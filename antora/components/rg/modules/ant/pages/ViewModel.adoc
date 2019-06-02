@@ -25,7 +25,7 @@ public class CustomerViewModel {
 ----
 
 Although there are several ways to instantiate a view model, we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
-The xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] can then be used to inject dependencies into the view model.
+The xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] can then be used to inject dependencies into the view model.
 For example:
 
 [source,java]
@@ -46,7 +46,7 @@ The view model's memento will be derived from the value of the view model object
 Any xref:rg:ant:Property/notPersisted.adoc[`@Property#notPersisted()`] properties will be excluded from the memento, as will any xref:rg:ant:Programmatic.adoc[`@Programmatic`] properties.
 Properties that are merely xref:rg:ant:Property/hidden.adoc[hidden] _are_ included in the memento.
 
-Only properties supported by the configured xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
+Only properties supported by the configured xref:rg:svc:integration-api/MementoService.adoc[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
 
 View models, as defined by `@ViewModel` (or `@DomainObject(nature=VIEW_MODEL)` for that matter) have some limitations:
 

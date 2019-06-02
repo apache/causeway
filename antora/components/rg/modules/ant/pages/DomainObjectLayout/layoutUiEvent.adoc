@@ -7,7 +7,7 @@ Whenever a domain object is to be rendered, the framework fires off an layout UI
 This is as an alternative to implementing xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`] reserved method.
 (If `layout()` is present, then it will take precedence).
 
-Subscribers subscribe through the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can use obtain a reference to the domain object from the event.
+Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
 From this they can, if they wish, specify a CSS class for the domain object using the event's API.
 
 By default the event raised is `LayoutUiEvent.Default`.
@@ -45,7 +45,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
@@ -101,7 +101,7 @@ And, conversely, the framework also provides `LayoutUiEvent.Noop`; if `layoutUiE
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically by calling the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly.
+However, events can be raised programmatically by calling the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] API directly.
 
 
 

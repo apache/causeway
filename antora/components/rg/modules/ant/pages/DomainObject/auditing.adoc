@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the registered xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s).
+The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the registered xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s).
 
 The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.services.audit.objects` is used to determine the whether the action is audited:
 

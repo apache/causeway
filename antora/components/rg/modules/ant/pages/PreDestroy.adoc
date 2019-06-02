@@ -19,7 +19,7 @@ public void deinit() { ... }    <2>
 <1> It is not necessary to annotate the method with xref:rg:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility, and accept no arguments.
 
-A common use case is for domain services that interact with the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].  For example:
+A common use case is for domain services that interact with the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  For example:
 
 [source,java]
 ----

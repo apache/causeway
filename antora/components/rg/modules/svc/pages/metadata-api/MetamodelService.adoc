@@ -69,7 +69,7 @@ If an `AppManifest2` was used (from a `Module`), then this is also returned (els
 
 <8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:rg:ant:Action/command.adoc[`@Action#commandDtoProcessor()`] or xref:rg:ant:Property/command.adoc[`@Property#commandDtoProcessor()`].
 +
-This is used by the xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService_implementations[framework-provided implementations] of `ContentMappingService`.
+This is used by the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc#implementations[framework-provided implementations] of `ContentMappingService`.
 
 <9> Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 +

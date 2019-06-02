@@ -30,19 +30,19 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the action invocation should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service.
+`services.command.Command` object through the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] service.
 
 
 |`commandExecuteIn()`
 |`FOREGROUND`,`BACKGROUND` +
 (`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
 
 
 |`commandPersistence()`
 |`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
 (`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured).
 
 
 |`commandDtoProcessor()`
@@ -54,7 +54,7 @@ The table below summarizes the annotation's attributes.
 |xref:rg:ant:Action/domainEvent.adoc[`domainEvent()`]
 |subtype of `ActionDomainEvent` +
 (`ActionDomainEvent.Default`)
-|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to
 broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and
 post-execute).
 
@@ -78,7 +78,7 @@ Currently this is only supported for no-arg actions.
 |xref:rg:ant:Action/publishing.adoc[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether the action invocation should be published to the registered xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+|whether the action invocation should be published to the registered xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 
 |xref:rg:ant:Action/restrictTo.adoc[`restrictTo()`]
 |`NO_RESTRICTIONS`,`PROTOTYPING` +

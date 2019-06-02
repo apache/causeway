@@ -94,7 +94,7 @@ public class Customer {
 
 [NOTE]
 ====
-An alternative and almost equivalent design would be to publish an event using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and implement the domain services as subscribers to the event.
+An alternative and almost equivalent design would be to publish an event using the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and implement the domain services as subscribers to the event.
 This alternative design is used in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s poly module, for example.
 ====
 
@@ -105,7 +105,7 @@ This alternative design is used in the (non-ASF) link:http://platform.incode.org
 == Manually injecting services
 
 Apache Isis performs dependency injection when domain entities are recreated.
-It will also perform dependency injection if an object is created through the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] or xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`].
+It will also perform dependency injection if an object is created through the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`] or xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`].
 
 For example, to create a new (transient) domain object, the idiom is:
 
@@ -124,7 +124,7 @@ ToDoAppDashboard dashboard = repositoryService.instantiate(ToDoAppDashboard.clas
 ----
 
 
-If you prefer, though, you can simply instantiate domain objects using "new" and then inject domain services manually using xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ServiceRegistry[`ServiceRegistry`]:
+If you prefer, though, you can simply instantiate domain objects using "new" and then inject domain services manually using xref:rg:svc:core-domain-api/ServiceRegistry.adoc[`ServiceRegistry`]:
 
 
 [source,java]

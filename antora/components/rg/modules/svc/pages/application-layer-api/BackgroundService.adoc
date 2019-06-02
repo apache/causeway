@@ -15,7 +15,7 @@ The persistence delegates the persistence of the memento to an appropriate imple
 One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
 
 The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.
-The `BackgroundCommandExecution` abstract class (discussed xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService_BackgroundCommandExecution[below]) provides infrastructure to do this; the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
+The `BackgroundCommandExecution` abstract class (discussed xref:rg:svc:application-layer-api/BackgroundService/BackgroundCommandExecution.adoc[below]) provides infrastructure to do this; the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
 
 
 

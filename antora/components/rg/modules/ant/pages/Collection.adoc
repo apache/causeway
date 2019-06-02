@@ -19,7 +19,7 @@ The table below summarizes the annotation's attributes.
 |xref:rg:ant:Collection/domainEvent.adoc[`domainEvent()`]
 |subtype of `CollectionDomainEvent` +
 (`CollectionDomainEvent.Default`)
-|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
 |xref:rg:ant:Collection/editing.adoc[`editing()`]

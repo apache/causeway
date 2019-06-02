@@ -8,7 +8,7 @@ The `BackgroundCommandService2` (SPI) service supports the xref:rg:svc:rgsvc.ado
 
 The `BackgroundService` is responsible for capturing a memento representing the action invocation, and then hands off to the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] `BackgroundCommandService` to actually persist it.
 
-The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.  The abstract xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService_BackgroundCommandExecution[`BackgroundCommandExecution`] provides a mechanism to execute such commands.  This can be considered an API, albeit "internal" because the implementation relies on internals of the framework.
+The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.  The abstract xref:rg:svc:application-layer-api/BackgroundService/BackgroundCommandExecution.adoc[`BackgroundCommandExecution`] provides a mechanism to execute such commands.  This can be considered an API, albeit "internal" because the implementation relies on internals of the framework.
 
 
 

@@ -32,7 +32,7 @@ Apache Isis uses argument to pass in the configuration properties read from all 
 
 [TIP]
 ====
-Alternatively, you could inject xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`ConfigurationService`] into the service and read configuration properties using `ConfigurationService#getProperty(...)` and related methods.
+Alternatively, you could inject xref:rg:svc:core-domain-api/ConfigurationService.adoc[`ConfigurationService`] into the service and read configuration properties using `ConfigurationService#getProperty(...)` and related methods.
 However, be aware when using this latter API that only those configuration properties keys with an `application.` prefix are provided.
 ====
 
