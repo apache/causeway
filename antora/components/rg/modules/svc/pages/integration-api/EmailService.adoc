@@ -84,7 +84,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `port` +
 | port number (`_587_`)
-|The port number for the SMTP service on the the external SMTP host (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+|The port number for the SMTP service on the the external SMTP host (used by xref:rg:svc:integration-api/EmailService.adoc[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -93,7 +93,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.address` +
 | email address
-|The email address to use for sending out email (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
+|The email address to use for sending out email (used by xref:rg:svc:integration-api/EmailService.adoc[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -103,7 +103,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.hostname` +
 | host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+|The hostname of the external SMTP provider (used by xref:rg:svc:integration-api/EmailService.adoc[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -112,7 +112,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
+|The corresponding password for the email address to use for sending out email (used by xref:rg:svc:integration-api/EmailService.adoc[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -157,7 +157,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `tls.enabled`
 |`true`,`false` +
 (`true`)
-|Whether to enable TLS for the email SMTP connection (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+|Whether to enable TLS for the email SMTP connection (used by xref:rg:svc:integration-api/EmailService.adoc[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -241,4 +241,4 @@ To ensure that your alternative implementation takes the place of the default im
 
 == Related Services
 
-The email service is used by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`] which is, in turn, used by xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`].
+The email service is used by the xref:rg:svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`] which is, in turn, used by xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`].

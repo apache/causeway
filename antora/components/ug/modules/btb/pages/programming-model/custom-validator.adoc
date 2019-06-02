@@ -15,7 +15,7 @@ You can also impose your own application-specific rules by installing your own m
 
 [TIP]
 ====
-Isis' xref:rg:mvn:rgmvn.adoc#[Maven plugin] will also validate the domain object model during build time.
+Isis' xref:rg:mvn:about.adoc[Maven plugin] will also validate the domain object model during build time.
 ====
 
 

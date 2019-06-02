@@ -9,7 +9,7 @@ It also shows how to instantiate xref:ug:fun:building-blocks/types-of-domain-obj
 
 [NOTE]
 ====
-The main domain services used are xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
+The main domain services used are xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] and xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
 ====
 
 

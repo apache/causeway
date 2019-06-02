@@ -68,13 +68,13 @@ In addition to Apache Isis' Shiro-based implementation of its authentication and
 ====
 A further aspect of security is auditing: recording what data was modified by which user.
 
-Apache Isis provides the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]
-can be used to track the actions being invoked, and the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
+Apache Isis provides the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`]
+can be used to track the actions being invoked, and the xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`]
 captures what data was modified as a result (auditing).
 When ``Interaction``s are persisted (eg by way of (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module) this provides excellent
 traceability.
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of the `AuditerService`.
 
-For xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can be also be used to capture actions.
+For xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] can be also be used to capture actions.
 ====
 

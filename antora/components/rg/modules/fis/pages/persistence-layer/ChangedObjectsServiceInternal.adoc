@@ -32,7 +32,7 @@ public class ChangedObjectsServiceInternal {
 }
 ----
 <1> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
-<2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]).
+<2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`]).
 <3> Used by xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] to obtain details of and
 counters of all objects changed within the transaction.
 <4> Used by xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] to obtain all pairs of

@@ -97,5 +97,5 @@ translations can be downloaded as a single file.
 
 == Related Services
 
-This service works in conjunction with xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`] and xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`TranslationsResolver`] in order to provide i18n support.
+This service works in conjunction with xref:rg:svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`] and xref:rg:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] in order to provide i18n support.
 

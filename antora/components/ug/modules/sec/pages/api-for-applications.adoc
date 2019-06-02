@@ -11,7 +11,7 @@ Still, on very rare occasion you may have a need, in which case you can either u
 
 == `UserService` API
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] service exposes the following API:
+The xref:rg:svc:core-domain-api/UserService.adoc[`UserService`] service exposes the following API:
 
 [source,java]
 ----

@@ -437,7 +437,7 @@ Note that the application must be bootstrapped using an `AppManifest2`.
 (`false`)
 | Whether to check that the class has an object type explicitly specified somehow.
 
-The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ug:vw:about.adoc[Wicket viewer] and xref:ug:vro:about.adoc[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
+The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ug:vw:about.adoc[Wicket viewer] and xref:ug:vro:about.adoc[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
 In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
 
 If the object type is not specified explicitly, then this can cause data migration issues if the class is subsequently refactored (eg renamed, or moved to a different package).
@@ -705,7 +705,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the xref:ug:vw:about.adoc[Wicket viewer] and the xref:ug:vro:about.adoc[Restful Objects viewer], and also by the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
+Filtering is supported by the xref:ug:vw:about.adoc[Wicket viewer] and the xref:ug:vro:about.adoc[Restful Objects viewer], and also by the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
 
 [NOTE]
 ====

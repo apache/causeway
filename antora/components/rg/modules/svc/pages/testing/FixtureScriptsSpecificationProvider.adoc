@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `FixtureScriptsSpecificationProvider` configures the xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] domain service, providing the location to search for fixture scripts and other settings.
+The `FixtureScriptsSpecificationProvider` configures the xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`] domain service, providing the location to search for fixture scripts and other settings.
 
 The service is used only by the default implementation of `FixtureScripts`, namely `FixtureScriptsDefault`.
 

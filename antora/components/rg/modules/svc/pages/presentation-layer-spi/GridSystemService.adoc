@@ -59,4 +59,4 @@ The framework provides `GridSystemServiceBS3`, an implementation that encodes th
 
 == Related Services
 
-This service is used by xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`].
+This service is used by xref:rg:svc:presentation-layer-spi/GridService.adoc[`GridService`].

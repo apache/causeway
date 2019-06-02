@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-Domain events are fired -- through the internal xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus] -- for every user interaction with each object member (property, collection or action).
+Domain events are fired -- through the internal xref:rg:svc:core-domain-api/EventBusService.adoc[event bus] -- for every user interaction with each object member (property, collection or action).
 
 By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:rg:ant:Property/domainEvent.adoc[`@Property#domainEvent()`] attribute allows a custom subclass to be specified if necessary.
 Similarly, rendering a collection causes a `CollectionDomainEvent` to be fired, and rendering an action causes an `ActionDomainEvent` to be fired.

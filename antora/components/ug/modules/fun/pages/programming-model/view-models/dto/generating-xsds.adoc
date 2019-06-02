@@ -15,7 +15,7 @@ There are therefore two options:
 * either choose not to have the view model DTO reference any persistent entities, and simply limit the DTO to simple scalars. +
 +
 Such a DTO will then be usable in both the Apache Isis app (to generate the original XML) and in the consumer.
-The xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] can be used to obtain the object identifiers
+The xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`] can be used to obtain the object identifiers
 
 * alternatively, generate a different DTO for the consumer from the XSD of the view model DTO.
 

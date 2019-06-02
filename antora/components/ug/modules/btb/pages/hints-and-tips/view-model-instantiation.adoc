@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 Vith view models, some care must be taken in how they are instantiated.
 Specifically, it's important that the framework doesn't "know" about the view model until its state is "sufficiently" populated to distinguish from other view models.
 
-In practical terms, this means that view models should be instantiated using a constructor, and then injecting services (if required) using the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service:
+In practical terms, this means that view models should be instantiated using a constructor, and then injecting services (if required) using the xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service:
 
 [source,java]
 ----
@@ -14,7 +14,7 @@ CustomerViewModel viewModel = new CustomerViewModel("Joe", "Bloggs");
 serviceRegistry.injectServicesInto(viewModel);
 ----
 
-What will most likely *fail* is to use the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`]:
+What will most likely *fail* is to use the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`]:
 
 
 [source,java]

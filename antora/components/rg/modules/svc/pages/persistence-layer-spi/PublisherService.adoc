@@ -9,7 +9,7 @@ Events that can be published are action invocations/property edits, and changed 
 A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
 
 An alternative use is for profiling: for each execution (action invocation/property edit) the framework captures metrics of the number of objects loaded or dirtied as the result of that execution.
-If the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] is used to call other objects then the metrics are captured for each sub-execution.
+If the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] is used to call other objects then the metrics are captured for each sub-execution.
 The framework provides a default implementation, `PublisherServiceLogging`, that will log these execution graphs (in XML form, per the xref:rg:cms:schema/ixn.adoc["ixn" schema]) to an SLF4J logger.
 
 Only actions/properties/domain objects annotated for publishing (using xref:rg:ant:Action/publishing.adoc[`@Action#publishing()`], xref:rg:ant:Property/publishing.adoc[`@Property#publishing()`] or xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject#publishing()`]) are published.
@@ -29,7 +29,7 @@ public interface PublisherService {
 <1> to publish an individual action invocation or property edit, as captured within an `Interaction.Execution`.
 <2> to publish a set of changed objects.
 
-Each `Interaction.Execution` has an owning `Interaction`; this is the same object obtainable from xref:rg:svc:rgsvc.adoc#_rgsvc_spi_InteractionContext[`InteractionContext`].
+Each `Interaction.Execution` has an owning `Interaction`; this is the same object obtainable from xref:rg:svc:spi/InteractionContext.adoc[`InteractionContext`].
 Implementations that publish member executions can use `Interaction.Execution#getDto()` method to return a DTO (as per the xref:rg:cms:schema/ixn.adoc["ixn" schema]) which can be converted into a serializable XML representation using the `InteractionDtoUtils` utility class.
 The XML can either serialize a single execution, or can be a "deep" serialization of an execution and all sub-executions.
 
@@ -118,15 +118,15 @@ This service supports two main use cases:
 
 To support these use cases several other services are involved:
 
-* the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
+* the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
 
 * the (internal) xref:rg:fis:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
 
 * the (internal) xref:rg:fis:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 
-* the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
+* the xref:rg:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] differs from the `PublisherService` in that it is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.
+The xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] differs from the `PublisherService` in that it is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.
 The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable, for example.
-That said, it is possible to obtain a serialization of the action invocation/property edit causing the current event to be raised using xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] domain service.
+That said, it is possible to obtain a serialization of the action invocation/property edit causing the current event to be raised using xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] domain service.
 

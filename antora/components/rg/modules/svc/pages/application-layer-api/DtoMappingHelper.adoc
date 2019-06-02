@@ -17,7 +17,7 @@ public class DtoMappingHelper {
     public OidDto oidDtoFor(final Object object) { ... }    // <1>
 }
 ----
-<1> Uses the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] to convert the domain object's internal identifier into a serializable `OidDto`.
+<1> Uses the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`] to convert the domain object's internal identifier into a serializable `OidDto`.
 
 This class (`o.a.i.applib.services.dto.DtoMappingHelper`) is also the implementation.
 

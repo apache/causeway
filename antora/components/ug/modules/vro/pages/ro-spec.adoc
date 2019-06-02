@@ -123,7 +123,7 @@ For example, the client could use an `Accept` header such as:
 Accept: application/xml;x-ro-domain-type="com.mycompany.viewmodels.v2.CustomerViewModel"
 ----
 
-The server will use the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] to attempt to
+The server will use the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] to attempt to
 transform the domain object into the requested `x-ro-domain-type`.  The whole process is discussed in more detail in
 the xref:ug:vro:architecture.adoc[architecture] chapter.
 

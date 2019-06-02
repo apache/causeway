@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 Domain services acting as event subscribers can subscribe to xref:ug:fun:building-blocks/events/domain-events.adoc[domain], xref:ug:fun:building-blocks/events/ui-events.adoc[UI] and xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle] events, influencing the rendering and behaviour of other objects.
 
-All subscribers must subscribe to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]; as this amounts to a few lines of boilerplate it's easiest to inherit from the convenience `AbstractSubscriber` class.
+All subscribers must subscribe to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`]; as this amounts to a few lines of boilerplate it's easiest to inherit from the convenience `AbstractSubscriber` class.
 
 We suggest naming such classes `XxxSubscriptions`, for example:
 

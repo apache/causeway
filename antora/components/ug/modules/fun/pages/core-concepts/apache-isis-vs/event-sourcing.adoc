@@ -20,7 +20,7 @@ Note that the event might be dispatched and consumed in-process or alternatively
 If the latter, then the subscriber will operate within a separate transaction, meaning the usual eventual consistency concerns and also compensating actions if a rollback is required.
 CQRS/event sourcing advocates point out -- correctly -- that this is just how things are in the "real world" too.
 
-In Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`], and can optionally also be published through the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+In Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`], and can optionally also be published through the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 The former are dispatched and consumed in-process and within the same transaction, and for this reason the xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscribers] can also veto the events.
 The latter are intended for out-of-process consumption; the (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] and the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq modules provide implementations for dispatching either through a RDBMS database table, or directly through to an link:http://camel.apache.org[ActiveMQ] message queue (eg wired up to link:http://camel.apache.org[Apache Camel] event bus).
 

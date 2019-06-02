@@ -39,7 +39,7 @@ public static class ActionInvocationContext {
 <4> is the 0-based index to the object being acted upon.
 
 
-To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage
@@ -47,7 +47,7 @@ To provide an alternative implementation, subclass and use xref:rg:ant:DomainSer
 For actions that are void or that return null, Apache Isis will return to the list once executed.
 But for bulk actions that are non-void, Apache Isis will render the returned object/value from the last object invoked (and simply discards the object/value of all actions except the last).
 
-One idiom is for the domain objects to also use the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] service to share information, for example to aggregate values.
+One idiom is for the domain objects to also use the xref:rg:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] service to share information, for example to aggregate values.
 The `ActionInvocationContext#isLast()` method can then be used to determine if all the information has been gathered, and then do something with it (eg derive variance across a range of values, render a graph etc).
 
 More prosaically, the `ActionInvocationContext` can be used to ensure that the action behaves appropriately depending on how it has been invoked (on a single object and/or a collection) whether it is called in bulk mode or regular mode.

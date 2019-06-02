@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 Once a domain entity has been instantiated, it must be persisted.
-This is done using the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`].
+This is done using the xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`].
 For example:
 
 [source,java]
@@ -30,7 +30,7 @@ repositoryService.persist(customer);
 
 It's worth being aware that the framework does _not_ eagerly persist the object.
 Rather, it queues up an internal command structure representing the object persistence request.
-This is then executed either at the end of the transaction, or if a xref:ug:fun:crud/finding.adoc[query is run], or if the internal queue is manually flushed using xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]'s `flush()` method.
+This is then executed either at the end of the transaction, or if a xref:ug:fun:crud/finding.adoc[query is run], or if the internal queue is manually flushed using xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`]'s `flush()` method.
 
 Alternatively, you can use:
 

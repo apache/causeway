@@ -51,4 +51,4 @@ The `IsisSchemas` parameter to the action can be used to optionally ignore the c
 
 == Related Services
 
-The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to actually generate the XML/XSD.
+The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`] to actually generate the XML/XSD.

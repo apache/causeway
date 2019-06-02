@@ -196,7 +196,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adrgsvc`
-//|`\xref:rg:svc:rgsvc.adoc#xxx[ttt]`
+//|`\xref:rg:svc:about.adoc#xxx[ttt]`
 //
 //a hyperlink to a bookmark within the reference guide for domain services, where:
 //
@@ -212,7 +212,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adrgmvn`
-//|`\xref:rg:mvn:rgmvn.adoc#xxx[ttt]`
+//|`\xref:rg:mvn:about.adoc#xxx[ttt]`
 //
 //a hyperlink to a bookmark within the reference guide for the maven plugin, where:
 //
@@ -259,7 +259,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adrgsa`
-//|`\xref:rg:svc:rgsvc.adoc#_rgsvc_api_xxx[`xxx`]`
+//|`\xref:rg:svc:api/xxx.adoc[`xxx`]`
 //
 //a hyperlink to the "man page" for an (API) domain service within the reference guide for domain services, where:
 //
@@ -267,14 +267,14 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]`
+//`\xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]`
 //
-//|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
+//|xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]
 //
 //
 //
 //|`adrgss`
-//|`\xref:rg:svc:rgsvc.adoc#_rgsvc_spi_xxx[`xxx`]`
+//|`\xref:rg:svc:spi/xxx.adoc[`xxx`]`
 //
 //a hyperlink to the "man page" for an (SPI) domain service within the reference guide for domain services, where:
 //
@@ -282,9 +282,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`]`
+//`\xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`]`
 //
-//|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingServicef[`ContentMappingService`]
+//|xref:rg:svc:presentation-layer-spi/ContentMappingServicef.adoc[`ContentMappingService`]
 //
 //
 //

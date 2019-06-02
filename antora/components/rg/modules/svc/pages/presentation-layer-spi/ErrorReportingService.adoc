@@ -33,8 +33,8 @@ public class ErrorDetails {
 }
 ----
 <1> the main message to be displayed to the end-user.
-The service is responsible for translating this into the language of the end-user (it can use xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`] if required).
-<2> whether this message has already been recognized by an xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`] service.
+The service is responsible for translating this into the language of the end-user (it can use xref:rg:svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`] if required).
+<2> whether this message has already been recognized by an xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`] service.
 Generally this converts potentially non-recoverable (fatal) exceptions into recoverable exceptions (warnings) as well providing an alternative mechanism for generating user-friendly error messages.
 <3> whether the cause of the exception was due to a lack of privileges.
 In such cases the UI restricts the information shown to the end-user, to avoid leaking potentially sensitive information

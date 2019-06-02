@@ -22,7 +22,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`o.a.i.applib.` +
+|xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`o.a.i.applib.` +
 `services.audit` +
 `AuditerService`]
 |Create an audit record for every changed property of every changed object within a transaction.
@@ -36,7 +36,7 @@ also +
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`o.a.i.applib.` +
+|xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`o.a.i.applib.` +
 `services.publish` +
 `PublisherService`]
 |Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
@@ -52,7 +52,7 @@ also +
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`o.a.i.applib.` +
+|xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[`o.a.i.applib.` +
 `services.userreg` +
 `UserRegistrationService`]
 |Create a new user account with the configured security mechanism.

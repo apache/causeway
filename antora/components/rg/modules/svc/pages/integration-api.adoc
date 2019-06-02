@@ -21,7 +21,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`o.a.i.applib.` +
+|xref:rg:svc:integration-api/BookmarkService.adoc[`o.a.i.applib.` +
 `services.bookmark` +
 `BookmarkService`]
 |Convert object reference to a serializable "bookmark", and vice versa.
@@ -36,7 +36,7 @@ It also lists their corresponding implementation, either a default implementatio
 `Contributions`
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`o.a.i.applib.` +
+|xref:rg:svc:integration-api/EmailService.adoc[`o.a.i.applib.` +
 `services.email` +
 `EmailService`]
 |Send a HTML email, optionally with attachments.
@@ -47,7 +47,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`o.a.i.applib.` +
+|xref:rg:svc:integration-api/JaxbService.adoc[`o.a.i.applib.` +
 `services.jaxb` +
 `JaxbService`]
 |Marshal and unmarshal JAXB-annotated view models to/from XML.
@@ -57,17 +57,17 @@ It also lists their corresponding implementation, either a default implementatio
 |
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_MementoService[`o.a.i.applib.` +
+|xref:rg:svc:integration-api/MementoService.adoc[`o.a.i.applib.` +
 `services.memento` +
 `MementoService`]
-|Capture a serializable memento of a set of primitives or xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[bookmarks].  Primarily used internally, eg in support of commands/auditing.
+|Capture a serializable memento of a set of primitives or xref:rg:svc:integration-api/BookmarkService.adoc[bookmarks].  Primarily used internally, eg in support of commands/auditing.
 |`MementoServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_XmlSnapshotService[`o.a.i.applib.` +
+|xref:rg:svc:integration-api/XmlSnapshotService.adoc[`o.a.i.applib.` +
 `services.xmlsnapshot` +
 `XmlSnapshotService`]
 |Generate an XML representation of an object and optionally a graph of related objects.

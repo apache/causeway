@@ -12,7 +12,7 @@ different users of the system.
 [NOTE]
 ====
 This service is deprecated; use xref:ug:tst:fixture-scripts.adoc[fixture scripts] and the
-xref:rg:svc:rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`] instead.
+xref:rg:svc:testing/SudoService.adoc[`SudoService`] instead.
 ====
 
 

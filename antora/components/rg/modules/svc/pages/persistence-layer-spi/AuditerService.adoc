@@ -99,9 +99,9 @@ If menu items or contributions are not required in the UI, these can be suppress
 
 == Related Services
 
-The auditing service works very well with implementations of xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] that persist the ``Interaction.Execution`` objects obtained from the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service.
+The auditing service works very well with implementations of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] that persist the ``Interaction.Execution`` objects obtained from the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service.
 The interaction execution captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditerService` audit entries capture the _effect_ of that interaction in terms of changed state.
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can also be combined with the auditer service, however
+The xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] can also be combined with the auditer service, however
 ``Command``s are primarily concerned with capture the _intent_ of an action, not the actual action invocation itself.
 

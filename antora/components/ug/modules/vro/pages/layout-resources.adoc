@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-Apache Isis' Restful Objects viewer provides a number of additional resource endpoints that provide representations of the object layout (as per xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`]) and of the menu layout (as per xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[`MenuBarsService`]).
+Apache Isis' Restful Objects viewer provides a number of additional resource endpoints that provide representations of the object layout (as per xref:rg:svc:presentation-layer-spi/GridService.adoc[`GridService`]) and of the menu layout (as per xref:rg:svc:presentation-layer-spi/MenuBarsService.adoc[`MenuBarsService`]).
 
 This chapter provides details of these resources, the link ``Rel``s to access them, and the resultant representations.
 
@@ -11,7 +11,7 @@ This chapter provides details of these resources, the link ``Rel``s to access th
 
 == MenuBars
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[`MenuBarsService`] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
+The xref:rg:svc:presentation-layer-spi/MenuBarsService.adoc[`MenuBarsService`] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
 
 For example, the xref:ug:fun:getting-started/helloworld-archetype.adoc[Hello World archetype] has the following layout:
 
@@ -132,7 +132,7 @@ Note that because of dynamic icons (the xref:rg:cms:methods/reserved/iconName.ad
 
 == Domain Object Layout
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] provides an XML document which defines the layout of any of domain object.
+The xref:rg:svc:presentation-layer-spi/GridService.adoc[`GridService`] provides an XML document which defines the layout of any of domain object.
 Typically this is the contents of the `Xxx.layout.xml` file (where `Xxx` is the domain type).
 
 For example, in the xref:ug:fun:getting-started/helloworld-archetype.adoc[Hello World archetype] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
@@ -238,7 +238,7 @@ The representation of the domain types resource (section 22.2 of RO spec v1.0) h
 ----
 
 
-The representation returned by this resource is essentially exactly the same as the layout returned by xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] (it is not dynamically extended with links).
+The representation returned by this resource is essentially exactly the same as the layout returned by xref:rg:svc:presentation-layer-spi/GridService.adoc[`GridService`] (it is not dynamically extended with links).
 
 
 

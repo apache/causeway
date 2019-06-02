@@ -4,9 +4,9 @@ include::_attributes.adoc[]
 
 
 
-The `BackgroundCommandService2` (SPI) service supports the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] (API) service, persisting action invocations as commands such that they can subsequently be invoked in the background.
+The `BackgroundCommandService2` (SPI) service supports the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`] (API) service, persisting action invocations as commands such that they can subsequently be invoked in the background.
 
-The `BackgroundService` is responsible for capturing a memento representing the action invocation, and then hands off to the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] `BackgroundCommandService` to actually persist it.
+The `BackgroundService` is responsible for capturing a memento representing the action invocation, and then hands off to the xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`] `BackgroundCommandService` to actually persist it.
 
 The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.  The abstract xref:rg:svc:application-layer-api/BackgroundService/BackgroundCommandExecution.adoc[`BackgroundCommandExecution`] provides a mechanism to execute such commands.  This can be considered an API, albeit "internal" because the implementation relies on internals of the framework.
 
@@ -66,7 +66,7 @@ The module also provides a concrete subclass of `BackgroundCommandExecution` tha
 
 [TIP]
 ====
-Details of setting up the Quartz scheduler to actually execute these persisted commands can be found on the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] page.
+Details of setting up the Quartz scheduler to actually execute these persisted commands can be found on the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`] page.
 ====
 
 
@@ -78,7 +78,7 @@ Background commands can be created either declaratively or imperatively.
 
 The declarative approach involves annotating an action using xref:rg:ant:Action/command.adoc[`@Action#command()`] with `@Action#commandExecuteIn=CommandExecuteIn.BACKGROUND`.
 
-The imperative approach involves explicitly calling the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] from within domain object's action.
+The imperative approach involves explicitly calling the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`] from within domain object's action.
 
 
 
@@ -86,7 +86,7 @@ The imperative approach involves explicitly calling the xref:rg:svc:rgsvc.adoc#_
 == Alternative Implementations
 
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`BackgroundCommandService`), and also provides a number of related domain services (`BackgroundCommandServiceJdo`, `BackgroundCommandJdoRepository` and `BackgroundCommandServiceJdoContributions`).
-This module also provides service implementations of the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`].
+This module also provides service implementations of the xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`].
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
 
@@ -95,9 +95,9 @@ If contributions are not required in the UI, these can be suppressed either usin
 
 == Related Services
 
-As discussed above, this service supports the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] , persisting `Command`s such that they can be executed in the background.
+As discussed above, this service supports the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`] , persisting `Command`s such that they can be executed in the background.
 
-There is also a tie-up with the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] and its supporting xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] domain service. The `CommandContext` service is responsible for providing a parent `Command` with which the background `Command`s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s (analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s). The `BackgroundCommandService` ensures that these background `Command`s are associated with the parent "foreground" `Command`.
+There is also a tie-up with the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] and its supporting xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] domain service. The `CommandContext` service is responsible for providing a parent `Command` with which the background `Command`s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s (analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s). The `BackgroundCommandService` ensures that these background `Command`s are associated with the parent "foreground" `Command`.
 
 What that means is that the implementations of `CommandService` and `BackgroundCommandService` go together, hence both implemented in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s  command module.).
 

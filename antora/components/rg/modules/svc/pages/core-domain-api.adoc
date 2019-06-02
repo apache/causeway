@@ -21,7 +21,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`o.a.i.applib.` +
+|xref:rg:svc:core-domain-api/ClockService.adoc[`o.a.i.applib.` +
 `services.clock` +
 `ClockService`]
 |Access the current time (and for testing, allow the time to be changed)
@@ -32,7 +32,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`o.a.i.applib.` +
+|xref:rg:svc:core-domain-api/ConfigurationService.adoc[`o.a.i.applib.` +
 `services.config` +
 `ConfigurationService`]
 |Access configuration properties (eg from `isis.properties` file)
@@ -43,7 +43,7 @@ It also lists their corresponding implementation, either a default implementatio
 |The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface. +
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`o.a.i.applib.` +
+|xref:rg:svc:core-domain-api/EventBusService.adoc[`o.a.i.applib.` +
 `services.eventbus` +
 `EventBusService`]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
@@ -56,7 +56,7 @@ It also lists their corresponding implementation, either a default implementatio
 ``isis-core-runtime``
 |
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`o.a.i.applib.` +
+|xref:rg:svc:core-domain-api/FactoryService.adoc[`o.a.i.applib.` +
 `services.factory` +
 `FactoryService`]
 |Methods to instantiate and initialize domain objects
@@ -69,7 +69,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`o.a.i.applib.` +
+|xref:rg:svc:core-domain-api/Scratchpad.adoc[`o.a.i.applib.` +
 `services.scratchpad` +
 `Scratchpad`]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls; in particular for use by "bulk" actions (invoking of an action for all elements of a collection)
@@ -81,7 +81,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`o.a.i.applib.` +
+|xref:rg:svc:core-domain-api/UserService.adoc[`o.a.i.applib.` +
 `services.xactn` +
 `UserService`]
 |Methods to access the currently-logged on user.

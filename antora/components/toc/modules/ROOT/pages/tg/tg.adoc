@@ -249,7 +249,7 @@ We usually also have a fixture script to zap all the (non-reference) data (or so
 
 * rename the `SimpleObjectsTearDownFixture` class
 * and update to delete from the appropriate underlying database table(s)
-* use the injected xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] domain service.
+* use the injected xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] domain service.
 * refactor/rename the fixture script classes that create instances your entity:
 * `RecreateSimpleObjects`, which sets up a set of objects for a given scenario
 * `SimpleObjectCreate` which creates a single object
@@ -388,7 +388,7 @@ For example: it probably shouldn't be possible to add an object twice into a col
 * Add domain actions to add/remove from the collection
 * to create objects, xref:ug:fun:programming-model/inject-services.adoc[inject] associated domain service
 ** generally we recommend using the xref:rg:ant:Inject.adoc[`@Inject`] annotation with either private or default visibility
-* the service itself should use xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
+* the service itself should use xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]
 * use the xref:rg:ant:MemberOrder.adoc[`@MemberOrder(name=...)`] annotation to associate an action with a property or with a collection
 
 
@@ -480,7 +480,7 @@ To ensure testability, there should be no dependencies on system time, for examp
 Instead the domain objects should delegate to the provided `ClockService`.
 
 * remove any dependencies on system time (eg defaults for date/time action parameters)
-* inject xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`ClockService`]
+* inject xref:rg:svc:core-domain-api/ClockService.adoc[`ClockService`]
 * call `ClockService.now()` etc where required.
 
 
@@ -544,7 +544,7 @@ Under the covers Apache Isis uses the https://code.google.com/p/guava-libraries/
 By default the events generated are `ActionDomainEvent.Default` (for actions) and `PropertyDomainEvent.Default` (for properties). Subclasses of these can be specified using the xref:rg:ant:Action/domainEvent.adoc[`@Action(domainEvent=...)`] or xref:rg:ant:Property/domainEvent.adoc[`Property(domainEvent=...)`] for properties.
 
 
-Using the guidance in the docs for the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]:
+Using the guidance in the docs for the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`]:
 
 * write a domain service subscriber to subscribe to events
 * use the domain service to perform log events
@@ -564,12 +564,12 @@ Note that currently (1.8.0) only no-arg actions can be specified as bulk actions
 
 Thus:
 * Write a no-arg action for your domain entity, annotate with `@Action(invokeOn=...)`
-* Inject the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInteractionContext`] (request-scoped) service
+* Inject the xref:rg:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInteractionContext`] (request-scoped) service
 * Use the `ActionInteractionContext` service to determine whether the action was invoked in bulk or as a regular action.
 * return null if invoked on a collection; the Wicket viewer will go back to the original collection
 ** (if return non-null, then Wicket viewer will navigate to the object of the last invocation generally not what is required)
 
-The similar xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
+The similar xref:rg:svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
 
 * Inject the `Scratchpad` domain service
 * for each action, store state (eg a running total)
@@ -580,7 +580,7 @@ The similar xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad
 
 == Performance tuning
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] (request-scoped) domain service allows arbitrary objects to be cached for the duration of a request.
+The xref:rg:svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`] (request-scoped) domain service allows arbitrary objects to be cached for the duration of a request.
 
 This can be helpful for "naive" code which would normally make the same query within a loop.
 
@@ -707,7 +707,7 @@ change back to:
 
 There will probably be some compile issues to fix up once you've done this; comment out all code that doesn't compile.
 
-Isis has great support for writing xref:ug:tst:integ-test-support.adoc[integration tests]; well-written integration tests should leverage fixture scripts and use the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`@WrapperFactory`] domain service.
+Isis has great support for writing xref:ug:tst:integ-test-support.adoc[integration tests]; well-written integration tests should leverage fixture scripts and use the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`@WrapperFactory`] domain service.
 
 * use the tests from the original archetype and the documentation on the website to develop integration tests for your app's functionality.
 

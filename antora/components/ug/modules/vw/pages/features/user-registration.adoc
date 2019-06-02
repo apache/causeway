@@ -15,9 +15,9 @@ In a similar way, if the user has forgotten their password then they can request
 
 To support this the framework requires three services to be registered and configured:
 
-* the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[user registration service], which provides an API to create the user account
-* the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[email notification service], which provides an API for to send the verification emails
-* the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[email service], that is used by the email notification service to actually send the email.
+* the xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service], which provides an API to create the user account
+* the xref:rg:svc:presentation-layer-spi/EmailNotificationService.adoc[email notification service], which provides an API for to send the verification emails
+* the xref:rg:svc:integration-api/EmailService.adoc[email service], that is used by the email notification service to actually send the email.
 
 The Apache Isis core framework provides a default implementation of both the email notification service and the email service. If your application uses the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module then an implementation is provided by that module; just add to the classpath. Otherwise you will need to provide your own implementation.
 
@@ -66,9 +66,9 @@ image::user-registration/sign-up-after-registration.png[width="800px",link="{ima
 
 There are two prerequisites:
 
-* register an implementation of the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[user registration service] (eg by using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module)
+* register an implementation of the xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] (eg by using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module)
 
-* configure the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[email service]
+* configure the xref:rg:svc:integration-api/EmailService.adoc[email service]
 
 The latter is required if you are using the default email notification service and email service. If you are using your own alternative implementation of the email notification service then it may be omitted (and configure your own alternative implementation as required).
 

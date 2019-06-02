@@ -19,7 +19,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_bootstrapping-spi_ClassDiscoveryService[`o.a.i.applib.` +
+|xref:rg:svc:bootstrapping-spi/ClassDiscoveryService.adoc[`o.a.i.applib.` +
 `services.classdiscovery` +
 `ClassDiscoveryService`]
 |Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:rg:ant:DomainService.adoc[`@DomainService`])

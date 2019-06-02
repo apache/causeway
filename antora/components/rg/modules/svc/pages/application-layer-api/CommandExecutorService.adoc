@@ -31,10 +31,10 @@ public interface CommandExecutorService {
 }
 ----
 <1> whether to switch the effective user for the duration of executing the `Command`.
-Behind the scenes this uses the xref:rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`].
+Behind the scenes this uses the xref:rg:svc:testing/SudoService.adoc[`SudoService`].
 <2> provided `Command` must implement `CommandDto`.
 
-When the `Command` is executed, it will also be returned by xref:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`].
+When the `Command` is executed, it will also be returned by xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`].
 Any associated objects that implement `HasTransactionId` (audit entries and the like) will therefore have the correct transactionId and will correctly be associated with the `Command` being executed.
 
 The framework provides a default implementation of this service,

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 The `UserRegistrationService` provides the ability for users to sign-up to access an application by providing a valid email address, and also provides the capability for users to reset their password if forgotten.
 
-For user sign-up, the xref:ug:vw:about.adoc[Wicket viewer] will check whether an implementation of this service (and also the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`]) is available, and if so will render a sign-up page where the user enters their email address. A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on). When the user has provided the additional details, the Wicket viewer calls _this_ service in order to create an account for them, and then logs the user on.
+For user sign-up, the xref:ug:vw:about.adoc[Wicket viewer] will check whether an implementation of this service (and also the xref:rg:svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`]) is available, and if so will render a sign-up page where the user enters their email address. A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on). When the user has provided the additional details, the Wicket viewer calls _this_ service in order to create an account for them, and then logs the user on.
 
 For the password reset feature, the Wicket viewer will render a password reset page, and use the `EmailNotificationService` to send a "password forgotten" email.  This service provides the ability to reset a password based on the user's email address.
 
@@ -76,8 +76,8 @@ This is needed so that the self-registered users are assigned automatically to y
 
 The most common use case is to allow users to sign-up through Apache Isis' Wicket viewer. Because the process requires email to be sent, the following services must be configured:
 
-* xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]
-* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`]
+* xref:rg:svc:integration-api/EmailService.adoc[`EmailService`]
+* xref:rg:svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`]
 * `UserRegistrationService` (this service)
 
 The `EmailService` in particular requires additional xref:rg:cfg:configuring-core.adoc[configuration properties] to specify the external SMTP service.

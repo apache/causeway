@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `BackgroundService2` domain service (and its various supertypes), and also the companion xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
+The `BackgroundService2` domain service (and its various supertypes), and also the companion xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
 
 The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way, and persisting it rather than executing it directly.
 
@@ -30,12 +30,12 @@ public interface BackgroundService2 {
     <T> T executeMixin(Class<T> mixinClass, Object mixedIn);    // <2>
 }
 ----
-<1> returns a proxy around the domain object; any methods executed against this proxy will result in a command (to invoke the corresponding action) being persisted by xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService2[`BackgroundCommandService2`]
-<2> Returns a proxy around the mixin; any methods executed against this proxy will result in a command (to invoke the corresponding mixin action) being persisted by xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService2[`BackgroundCommandService2`].
+<1> returns a proxy around the domain object; any methods executed against this proxy will result in a command (to invoke the corresponding action) being persisted by xref:rg:svc:application-layer-spi/BackgroundCommandService2.adoc[`BackgroundCommandService2`]
+<2> Returns a proxy around the mixin; any methods executed against this proxy will result in a command (to invoke the corresponding mixin action) being persisted by xref:rg:svc:application-layer-spi/BackgroundCommandService2.adoc[`BackgroundCommandService2`].
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
-To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage
@@ -77,7 +77,7 @@ In the above example, this would be the `submitInvoice()` method called upon eac
 One could imagine more complex designs where only the final command executed notifies the user.
 
 However, an alternative is to rely on the fact that the `BackgroundService` will automatically hint that the `Command` representing the original interaction (to `submitCustomerInvoices()` in the example above) should be persisted.
-This will be available if the related xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] and xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] domain services are configured, and the `CommandService` supports persistent commands.
+This will be available if the related xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] and xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] domain services are configured, and the `CommandService` supports persistent commands.
 Note that (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module does indeed provide such an implementation of `CommandService` (as well as of the required `BackgroundCommandService`).
 
 Thus, the original action can run a query to obtain it corresponding `Command`, and return this to the user.
@@ -96,7 +96,7 @@ public Command submitCustomerInvoices() {
 @Inject
 CommandContext commandContext;  // <1>
 ----
-<1> the injected xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] domain service.
+<1> the injected xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] domain service.
 
 The user would be returned a domain object representing their action invocation.
 
@@ -105,15 +105,15 @@ The user would be returned a domain object representing their action invocation.
 
 == Related Services
 
-This service is closely related to the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] and also that service's supporting xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] service.
+This service is closely related to the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] and also that service's supporting xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] service.
 
 The `CommandContext` service is responsible for providing a parent `Command` with which the background ``Command``s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s.
 The latter is analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s.
 
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way.
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]).
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] and xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]).
 
 The xref:rg:fis:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
-(In earlier versions, xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`] was used for this purpose).
+(In earlier versions, xref:rg:svc:integration-api/MementoService.adoc[`MementoService`] was used for this purpose).
 
 

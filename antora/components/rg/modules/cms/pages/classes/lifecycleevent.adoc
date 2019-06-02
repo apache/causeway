@@ -36,7 +36,7 @@ Impl'n (g: a:)
 ``isis-core-applib``
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first instantiated using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`]'s
+|Broadcast when an object is first instantiated using the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s
 `#instantiate(...)` method.
 
 
@@ -57,7 +57,7 @@ Impl'n (g: a:)
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first saved (inserted) into the database using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s
+|Broadcast when an object is first saved (inserted) into the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
 `#persist(...)` method.
 
 
@@ -68,7 +68,7 @@ Impl'n (g: a:)
 ``isis-core-applib``
 |(abstract class). +
 `ObjectPersistingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be saved (inserted) into the database using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s
+|Broadcast when an object is about to be saved (inserted) into the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
 `#persist(...)` method.
 
 
@@ -79,7 +79,7 @@ Impl'n (g: a:)
 ``isis-core-applib``
 |(abstract class). +
 `ObjectRemovingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be deleted from the database using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s
+|Broadcast when an object is about to be deleted from the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s
 `#remove(...)` method.
 
 
@@ -91,7 +91,7 @@ Impl'n (g: a:)
 |(abstract class). +
 `ObjectUpdatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object has just been updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+This is done either explicitly when the current transaction is flushed using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
 |xref:rg:cms:classes/lifecycleevent/ObjectUpdatingDomainEvent.adoc[`o.a.i.applib.` +
@@ -102,7 +102,7 @@ This is done either explicitly when the current transaction is flushed using the
 |(abstract class). +
 `ObjectUpdatingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+This is done either explicitly when the current transaction is flushed using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
 |===

@@ -26,7 +26,7 @@ public interface TransactionService3 {
 Under certain circumstances (eg actions used to perform data migration, say, or for large fixture scripts), it can be helpful to programmatically complete one transaction and start another one.
 <3> overload of nextTransaction() that provides more control on the action to be performed if the current transaction has been marked for abort only
 <4> If the user interaction creates/persists an object or deletes an object (eg using the
-xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]'s `persist()` or `delete()` methods), then the framework actually queues up the work and only performs the persistence command either at the end of the transaction or immediately prior to the next query.
+xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]'s `persist()` or `delete()` methods), then the framework actually queues up the work and only performs the persistence command either at the end of the transaction or immediately prior to the next query.
 Performing a flush will cause any pending calls to be performed immediately.
 <5> the state of the current or most recently completed transaction.
 

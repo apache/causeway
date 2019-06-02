@@ -24,7 +24,7 @@ The lifecycle callback methods supported by Apache Isis are:
 |Description
 
 |xref:rg:cms:methods/lifecycle/created.adoc[`created()`]
-|called when an object has just been created using xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(..)`] or xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`]
+|called when an object has just been created using xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(..)`] or xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService#instantiate(...)`]
 
 |xref:rg:cms:methods/lifecycle/loaded.adoc[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.

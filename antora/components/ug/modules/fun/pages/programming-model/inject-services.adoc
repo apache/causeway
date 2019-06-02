@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 Apache Isis autowires (automatically injects) domain services into each entity, as well as into the domain services themselves, using either method injection or field injection.
-The framework defines many additional services (such as xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]); these are injected in exactly the same manner.
+The framework defines many additional services (such as xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]); these are injected in exactly the same manner.
 
 Sometimes there may be multiple services that implement a single type.
 This is common for example for SPI service, whereby one module defines an SPI service, and other module(s) in the application implement that service.

@@ -241,7 +241,7 @@ take a look at link:http://stackoverflow.com/a/10041835/56880[this SO answer] on
 
 == JVM Args
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] uses link:http://www.javassist.org[Javassist] to create on-the-fly classes acting as a proxy.
+The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] uses link:http://www.javassist.org[Javassist] to create on-the-fly classes acting as a proxy.
 The cost of these proxies can be mitigated using:
 
 [source,ini]

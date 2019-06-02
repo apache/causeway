@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 The `HasTransactionId` interface is a mix-in for any domain objects that reference a transaction id, such as
-auditing entries or commands, or for xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[``Interaction``]s persisted as published events.
+auditing entries or commands, or for xref:rg:svc:application-layer-api/InteractionContext.adoc[``Interaction``]s persisted as published events.
 
 [NOTE]
 ====

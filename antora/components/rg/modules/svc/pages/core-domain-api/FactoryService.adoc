@@ -26,11 +26,11 @@ The class must have a 1-arg constructor of the appropriate type.
 
 The object is created in memory, but is not persisted.  The benefits of using this method (instead of simply using the Java `new` keyword) are:
 
-* any services will be injected into the object immediately (otherwise they will not be injected until the frameworkbecomes aware of the object, typically when it is persisted through the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]
+* any services will be injected into the object immediately (otherwise they will not be injected until the frameworkbecomes aware of the object, typically when it is persisted through the xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
 
 * the default value for any properties (usually as specified by `defaultXxx()` supporting methods) will not be set and the `created()` callback will be called.
 
-The corollary is: if your code never uses `defaultXxx()` or the `created()` callback, then you can just `new` up the object.  The xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service can be used to inject services into the domain object.
+The corollary is: if your code never uses `defaultXxx()` or the `created()` callback, then you can just `new` up the object.  The xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service can be used to inject services into the domain object.
 
 
 
@@ -56,6 +56,6 @@ The core framework provides a default implementation of this service (`o.a.i.cor
 
 == Related Services
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] is often used in conjunction with the `FactoryService`, to persist domain objects after they have been instantiated and populated.
+The xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] is often used in conjunction with the `FactoryService`, to persist domain objects after they have been instantiated and populated.
 
-An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service to inject other domain services into the instantiated object.
+An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service to inject other domain services into the instantiated object.

@@ -44,7 +44,7 @@ public String title() {
 ----
 <1> simple xref:rg:cms:classes/utility/TitleBuffer.adoc[utility class] to help construct the title string
 <2> imperative conditional logic
-<3> using the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
+<3> using the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
 <4> ... but ignore if not
 
 As the example above shows, the implementation can be as complex as you like.

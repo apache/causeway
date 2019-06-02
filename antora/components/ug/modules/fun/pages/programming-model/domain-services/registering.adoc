@@ -48,7 +48,7 @@ isis.services = employee.Employees,\
 
 This is quite rare, however; you will often want to use default implementations of domain services that are provided by the framework and so will not reside under this prefix.
 
-Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rg:svc:rgsvc.adoc#[domain services] reference guide for further details.
+Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rg:svc:about.adoc[domain services] reference guide for further details.
 
 
 

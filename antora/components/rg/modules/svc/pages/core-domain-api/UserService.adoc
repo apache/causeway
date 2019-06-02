@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 The `UserService` allows the domain object to obtain the identity of the user interacting with said object.
 
-If xref:rg:svc:rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`] has been used to temporarily override the user and/or roles, then this service will report the overridden values instead.
+If xref:rg:svc:testing/SudoService.adoc[`SudoService`] has been used to temporarily override the user and/or roles, then this service will report the overridden values instead.
 
 
 

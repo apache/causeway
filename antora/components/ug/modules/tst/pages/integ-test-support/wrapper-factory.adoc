@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
+The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
 And the role of this wrapper is to simulate the UI.
 
 [NOTE]
@@ -153,7 +153,7 @@ public void subscriberReceivesEvents() throws Exception {
     then(evHolder[0].getIdentifier().getMemberName()).isEqualTo("completed");
 }
 ----
-<1> inject xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] into this test
+<1> inject xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] into this test
 <2> holder for subscriber to capture event to
 <3> subscriber's callback, using the guava subscriber syntax
 <4> invoking the domain object using the wrapper

@@ -38,7 +38,7 @@ If all provided implementations return `null`, then the framework will fallback 
 The framework provides a fallback implementation of this service, namely `TableColumnOrderService.Default`.
 
 There can be multiple implementations of `TableColumnOrderService registered.
-These are checked in turn (chain of responsibility pattern), ordered according to xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+These are checked in turn (chain of responsibility pattern), ordered according to xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 The order from the first service that returns a non null value will be used.
 
 

@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `MenuBarsLoaderService` is used by the default implementation of xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[MenuBarsService] to return a a xref:rg:cms:classes/menubars.adoc[`MenuBars`] instance deserialized from the `menubars.layout.xml` file read from the classpath.
+The `MenuBarsLoaderService` is used by the default implementation of xref:rg:svc:presentation-layer-spi/MenuBarsService.adoc[MenuBarsService] to return a a xref:rg:cms:classes/menubars.adoc[`MenuBars`] instance deserialized from the `menubars.layout.xml` file read from the classpath.
 
 
 == SPI and Implementation
@@ -19,7 +19,7 @@ public interface MenuBarsLoaderService {
 }
 ----
 <1> Whether dynamic reloading of the menu bars layout is enabled.
-If not, then the xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[MenuBarsService] will cache the layout once loaded.
+If not, then the xref:rg:svc:presentation-layer-spi/MenuBarsService.adoc[MenuBarsService] will cache the layout once loaded.
 <2> Returns a new instance of `MenuBars` if possible, otherwise null.
 
 

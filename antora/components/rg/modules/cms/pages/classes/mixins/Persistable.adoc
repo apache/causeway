@@ -30,7 +30,7 @@ public Clob downloadJdoMetadata(                    // <1>
 
 === Related Services
 
-The mixin delegates to the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] service to obtain a reference to the JDO `PersistenceManagerFactory`.
+The mixin delegates to the xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] service to obtain a reference to the JDO `PersistenceManagerFactory`.
 
 
 == `datanucleusXxx`

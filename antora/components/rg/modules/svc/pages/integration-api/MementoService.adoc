@@ -49,7 +49,7 @@ In fact, the `MementoServiceDefault` implementation does provide a mechanism to 
 not part of the `MementoService` public API. Note also that the encoding method is not pluggable.
 ====
 
-To use an alternative implementation, implement `MementoService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, implement `MementoService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 The types of objects that are supported by the `MementoService` are implementation-specific, but would typically
 include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary

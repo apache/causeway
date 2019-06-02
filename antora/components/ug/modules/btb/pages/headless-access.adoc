@@ -14,7 +14,7 @@ There are several main use-cases:
 
 Note that the calling thread runs in the same process space as the Apache Isis domain object model (must be physically linked to the JAR files containing the domain classes).  For use cases where the calling thread runs in some other process space (eg migrating data from a legacy system), then the xref:ug:vro:about.adoc[Restful Objects viewer] is usually the way to go.
 
-The API described in this chapter is reasonably low-level, allowing code to interact very directly with the Apache Isis metamodel and runtime.  Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.  However the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service could be used to enforce such business rules if required.
+The API described in this chapter is reasonably low-level, allowing code to interact very directly with the Apache Isis metamodel and runtime.  Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.  However the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service could be used to enforce such business rules if required.
 
 
 

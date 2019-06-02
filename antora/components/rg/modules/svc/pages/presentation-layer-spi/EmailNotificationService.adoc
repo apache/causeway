@@ -6,11 +6,11 @@ include::_attributes.adoc[]
 
 The `EmailNotificationService` supports the xref:ug:vw:features/user-registration.adoc[user registration] (self sign-up) features of the xref:ug:vw:about.adoc[Wicket viewer] whereby a user can sign-up to access an application by providing a valid email address.
 
-The Wicket viewer will check whether an implementation of this service (and also the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent using this service; the email includes a link back to the running application. The user then completes the registration process (choosing a user name, password and so on) and the Wicket viewer creates an account for them (using the aforementioned `UserRegistrationService`).
+The Wicket viewer will check whether an implementation of this service (and also the xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent using this service; the email includes a link back to the running application. The user then completes the registration process (choosing a user name, password and so on) and the Wicket viewer creates an account for them (using the aforementioned `UserRegistrationService`).
 
 The role of this service in all of this is to format and send out emails for the initial registration, or for password resets.
 
-The default implementation of this service uses the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`], which must be configured in order for user registration to be enabled.
+The default implementation of this service uses the xref:rg:svc:integration-api/EmailService.adoc[`EmailService`], which must be configured in order for user registration to be enabled.
 
 
 == SPI
@@ -60,7 +60,7 @@ This implies a couple of additional constraints:
 
 == Related Services
 
-As noted elsewhere, the default implementation of this service uses xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`].  This service has no specific configuration properties but does require that the `EmailService` has been configured.
+As noted elsewhere, the default implementation of this service uses xref:rg:svc:integration-api/EmailService.adoc[`EmailService`].  This service has no specific configuration properties but does require that the `EmailService` has been configured.
 
-Conversely, this service is used by (Isis' default implementation of) xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`].
+Conversely, this service is used by (Isis' default implementation of) xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`].
 

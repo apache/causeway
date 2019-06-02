@@ -39,7 +39,7 @@ This implementation is also used to discover domain services annotated with xref
 Currently this logic uses the implementation directly, so is not pluggable.
 ====
 
-To use an alternative implementation, implement the `ClassDiscoveryService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, implement the `ClassDiscoveryService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 
@@ -47,6 +47,6 @@ To use an alternative implementation, implement the `ClassDiscoveryService` inte
 
 == Related Services
 
-The xref:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] domain service uses `ClassDiscoveryService` to discover ``FixtureScript``s implementations to present in the UI.
+The xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`] domain service uses `ClassDiscoveryService` to discover ``FixtureScript``s implementations to present in the UI.
 
 Note that the bootstrapping of the framework itself does _not_ use this service (though it does use the same underlying library as the default implementation of this service, namely `org.reflections.Reflections`).

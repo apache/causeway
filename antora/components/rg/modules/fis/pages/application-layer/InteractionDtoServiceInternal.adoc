@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `InteractionDtoServiceInternal` internal domain service is used by the framework to create and update DTOs representing member executions, ie the invocation of an action or the editing of a property.  The DTO is in all cases a subclass of `MemberExecutionDto`, from the xref:rg:cms:schema/ixn.adoc["ixn" schema], and subsequently accessible from the `Interaction` object (per the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service).
+The `InteractionDtoServiceInternal` internal domain service is used by the framework to create and update DTOs representing member executions, ie the invocation of an action or the editing of a property.  The DTO is in all cases a subclass of `MemberExecutionDto`, from the xref:rg:cms:schema/ixn.adoc["ixn" schema], and subsequently accessible from the `Interaction` object (per the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service).
 
 
 == SPI & Implementation

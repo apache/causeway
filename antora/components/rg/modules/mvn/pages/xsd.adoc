@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `xsd` goal of the `isis-maven-plugin` uses the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to
+The `xsd` goal of the `isis-maven-plugin` uses the xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`] to
 generate XSD schemas from any JAXB-annotated xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model/DTOs].
 
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
@@ -28,7 +28,7 @@ Defaults to `false`.  Most DTO classes will reference one another or the xref:rg
 
 * `commonSchemas` - (optional) whether to also generate the isis common schema(s). +
 +
-Defaults to `false`; if set then the call to xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] will set `IsisSchemas.INCLUDE` flag.
+Defaults to `false`; if set then the call to xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`] will set `IsisSchemas.INCLUDE` flag.
 
 As a convenience to any (Java) consumers, the XSDs generated from the view models can then in turn be generated
 into DTOs.  The original view models and these DTOs are similar but not identical: while the view models can only be used
@@ -99,10 +99,10 @@ First, the usual boilerplate:
 </project>
 ----
 <1> depends on the rest of the application's modules
-<2> XSD generation, to run the `xsd` goal and then assemble into a zip file; within a profile for modularity; see section xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xsd-profile[below]
-<3> XJC generation, to run the `xjc` to generate Java DTO classes from XSDs; within a profile for modularity; see section xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xjc-profile[below]
+<2> XSD generation, to run the `xsd` goal and then assemble into a zip file; within a profile for modularity; see section xref:rg:mvn:xsd.adoc#xsd-profile[below]
+<3> XJC generation, to run the `xjc` to generate Java DTO classes from XSDs; within a profile for modularity; see section xref:rg:mvn:xsd.adoc#xjc-profile[below]
 
-The xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xsd-profile[sections] xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xjc-profile[below] flesh out the gaps.
+The xref:rg:mvn:xsd.adoc#xsd-profile[sections] xref:rg:mvn:xsd.adoc#xjc-profile[below] flesh out the gaps.
 
 
 

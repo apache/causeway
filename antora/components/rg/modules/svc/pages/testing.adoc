@@ -23,7 +23,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_testing_ExecutionParametersService[`o.a.i.applib.` +
+|xref:rg:svc:testing/ExecutionParametersService.adoc[`o.a.i.applib.` +
 `fixturescripts.` +
 `ExecutionParametersService`]
 |...
@@ -33,28 +33,28 @@ It also lists their corresponding implementation, either a default implementatio
 |API is also a concrete class
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`o.a.i.applib.` +
+|xref:rg:svc:testing/FixtureScripts.adoc[`o.a.i.applib.` +
 `fixturescripts` +
 `FixtureScripts`]
 |Provides the ability to execute fixture scripts.
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Default implementation uses xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScripts-
+|Default implementation uses xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScripts-
 SpecificationProvider`].
 
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
+|xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`o.a.i.applib.` +
 `services.fixturespec` +
 `FixtureScripts-` +
 `SpecificationProvider`]
-|Provides settings for xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] default domain service (`FixtureScriptsDefault`) for executing fixture scripts.
+|Provides settings for xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`] default domain service (`FixtureScriptsDefault`) for executing fixture scripts.
 |
 |
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_testing_SudoService[`o.a.i.applib.` +
+|xref:rg:svc:testing/SudoService.adoc[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
 |For use in testing while running xref:rg:cms:classes/super/FixtureScripts.adoc[fixture scripts], allows a block of code to run as a specified user account.
@@ -64,7 +64,7 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
-|xref:rg:svc:rgsvc.adoc#_rgsvc_testing_SwitchUserService[`o.a.i.applib.` +
+|xref:rg:svc:testing/SwitchUserService.adoc[`o.a.i.applib.` +
 `fixtures.switchuser` +
 `SwitchUserServiceService`]
 |(deprecated)

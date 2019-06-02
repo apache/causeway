@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 This section catalogues the various domain event classes defined by Apache Isis.
 
-These events are broadcast on the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
+These events are broadcast on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
 The domain events are broadcast as a result of being specified in the xref:rg:ant:Action/domainEvent.adoc[`@Action#domainEvent()`],  xref:rg:ant:Property/domainEvent.adoc[`@Property#domainEvent()`] or xref:rg:ant:Collection/domainEvent.adoc[`@Collection#domainEvent()`] attributes.
 
 They are listed in the table below.

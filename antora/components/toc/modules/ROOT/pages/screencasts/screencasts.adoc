@@ -115,7 +115,7 @@ Using the Swagger UI to access the xref:ug:vro:about.adoc[REST API] automaticall
 
 
 |link:https://www.youtube.com/watch?v=yOh3WphhR1E[010^] +
-Using the xref:rg:mvn:rgmvn.adoc#[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
+Using the xref:rg:mvn:about.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
 ||||||||x|||
 
 
@@ -145,7 +145,7 @@ Implementing business logic using a (no-arg) action, and associating with a prop
 
 
 |link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
-Invoking (no-arg) action on multiple objects at once (using xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`], and using the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience.
+Invoking (no-arg) action on multiple objects at once (using xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`], and using the xref:rg:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
 |||x||||||x||
 
 
@@ -341,7 +341,7 @@ How to validate action parameters using the xref:rg:ant:Parameter/mustSatisfy.ad
 
 
 |link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
-How to instantiate/initialize objects using xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`], xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] and/or xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
+How to instantiate/initialize objects using xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
 |x||||||||x||
 
 

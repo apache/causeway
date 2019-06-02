@@ -9,7 +9,7 @@ simply exposes the HTTP `Accept` header to the domain.  Its intended use is to s
 [NOTE]
 ====
 As an alternative to performing content negotiation within the domain classes, the xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and
-xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
 == API & Implementation
@@ -38,7 +38,7 @@ Note that the service will only return a list when the request is initiated thro
 
 To use an alternative implementation, use
 xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage
@@ -62,7 +62,7 @@ type/subtype, eg `application/vnd.myrestapi-v1+json`; an alternative is to use a
 `application/json;x-my-rest-api-version=1` (where `x-my-rest-api-version` is the media type parameter).
 
 The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter;
-this is used by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] to determine how to
+this is used by the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] to determine how to
 map domain objects to view models/DTOs.
 ====
 

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 This section catalogues the various UI event classes defined by Apache Isis.
 
-These events are broadcast on the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].  The domain
+These events are broadcast on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  The domain
 events are broadcast as a result of being specified in the xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`@DomainObjectLayout#titleUiEvent()`],  xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] or xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
 
 They are listed in the table below.
