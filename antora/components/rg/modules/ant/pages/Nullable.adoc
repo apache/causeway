@@ -45,7 +45,7 @@ xref:rg:ant:Column/allowsNull.adoc[`@Column#allowsNull()`].
 ====
 
 If more than one method is specified then the framework will validate that there are no incompatibilities (and fail to
-boot otherwise).  This can also be verified using the xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal] of the Apache
+boot otherwise).  This can also be verified using the xref:rg:mvn:validate.adoc[validate goal] of the Apache
 Isis Maven plugin.
 
 

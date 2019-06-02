@@ -55,7 +55,7 @@ In the todoapp this can be found in the `todoapp-xsd` Maven module, whose `pom.x
 </project>
 ----
 
-The `isis-xsd` profile generates the XSD using the xref:rg:mvn:rgmvn.adoc#_rgmvn_xsd[`xsd` goal] of Isis' maven plugin:
+The `isis-xsd` profile generates the XSD using the xref:rg:mvn:xsd.adoc[`xsd` goal] of Isis' maven plugin:
 
 [source,xml]
 ----

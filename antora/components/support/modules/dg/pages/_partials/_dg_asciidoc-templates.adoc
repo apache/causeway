@@ -221,9 +221,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]`
+//`\xref:rg:mvn:validate.adoc[validate goal]`
 //
-//|xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]
+//|xref:rg:mvn:validate.adoc[validate goal]
 //
 //
 //

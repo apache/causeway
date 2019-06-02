@@ -59,6 +59,6 @@ This service is provided as a convenience for applications, it is not (currently
 
 A `SwaggerServiceMenu` domain service provides a prototype action that enables the swagger spec to be downloaded from the Wicket viewer's UI.
 
-Apache Isis' xref:rg:mvn:rgmvn.adoc#[Maven plugin] also provides a xref:rg:mvn:rgmvn.adoc#_rgmvn_swagger[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
+Apache Isis' xref:rg:mvn:rgmvn.adoc#[Maven plugin] also provides a xref:rg:mvn:swagger.adoc[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
 
 

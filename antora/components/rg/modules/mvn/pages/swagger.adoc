@@ -86,7 +86,7 @@ Update the `pom.xml` (in your project's `integtest` module):
 ----
 <1> the profile is active by default, though can be disabled using `-Dskip.isis-swagger`
 <2> set to `1.11.0` (or any later version)
-<3> the manifest discussed xref:rg:mvn:rgmvn.adoc#_rgmvn_intro_app-manifest[previously]; adjust as required
+<3> the manifest discussed xref:rg:mvn:intro/app-manifest.adoc[previously]; adjust as required
 <4> the visibilities to create (one swagger spec file per visibility listed)
 <5> which file format to generate the spec files as.
 <6> the `dom` module for the project; adjust as required
