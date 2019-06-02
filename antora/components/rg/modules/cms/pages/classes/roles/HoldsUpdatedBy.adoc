@@ -14,6 +14,6 @@ public interface HoldsUpdatedBy {
 }
 ----
 
-Entities that implement this interface often also implement xref:rg:cms:rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedAt[`HoldsUpdatedAt`] role interface; as a convenience the xref:rg:cms:rgcms.adoc#_rgcms_classes_roles_Timestampable[`Timestampable`] interface combines the two roles.
+Entities that implement this interface often also implement xref:rg:cms:classes/roles/HoldsUpdatedAt.adoc[`HoldsUpdatedAt`] role interface; as a convenience the xref:rg:cms:classes/roles/Timestampable.adoc[`Timestampable`] interface combines the two roles.
 
 

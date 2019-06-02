@@ -40,7 +40,7 @@ public class ToDoItem ... {
 
 See also:
 
-* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
-* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
-* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
-* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`]
+* xref:rg:cms:methods/reserved/title.adoc[`title()`]
+* xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`]
+* xref:rg:cms:methods/reserved/cssClass.adoc[`cssClass()`]
+* xref:rg:cms:methods/reserved/layout.adoc[`layout()`]

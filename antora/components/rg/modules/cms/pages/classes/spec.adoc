@@ -9,7 +9,6 @@ Apache Isis will automatically apply such specifications as validation rules on 
 
 
 
-[_rgcms_classes_spec-Specification]
 == `Specification`
 
 The heart of the support for this pattern is the `Specification` interface:
@@ -47,11 +46,10 @@ public class Customer {
 
 
 
-[_rgcms_classes_spec-Specification2]
 == `Specification2`
 
 The `Specification2` interface extends the `Specification` API to add support for i18n.
-This is done by defining an additional method that returns a xref:rg:cms:rgcms.adoc#_rgcms_classes_i18n_TranslatableString[translatable string]:
+This is done by defining an additional method that returns a xref:rg:cms:classes/i18n/TranslatableString.adoc[translatable string]:
 
 [source,java]
 ----
@@ -67,7 +65,6 @@ Note that if implementing `Specification2` then there is no need to also provide
 
 
 
-[_rgcms_classes_spec-adapter_classes]
 == Adapter classes
 
 The `AbstractSpecification` and `AbstractSpecification2` adapter classes provide a partial implementation of the respective interfaces, providing type-safety.
@@ -96,7 +93,6 @@ public class Customer {
 The `AbstractSpecification2` class is almost identical; its type-safe method is `satisfiesTranslatableSafely(T)` instead.
 
 
-[_rgcms_classes_spec-combining_specifications]
 == Combining specifications
 
 There are also adapter classes that can be inherited from to combine specifications:

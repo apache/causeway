@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 The `ClassDiscoveryService` service (and its various supertypes) is used to automatically discover subclasses of any given type on the classpath.
 The primary use case is to support "convention-over-configuration" designs that work with a minimum of configuration.
 
-This service is used by the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] service to automatically locate any xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] implementations.
+This service is used by the xref:rg:cms:classes/super/FixtureScripts.adoc[`FixtureScripts`] service to automatically locate any xref:rg:cms:classes/super/FixtureScript.adoc[`FixtureScript`] implementations.
 
 
 

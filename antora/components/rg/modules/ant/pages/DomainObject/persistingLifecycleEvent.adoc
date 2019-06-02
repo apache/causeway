@@ -12,7 +12,7 @@ One possible application is to maintain a full-text search database using link:h
 [NOTE]
 ====
 Another use case is to maintain "last updated by"/"last updated at" properties.
-While you can roll your own, note that the framework provides built-in support for this use case through the xref:rg:cms:rgcms.adoc#_rgcms_classes_roles_Timestampable[`Timestampable`] role interface.
+While you can roll your own, note that the framework provides built-in support for this use case through the xref:rg:cms:classes/roles/Timestampable.adoc[`Timestampable`] role interface.
 ====
 
 By default the event raised is `ObjectPersistingEvent.Default`.

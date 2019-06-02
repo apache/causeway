@@ -32,7 +32,7 @@ The table below lists the method prefixes that are recognized as part of Apache 
 Param
 |Description
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]
+|xref:rg:cms:methods/prefixes/addTo.adoc[`addTo...()`]
 |
 |
 |Y
@@ -45,10 +45,10 @@ Param
 Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]`
+See also xref:rg:cms:methods/prefixes/removeFrom.adoc[`removeFrom...()`]`
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
+|xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoComplete...()`]
 |
 |Y
 |
@@ -59,9 +59,9 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom..
 Alternatively, can specify for a class using xref:rg:ant:DomainObject/autoCompleteRepository.adoc[`@DomainObject` +
 `#autoCompleteRepository`] +
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+See also xref:rg:cms:methods/prefixes/choices.adoc[`choices...()`]
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+|xref:rg:cms:methods/prefixes/choices.adoc[`choices...()`]
 |
 |Y
 |
@@ -69,9 +69,9 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 |Y
 |Provide list of choices for a property or action parameter. +
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`].
+See also xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoComplete...()`].
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]
+|xref:rg:cms:methods/prefixes/clear.adoc[`clear...()`]
 |
 |Y
 |
@@ -81,10 +81,10 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComple
 
 Allows business logic to be placed apart from the setter. +
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]
+See also xref:rg:cms:methods/prefixes/modify.adoc[`modify...()`]
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
+|xref:rg:cms:methods/prefixes/default.adoc[`default...()`]
 |
 |Y
 |
@@ -92,7 +92,7 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]
 |Y
 |Default value for a property or an action parameter.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`]
+|xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`]
 |Y
 |Y
 |Y
@@ -100,7 +100,7 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]
 |
 |Disables (makes read-only) a property, a collection or an action.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_get[`get...()`]
+|xref:rg:cms:methods/prefixes/get.adoc[`get...()`]
 |
 |Y
 |Y
@@ -108,9 +108,9 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]
 |
 |Access the value of a property or collection. +
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`].
+See also xref:rg:cms:methods/prefixes/set.adoc[`set...()`].
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`]
+|xref:rg:cms:methods/prefixes/hide.adoc[`hide...()`]
 |
 |Y
 |Y
@@ -118,7 +118,7 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`].
 |
 |Hides a property, a collection or an action.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]
+|xref:rg:cms:methods/prefixes/modify.adoc[`modify...()`]
 |
 |Y
 |
@@ -128,9 +128,9 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`].
 
 Allows business logic to be placed apart from the setter. +
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]`.
+See also xref:rg:cms:methods/prefixes/clear.adoc[`clear...()`]`.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]
+|xref:rg:cms:methods/prefixes/removeFrom.adoc[`removeFrom...()`]
 |
 |
 |Y
@@ -143,10 +143,10 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]`.
 Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]`
+See also xref:rg:cms:methods/prefixes/addTo.adoc[`addTo...()`]`
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`]
+|xref:rg:cms:methods/prefixes/set.adoc[`set...()`]
 |
 |Y
 |Y
@@ -154,7 +154,7 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]`
 |
 |Sets the value of a property or a collection.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`]
+|xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`]
 |Y
 |
 |
@@ -162,9 +162,9 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]`
 |Y
 |Check that a proposed value of a property or a set of action parameters or a single action parameter is valid. +
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`] and xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`] to validate modifications to collections.
+See also xref:rg:cms:methods/prefixes/validateAddTo.adoc[`validateAddTo...()`] and xref:rg:cms:methods/prefixes/validateRemoveFrom.adoc[`validateRemoveFrom...()`] to validate modifications to collections.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validate +
+|xref:rg:cms:methods/prefixes/validateAddTo.adoc[`validate +
 AddTo...()`]
 |
 |Y
@@ -178,9 +178,9 @@ AddTo...()`]
 Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`], and xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] for properties and actions.
+See also xref:rg:cms:methods/prefixes/validateRemoveFrom.adoc[`validateRemoveFrom...()`], and xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`] for properties and actions.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validate +
+|xref:rg:cms:methods/prefixes/validateRemoveFrom.adoc[`validate +
 RemoveFrom...()`]
 |
 |Y
@@ -194,7 +194,7 @@ RemoveFrom...()`]
 Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`], and xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] for properties and actions.
+See also xref:rg:cms:methods/prefixes/validateAddTo.adoc[`validateAddTo...()`], and xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`] for properties and actions.
 
 |===
 

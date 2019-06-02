@@ -21,7 +21,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/domainevent/AbstractDomainEvent.adoc[`o.a.i.applib.` +
 `AbstractDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
@@ -30,7 +30,7 @@ Impl'n (g: a:)
 |Superclass of the other domain events, listed below in this table.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_ActionDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/domainevent/ActionDomainEvent.adoc[`o.a.i.applib.` +
 `ActionDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
@@ -40,7 +40,7 @@ Impl'n (g: a:)
 |Broadcast whenever there is an interaction (hide/disable/validate/pre-execute/post-execute) with an object's action.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_CollectionDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/domainevent/CollectionDomainEvent.adoc[`o.a.i.applib.` +
 `CollectionDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
@@ -51,7 +51,7 @@ is specified.
 |Broadcast whenever there is an interaction (hide/disable/validate/access) with an object's collection.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_PropertyDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/domainevent/PropertyDomainEvent.adoc[`o.a.i.applib.` +
 `PropertyDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +

@@ -164,7 +164,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adrgcfg`
-//|`\xref:rg:cfg:rgcfg.adoc#xxx[ttt]`
+//|`\xref:rg:cfg:about.adoc#xxx[ttt]`
 //
 //a hyperlink to a bookmark within the reference guide for configuration properties guide, where:
 //
@@ -189,9 +189,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]`
+//`\xref:rg:cms:classes/super/AbstractService.adoc[`AbstractService`]`
 //
-//|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]
+//|xref:rg:cms:classes/super/AbstractService.adoc[`AbstractService`]
 //
 //
 //

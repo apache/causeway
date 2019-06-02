@@ -86,7 +86,7 @@ This works for both singleton (application-scoped) and also xref:rg:ant:RequestS
 
 [TIP]
 ====
-The xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`AbstractSubscriber`] class automatically performs this
+The xref:rg:cms:classes/super/AbstractSubscriber.adoc[`AbstractSubscriber`] class automatically performs this
 registration.  As a convenience, it is also annotated with the
 xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] attribute.
 ====

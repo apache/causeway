@@ -14,7 +14,7 @@ The class itself is instantiated automatically by the framework whenever interac
 
 [NOTE]
 ====
-If the domain object defines its own xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] supporting method,
+If the domain object defines its own xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`] supporting method,
 or if it has the
 xref:rg:ant:DomainObjectLayout#cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute, then
 these will take precedence.

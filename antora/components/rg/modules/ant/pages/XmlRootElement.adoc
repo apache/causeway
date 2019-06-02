@@ -11,7 +11,7 @@ A view model is a non-persisted domain object whose state is converted to/from a
 JAXB-annotated object this memento is its XML representation.  JAXB generally requires that the root element of the
 XML representation is annotated with `@XmlRootElement`.  Apache Isis makes this a mandatory requirement.
 
-In comparison to using either the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface or the
+In comparison to using either the xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface or the
 xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of
 significant advantages:
 

@@ -32,4 +32,4 @@ public class LibraryMember {
 <2> perform some additional business logic
 
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]`
+See also xref:rg:cms:methods/prefixes/addTo.adoc[`addTo...()`]`

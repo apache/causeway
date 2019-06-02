@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-Subclass of xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEvent[`AbstractDomainEvent`] for properties.
+Subclass of xref:rg:cms:classes/domainevent/AbstractDomainEvent.adoc[`AbstractDomainEvent`] for properties.
 
 The class has a couple of responsibilities (in addition to those it inherits):
 

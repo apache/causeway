@@ -40,5 +40,5 @@ public class LibraryMember {
 ----
 
 
-See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`] and  xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`]`
+See also xref:rg:cms:methods/prefixes/removeFrom.adoc[`removeFrom...()`] and  xref:rg:cms:methods/prefixes/validateAddTo.adoc[`validateAddTo...()`]`
 

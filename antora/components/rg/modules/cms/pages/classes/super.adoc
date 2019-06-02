@@ -18,7 +18,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`o.a.i.applib.` +
+|xref:rg:cms:classes/super/AbstractService.adoc[`o.a.i.applib.` +
 `AbstractService`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -26,7 +26,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`o.a.i.applib.` +
+|xref:rg:cms:classes/super/AbstractSubscriber.adoc[`o.a.i.applib.` +
 `AbstractSubscriber`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -34,7 +34,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`o.a.i.applib.` +
+|xref:rg:cms:classes/super/AbstractViewModel.adoc[`o.a.i.applib.` +
 `AbstractViewModel`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -42,7 +42,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScript[`o.a.i.applib.` +
+|xref:rg:cms:classes/super/FixtureScript.adoc[`o.a.i.applib.` +
 `fixturescript` +
 `FixtureScript`]
 |``o.a.i.core`` +
@@ -51,7 +51,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`o.a.i.applib.` +
+|xref:rg:cms:classes/super/FixtureScripts.adoc[`o.a.i.applib.` +
 `fixturescripts` +
 `FixtureScripts`]
 |``o.a.i.core`` +

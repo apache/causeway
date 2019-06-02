@@ -70,4 +70,4 @@ public String validateDelete(boolean areYouSure) {
 ----
 <1> invalid to return `this` (cannot render a deleted object)
 
-Note that the action itself does not use the boolean parameter, it is only used by the supporting xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] method.
+Note that the action itself does not use the boolean parameter, it is only used by the supporting xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`] method.

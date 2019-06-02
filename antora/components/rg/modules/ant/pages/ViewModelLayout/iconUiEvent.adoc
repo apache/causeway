@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 Whenever a view model is to be rendered, the framework fires off an icon UI event to obtain an icon (name) for the object (if possible).
-This is as an alternative to implementing xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] reserved method.
+This is as an alternative to implementing xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`] reserved method.
 (If `iconName()` is present, then it will take precedence).
 
 This attribute is the same as xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`], but for view models instead of entities.

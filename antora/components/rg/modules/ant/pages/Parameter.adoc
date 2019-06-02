@@ -18,8 +18,8 @@ The table below summarizes the annotation's attributes.
 
 |xref:rg:ant:Parameter/fileAccept.adoc[`fileAccept()`]
 |Media type or file extension
-|Hints the file type to be uploaded for xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
- or xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
+|Hints the file type to be uploaded for xref:rg:cms:classes/value-types/Blob.adoc[`Blob`]
+ or xref:rg:cms:classes/value-types/Clob.adoc[`Clob`]. +
  +
  Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 

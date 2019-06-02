@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The Apache Isis application library provides the xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[Blob] value type (binary large objects) and also the xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[Clob]
+The Apache Isis application library provides the xref:rg:cms:classes/value-types/Blob.adoc[Blob] value type (binary large objects) and also the xref:rg:cms:classes/value-types/Clob.adoc[Clob]
 value type (character large object), each of which also includes metadata about the data (specifically the filename and mime type).
 
 A class can define a property using either of these types, for example:

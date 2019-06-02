@@ -56,7 +56,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
     ...
 }
 ----
-<1> the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] domain service is injected, providing us with the ability to run fixture scripts
+<1> the xref:rg:cms:classes/super/FixtureScripts.adoc[`FixtureScripts`] domain service is injected, providing us with the ability to run fixture scripts
 <2> likewise, an instance of the `ToDoItems` domain service is injected.  We'll use this to lookup...
 <3> the object under test, held as a field
 <4> the fixture script for this test; it deletes all existing todo items (for the current user only) and then recreates them

@@ -57,7 +57,7 @@ SpecificationProvider`].
 |xref:rg:svc:rgsvc.adoc#_rgsvc_testing_SudoService[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
-|For use in testing while running xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
+|For use in testing while running xref:rg:cms:classes/super/FixtureScripts.adoc[fixture scripts], allows a block of code to run as a specified user account.
 |`SudoServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``

@@ -159,13 +159,13 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
-Using the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`], xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
+Using the xref:rg:cms:methods/reserved/title.adoc[`title()`], xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`] and xref:rg:cms:methods/reserved/cssClass.adoc[`cssClass()`] so that end-users can distinguish domain objects within the UI.
 |x||x||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=7ToRKBOeemM[015^] +
-Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rg:cms:rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`IconUiEvent`] as per the xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] annotation
+Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rg:cms:classes/uievent/IconUiEvent.adoc[`IconUiEvent`] as per the xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] annotation
 ||||||x|||||
 
 
@@ -252,13 +252,13 @@ Shows how to refactor a domain object to move (derived) collections out of the d
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:ug:fun:building-blocks/events/domain-events.adoc[decouple] and abstract business rules (xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[validation]).
+Using a domain event xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscriber] to xref:ug:fun:building-blocks/events/domain-events.adoc[decouple] and abstract business rules (xref:rg:cms:methods/prefixes/validate.adoc[validation]).
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=6GjLW0hlrm4[025^] +
-Using a domain event xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to hide functionality, in this
+Using a domain event xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscriber] to hide functionality, in this
   case the xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
 ||||||||||x|
 
@@ -271,7 +271,7 @@ Using a domain event xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscri
 
 
 |link:https://www.youtube.com/watch?v=qj4bMkQRBUY[026^] +
-Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
+Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cms:methods/reserved/title.adoc[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
 |x||||||||x||
 
 
@@ -322,7 +322,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=ORoEYlg6XFM[030^] +
-How to validate action parameters using a supporting xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validateNXxx()`] method.
+How to validate action parameters using a supporting xref:rg:cms:methods/prefixes/validate.adoc[`validateNXxx()`] method.
 |x||||||||x||
 
 
@@ -355,19 +355,19 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=cQ06PoMNDPw[033^] +
-How to provide a set of xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when editing a property.
+How to provide a set of xref:rg:cms:methods/prefixes/choices.adoc[choices] (a drop-down list) when editing a property.
 |x||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=afEnYKljBQs[034^] +
-How to provide a set of xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when invoking an action.
+How to provide a set of xref:rg:cms:methods/prefixes/choices.adoc[choices] (a drop-down list) when invoking an action.
 |||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=fKo6aTPK-gk[035^] +
-How to use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] supporting methods as a source for default values within a xref:ug:tst:fixture-scripts.adoc[fixture script].
+How to use the xref:rg:cms:methods/prefixes/choices.adoc[choices] supporting methods as a source for default values within a xref:ug:tst:fixture-scripts.adoc[fixture script].
 ||x|||||||x||
 
 
@@ -406,7 +406,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=NKaR7ZedI8E[039^] +
-Using the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller.
+Using the xref:rg:cms:classes/super/FixtureScript.adoc[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller.
 ||x|||||||||
 
 
@@ -446,7 +446,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Rt4JoV4ssVY[043^] +
-How to use the supporting xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
+How to use the supporting xref:rg:cms:methods/prefixes/default.adoc[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
 |x||||||||x||
 
 
@@ -456,12 +456,12 @@ How to use xref:rg:ant:DomainObject/bounding.adoc[`@DomainObject#bounding()`] so
 
 
 |link:https://www.youtube.com/watch?v=0ro_YhXOpJU[045^] +
-How to use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:rg:cms:methods/prefixes/choices.adoc[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=K36IJQ_hDfs[046^] +
-How to use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 

@@ -8,18 +8,12 @@ or deleting objects from the database.
 
 Its immediate subclasses are:
 
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedEvent[`ObjectCreatedEvent`]
-
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedEvent[`ObjectLoadedEvent`]
-
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistedEvent[`ObjectPersistedEvent`]
-
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingEvent[`ObjectPersistingEvent`]
-
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectRemovingEvent[`ObjectRemovingEvent`]
-
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatedEvent[`ObjectUpdatedEvent`]
-
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingEvent[`ObjectUpdatingEvent`]
+* xref:rg:cms:classes/lifecycleevent/ObjectCreatedEvent.adoc[`ObjectCreatedEvent`]
+* xref:rg:cms:classes/lifecycleevent/ObjectLoadedEvent.adoc[`ObjectLoadedEvent`]
+* xref:rg:cms:classes/lifecycleevent/ObjectPersistedEvent.adoc[`ObjectPersistedEvent`]
+* xref:rg:cms:classes/lifecycleevent/ObjectPersistingEvent.adoc[`ObjectPersistingEvent`]
+* xref:rg:cms:classes/lifecycleevent/ObjectRemovingEvent.adoc[`ObjectRemovingEvent`]
+* xref:rg:cms:classes/lifecycleevent/ObjectUpdatedEvent.adoc[`ObjectUpdatedEvent`]
+* xref:rg:cms:classes/lifecycleevent/ObjectUpdatingEvent.adoc[`ObjectUpdatingEvent`]
 
 

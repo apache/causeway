@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `@MinLength` annotation is used to specify the minimum number of characters in a search of an xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method.
+The `@MinLength` annotation is used to specify the minimum number of characters in a search of an xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoComplete...()`] supporting method.
 
 
 For example:

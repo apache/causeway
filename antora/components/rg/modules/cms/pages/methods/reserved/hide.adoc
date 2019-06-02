@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 One use case that Apache Isis supports is that of a domain object with a lifecycle whereby at some stage some number of the object's members should be hidden.
 For example, for an object that at some stage is logically immutable, we might want to make all its properties/collections unmodifiable and hide all its actions.
 
-While we could write a separate xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`] method for each and every action, this could become painful.  So instead Isis allows a single `hide...(...)` method to be implemented that is applied to all members.
+While we could write a separate xref:rg:cms:methods/prefixes/hide.adoc[`hide...()`] method for each and every action, this could become painful.  So instead Isis allows a single `hide...(...)` method to be implemented that is applied to all members.
 
 The signature of the method is:
 
@@ -27,12 +27,12 @@ public boolean hide(Identifier.Type identifierType) {
 }
 ----
 
-See also the similar method to xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_disable[`disable()`] object members en-masse.
+See also the similar method to xref:rg:cms:methods/reserved/disable.adoc[`disable()`] object members en-masse.
 
 
 == Alternatives
 
 An alternative design -- and one that could be easily argued is actually more flexible -- is to leverage domain events with vetoing subscribers.
 
-There is further discussion on this approach in xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_disable[here].
+There is further discussion on this approach in xref:rg:cms:methods/reserved/disable.adoc[here].
 

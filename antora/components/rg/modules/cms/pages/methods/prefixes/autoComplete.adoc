@@ -8,7 +8,7 @@ The `autoComplete...()` supporting method is called for action parameters and fo
 
 [TIP]
 ====
-If the number of candidate objects is comparatively small, then use xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] supporting method instead.
+If the number of candidate objects is comparatively small, then use xref:rg:cms:methods/prefixes/choices.adoc[`choices...()`] supporting method instead.
 ====
 
 The signature of the supporting method depends on whether it is for a parameter or a property.

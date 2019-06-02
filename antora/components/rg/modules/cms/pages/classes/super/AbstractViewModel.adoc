@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-This class simply implements the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface, however the methods are still abstract.
+This class simply implements the xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface, however the methods are still abstract.
 In and of itself it provides no new behaviour.
 
 [TIP]

@@ -41,11 +41,11 @@ public interface RepresentsInteractionMemberExecution extends HasTransactionId {
 }
 ----
 
-Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:rg:cms:rgcms.adoc#schema-ixn[`InteractionDto`]) that has at least one member execution (cf xref:rg:cms:rgcms.adoc#schema-ixn_memberExecutionDto[`memberExecutionDto`]).
+Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:rg:cms:schema/ixn.adoc[`InteractionDto`]) that has at least one member execution (cf xref:rg:cms:schema/ixn/memberExecutionDto.adoc[`memberExecutionDto`]).
 
-If the interaction (almost certainly an action) calls other actions by way of xref:rg:svc:rgsvc.adoc#WrapperFactory[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
+If the interaction (almost certainly an action) calls other actions by way of xref:rg:svc:WrapperFactory.adoc[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
 
 The purpose of this interface is to allow mixins to be defined, though the framework itself defines none.
 
-Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 

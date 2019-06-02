@@ -322,7 +322,7 @@ In this section we explore adding some value properties
 * for all non-optional properties will either need to prompt for a value, or calculate some suitable default
 * change the implementation of title, if need be
 * revisit the title, consider whether to use the xref:rg:ant:Title.adoc[`@Title`] annotation
-** rather than the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method
+** rather than the xref:rg:cms:methods/reserved/title.adoc[`title()`] method
 * order the properties using the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`], also `@MemberGroupLayout`
 ** see also the docs on xref:ug:vw:layout/annotation-based.adoc[static layouts]
 * use the xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
@@ -341,10 +341,10 @@ In this section we focus on scalar reference properties.
 * update the corresponding domain service (for creation actoin)
 * use different techniques to obtain references (shown in drop-down list box)
 ** use the xref:rg:ant:DomainObject/bounding.adoc[`@DomainObjectLayout(bounding=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
-** use a xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] supporting method
+** use a xref:rg:cms:methods/prefixes/choices.adoc[`choices...()`] supporting method
 *** on a property
 *** on an action parameter
-** use a xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method
+** use a xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoComplete...()`] supporting method
 *** on a property
 *** on an action parameter
 
@@ -367,7 +367,7 @@ Returning back to references, Isis also supports vector (multi-valued) reference
 We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
 
 * Ensure that all domain classes implement `java.lang.Comparable`
-** use the xref:rg:cms:rgcms.adoc#_rgcms_classes_utility_ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
+** use the xref:rg:cms:classes/utility/ObjectContracts.adoc[`ObjectContracts`] utility class to help implement `Comparable`
 *** you can also implement `equals()`, `hashCode()`, `toString()`
 * Add a xref:ug:fun:programming-model/collections.adoc[collection] to one of the entities
 ** Use `SortedSet` as the class
@@ -442,7 +442,7 @@ Or, more pithily: "see it, use it, do it"
 * Use the xref:rg:ant:Property/hidden.adoc[`Property(hidden=...)`] annotation to make properties invisible
 ** likewise xref:rg:ant:Collection/hidden.adoc[`@Collection(hidden=...)`] for collections
 ** the xref:rg:ant:Programmatic.adoc[`@Programmatic`]  annotation can also be used and in many cases is to be preferred; the difference is that the latter means the member is not part of the Apache Isis metamodel.
-* Use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`] supporting method on properties, collections and actions to make a property/collection/action invisible according to some imperative rule
+* Use the xref:rg:cms:methods/prefixes/hide.adoc[`hide...()`] supporting method on properties, collections and actions to make a property/collection/action invisible according to some imperative rule
 
 
 === Use it!
@@ -450,14 +450,14 @@ Or, more pithily: "see it, use it, do it"
 * Use the xref:rg:ant:Property/editing.adoc[`Property(editing=...)`] annotation to make property read-only
 ** likewise xref:rg:ant:Collection/editing.adoc[`@Collection(editing=...)`] for collections
 ** alternatively, use xref:rg:ant:DomainObject/editing.adoc[`@DomainObject(editing=...)`] to disable editing for all properties/collections
-* Use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] supporting method on properties and actions to make a property/action disabled according to some imperative rule
+* Use the xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`] supporting method on properties and actions to make a property/action disabled according to some imperative rule
 
 
 === Do it!
 
 * use the xref:rg:ant:Property/regexPattern.adoc[`@Property(regexPattern=...)`] annotation to specify a regex pattern for properties, and use xref:rg:ant:Parameter/regexPattern.adoc[`@Parameter(regexPattern=...)`] for parameters
 * use the xref:rg:ant:Property/maxLength.adoc[`@Property(maxLength=...)`] annotation to indicate a maxmum number of characters, and xref:rg:ant:Parameter/maxLength.adoc[`@Parameter(maxLength=...)`] for parameters
-* Use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] supporting method on properties or action parameter
+* Use the xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`] supporting method on properties or action parameter
 * optional: for any data type:
 ** use the xref:rg:ant:Property/mustSatisfy.adoc[`Property(mustSatisfy=...)`] and xref:rg:ant:Parameter/mustSatisfy.adoc[`Parameter(mustSatisfy=...)`] annotations to specify arbitrary constraints on properties and parameters
 
@@ -649,7 +649,7 @@ For some high-volume or specialized uses cases, though, there may be a requireme
 Also, if using Apache Isis' REST API then the REST client may be a native application (on a smartphone or tablet, say) that is deployed by a third party.
 In these cases exposing the entities directly would be inadvisable because a refactoring of the domain entity would change the REST API and probably break that REST client.
 
-To support these use cases, Apache Isis therefore allows you to write a view model, either by annotating the class with xref:rg:ant:ViewModel.adoc[`@ViewModel`] or (for more control) by implementing the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`ViewModel`] interface.
+To support these use cases, Apache Isis therefore allows you to write a view model, either by annotating the class with xref:rg:ant:ViewModel.adoc[`@ViewModel`] or (for more control) by implementing the xref:rg:cms:classes/super/AbstractViewModel.adoc[`ViewModel`] interface.
 
 * build a view model summarizing the state of the app (a "dashboard")
 * write a new `@HomePage` domain service action returning this dashboard viewmodel (and remove the `@HomePage` annotation from any other domain service if present)

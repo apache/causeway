@@ -127,7 +127,7 @@ The representation returned by the domain object resource (section 14.4 of the R
 }
 ----
 
-Note that because of dynamic icons (the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] supporting method) the image returned can vary on an instance-by-instance basis.
+Note that because of dynamic icons (the xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`] supporting method) the image returned can vary on an instance-by-instance basis.
 
 
 == Domain Object Layout

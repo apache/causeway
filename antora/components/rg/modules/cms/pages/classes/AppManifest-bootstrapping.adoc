@@ -8,7 +8,7 @@ This section describes how to implement the `AppManifest` interface to bootstrap
 
 [TIP]
 ====
-The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` makes it easy to write an `AppManifest`, defined by a set of xref:rgcms.adoc#_rgcms_classes_Module[`Module`] implementations.
+The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` makes it easy to write an `AppManifest`, defined by a set of xref:rg:cms:classes/Module.adoc[`Module`] implementations.
 The app manifest can then be used both to bootstrap the application "proper", or for integration tests.
 ====
 
@@ -185,7 +185,7 @@ public Map<String, String> getConfigurationProperties() {
 
 [NOTE]
 ====
-The recommendations in this section no longer apply if using the xref:rg:cms:rgcms.adoc#__rgcms_classes_AppManifest2-bootstrapping_bootstrapping[`AppManifest2`] interface and ``Module``s to bootstrap your application.
+The recommendations in this section no longer apply if using the xref:rg:cms:classes/AppManifest2-bootstrapping/bootstrapping.adoc[`AppManifest2`] interface and ``Module``s to bootstrap your application.
 ====
 
 One of the primary goals of the `AppManifest` is to unify the bootstrapping of both integration tests and the webapp.
@@ -237,7 +237,7 @@ The next section describes some helper classes that the framework provides to he
 
 [IMPORTANT]
 ====
-The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` supercede `AppManifestAbstract`, making it easy to write an `AppManifest` defined by a set of xref:rgcms.adoc#_rgcms_classes_Module[`Module`] implementations.
+The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` supercede `AppManifestAbstract`, making it easy to write an `AppManifest` defined by a set of xref:rg:cms:classes/Module.adoc[`Module`] implementations.
 ====
 
 The `AppManifestAbstract` and its associated builder (`AppManifestAbstract.Builder`) make it easy to bootstrap the application both as a webapp and also as an integration test.

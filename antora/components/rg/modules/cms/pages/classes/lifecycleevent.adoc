@@ -20,7 +20,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/AbstractLifecycleEvent.adoc[`o.a.i.applib.` +
 `AbstractLifecycleEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -29,7 +29,7 @@ Impl'n (g: a:)
 |Superclass of the other lifecycle events, listed below in this table.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/ObjectCreatedDomainEvent.adoc[`o.a.i.applib.` +
 `ObjectCreatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -40,7 +40,7 @@ Impl'n (g: a:)
 `#instantiate(...)` method.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/ObjectLoadedDomainEvent.adoc[`o.a.i.applib.` +
 `ObjectLoadedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -50,7 +50,7 @@ Impl'n (g: a:)
 |Broadcast when an object is retrieved from the database.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/ObjectPersistedDomainEvent.adoc[`o.a.i.applib.` +
 `ObjectPersistedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -61,7 +61,7 @@ Impl'n (g: a:)
 `#persist(...)` method.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/ObjectPersistingDomainEvent.adoc[`o.a.i.applib.` +
 `ObjectPersistingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -72,7 +72,7 @@ Impl'n (g: a:)
 `#persist(...)` method.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectRemovingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/ObjectRemovingDomainEvent.adoc[`o.a.i.applib.` +
 `ObjectRemovingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -83,7 +83,7 @@ Impl'n (g: a:)
 `#remove(...)` method.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/ObjectUpdatedDomainEvent.adoc[`o.a.i.applib.` +
 `ObjectUpdatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -94,7 +94,7 @@ Impl'n (g: a:)
 This is done either explicitly when the current transaction is flushed using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes/lifecycleevent/ObjectUpdatingDomainEvent.adoc[`o.a.i.applib.` +
 `ObjectUpdatingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +

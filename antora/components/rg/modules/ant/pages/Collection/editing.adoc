@@ -19,7 +19,7 @@ Whether a collection is enabled or disabled depends upon these factors:
 
 * whether the domain object has been configured as immutable through the xref:rg:ant:DomainObject/editing.adoc[`@DomainObject#editing()`] attribute
 
-* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:rg:cfg:rgcfg.adoc#\_rgcfg_configuring-core[configuration property] `isis.objects.editing`.
+* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.objects.editing`.
 If set to `false`, then the object's collections (and properties) are *not* editable
 
 * else, then the value of the `@Collection(editing=...)` attribute itself.

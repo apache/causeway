@@ -7,7 +7,7 @@ The framework provides a single mixin that contributes to simply `java.lang.Obje
 It provides the ability to download the layout XML for any domain object (in practical terms: entities and view models).
 
 These mixin actions are all associated with the "Metadata" fieldset.
-A number of other xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Persistable[mixins] also contribute properties or actions to the "Metadata" fieldset.
+A number of other xref:rg:cms:classes/mixins/Persistable.adoc[mixins] also contribute properties or actions to the "Metadata" fieldset.
 
 
 

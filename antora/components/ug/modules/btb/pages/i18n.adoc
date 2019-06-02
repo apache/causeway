@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 Apache Isis' support for internationlization (i18n) allows every element of the domain model (the class names, property names, action names, parameter names and so forth) to be translated.
 
-It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] or xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`], and so on.
+It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`] or xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`], and so on.
 
 The xref:ug:vw:about.adoc[Wicket viewer] (that is, its labels and messages) is also internationalized using the same mechanism.
 If no translations are available, then the Wicket viewer falls back to using Wicket resource bundles.

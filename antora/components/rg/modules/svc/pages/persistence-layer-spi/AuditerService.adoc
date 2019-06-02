@@ -87,7 +87,7 @@ the secondary menu bar.
 * `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.
 None of its actions are visible in the user interface (they are all `@Programmatic`).
 
-* `AuditingServiceContributions` which contributes collections to the xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface.
+* `AuditingServiceContributions` which contributes collections to the xref:rg:cms:classes/mixins/HasTransactionId.adoc[ `HasTransactionId`] interface.
 This will therefore display all audit entries that occurred in a given request/transaction, in other words whenever a command, a published event or another audit entry is displayed.
 
 

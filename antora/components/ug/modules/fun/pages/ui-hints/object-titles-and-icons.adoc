@@ -76,7 +76,7 @@ Titles can sometimes get be long and therefore rather cumbersome in "parented" t
 
 === Imperative style
 
-Alternatively, the title can be provided simply by implementing the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method.
+Alternatively, the title can be provided simply by implementing the xref:rg:cms:methods/reserved/title.adoc[`title()`] reserved method.
 
 For example:
 
@@ -178,7 +178,7 @@ public class InvoiceRun {
 
 === Imperative style
 
-To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] method.
+To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`] method.
 
 For example:
 
@@ -242,7 +242,7 @@ public class OrderSubscriptions extends AbstractSubscriber {
 
 == Object CSS Styling
 
-It is also possible for an object to return a xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].
+It is also possible for an object to return a xref:rg:cms:methods/reserved/cssClass.adoc[CSS class].
 In conjunction with xref:ug:vw:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
@@ -262,7 +262,7 @@ One possible use case would be to render the most important object types with a 
 === Imperative style
 
 
-To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] method.
+To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:methods/reserved/cssClass.adoc[`cssClass()`] method.
 
 For example:
 

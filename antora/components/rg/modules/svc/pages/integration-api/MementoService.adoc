@@ -77,7 +77,7 @@ If using another implementation, the `canSet(...)` method can be used to check i
 
 == Usage
 
-As noted in the introduction, a common use case for this service is in the implementation of the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`ViewModel`] interface.
+As noted in the introduction, a common use case for this service is in the implementation of the xref:rg:cms:classes/super/AbstractViewModel.adoc[`ViewModel`] interface.
 
 [TIP]
 ====

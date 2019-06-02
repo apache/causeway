@@ -60,7 +60,7 @@ If you are using view models heavily, you may wish to restrict yourself to just 
 
 [NOTE]
 ====
-The `@ViewModel` does not allow the objectType to be specified, meaning that it is incompatible with the metamodel validation check ennabled by the xref:rg:cfg:rgcfg.adoc#__rgcfg_configuring-core_metamodel-validation[`explicitObjectType`] configuration property.
+The `@ViewModel` does not allow the objectType to be specified, meaning that it is incompatible with the metamodel validation check ennabled by the xref:rg:cfg:configuring-core.adoc#metamodel-validation[`explicitObjectType`] configuration property.
 
 Instead, use xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:rg:ant:DomainObject/objectType.adoc[`@DomainObject#objectType()`].
 ====

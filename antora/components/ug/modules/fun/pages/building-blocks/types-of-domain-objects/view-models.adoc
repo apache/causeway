@@ -125,7 +125,7 @@ In case it's not obvious, these DTOs are still usable as "regular" view models; 
 In fact (as the xref:ug:fun:programming-model/view-models/jaxb.adoc[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
-The view model simply needs to implement the xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface; the framework has xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that contribute the download actions to the view model.
+The view model simply needs to implement the xref:rg:cms:classes/mixins/Dto.adoc[`Dto`] marker interface; the framework has xref:rg:cms:classes/mixins/Dto.adoc[mixins] that contribute the download actions to the view model.
 
 [TIP]
 ====

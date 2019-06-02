@@ -58,7 +58,7 @@ public boolean hideStatus() { ... }
 ----
 
 
-For more information, see the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`] section in the appropriate reference guide.
+For more information, see the xref:rg:cms:methods/prefixes/hide.adoc[`hide...()`] section in the appropriate reference guide.
 
 
 == Usability ("use it")
@@ -86,7 +86,7 @@ public void setStatus(String status) { ... }
 public String disableStatus() { ... }
 ----
 
-For more information, see  xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] section in the appropriate reference guide.
+For more information, see  xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`] section in the appropriate reference guide.
 
 
 It is also possible to make all properties of a domain object unmodifiable, using:
@@ -99,7 +99,7 @@ It is also possible to make all properties of a domain object unmodifiable, usin
 public class Customer { ... }
 ----
 
-This can be made a global policy using a xref:rg:cfg:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[configuration setting]:
+This can be made a global policy using a xref:rg:cfg:configuring-core.adoc#isis-objects-editing[configuration setting]:
 
 .isis.properties
 [source,ini]
@@ -140,7 +140,7 @@ public void setStatus(String status) { ... }
 public String validateStatus(String status) { ... }
 ----
 
-For more information, see the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] section in the appropriate reference guide.
+For more information, see the xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`] section in the appropriate reference guide.
 The reference guide also explains how to define validation declaratively, using the xref:rg:ant:Parameter/mustSatisfy.adoc[`@Parameter#mustSatisfy()`] or xref:rg:ant:Property/mustSatisfy.adoc[`@Property#mustSatisfy()`] attributes.
 
 
@@ -198,7 +198,7 @@ Datanucleus does _not_ call the setter when reloading the object from the databa
 
 [NOTE]
 ====
-The framework also allows side-effect code to be placed in separate xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`] supporting methods; if present then these will be called by the framework rather than the setter.
+The framework also allows side-effect code to be placed in separate xref:rg:cms:methods/prefixes/modify.adoc[`modify...()`], xref:rg:cms:methods/prefixes/clear.adoc[`clear...()`] supporting methods; if present then these will be called by the framework rather than the setter.
 However, because of DataNucleus' smart handling of setters, these supporting methods are in essence redundant, and so should be considered deprecated.
 ====
 

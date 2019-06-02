@@ -23,28 +23,28 @@ The lifecycle callback methods supported by Apache Isis are:
 |Method
 |Description
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_created[`created()`]
+|xref:rg:cms:methods/lifecycle/created.adoc[`created()`]
 |called when an object has just been created using xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(..)`] or xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`]
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_loaded[`loaded()`]
+|xref:rg:cms:methods/lifecycle/loaded.adoc[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_persisted[`persisted()`]
+|xref:rg:cms:methods/lifecycle/persisted.adoc[`persisted()`]
 |called when object has just been persisted from the object store.
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_persisting[`persisting()`]
+|xref:rg:cms:methods/lifecycle/persisting.adoc[`persisting()`]
 |called when a (not-yet-persistent) object is just about to be persisted from the object store
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_removed[`removed()`]
+|xref:rg:cms:methods/lifecycle/removed.adoc[`removed()`]
 |called when a (persistent) object has just been deleted from the object store
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_removing[`removing()`]
+|xref:rg:cms:methods/lifecycle/removing.adoc[`removing()`]
 |called when a (persistent) object is just about to be deleted from the object store
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_updated[`updated()`]
+|xref:rg:cms:methods/lifecycle/updated.adoc[`updated()`]
 |called when a (persistent) object has just been updated in the object store
 
-|xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_updating[`updating()`]
+|xref:rg:cms:methods/lifecycle/updating.adoc[`updating()`]
 |called when a (persistent) object is just about to be updated in the object store
 
 |===
