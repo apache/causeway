@@ -120,7 +120,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adcgcom`
-//|`\xref:support:cgcom:cgcom.adoc#xxx[ttt]`
+//|`\xref:support:cgcom:about.adoc#xxx[ttt]`
 //
 //a hyperlink to a bookmark within the committers' guide, where:
 //

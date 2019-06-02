@@ -59,8 +59,8 @@ include::_attributes.adoc[]
 ** xref:support:dg:dg.adoc#contributing[Pull requests]
 ** xref:support:dg:dg.adoc#asciidoc-syntax[Asciidoc syntax]
 
-*  xref:support:cgcom:cgcom.adoc[Committers' Guide]
-** xref:support:cgcom:cgcom.adoc#cutting-a-release[Cutting] & xref:support:cgcom:cgcom.adoc#verifying-releases[Verifying]
+*  xref:support:cgcom:about.adoc[Committers' Guide]
+** xref:support:cgcom:cutting-a-release.adoc[Cutting] & xref:support:cgcom:verifying-releases.adoc[Verifying]
 
 * Source files: xref:support:ad:ad.adoc[Architecture & Design]
 

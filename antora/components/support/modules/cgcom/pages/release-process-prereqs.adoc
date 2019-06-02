@@ -7,7 +7,7 @@
 
 
 
-This section (appendix) describes the prerequisites for the xref:support:cgcom:cgcom.adoc#_cgcom_release-process[release process].
+This section (appendix) describes the prerequisites for the xref:support:cgcom:release-process.adoc[release process].
 
 
 
@@ -22,7 +22,7 @@ Ensure that Java 7 is installed and the toolchains plugin is configured, as desc
 
 The most important configuration you require is to set up public/private key pair.
 This is used by the `maven-release-plugin` to sign the code artifacts.
-See the page on xref:support:cgcom:cgcom.adoc#_cgcom_key-generation[key generation] for more details.
+See the page on xref:support:cgcom:key-generation.adoc[key generation] for more details.
 
 In order to prepare the release, you'll (need to) have a `~/.gnupg` directory with the relevant files (`gpg.conf`, `pubring.gpg`, `secring.gpg` etc), and have `gpg` on your operating system PATH.
 

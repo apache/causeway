@@ -8,11 +8,11 @@
 
 The release process consists of:
 
-* the release manager xref:support:cgcom:cgcom.adoc#cutting-a-release[cutting the release]
+* the release manager xref:support:cgcom:cutting-a-release.adoc[cutting the release]
 
-* members of the Apache Isis PMC xref:support:cgcom:cgcom.adoc#verifying-releases[verifying] and voting on the release
+* members of the Apache Isis PMC xref:support:cgcom:verifying-releases.adoc[verifying] and voting on the release
 
-* the release manager performing post-release tasks, for either a successful or an xref:support:cgcom:cgcom.adoc#post-release-unsuccessful[unsuccessful] vote (former documented below)
+* the release manager performing post-release tasks, for either a successful or an xref:support:cgcom:post-release-unsuccessful.adoc[unsuccessful] vote (former documented below)
 
 For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.
 If there are not +3 votes after this time then it is perfectly permissible to keep the vote open longer.

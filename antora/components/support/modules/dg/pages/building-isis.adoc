@@ -128,7 +128,7 @@ For further reading, see:
 
 Apache Isis is compatible with Java 7 and Java 8.  For every-day use, the framework is usually compiled against Java 8.
 
-Releases however are xref:support:cgcom:cgcom.adoc#_cgcom_cutting-a-release[cut] using Java 7, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
+Releases however are xref:support:cgcom:cutting-a-release.adoc[cut] using Java 7, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
 
 Therefore install either/both of Java 7 JDK and Java 8 JDK.  Note that the JRE is _not_ sufficient.
 
