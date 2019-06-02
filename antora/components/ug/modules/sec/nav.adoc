@@ -1,6 +1,4 @@
-* Security
-
-** xref:about.adoc[About]
+* xref:about.adoc[Security]
 
 
 ** xref:configuring-isis-to-use-shiro.adoc[Configuring Isis to use Shiro]

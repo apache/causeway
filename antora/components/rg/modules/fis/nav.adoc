@@ -1,7 +1,4 @@
-* Framework Internal Services
-
-** xref:about.adoc[About]
-
+* xref:about.adoc[Framework Internal Services]
 
 
 ** xref:presentation-layer.adoc[Presentation Layer]

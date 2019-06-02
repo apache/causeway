@@ -1,8 +1,4 @@
-* Annotations
-
-** xref:about.adoc[About]
-
-
+* xref:about.adoc[Annotations]
 
 ** xref:aaa.adoc[Summary]
 *** xref:aaa/main.adoc[Main]

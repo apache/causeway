@@ -1,6 +1,4 @@
-* Maven plugin
-
-** xref:about.adoc[About]
+* xref:about.adoc[Maven plugin]
 
 ** xref:intro.adoc[Introduction]
 ** xref:validate.adoc[Validate]

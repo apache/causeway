@@ -1,6 +1,4 @@
-* Beyond the Basics
-
-** xref:about.adoc[About]
+* xref:about.adoc[Beyond the Basics]
 
 
 ** xref:i18n.adoc[i18n]

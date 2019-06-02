@@ -1,6 +1,6 @@
-* Restful Objects Viewer
+* xref:about.adoc[Restful Objects Viewer]
 
-** xref:about.adoc[About]
+
 
 ** xref:ro-spec.adoc[RO Spec]
 

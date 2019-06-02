@@ -1,6 +1,5 @@
-* Core Config Properties
+* xref:about.adoc[Core Config Properties]
 
-** xref:about.adoc[About]
 ** xref:deployment-types.adoc[Deployment Types]
 ** xref:configuration-files.adoc[Configuration Files]
 ** xref:specifying-components.adoc[Specifying Components]

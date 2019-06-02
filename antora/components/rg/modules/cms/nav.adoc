@@ -1,9 +1,4 @@
-* Classes, Methods & Schema
-
-** xref:about.adoc[About]
-
-
-
+* xref:about.adoc[Classes, Methods & Schema]
 
 
 ** xref:methods.adoc[Methods]

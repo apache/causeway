@@ -1,8 +1,4 @@
-* Fundamentals
-
-** xref:about.adoc[About]
-
-
+* xref:about.adoc[Fundamentals]
 
 
 ** xref:core-concepts.adoc[Core Concepts]

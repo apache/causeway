@@ -1,6 +1,5 @@
-* Domain Services
+* xref:about.adoc[Domain Services]
 
-** xref:about.adoc[About]
 
 ** xref:intro.adoc[Introduction]
 

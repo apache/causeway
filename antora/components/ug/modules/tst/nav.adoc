@@ -1,6 +1,5 @@
-* Testing
+* xref:about.adoc[Testing]
 
-** xref:about.adoc[About]
 
 ** xref:overview.adoc[Overview]
 

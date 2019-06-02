@@ -1,6 +1,5 @@
-* DataNucleus Object Store
+* xref:about.adoc[DataNucleus Object Store]
 
-** xref:about.adoc[About]
 
 ** xref:configuring.adoc[Configuring]
 *** xref:configuring/properties.adoc[Properties]

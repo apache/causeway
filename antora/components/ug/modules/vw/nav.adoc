@@ -1,6 +1,4 @@
-* Wicket Viewer
-
-** xref:about.adoc[About]
+* xref:about.adoc[Wicket Viewer]
 
 ** xref:features.adoc[Features]
 *** xref:features/recent-pages.adoc[Recent Pages]
