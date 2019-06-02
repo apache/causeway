@@ -200,18 +200,4 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateA
 
 
 
-include::partial$_rgcms_methods_prefixes_addTo.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_autoComplete.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_choices.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_clear.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_default.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_disable.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_get.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_hide.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_modify.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_removeFrom.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_set.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_validate.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_validateAddTo.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_prefixes_validateRemoveFrom.adoc[leveloffset=+1]
 

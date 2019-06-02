@@ -67,8 +67,4 @@ is specified.
 
 
 
-include::partial$_rgcms_classes_domainevent_AbstractDomainEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_domainevent_ActionDomainEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_domainevent_CollectionDomainEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_domainevent_PropertyDomainEvent.adoc[leveloffset=+1]
 

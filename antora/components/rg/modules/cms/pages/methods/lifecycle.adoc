@@ -52,13 +52,3 @@ The lifecycle callback methods supported by Apache Isis are:
 
 
 
-include::partial$_rgcms_methods_lifecycle_created.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_lifecycle_loaded.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_lifecycle_persisted.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_lifecycle_persisting.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_lifecycle_removed.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_lifecycle_removing.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_lifecycle_updated.adoc[leveloffset=+1]
-include::partial$_rgcms_methods_lifecycle_updating.adoc[leveloffset=+1]
-
-include::partial$_rgcms_methods_lifecycle_jdo-api.adoc[leveloffset=+1]

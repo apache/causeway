@@ -109,12 +109,4 @@ This is done either explicitly when the current transaction is flushed using the
 
 
 
-include::partial$_rgcms_classes_lifecycleevent_AbstractLifecycleEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_lifecycleevent_ObjectCreatedEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_lifecycleevent_ObjectLoadedEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_lifecycleevent_ObjectPersistedEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_lifecycleevent_ObjectPersistingEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_lifecycleevent_ObjectRemovingEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_lifecycleevent_ObjectUpdatedEvent.adoc[leveloffset=+1]
-include::partial$_rgcms_classes_lifecycleevent_ObjectUpdatingEvent.adoc[leveloffset=+1]
 
