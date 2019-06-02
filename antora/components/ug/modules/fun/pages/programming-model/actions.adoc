@@ -160,7 +160,7 @@ As the example suggests, any collection parameter type must provide a way to sel
 == Optional Parameters
 
 Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_optional-properties[optionality of properties] is defined using xref:rg:ant:rgant.adoc#_rgant-Column_allowsNull[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
-Instead, either the xref:rg:ant:rgant.adoc#_rgant-Nullable[`@Nullable`] annotation or the xref:rg:ant:rgant.adoc#_rgant_Parameter_optionality[`@Parameter#optionality()`]  annotation/attribute is used.
+Instead, either the xref:rg:ant:rgant.adoc#_rgant-Nullable[`@Nullable`] annotation or the xref:rg:ant:Parameter/optionality.adoc[`@Parameter#optionality()`]  annotation/attribute is used.
 
 For example:
 
@@ -227,7 +227,7 @@ See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameter
 
 == ``BigDecimal``s (Precision)
 
-Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_bigdecimals[precision of BigDecimal properties] is defined using xref:rg:ant:rgant.adoc#_rgant_Column_scale[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
+Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_bigdecimals[precision of BigDecimal properties] is defined using xref:rg:ant:Column/scale.adoc[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
 Instead, the xref:rg:ant:rgant.adoc#_rgant-Digits[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
 
 For example:
@@ -246,7 +246,7 @@ public Order updateDiscount(
     return this;
 }
 ----
-<1> Specifies the property precision using xref:rg:ant:rgant.adoc#_rgant_Column_scale[`@Column#scale()`]
+<1> Specifies the property precision using xref:rg:ant:Column/scale.adoc[`@Column#scale()`]
 <2> Specifies the corresponding parameter precision using xref:rg:ant:rgant.adoc#_rgant-Digits[`@Digits#fraction()`].
 
 See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].

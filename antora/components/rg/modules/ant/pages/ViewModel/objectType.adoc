@@ -37,9 +37,9 @@ public class Order {
 
 The rules of precedence are:
 
-1. xref:rg:ant:rgant.adoc#_rgant_Discriminator[`@Discriminator`]
-2. `@DomainObject#objectType`, or xref:rg:ant:rgant.adoc#_rgant_ViewModel_objectType[`@ViewModel#objectType()`]
-3. xref:rg:ant:rgant.adoc#_rgant_PersistenceCapable[`@PersistenceCapable`], if at least the `schema` attribute is defined.
+1. xref:rg:ant:Discriminator.adoc[`@Discriminator`]
+2. `@DomainObject#objectType`, or xref:rg:ant:ViewModel/objectType.adoc[`@ViewModel#objectType()`]
+3. xref:rg:ant:PersistenceCapable.adoc[`@PersistenceCapable`], if at least the `schema` attribute is defined.
 +
 If both `schema` and `table` are defined, then the value is "`schema.table`".
 If only `schema` is defined, then the value is "`schema.className`".

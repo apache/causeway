@@ -157,9 +157,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]`
+//`\xref:rg:ant:aaa/main.adoc[Core annotations]`
 //
-//|xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]
+//|xref:rg:ant:aaa/main.adoc[Core annotations]
 //
 //
 //
