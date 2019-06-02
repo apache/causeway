@@ -14,7 +14,7 @@ This section (appendix) describes the prerequisites for the xref:support:cgcom:r
 == Configure toolchains plugin
 
 Apache Isis releases are built using Java 7, enforced using the maven toolchains plugin.
-Ensure that Java 7 is installed and the toolchains plugin is configured, as described in the xref:support:dg:dg.adoc#__dg_building-isis_configure-maven-toolchains-plugin[contributors' guide].
+Ensure that Java 7 is installed and the toolchains plugin is configured, as described in the xref:support:dg:building-isis/configure-maven-toolchains-plugin.adoc[contributors' guide].
 
 
 

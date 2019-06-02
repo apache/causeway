@@ -94,7 +94,7 @@ Note that the database runs in-memory (using HSQLDB) so any data created will be
 
 == Dev environment
 
-Set up xref:support:dg:dg.adoc#_dg_ide[an IDE] and import the project to be able to run and debug the app.
+Set up xref:support:dg:ide.adoc[an IDE] and import the project to be able to run and debug the app.
 
 Then set up a launch configuration and check that you can:
 

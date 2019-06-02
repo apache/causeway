@@ -3,6 +3,13 @@
 include::_attributes.adoc[]
 
 
+[WARNING]
+===
+This material is out of date.
+
+We have now switched to using https://antora.org[Antora], which is a static doc site generator that builds upon Asciidoctor.
+Antora has its own directory/file conventions, which supercede the file name conventions described here.
+===
 
 
 This appendix describes the main syntax conventions when writing Asciidoctor/Asciidoc.
@@ -230,9 +237,9 @@ link:http://ciserver:8080[CI Server^]
 |Link to an external hyperlink, with `target=blank`
 
 |....
-xref:dg.adoc#__dg_asciidoc_links-and-xrefs#[background]
+xref:support:dg:asciidoc/links-and-xrefs#.adoc[background]
 ....
-|xref:dg.adoc#__dg_asciidoc_links-and-xrefs[background]
+|xref:support:dg:asciidoc/links-and-xrefs.adoc[background]
 |Cross-reference to section in same asciidoc document
 
 |....
@@ -745,7 +752,7 @@ image:_images/vscode.png[link="_images/vscode.png",width="800px"]
 
 Use the `include:` macro to break up a document into multiple sections.
 
-For example, this xref:dg.adoc#[developers' guide] document is broken into several files:
+For example, this xref:support:dg:about.adoc[developers' guide] document is broken into several files:
 
 ....
 dg.adoc

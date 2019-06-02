@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 
 
-//We highly recommend that you install the (IntelliJ) live templates for Asciidoctor, as described in xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[IDE templates].
+//We highly recommend that you install the (IntelliJ) live templates for Asciidoctor, as described in xref:support:dg:ide/intellij.adoc#live-templates[IDE templates].
 //These provide a large number of helper templates.
 
-//An xref:support:dg:dg.adoc#_dg_asciidoc-templates[appendix] lists all the templates available, demonstrating their intended usage and output.
+//An xref:support:dg:asciidoc-templates.adoc[appendix] lists all the templates available, demonstrating their intended usage and output.

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-//This appendix lists the (IntelliJ) live templates available for xref:support:dg:dg.adoc#_dg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[here].
+//This appendix lists the (IntelliJ) live templates available for xref:support:dg:asciidoc.adoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:support:dg:ide/intellij.adoc#live-templates[here].
 //
 //In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
 //
@@ -129,10 +129,10 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:support:dg:dg.adoc#_cgcom_cutting-a-release[Cutting a release\]`
+//`\xref:support:cgcom:cutting-a-release.adoc[Cutting a release\]`
 //
 //|`addg`
-//|`\xref:support:dg:dg.adoc#xxx[ttt]`
+//|`\xref:support:dg:about.adoc[ttt]`
 //
 //a hyperlink to a bookmark within the developers' guide, where:
 //
@@ -141,9 +141,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]`
+//`\xref:support:dg:asciidoc-templates.adoc[Asciidoc templates\]`
 //
-//|xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates]
+//|xref:support:dg:asciidoc-templates.adoc[Asciidoc templates]
 //
 //
 //

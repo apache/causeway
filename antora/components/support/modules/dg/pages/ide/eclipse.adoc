@@ -23,7 +23,7 @@ This plugin needs to be configured for each of your domain modules (usually just
 
 == Editor Templates
 
-We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[IntelliJ live templates]):
+We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:support:dg:ide/intellij.adoc#live-templates[IntelliJ live templates]):
 
 * `is` (Apache Isis domain objects).  link:./resources/eclipse/isis-templates.xml[Download]
 * `ju` (for JUnit tests) link:./resources/eclipse/junit4-templates.xml[Download]
@@ -117,7 +117,7 @@ image::eclipse/eclipse-110-project-support.png[width="600px",link="{imagesdir}ec
 DataNucleus' enhancer uses the domain object model's own classpath to reference DataNucleus JARs.
 So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
-See the section in xref:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.
+See the section in xref:support:dg:hints-and-tips/datanucleus-enhancer.adoc[DataNucleus enhancer] for details of the contents of the `pom.xml`.
 Chances are it is already set up from running the xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld] or the xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp] archetype.
 
 
@@ -209,5 +209,5 @@ Changing persisting domain entities is more problematic, for two reasons: the JD
 domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.  You may find that adding
 actions will work, but adding new properties or collections is much less likely to.
 
-For details of setting up DCEVM, see the xref:support:dg:dg.adoc#__dg_ide_intellij_advanced_dcevm[corresponding section] in the IntelliJ documentation.
+For details of setting up DCEVM, see the xref:support:dg:ide/intellij.adoc#advanced_dcevm[corresponding section] in the IntelliJ documentation.
 

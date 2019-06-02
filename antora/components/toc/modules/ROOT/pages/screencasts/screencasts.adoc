@@ -52,7 +52,7 @@ Generating an app using the xref:ug:fun:getting-started/simpleapp-archetype.adoc
 
 
 |link:https://www.youtube.com/watch?v=6GPtec5Hu5Q[002^] +
-Importing the generated app into an xref:support:dg:dg.adoc#_dg_ide[IDE] +
+Importing the generated app into an xref:support:dg:ide.adoc[IDE] +
 
 |x||x||||||||
 

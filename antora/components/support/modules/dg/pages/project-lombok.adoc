@@ -29,7 +29,7 @@ private String name;
 ----
 
 Under the covers it is implemented as an annotation processor; it basically hooks into the Java compiler
-so that it can emit additional bytecode (eg for the getter and setter).  See xref:support:dg:dg.adoc#__dg_ide_intellij_other-settings-compiler[here] for details of setting up in IntelliJ (Eclipse has very similar support).
+so that it can emit additional bytecode (eg for the getter and setter).  See xref:support:dg:ide/intellij.adoc#other-settings-compiler[here] for details of setting up in IntelliJ (Eclipse has very similar support).
 
 Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:rg:ant:Property.adoc[`Property`], xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`], xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:rg:ant:MemberOrder.adoc[`@MemberOrder`]) can be placed on the field instead.
 

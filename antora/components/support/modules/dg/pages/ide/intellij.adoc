@@ -143,7 +143,7 @@ The live templates have a prefix of either:
 * `is` : for Apache Isis domain objects
 * `ju` : for JUnit tests
 * `jm` : for JMock mocks or libraries
-//* `ad` : for Asciidoc documentation; a full list can be found in the xref:support:dg:dg.adoc#_dg_asciidoc-templates[appendix].
+//* `ad` : for Asciidoc documentation; a full list can be found in the xref:support:dg:asciidoc-templates.adoc[appendix].
 
 The live templates are also provided as a settings JAR file, namely *link:resources/intellij/isis-settings-live-templates.jar[isis-settings-live-templates.jar]*.
 Download and import (as for the previous settings JAR files).
@@ -174,7 +174,7 @@ On the *Annotation Processors* page, enable and adjust for the 'default' setting
 image::intellij-idea/040-other-settings-compiler/020-annotation-processor.png[width="700px",link="{imagesdir}intellij-idea/040-other-settings-compiler/020-annotation-processor.png"]
 
 This setting enables the generation of the `Q*` classes for DataNucleus type-safe queries, as well as being required
-for frameworks such as xref:support:dg:dg.adoc#_dg_project-lombok[Project Lombok].
+for frameworks such as xref:support:dg:project-lombok.adoc[Project Lombok].
 
 [NOTE]
 ====
@@ -469,7 +469,7 @@ If you hit an error of "duplicate classes":
 
 image::intellij-idea/060-troubleshooting/010-duplicate-classes.png[width="600px",link="{imagesdir}intellij-idea/060-troubleshooting/010-duplicate-classes.png"]
 
-then make sure you have correctly configured the xref:support:dg:dg.adoc#__dg_ide_intellij_other-settings-compiler[annotation processor]
+then make sure you have correctly configured the xref:support:dg:ide/intellij.adoc#other-settings-compiler[annotation processor]
 settings.  Pay attention in particular to the "Production sources directory" and "Test sources directory", that these
 are set up correctly.
 
@@ -483,7 +483,7 @@ In this section are several options that will reduce the time it takes between m
 
 === Using Grade to compile/enhance
 
-Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:support:dg:dg.adoc#__dg_ide_intellij_running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
+Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:support:dg:ide/intellij.adoc#running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
 
 Alternative, you can use the following `build.gradle` script in your `dom` module:
 

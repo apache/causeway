@@ -814,7 +814,7 @@ This feature is primarily just to help track any memory leakage issues that migh
 |`isis.viewer.wicket.` +
 `liveReloadUrl`
 | URL
-|Specifies the URL if xref:support:dg:dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
+|Specifies the URL if xref:support:dg:ide/intellij.adoc#advanced_gradle-liveReload[live reload] is set up, eg: +
 
 `http://localhost:35729/livereload.js?snipver=1`
 

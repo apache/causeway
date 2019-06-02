@@ -10,8 +10,8 @@ Apache Isis' documentation (meaning the website and the users' guide, the refere
 The website and guides are created by running build tools (documented below) which create the HTML version of the site and guides.
 You can therefore easily check the documentation before raising a pull request (as a contributor) or publishing the site (if a committer).
 
-For details of authoring/updating the documents and website, see the xref:support:dg:dg.adoc#_dg_asciidoc[developers' guide].
-//To help write the Asciidoc text itself, we provide some xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates].
+For details of authoring/updating the documents and website, see the xref:support:dg:asciidoc.adoc[developers' guide].
+//To help write the Asciidoc text itself, we provide some xref:support:dg:asciidoc-templates.adoc[Asciidoc templates].
 
 Publishing is performed by copying the generated HTML to a different git repository (link:https://github.com/apache/isis-site.git[isis-site]).
 This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].

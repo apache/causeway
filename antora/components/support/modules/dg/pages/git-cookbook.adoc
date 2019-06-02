@@ -8,8 +8,8 @@ include::_attributes.adoc[]
 
 This appendix describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
 
-* xref:support:dg:dg.adoc#_dg_building-isis[building Apache Isis]
-* xref:support:dg:dg.adoc#_dg_contributing[Contributing]
+* xref:support:dg:building-isis.adoc[building Apache Isis]
+* xref:support:dg:contributing.adoc[Contributing]
 * xref:support:cgcom:policies/git-policy.adoc[Git policy]
 
 
@@ -83,7 +83,7 @@ git commit -m "ISIS-nnn: yada yada"
 
 == Common Workflows
 
-The xref:support:dg:dg.adoc#_dg_contributing[contributing] page describes the workflow for non-committers.  The xref:support:cgcom:policies/git-policy.adoc[Git policy] page describes a workflow for Apache Isis **committers**.
+The xref:support:dg:contributing.adoc[contributing] page describes the workflow for non-committers.  The xref:support:cgcom:policies/git-policy.adoc[Git policy] page describes a workflow for Apache Isis **committers**.
 
 
 

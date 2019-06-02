@@ -54,10 +54,10 @@ include::_attributes.adoc[]
 
 |*Get involved!*
 
-* *xref:support:dg:dg.adoc[Developers' Guide]*
+* *xref:support:dg:about.adoc[Developers' Guide]*
 ** xref:support:dg:ide/intellij.adoc[IntelliJ] & xref:support:dg:ide/eclipse.adoc[Eclipse]
-** xref:support:dg:dg.adoc#contributing[Pull requests]
-** xref:support:dg:dg.adoc#asciidoc-syntax[Asciidoc syntax]
+** xref:support:dg:contributing.adoc[Pull requests]
+** xref:support:dg:asciidoc-syntax.adoc[Asciidoc syntax]
 
 *  xref:support:cgcom:about.adoc[Committers' Guide]
 ** xref:support:cgcom:cutting-a-release.adoc[Cutting] & xref:support:cgcom:verifying-releases.adoc[Verifying]
