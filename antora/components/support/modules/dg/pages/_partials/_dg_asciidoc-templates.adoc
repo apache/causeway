@@ -362,9 +362,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
+//`\xref:ug:tst:bdd-spec-support.adoc[BDD Spec Support]`
 //
-//|xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
+//|xref:ug:tst:bdd-spec-support.adoc[BDD Spec Support]
 //
 //
 //|`adugbtb`

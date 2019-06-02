@@ -667,7 +667,7 @@ Time to fix that.
 
 Unit testing domain entities and domain services is easy; just use JUnit and mocking libraries to mock out interactions with domain services.
 
-https://code.google.com/p/mockito/[Mockito] seems to be the current favourite among Java developers for mocking libraries, but if you use JMock then you'll find we provide a `JUnitRuleMockery2` class and a number of other utility classes, documented xref:ug:tst:ugtst.adoc#_ugtst_unit-test-support[here].
+https://code.google.com/p/mockito/[Mockito] seems to be the current favourite among Java developers for mocking libraries, but if you use JMock then you'll find we provide a `JUnitRuleMockery2` class and a number of other utility classes, documented xref:ug:tst:unit-test-support.adoc[here].
 
 * write some unit tests (adapt from the unit tests in the `myapp-dom` Maven module).
 
@@ -707,7 +707,7 @@ change back to:
 
 There will probably be some compile issues to fix up once you've done this; comment out all code that doesn't compile.
 
-Isis has great support for writing xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration tests]; well-written integration tests should leverage fixture scripts and use the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`@WrapperFactory`] domain service.
+Isis has great support for writing xref:ug:tst:integ-test-support.adoc[integration tests]; well-written integration tests should leverage fixture scripts and use the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`@WrapperFactory`] domain service.
 
 * use the tests from the original archetype and the documentation on the website to develop integration tests for your app's functionality.
 

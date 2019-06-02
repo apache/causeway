@@ -6,4 +6,4 @@ This abstract class constitutes the API of a domain service to execute xref:rg:c
 
 For more information, see xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] in the domain services guide.
 
-See the see the xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts[user guide's testing chapter] for further discussion on the use of fixture scripts, in particular xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts' API and usage].
+See the see the xref:ug:tst:fixture-scripts.adoc[user guide's testing chapter] for further discussion on the use of fixture scripts, in particular xref:ug:tst:fixture-scripts/api-and-usage.adoc[fixture scripts' API and usage].

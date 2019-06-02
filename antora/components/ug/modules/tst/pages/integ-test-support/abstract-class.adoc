@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 When writing integration tests, it's easiest to inherit from the `IntegrationTestAbstract3` base class.
 
-This base class xref:ugtst.adoc#_ugtst_integ-test-support_bootstrapping[bootstraps] the framework (caching the framework on a thread-local), and provides various utility methods and framework-provided services for use by your application's subclass tests.
+This base class xref:ug:tst:integ-test-support/bootstrapping.adoc[bootstraps] the framework (caching the framework on a thread-local), and provides various utility methods and framework-provided services for use by your application's subclass tests.
 
 
 
@@ -64,7 +64,7 @@ public ExceptionRecognizerTranslate exceptionRecognizerTranslations =    // <4>
     ExceptionRecognizerTranslate.create();
 ----
 <1> ensures an Apache Isis session/transaction running for each test
-<2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:ug:tst:ugtst.adoc#_ugtst_unit-test-support_jmock-extensions[JMock Extensions].
+<2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:ug:tst:unit-test-support/jmock-extensions.adoc[JMock Extensions].
 <3> standard JUnit rule for writing tests that throw exceptions
 <4> to capture messages that require translation, as described in xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18 support].
 

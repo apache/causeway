@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `SudoService` allows the current user reported by the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`]  to be temporarily changed to some other user.
-This is useful both for xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
+This is useful both for xref:ug:tst:integ-test-support.adoc[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ug:tst:fixture-scripts.adoc[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
 
 
 == API

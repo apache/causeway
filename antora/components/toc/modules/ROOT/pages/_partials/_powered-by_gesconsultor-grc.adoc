@@ -80,7 +80,7 @@ At the last count more than 400 domain entities, across 6 different Bounded Cont
 
 At the Domain level, we also extensively use the xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events] functionality available in Apache Isis, along with many of the (non-ASF) link:http://platform.incode.org[Incode Platform^] (such as audit, security and excel modules).
 
-The GRC platform currently has more than 5600 automated tests, about 2000 being xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD tests] and 3600 xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration tests], all leveraging Apache Isis' extensive testing capabilities.
+The GRC platform currently has more than 5600 automated tests, about 2000 being xref:ug:tst:bdd-spec-support.adoc[BDD tests] and 3600 xref:ug:tst:integ-test-support.adoc[integration tests], all leveraging Apache Isis' extensive testing capabilities.
 
 
 == Summing up

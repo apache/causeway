@@ -490,7 +490,7 @@ msgstr "Username"
 
 So much for the API; but as noted, it is also necessary to ensure that the required translations are recorded (by the `TranslationService`) into the `.pot` file.
 
-For this, we recommend that you ensure that all such methods are tested through an xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration test] (not unit test).
+For this, we recommend that you ensure that all such methods are tested through an xref:ug:tst:integ-test-support.adoc[integration test] (not unit test).
 
 For example, here's the corresponding integration test for the "Exclamation mark" example from the simpleapp (above):
 
