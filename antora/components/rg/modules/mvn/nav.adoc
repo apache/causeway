@@ -1,5 +1,8 @@
 * Maven plugin
 
 ** xref:about.adoc[About]
-** xref:rgmvn.adoc[Guide]
 
+** xref:intro.adoc[Introduction]
+** xref:validate.adoc[Validate]
+** xref:swagger.adoc[Swagger]
+** xref:xsd.adoc[XSD]
