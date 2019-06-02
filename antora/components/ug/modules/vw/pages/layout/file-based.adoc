@@ -142,7 +142,7 @@ This corresponds to the following XML:
 
 
 You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.
-This topic is discussed in more detail xref:ug:fun:ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+This topic is discussed in more detail xref:ug:vw:layout/file-based/adoc#unreferenced[below].
 
 
 
@@ -188,7 +188,7 @@ Notice how actions - such as `duplicate` and `delete` - can be associated with t
 Thereafter the fieldset lists the properties in order.
 Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
-Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ug:fun:ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ug:vw:layout/file-based.adoc#unreferenced[below].
 
 [NOTE]
 ====

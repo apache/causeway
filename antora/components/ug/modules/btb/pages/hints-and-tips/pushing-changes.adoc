@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 [NOTE]
 ====
-This technique is much less powerful than using ../ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[the event bus] or an SPI service.
+This technique is much less powerful than using xref:ug:fun/building-blocks/events/domain-events.adoc[the event bus] or an SPI service.
 We present it mostly for completeness.
 ====
 

@@ -23,8 +23,8 @@ include::_attributes.adoc[]
 
 * *xref:cheat-sheet/cheat-sheet.adoc[Cheat Sheet]*
 //& *link:guides/htg.html[Hints-n-Tips]*
-* xref:ug:fun:ugfun.adoc#helloworld-archetype[HelloWorld archetype]
-* xref:ug:fun:ugfun.adoc#simpleapp-archetype[SimpleApp archetype]
+* xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld archetype]
+* xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp archetype]
 * How to get xref:icons/icons.adoc[Icons]
 * Extension modules: https://platform.incode.org[Incode Platform] footnoteref:[ASF, Not Apache Software Foundation projects.]
 

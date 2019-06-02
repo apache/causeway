@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-As described in the xref:ug:fun:ugfun.adoc#\_ugfun_building-blocks_types-of-domain-objects_view-models[introduction], view models are domain objects like domain entities, with behaviour and state.
+As described in the xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[introduction], view models are domain objects like domain entities, with behaviour and state.
 However, unlike domain entities, their state is _not_ persisted to a database but is instead serialized into its identifier (in effect, its URL).
 
 The framework provides two main ways to implement a view model:

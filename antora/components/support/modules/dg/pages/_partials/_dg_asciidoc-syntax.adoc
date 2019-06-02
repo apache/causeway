@@ -236,9 +236,9 @@ xref:dg.adoc#__dg_asciidoc_links-and-xrefs#[background]
 |Cross-reference to section in same asciidoc document
 
 |....
-xref:ug:fun:ugfun.adoc#[Fundamentals]
+xref:ug:fun:about.adoc#[Fundamentals]
 ....
-|xref:ug:fun:ugfun.adoc#[Fundamentals]
+|xref:ug:fun:about.adoc#[Fundamentals]
 |Cross-reference to top-level of different asciidoc document
 
 |....
