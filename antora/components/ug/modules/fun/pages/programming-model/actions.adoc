@@ -23,7 +23,7 @@ But if the state change is more complex, then most likely an action should be us
 == Defining actions
 
 Broadly speaking, actions are all the `public` methods that are not getters or setters which represent properties or collections.
-This is a slight simplification; there are a number of other method prefixes (such as `hide` or `validate`) that represent xref:ug:fun:ugfun.adoc#_ugfun_business-rules[business rules]); these also not treated as actions.
+This is a slight simplification; there are a number of other method prefixes (such as `hide` or `validate`) that represent xref:ug:fun:business-rules.adoc[business rules]); these also not treated as actions.
 And, any method that are annotated with `@Programmatic` will also be excluded.
 But by and large, all other methods such as `placeOrder(...)` or `approveInvoice(...)` will be treated as actions.
 

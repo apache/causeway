@@ -299,9 +299,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]`
+//`\xref:ug:fun:core-concepts.adoc[Core concepts]`
 //
-//|xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]
+//|xref:ug:fun:core-concepts.adoc[Core concepts]
 //
 //
 //

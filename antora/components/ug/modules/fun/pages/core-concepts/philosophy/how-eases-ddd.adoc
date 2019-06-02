@@ -51,7 +51,7 @@ If we are using code as the primary means of expressing the model, then we need 
 
 We could generate UML diagrams and the like from code. That will work for some members of the business community, but not for everyone. Or we could generate a PDF document from Javadoc comments, but comments aren't code and so the document may be inaccurate.  Anyway, even if we do create such a document, not everyone will read it.
 
-A better way to represent the model is to show it in action as a working prototype. As we show in the xref:ug:fun:ugfun.adoc#_ugfun_getting-started[Getting Started] section, Apache Isis enables this with ease. Such prototypes bring the domain model to life, engaging the audience in a way that a piece of paper never can.
+A better way to represent the model is to show it in action as a working prototype. As we show in the xref:ug:fun:getting-started.adoc[Getting Started] section, Apache Isis enables this with ease. Such prototypes bring the domain model to life, engaging the audience in a way that a piece of paper never can.
 
 Moreover, with Apache Isis prototypes, the domain model will come shining through. If there are mistakes or misunderstandings in the domain model (inevitable when building any complex system), they will be obvious to all.
 

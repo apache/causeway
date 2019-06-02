@@ -1,10 +1,10 @@
 = Fundamentals
 include::_attributes.adoc[]
 
-This guide introduces the xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[core concepts] and ideas behind Apache Isis,
-and tells you how to xref:ug:fun:ugfun.adoc#_ugfun_getting-started[get started] with a Maven archetype.
+This guide introduces the xref:ug:fun:core-concepts.adoc[core concepts] and ideas behind Apache Isis,
+and tells you how to xref:ug:fun:getting-started.adoc[get started] with a Maven archetype.
 
-It also describes a number of xref:ug:fun:ugfun.adoc#_ugfun_how-tos[how-to]s, describes how to influence the
+It also describes a number of xref:ug:fun:how-tos.adoc[how-to]s, describes how to influence the
 xref:ug:vw:ugvw.adoc#_ugvw_layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it
  catalogues various xref:support:dg:dg.adoc#_dg_hints-and-tips.adoc[FAQ]s.
 

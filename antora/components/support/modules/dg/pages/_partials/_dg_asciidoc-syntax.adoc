@@ -242,9 +242,9 @@ xref:ug:fun:ugfun.adoc#[Fundamentals]
 |Cross-reference to top-level of different asciidoc document
 
 |....
-xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core Concepts]
+xref:ug:fun:core-concepts.adoc[Core Concepts]
 ....
-|xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core Concepts]
+|xref:ug:fun:core-concepts.adoc[Core Concepts]
 |Cross-reference to section within different asciidoc document
 
 |===

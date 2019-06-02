@@ -225,11 +225,11 @@ For our app it therefore makes sense to refactor that class into our own first s
 * rename the `SimpleObjects` class
 ** eg rename to `Pets`
 * review `create` action (acting as a factory)
-** as per the docs describing xref:ug:fun:ugfun.adoc#_ugfun_crud[how to create or delete objects]
+** as per the docs describing xref:ug:fun:crud.adoc[how to create or delete objects]
 * rename if you wish
 ** eg `newPet(...)` or `addPet(...)`
 * review `listAll` action (acting as a repository)
-* as per the docs describing xref:ug:fun:ugfun.adoc#_ugfun_crud[how to write a custom repository]
+* as per the docs describing xref:ug:fun:crud.adoc[how to write a custom repository]
 * note the annotations on the corresponding domain class (originally called `SimpleObject`, though renamed by now, eg to `Pet`)
 * rename if you wish
 ** eg `listPets()`
@@ -356,7 +356,7 @@ In this section we focus on scalar reference properties.
 Quick detour: often we want to set up defaults to go with choices.
 Sensible defaults for action parameters can really improve the usability of the app.
 
-* Add xref:ug:fun:ugfun.adoc#_ugfun_drop-downs-and-defaults[defaults] for action parameters
+* Add xref:ug:fun:drop-downs-and-defaults.adoc[defaults] for action parameters
 
 
 
