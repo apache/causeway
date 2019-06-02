@@ -31,7 +31,7 @@ It's also possible to specify a xref:rg:ant:DomainObjectLayout/plural.adoc[plura
 
 [TIP]
 ====
-The framework also provides a separate, powerful mechanism for xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[internationalization].
+The framework also provides a separate, powerful mechanism for xref:ug:btb:i18n.adoc[internationalization].
 ====
 
 

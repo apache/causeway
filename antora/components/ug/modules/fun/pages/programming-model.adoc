@@ -26,7 +26,7 @@ In this section we discuss the mechanics of writing domain objects that comply w
 In fact, the Apache Isis programming model is extensible; you can teach Apache Isis new programming conventions and you can remove existing ones; ultimately they amount to syntax.
 The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
 
-You can learn more about extending Apache Isis programming model xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model[here].
+You can learn more about extending Apache Isis programming model xref:ug:btb:programming-model.adoc[here].
 ====
 
 

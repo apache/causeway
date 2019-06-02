@@ -23,4 +23,4 @@ public String validate() { ... }
 
 where the returned string is the reason that the invocation is vetoed.
 
-Note that Apache Isis' xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that the returned reason can also be internationalized.
+Note that Apache Isis' xref:ug:btb:i18n.adoc[i18n support] extends this so that the returned reason can also be internationalized.

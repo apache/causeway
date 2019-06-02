@@ -16,7 +16,7 @@ public String disabled(Identifier.Type identifierType) { ... }
 
 where `Identifier.Type` is part of the Isis applib (nested static class of `o.a.i.applib.Identifier`) to distinguish between an interaction with an action, a property or an action.
 
-Note that Apache Isis' xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that the returned reason can also be internationalized.
+Note that Apache Isis' xref:ug:btb:i18n.adoc[i18n support] extends this so that the returned reason can also be internationalized.
 
 For example:
 

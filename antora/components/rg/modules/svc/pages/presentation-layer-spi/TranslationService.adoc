@@ -11,7 +11,7 @@ These translations provide for both singular and plural forms.
 
 [NOTE]
 ====
-For the "big picture" and further details on Apache Isis' i18n support, see xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[here].
+For the "big picture" and further details on Apache Isis' i18n support, see xref:ug:btb:i18n.adoc[here].
 ====
 
 
@@ -56,7 +56,7 @@ The framework also provides a supporting `TranslationServicePoMenu` provides men
 
 If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
 
-For more details on the implementation, see xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support].
+For more details on the implementation, see xref:ug:btb:i18n.adoc[i18n support].
 
 
 If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
@@ -80,7 +80,7 @@ The default implementation of this domain service recognises the following confi
 It can also be disabled.
 This can be useful for integration tests.
 
-See xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
+See xref:ug:btb:i18n.adoc[i18n support] to learn more about the translation service.
 
 |===
 

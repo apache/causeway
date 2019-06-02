@@ -21,7 +21,7 @@ The signature of the supporting method for a collection with element type `E` is
 public String validateRemoveFromXxx(E element) { ... }
 ----
 
-where the returned string is the reason the collection modification invocation is vetoed (or `null` if not vetoed).  Apache Isis' xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized if required.
+where the returned string is the reason the collection modification invocation is vetoed (or `null` if not vetoed).  Apache Isis' xref:ug:btb:i18n.adoc[i18n support] extends this so that reasons can be internationalized if required.
 
 
 For example:

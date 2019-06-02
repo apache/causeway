@@ -63,6 +63,6 @@ It is also possible to specify a fully qualified class name to replace either of
 
 == Viewer Configuration
 
-Viewers are specified by way of the filters and servlets in the xref:ug:btb:ugbtb.adoc#_ugbtb_web-xml[`web.xml`] file; these are not bootstrapped by the framework, rather it is the other way around.
+Viewers are specified by way of the filters and servlets in the xref:ug:btb:web-xml.adoc[`web.xml`] file; these are not bootstrapped by the framework, rather it is the other way around.
 
 

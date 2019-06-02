@@ -58,4 +58,4 @@ See also our guidance on xref:downloads:mn:migration-notes.adoc#_migration-notes
 
 
 The framework also supports i18n: locale-specific names and descriptions.
-For more information, see the xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[beyond-the-basics] guide.
+For more information, see the xref:ug:btb:i18n.adoc[beyond-the-basics] guide.

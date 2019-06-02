@@ -18,6 +18,6 @@ See also hints-n-tips chapters in the:
 
 * the xref:ug:sec:hints-and-tips.adoc[Security] guide
 
-* the xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips[Beyond the Basics] guide (this chapter).
+* the xref:ug:btb:hints-and-tips.adoc[Beyond the Basics] guide (this chapter).
 
 

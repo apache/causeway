@@ -36,7 +36,7 @@ public class ToDoItem {
 As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
 
 
-The framework also provides a separate, powerful mechanism for xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[internationalization].
+The framework also provides a separate, powerful mechanism for xref:ug:btb:i18n.adoc[internationalization].
 
 
 == See also
