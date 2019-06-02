@@ -25,11 +25,6 @@ The (Asciidoc) source code can be found at `adocs/documentation` (relative to ro
 
 
 
-include::_dg_asciidoc_naming-conventions.adoc[leveloffset=+1]
-include::_dg_asciidoc_writing-the-docs.adoc[leveloffset=+1]
-include::_dg_asciidoc_build-and-review.adoc[leveloffset=+1]
-include::_dg_asciidoc_instant-rebuild.adoc[leveloffset=+1]
-include::_dg_asciidoc_publish-procedure.adoc[leveloffset=+1]
 
 
 

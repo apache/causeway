@@ -1,6 +1,4 @@
-* Committers' Guide
-
-** xref:about.adoc[About]
+* xref:about.adoc[Committers' Guide]
 
 ** xref:applying-patches.adoc[Applying Patches]
 

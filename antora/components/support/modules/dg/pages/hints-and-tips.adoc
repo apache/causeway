@@ -21,11 +21,3 @@ See also hints-n-tips chapters in the:
 * the xref:ug:btb:hints-and-tips.adoc[Beyond the Basics] guide.
 
 
-// tag::inclusions[]
-
-include::_dg_hints-and-tips_datanucleus-enhancer.adoc[leveloffset=+1]
-include::_dg_hints-and-tips_enabling-logging.adoc[leveloffset=+1]
-include::_dg_hints-and-tips_enhance-only.adoc[leveloffset=+1]
-include::_dg_hints-and-tips_how-run-fixtures-on-app-startup.adoc[leveloffset=+1]
-
-// end::inclusions[]

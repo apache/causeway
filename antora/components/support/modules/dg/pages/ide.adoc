@@ -11,6 +11,4 @@ Apache Isis is built with Maven, and all modern IDEs can import Maven projects.
 This chapter shows how to setup and use two of the most popular IDEs, IntelliJ IDEA and Eclipse.
 
 
-include::_dg_ide_intellij.adoc[leveloffset=+1]
-include::_dg_ide_eclipse.adoc[leveloffset=+1]
 
