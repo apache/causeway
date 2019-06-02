@@ -38,7 +38,7 @@ include::_attributes.adoc[]
 *  xref:ug:odn:ugodn.adoc[DataNucleus Object Store]
 *  xref:ug:sec:ugsec.adoc[Security]
 * *xref:ug:tst:ugtst.adoc[Testing]*
-*  xref:ug:btb:ugbtb.adoc[Beyond the Basics]
+*  xref:ug:btb:about.adoc[Beyond the Basics]
 
 
 |*Reference Guides:*

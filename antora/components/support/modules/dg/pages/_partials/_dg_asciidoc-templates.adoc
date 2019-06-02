@@ -368,7 +368,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugbtb`
-//|`\xref:ug:btb:ugbtb.adoc#xxx[ttt]`
+//|`\xref:ug:btb:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
 //

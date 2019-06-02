@@ -46,5 +46,5 @@ There are also a whole bunch of GC-related flags, that you might want to explore
 
 ## Configuring in Tomcat
 
-If using Tomcat, update the `CATALINA_OPTS` variable.  (This variable is also updated if xref:ug:btb:ugbtb.adoc#__ugbtb_deployment_externalized-configuration_Log4j[configuring logging to run externally]).
+If using Tomcat, update the `CATALINA_OPTS` variable.  (This variable is also updated if xref:ug:btb:deployment/externalized-configuration.adoc#log4j[configuring logging to run externally]).
 
