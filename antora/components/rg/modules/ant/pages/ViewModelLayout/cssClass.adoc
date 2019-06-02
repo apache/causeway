@@ -4,6 +4,6 @@ include::_attributes.adoc[]
 
 
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the view model.   xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the view model.   xref:rg:cfg:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 This is equivalent to xref:rgant.adoc#_rgant_DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`], but for view models instead of entities.

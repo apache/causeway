@@ -33,7 +33,7 @@ These are resolved relative to `src/main/webapp`, or an absolute URL can be spec
 * for the header image, a size of 160x40 works well.
 
 
-You may also wish to tweak the xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`].
+You may also wish to tweak the xref:rg:cfg:application-specific/application-css.adoc[`application.css`].
 For example, a logo with height 40px works well with the following:
 
 [source,css]

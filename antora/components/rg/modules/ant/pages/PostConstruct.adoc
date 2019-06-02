@@ -28,7 +28,7 @@ Alternatively - for domain services only, not view models - the method can accep
 @Programmatic
 public void init(Map<String,String> properties) { ... }
 ----
-Apache Isis uses argument to pass in the configuration properties read from all xref:rg:cfg:rgcfg.adoc#_rgcfg_configuration-files[configuration files]:
+Apache Isis uses argument to pass in the configuration properties read from all xref:rg:cfg:configuration-files.adoc[configuration files]:
 
 [TIP]
 ====

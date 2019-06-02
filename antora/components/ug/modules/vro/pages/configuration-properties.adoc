@@ -57,7 +57,7 @@ In addition:
 (depends)
 |If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
 
-If no configuration property is available, then the defaults is determined by the xref:rg:cfg:rgcfg.adoc#_rgcfg_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
+If no configuration property is available, then the defaults is determined by the xref:rg:cfg:deployment-types.adoc[deployment type]: production mode disables pretty printing, while prototype mode enables it.
 
 |===
 

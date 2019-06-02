@@ -177,14 +177,14 @@ image::ContentNegotiationService/accept-json.png[width="700px",link="{imagesdir}
 [_rgfis_presentation-layer_ContentNegotiationService_Configuration]]
 == Configuration
 
-The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:
+The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:rg:cfg:configuring-core.adoc[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:
 
 [source,ini]
 ----
 isis.services.ContentNegotiationServiceXRoDomainType.prettyPrint=true
 ----
 
-If the property is not set, then the default depends on the xref:rg:cfg:rgcfg.adoc#_rgcfg_deployment-types[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
+If the property is not set, then the default depends on the xref:rg:cfg:deployment-types.adoc[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
 
 
 

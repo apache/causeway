@@ -19,7 +19,7 @@ Docker host can be assured.
 == Using an `overrides.properties`
 
 In addition to loading the regular configuration properties from `WEB-INF` directory (described
-xref:rg:cfg:rgcfg.adoc#_rgcfg_configuration-files[here]), Apache Isis will also load the `overrides.properties` file.
+xref:rg:cfg:configuration-files.adoc[here]), Apache Isis will also load the `overrides.properties` file.
 
 This file is treated slightly differently than the other configuration files; it is loaded last, and any configuration
 properties defined in it will _override_ any configuration properties already read from other files (this includes

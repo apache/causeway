@@ -103,9 +103,9 @@ All requested translations are written into the `.pot` file.
 
 To make the service as convenient as possible to use, the service configures itself as follows:
 
-* if running in prototype mode xref:rg:cfg:rgcfg.adoc#_rgcfg_deployment-types[deployment type] or during integration tests, then the service runs in *write* mode, in which case it records all translations into the `.pot` file.
+* if running in prototype mode xref:rg:cfg:deployment-types.adoc[deployment type] or during integration tests, then the service runs in *write* mode, in which case it records all translations into the `.pot` file.
 The `.pot` file is written out when the system is shutdown.
-* if running in server (production) mode xref:rg:cfg:rgcfg.adoc#_rgcfg_deployment-types[deployment type], then the service runs in *read* mode.
+* if running in server (production) mode xref:rg:cfg:deployment-types.adoc[deployment type], then the service runs in *read* mode.
 It is also possible to set a configuration setting in `isis.properties` to force read mode even if running in prototype mode (useful to manually test/demo the translations).
 
 When running in write mode the original text is returned to the caller untranslated.

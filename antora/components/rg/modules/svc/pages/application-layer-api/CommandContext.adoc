@@ -131,7 +131,7 @@ public class ToDoItem ... {
 ====
 As an alternative to annotating every action with `@Action#command()`, alternatively this can be configured as the default using `isis.services.command.actions` configuration property.
 
-See xref:rg:ant:rgant.adoc#_rgant-Action_command[`@Action#command()`] and xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[runtime configuration] for further details.
+See xref:rg:ant:rgant.adoc#_rgant-Action_command[`@Action#command()`] and xref:rg:cfg:configuring-core.adoc[runtime configuration] for further details.
 ====
 
 

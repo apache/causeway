@@ -94,7 +94,7 @@ These are then executed either when the request completes (and the transaction c
 This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
 
 By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`.
-However, this behaviour can be disabled using the  xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
+However, this behaviour can be disabled using the  xref:rg:cfg:configuring-core.adoc[configuration property] `isis.services.container.disableAutoFlush`.
 
 
 

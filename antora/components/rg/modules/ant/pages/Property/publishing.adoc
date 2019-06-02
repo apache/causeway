@@ -9,7 +9,7 @@ The `publishing()` attribute determines whether and how a property edit is publi
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
 The default value for the attribute is `AS_CONFIGURED`, meaning that the
-xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.publish.properties` is used to
+xref:rg:cfg:configuring-core.adoc[configuration property] `isis.services.publish.properties` is used to
 determine the whether the property is published:
 
 * `all`

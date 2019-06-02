@@ -32,7 +32,7 @@ For a domain service action to be contributed, the domain services must have a x
 
 |xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]. +
+|an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]. +
 
 Supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer] but currently ignored by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 

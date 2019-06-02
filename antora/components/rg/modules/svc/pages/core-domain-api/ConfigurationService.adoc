@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `ConfigurationService` allows domain objects to read the configuration properties aggregated from the various xref:rg:cfg:rgcfg.adoc#_rgcfg_configuration-files[configuration files].
+The `ConfigurationService` allows domain objects to read the configuration properties aggregated from the various xref:rg:cfg:configuration-files.adoc[configuration files].
 
 
 [IMPORTANT]

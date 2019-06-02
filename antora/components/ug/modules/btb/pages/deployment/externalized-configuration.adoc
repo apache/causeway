@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-As described xref:rg:cfg:rgcfg.adoc#_rgcfg_configuration-files[here], by default Apache Isis itself bootstraps from the
+As described xref:rg:cfg:configuration-files.adoc[here], by default Apache Isis itself bootstraps from the
 `isis.properties` configuration file.
 It will also read configuration from the (optional) component/implementation-specific configuration files (such as `persistor_datanucleus.properties` or `viewer_wicket.properties`), and also (optional) component-specific configuration files (such as `persistor.properties` or `viewer.properties`).
 

@@ -62,7 +62,7 @@ image::reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png[widt
 ====
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
 
-Instead, a default can be specified using a xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] in `isis.properties`:
+Instead, a default can be specified using a xref:rg:cfg:configuring-core.adoc[configuration property] in `isis.properties`:
 
 [source,ini]
 ----

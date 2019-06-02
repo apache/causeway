@@ -15,7 +15,7 @@ The table below lists the reserved methods that are recognized as part of Apache
 
 |xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
 |Provides a CSS class for this object instance.
-In conjunction with xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
+In conjunction with xref:rg:cfg:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
 
 |xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_disable[`disable(...)`]
 |Disable all or some of an object's properties

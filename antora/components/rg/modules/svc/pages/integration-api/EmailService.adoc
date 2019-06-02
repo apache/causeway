@@ -169,7 +169,7 @@ Thus, use this service the following properties must be configured:
 * `isis.service.email.sender.address`
 * `isis.service.email.sender.password`
 
-and these properties may optionally be configured (each has a default to use gmail, documented xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[here]):
+and these properties may optionally be configured (each has a default to use gmail, documented xref:rg:cfg:configuring-core.adoc[here]):
 
 * `isis.service.email.sender.hostname`
 * `isis.service.email.port`

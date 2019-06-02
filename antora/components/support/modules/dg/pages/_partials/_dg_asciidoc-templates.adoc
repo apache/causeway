@@ -173,9 +173,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]`
+//`\xref:rg:cfg:configuring-core.adoc[Configuring Core]`
 //
-//|xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]
+//|xref:rg:cfg:configuring-core.adoc[Configuring Core]
 //
 //
 //
