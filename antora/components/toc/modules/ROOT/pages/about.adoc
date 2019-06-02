@@ -55,7 +55,7 @@ include::_attributes.adoc[]
 |*Get involved!*
 
 * *xref:support:dg:dg.adoc[Developers' Guide]*
-** xref:support:dg:dg.adoc#intellij[IntelliJ] & xref:dg:dg.adoc#eclipse[Eclipse]
+** xref:support:dg:dg.adoc#developing-using-intellij-idea[IntelliJ] & xref:support:dg:dg.adoc#eclipse[Eclipse]
 ** xref:support:dg:dg.adoc#contributing[Pull requests]
 ** xref:support:dg:dg.adoc#asciidoc-syntax[Asciidoc syntax]
 

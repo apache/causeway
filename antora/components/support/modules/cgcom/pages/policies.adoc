@@ -8,6 +8,4 @@
 
 This chapter pulls together various policy documents relating to the development of Apache Isis'.
 
-include::_cgcom_policies_versioning-policy.adoc[leveloffset=+1]
-include::_cgcom_policies_git-policy.adoc[leveloffset=+1]
 
