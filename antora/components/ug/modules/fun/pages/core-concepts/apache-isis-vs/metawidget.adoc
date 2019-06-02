@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-MetaWidget (mentioned xref:ug:fun:ugfun.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern_object-interface-mapping[earlier] has a number of ideas in common with Apache Isis, specifically the runtime generation of a UI for domain objects.
+MetaWidget (mentioned xref:ug:fun:core-concepts/philosophy/naked-objects-pattern/object-interface-mapping.adoc[earlier] has a number of ideas in common with Apache Isis, specifically the runtime generation of a UI for domain objects.
 And like Apache Isis, MetaWidget builds its own metamodel of the domain objects and uses this to render the object.
 
 However, there is a difference in philosophy in that MW is not a full-stack framework and does not (in their words) try to "own the UI".

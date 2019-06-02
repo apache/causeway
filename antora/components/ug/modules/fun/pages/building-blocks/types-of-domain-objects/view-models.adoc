@@ -129,7 +129,7 @@ The view model simply needs to implement the xref:rg:cms:rgcms.adoc#_rgcms_class
 
 [TIP]
 ====
-Details of how to consume such DTOs can be found xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb_dto-consumers[here].
+Details of how to consume such DTOs can be found xref:ug:fun:programming-model/view-models/jaxb/dto-consumers.adoc[here].
 ====
 
 

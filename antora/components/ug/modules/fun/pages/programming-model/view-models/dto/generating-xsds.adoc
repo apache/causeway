@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-In the section xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[above] it was explained how a view model DTO can transparent reference any "backing" entities; these references are converted to internal object identifiers.
+In the section xref:ug:fun:programming-model/view-models/jaxb/referencing-domain-entities.adoc[above] it was explained how a view model DTO can transparent reference any "backing" entities; these references are converted to internal object identifiers.
 
 However, if the consumer of the XML is another Java process (eg running within an Apache Camel route), then you might be tempted/expect to be able to use the same DTO within that Java process.
 After a little thought though you'll realize that (duh!) of course you cannot; the consumer runs in a different process space, and will not have references to those containing entities.
