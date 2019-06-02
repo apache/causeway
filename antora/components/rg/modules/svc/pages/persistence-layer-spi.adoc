@@ -79,6 +79,3 @@ Where an implementation is available (on the classpath) then it is always regist
 
 
 
-include::partial$_rgsvc_persistence-layer-spi_AuditerService.adoc[leveloffset=+1]
-include::partial$_rgsvc_persistence-layer-spi_PublisherService.adoc[leveloffset=+1]
-include::partial$_rgsvc_persistence-layer-spi_UserRegistrationService.adoc[leveloffset=+1]

@@ -123,5 +123,11 @@
 
 ** xref:schema.adoc[Schema]
 
+//*** xref:schema/aim.adoc[aim: ActionInvocationMemento] // replaced in 1.13.0
+*** xref:schema/mml.adoc[mml: Metamodel]
+*** xref:schema/cmd.adoc[cmd: Command]
+*** xref:schema/ixn.adoc[ixn: Interaction]
+*** xref:schema/chg.adoc[chg: Change]
+*** xref:schema/common.adoc[Common]
 
 
