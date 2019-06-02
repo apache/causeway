@@ -174,7 +174,6 @@ image::ContentNegotiationService/accept-json.png[width="700px",link="{imagesdir}
 
 
 
-[_rgfis_presentation-layer_ContentNegotiationService_Configuration]]
 == Configuration
 
 The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:rg:cfg:configuring-core.adoc[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:

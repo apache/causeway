@@ -34,7 +34,7 @@ Importantly, this also minimizes the coupling between your code and Apache Isis,
 The framework also defines a number of "internal" services.
 These are not part of the framework's formal API, in that they use classes that are outside of the applib.
 These internal framework services should be thought of as part of the internal design of the framework, and are liable to change from release to release.
-The internal framework services are documented in the xref:rg:fis:rgfis.adoc#[Framework Internal Services] guide.
+The internal framework services are documented in the xref:rg:fis:about.adoc[Framework Internal Services] guide.
 
 
 
