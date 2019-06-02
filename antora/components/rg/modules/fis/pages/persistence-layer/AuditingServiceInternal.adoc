@@ -21,7 +21,7 @@ public class AuditingServiceInternal {
 }
 ----
 <1> minor performance optimization as to whether any auditing services are actually enabled; checks to see if any xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] are enabled.
-<2> uses the xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s).
+<2> uses the xref:rg:fis:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s).
 
 The service implementation is `o.a.i.c.r.s.auditing.AuditingServiceInternal`.
 
@@ -34,7 +34,7 @@ Apache Isis' default implementation of `AuditingServiceInternal` class is automa
 
 == Related Classes
 
-The service delegates between the (internal) xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service  to the configured xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s).
+The service delegates between the (internal) xref:rg:fis:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service  to the configured xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s).
 If no such service(s) are configured, then _this_ service is in effect a no-op.
 
-The (internal) xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] performs a similar function for the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.
+The (internal) xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] performs a similar function for the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.

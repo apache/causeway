@@ -202,4 +202,4 @@ To use an alternative implementation, use xref:rg:ant:DomainServiceLayout/menuOr
 
 The default implementation of `ContentNegotiationService` delegates to xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
 
-The `ContentNegotiationService` is itself called by the (default implementation of) xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_RepresentationService[`RepresentationService`].
+The `ContentNegotiationService` is itself called by the (default implementation of) xref:rg:fis:presentation-layer/RepresentationService.adoc[`RepresentationService`].

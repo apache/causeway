@@ -4,9 +4,9 @@ include::_attributes.adoc[]
 
 
 
-The `ContentMappingService` supports the (default implementation of the) xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] enabling the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
+The `ContentMappingService` supports the (default implementation of the) xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] enabling the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
 
-See xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] for further discussion.
+See xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] for further discussion.
 
 
 [NOTE]
@@ -72,6 +72,6 @@ public static class Util {
 
 == Related Services
 
-This service is a companion to the default implementation of the xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`].
+This service is a companion to the default implementation of the xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`].
 
 The framework implementations of `ContentMappingService` use the xref:rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.

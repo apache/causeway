@@ -24,7 +24,7 @@ Impl'n (g: a:)
 
 
 
-|xref:rg:fis:rgfis.adoc#_rgfis_application-layer_AuthenticationSessionProvider[`o.a.i.core.commons.` +
+|xref:rg:fis:application-layer/AuthenticationSessionProvider.adoc[`o.a.i.core.commons.` +
 `authentication.` +
 `AuthenticationSessionProvider`]
 |Simply responsible for obtaining the current `AuthenticationSession` (the framework's internal representation of the currently logged-in user).
@@ -34,7 +34,7 @@ Impl'n (g: a:)
 |Default implementation looks up from `IsisSessionFactory` singleton's thread-local
 
 
-|xref:rg:fis:rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`o.a.i.c.m.s.command` +
+|xref:rg:fis:application-layer/CommandDtoServiceInternal.adoc[`o.a.i.c.m.s.command` +
 `CommandDtoServiceInternal`]
 |Creates memento of current action invocation, for use as a serializable XML reified command.  The
 most notable usage of this is to allow the execution of the `Command` to be deferred to run in the background (via
@@ -46,7 +46,7 @@ xref:rg:ant:Property/command.adoc[`@Property#commandExecuteIn()`].
 |
 
 
-|xref:rg:fis:rgfis.adoc#_rgfis_application-layer_InteractionDtoServiceInternal[`o.a.i.c.m.s.ixn` +
+|xref:rg:fis:application-layer/InteractionDtoServiceInternal.adoc[`o.a.i.c.m.s.ixn` +
 `InteractionDtoServiceInternal`]
 |Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 |`CommandDtoService-` +

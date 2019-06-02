@@ -9,7 +9,7 @@ The `BackgroundService2` is responsible for capturing a memento representing the
 
 The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can capture the action to invoke and its arguments.
 
-This is done using xref:rg:fis:rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`CommandDtoServiceInternal`].
+This is done using xref:rg:fis:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`].
 
 The persistence delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService2`.
 One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
@@ -113,7 +113,7 @@ The latter is analogous to the way in which the `BackgroundCommandService` persi
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way.
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]).
 
-The xref:rg:fis:rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
+The xref:rg:fis:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
 (In earlier versions, xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`] was used for this purpose).
 
 

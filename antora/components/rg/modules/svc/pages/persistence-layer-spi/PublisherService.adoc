@@ -120,9 +120,9 @@ To support these use cases several other services are involved:
 
 * the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
 
-* the (internal) xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
+* the (internal) xref:rg:fis:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:rg:fis:rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
+* the (internal) xref:rg:fis:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 
 * the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 

@@ -8,7 +8,7 @@ simply exposes the HTTP `Accept` header to the domain.  Its intended use is to s
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] and
+As an alternative to performing content negotiation within the domain classes, the xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and
 xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
