@@ -32,12 +32,12 @@ include::_attributes.adoc[]
 
 |*User Guides:*
 
-* *xref:ug:fun:ugfun.adoc[Fundamentals]*
+* *xref:ug:fun:about.adoc[Fundamentals]*
 *  xref:ug:vw:ugvw.adoc[Wicket Viewer]
-*  xref:ug:vro:ugvro.adoc[Restful Objects Viewer]
-*  xref:ug:odn:ugodn.adoc[DataNucleus Object Store]
-*  xref:ug:sec:ugsec.adoc[Security]
-* *xref:ug:tst:ugtst.adoc[Testing]*
+*  xref:ug:vro:about.adoc[Restful Objects Viewer]
+*  xref:ug:odn:about.adoc[DataNucleus Object Store]
+*  xref:ug:sec:about.adoc[Security]
+* *xref:ug:tst:about.adoc[Testing]*
 *  xref:ug:btb:about.adoc[Beyond the Basics]
 
 

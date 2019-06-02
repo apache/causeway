@@ -8,11 +8,11 @@ In larger applications we have found it worthwhile to ensure that our domain ser
 
 The application provides the `@DomainService(nature=...)` annotation that helps distinguish some of these responsibilities:
 
-* `VIEW_MENU_ONLY` indicates that the actions should appear on the menu of the xref:ug:vw:ugvw.adoc#[Wicket viewer], and as top-level actions for the REST API provided by the xref:ug:vro:ugvro.adoc#[Restful Objects viewer]
+* `VIEW_MENU_ONLY` indicates that the actions should appear on the menu of the xref:ug:vw:ugvw.adoc#[Wicket viewer], and as top-level actions for the REST API provided by the xref:ug:vro:about.adoc[Restful Objects viewer]
 
 * `DOMAIN` indicates that the actions are for other domain objects to invoke (either directly or indirectly through the event bus), but in any case should not be rendered at all in the UI
 
-* `VIEW_REST_ONLY` indicates that the actions should appear in the REST API provided by the xref:ug:vro:ugvro.adoc#[Restful Objects viewer], but not rendered by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+* `VIEW_REST_ONLY` indicates that the actions should appear in the REST API provided by the xref:ug:vro:about.adoc[Restful Objects viewer], but not rendered by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
 
 There are also two other natures that should be considered "deprecated":
 

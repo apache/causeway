@@ -14,7 +14,7 @@ Service actions are grouped into menu sections.
 
 All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://isis.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsLoaderService[`MenuBarsLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
-It also allows the menu bars to be exposed through the REST API provided by the xref:ug:vro:ugvro.adoc#[Restful Objects viewer], as either XML or JSON.
+It also allows the menu bars to be exposed through the REST API provided by the xref:ug:vro:about.adoc[Restful Objects viewer], as either XML or JSON.
 
 The service action component also allows a link to be associated with it.
 Each such link is populated by the framework automatically when exposing the menu bars layout through the REST API, pointing back to the standard Restful Objects resources.

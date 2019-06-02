@@ -39,7 +39,7 @@ Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer] provides an implementation of this se
 
 [NOTE]
 ====
-Currently there is no equivalent implementation for the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
+Currently there is no equivalent implementation for the xref:ug:vro:about.adoc[RestfulObjects viewer].
 ====
 
 

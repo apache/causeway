@@ -290,7 +290,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugfun`
-//|`\xref:ug:fun:ugfun.adoc#xxx[ttt]`
+//|`\xref:ug:fun:about.adoc#xxx[ttt]`
 //
 //a hyperlink to a bookmark within the fundamentals users' guide, where:
 //
@@ -322,7 +322,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugvro`
-//|`\xref:ug:vro:ugvro.adoc#xxx[ttt]`
+//|`\xref:ug:vro:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 //
@@ -338,7 +338,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugsec`
-//|`\xref:ug:sec:ugsec.adoc#xxx[ttt]`
+//|`\xref:ug:sec:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Secrurity guide, where:
 //
@@ -353,7 +353,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugtst`
-//|`\xref:ug:tst:ugtst.adoc#xxx[ttt]`
+//|`\xref:ug:tst:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Testing guide, where:
 //

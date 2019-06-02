@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-By and large the security mechanisms within Isis are transparent to the rest of the framework (the xref:ug:vw:ugvw.adoc#[Wicket Viewer] and xref:ug:vro:ugvro.adoc#[Restful Objects viewer], and the overall xref:rg:cfg:rgcfg.adoc#_rgcfg[runtime]).
+By and large the security mechanisms within Isis are transparent to the rest of the framework (the xref:ug:vw:ugvw.adoc#[Wicket Viewer] and xref:ug:vro:about.adoc[Restful Objects viewer], and the overall xref:rg:cfg:rgcfg.adoc#_rgcfg[runtime]).
 
 That said, it is the responsibility of the viewers to ensure that for each request there is a valid user session present.  The sections below explain how this works.
 
@@ -66,7 +66,7 @@ If you are using an LDAP realm and want to enable user-self registration then yo
 
 == Restful Objects Viewer
 
-Unlike the Wicket viewer, the xref:ug:vro:ugvro.adoc#[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter (set up by the framework's web bootstrapping).
+Unlike the Wicket viewer, the xref:ug:vro:about.adoc[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter (set up by the framework's web bootstrapping).
 The authentication strategy is responsible for ensuring that a session is available for the REST resource.
 
 The API of `AuthenticationSessionStrategy` is simply:

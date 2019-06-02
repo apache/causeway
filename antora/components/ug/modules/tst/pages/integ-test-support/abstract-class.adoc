@@ -13,7 +13,7 @@ This base class xref:ug:tst:integ-test-support/bootstrapping.adoc[bootstraps] th
 == `IntegrationTestAbstract3`
 
 We recommend that your integration tests inherit from Apache Isis' `IntegrationTestAbstract3` class.
-The primary benefit over its predecessor, `IntegrationTestAbstract2` (discussed xref:ugtst.adoc#__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract2[below] is that it allows the test to be bootstrapped by passing in a `Module` rather than an `AppManifest`.
+The primary benefit over its predecessor, `IntegrationTestAbstract2` (discussed xref:ug:tst:integ-test-support/abstract-class/adoc#IntegrationTestAbstract2[below] is that it allows the test to be bootstrapped by passing in a `Module` rather than an `AppManifest`.
 
 For example:
 

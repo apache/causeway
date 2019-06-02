@@ -34,7 +34,7 @@ The current user/role reported by the internal xref:rg:fis:application-layer/Aut
 
 [IMPORTANT]
 ====
-Note however that this the "effective user" does not propagate through to the xref:ug:sec:ugsec.adoc#[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
+Note however that this the "effective user" does not propagate through to the xref:ug:sec:about.adoc[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
 See the xref:rg:svc:rgsvc.adoc#__rgsvc_testing_SudoService_ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
 ====
 
@@ -67,7 +67,7 @@ protected void execute(final ExecutionContext ec) {
 
 === ACCESS_ALL_ROLE
 
-When `sudo(...)` is called the "effective user" is reported by both xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] and by xref:rg:fis:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`], but does not propagate through to the xref:ug:sec:ugsec.adoc#[Shiro security mechanism].
+When `sudo(...)` is called the "effective user" is reported by both xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] and by xref:rg:fis:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`], but does not propagate through to the xref:ug:sec:about.adoc[Shiro security mechanism].
 These continue to be evaluated according to the permissions of the current user.
 
 This can be a problem in certain use cases.

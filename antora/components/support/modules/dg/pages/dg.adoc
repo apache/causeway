@@ -27,10 +27,10 @@ The user guides available are:
 
 * xref:ug:fun:about.adoc#[Fundamentals]
 * xref:ug:vw:ugvw.adoc#[Wicket viewer]
-* xref:ug:vro:ugvro.adoc#[Restful Objects viewer]
-* xref:ug:odn:ugodn.adoc#[DataNucleus object store]
-* xref:ug:sec:ugsec.adoc#[Security]
-* xref:ug:tst:ugtst.adoc#[Testing]
+* xref:ug:vro:about.adoc[Restful Objects viewer]
+* xref:ug:odn:about.adoc#[DataNucleus object store]
+* xref:ug:sec:about.adoc#[Security]
+* xref:ug:tst:about.adoc#[Testing]
 * xref:ug:btb:about.adoc#[Beyond the Basics]
 
 The reference guides are:

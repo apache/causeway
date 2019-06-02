@@ -60,7 +60,7 @@ REST (Representation State Transfer) is an architectural style for building high
 Many commercial web APIs (twitter, facebook, Amazon) are implemented as either pure REST APIs or some approximation therein.
 
 The http://restfulobjects.org[Restful Objects specification] defines a means by a domain object model can be exposed as RESTful resources using JSON representations over HTTP.
-Apache Isis' xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
+Apache Isis' xref:ug:vro:about.adoc[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
 
 There are a number of use cases for deploying Isis as a REST API, including:
 

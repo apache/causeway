@@ -9,9 +9,9 @@ This guide describes how to configure an Apache Isis application.
 [NOTE]
 ====
 This guide covers only the core configuration properties (relating to Apache Isis' metamodel and runtime management).
-Configuration properties for the viewers can be found in the xref:ug:vw:ugvw.adoc#[Wicket Viewer] guide and the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] guide.
+Configuration properties for the viewers can be found in the xref:ug:vw:ugvw.adoc#[Wicket Viewer] guide and the xref:ug:vro:about.adoc[RestfulObjects viewer] guide.
 Likewise details of configuring security (Apache Shiro) can be
-found in the xref:ug:sec:ugsec.adoc#[Security] guide, and details for configuring the DataNucleus Object Store can be found in the xref:ug:odn:ugodn.adoc#[DataNucleus] guide.
+found in the xref:ug:sec:about.adoc#[Security] guide, and details for configuring the DataNucleus Object Store can be found in the xref:ug:odn:about.adoc#[DataNucleus] guide.
 ====
 
 [TIP]

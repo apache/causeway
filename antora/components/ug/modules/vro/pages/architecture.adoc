@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning
+The xref:ug:vro:about.adoc[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning
 that it defines a well-defined set of endpoint URLs as resources, and generates a well-defined set of (JSON)
 representations when these resources are accessed.
 

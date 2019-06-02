@@ -53,7 +53,7 @@ functionality is simply for other domain objects to invoke programmatically).
 +
 It is also possible to specify a nature of simply `VIEW`, this combining `VIEW_MENU_ONLY` and `VIEW_CONTRIBUTIONS_ONLY`.
 This is in fact the default, useful for initial prototyping.
-A final nature is `VIEW_REST_ONLY` which is for domain services whose functionality is surfaced only by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
+A final nature is `VIEW_REST_ONLY` which is for domain services whose functionality is surfaced only by the xref:ug:vro:about.adoc[RestfulObjects viewer].
 
 You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 

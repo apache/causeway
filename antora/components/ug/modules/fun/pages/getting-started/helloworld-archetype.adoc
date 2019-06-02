@@ -309,7 +309,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `helloworld` archetype generates a single WAR file, configured to run both the xref:ug:vw:ugvw.adoc#[Wicket viewer] and the xref:ug:vro:ugvro.adoc#[Restful Objects viewer].
+The `helloworld` archetype generates a single WAR file, configured to run both the xref:ug:vw:ugvw.adoc#[Wicket viewer] and the xref:ug:vro:about.adoc[Restful Objects viewer].
 The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
@@ -359,7 +359,7 @@ image::getting-started/helloworld-before-launch.png[width="600px",link="{imagesd
 
 == Using the App
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ug:vw:ugvw.adoc#[Wicket viewer] or the xref:ug:vro:ugvro.adoc#[Restful Objects viewer]:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ug:vw:ugvw.adoc#[Wicket viewer] or the xref:ug:vro:about.adoc[Restful Objects viewer]:
 
 image::getting-started/using-hello-world/010-root-page.png[width="600px",link="{imagesdir}getting-started/using-hello-world/010-root-page.png"]
 
@@ -367,7 +367,7 @@ The Wicket viewer provides a human usable web UI (implemented, as you might have
 
 image::getting-started/using-hello-world/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}getting-started/using-hello-world/020-login-to-wicket-viewer.png"]
 
-The app itself is configured to run using xref:ug:sec:ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
+The app itself is configured to run using xref:ug:sec:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
 
 * username: _sven_
 * password: _pass_

@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `ContentMappingService` supports the (default implementation of the) xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] enabling the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
+The `ContentMappingService` supports the (default implementation of the) xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] enabling the xref:ug:vro:about.adoc[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
 
 See xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] for further discussion.
 

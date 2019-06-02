@@ -26,7 +26,7 @@ The following configuration properties are supported:
 |`isis.viewer.restfulobjects.` +
 `honorUiHints`
 | `true`,`false` (`_false_`)
-|A mechanism for reducing the number of round-trips by eagerly rendering collections; discussed xref:ug:vro:ugvro.adoc#___ugvro_ro-spec_extensions_minimizing-round-trips_honor-ui-hints[here].
+|A mechanism for reducing the number of round-trips by eagerly rendering collections; discussed xref:ug:vro:ro-spec.adoc#honor-ui-hints[here].
 
 |`isis.viewer.restfulobjects.` +
 `strictAcceptChecking`
@@ -114,7 +114,7 @@ Nevertheless, those configuration properties are:
 |`isis.viewer.restfulobjects.` +
 `objectPropertyValuesOnly`
 | `true`,`false` (`_false_`)
-| See xref:ug:vro:ugvro.adoc#__ugvro_simplified-representations_configuration-properties_object-property-values-only[discussion] below.
+| See discussionp below.
 |
 
 |===
@@ -135,9 +135,7 @@ isis.viewer.restfulobjects.suppressMemberDisabledReason=true
 
 [NOTE]
 ====
-If these configuration settings are set in conjunction with using the
-xref:ug:vro:ugvro.adoc#__ugvro_simplified-representations_apache-isis-profile[Apache Isis profile], then the special `$$ro`
-property in the representations with reflect these settings.
+If these configuration settings are set in conjunction with using the xref:ug:vro:simplified-representations.adoc#apache-isis-profile[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
 ====
 
 
