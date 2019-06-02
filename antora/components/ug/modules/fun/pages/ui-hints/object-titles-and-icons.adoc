@@ -10,7 +10,7 @@ The icon is often the same for all instances of a particular class, but it's als
 This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
 It is also possible for an object to provide a CSS class hint.
-In conjunction with xref:ug:vw:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with xref:ug:vw:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 == Object Title
@@ -243,7 +243,7 @@ public class OrderSubscriptions extends AbstractSubscriber {
 == Object CSS Styling
 
 It is also possible for an object to return a xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].
-In conjunction with xref:ug:vw:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with xref:ug:vw:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 

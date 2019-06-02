@@ -353,8 +353,8 @@ image::suppress-password-reset/login-page-suppress-password-reset.png[width="300
 
 Configuration properties that influence the appearance of the header and footer panels.
 
-See also the xref:ugvw.adoc#_ugvw_configuration-properties_bookmarks-and-breadcrumbs[bookmarks and breadcrumbs] and xref:ugvw.adoc#_ugvw_configuration-properties_themes
-[themes] configuration properties, because these also control UI elements that appear on the header/footer panels.
+See also the xref:ug:vw:configuration-properties/bookmarks-and-breadcrumbs.adoc[bookmarks and breadcrumbs] and xref:ug:vw:configuration-properties/themes
+.adoc[themes] configuration properties, because these also control UI elements that appear on the header/footer panels.
 
 .Header and Footer
 [cols="2a,1,3a", options="header"]
@@ -542,7 +542,7 @@ Note that `inline_as_if_edit` does not make sense for a configuration property d
 (`_sidebar_`)
 | Whether an action on a domain object (entity or view model) which prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
 
-See the discussion on the xref:ug:vw:ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
+See the discussion on the xref:ug:vw:features/sidebar-vs-modal-dialogs.adoc[sidebar vs modal dialogs] feature for further details.
 
 |`isis.viewer.wicket.` +
 `dialogModeForMenu`
@@ -550,7 +550,7 @@ See the discussion on the xref:ug:vw:ugvw.adoc#_ugvw_features_sidebar-vs-modal-d
 (`_sidebar_`)
 | Whether an action for a domain service should be rendered using a sidebar or alternatively in a modal dialog box.
 
-See the discussion on the xref:ug:vw:ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
+See the discussion on the xref:ug:vw:features/sidebar-vs-modal-dialogs.adoc[sidebar vs modal dialogs] feature for further details.
 
 
 
@@ -558,7 +558,7 @@ See the discussion on the xref:ug:vw:ugvw.adoc#_ugvw_features_sidebar-vs-modal-d
 
 
 Objects whose title is overly long can be cumbersome in titles.
-The Wicket viewer has a xref:ug:vw:ugvw.adoc#_ugvw_features_titles-in-tables[mechanism to automatically shorten] the titles of objects specified using `@Title`.
+The Wicket viewer has a xref:ug:vw:features/titles-in-tables.adoc[mechanism to automatically shorten] the titles of objects specified using `@Title`.
 As an alternative/in addition, the viewer can also be configured to simply truncate titles longer than a certain length.
 
 The properties themselves are:
@@ -718,7 +718,7 @@ where the value is the list of themes (from http://bootswatch.com[bootswatch.com
 
 [TIP]
 ====
-You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:ug:vw:ugvw.adoc#_ugvw_extending_custom-bootstrap-theme[Extending] chapter for further details.
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:ug:vw:extending/custom-bootstrap-theme.adoc[Extending] chapter for further details.
 ====
 
 
@@ -868,7 +868,7 @@ These configuration properties are used to enable/disable features that are eith
 `whereAmI.enabled`
 | `true`,`false` +
 (`_true_`)
-| To disable the xref:ugvw.adoc#_ugvw_features_where-am-i["Where am I"] feature.
+| To disable the xref:ug:vw:features/where-am-i.adoc["Where am I"] feature.
 
 
 |`isis.viewer.wicket.` +

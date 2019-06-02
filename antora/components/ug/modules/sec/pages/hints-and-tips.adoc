@@ -11,7 +11,7 @@ See also hints-n-tips chapters in the:
 
 * the xref:support:dg:dg.adoc#_dg_hints-and-tips[Developers'] guide
 
-* the xref:ug:vw:ugvw.adoc#_ugvw_hints-and-tips[Wicket viewer] guide
+* the xref:ug:vw:hints-and-tips.adoc[Wicket viewer] guide
 
 * the xref:ug:vro:hints-and-tips.adoc[Restful Objects viewer] guide
 

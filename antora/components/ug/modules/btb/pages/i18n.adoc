@@ -334,7 +334,7 @@ msgstr "You can only select 1 item"
 === Login/self-sign-up
 
 In addition, there are a reasonably large number of messages that are used for both login and the
- xref:ug:vw:ugvw.adoc#_ugvw_features_user-registration[user registration] (self sign-up) and password reset features.
+ xref:ug:vw:features/user-registration.adoc[user registration] (self sign-up) and password reset features.
 
 These are:
 
@@ -550,7 +550,7 @@ msgid "<i>Quantity</i>"
 msgstr "<i>Quantité</i>"
 ----
 
-For this to work, the `namedEscaped()` attribute must be specified using either the xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout file], or using an annotation such as xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`].
+For this to work, the `namedEscaped()` attribute must be specified using either the xref:ug:vw:layout/file-based.adoc[layout file], or using an annotation such as xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`].
 
 For example:
 

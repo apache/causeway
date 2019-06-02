@@ -19,7 +19,7 @@ Collections are always rendered in the "last" column.  This can appear either be
 
 [IMPORTANT]
 ====
-As this is an important topic, there is a xref:ug:vw:ugvw.adoc#_ugvw_layout[separate chapter] that discussed object layout in full.
+As this is an important topic, there is a xref:ug:vw:layout.adoc[separate chapter] that discussed object layout in full.
 ====
 
 

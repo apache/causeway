@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-Metadata providing UI hints can be specified either xref:ug:vw:ugvw.adoc#_ugvw_layout_annotation-based[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
+Metadata providing UI hints can be specified either xref:ug:vw:layout/annotation-based.adoc[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
 
 File-based layouts offer a number of benefits:
 

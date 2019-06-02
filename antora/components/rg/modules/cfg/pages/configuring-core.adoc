@@ -6,7 +6,7 @@ This section lists the core/runtime configuration properties recognized by Apach
 
 [NOTE]
 ====
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug:odn:configuring.adoc[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ug:vro:configuration-properties.adoc[here for the Restful Objects viewer].
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug:odn:configuring.adoc[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug:vw:configuration-properties.adoc[here for Wicket viewer], and xref:ug:vro:configuration-properties.adoc[here for the Restful Objects viewer].
 ====
 
 
@@ -616,7 +616,7 @@ See xref:ug:btb:programming-model/finetuning.adoc[finetuning the programming mod
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ug:vw:layout/file-based.adoc[file-based layout]s. +
 
 See xref:ug:btb:programming-model/layout-metadata-reader.adoc[Layout Metadata Reader] for more information.
 

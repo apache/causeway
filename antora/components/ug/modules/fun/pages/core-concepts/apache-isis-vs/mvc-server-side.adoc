@@ -12,7 +12,7 @@ The views provided out of the box by these frameworks tend to be simple  _CRUD_-
 More sophisticated behavior is accomplished by customizing the generated controllers.
 
 The most obvious difference when developing an Apache Isis application is its deliberate lack of an explicit controller layer; non- _CRUD_ behavior is automatically made available in its generic object-oriented  _UI_s.
-More sophisticated UIs can be built either by xref:ug:vw:ugvw.adoc#_ugvw_extending[extending Apache Isis' Wicket viewer] or by writing a bespoke UI leveraging the REST (hypermedia) API automatically exposed by xref:ug:vro:ugvro.adoc#[Isis' Restful Objects viewer].
+More sophisticated UIs can be built either by xref:ug:vw:extending.adoc[extending Apache Isis' Wicket viewer] or by writing a bespoke UI leveraging the REST (hypermedia) API automatically exposed by xref:ug:vro:ugvro.adoc#[Isis' Restful Objects viewer].
 Other frameworks can also be used to implement REST APIs, of course, but generally they require a significant amount of development to get anywhere near the level of sophistication provided automatically by Apache Isis' REST API.
 
 Although these frameworks all provide their own ecosystems of extensions, Apache Isis' equivalent link:http://platform.incode.org[Incode Platform^] modules (non-ASF) tend to work at a higher-level of abstraction.

@@ -324,7 +324,7 @@ In this section we explore adding some value properties
 * revisit the title, consider whether to use the xref:rg:ant:Title.adoc[`@Title`] annotation
 ** rather than the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method
 * order the properties using the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`], also `@MemberGroupLayout`
-** see also the docs on xref:ug:vw:ugvw.adoc#_ugvw_layout_annotation-based[static layouts]
+** see also the docs on xref:ug:vw:layout/annotation-based.adoc[static layouts]
 * use the xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
 ** do the same for parameters using xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`]
 
@@ -418,7 +418,7 @@ However, the feedback loop is not good: it requires us stopping the app, editing
 So instead, all these UI hints (and more) can be specified dynamically, using a corresponding `.layout.xml` file.
 If edited while the app is running, it will be reloaded automatically (in IntelliJ, use Run&gt;Reload Changed Classes):
 
-* Delete the various hint annotations and instead specify layout hints using a  xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[.layout.xml] file.
+* Delete the various hint annotations and instead specify layout hints using a  xref:ug:vw:layout/file-based.adoc[.layout.xml] file.
 
 
 
@@ -592,7 +592,7 @@ This can be helpful for "naive" code which would normally make the same query wi
 
 == Extending the Wicket UI
 
-Each element in the Wicket viewer (entity form, properties, collections, action button etc) is a component, each created by a internal API (`ComponentFactory`, described xref:ug:vw:ugvw.adoc#_ugvw_extending[here]).
+Each element in the Wicket viewer (entity form, properties, collections, action button etc) is a component, each created by a internal API (`ComponentFactory`, described xref:ug:vw:extending.adoc[here]).
 For collections there can be multiple views, and the Wicket viewer provides a view selector drop down (top right of each collection panel).
 
 Moreover, we can add additional views.

@@ -13,7 +13,7 @@ It is of course possible for domain objects to use this service; it will be inje
 
 [NOTE]
 ====
-For further details on the user registration feature (as supported by the Wicket viewer), see xref:ug:vw:ugvw.adoc#_ugvw_features_user-registration[here].
+For further details on the user registration feature (as supported by the Wicket viewer), see xref:ug:vw:features/user-registration.adoc[here].
 ====
 
 

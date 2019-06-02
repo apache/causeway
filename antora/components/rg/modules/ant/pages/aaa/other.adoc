@@ -11,7 +11,7 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Annotation
 |Purpose
 |Layer
-|xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
+|xref:ug:vw:layout/file-based.adoc[File-based layout]?
 
 |xref:rg:ant:Facets.adoc[`@Facets`]
 |Install arbitrary facets within the Apache Isis metamodel.

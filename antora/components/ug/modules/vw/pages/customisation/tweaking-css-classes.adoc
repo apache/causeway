@@ -91,7 +91,7 @@ div.x-myapp-highlight span.scalarName {
 }
 ----
 
-Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout file].
+Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:ug:vw:layout/file-based.adoc[layout file].
 
 
 

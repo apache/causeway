@@ -29,4 +29,4 @@ image::dialog-mode/sidebar.png[width="800px",link="{imagesdir}dialog-mode/sideba
 
 
 
-However, the original modal dialog can still be be used if end-users prefer that style, by setting the `isis.viewer.wicket.dialog` xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties_presentation[configuration property].
+However, the original modal dialog can still be be used if end-users prefer that style, by setting the `isis.viewer.wicket.dialog` xref:ug:vw:configuration-properties/presentation.adoc[configuration property].

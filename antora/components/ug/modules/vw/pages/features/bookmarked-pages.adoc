@@ -90,7 +90,7 @@ Alternatively, `alt+[` will toggle open/close the panel; it can also be closed u
 
 === Related functionality
 
-The xref:ug:vw:ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
+The xref:ug:vw:features/recent-pages.adoc[Recent Pages] also lists recently visited pages, selected from a drop-down.
 
 
 

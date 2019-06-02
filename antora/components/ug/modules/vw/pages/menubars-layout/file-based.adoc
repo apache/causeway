@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 The domain service actions can be arranged across menu items using the `menubars.layout.xml` file.
 Not only is this easier to work with, it also can be reloaded dynamically (if in prototype mode), substantially reducing the edit compile run cycle.
 
-As for xref:ugvw.adoc#_ugvw_layout_file-based[file-based object layouts], this offers a number of benefits:
+As for xref:ug:vw:layout/file-based.adoc[file-based object layouts], this offers a number of benefits:
 
 * Probably most significantly, the layout can be updated without requiring a recompile of the code and redeploy of the app; fine-tuning the layout with your end users is easy to do
 

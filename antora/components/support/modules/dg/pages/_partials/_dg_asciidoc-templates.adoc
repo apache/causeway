@@ -316,9 +316,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]`
+//`\xref:ug:vw:customisation.adoc[Customisation]`
 //
-//|xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]
+//|xref:ug:vw:customisation.adoc[Customisation]
 //
 //
 //|`adugvro`

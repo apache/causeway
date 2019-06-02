@@ -72,7 +72,7 @@ There are two prerequisites:
 
 The latter is required if you are using the default email notification service and email service. If you are using your own alternative implementation of the email notification service then it may be omitted (and configure your own alternative implementation as required).
 
-It is also possible to configure the Wicket viewer to suppress the sign-up page link and/or the password reset page, see xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties_sign-in[here] for further details.
+It is also possible to configure the Wicket viewer to suppress the sign-up page link and/or the password reset page, see xref:ug:vw:configuration-properties/sign-in.adoc[here] for further details.
 
 
 

@@ -36,7 +36,7 @@ This mixin uses the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_HintSto
 
 == `downloadLayoutXml()`
 
-The `Object_downloadLayoutXml` mixin provides an action to download the xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] for the current domain object.
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:ug:vw:layout/file-based.adoc[layout XML] for the current domain object.
 It has the following signature:
 
 [source,java]
@@ -50,7 +50,7 @@ public Object downloadLayoutXml(
 ----
 <1> either current, complete, normalized or minimal.
 
-See the documentation on xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] and also
+See the documentation on xref:ug:vw:layout/file-based.adoc[layout XML] and also
 the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] for more information on these styles
 
 
@@ -82,7 +82,7 @@ This mixin calls xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`Me
 
 == `downloadLayoutXml()`
 
-The `Object_downloadLayoutXml` mixin provides an action to download the xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] for the current domain object.
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:ug:vw:layout/file-based.adoc[layout XML] for the current domain object.
 It has the following signature:
 
 [source,java]
@@ -96,7 +96,7 @@ public Object downloadLayoutXml(
 ----
 <1> either current, complete, normalized or minimal.
 
-See the documentation on xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] and also
+See the documentation on xref:ug:vw:layout/file-based.adoc[layout XML] and also
 the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] for more information on these styles
 
 

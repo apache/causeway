@@ -35,7 +35,7 @@ which means that they can only be accessed by a user with an authenticated sessi
 
 [TIP]
 ====
-The sign-in page to render is pluggable; see xref:ug:vw:ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
+The sign-in page to render is pluggable; see xref:ug:vw:extending/custom-pages.adoc[extensions chapter] for details.
 ====
 
 In the sign-in page the viewer calls to the Isis Authenticator API, and obtains back a user/role.  It also adds in its special reserved role (per the annotation above) and then continues on to whichever page the user was attempting to access (usually the home page).
@@ -53,7 +53,7 @@ These pages all "reach inside" Apache Isis framework using a mechanism similar t
 
 [TIP]
 ====
-The sign-in verification page to render is pluggable; see xref:ug:vw:ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
+The sign-in verification page to render is pluggable; see xref:ug:vw:extending/custom-pages.adoc[extensions chapter] for details.
 ====
 
 User registration is only available if the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.

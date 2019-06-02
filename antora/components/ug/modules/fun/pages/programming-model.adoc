@@ -62,7 +62,7 @@ If a domain service does hold state (eg the `Scratchpad` service noted above) th
 
 The framework also defines supplementary annotations, `@DomainObjectLayout` and `@DomainServiceLayout`.
 These provide hints relating to the layout of the domain object in the user interface.
-(Alternatively, these UI hints can be defined in a supplementary xref:ug:vw:ugvw.adoc#_ugvw_layout[`.layout.xml`] file.
+(Alternatively, these UI hints can be defined in a supplementary xref:ug:vw:layout.adoc[`.layout.xml`] file.
 
 
 

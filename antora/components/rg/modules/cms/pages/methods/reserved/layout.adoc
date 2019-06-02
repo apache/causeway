@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 Every object has a xref:ug:vw:ugvw.adoc#layout[layout] .
-This may be specified using annotations such as xref:rg:ant:MemberOrder.adoc[`@MemberOrder`], xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and the like,  but it much more commonly specified using an xref:ugvw.adoc#_ugvw_layout_file-based [XML layout file].
+This may be specified using annotations such as xref:rg:ant:MemberOrder.adoc[`@MemberOrder`], xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and the like,  but it much more commonly specified using an xref:ug:vw:layout/file-based .adoc[XML layout file].
 
 The `layout` method allows the domain object to specify an alternate layout to its usual layout.
 

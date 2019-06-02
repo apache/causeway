@@ -41,7 +41,7 @@ Selecting the domain object from the list causes the viewer to automatically nav
 
 == Related functionality
 
-The xref:ug:vw:ugvw.adoc#_ugvw_features_bookmarked-pages[bookmarked pages] (sliding panel) also provides links to recently visited objects, but only those explicitly marked as `@DomainObject(bookmarking=...)`.  The bookmarks panel also nests related objects together hierarchically (the recent pages drop-down does not).
+The xref:ug:vw:features/bookmarked-pages.adoc[bookmarked pages] (sliding panel) also provides links to recently visited objects, but only those explicitly marked as `@DomainObject(bookmarking=...)`.  The bookmarks panel also nests related objects together hierarchically (the recent pages drop-down does not).
 
 
 

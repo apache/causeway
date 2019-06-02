@@ -8,7 +8,7 @@ Nevertheless, some metadata relating solely to the UI is inevitably required.
 This chapter describes how this is done both for domain objects using either annotations or using an associated layout file.
 
 The chapter also describes how to customising which columns of associated objects appear in tables.
-The layout of application menu items is described in a xref:ugvw.adoc#_ugvw_menubars-layout[separate chapter].
+The layout of application menu items is described in a xref:ug:vw:menubars-layout.adoc[separate chapter].
 
 
 

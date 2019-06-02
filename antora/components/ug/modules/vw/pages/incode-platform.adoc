@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^] provides a number of extensions to the Wicket viewer (leveraging the APIs described in xref:ug:vw:ugvw.adoc#_ugvw_extending[Extending the Wicket viewer] section, later.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^] provides a number of extensions to the Wicket viewer (leveraging the APIs described in xref:ug:vw:extending.adoc[Extending the Wicket viewer] section, later.
 While you are free to fork and adapt any of them to your needs, they are also intended for use "out-of-the-box".
 
 At the time of writing the addons available are:

@@ -20,7 +20,7 @@ You can therefore use this CSS class as a way of building your own "theme" for t
 
 [TIP]
 ====
-Alternatively you could "do it properly" and create your xref:ug:vw:ugvw.adoc#_ugvw_extending_custom-bootstrap-theme[own Bootstrap theme], as described in the xref:ug:btb:ugbtb.adoc#[Extending] chapter.
+Alternatively you could "do it properly" and create your xref:ug:vw:extending/custom-bootstrap-theme.adoc[own Bootstrap theme], as described in the xref:ug:btb:ugbtb.adoc#[Extending] chapter.
 ====
 
 

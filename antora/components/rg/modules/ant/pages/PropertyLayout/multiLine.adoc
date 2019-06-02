@@ -29,5 +29,5 @@ If set > 1 (as would normally be the case), then the default xref:rg:ant:Propert
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
 

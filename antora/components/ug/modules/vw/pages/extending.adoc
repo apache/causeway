@@ -5,11 +5,11 @@ include::_attributes.adoc[]
 
 The Wicket viewer allows you to customize the GUI in several (progressively more sophisticated) ways:
 
-* by xref:ug:vw:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[tweaking the UI using CSS]
-* by xref:ug:vw:ugvw.adoc#_ugvw_customisation_custom-javascript[tweaking the UI using Javascript]
-* by writing a xref:ug:vw:ugvw.adoc#_ugvw_extending_custom-bootstrap-theme[custom bootstrap theme]
-* by xref:ug:vw:ugvw.adoc#_ugvw_extending_replacing-page-elements[replacing elements of the page] using the `ComponentFactory` interface
-* by implementing xref:ug:vw:ugvw.adoc#_ugvw_extending_custom-pages[replacement page implementations] for the standard page types
+* by xref:ug:vw:customisation/tweaking-css-classes.adoc[tweaking the UI using CSS]
+* by xref:ug:vw:customisation/custom-javascript.adoc[tweaking the UI using Javascript]
+* by writing a xref:ug:vw:extending/custom-bootstrap-theme.adoc[custom bootstrap theme]
+* by xref:ug:vw:extending/replacing-page-elements.adoc[replacing elements of the page] using the `ComponentFactory` interface
+* by implementing xref:ug:vw:extending/custom-pages.adoc[replacement page implementations] for the standard page types
 
 The first two of these options are discussed in the xref:ug:vw:ugvw.adoc#[Wicket viewer] chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
 
