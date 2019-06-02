@@ -13,7 +13,7 @@ image::reference-annotations/DomainObjectLayout/bookmarking.png[width="720px",li
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 For example:
@@ -37,7 +37,7 @@ image::reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="72
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 

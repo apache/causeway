@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `UserProfileService` provides the ability for the domain application to return supplementary metadata about the current user. This information is used (by the xref:ug:vw:ugvw.adoc#[Wicket viewer]) to customize the appearance of the tertiary "Me" menu bar (top right). For example, rather than display the username, instead the user's first and last name could be displayed.
+The `UserProfileService` provides the ability for the domain application to return supplementary metadata about the current user. This information is used (by the xref:ug:vw:about.adoc[Wicket viewer]) to customize the appearance of the tertiary "Me" menu bar (top right). For example, rather than display the username, instead the user's first and last name could be displayed.
 
 Another use case is to allow the user to switch context in some fashion or other. This might be to emulate a sort of "sudo"-like function, or perhaps to focus on some particular set of data.
 

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 Domain service APIs for the presentation layer allow the domain objects to control aspects of the user interface.
-The implementations are specific to the particular viewer (xref:ug:vw:ugvw.adoc#[Wicket viewer] or xref:ug:vro:about.adoc[Restful Objects viewer]) so the domain code must guard against them being unavailable in some cases.
+The implementations are specific to the particular viewer (xref:ug:vw:about.adoc[Wicket viewer] or xref:ug:vro:about.adoc[Restful Objects viewer]) so the domain code must guard against them being unavailable in some cases.
 
 
 The table below summarizes the presentation layer APIs defined by Apache Isis.
@@ -37,7 +37,7 @@ It also lists their corresponding implementation.
 |`BookmarkUiServiceWicket` +
 ``o.a.i.core`` +
 ``isis-core-viewer-wicket-impl``
-|(Implementation only usable within the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+|(Implementation only usable within the xref:ug:vw:about.adoc[Wicket viewer].
 
 
 |xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`o.a.i.applib` +
@@ -47,7 +47,7 @@ It also lists their corresponding implementation.
 |`DeepLinkServiceWicket` +
 ``o.a.i.viewer`` +
 ``isis-core-viewer-wicket-impl``
-|Implementation only usable within the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+|Implementation only usable within the xref:ug:vw:about.adoc[Wicket viewer].
 
 
 |xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-api_GuiceBeanProvider[`o.a.i.applib.` +
@@ -57,7 +57,7 @@ It also lists their corresponding implementation.
 |`GuiceBeanProviderWicket` +
 ``o.a.i.core`` +
 ``isis-core-viewer-wicket-impl``
-|Implementation only usable within the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+|Implementation only usable within the xref:ug:vw:about.adoc[Wicket viewer].
 
 
 

@@ -75,7 +75,7 @@ Here a non-`null` value is used as the reason why the action is disabled.
 It is also possible to return a localized string by returning a `TranslatableString`.
 
 
-Properties are similar (note that collections are implicitly read-only in the xref:ug:vw:ugvw.adoc#[Wicket viewer]:
+Properties are similar (note that collections are implicitly read-only in the xref:ug:vw:about.adoc[Wicket viewer]:
 
 
 [source,java]

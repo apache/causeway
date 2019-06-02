@@ -11,7 +11,7 @@ The Wicket viewer allows you to customize the GUI in several (progressively more
 * by xref:ug:vw:extending/replacing-page-elements.adoc[replacing elements of the page] using the `ComponentFactory` interface
 * by implementing xref:ug:vw:extending/custom-pages.adoc[replacement page implementations] for the standard page types
 
-The first two of these options are discussed in the xref:ug:vw:ugvw.adoc#[Wicket viewer] chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
+The first two of these options are discussed in the xref:ug:vw:about.adoc[Wicket viewer] chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
 
 The chapter wraps up with a technique for prototyping, allowing user/passwords to be specified as query arguments.
 

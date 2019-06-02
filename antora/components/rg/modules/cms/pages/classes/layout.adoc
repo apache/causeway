@@ -11,7 +11,7 @@ These classes fall into two main categories:
 * common component classes, that capture the layout metadata for an object's properties, collections and actions.
 These are bound (or associated) to the regions of the grid
 
-The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:ug:vw:ugvw.adoc#[Wicket viewer] components capable of rendering that grid system.
+The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:ug:vw:about.adoc[Wicket viewer] components capable of rendering that grid system.
 In principle it is also possible to extend the layout architecture for other grid systems.
 The component classes, though, are intended to be reusable across all grid systems.
 

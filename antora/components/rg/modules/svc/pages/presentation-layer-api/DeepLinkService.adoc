@@ -22,7 +22,7 @@ public interface DeepLinkService {
 ----
 <1> Creates a URI that can be used to obtain a representation of the provided domain object in one of the Apache Isis viewers.
 
-The xref:ug:vw:ugvw.adoc#[Wicket viewer] provides an implementation of this service `o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket`.
+The xref:ug:vw:about.adoc[Wicket viewer] provides an implementation of this service `o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket`.
 
 For the xref:ug:vro:about.adoc[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
 

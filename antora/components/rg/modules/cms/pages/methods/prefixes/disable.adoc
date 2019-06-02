@@ -10,7 +10,7 @@ It allows the modification of the property/collection to be vetoed (ie made read
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer]; they are always implicitly disabled.
+Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer]; they are always implicitly disabled.
 ====
 
 Typically modification/invocation is vetoed based on the state of the domain object being interacted with, though it could be any reason at all (eg the current date/time of the interaction, or the state of some other related data such as stock levels, or the identity of the calling user).

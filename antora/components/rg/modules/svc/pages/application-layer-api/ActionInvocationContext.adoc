@@ -69,7 +69,7 @@ public class ToDoItem ... {
 }
 ----
 <1> if invoked as a regular action, return this object;
-<2> otherwise (if invoked on collection of objects), return null, so that the xref:ug:vw:ugvw.adoc#[Wicket viewer] will re-render the list of objects
+<2> otherwise (if invoked on collection of objects), return null, so that the xref:ug:vw:about.adoc[Wicket viewer] will re-render the list of objects
 
 
 

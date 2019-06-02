@@ -17,7 +17,7 @@ public class ToDoItems {
 }
 ----
 
-In the xref:ug:vw:ugvw.adoc#[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
+In the xref:ug:vw:about.adoc[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
 
 image::reference-annotations/DomainServiceLayout/menuBar-primary.png[width="720px",link="{imagesdir}reference-annotations/DomainServiceLayout/menuBar-primary.png"]
 

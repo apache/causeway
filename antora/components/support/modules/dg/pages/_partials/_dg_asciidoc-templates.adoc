@@ -307,7 +307,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugvw`
-//|`\xref:ug:vw:ugvw.adoc#xxx[ttt]`
+//|`\xref:ug:vw:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Wicket viewer guide, where:
 //

@@ -9,7 +9,7 @@ The `validateAddTo...()` supporting method is called whenever an object is to be
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 The suggested workaround is to simply define an action.
 ====
 

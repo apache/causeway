@@ -35,7 +35,7 @@ This is notionally request-scoped, returning the `Locale` of the current user; _
 
 == Implementation
 
-Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
+Isis' xref:ug:vw:about.adoc[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
 
 [NOTE]
 ====

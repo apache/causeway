@@ -240,7 +240,7 @@ In prototype mode, though, a fixed key will still be used; this saves the develo
 (`_false_`)
 |Whether to suppress "remember me" checkbox on the login page.
 
-Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_remember-me[below].
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_remember-me[below].
 
 |`isis.viewer.wicket.` +
 `suppressPasswordReset`
@@ -248,7 +248,7 @@ Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_remembe
 (`_false_`)
 |If user registration is enabled, whether to suppress the "password reset" link on the login page.
 
-Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_password-reset[below].
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_password-reset[below].
 
 |`isis.viewer.wicket.` +
 `suppressRememberMe`
@@ -256,7 +256,7 @@ Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_passwor
 (`_false_`)
 |Whether to suppress "remember me" checkbox on the login page.
 
-Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_remember-me[below].
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_remember-me[below].
 
 [NOTE]
 ====
@@ -272,7 +272,7 @@ Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_remembe
 
 Note though that user registration services must also be configured.
 
-Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_sign-up[below].
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_sign-up[below].
 
 
 |===

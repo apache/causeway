@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 The `cssClass()` returns a CSS class for a particular object instance.
 
-The xref:ug:vw:ugvw.adoc#[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.
+The xref:ug:vw:about.adoc[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.
 This is done both for rendering the object either in a table or when rendering the object on its own page.
 
 In conjunction with xref:rg:cfg:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +

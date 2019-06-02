@@ -9,18 +9,18 @@ The `bookmarking()` attribute indicates if an action (with safe xref:rg:ant:Acti
 
 
 
-In the xref:ug:vw:ugvw.adoc#[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
+In the xref:ug:vw:about.adoc[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
 
 image::reference-annotations/ActionLayout/bookmarking.png[width="720px",link="{imagesdir}reference-annotations/ActionLayout/bookmarking.png"]
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 [TIP]
 ====
-The xref:ug:vw:ugvw.adoc#[Wicket viewer] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
+The xref:ug:vw:about.adoc[Wicket viewer] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
 ====
 
 

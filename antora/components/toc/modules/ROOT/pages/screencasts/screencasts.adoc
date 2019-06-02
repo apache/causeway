@@ -212,20 +212,20 @@ Using xref:ug:vw:layout/file-based.adoc[dynamic (XML) layouts] to specify the pa
 include::partial$_screencasts-playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
-Demonstrates how Apache Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
+Demonstrates how Apache Isis' xref:ug:vw:about.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
  application can clear these UI hints using the (framework-provided) xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action.
 |||x||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=Kqch-XNlBMA[020^] +
-Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer].
+Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:ug:vw:about.adoc[Wicket viewer].
 |||x||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer], and how the developer can ensure that xref:rg:ant:DomainObjectLayout/bookmarking.adoc[domain objects] and (xref:rg:ant:Action/semantics.adoc[query-only]) xref:rg:ant:ActionLayout/bookmarking.adoc[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ug:vw:about.adoc[Wicket viewer], and how the developer can ensure that xref:rg:ant:DomainObjectLayout/bookmarking.adoc[domain objects] and (xref:rg:ant:Action/semantics.adoc[query-only]) xref:rg:ant:ActionLayout/bookmarking.adoc[actions] can be bookmarked.
 |||x||||||||
 
 
@@ -425,7 +425,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=esujf_DFeWA[041^] +
-Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:ug:vw:about.adoc[Wicket viewer].
 |||||||x||x|x|
 
 
@@ -549,7 +549,7 @@ The (very simple) steps required to rename a domain entity class.
 
 
 |link:https://www.youtube.com/watch?v=J5xobU6X0ng[057^] +
-How to rename a menu (on the top-level menubar) as rendered in the  xref:ug:vw:ugvw.adoc#[Wicket viewer].
+How to rename a menu (on the top-level menubar) as rendered in the  xref:ug:vw:about.adoc[Wicket viewer].
 |x||||||||||
 
 

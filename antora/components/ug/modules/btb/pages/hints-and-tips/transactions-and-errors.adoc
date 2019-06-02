@@ -39,7 +39,7 @@ You get the idea.
 == Raise message in the UI
 
 The framework provides the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`MessageService`] as a means to return an out-of-band
-message to the end-user.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] these are shown as "toast" pop-ups; the
+message to the end-user.  In the xref:ug:vw:about.adoc[Wicket viewer] these are shown as "toast" pop-ups; the
 xref:ug:vro:about.adoc[Restful Objects viewer] returns an HTTP header.
 
 The `UserService` provides three APIs, for different:
@@ -56,7 +56,7 @@ None of these messages/errors has any influence on the transaction; any changes 
 == Aborting transactions
 
 If you want to abort Apache Isis' transaction, this can be done by throwing an exception.  The exception message
-is displayed to the user on the error page (if xref:ug:vw:ugvw.adoc#[Wicket viewer]) or a 500 status error code (if the
+is displayed to the user on the error page (if xref:ug:vw:about.adoc[Wicket viewer]) or a 500 status error code (if the
 xref:ug:vro:about.adoc[Restful Objects] viewer).
 
 If the exception thrown is because of an unexpected error (eg a `NullPointerException` in the domain app itself), then

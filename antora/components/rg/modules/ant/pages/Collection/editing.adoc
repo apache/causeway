@@ -10,7 +10,7 @@ The related `editingDisabledReason()` attribute specifies the a hard-coded reaso
 
 [WARNING]
 ====
-The xref:ug:vw:ugvw.adoc#[Wicket viewer] does *not* currently support the modification of collections; they are rendered read-only.
+The xref:ug:vw:about.adoc[Wicket viewer] does *not* currently support the modification of collections; they are rendered read-only.
 
 The workaround is to create add/remove actions and use xref:rg:ant:MemberOrder.adoc[UI hints] to render them close to the collection.
 ====

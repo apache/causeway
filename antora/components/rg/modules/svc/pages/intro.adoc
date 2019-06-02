@@ -14,7 +14,7 @@ The diagram below shows these categories:
 image::reference-services/categories.png[width="600px",link="{imagesdir}reference-services/categories.png"]
 
 
-A small number of domain services can be considered both API and SPI; a good example is the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:ug:vw:features/user-registration.adoc[user registration] functionality supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+A small number of domain services can be considered both API and SPI; a good example is the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:ug:vw:features/user-registration.adoc[user registration] functionality supported by the xref:ug:vw:about.adoc[Wicket viewer].
 The same is true of the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:rg:ant:Action/domainEvent.adoc[`@Action#domainEvent()`] etc.
 

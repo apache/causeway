@@ -529,7 +529,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ug:vw:ugvw.adoc#[Wicket viewer] and the xref:ug:vro:about.adoc[Restful Objects viewer].
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ug:vw:about.adoc[Wicket viewer] and the xref:ug:vro:about.adoc[Restful Objects viewer].
 The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.

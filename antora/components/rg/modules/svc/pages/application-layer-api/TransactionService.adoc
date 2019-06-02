@@ -55,7 +55,7 @@ Again, may not flush or abort or commit.
 
 
 As noted above, `nextTransaction()` can be useful for actions used to perform data migration, say, or for large fixture scripts.
-It is also used by the xref:ug:vw:ugvw.adoc#[Wicket viewer]'s support for bulk actions; each action is invoked in its own transaction.
+It is also used by the xref:ug:vw:about.adoc[Wicket viewer]'s support for bulk actions; each action is invoked in its own transaction.
 An overload of this method takes a `Policy` enum, defined as:
 
 [source,java]

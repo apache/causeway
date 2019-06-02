@@ -32,7 +32,7 @@ objects
 to persist published action invocations
 
 * and of course both the xref:ug:vro:about.adoc[RestfulObjects viewer] and
-xref:ug:vw:ugvw.adoc#[Wicket viewer]
+xref:ug:vw:about.adoc[Wicket viewer]
 use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.

@@ -185,7 +185,8 @@ For example:
 </div>
 ----
 <1> the parent class identifier
-<2> the collection identifier. This element's class also has the entity type within the collection (as xref:ug:vw:ugvw.adoc#__ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
+<2> the collection identifier.
+This element's class also has the entity type within the collection (as xref:ug:vw:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
 
 Using this, the `productRef` property could be targeted using:
 
@@ -229,7 +230,8 @@ Standalone collections will be wrapped in a ``<div>`` that identifies the action
     </div>
 </div>
 ----
-<1> action identifier.  This element's class also identifies the entity type within the collection (as xref:ug:vw:ugvw.adoc#__ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
+<1> action identifier.
+This element's class also identifies the entity type within the collection (as xref:ug:vw:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
 
 Using this, the `quantity` property could be targeted using:
 

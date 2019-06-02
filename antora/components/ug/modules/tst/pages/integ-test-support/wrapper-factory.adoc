@@ -90,7 +90,7 @@ It can also call `add(...)` or `remove(...)` on the collection (returned by the 
 +
 [NOTE]
 ====
-In this respect the wrapper is more functional than the xref:ug:vw:ugvw.adoc#[Wicket viewer] (which does not expose the ability to mutate collections directly).
+In this respect the wrapper is more functional than the xref:ug:vw:about.adoc[Wicket viewer] (which does not expose the ability to mutate collections directly).
 ====
 
 * for *_object actions_* the test can call the action method itself.

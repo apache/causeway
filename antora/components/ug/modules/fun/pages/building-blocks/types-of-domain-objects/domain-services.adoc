@@ -15,7 +15,7 @@ Similarly, entities might also have a corresponding factory service: a `Customer
 On the other hand, from an end-users' perspective the act of finding an existing object vs creating a new one are quite closely related.
 For this reason, in Apache Isis it's therefore quite common to have a single domain service that acts as both a factory and a repository (and is usually called just a "repository").
 
-The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:ug:vw:ugvw.adoc#[Wicket viewer]'s UI.
+The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:ug:vw:about.adoc[Wicket viewer]'s UI.
 
 Domain services can also be used for a number of other purposes:
 

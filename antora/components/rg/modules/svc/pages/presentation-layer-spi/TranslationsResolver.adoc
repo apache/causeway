@@ -31,7 +31,7 @@ public interface TranslationsResolver {
 
 == Implementation
 
-Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
+Isis' xref:ug:vw:about.adoc[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
 
 [NOTE]
 ====

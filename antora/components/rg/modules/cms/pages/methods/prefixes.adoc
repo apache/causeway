@@ -42,7 +42,7 @@ Param
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]`
@@ -140,7 +140,7 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]`.
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]`
@@ -175,7 +175,7 @@ AddTo...()`]
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`], and xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] for properties and actions.
@@ -191,7 +191,7 @@ RemoveFrom...()`]
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`], and xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] for properties and actions.

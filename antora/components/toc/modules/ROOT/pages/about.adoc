@@ -33,7 +33,7 @@ include::_attributes.adoc[]
 |*User Guides:*
 
 * *xref:ug:fun:about.adoc[Fundamentals]*
-*  xref:ug:vw:ugvw.adoc[Wicket Viewer]
+*  xref:ug:vw:about.adoc[Wicket Viewer]
 *  xref:ug:vro:about.adoc[Restful Objects Viewer]
 *  xref:ug:odn:about.adoc[DataNucleus Object Store]
 *  xref:ug:sec:about.adoc[Security]

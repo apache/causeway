@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 The `describedAs()` attribute is used to provide a short description of the domain object to the user.
-In the xref:ug:vw:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
+In the xref:ug:vw:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
 
 For example:
 

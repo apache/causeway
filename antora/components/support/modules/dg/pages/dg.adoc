@@ -26,7 +26,7 @@ Apache Isis documentation is broken out into a number of user, reference and "su
 The user guides available are:
 
 * xref:ug:fun:about.adoc#[Fundamentals]
-* xref:ug:vw:ugvw.adoc#[Wicket viewer]
+* xref:ug:vw:about.adoc[Wicket viewer]
 * xref:ug:vro:about.adoc[Restful Objects viewer]
 * xref:ug:odn:about.adoc#[DataNucleus object store]
 * xref:ug:sec:about.adoc#[Security]

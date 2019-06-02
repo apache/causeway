@@ -18,7 +18,7 @@ For example, the screenshot below shows the "prototyping" menu from the (non-ASF
 image::reference-annotations/DomainServiceLayout/menuOrder.png[width="500px",link="{imagesdir}reference-annotations/DomainServiceLayout/menuOrder.png"]
 
 
-The xref:ug:vw:ugvw.adoc#[Wicket viewer] automatically places separators between actions from different domain services.  From this we can infer that there are actually five different domain services that are all rendered on the "prototyping" top-level menu.
+The xref:ug:vw:about.adoc[Wicket viewer] automatically places separators between actions from different domain services.  From this we can infer that there are actually five different domain services that are all rendered on the "prototyping" top-level menu.
 
 One of these is the todoapp's `DemoDomainEventSubscriptions` service:
 
