@@ -89,8 +89,3 @@ Key:
 * `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 
 
-include::partial$_rgsvc_metadata-api_ApplicationFeatureRepository.adoc[leveloffset=+1]
-include::partial$_rgsvc_metadata-api_LayoutService.adoc[leveloffset=+1]
-include::partial$_rgsvc_metadata-api_MetamodelService.adoc[leveloffset=+1]
-include::partial$_rgsvc_metadata-api_ServiceRegistry.adoc[leveloffset=+1]
-include::partial$_rgsvc_metadata-api_SwaggerService.adoc[leveloffset=+1]

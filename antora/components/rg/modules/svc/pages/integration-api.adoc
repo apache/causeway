@@ -91,8 +91,3 @@ Key:
 
 
 
-include::partial$_rgsvc_integration-api_BookmarkService.adoc[leveloffset=+1]
-include::partial$_rgsvc_integration-api_EmailService.adoc[leveloffset=+1]
-include::partial$_rgsvc_integration-api_JaxbService.adoc[leveloffset=+1]
-include::partial$_rgsvc_integration-api_MementoService.adoc[leveloffset=+1]
-include::partial$_rgsvc_integration-api_XmlSnapshotService.adoc[leveloffset=+1]

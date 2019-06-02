@@ -103,8 +103,3 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-include::partial$_rgsvc_testing_ExecutionParametersService.adoc[leveloffset=+1]
-include::partial$_rgsvc_testing_FixtureScripts.adoc[leveloffset=+1]
-include::partial$_rgsvc_testing_FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
-include::partial$_rgsvc_testing_SudoService.adoc[leveloffset=+1]
-include::partial$_rgsvc_testing_SwitchUserService.adoc[leveloffset=+1]

@@ -196,23 +196,5 @@ Key:
 
 
 
-include::partial$_rgsvc_presentation-layer-spi_ContentMappingService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_EmailNotificationService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_ErrorReportingService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_ExceptionRecognizer.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_GridLoaderService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_GridService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_GridSystemService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_HintStore.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_LocaleProvider.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_MenuBarsLoaderService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_MenuBarsService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_RoutingService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_SessionLoggingService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_TableColumnOrderService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_TranslationService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_TranslationsResolver.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_UrlEncodingService.adoc[leveloffset=+1]
-include::partial$_rgsvc_presentation-layer-spi_UserProfileService.adoc[leveloffset=+1]
 
 

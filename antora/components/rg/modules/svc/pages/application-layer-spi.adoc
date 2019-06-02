@@ -80,7 +80,3 @@ Key:
 
 
 
-include::partial$_rgsvc_application-layer-spi_BackgroundCommandService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-spi_CommandService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-spi_HomePageProviderService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-spi_HealthCheckService.adoc[leveloffset=+1]

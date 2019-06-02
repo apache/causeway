@@ -158,13 +158,3 @@ Key:
 
 
 
-include::partial$_rgsvc_application-layer-api_ActionInvocationContext.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_BackgroundService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_CommandContext.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_DtoMappingHelper.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_InteractionContext.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_MessageService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_SessionManagementService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_TitleService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_TransactionService.adoc[leveloffset=+1]
-include::partial$_rgsvc_application-layer-api_WrapperFactory.adoc[leveloffset=+1]
