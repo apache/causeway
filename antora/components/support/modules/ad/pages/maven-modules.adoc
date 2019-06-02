@@ -1,12 +1,9 @@
-= Architecture and Design
+= Maven modules
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 include::_attributes.adoc[]
 
 
-This guide describes the internal architecture and design of the framework.
-
-== Maven modules
 
 ////[monotree]
 ----
@@ -19,7 +16,7 @@ This guide describes the internal architecture and design of the framework.
 ----
 
 
-=== core
+== core
 
 The core modules ....
 
@@ -79,7 +76,7 @@ Application integration tests typically extend from adapter superclasses defined
 | `isis-core-metamodel`
 | The classes that make up the metamodel which is used to render the UI.
 
-See the xref:ad.adoc#__ad_metamodel[section below] which also includes a simplified UML diagram of these classes.
+See the xref:support:ad:ad.adoc#metamodel[section below] which also includes a simplified UML diagram of these classes.
 
 | `isis-core-runtime`
 | The classes that make up runtime management and persistence of domain objects, as well as framework for security (concepts of authentication or authorisation). Also provides an implementation of the `WrapperFactory` domain service.
@@ -134,7 +131,7 @@ Also defines registries of pages and components, as well as a number of domain s
 |===
 
 
-=== core/plugins
+== core/plugins
 
 The `core/plugins` modules ...
 
@@ -196,7 +193,7 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 |===
 
 
-=== core/mavendeps
+== core/mavendeps
 
 The `core/mavendeps` modules ...
 
@@ -261,7 +258,7 @@ These can then be included using a single dependency declaration:
 
 
 
-=== core/legacy
+== core/legacy
 
 The `core/legacy` modules ...
 
@@ -290,7 +287,7 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 |===
 
 
-=== core/mavenplugins
+== core/mavenplugins
 
 There is a single Maven plugin module.
 Its Maven `groupId` is `org.apache.isis.tools`.
@@ -317,7 +314,7 @@ This plugin can validate the metamodel and generate Swagger specs for a domain m
 
 
 
-=== archetypes
+== archetypes
 
 ////[monotree]
 ----
@@ -370,123 +367,3 @@ The intention is to allow this module structure to be copied so that the develop
 |===
 
 
-
-== Metamodel
-
-The diagram below shows a simplified version of Apache Isis' internal metamodel.
-
-
-[plantuml]
-----
-hide empty members
-'hide methods
-
-skinparam class {
-	BackgroundColor<<desc>> Cyan
-	BackgroundColor<<ppt>> LightGreen
-	BackgroundColor<<mi>> LightPink
-	BackgroundColor<<role>> LightYellow
-	BackgroundColor<<strategy>> White
-	BackgroundColor<<api>> White
-	BackgroundColor<<spi>> White
-	BackgroundColor<<internal>> LightGrey
-	BackgroundColor<<value>> White
-}
-
-
-package metamodel {
-
-    class Object\nSpecId<<value>> {
-        +type
-    }
-
-    class Object\nSpecification<<desc>> {
-        +objectSpecId
-        ....
-        -fullyQualifiedClassName
-    }
-
-    class Object\nMember<<desc>> {
-
-    }
-
-    class Object\nAction<<desc>> {
-
-    }
-
-    class Object\nAssociation<<desc>> {
-
-    }
-
-    class OneToOne\nAssociation<<desc>> {
-
-    }
-
-    class OneToMany\nAssociation<<desc>> {
-
-    }
-
-    interface FacetHolder<<desc>> {
-    }
-
-    class Object\nActionParameter<<desc>> {
-    }
-
-    class OneToOne\nActionParameter<<desc>> {
-    }
-
-    interface Facet<<desc>> {
-    }
-
-    class OneToMany\nActionParameter<<desc>> {
-    }
-}
-
-package runtime {
-    class Object\nAdapter<<ppt>> {
-        +getSpecification()
-    }
-    class Oid<<value>> {
-
-    }
-}
-
-
-
-Object\nSpecification -up-> Object\nSpecId
-Object\nSpecification -down-> "*" Object\nMember
-Object\nMember ^-down- Object\nAssociation
-Object\nMember ^-down- Object\nAction
-Object\nAssociation ^-down- OneToOne\nAssociation
-Object\nAssociation ^-down- OneToMany\nAssociation
-Object\nActionParameter ^-down- OneToOne\nActionParameter
-Object\nActionParameter ^-down- OneToMany\nActionParameter
-Object\nAction -left-> "*" Object\nActionParameter
-
-FacetHolder ^-.left- Object\nSpecification
-FacetHolder ^-.down- Object\nMember
-FacetHolder ^-.down- Object\nActionParameter
-FacetHolder -right-> "*" Facet
-
-
-Object\nAdapter  -up-> Oid
-
-Oid -right-> Object\nSpecId
-
-----
-
-where in the `metamodel` package:
-
-`ObjectSpecification`:: is equivalent to `java.lang.Class`
-`ObjectSpecId`:: is a value object equivalent to the `@DomainObject#objectType` or `@DomainService#objectType` attribute
-`OneToOneAssociation`:: represents a scalar property
-`OneToManyAssociation`:: represents a collection
-`ObjectAction`:: represents an action (with multiple parameters, either scalar or list)
-
-and in the `runtime` package:
-
-`Oid`:: is equivalent to the applib `Bookmark`
-+
-and appears in URLs in the Wicket and Restful Objects viewers
-
-`ObjectAdapter`:: is equivalent to `java.lang.Object`

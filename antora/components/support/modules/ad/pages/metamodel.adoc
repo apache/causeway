@@ -1,0 +1,125 @@
+= Metamodel
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::_attributes.adoc[]
+
+
+
+
+The diagram below shows a simplified version of Apache Isis' internal metamodel.
+
+
+[plantuml]
+----
+hide empty members
+'hide methods
+
+skinparam class {
+	BackgroundColor<<desc>> Cyan
+	BackgroundColor<<ppt>> LightGreen
+	BackgroundColor<<mi>> LightPink
+	BackgroundColor<<role>> LightYellow
+	BackgroundColor<<strategy>> White
+	BackgroundColor<<api>> White
+	BackgroundColor<<spi>> White
+	BackgroundColor<<internal>> LightGrey
+	BackgroundColor<<value>> White
+}
+
+
+package metamodel {
+
+    class Object\nSpecId<<value>> {
+        +type
+    }
+
+    class Object\nSpecification<<desc>> {
+        +objectSpecId
+        ....
+        -fullyQualifiedClassName
+    }
+
+    class Object\nMember<<desc>> {
+
+    }
+
+    class Object\nAction<<desc>> {
+
+    }
+
+    class Object\nAssociation<<desc>> {
+
+    }
+
+    class OneToOne\nAssociation<<desc>> {
+
+    }
+
+    class OneToMany\nAssociation<<desc>> {
+
+    }
+
+    interface FacetHolder<<desc>> {
+    }
+
+    class Object\nActionParameter<<desc>> {
+    }
+
+    class OneToOne\nActionParameter<<desc>> {
+    }
+
+    interface Facet<<desc>> {
+    }
+
+    class OneToMany\nActionParameter<<desc>> {
+    }
+}
+
+package runtime {
+    class Object\nAdapter<<ppt>> {
+        +getSpecification()
+    }
+    class Oid<<value>> {
+
+    }
+}
+
+
+
+Object\nSpecification -up-> Object\nSpecId
+Object\nSpecification -down-> "*" Object\nMember
+Object\nMember ^-down- Object\nAssociation
+Object\nMember ^-down- Object\nAction
+Object\nAssociation ^-down- OneToOne\nAssociation
+Object\nAssociation ^-down- OneToMany\nAssociation
+Object\nActionParameter ^-down- OneToOne\nActionParameter
+Object\nActionParameter ^-down- OneToMany\nActionParameter
+Object\nAction -left-> "*" Object\nActionParameter
+
+FacetHolder ^-.left- Object\nSpecification
+FacetHolder ^-.down- Object\nMember
+FacetHolder ^-.down- Object\nActionParameter
+FacetHolder -right-> "*" Facet
+
+
+Object\nAdapter  -up-> Oid
+
+Oid -right-> Object\nSpecId
+
+----
+
+where in the `metamodel` package:
+
+`ObjectSpecification`:: is equivalent to `java.lang.Class`
+`ObjectSpecId`:: is a value object equivalent to the `@DomainObject#objectType` or `@DomainService#objectType` attribute
+`OneToOneAssociation`:: represents a scalar property
+`OneToManyAssociation`:: represents a collection
+`ObjectAction`:: represents an action (with multiple parameters, either scalar or list)
+
+and in the `runtime` package:
+
+`Oid`:: is equivalent to the applib `Bookmark`
++
+and appears in URLs in the Wicket and Restful Objects viewers
+
+`ObjectAdapter`:: is equivalent to `java.lang.Object`

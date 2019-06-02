@@ -1,5 +1,5 @@
 = Architecture & Design
 include::_attributes.adoc[]
 
-CAUTION: TODO ... convert over from 1.x branch
+This guide describes the internal architecture and design of the framework.
 
