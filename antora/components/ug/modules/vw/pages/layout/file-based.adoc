@@ -25,7 +25,7 @@ There are some downsides, though:
 * there is no notion of inheritance, so a `.layout.xml` is required for all concrete classes and also for any abstract classes (if used as a collection type).
 In contrast, the dewey-decimal format `@MemberOrder` annotation allows the metadata of the subclass its superclasses to fit together relatively seamlessly.
 
-The `Xxx.layout.xml` file is just the serialized form of a xref:rg:cms:rgcms.adoc#_rgcms_classes_layout[`Grid`] layout class defined within Apache Isis' applib.
+The `Xxx.layout.xml` file is just the serialized form of a xref:rg:cms:classes/layout.adoc[`Grid`] layout class defined within Apache Isis' applib.
 These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
 
 
@@ -63,7 +63,7 @@ The rows and columns are closely modelled on link:http://getbootstrap.com[Bootst
 
 * those that defines common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 
-More information about these classes can be found in xref:rg:cms:rgcms.adoc#_rgcms_classes_layout[the reference guide].  More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
+More information about these classes can be found in xref:rg:cms:classes/layout.adoc[the reference guide].  More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
 
 
 
@@ -428,7 +428,7 @@ For more information about layouts, see:
 
 * xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] and its supporting services, xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`]
 
-* xref:rg:cms:rgcms.adoc#_rgcms_classes_layout[grid layout classes], defined in the Apache Isis applib
+* xref:rg:cms:classes/layout.adoc[grid layout classes], defined in the Apache Isis applib
 
 
 

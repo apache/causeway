@@ -31,7 +31,7 @@ all the code by hand
 The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated
 with the xref:rg:ant:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], using the
 framework-provided `PersistentEntityAdapter`.  This adapter converts any references to such domain entities using the
-`oidDto` complex type (as defined by the Apache Isis xref:rg:cms:rgcms.adoc#_rgcms_schema_common[common schema]):
+`oidDto` complex type (as defined by the Apache Isis xref:rg:cms:schema/common.adoc[common schema]):
 the object's type and its identifier.
 
 [TIP]
@@ -73,7 +73,7 @@ Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions
 the DTO "clean", just focused on specifying the data contract.
 
 Behaviour can therefore be provided using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] (annotated with
-xref:rg:ant:rgant.adoc#_rgant-Mixin[`@Mixin`]), while xref:rg:cms:rgcms.adoc#_rgcms_classes_uievent[UI events] can be used
+xref:rg:ant:rgant.adoc#_rgant-Mixin[`@Mixin`]), while xref:rg:cms:classes/uievent.adoc[UI events] can be used
 to obtain title, icons and so on.
 
 For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[this topic]

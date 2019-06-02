@@ -16,7 +16,7 @@ The framework then performs classpath scanning across all such packages to locat
 In the same way that the Java module act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
 
 The module class does not _need_ to implement any specific interface; in this case the framework uses the module class simply to obtain a package to scan for entities and domain services.
-However, it's recommended to implement the xref:rg:cms:rgcms.adoc#_rgcms_classes_Module[`Module`] interface because this allows the module to specify its direct dependencies; from these all transitive dependencies are calculated.
+However, it's recommended to implement the xref:rg:cms:classes/Module.adoc[`Module`] interface because this allows the module to specify its direct dependencies; from these all transitive dependencies are calculated.
 This should match the compile-time dependencies declared within Maven.
 
 The `Module` interface also allows a module to declare any configuration properties that should be contributed, as well as fixture scripts for reference data, and to tear down (for integration testing).

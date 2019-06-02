@@ -61,12 +61,12 @@ The `commandDto` root element is defined as:
 ----
 <1> the command schema has a namespace URI of "http://isis.apache.org/schema/cmd".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> uses complex types defined in the xref:rg:cms:rgcms.adoc#_rgcms_schema_common["common" schema].
+<2> uses complex types defined in the xref:rg:cms:schema/common.adoc["common" schema].
 <3> definition of the `commandDto` root element.
 The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this command is created.
-The transaction Id is used to correlate to the xref:rg:cms:rgcms.adoc#_rgcms_schema_interaction[interaction] that executes the command, and to any xref:rg:cms:rgcms.adoc#_rgcms_schema_changes[changes] to domain objects occurring as a side-effect of that interaction.
+The transaction Id is used to correlate to the xref:rg:cms:schema/interaction.adoc[interaction] that executes the command, and to any xref:rg:cms:schema/changes.adoc[changes] to domain objects occurring as a side-effect of that interaction.
 <6> the name of the user who created the command (whose intention it is to invoke the action/edit the property).
 <7> the target object (or objects) to be invoked.
 A bulk action will create multiple commands, each with only a single target.
@@ -162,4 +162,4 @@ The schema also defines a small number of supporting types:
 <1> the `paramsDto` is simply the list of parameter/arguments.
 <2> the `paramDto` complex type essentially combines a parameter with its corresponding argument: a named value that has a type.
 It extends the `valueWithTypeDto` complex type taken from the
-xref:rg:cms:rgcms.adoc#_rgcms_schema_common["common"] schema.
+xref:rg:cms:schema/common.adoc["common"] schema.

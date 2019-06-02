@@ -45,7 +45,7 @@ public class Dto_downloadXsd {
 
 If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as a xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] of that XSD.
 If there are multiple XSD schemas referenced then the action will return a zip of those schemas, wrapped up in a xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`].
-The `IsisSchemas` parameter to the action can be used to optionally ignore the common xref:rg:cms:rgcms.adoc#_rgcms_schema[Apache Isis schemas] (useful if there is only one other XSD schema referenced by the DTO).
+The `IsisSchemas` parameter to the action can be used to optionally ignore the common xref:rg:cms:schema.adoc[Apache Isis schemas] (useful if there is only one other XSD schema referenced by the DTO).
 
 
 

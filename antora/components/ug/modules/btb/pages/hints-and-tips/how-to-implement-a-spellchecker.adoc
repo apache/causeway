@@ -11,7 +11,7 @@ From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the A
 
 One way to implement is to use the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus]:
 
-* Set up a xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent[domain event] xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] that can veto the changes.
+* Set up a xref:rg:cms:classes/domainevent.adoc[domain event] xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] that can veto the changes.
 
 * if the change is made through an action, you can use xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`].
 

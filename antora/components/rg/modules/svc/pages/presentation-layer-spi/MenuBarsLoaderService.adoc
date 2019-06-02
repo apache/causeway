@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `MenuBarsLoaderService` is used by the default implementation of xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[MenuBarsService] to return a a xref:rg:cms:rgcms.adoc#_rgcms_classes_menubars[`MenuBars`] instance deserialized from the `menubars.layout.xml` file read from the classpath.
+The `MenuBarsLoaderService` is used by the default implementation of xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[MenuBarsService] to return a a xref:rg:cms:classes/menubars.adoc[`MenuBars`] instance deserialized from the `menubars.layout.xml` file read from the classpath.
 
 
 == SPI and Implementation

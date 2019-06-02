@@ -29,7 +29,7 @@ public interface BackgroundCommandService2 {
 
 }
 ----
-<1> an instance of a xref:rg:cms:rgcms.adoc#_rgcms_schema_cmd[`CommandDto`] capturing the details of the action invocation or property edit to be retained (eg persisted to a database) so that it can be executed at a later time
+<1> an instance of a xref:rg:cms:schema/cmd.adoc[`CommandDto`] capturing the details of the action invocation or property edit to be retained (eg persisted to a database) so that it can be executed at a later time
 <2> reference to the parent `Command` requesting the action be performed as a background command.  This allows information such as the initiating user to be obtained.
 
 

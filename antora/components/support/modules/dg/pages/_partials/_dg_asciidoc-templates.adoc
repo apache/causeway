@@ -205,9 +205,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
+//`\xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest` bootstrapping]`
 //
-//|xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
+//|xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest` bootstrapping]
 //
 //
 //

@@ -126,7 +126,7 @@ Using the xref:rg:mvn:rgmvn.adoc#[Apache Isis maven plugin] to validate domain o
 
 
 |link:https://www.youtube.com/watch?v=1sNiR3Y84c0[011^] +
-How the framework uses the xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] is used to bootstrap the application
+How the framework uses the xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] is used to bootstrap the application
 ||||||||||x|
 
 

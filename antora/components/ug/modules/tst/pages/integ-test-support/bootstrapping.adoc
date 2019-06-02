@@ -7,7 +7,7 @@ Integration tests instantiate an Apache Isis "runtime" (as a singleton) within a
 Because (depending on the size of your app) it takes a little time to bootstrap Apache Isis, the framework caches the runtime on a thread-local from one test to the next.
 
 
-The recommended way to bootstrapping of integration tests is done using a xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest2-bootstrapping[`Module`] implementation, along with the `IntegrationTestAbstract3` superclass.
+The recommended way to bootstrapping of integration tests is done using a xref:rg:cms:classes/AppManifest2-bootstrapping.adoc[`Module`] implementation, along with the `IntegrationTestAbstract3` superclass.
 
 For example, the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s integration tests all inherit from this class:
 
