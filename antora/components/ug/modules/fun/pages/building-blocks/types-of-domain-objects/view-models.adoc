@@ -92,7 +92,7 @@ You certainly _shouldn't_ try to build out a domain layer that could support eve
 
 Instead, you should iterate.
 Identify the use case/story/end-user objective that will deliver value to the business.
-Then build out the minimum domain entities to support that use case (refining the xref:ug:fun:ugfun.adoc#__ugfun_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you go).
+Then build out the minimum domain entities to support that use case (refining the xref:ug:fun:core-concepts/philosophy/domain-driven-design/ubiquitous-language.adoc[ubiquitous language] as you go).
 Then, identify if there any view models that could be introduced which would simplify the end-user interactions with the system (perhaps automating several related use cases together).
 ****
 

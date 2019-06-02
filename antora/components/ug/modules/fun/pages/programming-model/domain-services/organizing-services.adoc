@@ -24,7 +24,7 @@ This feature is deprecated because xref:ug:fun:building-blocks/types-of-domain-o
 
 If the domain service nature is not specified (or is left to its default, `VIEW`), then the service's actions will appear in the UI.
 
-While for long-term maintainability we do recommend the naming conventions described xref:ug:fun:ugfun.adoc#__ugfun_building-blocks_domain-services_organizing-services[above], you can get away with far fewer services when just prototyping a domain.
+While for long-term maintainability we do recommend the naming conventions described xref:ug:fun:building-blocks/domain-services/organizing-services.adoc[above], you can get away with far fewer services when just prototyping a domain.
 Later on it is easy enough to refactor the code to tease apart the different responsibilities.
 
 Pulling all the above together, here are our suggestions as to how you should organize your domain services.

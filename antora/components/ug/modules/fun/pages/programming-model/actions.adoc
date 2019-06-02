@@ -154,12 +154,12 @@ public List<Product> autoComplete0AddToBasket(@MinLength(3) String searchTerm) {
 }
 ----
 
-As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:ug:fun:ugfun.adoc#__ugfun_programming-model_actions_reference-parameter-types_removing-boilerplate[above]).
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:ug:fun:programming-model/actions/reference-parameter-types/removing-boilerplate.adoc[above]).
 
 
 == Optional Parameters
 
-Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_optional-properties[optionality of properties] is defined using xref:rg:ant:Column/allowsNull.adoc[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
+Whereas the xref:ug:fun:programming-model/properties/optional-properties.adoc[optionality of properties] is defined using xref:rg:ant:Column/allowsNull.adoc[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
 Instead, either the xref:rg:ant:Nullable.adoc[`@Nullable`] annotation or the xref:rg:ant:Parameter/optionality.adoc[`@Parameter#optionality()`]  annotation/attribute is used.
 
 For example:
@@ -187,7 +187,7 @@ See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties 
 
 == ``String`` Parameters (Length)
 
-Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_strings[length of string properties] is defined using xref:rg:ant:Column/length.adoc[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
+Whereas the xref:ug:fun:programming-model/properties/datatypes/strings.adoc[length of string properties] is defined using xref:rg:ant:Column/length.adoc[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
 Instead, the xref:rg:ant:Parameter/maxLength.adoc[`@Parameter#maxLength()`] annotation/attribute is used.
 
 For example:
@@ -227,7 +227,7 @@ See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties 
 
 == ``BigDecimal``s (Precision)
 
-Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_bigdecimals[precision of BigDecimal properties] is defined using xref:rg:ant:Column/scale.adoc[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
+Whereas the xref:ug:fun:programming-model/properties/datatypes/bigdecimals.adoc[precision of BigDecimal properties] is defined using xref:rg:ant:Column/scale.adoc[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
 Instead, the xref:rg:ant:Digits.adoc[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
 
 For example:

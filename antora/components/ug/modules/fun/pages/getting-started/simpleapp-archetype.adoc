@@ -7,7 +7,7 @@ Like the xref:ug:fun:getting-started/helloworld-archetype.adoc[helloworld archet
 
 However, the generated application also provides more structure to assist you as your application grows.
 
-We'll talk more about the structure of the generated app xref:ugfun.adoc#__ugfun_getting-started_simpleapp-archetype_structure-of-the-app[below], but for now let's see how to generate the application.
+We'll talk more about the structure of the generated app xref:ug:fun:getting-started/simpleapp-archetype/structure-of-the-app.adoc[below], but for now let's see how to generate the application.
 
 
 [TIP]
