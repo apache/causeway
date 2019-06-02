@@ -5,10 +5,5 @@ include::_attributes.adoc[]
 
 This section summarizes the various annotations supported by Apache Isis.  They break out into five categories.
 
-include::partial$_rgant_aaa_main.adoc[leveloffset=+1]
-include::partial$_rgant_aaa_other.adoc[leveloffset=+1]
-include::partial$_rgant_aaa_jdo.adoc[leveloffset=+1]
-include::partial$_rgant_aaa_jee.adoc[leveloffset=+1]
-include::partial$_rgant_aaa_partial.adoc[leveloffset=+1]
 
 

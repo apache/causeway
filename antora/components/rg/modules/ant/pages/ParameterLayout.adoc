@@ -101,12 +101,5 @@ Note that there is (currently) no support for specifying UI hints for domain ser
 
 
 
-include::partial$_rgant-ParameterLayout_cssClass.adoc[leveloffset=+1]
-include::partial$_rgant-ParameterLayout_describedAs.adoc[leveloffset=+1]
-include::partial$_rgant-ParameterLayout_labelPosition.adoc[leveloffset=+1]
-include::partial$_rgant-ParameterLayout_multiLine.adoc[leveloffset=+1]
-include::partial$_rgant-ParameterLayout_named.adoc[leveloffset=+1]
-include::partial$_rgant-ParameterLayout_renderedAsDayBefore.adoc[leveloffset=+1]
-include::partial$_rgant-ParameterLayout_typicalLength.adoc[leveloffset=+1]
 
 

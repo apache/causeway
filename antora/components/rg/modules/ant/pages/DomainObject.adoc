@@ -129,21 +129,6 @@ public class Customer {
 
 
 
-include::partial$_rgant-DomainObject_auditing.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_autoCompleteRepository.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_bounding.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_createdLifecycleEvent.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_editing.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_loadedLifecycleEvent.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_mixinMethod.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_nature.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_persistedLifecycleEvent.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_persistingLifecycleEvent.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_objectType.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_publishing.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_removingLifecycleEvent.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_updatingLifecycleEvent.adoc[leveloffset=+1]
-include::partial$_rgant-DomainObject_updatedLifecycleEvent.adoc[leveloffset=+1]
 
 
 

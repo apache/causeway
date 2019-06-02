@@ -105,14 +105,6 @@ As an alternative to using the `@ActionLayout` annotation, a xref:ug:vw:ugvw.ado
 
 
 
-include::partial$_rgant-ActionLayout_bookmarking.adoc[leveloffset=+1]
-include::partial$_rgant-ActionLayout_contributedAs.adoc[leveloffset=+1]
-include::partial$_rgant-ActionLayout_cssClass.adoc[leveloffset=+1]
-include::partial$_rgant-ActionLayout_cssClassFa.adoc[leveloffset=+1]
-include::partial$_rgant-ActionLayout_describedAs.adoc[leveloffset=+1]
-include::partial$_rgant-ActionLayout_hidden.adoc[leveloffset=+1]
-include::partial$_rgant-ActionLayout_named.adoc[leveloffset=+1]
-include::partial$_rgant-ActionLayout_position.adoc[leveloffset=+1]
 
 
 

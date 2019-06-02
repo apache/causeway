@@ -35,4 +35,3 @@ An alternative and equivalent approach is to use the
 xref:rg:ant:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
 
 
-include::partial$_rgant-Mixin_method.adoc[leveloffset=+1]

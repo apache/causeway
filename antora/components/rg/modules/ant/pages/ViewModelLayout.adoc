@@ -105,16 +105,6 @@ Note that there is (currently) no support for specifying UI hints for view model
 
 
 
-include::partial$_rgant-ViewModelLayout_cssClass.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_cssClassFa.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_cssClassUiEvent.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_describedAs.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_iconUiEvent.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_layoutUiEvent.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_named.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_paged.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_plural.adoc[leveloffset=+1]
-include::partial$_rgant-ViewModelLayout_titleUiEvent.adoc[leveloffset=+1]
 
 
 

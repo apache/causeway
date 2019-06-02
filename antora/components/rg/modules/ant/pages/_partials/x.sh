@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-for a in `ls | grep _ugvw`
+for a in `ls | grep _rgant`
 do
-	b=$(echo $a | cut -c7- | sed 's|_|/|g')
+	b=$(echo $a | cut -c8- | sed 's|_|/|g')
 	d=$(dirname $b)
 	f=$(basename $b)
 	mkdir -p ../$d

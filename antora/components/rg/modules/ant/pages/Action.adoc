@@ -130,16 +130,6 @@ public class ToDoItem {
 
 
 
-include::partial$_rgant-Action_associateWith.adoc[leveloffset=+1]
-include::partial$_rgant-Action_command.adoc[leveloffset=+1]
-include::partial$_rgant-Action_domainEvent.adoc[leveloffset=+1]
-include::partial$_rgant-Action_hidden.adoc[leveloffset=+1]
-include::partial$_rgant-Action_invokeOn.adoc[leveloffset=+1]
-include::partial$_rgant-Action_publishing.adoc[leveloffset=+1]
-include::partial$_rgant-Action_restrictTo.adoc[leveloffset=+1]
-include::partial$_rgant-Action_semantics.adoc[leveloffset=+1]
-include::partial$_rgant-Action_typeOf.adoc[leveloffset=+1]
-
 
 
 

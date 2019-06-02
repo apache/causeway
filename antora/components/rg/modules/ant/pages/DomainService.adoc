@@ -61,9 +61,6 @@ public class LoanRepository {
 
 
 
-include::partial$_rgant-DomainService_nature.adoc[leveloffset=+1]
-include::partial$_rgant-DomainService_objectType.adoc[leveloffset=+1]
-include::partial$_rgant-DomainService_repositoryFor.adoc[leveloffset=+1]
 
 
 
