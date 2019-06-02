@@ -2,7 +2,7 @@
 include::_attributes.adoc[]
 
 This guide introduces the xref:ug:fun:core-concepts.adoc[core concepts] and ideas behind Apache Isis,
-and tells you how to xref:ug:fun:getting-started.adoc[get started] with a Maven archetype.
+and tells you how to xref:ug:fun:getting-started/helloworld-archetype.adoc[get started] with a Maven archetype.
 
 It also describes a number of xref:ug:fun:how-tos.adoc[how-to]s, describes how to influence the
 xref:ug:vw:ugvw.adoc#_ugvw_layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it
