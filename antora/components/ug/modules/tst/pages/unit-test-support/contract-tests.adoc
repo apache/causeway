@@ -62,11 +62,11 @@ public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
 == Bidirectional
 
-This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:ug:fun:ugfun.adoc#_ugfun_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[mutual registration pattern]
+This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:ug:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[mutual registration pattern]
 
 [TIP]
 ====
-(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:ug:fun:ugfun.adoc#_ugfun_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[here].  Also check out the templates in the developers' guide (xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[live templates for IntelliJ] / xref:support:dg:dg.adoc#__dg_ide_eclipse_editor-templates[editor templates for Eclipse]) for further guidance.
+(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:ug:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[here].  Also check out the templates in the developers' guide (xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[live templates for IntelliJ] / xref:support:dg:dg.adoc#__dg_ide_eclipse_editor-templates[editor templates for Eclipse]) for further guidance.
 ====
 
 For example, suppose that `ParentDomainObject` and `ChildDomainObject` have a 1:m relationship (`ParentDomainObject#children` / `ChildDomainObject#parent`), and also `PeerDomainObject` has a 1:1 relationship with itself (`PeerDomainObject#next` / `PeerDomainObject#previous`).

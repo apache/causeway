@@ -40,7 +40,7 @@ public class OrderContributions {
 <3> Only actions with a single argument can be contributed as associations
 
 More information about contributions can be found xref:ug:fun:how-tos/contributed-members.adoc[here].  More information
-about using contributions and mixins to keep your domain application decoupled can be found xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[here] and xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services]).
+about using contributions and mixins to keep your domain application decoupled can be found xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[here] and xref:ug:fun:programming-model/domain-services/contributions.adoc[contributed services]).
 
 
 

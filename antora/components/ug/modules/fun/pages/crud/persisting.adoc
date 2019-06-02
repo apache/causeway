@@ -41,7 +41,7 @@ repositoryService.persistAndFlush(customer);
 
 to eagerly perform the object insertion into the database.
 
-When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle events].
+When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle events].
 
 
 

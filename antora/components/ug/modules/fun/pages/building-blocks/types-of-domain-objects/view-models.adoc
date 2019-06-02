@@ -122,7 +122,7 @@ This is done by annotating the class using JAXB annotations; this allows the con
 A discussion of how that might be done using an ESB such as link:http://camel.apache.org[Apache Camel(TM)] follows xref:ug:btb:ugbtb.adoc#__ugfun_building-blocks_view-models_dtos_consumers[below].
 
 In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ug:vw:ugvw.adoc#[Wicket viewer] just like any other.
-In fact (as the xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
+In fact (as the xref:ug:fun:programming-model/view-models/jaxb.adoc[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
 The view model simply needs to implement the xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface; the framework has xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that contribute the download actions to the view model.

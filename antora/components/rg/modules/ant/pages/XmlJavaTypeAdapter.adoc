@@ -20,6 +20,6 @@ public class ToDoItem ...  {
 
 This annotation therefore allows view models/DTOs to have references to persistent entities; a common idiom.
 
-For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[this topic]
+For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[this topic]
 in the user guide.
 

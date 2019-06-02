@@ -49,7 +49,7 @@ To use an alternative implementation, implement `JaxbService` interface and use 
 
 This service is provided as a convenience for applications, but is also used internally by the framework to
 xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated
-xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models].  The functionality to download XML and XSD schemas is also
+xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models].  The functionality to download XML and XSD schemas is also
 exposed in the UI through mixins to xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] interface.
 
 

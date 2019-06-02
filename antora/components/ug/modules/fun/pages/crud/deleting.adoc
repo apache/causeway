@@ -24,6 +24,6 @@ repositoryService.removeAndFlush(customer);
 
 to eagerly perform the object deletion from the database.
 
-When an object is deleted the framework will emit `ObjectRemovingEvent` xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle event].
+When an object is deleted the framework will emit `ObjectRemovingEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle event].
 
 

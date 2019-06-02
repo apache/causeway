@@ -33,9 +33,9 @@ public class DocumentHolder_documents {
 
 Alternatively, if the xref:rg:ant:Mixin/method.adoc[`@Mixin#method()`] attribute is specified, then this can nominate a different abbreviation.
 
-The examples above (for xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins_contributed-property[property], xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins_contributed-collection[collection] and xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins_contributed-action[action]) demonstrate this.
+The examples above (for xref:ug:fun:programming-model/mixins/contributed-property.adoc[property], xref:ug:fun:programming-model/mixins/contributed-collection.adoc[collection] and xref:ug:fun:programming-model/mixins/contributed-action.adoc[action]) demonstrate this.
 
 
 The character "$" is also recognized as a separator between the mixin type and mixin name.
-This is useful for mixins implemented as nested static types, discussed xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins_nested-static-classes[below].
+This is useful for mixins implemented as nested static types, discussed xref:ug:fun:programming-model/mixins/nested-static-classes.adoc[below].
 

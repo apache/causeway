@@ -46,7 +46,7 @@ The framework will automatically recreate the domain object each time it is inte
 +
 indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 +
-Equivalent to annotating with xref:rg:ant:Mixin.adoc[`@Mixin`].  For further discussion on using mixins, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] in the user guide.
+Equivalent to annotating with xref:rg:ant:Mixin.adoc[`@Mixin`].  For further discussion on using mixins, see xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] in the user guide.
 
 
 * `VIEW_MODEL` +
@@ -70,7 +70,7 @@ The benefit of `nature()` is that it allows the developer to properly characteri
 ====
 On the other hand, view models defined in this way do have some limitations; see xref:rg:ant:ViewModel.adoc[`@ViewModel`] for further discussion.
 
-These limitations do _not_ apply to xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB] view models.
+These limitations do _not_ apply to xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB] view models.
 If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
 ====
 

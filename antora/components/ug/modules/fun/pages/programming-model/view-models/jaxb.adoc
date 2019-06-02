@@ -48,7 +48,7 @@ For collections, the `@XmlElementWrapper` would also typically be used.
 Use JAXB elements such as `@XmlElement` for properties and the combination of `@XmlElementWrapper` and `@XmlElement` for collections.
 Properties can be ignored (for serialization) using `@XmlTransient`.
 
-The derived properties could also have been implemented using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins].
+The derived properties could also have been implemented using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins].
 
 
 [IMPORTANT]

@@ -4,8 +4,8 @@ include::_attributes.adoc[]
 
 
 
-The `MementoService` was originally introduced to simplify the implementation of xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[ViewModel]s which are required by the framework to return string representation of all of their backing state, moreover which is safe for use within a URL.
-This usage is deprecated; use xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view models] instead.
+The `MementoService` was originally introduced to simplify the implementation of xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[ViewModel]s which are required by the framework to return string representation of all of their backing state, moreover which is safe for use within a URL.
+This usage is deprecated; use xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB view models] instead.
 
 The service can also be used to create a memento of arbitrary objects, however this usage is also deprecated.
 

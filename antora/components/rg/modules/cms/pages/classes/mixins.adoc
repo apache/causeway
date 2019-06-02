@@ -7,7 +7,7 @@ This chapter defines a number of role interfaces that definea contract for some 
 
 [TIP]
 ====
-See the xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[fundamentals user guide] for a discussion of mixins.
+See the xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[fundamentals user guide] for a discussion of mixins.
 ====
 
 

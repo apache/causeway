@@ -55,7 +55,7 @@ Whenever a query is submitted, the framework will automatically "flush" any pend
 This ensures that the database query runs against an up-to-date table so that all matching instances (with respect to the current transaction) are correctly retrieved.
 
 
-When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle event].
+When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle event].
 
 
 == Type-safe queries

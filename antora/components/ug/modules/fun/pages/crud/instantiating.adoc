@@ -19,7 +19,7 @@ or
 Dashboard dashboardVM = factoryService.instantiate(Dashboard.class);
 ----
 
-When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle event] will also be emitted.
+When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle event] will also be emitted.
 
 
 For this to work the target class _must_ have a no-arg constructor.

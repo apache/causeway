@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 The `@XmlRootElement` annotation provides an alternative way to define a
-xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model], in particular one intended to act as a DTO for use within
+xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model], in particular one intended to act as a DTO for use within
 xref:ug:vro:ugvro.adoc#[RestfulObjects viewer], or which contains arbitrarily complex state.
 
 A view model is a non-persisted domain object whose state is converted to/from a string memento.  In the case of a
@@ -72,10 +72,10 @@ public class ToDoItemDto implements Dto {
 Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep
 the DTO "clean", just focused on specifying the data contract.
 
-Behaviour can therefore be provided using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] (annotated with
+Behaviour can therefore be provided using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] (annotated with
 xref:rg:ant:Mixin.adoc[`@Mixin`]), while xref:rg:cms:classes/uievent.adoc[UI events] can be used
 to obtain title, icons and so on.
 
-For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[this topic]
+For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[this topic]
 in the user guide.
 

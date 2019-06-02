@@ -52,7 +52,7 @@ xref:ug:fun:programming-model/domain-services.adoc[here].
 
 == Hexagonal Arch. + services
 
-It's worth extending the xref:ug:fun:ugfun.adoc#_ugfun_core-concepts_philosophy_hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
+It's worth extending the xref:ug:fun:core-concepts/philosophy/hexagonal-architecture.adoc[Hexagonal Architecture] to show where domain services fit in:
 
 .The hexagonal architecture with Isis addons
 image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]

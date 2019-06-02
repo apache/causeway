@@ -57,7 +57,7 @@ public class CompareCustomers {
 }
 ----
 
-This capability is particularly useful when the JAXB view model is being used as a xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_dto[DTO].
+This capability is particularly useful when the JAXB view model is being used as a xref:ug:fun:programming-model/view-models/dto.adoc[DTO].
 
 
 

@@ -18,7 +18,7 @@ There are also two other natures that should be considered "deprecated":
 
 * `VIEW_CONTRIBUTIONS_ONLY` which indicates that the actions should be contributed as actions to its action parameters. +
 +
-This feature is deprecated because xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] are equivalent in functionality with a simpler programming model.
+This feature is deprecated because xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] are equivalent in functionality with a simpler programming model.
 
 * `VIEW` combines both `VIEW_MENU_ONLY` and the deprecated `VIEW_CONTRIBUTIONS_ONLY`.
 

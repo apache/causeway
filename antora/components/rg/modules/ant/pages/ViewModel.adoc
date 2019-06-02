@@ -54,7 +54,7 @@ View models, as defined by `@ViewModel` (or `@DomainObject(nature=VIEW_MODEL)` f
 * collections (of either view models or entities) are ignored.
 * not every data type is supported,
 
-However, these limitations do _not_ apply to xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB] view models.
+However, these limitations do _not_ apply to xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB] view models.
 If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
 
 

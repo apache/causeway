@@ -9,7 +9,7 @@ The `@Mixin` annotation indicates that the class acts as a mixin, contributing b
 Mixins were originally introduced as a means of allowing contributions from one module to the types of another module; in such cases the mixin type is often an interface type (eg `DocumentHolder`) that might be implemented by numerous different concrete types.
 However, mixins are also a convenient mechanism for grouping functionality even for a concrete type.
 
-For further discussion on using mixins, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] in the user guide.
+For further discussion on using mixins, see xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] in the user guide.
 
 The table below summarizes the annotation's attributes.
 

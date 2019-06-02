@@ -3,9 +3,9 @@
 include::_attributes.adoc[]
 
 
-This chapter shows the idioms for creating, reading, updating and deleting xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_domain-entities[domain entities].
+This chapter shows the idioms for creating, reading, updating and deleting xref:ug:fun:building-blocks/types-of-domain-objects/domain-entities.adoc[domain entities].
 
-It also shows how to instantiate xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models] and how to programmatically instantiate xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] (useful primarily for xref:ug:tst:integ-test-support.adoc[integration testing]).
+It also shows how to instantiate xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models] and how to programmatically instantiate xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] (useful primarily for xref:ug:tst:integ-test-support.adoc[integration testing]).
 
 [NOTE]
 ====

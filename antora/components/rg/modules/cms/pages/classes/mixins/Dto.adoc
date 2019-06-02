@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 The `Dto` role interface is intended to be implemented by JAXB-annotated view models, that is, annotated using
 xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`].
-It enables the ability to download the XML and XSD schema of those objects using two xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins], `Dto_downloadXml` and `Dto_downloadXsd`.
+It enables the ability to download the XML and XSD schema of those objects using two xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins], `Dto_downloadXml` and `Dto_downloadXsd`.
 
 The interface is just a marker interface (with no members), and is defined as:
 
