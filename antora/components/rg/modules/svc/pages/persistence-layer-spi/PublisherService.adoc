@@ -10,7 +10,7 @@ A typical use case is to publish onto a pub/sub bus such as link:http://activemq
 
 An alternative use is for profiling: for each execution (action invocation/property edit) the framework captures metrics of the number of objects loaded or dirtied as the result of that execution.
 If the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] is used to call other objects then the metrics are captured for each sub-execution.
-The framework provides a default implementation, `PublisherServiceLogging`, that will log these execution graphs (in XML form, per the xref:rg:cms:rgcms.adoc#_rgcms_schema-ixn["ixn" schema]) to an SLF4J logger.
+The framework provides a default implementation, `PublisherServiceLogging`, that will log these execution graphs (in XML form, per the xref:rg:cms:rgcms.adoc#_rgcms_schema_ixn["ixn" schema]) to an SLF4J logger.
 
 Only actions/properties/domain objects annotated for publishing (using xref:rg:ant:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`], xref:rg:ant:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] or xref:rg:ant:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) are published.
 
@@ -30,7 +30,7 @@ public interface PublisherService {
 <2> to publish a set of changed objects.
 
 Each `Interaction.Execution` has an owning `Interaction`; this is the same object obtainable from xref:rg:svc:rgsvc.adoc#_rgsvc_spi_InteractionContext[`InteractionContext`].
-Implementations that publish member executions can use `Interaction.Execution#getDto()` method to return a DTO (as per the xref:rg:cms:rgcms.adoc#_rgcms_schema-ixn["ixn" schema]) which can be converted into a serializable XML representation using the `InteractionDtoUtils` utility class.
+Implementations that publish member executions can use `Interaction.Execution#getDto()` method to return a DTO (as per the xref:rg:cms:rgcms.adoc#_rgcms_schema_ixn["ixn" schema]) which can be converted into a serializable XML representation using the `InteractionDtoUtils` utility class.
 The XML can either serialize a single execution, or can be a "deep" serialization of an execution and all sub-executions.
 
 The full API of `PublishedObjects` itself is:
@@ -53,7 +53,7 @@ public interface PublishedObjects extends HasTransactionId, HasUsername {
 <1> inherited from `HasTransactionId`, correlates back to the unique identifier of the transaction in which these objects were changed.
 <2> inherited from `HasUsername`, is the user that initiated the transaction causing these objects to change
 <3> the time that this set of objects was collated (just before the completion of the transaction completes)..
-<4> returns a DTO (as per the xref:rg:cms:rgcms.adoc#_rgcms_schema-chg["chg" schema]) which can be converted into a serializable XML representation can be obtained using the `ChangesDtoUtils` utility class.
+<4> returns a DTO (as per the xref:rg:cms:rgcms.adoc#_rgcms_schema_chg["chg" schema]) which can be converted into a serializable XML representation can be obtained using the `ChangesDtoUtils` utility class.
 <5> metrics as to the number of objects loaded, created, updated or deleted and the number of object properties modified (in other words the "size" or "weight" of the transaction).
 
 

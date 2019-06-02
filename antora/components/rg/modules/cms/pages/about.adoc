@@ -2,9 +2,9 @@
 include::_attributes.adoc[]
 
 
-This reference guide lists and describes various elements of the the Apache Isis Programming Model, specifically reserved and prefix xref:rg:cms:rgcms.adoc#_rgcms_methods[methods] (such as `title()` and `validate...()`) and various utility and supporting xref:rg:cms:rgcms.adoc#_rgcms_classes[classes].
+This reference guide lists and describes various elements of the the Apache Isis Programming Model, specifically reserved and prefix xref:rg:cms:methods.adoc[methods] (such as `title()` and `validate...()`) and various utility and supporting xref:rg:cms:classes.adoc[classes].
 
-It also describes the xref:rg:cms:rgcms.adoc#_rgcms_schema[XSD schema] defined by Apache Isis.
+It also describes the xref:rg:cms:schema.adoc[XSD schema] defined by Apache Isis.
 One use case is for the JAXB serialization of view models.
 
 

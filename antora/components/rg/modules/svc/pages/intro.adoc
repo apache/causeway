@@ -189,7 +189,7 @@ Note that it's possible for there to be more than one transaction per top-level 
 
 * Also at the end of each transaction, details of all changed properties are passed to any registered xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s) by way of the (internal) xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
 
-Implementations of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd[`cmd.xsd`] schema.
+Implementations of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:rg:cms:rgcms.adoc#_rgcms_schema_cmd[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
 Similarly, implementations of xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.

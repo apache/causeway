@@ -31,7 +31,7 @@ all the code by hand
 The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated
 with the xref:rg:ant:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], using the
 framework-provided `PersistentEntityAdapter`.  This adapter converts any references to such domain entities using the
-`oidDto` complex type (as defined by the Apache Isis xref:rg:cms:rgcms.adoc#_rgcms_schema-common[common schema]):
+`oidDto` complex type (as defined by the Apache Isis xref:rg:cms:rgcms.adoc#_rgcms_schema_common[common schema]):
 the object's type and its identifier.
 
 [TIP]

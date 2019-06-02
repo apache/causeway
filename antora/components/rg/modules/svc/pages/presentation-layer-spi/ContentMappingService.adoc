@@ -43,7 +43,7 @@ public interface ContentMappingService {
 The framework provides two implementations of this service, both in support of the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] SPI.
 
 By way of background: implementations of the SPI `CommandService` work with custom implementations of the `Command` interface, typically being persisted to a datastore.
-The `CommandWithDto` interface is a subtype of `Command` for implementations that can be reified into xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd[`CommandDto`] XML instances.
+The `CommandWithDto` interface is a subtype of `Command` for implementations that can be reified into xref:rg:cms:rgcms.adoc#_rgcms_schema_cmd[`CommandDto`] XML instances.
 One implementation that does this is the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module.
 
 For framework implementations of `ContentMappingService` allow domain service actions that return ``CommandDto``s (either singularly or in a list) to be converted into XML documents:

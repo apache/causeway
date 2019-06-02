@@ -70,11 +70,11 @@ xref:rg:ant:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]), that reference
 +
 These references are serialized instead into OIDs
 
-* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd["cmd" (command)] schema.
+* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:rg:cms:rgcms.adoc#_rgcms_schema_cmd["cmd" (command)] schema.
 +
 They are also used to represent references to any action arguments/properties that take domain object entities/view models.
 
-* third, as references to the target of an interaction capturing the actual execution of an action invocation or property edit, as described by the xref:rg:cms:rgcms.adoc#_rgcms_schema-ixn["ixn" (interaction)] schema.
+* third, as references to the target of an interaction capturing the actual execution of an action invocation or property edit, as described by the xref:rg:cms:rgcms.adoc#_rgcms_schema_ixn["ixn" (interaction)] schema.
 
 
 == `collectionDto` etc

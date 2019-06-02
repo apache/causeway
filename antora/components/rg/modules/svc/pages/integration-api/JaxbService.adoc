@@ -36,7 +36,7 @@ public interface JaxbService {
 
 With respect to the `IsisSchemas` enum: a JAXB-annotated domain object will live in its own XSD namespace and may
 reference multiple other XSD schemas.  In particular, many JAXB domain objects will reference the
-xref:rg:cms:rgcms.adoc#_rgcms_schema[common Isis schemas] (for example the `OidDto` class that represents a reference to
+xref:rg:cms:schema.adoc[common Isis schemas] (for example the `OidDto` class that represents a reference to
 a persistent entity).  The enum indicates whether these schemas should be included or excluded from the map.
 
 Apache Isis provides a default implementation of the service, `o.a.i.applib.services.jaxb.JaxbServiceDefault`.

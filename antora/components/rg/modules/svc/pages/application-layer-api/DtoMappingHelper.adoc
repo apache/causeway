@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `DtoMappingHelper` converts the domain object's internal identifier into a serializable `OidDto` for use in the xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd[command] and xref:rg:cms:rgcms.adoc#_rgcms_schema-ixn[interaction] schemas.
+The `DtoMappingHelper` converts the domain object's internal identifier into a serializable `OidDto` for use in the xref:rg:cms:rgcms.adoc#_rgcms_schema_cmd[command] and xref:rg:cms:rgcms.adoc#_rgcms_schema_ixn[interaction] schemas.
 
 
 == API and Usage
