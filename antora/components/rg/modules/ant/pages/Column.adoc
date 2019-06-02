@@ -78,7 +78,7 @@ public class Customer {
     public void setTotalOrdersToDate(BigDecimal totalOrdersToDate) { ... }
 ----
 
-For ``BigDecimal``s it is also possible to specify the xref:rg:ant:rgant.adoc#\_rgant-Digits[`@Digits`] annotation, whose form is `@Digits(integer, fraction)`.
+For ``BigDecimal``s it is also possible to specify the xref:rg:ant:Digits.adoc[`@Digits`] annotation, whose form is `@Digits(integer, fraction)`.
 There is a subtle difference here: while `@Column#scale()` corresponds to `@Digits#fraction()`, the value of `@Column#length()` (ie the precision) is actually the __sum__ of the `@Digits`' `integer()` and `fraction()` parts.
 
 If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.

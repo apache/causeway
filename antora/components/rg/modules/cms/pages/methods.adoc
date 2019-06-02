@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The Apache Isis metamodel is built up from declaratively (ie, xref:rg:ant:rgant.adoc#_rgant[annotations]) and imperatively, from "supporting" methods and other reserved methods.
+The Apache Isis metamodel is built up from declaratively (ie, xref:rg:ant:about.adoc[annotations]) and imperatively, from "supporting" methods and other reserved methods.
 
 This chapter documents the supporting methods and the reserved methods.  It also documents (separately) the reserved methods that act as callback hooks into the persistence lifecycle of domain entities.
 

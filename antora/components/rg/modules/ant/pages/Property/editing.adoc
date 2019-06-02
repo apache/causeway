@@ -9,7 +9,7 @@ The related `editingDisabledReason()` attribute specifies the a hard-coded reaso
 
 Whether a property is enabled or disabled depends upon these factors:
 
-* whether the domain object has been configured as immutable through the xref:rg:ant:rgant.adoc#\_rgant-DomainObject_editing[`@DomainObject#editing()`] attribute
+* whether the domain object has been configured as immutable through the xref:rg:DomainObject/editing.adoc[`@DomainObject#editing()`] attribute
 
 * else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:rg:cfg:rgcfg.adoc#\_rgcfg_configuring-core[configuration property] `isis.objects.editing`.  If set to `false`, then the object's properties (and collections) are __not__ editable
 

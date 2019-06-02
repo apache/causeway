@@ -148,7 +148,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adrgant`
-//|`\xref:rg:ant:rgant.adoc#xxx[ttt]`
+//|`\xref:rg:ant:about.adoc#xxx[ttt]`
 //
 //a hyperlink to a bookmark within the reference guide for annotations, where:
 //

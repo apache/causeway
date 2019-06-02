@@ -64,11 +64,11 @@ The following interfaces have been removed.
 
 |`Auditable` +
 (JDO applib)
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.adoc#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_audited[`@DomainObject#auditing()`]
 
 |`Bounded` +
 (JDO applib)
-|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.adoc#_rgant_DomainObject_bounding[`@DomainObject#bounding()`]
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_DomainObject_bounding[`@DomainObject#bounding()`]
 
 |`NotPersistable` +
 (JDO applib)

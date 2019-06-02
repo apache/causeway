@@ -254,7 +254,7 @@ Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_password-res
 `suppressRememberMe`
 | `true`,`false` +
 (`_false_`)
-|Whether to suppress "remember me" checkbox on the login page.
+|Wphether to suppress "remember me" checkbox on the login page.
 
 Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_remember-me[below].
 

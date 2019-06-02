@@ -35,12 +35,12 @@ The user guides available are:
 
 The reference guides are:
 
-* xref:rg:ant:rgant.adoc#[Annotations]
-* xref:rg:svc:rgsvc.adoc#[Domain Services]
-* xref:rg:cfg:rgcfg.adoc#[Configuration Properties]
-* xref:rg:cms:rgcms.adoc#[Classes, Methods and Schema]
-* xref:rg:mvn:rgmvn.adoc#[Apache Isis Maven plugin]
-* xref:rg:fis:rgfis.adoc#[Framework Internal Services]
+* xref:rg:ant:about.adoc#[Annotations]
+* xref:rg:svc:about.adoc#[Domain Services]
+* xref:rg:cfg:about.adoc#[Configuration Properties]
+* xref:rg:cms:about.adoc#[Classes, Methods and Schema]
+* xref:rg:mvn:about.adoc#[Apache Isis Maven plugin]
+* xref:rg:fis:about.adoc#[Framework Internal Services]
 
 The remaining guides are:
 
