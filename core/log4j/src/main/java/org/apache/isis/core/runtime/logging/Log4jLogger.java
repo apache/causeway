@@ -19,23 +19,26 @@
 
 package org.apache.isis.core.runtime.logging;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class Log4jLogger {
 
     public static final String PROPERTY_ROOT = "isis.logging.";
 
-    private org.apache.log4j.Logger logger;
-    private final org.apache.log4j.Level level;
+    private Logger logger;
+    private final Level level;
 
     public Log4jLogger() {
-        this(org.apache.log4j.Level.DEBUG);
+        this(Level.DEBUG);
     }
 
     public Log4jLogger(final String level) {
-        this.level = org.apache.log4j.Level.toLevel(level);
+        this.level = Level.toLevel(level);
     }
 
-    public Log4jLogger(final org.apache.log4j.Level level) {
+    public Log4jLogger(final Level level) {
         this.level = level;
     }
 
@@ -49,9 +52,9 @@ public abstract class Log4jLogger {
         log(request + "  -> " + result);
     }
 
-    private org.apache.log4j.Logger logger() {
+    private Logger logger() {
         if (logger == null) {
-            logger = org.apache.log4j.Logger.getLogger(getDecoratedClass());
+            logger = LogManager.getLogger(getDecoratedClass());
         }
         return logger;
     }

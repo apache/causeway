@@ -84,10 +84,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-log4j</artifactId>
-        </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -106,11 +102,6 @@
             <artifactId>isis-core-schema</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
     </dependencies>
 

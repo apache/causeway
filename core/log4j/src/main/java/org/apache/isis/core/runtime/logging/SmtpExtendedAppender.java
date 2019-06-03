@@ -23,40 +23,44 @@ import java.io.UnsupportedEncodingException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
-public class SmtpExtendedAppender extends org.apache.log4j.net.SMTPAppender {
+import org.apache.logging.log4j.core.appender.SmtpAppender;
+import org.slf4j.event.LoggingEvent;
 
-    public SmtpExtendedAppender() {
-        super();
-    }
-
-    public SmtpExtendedAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
-        super(evaluator);
-    }
-
-    @Override
-    public void append(final org.apache.log4j.spi.LoggingEvent event) {
-        if (evaluator.isTriggeringEvent(event)) {
-            try {
-                final String subject = limitToFirstLine(String.valueOf(event.getMessage()));
-                final String encodedSubject = MimeUtility.encodeText(subject, "UTF-8", null);
-                msg.setSubject(encodedSubject);
-            } catch (final UnsupportedEncodingException e) {
-                // ???
-            } catch (final MessagingException e) {
-                // ???
-            }
-        }
-        super.append(event);
-    }
-
-    private String limitToFirstLine(String subject) {
-        final int newline = subject.indexOf('\n');
-        final int carriageReturn = subject.indexOf('\r');
-        if (newline != -1 || carriageReturn != -1) {
-            final int pos = Math.max(newline, carriageReturn);
-            subject = subject.substring(0, pos);
-        }
-        return subject;
-    }
+@Deprecated //cannot subclass SmtpAppender from Log4j v2
+public class SmtpExtendedAppender { //extends SmtpAppender {
+//
+//    public SmtpExtendedAppender() {
+//        super();
+//    }
+//
+//    public SmtpExtendedAppender(final TriggeringEventEvaluator evaluator) {
+//        super(evaluator);
+//    }
+//
+//    @Override
+//    public void append(final LoggingEvent event) {
+//        if (evaluator.isTriggeringEvent(event)) {
+//            try {
+//                final String subject = limitToFirstLine(String.valueOf(event.getMessage()));
+//                final String encodedSubject = MimeUtility.encodeText(subject, "UTF-8", null);
+//                msg.setSubject(encodedSubject);
+//            } catch (final UnsupportedEncodingException e) {
+//                // ???
+//            } catch (final MessagingException e) {
+//                // ???
+//            }
+//        }
+//        super.append(event);
+//    }
+//
+//    private String limitToFirstLine(String subject) {
+//        final int newline = subject.indexOf('\n');
+//        final int carriageReturn = subject.indexOf('\r');
+//        if (newline != -1 || carriageReturn != -1) {
+//            final int pos = Math.max(newline, carriageReturn);
+//            subject = subject.substring(0, pos);
+//        }
+//        return subject;
+//    }
 
 }

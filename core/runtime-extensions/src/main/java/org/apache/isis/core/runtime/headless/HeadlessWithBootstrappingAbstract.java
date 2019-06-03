@@ -30,6 +30,7 @@ import org.apache.isis.core.runtime.headless.logging.LogStream;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.logging.log4j.Level;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -67,7 +68,7 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
 
         final boolean firstTime = !setupLogging.get();
         if(firstTime) {
-            IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer(org.apache.log4j.Level.INFO);
+            val loggingConfigurer = new IsisLoggingConfigurer(Level.INFO);
             loggingConfigurer.configureLoggingWithFile(logConfig.getLoggingPropertyFile(), new String[0]);
             setupLogging.set(true);
         }

@@ -22,7 +22,12 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.log4j.Level;
+import org.apache.isis.commons.internal.base._Blackhole;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
+import org.apache.isis.tool.mavenplugin.spring.IsisMavenPlugin_SpringContextLauncher;
+import org.apache.isis.tool.mavenplugin.util.MavenProjects;
+import org.apache.logging.log4j.Level;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,12 +37,6 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
-import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.tool.mavenplugin.spring.IsisMavenPlugin_SpringContextLauncher;
-import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
 

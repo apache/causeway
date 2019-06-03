@@ -28,12 +28,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class SnapshotServer {
     private static final String SNAPSHOT_PROPERTIES = "snapshot.properties";
-    private static final org.apache.log4j.Logger LOG4J = org.apache.log4j.Logger.getLogger(SnapshotServer.class);
+    private static final Logger LOG4J = LogManager.getLogger(SnapshotServer.class);
 
     public static void main(final String[] args) {
-        org.apache.log4j.BasicConfigurator.configure();
+        //BasicConfigurator.configure(); //log4j v1
 
         int port;
         String directoryPath;
