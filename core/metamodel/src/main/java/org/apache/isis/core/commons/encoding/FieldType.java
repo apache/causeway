@@ -31,10 +31,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.context._Context;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Typesafe writing and reading of fields, providing some level of integrity
@@ -50,9 +49,8 @@ import org.apache.isis.commons.internal.context._Context;
  * Conversely, the {@link #read(DataInputExtended)} reads the field type and
  * then the data for that field type.
  */
+@Log4j2
 public abstract class FieldType<T> {
-
-    private static Logger LOG = LoggerFactory.getLogger(FieldType.class);
 
     private static String LOG_INDENT = ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
     private static final int NULL_BIT = 64; // 2 to the 6
@@ -68,13 +66,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Boolean value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeBoolean(value);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -85,12 +83,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final boolean value = inputStream.readBoolean();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -104,21 +102,21 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
                 for (int i = 0; i < values.length; i++) {
                     outputStream.writeBoolean(values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -130,23 +128,23 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
                 final boolean[] values = new boolean[length];
                 for (int i = 0; i < values.length; i++) {
                     values[i] = inputStream.readBoolean();
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -157,13 +155,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Byte value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeByte(value.byteValue());
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -174,12 +172,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final byte value = inputStream.readByte();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -193,7 +191,7 @@ public abstract class FieldType<T> {
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 final int length = values.length;
                 outputStream.writeInt(length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append("length:").append(length).append(" [BYTE ARRAY]"));
                 }
 
@@ -201,7 +199,7 @@ public abstract class FieldType<T> {
                 // we take advantage of optimization built into DataOutputStream
                 outputStream.write(values);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -212,7 +210,7 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     final StringBuilder msg = new StringBuilder().append("length:").append(length).append(" [BYTE ARRAY]");
                     log(this, msg);
                 }
@@ -221,7 +219,7 @@ public abstract class FieldType<T> {
                 readBytes(inputStream, bytes);
                 return bytes;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -238,13 +236,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Short value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeShort(value.shortValue());
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -255,12 +253,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final short value = inputStream.readShort();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -274,22 +272,22 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
 
                 for (int i = 0; i < values.length; i++) {
                     outputStream.writeShort(values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -301,24 +299,24 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
 
                 final short[] values = new short[length];
                 for (int i = 0; i < values.length; i++) {
                     values[i] = inputStream.readShort();
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -329,13 +327,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Integer value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(value.intValue());
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -346,12 +344,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int value = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -362,13 +360,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Integer value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeByte(value);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -379,12 +377,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int value = inputStream.readUnsignedByte();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -395,13 +393,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Integer value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeShort(value);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -412,12 +410,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int value = inputStream.readUnsignedShort();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -431,22 +429,22 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
 
                 for (int i = 0; i < values.length; i++) {
                     outputStream.writeInt(values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -458,24 +456,24 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
 
                 final int[] values = new int[length];
                 for (int i = 0; i < values.length; i++) {
                     values[i] = inputStream.readInt();
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -486,13 +484,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Long value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeLong(value.intValue());
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -503,12 +501,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final long value = inputStream.readLong();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -521,22 +519,22 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
 
                 for (int i = 0; i < values.length; i++) {
                     outputStream.writeLong(values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -549,24 +547,24 @@ public abstract class FieldType<T> {
 
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
 
                 final long[] values = new long[length];
                 for (int i = 0; i < values.length; i++) {
                     values[i] = inputStream.readLong();
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -577,13 +575,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Character value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeLong(value.charValue());
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -594,12 +592,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final char value = inputStream.readChar();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -614,22 +612,22 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
 
                 for (int i = 0; i < values.length; i++) {
                     outputStream.writeChar(values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -641,24 +639,24 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
 
                 final char[] values = new char[length];
                 for (int i = 0; i < values.length; i++) {
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                     values[i] = inputStream.readChar();
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -669,13 +667,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Float value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeFloat(value);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -686,12 +684,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final float value = inputStream.readFloat();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -705,22 +703,22 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
 
                 for (int i = 0; i < values.length; i++) {
                     outputStream.writeFloat(values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -732,24 +730,24 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
 
                 final float[] values = new float[length];
                 for (int i = 0; i < values.length; i++) {
                     values[i] = inputStream.readFloat();
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -760,13 +758,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Double value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeDouble(value);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -777,12 +775,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final double value = inputStream.readDouble();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -796,22 +794,22 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
 
                 for (int i = 0; i < values.length; i++) {
                     outputStream.writeDouble(values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -823,24 +821,24 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
 
                 final double[] values = new double[length];
                 for (int i = 0; i < values.length; i++) {
                     values[i] = inputStream.readDouble();
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -851,13 +849,13 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final String value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeUTF(value);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -868,12 +866,12 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final String value = inputStream.readUTF();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(value));
                 }
                 return value;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -886,23 +884,23 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(values.length);
                 }
 
                 for (int i = 0; i < values.length; i++) {
                     // using FieldType to write out takes care of null handling
                     FieldType.STRING.write(output, values[i]);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -914,7 +912,7 @@ public abstract class FieldType<T> {
                 final StringBuilder buf = new StringBuilder();
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     buf.append("length: ").append(length);
                 }
 
@@ -922,17 +920,17 @@ public abstract class FieldType<T> {
                 for (int i = 0; i < values.length; i++) {
                     // using FieldType to read in takes care of null handling
                     values[i] = FieldType.STRING.read(input);
-                    if (LOG.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         buf.append(i == 0 ? ": " : ", ");
                         buf.append(values[i]);
                     }
                 }
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, buf);
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -945,7 +943,7 @@ public abstract class FieldType<T> {
             try {
                 // write out class
                 final String className = encodable.getClass().getName();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(className));
                 }
                 output.writeUTF(className);
@@ -953,7 +951,7 @@ public abstract class FieldType<T> {
                 // recursively encode
                 encodable.encode(output);
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -964,7 +962,7 @@ public abstract class FieldType<T> {
             try {
                 // read in class name ...
                 final String className = input.readUTF();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append(className));
                 }
 
@@ -994,7 +992,7 @@ public abstract class FieldType<T> {
                 }
 
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -1012,7 +1010,7 @@ public abstract class FieldType<T> {
             try {
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append("length: ").append(values.length));
                 }
                 for (final Encodable encodable : values) {
@@ -1020,7 +1018,7 @@ public abstract class FieldType<T> {
                     FieldType.ENCODABLE.write(output, encodable);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -1032,7 +1030,7 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append("length: ").append(length));
                 }
 
@@ -1043,7 +1041,7 @@ public abstract class FieldType<T> {
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -1059,7 +1057,7 @@ public abstract class FieldType<T> {
         @Override
         protected void doWrite(final DataOutputExtended output, final Serializable value) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append("[SERIALIZABLE]"));
                 }
 
@@ -1068,7 +1066,7 @@ public abstract class FieldType<T> {
                 oos.writeObject(value);
                 oos.flush();
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -1077,7 +1075,7 @@ public abstract class FieldType<T> {
         @Override
         protected Serializable doRead(final DataInputExtended input) throws IOException {
             try {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append("[SERIALIZABLE]"));
                 }
 
@@ -1089,7 +1087,7 @@ public abstract class FieldType<T> {
                     throw new FailedToDeserializeException(ex);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -1107,7 +1105,7 @@ public abstract class FieldType<T> {
             try {
                 final DataOutputStream outputStream = output.getDataOutputStream();
                 outputStream.writeInt(values.length);
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append("length: ").append(values.length));
                 }
 
@@ -1116,7 +1114,7 @@ public abstract class FieldType<T> {
                     FieldType.SERIALIZABLE.write(output, value);
                 }
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -1128,7 +1126,7 @@ public abstract class FieldType<T> {
             try {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log(this, new StringBuilder().append("length: ").append(length));
                 }
 
@@ -1139,7 +1137,7 @@ public abstract class FieldType<T> {
                 }
                 return values;
             } finally {
-                if (LOG.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     unlog(this);
                 }
             }
@@ -1197,7 +1195,7 @@ public abstract class FieldType<T> {
                 throw new IllegalStateException("Mismatch in stream: expected " + this + " but got " + fieldType + " (" + fieldTypeIdx + ")");
             }
 
-            if (isNull && LOG.isDebugEnabled()) {
+            if (isNull && log.isDebugEnabled()) {
                 // only log if reading a null; otherwise actual value read
                 // logged later
                 log(this, new StringBuilder().append("(null)"));
@@ -1209,7 +1207,7 @@ public abstract class FieldType<T> {
                 return doRead(input);
             }
         } finally {
-            if (isNull && LOG.isDebugEnabled()) {
+            if (isNull && log.isDebugEnabled()) {
                 // only unlog if reading a null
                 unlog(this);
             }
@@ -1228,7 +1226,7 @@ public abstract class FieldType<T> {
                 throw new IllegalStateException("Mismatch in stream: expected " + this + " but got " + fieldType);
             }
 
-            if (isNull && LOG.isDebugEnabled()) {
+            if (isNull && log.isDebugEnabled()) {
                 // only log if reading a null; otherwise actual value read
                 // logged later
                 log(this, new StringBuilder().append("(null)"));
@@ -1241,7 +1239,7 @@ public abstract class FieldType<T> {
             }
 
         } finally {
-            if (isNull && LOG.isDebugEnabled()) {
+            if (isNull && log.isDebugEnabled()) {
                 // only unlog if reading a null
                 unlog(this);
             }
@@ -1261,7 +1259,7 @@ public abstract class FieldType<T> {
             final DataOutputStream outputStream = output.getDataOutputStream();
 
             outputStream.write(fieldTypeIdxAndNullability);
-            if (isNull && LOG.isDebugEnabled()) {
+            if (isNull && log.isDebugEnabled()) {
                 // only log if writing a null; otherwise actual value logged
                 // later
                 log(this, new StringBuilder().append("(null)"));
@@ -1271,7 +1269,7 @@ public abstract class FieldType<T> {
                 doWrite(output, value);
             }
         } finally {
-            if (isNull && LOG.isDebugEnabled()) {
+            if (isNull && log.isDebugEnabled()) {
                 // only unlog if writing a null
                 unlog(this);
             }
@@ -1306,7 +1304,7 @@ public abstract class FieldType<T> {
         }
         buf.insert(0, spaces(currentDebugLevel()));
         incrementDebugLevel();
-        LOG.debug(buf.toString());
+        log.debug(buf.toString());
     }
 
     private static void unlog(final FieldType<?> fieldType) {
@@ -1320,7 +1318,7 @@ public abstract class FieldType<T> {
         decrementDebugLevel();
         if (fieldType.isIndentingAndOutdenting()) {
             buf.insert(0, spaces(currentDebugLevel()));
-            LOG.debug(buf.toString());
+            log.debug(buf.toString());
         }
     }
 

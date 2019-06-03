@@ -68,8 +68,6 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
 
-    //private final static Logger LOG = LoggerFactory.getLogger(ObjectActionDefault.class);
-
     public static ActionType getType(final String typeStr) {
         final ActionType type = ActionType.valueOf(typeStr);
         if (type == null) {

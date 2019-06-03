@@ -22,9 +22,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,6 +36,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * package private mixin for ObjectAdapterContext
  * <p>
@@ -46,14 +45,14 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * </p> 
  * @since 2.0.0-M2
  */
-@SuppressWarnings("unused")
+@Log4j2
 class ObjectAdapterContext_ObjectCreation {
     
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectCreation.class);
     private final ObjectAdapterContext objectAdapterContext;
-    private final PersistenceSession persistenceSession;
-    private final SpecificationLoader specificationLoader;
+    @SuppressWarnings("unused")
+	private final PersistenceSession persistenceSession;
+    @SuppressWarnings("unused")
+	private final SpecificationLoader specificationLoader;
     private ServiceInjector serviceInjector;
     
     ObjectAdapterContext_ObjectCreation(
@@ -83,8 +82,8 @@ class ObjectAdapterContext_ObjectCreation {
     }
     
     private ObjectAdapter newInstance(ObjectSpecification spec, Variant variant, String memento) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating {} instance of {}", variant, spec);
+        if (log.isDebugEnabled()) {
+            log.debug("creating {} instance of {}", variant, spec);
         }
         final Object pojo;
 
@@ -144,8 +143,8 @@ class ObjectAdapterContext_ObjectCreation {
 
             // so, doing it this way is this simplest, least obscure.
 
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("Skipping postEvent for creation of Command pojo");
+            if(log.isDebugEnabled()) {
+                log.debug("Skipping postEvent for creation of Command pojo");
             }
 
         } else {

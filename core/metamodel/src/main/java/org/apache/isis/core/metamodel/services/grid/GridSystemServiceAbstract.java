@@ -25,9 +25,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -117,9 +114,10 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid> implements GridSystemService<G> {
+import lombok.extern.log4j.Log4j2;
 
-    private static final Logger LOG = LoggerFactory.getLogger(GridSystemServiceAbstract.class);
+@Log4j2
+public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid> implements GridSystemService<G> {
 
     private final Class<G> gridImplementation;
     private final String tns;
@@ -171,15 +169,15 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
                         grid, domainClass);
         if (valid) {
             overwriteFacets(grid, domainClass);
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
+            if(log.isDebugEnabled()) {
+                log.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
             }
         } else {
 
             if(_Context.isPrototyping()) {
                 messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
             }
-            LOG.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
+            log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
         }
     }
 

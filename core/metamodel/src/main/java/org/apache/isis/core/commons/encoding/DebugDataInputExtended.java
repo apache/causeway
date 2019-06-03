@@ -22,12 +22,10 @@ package org.apache.isis.core.commons.encoding;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class DebugDataInputExtended extends DataInputExtendedDecorator {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DebugDataInputExtended.class);
 
     public DebugDataInputExtended(final DataInputExtended input) {
         super(input);
@@ -36,22 +34,22 @@ public class DebugDataInputExtended extends DataInputExtendedDecorator {
     @Override
     public boolean readBoolean() throws IOException {
         final boolean b = super.readBoolean();
-        LOG.debug("boolean: {}", b);
+        log.debug("boolean: {}", b);
         return b;
     }
 
     @Override
     public byte readByte() throws IOException {
         final byte b = super.readByte();
-        LOG.debug("byte: {}", b);
+        log.debug("byte: {}", b);
         return b;
     }
 
     @Override
     public byte[] readBytes() throws IOException {
         final byte[] bs = super.readBytes();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("bytes: {}", new String(bs));
+        if (log.isDebugEnabled()) {
+            log.debug("bytes: {}", new String(bs));
         }
         return bs;
     }
@@ -59,29 +57,29 @@ public class DebugDataInputExtended extends DataInputExtendedDecorator {
     @Override
     public int readInt() throws IOException {
         final int i = super.readInt();
-        LOG.debug("int: {}", i);
+        log.debug("int: {}", i);
         return i;
     }
 
     @Override
     public long readLong() throws IOException {
         final long l = super.readLong();
-        LOG.debug("long: {}", l);
+        log.debug("long: {}", l);
         return l;
     }
 
     @Override
     public String readUTF() throws IOException {
         final String string = super.readUTF();
-        LOG.debug("string: {}", string);
+        log.debug("string: {}", string);
         return string;
     }
 
     @Override
     public String[] readUTFs() throws IOException {
         final String[] strings = super.readUTFs();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("list: {}", Arrays.toString(strings));
+        if (log.isDebugEnabled()) {
+            log.debug("list: {}", Arrays.toString(strings));
         }
         return strings;
     }
@@ -89,8 +87,8 @@ public class DebugDataInputExtended extends DataInputExtendedDecorator {
     @Override
     public <T> T readEncodable(final Class<T> encodableType) throws IOException {
         final T object = super.readEncodable(encodableType);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(">>> object");
+        if (log.isDebugEnabled()) {
+            log.debug(">>> object");
         }
         return object;
     }
@@ -98,7 +96,7 @@ public class DebugDataInputExtended extends DataInputExtendedDecorator {
     @Override
     public <T> T[] readEncodables(final Class<T> encodableType) throws IOException {
         final T[] objects = super.readEncodables(encodableType);
-        LOG.debug(">>> objects x{}", objects.length);
+        log.debug(">>> objects x{}", objects.length);
         return objects;
     }
 

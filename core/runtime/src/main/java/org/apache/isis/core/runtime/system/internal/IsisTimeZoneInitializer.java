@@ -21,15 +21,13 @@ package org.apache.isis.core.runtime.system.internal;
 
 import java.util.TimeZone;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
 
-public class IsisTimeZoneInitializer {
+import lombok.extern.log4j.Log4j2;
 
-    public static final Logger LOG = LoggerFactory.getLogger(IsisTimeZoneInitializer.class);
+@Log4j2
+public class IsisTimeZoneInitializer {
 
     public void initTimeZone(final IsisConfiguration configuration) {
         final String timeZoneSpec = configuration.getString(ConfigurationConstants.ROOT + "timezone");
@@ -37,9 +35,9 @@ public class IsisTimeZoneInitializer {
             TimeZone timeZone;
             timeZone = TimeZone.getTimeZone(timeZoneSpec);
             TimeZone.setDefault(timeZone);
-            LOG.info("time zone set to {}", timeZone);
+            log.info("time zone set to {}", timeZone);
         }
-        LOG.debug("time zone is {}", TimeZone.getDefault());
+        log.debug("time zone is {}", TimeZone.getDefault());
     }
 
 }

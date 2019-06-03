@@ -34,8 +34,6 @@ import org.datanucleus.enhancer.EnhancementHelper;
  */
 public class DataNucleusLifeCycleHelper {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(DataNucleusLifeCycleHelper.class);
-
     public static void cleanUp(PersistenceManagerFactory persistenceManagerFactory) {
 
         try {

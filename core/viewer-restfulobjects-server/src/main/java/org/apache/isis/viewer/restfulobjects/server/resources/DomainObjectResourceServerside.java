@@ -67,15 +67,14 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 //TODO deprecated non standard import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.PrettyPrinting;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
-import org.apache.log4j.Logger;
 
-@Path("/objects")
+import lombok.extern.log4j.Log4j2;
+
+@Path("/objects") @Log4j2
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
 
-    private final static Logger LOG = Logger.getLogger(DomainObjectResourceServerside.class);
-
     public DomainObjectResourceServerside() {
-        LOG.debug("<init>");
+        log.debug("<init>");
     }
 
     // //////////////////////////////////////////////////////////

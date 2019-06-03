@@ -39,8 +39,6 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 public class CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
         CssClassFacet {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent.class);
-
     public static Facet create(
             final List<ViewModelLayout> viewModelLayouts,
             final MetamodelEventService metamodelEventService,

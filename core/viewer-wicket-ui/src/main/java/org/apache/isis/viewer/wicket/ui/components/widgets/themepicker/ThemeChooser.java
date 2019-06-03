@@ -51,7 +51,6 @@ import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
  */
 public class ThemeChooser extends Panel {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(ThemeChooser.class);
     private static final long serialVersionUID = 1L;
 
     /**

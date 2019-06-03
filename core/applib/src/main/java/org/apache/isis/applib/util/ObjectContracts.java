@@ -22,11 +22,10 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
@@ -71,9 +70,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
  * @since 2.0.0 (re-invented)
  *
  */
+@Log4j2
 public final class ObjectContracts {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectContracts.class);
 
     private ObjectContracts() {}
 
@@ -199,8 +197,8 @@ public final class ObjectContracts {
     public static <T> boolean equals(T obj, Object other, String propertyNames) {
 
         if(obj==null && other==null) {
-            if(LOG.isWarnEnabled()) {
-                LOG.warn("potential misuse of <T> ObjectContracts::equals(T obj, Object other, "
+            if(log.isWarnEnabled()) {
+                log.warn("potential misuse of <T> ObjectContracts::equals(T obj, Object other, "
                         + "String propertyNames). First argument is not expected to be null!");
             }
             return true;

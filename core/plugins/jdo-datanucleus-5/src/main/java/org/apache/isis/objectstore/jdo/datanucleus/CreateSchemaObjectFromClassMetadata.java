@@ -26,22 +26,19 @@ import java.sql.Statement;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.base._Strings;
-
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.enhancer.EnhancementNucleusContextImpl;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.store.ConnectionEncryptionProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation note: the methods in this class are <tt>protected</tt> to allow for easy subclassing.
  */
+@Log4j2
 public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, DataNucleusPropertiesAware {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CreateSchemaObjectFromClassMetadata.class);
 
     // -- persistenceManagerFactory, properties
 
@@ -70,7 +67,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         final String password = getConnectionPassword();
 
         if(_Strings.isNullOrEmpty(driverName) || _Strings.isNullOrEmpty(url)) {
-            LOG.warn("Unable to create schema due to missing configuration javax.jdo.option.Connection*");
+            log.warn("Unable to create schema due to missing configuration javax.jdo.option.Connection*");
             return;
         }
 
@@ -85,7 +82,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
             exec(cmd, statement);
 
         } catch (SQLException e) {
-            LOG.warn("Unable to create schema", e);
+            log.warn("Unable to create schema", e);
 
         } finally {
             closeSafely(statement);
@@ -202,7 +199,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
                 }
                 catch (Exception e)
                 {
-                    LOG.warn("Error invoking decrypter class {}", decrypterName, e);
+                    log.warn("Error invoking decrypter class {}", decrypterName, e);
                 }
             }
         }

@@ -20,15 +20,12 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import de.agilecoders.wicket.core.settings.ThemeProvider;
+import lombok.val;
 
 /**
  * @since 2.0.0-M2
@@ -62,20 +59,20 @@ public interface IsisWicketThemeSupport {
     /*private*/ static IsisWicketThemeSupport createInstance() {
         
         
-        final IsisConfiguration configuration = IsisContext.getConfiguration();
+        val configuration = IsisContext.getConfiguration();
         
-        final String themeSupportClassName = configuration.getString(
+        val themeSupportClassName = configuration.getString(
                 THEME_SUPPORT_PROVIDER_KEY, THEME_SUPPORT_DEFAULT_CLASS.getName());
         
         try {
             
-            IsisWicketThemeSupport themeSupport = 
-                    (IsisWicketThemeSupport) InstanceUtil.createInstance(themeSupportClassName);
+            val themeSupport = (IsisWicketThemeSupport) InstanceUtil.createInstance(themeSupportClassName);
             return themeSupport;
             
         } catch (Exception e) {
-            final Logger LOG = LoggerFactory.getLogger(IsisWicketThemeSupport.class);
-            LOG.warn("Could not instantiate configured theme support class '{}', defaulting to '{}'",
+        	
+        	val log = org.apache.logging.log4j.LogManager.getLogger(IsisWicketThemeSupport.class);
+            log.warn("Could not instantiate configured theme support class '{}', defaulting to '{}'",
                     themeSupportClassName,
                     THEME_SUPPORT_DEFAULT_CLASS.getName());
         }

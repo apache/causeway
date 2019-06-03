@@ -21,15 +21,13 @@ package org.apache.isis.core.runtime.system.internal;
 
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
-public class IsisLocaleInitializer {
+import lombok.extern.log4j.Log4j2;
 
-    public static final Logger LOG = LoggerFactory.getLogger(IsisLocaleInitializer.class);
+@Log4j2
+public class IsisLocaleInitializer {
 
     public void initLocale(final IsisConfiguration configuration) {
         final String localeSpec = configuration.getString(SystemConstants.LOCALE_KEY);
@@ -44,9 +42,9 @@ public class IsisLocaleInitializer {
                 locale = new Locale(language, country);
             }
             Locale.setDefault(locale);
-            LOG.info("locale set to {}", locale);
+            log.info("locale set to {}", locale);
         }
-        LOG.debug("locale is {}", Locale.getDefault());
+        log.debug("locale is {}", Locale.getDefault());
     }
 
 }

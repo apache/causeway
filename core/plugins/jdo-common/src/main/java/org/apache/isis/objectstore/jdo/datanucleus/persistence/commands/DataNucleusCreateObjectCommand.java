@@ -20,17 +20,14 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
-public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCommand implements CreateObjectCommand {
+import lombok.extern.log4j.Log4j2;
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(DataNucleusCreateObjectCommand.class);
+@Log4j2
+public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCommand implements CreateObjectCommand {
 
     public DataNucleusCreateObjectCommand(ObjectAdapter adapter, PersistenceManager persistenceManager) {
         super(adapter, persistenceManager);
@@ -39,8 +36,8 @@ public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCom
 
     @Override
     public void execute(final PersistenceCommandContext context) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("create object - executing command for: {}", onAdapter());
+        if (log.isDebugEnabled()) {
+            log.debug("create object - executing command for: {}", onAdapter());
         }
         final ObjectAdapter adapter = onAdapter();
         if(!adapter.isTransient()) {

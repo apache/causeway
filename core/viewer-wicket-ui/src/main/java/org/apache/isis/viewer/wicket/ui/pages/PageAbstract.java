@@ -28,40 +28,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.devutils.debugbar.DebugBar;
-import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
-import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.ClientProperties;
-import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.PackageResource;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
@@ -96,6 +62,37 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
+import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.ClientProperties;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.PackageResource;
+import org.apache.wicket.request.resource.ResourceReference;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
@@ -103,13 +100,13 @@ import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptRefe
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
+@Log4j2
 public abstract class PageAbstract extends WebPage implements ActionPromptProvider {
-
-    private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
     
@@ -206,7 +203,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
         } catch(final RuntimeException ex) {
 
-            LOG.error("Failed to construct page, going back to sign in page", ex);
+            log.error("Failed to construct page, going back to sign in page", ex);
 
             // REVIEW: similar code in WebRequestCycleForIsis
             final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()

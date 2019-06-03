@@ -50,7 +50,6 @@ import org.apache.isis.commons.internal.resources._Resources;
 public class EmailNotificationServiceDefault implements EmailNotificationService {
     
     private static final long serialVersionUID = 1L;
-    //private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationServiceDefault.class);
 
     // -- constants
 

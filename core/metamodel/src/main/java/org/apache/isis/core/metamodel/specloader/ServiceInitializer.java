@@ -23,16 +23,14 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 
-public class ServiceInitializer {
+import lombok.extern.log4j.Log4j2;
 
-    private final static Logger LOG = LoggerFactory.getLogger(ServiceInitializer.class);
+@Log4j2
+public class ServiceInitializer {
 
     private final List<Object> services;
 
@@ -53,7 +51,7 @@ public class ServiceInitializer {
     public void validate() {
 
         for (final Object service : services) {
-            LOG.debug("checking for @PostConstruct and @PostDestroy methods on {}", service.getClass().getName());
+            log.debug("checking for @PostConstruct and @PostDestroy methods on {}", service.getClass().getName());
             final Method[] methods = service.getClass().getMethods();
 
             // @PostConstruct
@@ -111,8 +109,8 @@ public class ServiceInitializer {
     // -- postConstruct
 
     public void postConstruct() {
-        if(LOG.isInfoEnabled()) {
-            LOG.info("calling @PostConstruct on all domain services");
+        if(log.isInfoEnabled()) {
+            log.info("calling @PostConstruct on all domain services");
         }
 
         Exception firstExceptionIfAny = null;
@@ -120,8 +118,8 @@ public class ServiceInitializer {
             final Object service = entry.getKey();
             final Method method = entry.getValue();
 
-            if(LOG.isDebugEnabled()) {
-                LOG.debug(
+            if(log.isDebugEnabled()) {
+                log.debug(
                         "... calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
             }
 
@@ -135,7 +133,7 @@ public class ServiceInitializer {
                     MethodExtensions.invoke(method, service, new Object[] { props });
                 }
             } catch(Exception ex) {
-                LOG.error(String.format(
+                log.error(String.format(
                         "@PostConstruct on %s#%s: failed",
                         service.getClass().getName(), method.getName()),
                         ex);
@@ -154,22 +152,22 @@ public class ServiceInitializer {
     // -- preDestroy
 
     public void preDestroy() {
-        if(LOG.isInfoEnabled()) {
-            LOG.info("calling @PreDestroy on all domain services");
+        if(log.isInfoEnabled()) {
+            log.info("calling @PreDestroy on all domain services");
         }
         for (final Map.Entry<Object, Method> entry : preDestroyMethodsByService.entrySet()) {
             final Object service = entry.getKey();
             final Method method = entry.getValue();
 
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("... calling @PreDestroy method: {}: {}", service.getClass().getName(), method.getName());
+            if(log.isDebugEnabled()) {
+                log.debug("... calling @PreDestroy method: {}: {}", service.getClass().getName(), method.getName());
             }
 
             try {
                 MethodExtensions.invoke(method, service);
             } catch(Exception ex) {
                 // do nothing
-                LOG.warn(String.format(
+                log.warn(String.format(
                         "@PreDestroy on %s#%s: failed, continuing anyway",
                         service.getClass().getName(), method.getName()));
             }

@@ -22,8 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
@@ -34,13 +32,14 @@ import javax.ws.rs.client.ClientResponseFilter;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * 
  * @since 2.0.0-M2
  */
-@Priority(999)
+@Priority(999) @Log4j2
 public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponseFilter{
-    private static final Logger LOG = Logger.getLogger(RestfulLoggingFilter.class.getName());
 
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
@@ -77,7 +76,7 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         .append("----------------------------------------\n")
         ;
         
-        LOG.log(Level.INFO, sb.toString());
+        log.info(sb.toString());
     }
     
     @Override
@@ -99,7 +98,7 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         .append("----------------------------------------\n")
         ;
         
-        LOG.log(Level.INFO, sb.toString());
+        log.info(sb.toString());
         
     }
        

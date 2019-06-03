@@ -21,9 +21,6 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -35,9 +32,10 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
-public class PersistenceQueryFactory {
+import lombok.extern.log4j.Log4j2;
 
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFactory.class);
+@Log4j2
+public class PersistenceQueryFactory {
 
     private final SpecificationLoader specificationLoader;
     private final Function<Object, ObjectAdapter> adapterProvider;
@@ -54,8 +52,8 @@ public class PersistenceQueryFactory {
      * {@link PersistenceQuery NOF-internal representation}.
      */
     final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("createPersistenceQueryFor: {}", query.getDescription());
+        if (log.isDebugEnabled()) {
+            log.debug("createPersistenceQueryFor: {}", query.getDescription());
         }
         final ObjectSpecification noSpec = specFor(query);
         if (query instanceof QueryFindAllInstances) {

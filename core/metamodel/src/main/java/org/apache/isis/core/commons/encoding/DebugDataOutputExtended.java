@@ -21,12 +21,10 @@ package org.apache.isis.core.commons.encoding;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class DebugDataOutputExtended extends DataOutputExtendedDecorator {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DebugDataOutputExtended.class);
 
     public DebugDataOutputExtended(final DataOutputExtended underlying) {
         super(underlying);
@@ -34,59 +32,59 @@ public class DebugDataOutputExtended extends DataOutputExtendedDecorator {
 
     @Override
     public void writeBoolean(final boolean flag) throws IOException {
-        LOG.debug("boolean: {}", flag);
+        log.debug("boolean: {}", flag);
         super.writeBoolean(flag);
     }
 
     @Override
     public void writeBytes(final byte[] value) throws IOException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("bytes: ({}) {}", value.length, new String(value));
+        if (log.isDebugEnabled()) {
+            log.debug("bytes: ({}) {}", value.length, new String(value));
         }
         super.writeBytes(value);
     }
 
     @Override
     public void writeByte(final int value) throws IOException {
-        LOG.debug("byte: {}", value);
+        log.debug("byte: {}", value);
         super.writeByte(value);
     }
 
     @Override
     public void writeInt(final int value) throws IOException {
-        LOG.debug("int: {}", value);
+        log.debug("int: {}", value);
         super.writeInt(value);
     }
 
     @Override
     public void writeLong(final long value) throws IOException {
-        LOG.debug("long: {}", value);
+        log.debug("long: {}", value);
         super.writeLong(value);
     }
 
     @Override
     public void writeEncodable(final Object object) throws IOException {
-        LOG.debug(">>> object: ({})", object);
+        log.debug(">>> object: ({})", object);
         super.writeEncodable(object);
     }
 
     @Override
     public void writeEncodables(final Object[] objects) throws IOException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(">>> objects x{}", objects.length);
+        if (log.isDebugEnabled()) {
+            log.debug(">>> objects x{}", objects.length);
         }
         super.writeEncodables(objects);
     }
 
     @Override
     public void writeUTF(final String str) throws IOException {
-        LOG.debug("string: {}", str);
+        log.debug("string: {}", str);
         super.writeUTF(str);
     }
 
     @Override
     public void writeUTFs(final String[] strings) throws IOException {
-        if (LOG.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             final StringBuffer l = new StringBuffer();
             for (int i = 0; i < strings.length; i++) {
                 if (i > 0) {
@@ -94,7 +92,7 @@ public class DebugDataOutputExtended extends DataOutputExtendedDecorator {
                 }
                 l.append(strings[i]);
             }
-            LOG.debug("list: {}", l);
+            log.debug("list: {}", l);
         }
         super.writeUTFs(strings);
     }

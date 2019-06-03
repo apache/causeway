@@ -21,15 +21,14 @@ import java.util.concurrent.Callable;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -45,10 +44,8 @@ import org.apache.isis.commons.internal.collections._Maps;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
         )
-@RequestScoped
+@RequestScoped @Log4j2
 public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {
-
-    private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCacheInternal.class);
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 
@@ -122,15 +119,15 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
 
     @Programmatic
     private <T> void put(final Key cacheKey, final T result) {
-        LOG.debug("PUT: {}", cacheKey);
+        log.debug("PUT: {}", cacheKey);
         cache.put(cacheKey, new Value<T>(result));
     }
 
     private static void logHitOrMiss(final Key cacheKey, final Value<?> cacheValue) {
-        if(!LOG.isDebugEnabled()) {
+        if(!log.isDebugEnabled()) {
             return;
         }
-        LOG.debug("{}: {}", (cacheValue != null ? "HIT" : "MISS"), cacheKey.toString());
+        log.debug("{}: {}", (cacheValue != null ? "HIT" : "MISS"), cacheKey.toString());
     }
 
     /**

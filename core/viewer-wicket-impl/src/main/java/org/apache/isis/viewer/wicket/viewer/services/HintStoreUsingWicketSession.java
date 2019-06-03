@@ -22,34 +22,30 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
-
-import org.apache.wicket.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.wicket.Session;
+
+import com.google.common.collect.Maps;
+
+import lombok.extern.log4j.Log4j2;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-        )
+        ) 
+@Log4j2
 public class HintStoreUsingWicketSession implements HintStore {
-
-    private static final long serialVersionUID = 1L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(HintStoreUsingWicketSession.class);
 
     @Override
     public String get(final Bookmark bookmark, final String key) {
         final Map<String, String> hintsForBookmark = hintsFor(bookmark);
         final String value = hintsForBookmark.get(key);
 
-        if(LOG.isDebugEnabled()) {
-            LOG.debug(String.format("GET %s / %s returns %s", bookmark.toString(), key, value));
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("GET %s / %s returns %s", bookmark.toString(), key, value));
         }
 
         return value;
@@ -59,8 +55,8 @@ public class HintStoreUsingWicketSession implements HintStore {
     public void set(final Bookmark bookmark, final String key, final String value) {
         final Map<String, String> hintsForBookmark = hintsFor(bookmark);
 
-        if(LOG.isDebugEnabled()) {
-            LOG.debug(String.format("SET %s / %s to %s", bookmark.toString(), key, value));
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("SET %s / %s to %s", bookmark.toString(), key, value));
         }
 
         hintsForBookmark.put(key, value);
@@ -70,8 +66,8 @@ public class HintStoreUsingWicketSession implements HintStore {
     public void remove(final Bookmark bookmark, final String key) {
         final Map<String, String> hintsForBookmark = hintsFor(bookmark);
 
-        if(LOG.isDebugEnabled()) {
-            LOG.debug(String.format("REMOVE %s / %s", bookmark.toString(), key));
+        if(log.isDebugEnabled()) {
+            log.debug(String.format("REMOVE %s / %s", bookmark.toString(), key));
         }
 
         hintsForBookmark.remove(key);

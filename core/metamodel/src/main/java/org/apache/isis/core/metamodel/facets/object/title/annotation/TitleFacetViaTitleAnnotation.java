@@ -24,9 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -37,9 +34,11 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
 
     public static class TitleComponent {
@@ -152,7 +151,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-            LOG.warn("Title failure", ex);
+            log.warn("Title failure", ex);
             return "Failed Title";
         }
     }

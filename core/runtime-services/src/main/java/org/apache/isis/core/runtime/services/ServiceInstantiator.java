@@ -28,9 +28,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -41,6 +38,8 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.plugins.codegen.ProxyFactory;
+
+import lombok.extern.log4j.Log4j2;
 
 //import javassist.util.proxy.MethodFilter;
 //import javassist.util.proxy.MethodHandler;
@@ -69,9 +68,8 @@ import org.apache.isis.core.plugins.codegen.ProxyFactory;
  * <b>Note</b>: there is one limitation to using proxies, namely that field-level injection into
  * request-scoped services is not (yet) supported.
  */
+@Log4j2
 public final class ServiceInstantiator {
-
-    private final static Logger LOG = LoggerFactory.getLogger(ServiceInstantiator.class);
 
     public ServiceInstantiator() {
     }
@@ -90,7 +88,7 @@ public final class ServiceInstantiator {
 
     private Class<?> loadClass(final String className) {
         try {
-            LOG.debug("loading class for service: {}", className);
+            log.debug("loading class for service: {}", className);
             return _Context.loadClassAndInitialize(className);
         } catch (final ClassNotFoundException ex) {
             throw new InitialisationException(String.format("Cannot find class '%s' for service", className));
@@ -214,8 +212,8 @@ public final class ServiceInstantiator {
         }
         final int numParams = postConstructMethod.getParameterTypes().length;
 
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("... calling @PostConstruct method: {}: {}", serviceClass.getName(), postConstructMethod.getName());
+        if(log.isDebugEnabled()) {
+            log.debug("... calling @PostConstruct method: {}: {}", serviceClass.getName(), postConstructMethod.getName());
         }
         // unlike shutdown, we don't swallow exceptions; would rather fail early
         if(numParams == 0) {
@@ -234,14 +232,14 @@ public final class ServiceInstantiator {
             return;
         }
 
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("... calling @PreDestroy method: {}: {}", serviceClass.getName(), preDestroyMethod.getName());
+        if(log.isDebugEnabled()) {
+            log.debug("... calling @PreDestroy method: {}: {}", serviceClass.getName(), preDestroyMethod.getName());
         }
         try {
             MethodExtensions.invoke(preDestroyMethod, service);
         } catch(Exception ex) {
             // do nothing
-            LOG.warn("... @PreDestroy method threw exception - continuing anyway", ex);
+            log.warn("... @PreDestroy method threw exception - continuing anyway", ex);
         }
     }
 

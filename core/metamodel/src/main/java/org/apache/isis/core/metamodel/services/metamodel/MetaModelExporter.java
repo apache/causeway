@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -62,9 +59,6 @@ import org.apache.isis.schema.metamodel.v1.VectorParam;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 class MetaModelExporter {
-
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(MetaModelExporter.class);
 
     SpecificationLoader specificationLookup;
 

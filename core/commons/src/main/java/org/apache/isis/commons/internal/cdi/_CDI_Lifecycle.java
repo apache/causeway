@@ -18,19 +18,15 @@
  */
 package org.apache.isis.commons.internal.cdi;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor(staticName="of")
+@RequiredArgsConstructor(staticName="of") @Log4j2
 final class _CDI_Lifecycle implements AutoCloseable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(_CDI_Lifecycle.class);
-    
     private final CheckedRunnable onClose;
     
     @Override
@@ -41,7 +37,7 @@ final class _CDI_Lifecycle implements AutoCloseable {
             val note = "This implementation expects the IocPlugin to provide a CDIProvider "
                     + "that creates CDI instances that implement AutoClosable";
             
-            LOG.warn("Failed to properly close the CDI container. Note: {}", note, e);
+            log.warn("Failed to properly close the CDI container. Note: {}", note, e);
         }
     }
     

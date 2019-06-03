@@ -22,18 +22,16 @@ import java.util.List;
 
 import javax.jdo.JDOQLTypedQuery;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 
-public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
+import lombok.extern.log4j.Log4j2;
 
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
+@Log4j2
+public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
     public PersistenceQueryFindAllInstancesProcessor(final PersistenceSession5 persistenceSession) {
         super(persistenceSession);
@@ -50,8 +48,8 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         JDOQLTypedQuery<?> typesafeQuery = isisJdoSupport.newTypesafeQuery(cls);
         isisJdoSupport.disableMultivaluedFetch(typesafeQuery); // fetch optimization
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("allInstances(): class={}", specification.getFullIdentifier());
+        if (log.isDebugEnabled()) {
+            log.debug("allInstances(): class={}", specification.getFullIdentifier());
         }
         
         final List<?> pojos = isisJdoSupport.executeQuery(cls);

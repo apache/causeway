@@ -21,16 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.layout.menubars.MenuSection;
@@ -48,15 +38,22 @@ import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public final class ServiceActionUtil {
-
-    private final static Logger LOG = LoggerFactory.getLogger(ServiceActionUtil.class);
 
     private ServiceActionUtil(){}
 
@@ -226,7 +223,7 @@ public final class ServiceActionUtil {
                     final ObjectAction objectAction = serviceAdapter.getSpecification()
                             .getObjectAction(actionLayoutData.getId());
                     if(objectAction == null) {
-                        LOG.warn("No such action {}", actionLayoutData.getId());
+                        log.warn("No such action {}", actionLayoutData.getId());
                         continue;
                     }
                     final ServiceAndAction serviceAndAction =

@@ -18,9 +18,6 @@ package org.apache.isis.applib.services.iactn;
 
 import javax.enterprise.context.RequestScoped;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -38,9 +35,6 @@ import org.apache.isis.applib.annotation.Programmatic;
         )
 @RequestScoped
 public class InteractionContext {
-
-    @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(InteractionContext.class);
 
     private Interaction interaction;
 

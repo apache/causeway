@@ -22,13 +22,10 @@ import java.util.Locale;
 
 import javax.inject.Singleton;
 
+import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.services.i18n.LocaleProvider;
 
 
 /**
@@ -36,8 +33,6 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
  */
 @Singleton
 public class LocaleProviderWicket implements LocaleProvider {
-
-    public static final Logger LOG = LoggerFactory.getLogger(LocaleProviderWicket.class);
 
     @Override
     public Locale getLocale() {

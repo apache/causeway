@@ -31,8 +31,6 @@ public class GridFacetDefault
 extends FacetAbstract
 implements GridFacet {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(GridFacetDefault.class);
-
     public static Class<? extends Facet> type() {
         return GridFacet.class;
     }

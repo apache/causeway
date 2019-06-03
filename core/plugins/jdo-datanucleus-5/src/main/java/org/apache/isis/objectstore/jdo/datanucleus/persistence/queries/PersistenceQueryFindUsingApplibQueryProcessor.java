@@ -24,9 +24,6 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -38,9 +35,10 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingA
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
 
-public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
+import lombok.extern.log4j.Log4j2;
 
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindUsingApplibQueryProcessor.class);
+@Log4j2
+public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
 
     public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceSession5 persistenceSession) {
         super(persistenceSession);
@@ -86,8 +84,8 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final Query<?> jdoQuery = persistenceSession.newJdoQuery(cls, filter);
         isisJdoSupport.disableMultivaluedFetch(jdoQuery); // fetch optimization
         
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("{} # {} ( {} )", cls.getName(), queryName, filter);
+        if (log.isDebugEnabled()) {
+            log.debug("{} # {} ( {} )", cls.getName(), queryName, filter);
         }
 
         try {
@@ -120,8 +118,8 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
             jdoQuery.setRange(persistenceQuery.getStart(), persistenceQuery.getEnd());
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("{} # {} ( {} )", cls.getName(), queryName, argumentsByParameterName);
+        if (log.isDebugEnabled()) {
+            log.debug("{} # {} ( {} )", cls.getName(), queryName, argumentsByParameterName);
         }
 
         try {

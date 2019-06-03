@@ -21,14 +21,12 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public final class QueryUtil {
+import lombok.extern.log4j.Log4j2;
 
-    private static final Logger LOG = LoggerFactory.getLogger(QueryUtil.class);
+@Log4j2
+public final class QueryUtil {
 
     private QueryUtil() {}
 
@@ -45,7 +43,7 @@ public final class QueryUtil {
         appendWhere(buf, whereClause);
 
         final String queryString = buf.toString();
-        LOG.debug("creating query: {}", queryString);
+        log.debug("creating query: {}", queryString);
 
         final Query<?> jdoQuery = persistenceManager.newQuery(queryString);
 

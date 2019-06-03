@@ -24,31 +24,28 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.bootstrap.BootstrapThemeTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0.0-M2
  */
+@Log4j2
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IsisWicketThemeSupportDefault.class);
-    
     private static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
     
     private final _Lazy<ThemeProvider> themeProvider = _Lazy.of(this::createThemeProvider); 
@@ -93,7 +90,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
             bootswatchTheme = BootswatchTheme.valueOf(themeName);
         } catch(Exception ex) {
             bootswatchTheme = BOOTSWATCH_THEME_DEFAULT;
-            LOG.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", 
+            log.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", 
                     themeName, 
                     bootswatchTheme);
 

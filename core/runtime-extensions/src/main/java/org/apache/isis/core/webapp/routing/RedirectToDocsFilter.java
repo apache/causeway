@@ -29,8 +29,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This filter attempts to ensure that would-be users of the framework are
@@ -47,9 +46,8 @@ import org.slf4j.LoggerFactory;
  * Only if the Accept header is set to application/json is the request allowed
  * to continue through.
  */
+@Log4j2
 public class RedirectToDocsFilter implements Filter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(RedirectToDocsFilter.class);
 
     private static final String REDIRECT_TO_KEY = "redirectTo";
     private static final String REDIRECT_TO_DEFAULT = "/index.html";
@@ -65,7 +63,7 @@ public class RedirectToDocsFilter implements Filter {
         if (redirectTo == null) {
             redirectTo = REDIRECT_TO_DEFAULT;
         }
-        LOG.info("redirectToDocsFilter: redirectTo={}", redirectTo);
+        log.info("redirectToDocsFilter: redirectTo={}", redirectTo);
     }
 
     @Override
@@ -79,7 +77,7 @@ public class RedirectToDocsFilter implements Filter {
 
         // do nothing if not requesting "/"
         final String servletPath = httpServletRequest.getServletPath();
-        LOG.info("redirectToDocsFilter: servletPath: {}", servletPath);
+        log.info("redirectToDocsFilter: servletPath: {}", servletPath);
 
         if (!"/".equals(servletPath)) {
             chain.doFilter(request, response);
@@ -95,7 +93,7 @@ public class RedirectToDocsFilter implements Filter {
 
         // otherwise redirect
         final String redirect = combine(httpServletRequest.getContextPath(), redirectTo);
-        LOG.info("redirectToDocsFilter: redirecting to: {}", redirect);
+        log.info("redirectToDocsFilter: redirecting to: {}", redirect);
 
         httpServletResponse.sendRedirect(redirect);
     }

@@ -28,15 +28,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Simply logs the URL of any request that causes an exception to be thrown.
  */
+@Log4j2
 public class IsisLogOnExceptionFilter implements Filter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(IsisLogOnExceptionFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -73,6 +71,6 @@ public class IsisLogOnExceptionFilter implements Filter {
             buf.append('?').append(queryString);
         }
 
-        LOG.error("Request caused {}: {}", e.getClass().getName(), buf.toString(), e);
+        log.error("Request caused {}: {}", e.getClass().getName(), buf.toString(), e);
     }
 }

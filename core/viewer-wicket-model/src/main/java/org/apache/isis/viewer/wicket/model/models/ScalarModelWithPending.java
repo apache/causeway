@@ -18,13 +18,11 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;
@@ -38,9 +36,8 @@ public interface ScalarModelWithPending extends Serializable {
 
     public ScalarModel getScalarModel();
 
+    @Log4j2
     static class Util {
-
-        private static final Logger LOG = LoggerFactory.getLogger(ScalarModelWithPending.Util.class);
 
         public static IModel<ObjectAdapterMemento> createModel(final ScalarModel model) {
             return createModel(model.asScalarModelWithPending());
@@ -54,10 +51,10 @@ public interface ScalarModelWithPending extends Serializable {
                 @Override
                 public ObjectAdapterMemento getObject() {
                     if (owner.getPending() != null) {
-                        LOG.debug("pending not null: {}", owner.getPending().toString());
+                        log.debug("pending not null: {}", owner.getPending().toString());
                         return owner.getPending();
                     }
-                    LOG.debug("pending is null");
+                    log.debug("pending is null");
 
                     final ObjectAdapterMemento objectAdapterMemento = owner.getScalarModel().getObjectAdapterMemento();
                     owner.setPending(objectAdapterMemento);
@@ -67,7 +64,7 @@ public interface ScalarModelWithPending extends Serializable {
 
                 @Override
                 public void setObject(final ObjectAdapterMemento adapterMemento) {
-                    LOG.debug("setting to: {}", (adapterMemento!=null?adapterMemento.toString():null) );
+                    log.debug("setting to: {}", (adapterMemento!=null?adapterMemento.toString():null) );
                     owner.setPending(adapterMemento);
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
                     if (ownerScalarModel != null) {
@@ -76,7 +73,7 @@ public interface ScalarModelWithPending extends Serializable {
                         } else {
                             final ObjectAdapterMemento ownerPending = owner.getPending();
                             if (ownerPending != null) {
-                                LOG.debug("setting to pending: {}", ownerPending.toString());
+                                log.debug("setting to pending: {}", ownerPending.toString());
                                 ownerScalarModel.setObject(
                                         ownerPending.getObjectAdapter());
                             }

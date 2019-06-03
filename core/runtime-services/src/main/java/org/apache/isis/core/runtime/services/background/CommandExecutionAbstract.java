@@ -25,8 +25,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  */
 public abstract class CommandExecutionAbstract extends AbstractIsisSessionTemplate {
 
-    //private final static Logger LOG = LoggerFactory.getLogger(CommandExecutionAbstract.class);
-
     private final CommandExecutorService.SudoPolicy sudoPolicy;
 
     protected CommandExecutionAbstract(final CommandExecutorService.SudoPolicy sudoPolicy) {

@@ -25,14 +25,13 @@ import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Abstract implementation of {@link ExceptionRecognizer} that looks
@@ -44,9 +43,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
+@Log4j2
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
-
-    public static final Logger LOG = LoggerFactory.getLogger(ExceptionRecognizerAbstract.class);
 
     /**
      * Normally recognized exceptions are not logged (because they are expected and handled).
@@ -140,7 +138,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 .filter(predicate)
                 .map(throwable->{
                     if(logRecognizedExceptions) {
-                        LOG.info("Recognized exception, stacktrace : ", throwable);
+                        log.info("Recognized exception, stacktrace : ", throwable);
                     }
                     if(ex instanceof TranslatableException) {
                         final TranslatableException translatableException = (TranslatableException) ex;

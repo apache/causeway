@@ -21,18 +21,16 @@ package org.apache.isis.core.runtime.services.i18n.po;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
-import org.joda.time.LocalDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.joda.time.LocalDateTime;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 class PoWriter extends PoAbstract {
-
-    public static Logger LOG = LoggerFactory.getLogger(PoWriter.class);
 
     private static class Block {
         private final SortedSet<String> contexts = _Sets.newTreeSet();
@@ -89,7 +87,7 @@ class PoWriter extends PoAbstract {
         buf.append("\n# end of .pot file");
         buf.append("\n##############################################################################");
         buf.append("\n");
-        LOG.info(buf.toString());
+        log.info(buf.toString());
     }
 
     /**

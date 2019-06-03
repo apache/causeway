@@ -25,9 +25,6 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -44,6 +41,8 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
  * applied.
@@ -56,7 +55,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  * the {@link IsisTransactionManager} to ensure that the underlying persistence
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
-@Vetoed
+@Vetoed @Log4j2
 public class IsisTransaction implements TransactionScopedComponent, Transaction {
 
     public static class Placeholder {
@@ -156,8 +155,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         }
     }
 
-    private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
-
     // -- constructor, fields
 
     private final UUID interactionId;
@@ -195,7 +192,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
         this.state = State.IN_PROGRESS;
 
-        LOG.debug("new transaction {}", this);
+        log.debug("new transaction {}", this);
     }
 
     // -- transactionId
@@ -261,19 +258,19 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         if (command instanceof DestroyObjectCommand) {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
-                LOG.debug("ignored both create and destroy command {}", command);
+                log.debug("ignored both create and destroy command {}", command);
                 return;
             }
 
             if (alreadyHasDestroy(onObject)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("ignored command {} as command already recorded", command );
+                if (log.isDebugEnabled()) {
+                    log.debug("ignored command {} as command already recorded", command );
                 }
                 return;
             }
         }
 
-        LOG.debug("add command {}", command);
+        log.debug("add command {}", command);
         persistenceCommands.add(command);
     }
 
@@ -321,7 +318,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         //
         // ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
         //
-        LOG.debug("flush transaction {}", this);
+        log.debug("flush transaction {}", this);
 
         try {
             doFlush();
@@ -396,10 +393,10 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         assert getState().canCommit();
         assert abortCause == null;
 
-        LOG.debug("preCommit transaction {}", this);
+        log.debug("preCommit transaction {}", this);
 
         if (getState() == State.COMMITTED) {
-            LOG.info("already committed; ignoring");
+            log.info("already committed; ignoring");
             return;
         }
 
@@ -424,10 +421,10 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         assert getState().canCommit();
         assert abortCause == null;
 
-        LOG.debug("postCommit transaction {}", this);
+        log.debug("postCommit transaction {}", this);
 
         if (getState() == State.COMMITTED) {
-            LOG.info("already committed; ignoring");
+            log.info("already committed; ignoring");
             return;
         }
 
@@ -442,7 +439,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     final void markAsAborted() {
         assert getState().canAbort();
 
-        LOG.info("abort transaction {}", this);
+        log.info("abort transaction {}", this);
         setState(State.ABORTED);
     }
 

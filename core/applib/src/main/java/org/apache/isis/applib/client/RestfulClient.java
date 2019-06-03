@@ -18,10 +18,11 @@
  */
 package org.apache.isis.applib.client;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.EnumSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Client;
@@ -35,7 +36,7 @@ import org.apache.isis.applib.client.log.RestfulLoggingFilter;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Setup the Restful Client with Basic-Auth:
@@ -127,9 +128,8 @@ if(digest.isSuccess()) {
  * 
  * @since 2.0.0-M2
  */
+@Log4j2
 public class RestfulClient {
-    
-    private static final Logger LOG = Logger.getLogger(RestfulClient.class.getName());
     
     public static String DEFAULT_RESPONSE_CONTENT_TYPE = "application/json;profile=\"urn:org.apache.isis/v1\"";
 
@@ -212,7 +212,7 @@ public class RestfulClient {
             Class<?> MOXyJsonProvider = _Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider");
             client.register(MOXyJsonProvider);
         } catch (Exception e) {
-            LOG.warning("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
+            log.warn("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
                     + " on the class-path."
                     + " Are you missing a maven dependency?");
         }

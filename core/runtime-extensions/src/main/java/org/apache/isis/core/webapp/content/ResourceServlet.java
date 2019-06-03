@@ -34,15 +34,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.commons.lang.InputStreamExtensions;
 import org.apache.isis.core.commons.lang.ResourceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Serves static web-resources by class-path or file-system lookup.
@@ -54,9 +53,9 @@ import org.apache.isis.core.commons.lang.StringExtensions;
 //        )
 //[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
+@Log4j2
 public class ResourceServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ResourceServlet.class);
     private static final long serialVersionUID = 1L;
     private ResourceServlet_HtmlTemplateVariables templateVariables;
 
@@ -85,14 +84,14 @@ public class ResourceServlet extends HttpServlet {
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
-        LOG.debug("request: {}", servletPath);
+        log.debug("request: {}", servletPath);
 
         final InputStream is = ifPresentElseGet(
                 ResourceUtil.getResourceAsStream(request), // try to load from file-system first 
                 ()->ResourceUtil.getResourceAsStream(servletPath)); // otherwise, try to load from class-path  
 
         if (is != null) {
-            LOG.debug("request: {} loaded from classpath", servletPath );
+            log.debug("request: {} loaded from classpath", servletPath );
 
             try {
                 writeContentType(request, response);
@@ -103,7 +102,7 @@ public class ResourceServlet extends HttpServlet {
             }
         }
 
-        LOG.warn("failed to load resource from classpath or file system: {}", servletPath);
+        log.warn("failed to load resource from classpath or file system: {}", servletPath);
     }
 
     private void processContent(

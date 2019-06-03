@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -71,10 +68,10 @@ import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
-@DomainService(nature = NatureOfService.DOMAIN)
-public class CommandExecutorServiceDefault implements CommandExecutorService {
+import lombok.extern.log4j.Log4j2;
 
-    private final static Logger LOG = LoggerFactory.getLogger(CommandExecutorServiceDefault.class);
+@DomainService(nature = NatureOfService.DOMAIN) @Log4j2
+public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     @Override
     @Programmatic
@@ -134,7 +131,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         org.apache.isis.applib.annotation.CommandExecuteIn executeIn = commandWithDto.getExecuteIn();
 
-        LOG.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getUniqueId());
+        log.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getUniqueId());
 
         RuntimeException exceptionIfAny = null;
 
@@ -219,7 +216,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         } catch (RuntimeException ex) {
 
-            LOG.warn("Exception when executing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
+            log.warn("Exception when executing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
 
             exceptionIfAny = ex;
         }
@@ -229,7 +226,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             transactionService.nextTransaction(TransactionService.Policy.ALWAYS);
         } catch(RuntimeException ex) {
 
-            LOG.warn("Exception when committing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
+            log.warn("Exception when committing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
 
             if(exceptionIfAny == null) {
                 exceptionIfAny = ex;

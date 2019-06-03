@@ -18,15 +18,14 @@ package org.apache.isis.core.runtime.services.background;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
@@ -35,9 +34,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  * This implementation uses the {@link #findBackgroundCommandsToExecute() hook method} so that it is
  * independent of the location where the actions have actually been persisted to.
  */
+@Log4j2
 public abstract class BackgroundCommandExecution extends CommandExecutionAbstract {
-
-    private final static Logger LOG = LoggerFactory.getLogger(BackgroundCommandExecution.class);
 
     /**
      * Defaults to the historical defaults * for running background commands.
@@ -62,7 +60,7 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
             commands.addAll(findBackgroundCommandsToExecute());
         });
 
-        LOG.debug("Found {} to execute", commands.size());
+        log.debug("Found {} to execute", commands.size());
 
         for (final Command command : commands) {
             execute(transactionManager, (CommandWithDto) command);

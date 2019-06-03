@@ -24,9 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,9 +32,10 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
+import lombok.extern.log4j.Log4j2;
 
-    private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaTitleMethod.class);
+@Log4j2
+public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final TranslationService translationService;
@@ -77,7 +75,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
             }
             return null;
         } catch (final RuntimeException ex) {
-            LOG.warn("title failure", ex);
+            log.warn("title failure", ex);
             return "Failed Title";
         }
     }

@@ -22,19 +22,6 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
-import com.google.common.base.Throwables;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
@@ -68,15 +55,25 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
+
+import com.google.common.base.Throwables;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
 implements FormExecutor {
 
     private static final long serialVersionUID = 1L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(FormExecutorDefault.class);
 
     protected final M model;
     protected final WicketViewerSettings settings;
@@ -437,7 +434,7 @@ implements FormExecutor {
             }
         }
 
-        if(LOG.isDebugEnabled()) {
+        if(log.isDebugEnabled()) {
             debug(componentsToRedraw, componentsNotToRedraw);
         }
 
@@ -454,9 +451,9 @@ implements FormExecutor {
     }
 
     private void debug(final String title, final List<Component> list) {
-        LOG.debug(">>> {}:", title);
+        log.debug(">>> {}:", title);
         for (Component component : list) {
-            LOG.debug(
+            log.debug(
                     String.format("%30s: %s",
                             component.getClass().getSimpleName(),
                             component.getPath()));
