@@ -18,12 +18,11 @@
  */
 package org.apache.isis.core.runtime.headless.logging;
 
-import static org.slf4j.event.Level.INFO;
-
 import java.io.PrintStream;
 
-import org.slf4j.Logger;
-import org.slf4j.event.Level;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+
 
 public class LogConfig {
     private final String loggingPropertyFile;
@@ -61,7 +60,7 @@ public class LogConfig {
             final Level testLoggingLevel,
             final PrintStream fixtureTracing,
             final String loggingPropertyFile) {
-        this.testLoggingLevel = testLoggingLevel != null ? testLoggingLevel : INFO;
+        this.testLoggingLevel = testLoggingLevel != null ? testLoggingLevel : Level.INFO;
         this.fixtureTracing = fixtureTracing != null ? fixtureTracing : System.out;
         this.loggingPropertyFile =
                 loggingPropertyFile != null ? loggingPropertyFile : "logging-integtest.properties";

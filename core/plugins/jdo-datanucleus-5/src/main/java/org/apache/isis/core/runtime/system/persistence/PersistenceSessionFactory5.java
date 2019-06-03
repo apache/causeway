@@ -42,14 +42,14 @@ import org.apache.isis.objectstore.jdo.service.JdoEntityTypeRegistry;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  *
  * Factory for {@link PersistenceSession}.
  *
  */
-@Vetoed @Slf4j
+@Vetoed @Log4j2
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledStateHolder {
 

@@ -51,7 +51,7 @@ import org.apache.isis.security.shiro.ShiroSecurityContext;
 
 import static org.apache.isis.config.internal._Config.getConfiguration;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
@@ -63,7 +63,7 @@ import lombok.extern.slf4j.Slf4j;
  * {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  */
-@Slf4j
+@Log4j2
 public class ShiroAuthenticator implements Authenticator {
 
     private static final String ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY = "isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated";

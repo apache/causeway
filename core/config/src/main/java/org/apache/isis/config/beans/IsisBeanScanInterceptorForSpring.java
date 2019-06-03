@@ -29,9 +29,9 @@ import org.apache.isis.config.registry.TypeMetaData;
 
 import lombok.Getter;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Slf4j
+@Log4j2
 public class IsisBeanScanInterceptorForSpring implements TypeFilter {
 	
 	@Getter(lazy=true) private final IsisBeanTypeRegistry typeRegistry = IsisBeanTypeRegistry.current();

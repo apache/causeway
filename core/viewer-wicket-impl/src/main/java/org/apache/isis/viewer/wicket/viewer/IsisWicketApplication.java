@@ -107,7 +107,7 @@ import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -133,7 +133,7 @@ import net.ftlines.wicketsource.WicketSource;
  * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
  * This mechanism allows a number of other aspects to be customized.
  */
-@Slf4j
+@Log4j2
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
 implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor {

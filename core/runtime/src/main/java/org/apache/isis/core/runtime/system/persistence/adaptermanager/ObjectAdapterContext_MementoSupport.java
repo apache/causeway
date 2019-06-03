@@ -48,7 +48,7 @@ import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdap
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -57,7 +57,7 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  * @since 2.0.0-M2
  */
-@Slf4j
+@Log4j2
 class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSupport {
     
     

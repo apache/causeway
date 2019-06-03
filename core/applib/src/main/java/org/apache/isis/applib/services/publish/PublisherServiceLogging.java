@@ -26,9 +26,9 @@ import org.apache.isis.schema.ixn.v1.InteractionDto;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Singleton @Slf4j
+@Singleton @Log4j2
 public class PublisherServiceLogging implements PublisherService {
 
     @Override

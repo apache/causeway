@@ -96,9 +96,9 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Slf4j
+@Log4j2
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
     private static class SubclassList {

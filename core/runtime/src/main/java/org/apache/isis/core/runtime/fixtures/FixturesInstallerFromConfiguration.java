@@ -26,9 +26,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Slf4j
+@Log4j2
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
 
     public FixturesInstallerFromConfiguration() {

@@ -49,7 +49,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * ThreadPoolSupport is application-scoped, meaning ThreadPoolSupport is closed on
@@ -59,7 +59,7 @@ import lombok.extern.slf4j.Slf4j;
  * when application shuts down.
  *
  */
-@Slf4j
+@Log4j2
 public final class ThreadPoolSupport implements AutoCloseable {
 
     public static ThreadPoolExecutionMode HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 

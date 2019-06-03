@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
  * </p> 
  * @since 2.0.0-M2
  */
-//@Slf4j
+//@Log4j2
 @RequiredArgsConstructor
 class ObjectAdapterContext_DependencyInjection {
     

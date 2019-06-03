@@ -26,6 +26,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.integtestsupport.components.HeadlessTransactionSupportDefault;
 import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
@@ -58,7 +60,7 @@ class JdoBootstrappingTest {
     @Inject IsisSessionFactory isisSessionFactory;
     @Inject HeadlessTransactionSupport transactions;
     @Inject FixtureScripts fixtureScripts;
-    private Inventory inventory;
+    @Inject RepositoryService repository;
     
     @BeforeEach
     void setUp() {
@@ -72,7 +74,7 @@ class JdoBootstrappingTest {
                 JdoTestDomainPersona.PurgeAll.builder());
 
         // given
-        inventory = fixtureScripts.runBuilderScript(
+        fixtureScripts.runBuilderScript(
                 JdoTestDomainPersona.InventoryWith1Book.builder());
         
         transactions.endTransaction();
@@ -84,12 +86,24 @@ class JdoBootstrappingTest {
     @Test
     void sampleInventoryShouldBeSetUp() {
 
+    	isisSessionFactory.openSession(new InitialisationSession());
+    	
+    	transactions.beginTransaction();
+    	
+    	val inventories = Bin.ofCollection(repository.allInstances(Inventory.class)); 
+		assertEquals(1, inventories.size());
+		
+		val inventory = inventories.getSingleton().get();
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(1, inventory.getProducts().size());
         
         val product = inventory.getProducts().iterator().next();
         assertEquals("Sample Book", product.getName());
+        
+        transactions.endTransaction();
+        
+        isisSessionFactory.closeSession();
         
     }
 

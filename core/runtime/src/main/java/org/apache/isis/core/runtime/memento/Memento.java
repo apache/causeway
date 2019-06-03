@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -51,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
  * easily. Also for a persistent objects only the reference's {@link Oid}s are
  * held, avoiding the need for serializing the whole object graph.
  */
-@Slf4j
+@Log4j2
 public class Memento implements Serializable {
 
     private final static long serialVersionUID = 1L;

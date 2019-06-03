@@ -26,13 +26,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-
+import org.springframework.context.annotation.PropertySources;
+import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.core.security.IsisSecurityBoot;
 
 @Configuration
-@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
+
 @Import({IsisSecurityBoot.class})
 @ComponentScan(
         basePackageClasses= {
@@ -41,6 +42,11 @@ import org.apache.isis.core.security.IsisSecurityBoot;
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
+@PropertySources({
+	@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
+    @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
+})
 public class JdoTestDomainModule {
     
    @Bean @Produces @Singleton

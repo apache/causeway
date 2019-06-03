@@ -30,10 +30,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 class EventSpring<T> implements Event<T> {
 
     private final ApplicationEventPublisher publisher;

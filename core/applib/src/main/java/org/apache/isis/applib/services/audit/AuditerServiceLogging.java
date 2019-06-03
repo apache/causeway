@@ -26,10 +26,10 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 @Singleton
-@Slf4j
+@Log4j2
 public class AuditerServiceLogging implements AuditerService {
 
     @PostConstruct

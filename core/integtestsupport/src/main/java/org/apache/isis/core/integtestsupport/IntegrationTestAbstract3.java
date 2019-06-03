@@ -27,7 +27,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-import org.slf4j.event.Level;
 
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.IsisConfiguration;
@@ -35,6 +34,7 @@ import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
+import org.apache.logging.log4j.Level;
 
 /**
  * Reworked base class for integration tests, uses a {@link Module} to bootstrap, rather than an {@link AppManifest}.

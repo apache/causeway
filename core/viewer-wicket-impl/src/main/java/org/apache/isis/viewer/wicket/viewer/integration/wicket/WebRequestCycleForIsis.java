@@ -76,7 +76,7 @@ import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
@@ -85,7 +85,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @since 2.0.0-M3
  */
-@Slf4j
+@Log4j2
 public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     private PageClassRegistry pageClassRegistry;

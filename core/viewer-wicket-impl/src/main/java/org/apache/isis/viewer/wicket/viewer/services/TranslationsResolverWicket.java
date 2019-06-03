@@ -43,13 +43,13 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 
 /**
  * An implementation that reads from /WEB-INF/...
  */
-@Singleton @Slf4j
+@Singleton @Log4j2
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     @Override

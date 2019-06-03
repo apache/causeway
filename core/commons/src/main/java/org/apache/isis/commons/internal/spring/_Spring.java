@@ -57,7 +57,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <h1>- internal use only -</h1>
@@ -69,7 +69,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @since 2.0.0
  */
-@Slf4j
+@Log4j2
 public class _Spring {
 
     public static boolean isContextAvailable() {

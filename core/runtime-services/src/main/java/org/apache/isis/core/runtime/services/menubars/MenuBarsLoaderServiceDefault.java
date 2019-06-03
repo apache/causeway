@@ -31,9 +31,9 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.beans.WebAppConfigBean;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Singleton @Slf4j
+@Singleton @Log4j2
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     
     @Override

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2MultiChoice</tt>;
@@ -40,7 +40,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
     public ScalarModel getScalarModel();
     
-    @Slf4j
+    @Log4j2
     static class Util {
 
         public static IModel<ArrayList<ObjectAdapterMemento>> createModel(final ScalarModel model) {

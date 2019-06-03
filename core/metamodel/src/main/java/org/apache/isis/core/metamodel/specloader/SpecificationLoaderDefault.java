@@ -41,7 +41,7 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <p>
@@ -59,7 +59,7 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  */
 @Singleton
-@Slf4j
+@Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 
 	private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();

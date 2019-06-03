@@ -50,12 +50,12 @@ import org.apache.isis.core.runtime.threadpool.ThreadPoolExecutionMode;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0.0
  */
-@Singleton @Slf4j
+@Singleton @Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
 
     @Override

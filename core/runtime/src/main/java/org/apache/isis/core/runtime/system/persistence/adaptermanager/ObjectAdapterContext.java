@@ -42,14 +42,14 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Encapsulate ObjectAdpater life-cycling.  
  *  
  * @since 2.0.0-M2
  */
-@Slf4j
+@Log4j2
 final public class ObjectAdapterContext {
 
     public static ObjectAdapterContext openContext(

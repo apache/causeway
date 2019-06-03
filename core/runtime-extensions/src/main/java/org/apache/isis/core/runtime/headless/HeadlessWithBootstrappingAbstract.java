@@ -20,9 +20,6 @@ package org.apache.isis.core.runtime.headless;
 
 import java.io.PrintStream;
 
-import org.joda.time.LocalDate;
-import org.slf4j.event.Level;
-
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.IsisConfiguration;
@@ -31,8 +28,9 @@ import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LogStream;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
+import org.apache.logging.log4j.Level;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides headless access to the system, first bootstrapping the system if required.
@@ -43,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
  *     to bootstrap the system with a given module for headless access.
  * </p>
  */
-@Slf4j
+@Log4j2
 public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract {
 
     private final LogConfig logConfig;
@@ -89,7 +87,7 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
     }
 
 
-    private LocalDate timeBeforeTest;
+    private org.joda.time.LocalDate timeBeforeTest;
 
     protected void bootstrapAndSetupIfRequired() {
 

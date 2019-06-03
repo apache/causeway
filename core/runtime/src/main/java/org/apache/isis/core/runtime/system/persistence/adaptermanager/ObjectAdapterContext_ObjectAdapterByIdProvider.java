@@ -42,7 +42,7 @@ import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -51,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
  * </p> 
  * @since 2.0.0-M2
  */
-@Slf4j
+@Log4j2
 class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByIdProvider {
     
     private final ObjectAdapterContext objectAdapterContext;

@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.runtime.headless.logging;
 
-import org.slf4j.Logger;
-import org.slf4j.event.Level;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 public class LeveledLogger {
 
@@ -33,23 +33,26 @@ public class LeveledLogger {
     }
 
     public void log(final String message) {
-        switch (level) {
-            case ERROR:
-                logger.error(message);
-                break;
-            case WARN:
-                logger.warn(message);
-                break;
-            case INFO:
-                logger.info(message);
-                break;
-            case DEBUG:
-                logger.debug(message);
-                break;
-            case TRACE:
-                logger.trace(message);
-                break;
-        }
+    	logger.log(level, message);
+    	
+//[2112]    	
+//        switch (level.) {
+//            case ERROR:
+//                logger.error(message);
+//                break;
+//            case WARN:
+//                logger.warn(message);
+//                break;
+//            case INFO:
+//                logger.info(message);
+//                break;
+//            case DEBUG:
+//                logger.debug(message);
+//                break;
+//            case TRACE:
+//                logger.trace(message);
+//                break;
+//        }
     }
 
 }

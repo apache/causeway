@@ -27,9 +27,9 @@ import org.apache.isis.config.IsisConfiguration;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Slf4j
+@Log4j2
 class _Config_LifecycleResource {
     
     private final Map<String, String> mutableProperties; 

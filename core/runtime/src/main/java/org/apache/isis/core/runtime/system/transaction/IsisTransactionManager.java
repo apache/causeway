@@ -36,9 +36,9 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
-@Vetoed @Slf4j
+@Vetoed @Log4j2
 public class IsisTransactionManager implements SessionScopedComponent {
 
     private int transactionLevel;

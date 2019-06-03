@@ -33,13 +33,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Holds the set of domain services, persistent entities and fixture scripts.services etc.
  * @since 2.0.0-M3
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE) @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE) @Log4j2
 public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoCloseable {
 
     public static IsisBeanTypeRegistry current() {

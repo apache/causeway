@@ -66,7 +66,7 @@ import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 import lombok.val;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
@@ -78,7 +78,7 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  *
  */
-@Singleton @Slf4j
+@Singleton @Log4j2
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Inject private IsisConfiguration configuration;

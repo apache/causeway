@@ -21,8 +21,8 @@ package org.apache.isis.core.runtime.headless.logging;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import org.slf4j.Logger;
-import org.slf4j.event.Level;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 public class LogStream extends OutputStream {
 
