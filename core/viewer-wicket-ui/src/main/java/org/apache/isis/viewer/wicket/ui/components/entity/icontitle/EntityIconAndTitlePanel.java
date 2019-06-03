@@ -63,7 +63,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
 
-    @SuppressWarnings("unused")
     private Label label;
     @SuppressWarnings("unused")
     private Image image;

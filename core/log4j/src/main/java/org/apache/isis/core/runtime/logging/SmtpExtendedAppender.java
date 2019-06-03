@@ -18,14 +18,6 @@
  */
 package org.apache.isis.core.runtime.logging;
 
-import java.io.UnsupportedEncodingException;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeUtility;
-
-import org.apache.logging.log4j.core.appender.SmtpAppender;
-import org.slf4j.event.LoggingEvent;
-
 @Deprecated //cannot subclass SmtpAppender from Log4j v2
 public class SmtpExtendedAppender { //extends SmtpAppender {
 //

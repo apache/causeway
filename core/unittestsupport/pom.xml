@@ -36,8 +36,11 @@
 
 		<!-- core plugin loading -->
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-commons</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<!-- convergence issues from spring-boot-starter-log4j2 -->
+			<version>${slf4j-api.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- framework default core-codegen-plugin for tests -->
@@ -71,6 +74,10 @@
 					<!-- we use log4j-2 instead -->
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -191,17 +198,14 @@
 				<dependency>
 					<groupId>javax.xml.bind</groupId>
 					<artifactId>jaxb-api</artifactId>
-					<version>2.3.0</version>
 				</dependency>
 				<dependency>
 					<groupId>com.sun.xml.bind</groupId>
 					<artifactId>jaxb-core</artifactId>
-					<version>2.3.0</version>
 				</dependency>
 				<dependency>
 					<groupId>com.sun.xml.bind</groupId>
 					<artifactId>jaxb-impl</artifactId>
-					<version>2.3.0</version>
 				</dependency>
 			</dependencies>
 		</profile>

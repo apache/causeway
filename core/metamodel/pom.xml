@@ -68,6 +68,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.slf4j</groupId>
+            		<artifactId>slf4j-api</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -110,6 +116,10 @@
             	<exclusion>
             		<groupId>org.yaml</groupId>
             		<artifactId>snakeyaml</artifactId>
+            	</exclusion>
+            	<exclusion>
+            		<groupId>org.slf4j</groupId>
+            		<artifactId>slf4j-api</artifactId>
             	</exclusion>
             </exclusions>
         </dependency>

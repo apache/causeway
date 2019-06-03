@@ -30,13 +30,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.plugins.PluginResolveException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * <h1>- internal use only -</h1>
@@ -110,7 +109,7 @@ public final class _Plugin {
     // -- CONVENIENT PICK ANY
 
     public static <T> T pickAnyAndWarn(Class<T> pluginInterfaceClass, Set<T> ambiguousPlugins) {
-        final Logger log = LoggerFactory.getLogger(pluginInterfaceClass);
+        final Logger log = LogManager.getLogger(pluginInterfaceClass);
         final T any = ambiguousPlugins.iterator().next();
 
         log.warn(String.format("You have more than one plugin implementing '%s' on your class-path [%s], "

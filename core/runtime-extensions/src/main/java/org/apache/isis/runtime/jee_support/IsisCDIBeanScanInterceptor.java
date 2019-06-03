@@ -31,10 +31,9 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  *
@@ -53,9 +52,9 @@ import lombok.val;
  *
  *
  */
+@Log4j2
 public final class IsisCDIBeanScanInterceptor implements Extension {
 
-    private static final Logger log = LoggerFactory.getLogger(IsisCDIBeanScanInterceptor.class);
     private final static _Probe probe = 
     		_Probe.unlimited().label("IsisCDIBeanScanInterceptor");
 

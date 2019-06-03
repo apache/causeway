@@ -85,11 +85,23 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.slf4j</groupId>
+            		<artifactId>slf4j-api</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
 	
         <dependency>
             <groupId>net.ftlines.wicket-source</groupId>
             <artifactId>wicket-source</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.slf4j</groupId>
+            		<artifactId>slf4j-api</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         
         <!-- Spring -->
