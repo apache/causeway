@@ -1,40 +1,8 @@
 # TODO's
-## Fix Integration Tests
-* PropertyDescriptionHandlerTest ->
-* 
 ## Implement Features
-* Link Button for Objects
-cell {
-                        add(button("Delete") {
-                            style = ButtonStyle.INFO
-                        })
-                    }
-
-* Generic Tables (ResultList etc.)
 * List<Member> ^= TObject?
 * direct Accessors ^= Methods  / indirect Accessors ^= Map.get(byName), sufficient for use in tables 
 * Form Layout
-* Switch the backend from Apache Isis 1.16.0 to 2.0.0-RC2
-* Use Layout.xml for menu and layout
-
-### Parse XML
-Either via 
-* JAXB -> Java -> Kotlin/JS or
-* https://github.com/pdvrieze/xmlutil (implementation("net.devrieze:xmlutil-js:0.9.0"))
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bs3:grid
-  xsi:schemaLocation="http://isis.apache.org/applib/layout/component
-                      http://isis.apache.org/applib/layout/component/component.xsd
-                      http://isis.apache.org/applib/layout/grid/bootstrap3
-                      http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
-  xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
-  xmlns:c="http://isis.apache.org/applib/layout/component"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    ...
-</bs3:grid>
-```
-
 
 ## Fix Bugs   
 * Sequence of menu entries is random. Use layout.xml

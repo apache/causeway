@@ -88,10 +88,10 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                     val p = cd.property
                     val v = p.get(logEntry)
                     when (v) {
-                        is String -> {
+ /*                       is String -> {
                             title = "A tooltip: $v"
                             enableTooltip()
-                        }
+                        } */
                         is Date -> cell(v.toStringF("HH:mm:ss.SSS"))
                         is EventState -> cell {
                             button(I18n.tr(logEntry.title), icon = v.iconName, style = ButtonStyle.LINK)

@@ -85,7 +85,7 @@ class EventLogTable2(val model: List<LogEntry>) : VPanel() {
                 persistenceMode = false
         )
 
-        val tabulator = Tabulator<LogEntry>(model, options = options)
+        val tabulator = Tabulator(model, options = options)
         marginTop = 0.px
         marginBottom = 0.px
         setEventListener<Tabulator<LogEntry>> {

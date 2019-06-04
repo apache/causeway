@@ -19,7 +19,6 @@ data class LogEntry(
         val url: String,
         val method: String? = "",
         val request: String = "") {
-    var m : String?    //TODO Deprecated
     var state = EventState.INITIAL
     var menu: ActionMenu? = null  //TODO Deprecated, use iconName
     var title: String = ""
@@ -28,7 +27,6 @@ data class LogEntry(
         state = EventState.RUNNING
         menu = ActionMenu("fa-ellipsis-h")
         title = stripHostPort(url)
-        m = method
     }
 
     var createdAt = Date()

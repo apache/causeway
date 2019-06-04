@@ -13,8 +13,15 @@ object RoView : TabPanel() {
     fun addTab(
             title: String, 
             panel: Component): TabPanel {
+        
         val icon = IconManager.find(title)
-        //TODO with 0.36 always use closeable=true
-        return super.addTab(title, panel, icon, image=null)
+        
+        val result = super.addTab(
+                title,
+                panel,
+                icon,
+                image=null,
+                closable = true)
+        return result
     }
 }

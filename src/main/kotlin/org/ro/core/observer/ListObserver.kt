@@ -33,18 +33,18 @@ class ListObserver : BaseObserver() {
             else -> log(le)
         }
 
-        console.log("[ListObserver.handleView] hasLayout: ${list.hasLayout()}")
+//        console.log("[ListObserver.handleView] hasLayout: ${list.hasLayout()}")
         if (list.hasLayout()) {
             handleView()
         }
     }
 
     private fun handleList(resultList: ResultList) {
-        console.log("[ListObserver.handleList] obj == ResultList")
+//        console.log("[ListObserver.handleList] obj == ResultList")
         val result = resultList.result!!
         val members = result.value
         for (l: Link in members) {
-            console.log("[ListObserver.handleList] link:\n $l")
+//            console.log("[ListObserver.handleList] link:\n $l")
             l.invoke(this)
         }
     }
@@ -80,7 +80,6 @@ class ListObserver : BaseObserver() {
     }
 
     private fun handleObject(obj: TObject) {
- //       console.log("[ListObserver.handleObject] adding TObject:\n ${obj}")
         list.list.add(ObjectAdapter(obj))
         if (!list.hasLayout()) {
             val link = obj.getLayoutLink()!!
