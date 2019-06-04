@@ -1,17 +1,17 @@
-= vs Event Sourcing
+= Apache Isis vs Event Sourcing
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
 
 
 
-The xref:_ugfun_core-concepts_apache-isis-vs_cqrs#[CQRS architecture] (discussed above) is often combined with _Event Sourcing_ pattern, though they are separate ideas.
+The xref:ug:fun/core-concepts/apache-isis-vs/cqrs.adoc[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
 
 With event sourcing, each business operation emits a domain event (or possibly events) that allow other objects in the system to act accordingly.
 For example, if a customer places an order then this might emit the `OrderPlacedEvent`.
 Most significantly, the subscribers to these events can include the datastore itself; the state of the system is in effect a transaction log of every event that has occurred since "the beginning of time": it is sometimes called an event store.
 With CQRS, this event datastore corresponds to the command/write datastore (the query/read datastore is of course derived from the command datastore).
 
-Although it might seem counter-intuitive to be able store persistent state in this way (as a souped up "transaction log"), the reality is that with modern compute capabilities make it quite feasible to replay many 10s/100s of thousands of events in a second.
+Although it might seem counter-intuitive to be able store persistent state in this way (as some kind of souped-up "transaction log"), the reality is that with modern compute capabilities make it quite feasible to replay many 10s or 100s of thousands of events in a second.
 And the architecture supports some interesting use cases; for example it becomes quite trivial to rewind the system back to some previous point in time.
 
 When combined with CQRS we see a command that triggers a business operation, and an event that results from it.

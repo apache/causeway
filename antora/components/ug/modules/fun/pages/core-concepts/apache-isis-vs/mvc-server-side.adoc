@@ -1,4 +1,4 @@
-= vs MVC server-side
+= Apache Isis vs MVC server-side
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
 
@@ -11,8 +11,8 @@ These frameworks all use the classic  *model-view-controller* ( _MVC_) pattern f
 The views provided out of the box by these frameworks tend to be simple  _CRUD_-style interfaces.
 More sophisticated behavior is accomplished by customizing the generated controllers.
 
-The most obvious difference when developing an Apache Isis application is its deliberate lack of an explicit controller layer; non- _CRUD_ behavior is automatically made available in its generic object-oriented  _UI_s.
-More sophisticated UIs can be built either by xref:ug:vw:extending.adoc[extending Apache Isis' Wicket viewer] or by writing a bespoke UI leveraging the REST (hypermedia) API automatically exposed by xref:ug:vro:about.adoc[Isis' Restful Objects viewer].
+The most obvious difference when developing an Apache Isis application is its deliberate lack of an explicit controller layer; non- _CRUD_ behavior is automatically made available in its generic object-oriented  __UI__s.
+More sophisticated UIs can be built either by xref:ug:vw:extending.adoc[extending Apache Isis' Wicket viewer] or by writing a bespoke UI leveraging the REST (hypermedia) API automatically exposed by Apache Isis' xref:ug:vro:about.adoc[Restful Objects] viewer.
 Other frameworks can also be used to implement REST APIs, of course, but generally they require a significant amount of development to get anywhere near the level of sophistication provided automatically by Apache Isis' REST API.
 
 Although these frameworks all provide their own ecosystems of extensions, Apache Isis' equivalent link:http://platform.incode.org[Incode Platform^] modules (non-ASF) tend to work at a higher-level of abstraction.

@@ -24,7 +24,6 @@
 **** xref:core-concepts/apache-isis-vs/mvc-server-side.adoc[MVC Server Side]
 **** xref:core-concepts/apache-isis-vs/cqrs.adoc[CQRS]
 **** xref:core-concepts/apache-isis-vs/event-sourcing.adoc[Event Sourcing]
-**** xref:core-concepts/apache-isis-vs/metawidget.adoc[Metawidget]
 
 *** xref:core-concepts/deployment-options.adoc[Deployment Options]
 

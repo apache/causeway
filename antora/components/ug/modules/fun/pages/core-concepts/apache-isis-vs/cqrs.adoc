@@ -1,9 +1,9 @@
-= vs CQRS
+= Apache Isis vs CQRS
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
 
 
-The CQRS architectural pattern (it stands for "Command Query Responsibility Separation") is the idea that the domain objects that mutate the state of the system - to which commands are sent and which then execute - should be separated from the mechanism by which the state of the system is queried (rendered).
+The link:https://martinfowler.com/bliki/CQRS.html[CQRS architectural pattern] (it stands for "Command Query Responsibility Separation") is the idea that the domain objects that mutate the state of the system - to which commands are sent and which then execute - should be separated from the mechanism by which the state of the system is queried (rendered).
 The former are sometimes called the "write (domain) model", the latter the "read model".
 
 In the canonical version of this pattern there are separate datastores.
@@ -29,7 +29,7 @@ There are other reasons though why a separate read model might make sense, such 
 In these cases Apache Isis can often provide a reasonable alternative, namely to map domain entities against RDBMS views, either materialized views or dynamic.
 In such cases there is still only a single physical datastore, and so transactional integrity is retained.
 
-Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:rg:svc:spi/PublisherService.adoc[`PublisherService`], or using xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscribers]  on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
+Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], or using xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscribers]  on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
 One can then use xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models] to surface the data in the external read datastore.
 
 With respect to commands, Apache Isis does of course support the xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] which allows each business action to be reified into a `Command`.
@@ -41,7 +41,7 @@ With Apache Isis, though, the end-user merely invokes the `placeOrder(...)` acti
 In CQRS the commands correspond to the business logic that mutates the system.
 Whether this logic is part of the command class (`PlaceOrderCommand`) or whether that command delegates to methods on the domain object is an implementation detail; but it certainly is common for the business logic to be wholly within the command object and for the domain object to be merely a data holder of the data within the command/write datastore.
 
-In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] or xref:ug:fun:how-tos/contributed-members.adoc[contributions].
+In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins].
 In the UI (surfaced by the xref:ug:vw:about.adoc[Wicket viewer]) or in the REST API (surfaced by the xref:ug:vro:about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
 
 
