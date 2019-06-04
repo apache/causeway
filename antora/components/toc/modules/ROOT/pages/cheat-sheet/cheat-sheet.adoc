@@ -15,4 +15,4 @@ image::cheat-sheets/cover.png[width="800px",link="resources/cheat-sheets/IsisChe
 
 pass:[<br/>]
 
-You can download the cheat sheet as either a link:resources/cheat-sheets/IsisCheatSheet.pdf[Acrobat PDF] or as an link:resources/cheat-sheets/IsisCheatSheet.docx[MS Word .docx] file.
+You can download the cheat sheet as either a link:cheat-sheets/IsisCheatSheet.pdf[Acrobat PDF] or as an link:resources/cheat-sheets/IsisCheatSheet.docx[MS Word .docx] file.

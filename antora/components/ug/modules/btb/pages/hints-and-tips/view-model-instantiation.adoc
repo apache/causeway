@@ -69,7 +69,7 @@ public class YearSummary {                                                  // <
 
 This collection, is, confusing, rendered as:
 
-image::hints-and-tips/view-model-fail.png[width="800px",link="{imagesdir}hints-and-tips/view-model-fail.png"]
+image::hints-and-tips/view-model-fail.png[width="800px",link="{imagesdir}/hints-and-tips/view-model-fail.png"]
 
 Even though the `amountsPerOffice` collection of view models is correctly populated, the framework/viewer maps these to their corresponding OIDs before they are rendered.
 Because the "Amsterdam" pojo and "London" pojo each mapped to the same OID, when fetching out the results the viewer obtains the London pojo both times.
@@ -107,7 +107,7 @@ The framework "sees" the domain object when services are injected into it.
 
 As can be seen, this renders just fine:
 
-image::hints-and-tips/view-model-success.png[width="800px",link="{imagesdir}hints-and-tips/view-model-success.png"]
+image::hints-and-tips/view-model-success.png[width="800px",link="{imagesdir}/hints-and-tips/view-model-success.png"]
 
 
 To complicate matters a little, note though that following "incorrect" implementation using `FactoryService` does also work correctly:

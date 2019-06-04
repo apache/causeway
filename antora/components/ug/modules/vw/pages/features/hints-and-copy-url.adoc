@@ -21,7 +21,7 @@ The following screenshots are taken from the [Estatio](https://github.com/estati
 
 This screenshot shows the copy URL button (top right):
 
-image::copy-link/010-copy-link-button.png[width="800px",link="{imagesdir}copy-link/010-copy-link-button.png"]
+image::copy-link/010-copy-link-button.png[width="800px",link="{imagesdir}/copy-link/010-copy-link-button.png"]
 
 [NOTE]
 ====
@@ -30,7 +30,7 @@ Note that these screenshots show an earlier version of the xref:ug:vw:about.adoc
 
 Clicking on this button brings up a dialog with the URL preselected:
 
-image::copy-link/020-copy-link-dialog.png[width="800px",link="{imagesdir}copy-link/020-copy-link-dialog.png"]
+image::copy-link/020-copy-link-dialog.png[width="800px",link="{imagesdir}/copy-link/020-copy-link-dialog.png"]
 
 
 The URL in this case is something like:
@@ -44,14 +44,14 @@ The user can copy the link (eg `ctrl+C`) into the clipboard, then hit `OK` or `E
 
 Using the viewer the user can hide/show collection tables, can sort the tables by header columns:
 
-image::copy-link/030-hints.png[width="800px",link="{imagesdir}copy-link/030-hints.png"]
+image::copy-link/030-hints.png[width="800px",link="{imagesdir}/copy-link/030-hints.png"]
 
 
 Also, if the collection spans multiple pages, then the individual page can be selected.
 
 Once the view has been customised, the URL shown in the copy URL dialog is in an extended form:
 
-image::copy-link/040-copy-link-with-hints.png[width="800px",link="{imagesdir}copy-link/040-copy-link-with-hints.png"]
+image::copy-link/040-copy-link-with-hints.png[width="800px",link="{imagesdir}/copy-link/040-copy-link-with-hints.png"]
 
 The URL in this case is something like:
 
@@ -65,7 +65,7 @@ When the user invokes an action on the object, the URL (necessarily) changes to 
 
 A quick way for the user to grab a shareable URL is simply by clicking on the object's title:
 
-image::copy-link/050-title-url.png[width="800px",link="{imagesdir}copy-link/050-title-url.png"]
+image::copy-link/050-title-url.png[width="800px",link="{imagesdir}/copy-link/050-title-url.png"]
 
 
 

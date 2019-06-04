@@ -52,7 +52,7 @@ For most other frameworks that would require having to test the application in a
 
 The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
 
-image::testing/integ-tests.png[width="700px",link="{imagesdir}testing/integ-tests.png"]
+image::testing/integ-tests.png[width="700px",link="{imagesdir}/testing/integ-tests.png"]
 
 If the test invokes an action that is disabled, then the wrapper will throw an appropriate exception.  If the action is ok to invoke, it delegates through.
 

@@ -57,7 +57,7 @@ These are _not_ the same as the original view models; they are provided as a con
 These two main responsibilities can then be placed into separate Maven profiles, for better modularity.  The diagram
 below shows the overall design:
 
-image::maven-plugin/xsd-goal.png[width="800px",link="{imagesdir}maven-plugin/xsd-goal.png"]
+image::maven-plugin/xsd-goal.png[width="800px",link="{imagesdir}/maven-plugin/xsd-goal.png"]
 
 For example, here is the `pom.xml` file for the (non-ASF)
 http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app's `todoapp-xsd` submodule.

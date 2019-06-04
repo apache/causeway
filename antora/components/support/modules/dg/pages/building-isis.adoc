@@ -17,7 +17,7 @@ The easiest place to get hold of command-line git is probably the http://git-scm
 
 On Windows, this also installs the rather good mSysGit Unix shell. We recommend that you enable git for both the mSysgit and the Windows command prompt:
 
-image::building-isis/setting-up-git.png[width="350px",link="{imagesdir}building-isis/setting-up-git.png"]
+image::building-isis/setting-up-git.png[width="350px",link="{imagesdir}/building-isis/setting-up-git.png"]
 
 Once git is installed, the two main command line tools to note are:
 

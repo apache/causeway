@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 CommApp is an application whose domain is that of managing businesses themselves, specifically the commercial aspects
 of a business.  You can get a feel for it from this screenshot:
 
-image::powered-by/commapp/screenshot-1.png[width="900px",link="{imagesdir}powered-by/commapp/screenshot-1.png"]
+image::powered-by/commapp/screenshot-1.png[width="900px",link="{imagesdir}/powered-by/commapp/screenshot-1.png"]
 
 which shows how the app integrates a number of the (non-ASF) link:http://platform.incode.org[Incode Platform^] componennts
 (excel, fullcalendar2, gmap3 and wickedcharts).

@@ -9,7 +9,7 @@
 **** xref:core-concepts/philosophy/hexagonal-architecture.adoc[Hexagonal Architecture]
 **** xref:core-concepts/philosophy/aop.adoc[AOP]
 // **** xref:core-concepts/philosophy/dci.adoc[DCI] // FIXME: incomplete
-**** xref:core-concepts.philosophy/how-eases-ddd.adoc[How eases DDD]
+**** xref:core-concepts/philosophy/how-eases-ddd.adoc[How eases DDD]
 
 *** xref:core-concepts/principles.adoc[Principles]
 **** xref:core-concepts/principles/build-not-buy.adoc[Build not Buy]

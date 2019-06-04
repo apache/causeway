@@ -51,7 +51,7 @@ isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=fa
 
 Consider the link:http://yuml.me/edit/742ad446[entities]:
 
-image::reference-classes/issue-in-more-detail.png[link="{imagesdir}reference-classes/issue-in-more-detail.png"]
+image::reference-classes/issue-in-more-detail.png[link="{imagesdir}/reference-classes/issue-in-more-detail.png"]
 
 In the course of a transaction, the `Agreement` entity is loaded into memory (not necessarily modified), and then new ``AgreementRole``s are associated to it.
 

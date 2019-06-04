@@ -45,7 +45,7 @@ The Restful Objects spec may be downloaded directly from github as either a PDF 
 The diagram below - taken from the Restful Objects spec - shows the various resources (URLs) and representations (JSON)
 that are defined:
 
-image::restfulobjects/ro-spec-resources-and-representations.png[width="800px",link="{imagesdir}restfulobjects/ro-spec-resources-and-representations.png"]
+image::restfulobjects/ro-spec-resources-and-representations.png[width="800px",link="{imagesdir}/restfulobjects/ro-spec-resources-and-representations.png"]
 
 The resource URLs are always well-defined, but Apache Isis' implementation allows for different representations to
 be returned, using content negotiation.  This is discussed further below.

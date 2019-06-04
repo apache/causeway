@@ -18,7 +18,7 @@ In other words: a domain object or view may declare its parent (with respect to 
 
 The following screenshot shows the navigation links below the top menu bar.
 
-image::where-am-i/hello_grey_bg.png[width="720px",link="{imagesdir}where-am-i/hello_grey_bg.png"]
+image::where-am-i/hello_grey_bg.png[width="720px",link="{imagesdir}/where-am-i/hello_grey_bg.png"]
 
 
 == Domain Code

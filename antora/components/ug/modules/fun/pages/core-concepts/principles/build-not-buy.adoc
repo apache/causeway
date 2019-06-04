@@ -18,7 +18,7 @@ These extra unnecessary features make the system difficult to learn and use.;
 The diagram below illustrates the dichotomy:
 
 .build-vs-buy
-image::core-concepts/philosophy/build-vs-buy.png[width="800px",link="{imagesdir}core-concepts/philosophy/build-vs-buy.png"]
+image::core-concepts/philosophy/build-vs-buy.png[width="800px",link="{imagesdir}/core-concepts/philosophy/build-vs-buy.png"]
 
 What happens in this case is that end-users -- needing some sort of solution for their particular business problem -- will end up using unused fields to store the information they need.
 We end up with no correlation between the fields definitions and the values stored therein, sometimes with the datatypes not even matching.

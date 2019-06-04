@@ -17,18 +17,18 @@ For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^] mod
 
 The menus themselves can be placed either on a primary, secondary or tertiary menu bar, as shown in this screenshot (taken from http://github.com/estatio/estatio[Estatio], an open source estate management application built using Apache Isis):
 
-image::application-menu/layout-menus.png[width="800px",link="{imagesdir}application-menu/layout-menus.png"]
+image::application-menu/layout-menus.png[width="800px",link="{imagesdir}/application-menu/layout-menus.png"]
 
 Within a single top-level menu (eg "Fixed Assets") there can be actions from multiple services.
 The Wicket viewer shows these as separate sections, with a divider between each:
 
-image::application-menu/dividers.png[width="400px",link="{imagesdir}application-menu/dividers.png"]
+image::application-menu/dividers.png[width="400px",link="{imagesdir}/application-menu/dividers.png"]
 
 
 The tertiary menu bar consists of a single unnamed menu, rendered underneath the user's login, top right.
 This is intended primarily for actions pertaining to the user themselves, eg their account, profile or settings:
 
-image::application-menu/tertiary.png[width="300px",link="{imagesdir}application-menu/tertiary.png"]
+image::application-menu/tertiary.png[width="300px",link="{imagesdir}/application-menu/tertiary.png"]
 
 
 The Apache Isis framework provides two mechanisms to control the arrangement of domain service actions across menubars and menus, either using annotations or using a file-based layout.

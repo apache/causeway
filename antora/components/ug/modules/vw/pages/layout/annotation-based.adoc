@@ -159,15 +159,15 @@ Below are sketches for the layout of the https://github.com/apache/isis/blob/f38
 
 The first divides the properties into two equal sized columns (6-6-0) and puts the collections underneath (12):
 
-image::reference-layout/6-6-0-12.png[width="720px",link="{imagesdir}reference-layout/6-6-0-12.png"]
+image::reference-layout/6-6-0-12.png[width="720px",link="{imagesdir}/reference-layout/6-6-0-12.png"]
 
 The next divides the collections into three equal sized columns (4-4-4) and again puts the collections underneath (12):
 
-image::reference-layout/4-4-4-12.png[width="720px",link="{imagesdir}reference-layout/4-4-4-12.png"]
+image::reference-layout/4-4-4-12.png[width="720px",link="{imagesdir}/reference-layout/4-4-4-12.png"]
 
 The last puts the properties into a single column (4-0) and places the collections into the other larger column (8-0):
 
-image::reference-layout/4-0-8-0.png[width="720px",link="{imagesdir}reference-layout/4-0-8-0.png"]
+image::reference-layout/4-0-8-0.png[width="720px",link="{imagesdir}/reference-layout/4-0-8-0.png"]
 
 
 == Other Annotations

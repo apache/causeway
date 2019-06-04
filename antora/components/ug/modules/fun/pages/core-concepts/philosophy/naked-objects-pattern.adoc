@@ -32,7 +32,7 @@ __________________________
 You can learn much more about the pattern in the book, link:http://www.amazon.com/exec/obidos/ISBN=0470844205/[Naked Objects], also freely available to link:http://www.nakedobjects.org/book/[read online].
 Richard co-wrote the book with one of Apache Isis' committers, Robert Matthews, who was in turn the author of the Naked Objects Framework for Java (the original codebase of of Apache Isis).
 
-You might also want to read Richard's link:resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD on the subject].
+You might also want to read Richard's link:{attachmentsdir}/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD on the subject].
 
 
 [TIP]
@@ -61,7 +61,6 @@ We sometimes use this idea to explain naked objects to a bunch of developers.
 Just as an ORM (such as link:http://datanucleus.org[DataNucleus] or link:http://hibernate.org[Hibernate]) maps domain entities to a database, you can think of the naked objects pattern as representing the concept of mapping domain objects to a user interface.
 
 This is the way that the link:http://metawidget.org/[MetaWidget] team, in particular Richard Kennard, the primary contributor, likes to describe their tool.
-MetaWidget has a number of ideas in common with Apache Isis (we compare Apache Isis' with MetaWidget xref:ug:fun:core-concepts/principles/apache-isis-vs/metawidget.adoc[here]), in particular the runtime generation of a UI for domain objects.
 You can hear more from Kennard and others on this http://devchat.tv/js-jabber/150-jsj-oims[Javascript Jabber podcast].
 
 

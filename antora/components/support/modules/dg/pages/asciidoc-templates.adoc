@@ -509,7 +509,7 @@ include::_attributes.adoc[]
 //| Example
 //
 //|`adimgfile`
-//|`\image:xxx/yyy.png[width="WWWpx",link="{imagesdir}xxx/yyy.png"]`
+//|`\image:xxx/yyy.png[width="WWWpx",link="{imagesdir}/xxx/yyy.png"]`
 //
 //embeds specified image, where:
 //
@@ -519,9 +519,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}layouts/estatio-Lease.png"]`
+//`\image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}/layouts/estatio-Lease.png"]`
 //
-//|image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}layouts/estatio-Lease.png"]
+//|image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}/layouts/estatio-Lease.png"]
 //
 //
 //

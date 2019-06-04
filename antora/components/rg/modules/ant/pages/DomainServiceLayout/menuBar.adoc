@@ -19,16 +19,16 @@ public class ToDoItems {
 
 In the xref:ug:vw:about.adoc[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
 
-image::reference-annotations/DomainServiceLayout/menuBar-primary.png[width="720px",link="{imagesdir}reference-annotations/DomainServiceLayout/menuBar-primary.png"]
+image::reference-annotations/DomainServiceLayout/menuBar-primary.png[width="720px",link="{imagesdir}/reference-annotations/DomainServiceLayout/menuBar-primary.png"]
 
 Domain services placed on the `SECONDARY` menu bar appear to the right:
 
-image::reference-annotations/DomainServiceLayout/menuBar-secondary.png[width="720px",link="{imagesdir}reference-annotations/DomainServiceLayout/menuBar-secondary.png"]
+image::reference-annotations/DomainServiceLayout/menuBar-secondary.png[width="720px",link="{imagesdir}/reference-annotations/DomainServiceLayout/menuBar-secondary.png"]
 
 
 Domain services placed on the `TERTIARY` appear in the menu bar associated with the user's name (far top-right)
 
-image::reference-annotations/DomainServiceLayout/menuBar-tertiary.png[width="720px",link="{imagesdir}reference-annotations/DomainServiceLayout/menuBar-tertiary.png"]
+image::reference-annotations/DomainServiceLayout/menuBar-tertiary.png[width="720px",link="{imagesdir}/reference-annotations/DomainServiceLayout/menuBar-tertiary.png"]
 
 
 The grouping of multiple domain services actions within a single drop-down is managed by the xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] attribute.

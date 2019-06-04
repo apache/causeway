@@ -15,7 +15,7 @@ In conjunction with xref:rg:cfg:application-specific/application-css.adoc[`appli
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add a strikethrough for completed todo items.
 This is shown on the home page:
 
-image::reference-methods/reserved/cssClass/strikethrough.png[width="800px",link="{imagesdir}reference-methods/reserved/cssClass/strikethrough.png"]
+image::reference-methods/reserved/cssClass/strikethrough.png[width="800px",link="{imagesdir}/reference-methods/reserved/cssClass/strikethrough.png"]
 
 
 The code to accomplish this is straightforward:

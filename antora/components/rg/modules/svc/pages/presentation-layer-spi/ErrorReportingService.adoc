@@ -100,6 +100,6 @@ public class KitchensinkErrorReportingService implements ErrorReportingService {
 
 which is rendered as:
 
-image::reference-services-spi/ErrorReportingService/kitchensink-example.png[width="860px",link="{imagesdir}reference-services-spi/ErrorReportingService/kitchensink-example.png"]
+image::reference-services-spi/ErrorReportingService/kitchensink-example.png[width="860px",link="{imagesdir}/reference-services-spi/ErrorReportingService/kitchensink-example.png"]
 
 

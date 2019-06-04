@@ -14,7 +14,7 @@ This allows more flexible representations to be generated for REST clients that 
 In all there are three domain services that can influence the representations generated: this service, xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`].
 The diagram below shows how these collaborate:
 
-image::RepresentationService/service-collaborations.png[width="700px",link="{imagesdir}RepresentationService/service-collaborations.png"]
+image::RepresentationService/service-collaborations.png[width="700px",link="{imagesdir}/RepresentationService/service-collaborations.png"]
 
 The `RepresentationServiceContentNegotiator` is the default implementation of the top-level `RepresentationService`, and it delegates to list of injecting `ContentNegotiationService` services.
 Using a chain of responsibility pattern, it returns the first non-null representation.

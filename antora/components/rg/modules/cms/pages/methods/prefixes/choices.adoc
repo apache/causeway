@@ -54,7 +54,7 @@ Action parameters also support the notion of dependent choices, whereby the list
 
 An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], whereby `ToDoItem`s are categorized and then can also be subcategorized:
 
-image::reference-methods/prefixes/choices/dependent.png[width="800px",link="{imagesdir}reference-methods/prefixes/choices/dependent.png"]
+image::reference-methods/prefixes/choices/dependent.png[width="800px",link="{imagesdir}/reference-methods/prefixes/choices/dependent.png"]
 
 
 

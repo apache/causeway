@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 The following presentation, available in multiple formats, provides some background on Apache Isis:
 
-* Introduction to Apache Isis (link:resources/downloadable-presentations/IntroducingApacheIsis.pptx[pptx], link:resources/downloadable-presentations/IntroducingApacheIsis.ppt[ppt], link:resources/downloadable-presentations/IntroducingApacheIsis.odp[odp], link:resources/downloadable-presentations/IntroducingApacheIsis-slides.pdf[pdf slides], link:resources/downloadable-presentations/IntroducingApacheIsis-notes.pdf[pdf notes])
+* Introduction to Apache Isis (link:downloadable-presentations/IntroducingApacheIsis.pptx[pptx], link:downloadable-presentations/IntroducingApacheIsis.ppt[ppt], link:downloadable-presentations/IntroducingApacheIsis.odp[odp], link:downloadable-presentations/IntroducingApacheIsis-slides.pdf[pdf slides], link:downloadable-presentations/IntroducingApacheIsis-notes.pdf[pdf notes])
 
 
 [WARNING]

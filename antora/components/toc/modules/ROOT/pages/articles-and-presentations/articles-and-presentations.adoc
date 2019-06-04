@@ -76,7 +76,7 @@ Slides available *link:http://www.danhaywood.com/spa2016/#/[here]*
 
 == 2004:
 
-* *Richard Pawson's link:../../guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis on Naked Objects]*
+* *Richard Pawson's link:../../guides/ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis on Naked Objects]*
 * Article series, TheServerSide
 * Part 1 - link:http://www.theserverside.com/news/1365562/Part-1-The-Case-for-Naked-Objects-Getting-Back-to-the-Object-Oriented-Ideal[The Case for Naked Objects - Getting Back to the Object-Oriented Ideal]
 * *Part 2 - link:http://www.theserverside.com/news/1365568/Part-2-Challenging-the-Dominant-Design-of-the-4-Layer-Architecture[Challenging the Dominant Design of the 4-Layer Architecture]*

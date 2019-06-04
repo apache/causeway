@@ -70,7 +70,7 @@ include::_attributes.adoc[]
 
 * xref:articles-and-presentations/articles-and-presentations.html[Articles, Conferences, Podcasts]
 * xref:books/books.html[Books]
-* link:guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
+* link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
 * https://cwiki.apache.org/confluence/display/ISIS/Index[Apache Isis Wiki]
 
 Other academia:
