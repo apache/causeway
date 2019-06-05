@@ -16,29 +16,28 @@
  */
 package org.apache.isis.testdomain.tests;
 
-import javax.inject.Inject;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.integtestsupport.components.HeadlessTransactionSupportDefault;
-import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.val;
 
@@ -59,37 +58,59 @@ import lombok.val;
 class JdoBootstrappingTest {
 
     @Inject IsisSessionFactory isisSessionFactory;
-    @Inject HeadlessTransactionSupport transactions;
+    @Inject //HeadlessTransactionSupport transactions;
+    TransactionService transactionService;
     @Inject FixtureScripts fixtureScripts;
     @Inject RepositoryService repository;
     
     @BeforeEach
+    void beforeEach() {
+        System.out.println("================== START ====================");
+    }
+    
     void setUp() {
+    	
+    	System.out.println("================== OPEN SESSION ====================");
         
         isisSessionFactory.openSession(new InitialisationSession());
+        transactionService.nextTransaction();
         
-        transactions.beginTransaction();
+//        System.out.println("================== BEGIN TX ====================");
+//        
+//        transactions.beginTransaction();
         
-        // cleanup
-        fixtureScripts.runBuilderScript(
-                JdoTestDomainPersona.PurgeAll.builder());
+//        System.out.println("================== RUN FIXTURE 1 ====================");
+//        
+//        // cleanup
+//        fixtureScripts.runBuilderScript(
+//                JdoTestDomainPersona.PurgeAll.builder());
+        
+        System.out.println("================== RUN FIXTURE 2 ====================");
 
         // given
         fixtureScripts.runBuilderScript(
                 JdoTestDomainPersona.InventoryWith1Book.builder());
         
-        transactions.endTransaction();
+        System.out.println("================== END TX ====================");
+        
+        transactionService.nextTransaction(); //transactions.endTransaction();
+        
+        System.out.println("================== CLOSE SESSION ====================");
         
         isisSessionFactory.closeSession();
+        
+        System.out.println("================== DONE ====================");
 
     }
     
     @Test
     void sampleInventoryShouldBeSetUp() {
+    	
+    	setUp();
 
     	isisSessionFactory.openSession(new InitialisationSession());
     	
-    	transactions.beginTransaction();
+    	//transactions.beginTransaction();
     	
     	val inventories = Bin.ofCollection(repository.allInstances(Inventory.class)); 
 		assertEquals(1, inventories.size());
@@ -102,7 +123,7 @@ class JdoBootstrappingTest {
         val product = inventory.getProducts().iterator().next();
         assertEquals("Sample Book", product.getName());
         
-        transactions.endTransaction();
+        //transactions.endTransaction();
         
         isisSessionFactory.closeSession();
         

@@ -19,6 +19,7 @@ package org.apache.isis.testdomain.tests;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,6 +39,7 @@ import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,6 +70,11 @@ class JdoTransactionTest {
 
 	@Inject RepositoryService repository;
 
+	@BeforeAll
+	static void launchH2Console() throws SQLException {
+		H2Console.main(null);
+	}
+	
 	@BeforeEach
 	void setUp() {
 
@@ -97,7 +104,7 @@ class JdoTransactionTest {
 		
 			isisSessionFactory.openSession(new InitialisationSession());
 	
-			//transactions.beginTransaction();
+			transactions.beginTransaction();
 	
 			Set<Product> products = new HashSet<>();
 	
@@ -108,7 +115,7 @@ class JdoTransactionTest {
 			val inventory = Inventory.of("Sample Inventory", products);
 			repository.persist(inventory);
 	
-			//transactions.endTransaction();
+			transactions.endTransaction();
 	
 			isisSessionFactory.closeSession();
 		

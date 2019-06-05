@@ -45,7 +45,7 @@ public enum BeanSort {
     
     /**
      * Object associated with an 'entity' or 'bean' to act as contributer of 
-     * domain actions or properties.  
+     * domain actions or properties. Might also be stateful similar to VIEW_MODEL
      */
     MIXIN,
     

@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
@@ -600,8 +601,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
         final ObjectSpecification specification = adapter.getSpecification();
-        if (specification.isService()) {
-            throw new NotPersistableException("Cannot persist services: " + adapter);
+        if (specification.isBean()) {
+            throw new NotPersistableException("Cannot persist beans: " + adapter);
         }
 
         getTransactionManager().executeWithinTransaction(()->{
@@ -923,6 +924,12 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     
     @Override
     public ManagedObjectState stateOf(@Nullable Object pojo) {
+    	
+    	// guard against misuse
+    	if(pojo instanceof ObjectAdapter) {
+    		throw _Exceptions.unexpectedCodeReach();
+    	}
+    	
         if (pojo!=null && pojo instanceof Persistable) {
             val persistable = (Persistable) pojo;
             val isDeleted = persistable.dnIsDeleted();

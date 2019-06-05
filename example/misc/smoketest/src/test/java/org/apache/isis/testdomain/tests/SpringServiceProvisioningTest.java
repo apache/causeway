@@ -43,7 +43,7 @@ import lombok.val;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
         classes = {
-            JdoTestDomainModule.class, 
+            //JdoTestDomainModule.class, 
             IsisBoot.class},
         properties = {
                 //"isis.reflector.introspector.parallelize=false",

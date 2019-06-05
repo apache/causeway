@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
@@ -30,7 +29,7 @@ import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Inbox;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -41,6 +40,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -161,7 +161,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     private final int sequence;
     //    private final AuthenticationSession authenticationSession;
 
-    private final List<PersistenceCommand> persistenceCommands = _Lists.newArrayList();
+    private final Inbox<PersistenceCommand> persistenceCommands = new Inbox<>();
     private final IsisTransactionManager transactionManager;
     //    private final MessageBroker messageBroker;
     private final PublishingServiceInternal publishingServiceInternal;
@@ -258,7 +258,9 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         if (command instanceof DestroyObjectCommand) {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
-                log.debug("ignored both create and destroy command {}", command);
+                if (log.isDebugEnabled()) {
+                	log.debug("ignored both create and destroy command {}", command);
+                }
                 return;
             }
 
@@ -287,7 +289,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     }
 
     private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
-        for (final PersistenceCommand command : persistenceCommands) {
+        for (final PersistenceCommand command : persistenceCommands.snapshot()) {
             if (command.onAdapter().equals(onObject)) {
                 if (commandClass.isAssignableFrom(command.getClass())) {
                     return command;
@@ -361,14 +363,12 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         do {
             // this algorithm ensures that we never execute the same command twice,
             // and also allow new commands to be added to end
-            final List<PersistenceCommand> persistenceCommandList = _Lists.newArrayList(persistenceCommands);
+            val pc_snapshot = persistenceCommands.snapshotThenClear();
 
-            if(!persistenceCommandList.isEmpty()) {
-                // so won't be processed again if a flush is encountered subsequently
-                persistenceCommands.removeAll(persistenceCommandList);
+            if(!pc_snapshot.isEmpty()) {
                 try {
-                    this.transactionManager.getPersistenceSession().execute(persistenceCommandList);
-                    for (PersistenceCommand persistenceCommand : persistenceCommandList) {
+                    this.transactionManager.getPersistenceSession().execute(pc_snapshot);
+                    for (PersistenceCommand persistenceCommand : pc_snapshot) {
                         if (persistenceCommand instanceof DestroyObjectCommand) {
                             final ObjectAdapter adapter = persistenceCommand.onAdapter();
                             adapter.setVersion(null);

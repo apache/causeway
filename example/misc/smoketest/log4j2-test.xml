@@ -25,6 +25,8 @@
 		
 		<logger name="DataNucleus.Persistence" level="debug"/>
 		<logger name="DataNucleus.Transaction" level="debug"/>
+		<logger name="DataNucleus.Datastore.Schema" level="debug"/>
+		<logger name="DataNucleus.Datastore.Native" level="debug"/>
 		
 		<Root level="info">
 			<AppenderRef ref="Console" />

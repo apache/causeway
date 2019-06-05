@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Property;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -41,7 +42,7 @@ import lombok.ToString;
 @Version(strategy= VersionStrategy.DATE_TIME, column="version")
 @DomainObject(auditing = Auditing.ENABLED)
 @DomainObjectLayout()  // causes UI events to be triggered
-@AllArgsConstructor(staticName = "of") @ToString
+@NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
 public class Inventory {
     
     public String title() {

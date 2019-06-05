@@ -47,6 +47,7 @@ import domainapp.dom.HelloWorldModule;
     @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(name=Presets.DataNucleus, factory = Presets.Factory.class, value = { "" }),
 })
 @Import({
 	IsisWebRestfulBoot.class,
