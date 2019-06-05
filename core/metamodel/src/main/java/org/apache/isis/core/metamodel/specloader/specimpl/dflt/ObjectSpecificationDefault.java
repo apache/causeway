@@ -279,7 +279,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     @Override
-    public boolean isBean() {
+    public boolean isManagedBean() {
         return isManagedBean;
     }
 

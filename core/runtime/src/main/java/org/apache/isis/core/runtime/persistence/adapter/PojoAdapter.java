@@ -151,7 +151,7 @@ public final class PojoAdapter implements ObjectAdapter {
     @Override
     public boolean isTransient() {
         val spec = getSpecification();
-        if(spec.isBean() || spec.isViewModel()) {
+        if(spec.isManagedBean() || spec.isViewModel()) {
             // services and view models are treated as persistent objects
             return false;
         }
@@ -167,7 +167,7 @@ public final class PojoAdapter implements ObjectAdapter {
     @Override
     public boolean isRepresentingPersistent() {
         val spec = getSpecification();
-        if(spec.isBean() || spec.isViewModel()) {
+        if(spec.isManagedBean() || spec.isViewModel()) {
             // services and view models are treated as persistent objects
             return true;
         }
@@ -182,7 +182,7 @@ public final class PojoAdapter implements ObjectAdapter {
     @Override
     public boolean isDestroyed() {
         val spec = getSpecification();
-        if(spec.isBean() || spec.isViewModel() || spec.isValue()) {
+        if(spec.isManagedBean() || spec.isViewModel() || spec.isValue()) {
             // services and view models are treated as persistent objects
             return false;
         }

@@ -601,7 +601,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
         final ObjectSpecification specification = adapter.getSpecification();
-        if (specification.isBean()) {
+        if (specification.isManagedBean()) {
             throw new NotPersistableException("Cannot persist beans: " + adapter);
         }
 

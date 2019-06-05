@@ -65,7 +65,7 @@ public class TypeActionResultReprRenderer extends ReprRendererAbstract<TypeActio
     }
 
     protected void putExtensionsIfService() {
-        getExtensions().mapPut("isService", objectSpecification.isBean());
+        getExtensions().mapPut("isService", objectSpecification.isManagedBean());
     }
 
 }

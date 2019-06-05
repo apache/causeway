@@ -146,7 +146,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		    if(spec!=null) specificationsFromRegistry.add(spec);
 
 		    switch (sort) {
-            case BEAN:
+            case MANAGED_BEAN:
                 typeRegistry.getBeanTypes().add(type);
                 domainServiceSpecs.add(spec);
                 return;

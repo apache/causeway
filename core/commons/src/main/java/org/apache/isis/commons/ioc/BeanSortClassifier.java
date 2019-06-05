@@ -23,7 +23,7 @@ public interface BeanSortClassifier {
     BeanSort quickClassify(Class<?> type);
 
     default boolean isManagedBean(Class<?> type) {
-        return quickClassify(type) == BeanSort.BEAN;
+        return quickClassify(type) == BeanSort.MANAGED_BEAN;
     }
     
 }

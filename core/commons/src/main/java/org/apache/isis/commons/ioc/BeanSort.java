@@ -18,6 +18,10 @@
  */
 package org.apache.isis.commons.ioc;
 
+/**
+ * Top level object classification.
+ *
+ */
 public enum BeanSort {
     
     /**
@@ -41,11 +45,11 @@ public enum BeanSort {
      * Injectable object, associated with a lifecycle context 
      * (application-scoped, request-scoped, ...).
      */
-    BEAN, 
+    MANAGED_BEAN, 
     
     /**
      * Object associated with an 'entity' or 'bean' to act as contributer of 
-     * domain actions or properties. Might also be stateful similar to VIEW_MODEL
+     * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
      */
     MIXIN,
     
@@ -61,8 +65,8 @@ public enum BeanSort {
     
     UNKNOWN;
 
-    public boolean isBean() {
-        return this == BEAN;
+    public boolean isManagedBean() {
+        return this == MANAGED_BEAN;
     }
 
     public boolean isMixin() {

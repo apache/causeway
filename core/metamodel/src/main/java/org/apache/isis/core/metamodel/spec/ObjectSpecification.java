@@ -357,13 +357,8 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * Whether this specification represents a bean, that is a managed object
      * with scoped life-cycle, available for dependency injection. 
      */
-    default boolean isBean() {
-        return getBeanSort().isBean();
-    }
-    
-    @Deprecated //TODO[2112] improper naming, what exactly is a service?
-    default boolean isService() {
-        return isBean();
+    default boolean isManagedBean() {
+        return getBeanSort().isManagedBean();
     }
 
     default boolean isViewModel() {

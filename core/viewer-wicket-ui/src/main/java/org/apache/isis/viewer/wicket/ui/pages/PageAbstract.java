@@ -472,7 +472,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         case INLINE_AS_IF_EDIT:
         default:
             final ConfigPropertyEnum<DialogMode> configProp =
-                    sort == BeanSort.BEAN
+                    sort == BeanSort.MANAGED_BEAN
                             ? CONFIG_DIALOG_MODE_FOR_MENUS
                             : CONFIG_DIALOG_MODE;
             final DialogMode dialogMode = configProp.from(getConfiguration());

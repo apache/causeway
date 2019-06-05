@@ -95,7 +95,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
     private static boolean isService(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {
             ObjectSpecification objectSpecification = (ObjectSpecification) facetHolder;
-            return objectSpecification.isBean();
+            return objectSpecification.isManagedBean();
         }
         return false;
     }
@@ -166,7 +166,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
         if(objectSpec.isMixin()) {
             return false;
         }
-        if (objectSpec.isBean()) {
+        if (objectSpec.isManagedBean()) {
             // don't check if domain service isn't a target in public API (UI/REST)
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if(domainServiceFacet != null) {

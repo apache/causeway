@@ -28,9 +28,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.Bin;
-import org.apache.isis.core.integtestsupport.components.HeadlessTransactionSupportDefault;
-import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.spring.IsisBoot;
@@ -51,7 +50,6 @@ import lombok.val;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
 		classes = {
-				HeadlessTransactionSupportDefault.class,
 				IsisBoot.class,
 				FixtureScriptsDefault.class,
 				JdoTestDomainModule.class,
@@ -65,14 +63,14 @@ import lombok.val;
 class JdoTransactionTest {
 
 	@Inject IsisSessionFactory isisSessionFactory;
-	@Inject HeadlessTransactionSupport transactions;
+	@Inject TransactionService transactionService;
 	@Inject FixtureScripts fixtureScripts;
 
 	@Inject RepositoryService repository;
 
 	@BeforeAll
 	static void launchH2Console() throws SQLException {
-		H2Console.main(null);
+		//H2Console.main(null);
 	}
 	
 	@BeforeEach
@@ -80,13 +78,11 @@ class JdoTransactionTest {
 
 		isisSessionFactory.openSession(new InitialisationSession());
 
-		transactions.beginTransaction();
+		transactionService.nextTransaction();
 
 		// cleanup
 		fixtureScripts.runBuilderScript(
 				JdoTestDomainPersona.PurgeAll.builder());
-
-		transactions.endTransaction();
 
 		isisSessionFactory.closeSession();
 	}
@@ -97,15 +93,16 @@ class JdoTransactionTest {
 		// expected pre condition: no inventories
 		
 		isisSessionFactory.openSession(new InitialisationSession());
+		
+		transactionService.nextTransaction();
+		
 		assertEquals(0, repository.allInstances(Inventory.class).size());
-		isisSessionFactory.closeSession();
+		
 
 		{ // setup sample Inventory
 		
-			isisSessionFactory.openSession(new InitialisationSession());
-	
-			transactions.beginTransaction();
-	
+			transactionService.nextTransaction();
+			
 			Set<Product> products = new HashSet<>();
 	
 			products.add(Book.of(
@@ -115,15 +112,12 @@ class JdoTransactionTest {
 			val inventory = Inventory.of("Sample Inventory", products);
 			repository.persist(inventory);
 	
-			transactions.endTransaction();
-	
-			isisSessionFactory.closeSession();
-		
+
 		}
 
 		// expected post condition: ONE inventory
 
-		isisSessionFactory.openSession(new InitialisationSession());
+		transactionService.nextTransaction();
 		
 		val inventories = Bin.ofCollection(repository.allInstances(Inventory.class)); 
 		assertEquals(1, inventories.size());

@@ -95,7 +95,7 @@ class MetaModelServiceDefaultTest {
                 allowing(mockSpec).subclasses(Depth.DIRECT);
                 will(returnValue(Collections.emptyList()));
                 
-                allowing(mockSpec).isBean();
+                allowing(mockSpec).isManagedBean();
                 will(returnValue(true));
             }
         });

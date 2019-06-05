@@ -84,8 +84,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-import lombok.val;
-
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
@@ -512,7 +510,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
             }
 
             private void validate(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
-                if(!isEntityOrViewModel(thisSpec)) {
+                if(!thisSpec.isEntityOrViewModel()) {
                     return;
                 }
 
@@ -523,7 +521,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                         continue;
                     }
 
-                    if(!isEntityOrViewModel(otherSpec)) {
+                    if(!otherSpec.isEntityOrViewModel()) {
                         continue;
                     }
 
@@ -571,13 +569,6 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
     }
-    
-    // -- HELPER
-    
-    private boolean isEntityOrViewModel(ObjectSpecification spec) {
-        val type = spec.getBeanSort();
-        return type.isEntity() || type.isViewModel();
-    }
-    
+
 
 }

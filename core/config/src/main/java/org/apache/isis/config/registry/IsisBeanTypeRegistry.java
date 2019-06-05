@@ -146,7 +146,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             entityTypes.add(type); 
         }
 
-        val isToBeProvisioned = beanSort.isBean();
+        val isToBeProvisioned = beanSort.isManagedBean();
         val isToBeInspected = !beanSort.isUnknown();
 
         if(isToBeInspected) {
@@ -182,7 +182,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
         val aDomainService = getAnnotation(type, DomainService.class);
         if(aDomainService!=null) {
-            return BeanSort.BEAN;
+            return BeanSort.MANAGED_BEAN;
         }
         
         //this takes precedence over whatever @DomainObject has to say
@@ -226,23 +226,23 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         }
 
         if(ApplicationScopedComponent.class.isAssignableFrom(type)) {
-            return BeanSort.BEAN;
+            return BeanSort.MANAGED_BEAN;
         }
 
         if(SessionScopedComponent.class.isAssignableFrom(type)) {
-            return BeanSort.BEAN;
+            return BeanSort.MANAGED_BEAN;
         }
 
         if(TransactionScopedComponent.class.isAssignableFrom(type)) {
-            return BeanSort.BEAN;
+            return BeanSort.MANAGED_BEAN;
         }
 
         if(getAnnotation(type, RequestScoped.class)!=null) {
-            return BeanSort.BEAN;
+            return BeanSort.MANAGED_BEAN;
         }
 
         if(getAnnotation(type, Singleton.class)!=null) {
-            return BeanSort.BEAN;
+            return BeanSort.MANAGED_BEAN;
         }
         
         if(Serializable.class.isAssignableFrom(type)) {

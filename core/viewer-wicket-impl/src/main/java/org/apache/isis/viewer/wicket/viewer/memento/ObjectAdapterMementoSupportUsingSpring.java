@@ -18,13 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.viewer.memento;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -42,8 +43,6 @@ import org.apache.isis.core.runtime.persistence.adapter.ObjectAdapterForBean;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -93,7 +92,7 @@ public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMeme
         probe.println(msg);
         
         switch (sort) {
-        case BEAN:
+        case MANAGED_BEAN:
             return ObjectAdapterMementoUsingSupport.of(null, sort, spec.getSpecId(), null);
 
         case ENTITY:
@@ -158,7 +157,7 @@ public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMeme
         
         // we need get some meta info on the object, deciding how to
         switch (sort) {
-        case BEAN:
+        case MANAGED_BEAN:
             
             val bean = serviceRegistry.lookupRegisteredBeanByNameElseFail(specId.asString());
             return ObjectAdapterForBean.of(bean, specificationLoader);

@@ -96,9 +96,9 @@ public class DomainMemberDefault implements DomainMember {
     public String getClassType() {
         boolean service = false;
         for(ObjectSpecification subspecs: spec.subclasses(Hierarchical.Depth.DIRECT)) {
-            service = service || subspecs.isBean();
+            service = service || subspecs.isManagedBean();
         }
-        return service || spec.isBean() ?"2 Service":spec.isValue()?"3 Value":spec.isParentedOrFreeCollection()?"4 Collection":"1 Object";
+        return service || spec.isManagedBean() ?"2 Service":spec.isValue()?"3 Value":spec.isParentedOrFreeCollection()?"4 Collection":"1 Object";
     }
     
     @XmlElement @Override

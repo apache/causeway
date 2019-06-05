@@ -366,7 +366,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 return titleString;
             }
         }
-        return (this.isService() ? "" : "Untitled ") + getSingularName();
+        return (this.isManagedBean() ? "" : "Untitled ") + getSingularName();
     }
 
 
@@ -773,7 +773,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // -- contributee associations (properties and collections)
 
     private List<ObjectAssociation> createContributeeAssociations() {
-        if (isService() || isValue()) {
+        if (isManagedBean() || isValue()) {
             return Collections.emptyList();
         }
         final List<ObjectAssociation> contributeeAssociations = _Lists.newArrayList();
@@ -864,7 +864,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // -- mixin associations (properties and collections)
 
     private List<ObjectAssociation> createMixedInAssociations() {
-        if (isService() || isValue()) {
+        if (isManagedBean() || isValue()) {
             return Collections.emptyList();
         }
 
@@ -958,11 +958,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * All contributee actions (each wrapping a service's contributed action) for this spec.
      *
      * <p>
-     * If this specification {@link #isService() is actually for} a service,
+     * If this specification {@link #isManagedBean() is actually for} a service,
      * then returns an empty list.
      */
     private List<ObjectAction> createContributeeActions() {
-        if (isService() || isValue()) {
+        if (isManagedBean() || isValue()) {
             return Collections.emptyList();
         }
         final List<ObjectAction> contributeeActions = _Lists.newArrayList();
@@ -1046,11 +1046,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * All contributee actions (each wrapping a service's contributed action) for this spec.
      *
      * <p>
-     * If this specification {@link #isService() is actually for} a service,
+     * If this specification {@link #isManagedBean() is actually for} a service,
      * then returns an empty list.
      */
     private List<ObjectAction> createMixedInActions() {
-        if (isService() || isValue() || isMixin()) {
+        if (isManagedBean() || isValue() || isMixin()) {
             return Collections.emptyList();
         }
         
@@ -1232,8 +1232,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 //        if(containsFacet(BeanFacet.class)) {
 //            return ManagedObjectSort.DOMAIN_SERVICE;
 //        }
-        if(isBean()) {
-            return BeanSort.BEAN;
+        if(isManagedBean()) {
+            return BeanSort.MANAGED_BEAN;
         }
 //
 

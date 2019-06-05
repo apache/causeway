@@ -26,7 +26,6 @@ import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.Bin;
-import org.apache.isis.core.integtestsupport.components.HeadlessTransactionSupportDefault;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.spring.IsisBoot;
@@ -44,7 +43,7 @@ import lombok.val;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
         classes = {
-                HeadlessTransactionSupportDefault.class,
+                //HeadlessTransactionSupportDefault.class,
                 IsisBoot.class,
                 FixtureScriptsDefault.class,
                 JdoTestDomainModule.class,
@@ -58,8 +57,7 @@ import lombok.val;
 class JdoBootstrappingTest {
 
     @Inject IsisSessionFactory isisSessionFactory;
-    @Inject //HeadlessTransactionSupport transactions;
-    TransactionService transactionService;
+    @Inject TransactionService transactionService;
     @Inject FixtureScripts fixtureScripts;
     @Inject RepositoryService repository;
     
@@ -73,17 +71,16 @@ class JdoBootstrappingTest {
     	System.out.println("================== OPEN SESSION ====================");
         
         isisSessionFactory.openSession(new InitialisationSession());
+        
+        System.out.println("================== BEGIN TX ====================");
+        
         transactionService.nextTransaction();
         
-//        System.out.println("================== BEGIN TX ====================");
-//        
-//        transactions.beginTransaction();
+        System.out.println("================== RUN FIXTURE 1 ====================");
         
-//        System.out.println("================== RUN FIXTURE 1 ====================");
-//        
-//        // cleanup
-//        fixtureScripts.runBuilderScript(
-//                JdoTestDomainPersona.PurgeAll.builder());
+        // cleanup
+        fixtureScripts.runBuilderScript(
+                JdoTestDomainPersona.PurgeAll.builder());
         
         System.out.println("================== RUN FIXTURE 2 ====================");
 
@@ -110,7 +107,7 @@ class JdoBootstrappingTest {
 
     	isisSessionFactory.openSession(new InitialisationSession());
     	
-    	//transactions.beginTransaction();
+    	transactionService.nextTransaction();
     	
     	val inventories = Bin.ofCollection(repository.allInstances(Inventory.class)); 
 		assertEquals(1, inventories.size());

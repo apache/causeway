@@ -201,7 +201,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
             
             final Stream<Object> domainServices = serviceRegistry.streamRegisteredBeans()
-                    .filter(beanAdapter->beanAdapter.getManagedObjectSort().isBean())
+                    .filter(beanAdapter->beanAdapter.getManagedObjectSort().isManagedBean())
                     .map(BeanAdapter::getInstance)
                     .filter(Bin::isCardinalityOne)
                     .map(Bin::getSingleton)

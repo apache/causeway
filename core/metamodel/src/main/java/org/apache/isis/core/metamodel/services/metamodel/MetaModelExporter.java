@@ -173,7 +173,7 @@ class MetaModelExporter {
 
         domainClass.setId(specification.getFullIdentifier());
 
-        if(specification.isService()) {
+        if(specification.isManagedBean()) {
             domainClass.setService(true);
         }
 
@@ -195,7 +195,7 @@ class MetaModelExporter {
             return;
         }
 
-        if (specification.isService()) {
+        if (specification.isManagedBean()) {
             if(!hasNatureOfServiceOfDomain(specification)) {
                 addActions(specification, domainClassByObjectSpec, config);
             }

@@ -144,7 +144,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             return null;
         }
 
-        final boolean isService = objectAdapter.getSpecification().isBean();
+        final boolean isService = objectAdapter.getSpecification().isManagedBean();
 
         if (!(mode.isArgs())) {
 
@@ -422,7 +422,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (!objectAdapter.isRepresentingPersistent()) {
             return;
         }
-        final boolean isService = objectAdapter.getSpecification().isBean();
+        final boolean isService = objectAdapter.getSpecification().isManagedBean();
         if(isService) {
             return;
         }

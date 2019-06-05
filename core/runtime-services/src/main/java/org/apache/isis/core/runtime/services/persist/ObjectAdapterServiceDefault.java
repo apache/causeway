@@ -61,13 +61,16 @@ public class ObjectAdapterServiceDefault implements ObjectAdapterService {
 		switch (spec.getBeanSort()) {
 		case VALUE:
 			return PojoAdapter.ofValue((Serializable) pojo);
+			
 		case VIEW_MODEL:
-		case BEAN:
+		case MANAGED_BEAN:
 		case ENTITY:
-			return ps().adapterFor(pojo);
 		case MIXIN:
+			return ps().adapterFor(pojo);
+		
 		case COLLECTION:
 			return PojoAdapter.ofTransient(pojo, spec.getSpecId());
+			
         case UNKNOWN:
             break;
             
