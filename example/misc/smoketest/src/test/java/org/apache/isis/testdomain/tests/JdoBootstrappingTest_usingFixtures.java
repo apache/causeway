@@ -19,12 +19,9 @@ package org.apache.isis.testdomain.tests;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.inject.Inject;
 
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -32,12 +29,10 @@ import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-import org.apache.isis.testdomain.jdo.Product;
+import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,29 +43,24 @@ import lombok.val;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
-		classes = {
-				IsisBoot.class,
-				FixtureScriptsDefault.class,
-				JdoTestDomainModule.class,
-		},
-		properties = {
-				"logging.config=log4j2-test.xml",
-				//"isis.reflector.introspector.parallelize=false",
-				//"logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
-		}
-		)
-class JdoBootstrappingTest {
+        classes = {
+                IsisBoot.class,
+                FixtureScriptsDefault.class,
+                JdoTestDomainModule.class,
+                },
+        properties = {
+        		"logging.config=log4j2-test.xml",
+                //"isis.reflector.introspector.parallelize=false",
+                //"logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+                }
+        )
+class JdoBootstrappingTest_usingFixtures {
 
-	@Inject private IsisSessionFactory isisSessionFactory;
-	@Inject private TransactionService transactionService;
-	@Inject private RepositoryService repository;
-
-	@BeforeAll
-	static void launchH2Console() throws SQLException {
-		// for troubleshooting ... 
-		//Util_H2Console.main(null);
-	}
-	
+    @Inject IsisSessionFactory isisSessionFactory;
+    @Inject TransactionService transactionService;
+    @Inject FixtureScripts fixtureScripts;
+    @Inject RepositoryService repository;
+    
     @BeforeEach
     void beforeEach() {
     	isisSessionFactory.openSession(new InitialisationSession());
@@ -81,63 +71,34 @@ class JdoBootstrappingTest {
     void afterEach() {
     	isisSessionFactory.closeSession();
     }
-	
-	void cleanUp() {
-
-        repository.allInstances(Inventory.class)
-        .forEach(repository::remove);
+    
+    void setUp() {
+        // cleanup
+        fixtureScripts.runBuilderScript(
+                JdoTestDomainPersona.PurgeAll.builder());
         
-        repository.allInstances(Book.class)
-        .forEach(repository::remove);
-        
-        repository.allInstances(Product.class)
-        .forEach(repository::remove);
-
-	}
-	
-	void setUp() { 
-		
-		// setup sample Inventory
-		Set<Product> products = new HashSet<>();
-
-		products.add(Book.of(
-				"Sample Book", "A sample book for testing.", 99.,
-				"Sample Author", "Sample ISBN", "Sample Publisher"));
-
-		val inventory = Inventory.of("Sample Inventory", products);
-		repository.persist(inventory);
-	}
-
-	@Test
-	void sampleInventoryShouldBeSetUp() {
-
-		// given - expected pre condition: no inventories
-		
-		cleanUp();		
-		assertEquals(0, repository.allInstances(Inventory.class).size());
-		
-		// when
-		
-		transactionService.nextTransaction();
-		setUp();
-
-
-		// then - expected post condition: ONE inventory
-
-		transactionService.nextTransaction();
-		
-		val inventories = Bin.ofCollection(repository.allInstances(Inventory.class)); 
+        // given
+        fixtureScripts.runBuilderScript(
+                JdoTestDomainPersona.InventoryWith1Book.builder());
+    }
+    
+    @Test
+    void sampleInventoryShouldBeSetUp() {
+    	
+    	setUp();
+    	
+    	val inventories = Bin.ofCollection(repository.allInstances(Inventory.class)); 
 		assertEquals(1, inventories.size());
 		
 		val inventory = inventories.getSingleton().get();
-		assertNotNull(inventory);
-		assertNotNull(inventory.getProducts());
-		assertEquals(1, inventory.getProducts().size());
+        assertNotNull(inventory);
+        assertNotNull(inventory.getProducts());
+        assertEquals(1, inventory.getProducts().size());
+        
+        val product = inventory.getProducts().iterator().next();
+        assertEquals("Sample Book", product.getName());
+        
+    }
 
-		val product = inventory.getProducts().iterator().next();
-		assertEquals("Sample Book", product.getName());
-
-	}
-
-
+        
 }

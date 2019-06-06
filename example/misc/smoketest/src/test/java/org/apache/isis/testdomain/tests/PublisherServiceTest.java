@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import lombok.val;
 
 /**
- * Depends on {@link JdoBootstrappingTest} to succeed.
+ * Depends on {@link JdoBootstrappingTest_usingFixtures} to succeed.
  */
 class PublisherServiceTest  {
     
