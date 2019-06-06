@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.tests;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Timestamp;
@@ -89,6 +90,7 @@ class AuditerServiceTest {
 				.getFirst()
 				.orElse(null);
 
+		assertNotNull(auditerServiceAny);
 		assertEquals(AuditerServiceStub.class, auditerServiceAny.getClass());
 
 		// given

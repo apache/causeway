@@ -41,9 +41,12 @@ import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
+import lombok.ToString;
+
 /**
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
+@ToString
 public class PublishedObjectsDefault implements PublishedObjects, RepresentsInteractionMemberExecution {
 
     // -- constructor, fields
