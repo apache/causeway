@@ -25,9 +25,7 @@ import java.util.Objects;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.datanucleus.PropertyNames;
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
-
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
@@ -38,6 +36,8 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.JdoEntityTypeRegistry;
+import org.datanucleus.PropertyNames;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -72,7 +72,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         // need to eagerly build, ... must be completed before catalogNamedQueries().
         // Why? because that method causes entity classes to be loaded which register with DN's EnhancementHelper,
         // which are then cached in DN.  It results in our CreateSchema listener not firing.
-        createDataNucleusApplicationComponents();
+        _Blackhole.consume(applicationComponents.get());
     }
 
     
@@ -102,10 +102,6 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, specificationLoader);
     }
-
-//    private boolean shouldCreate(final DataNucleusApplicationComponents5 applicationComponents) {
-//        return applicationComponents == null || applicationComponents.isStale();
-//    }
 
     private static void addDataNucleusPropertiesIfRequired(
             final Map<String, String> props) {
@@ -209,6 +205,9 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     
     // [ahuber] JRebel support, not tested at all
     private void guardAgainstStaleState() {
+    	if(!applicationComponents.isMemoized()) {
+    		return;
+    	}
         if(applicationComponents.get().isStale()) {
             try {
                 applicationComponents.get().shutdown();

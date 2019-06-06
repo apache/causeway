@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtime.services.menubars;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,6 +30,7 @@ import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -44,7 +46,9 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     @Override
     public BS3MenuBars menuBars() {
         
-        val menubarsLayoutResource = webAppConfigBean.getMenubarsLayoutXml();
+        val menubarsLayoutResource = Optional.ofNullable(webAppConfigBean)
+        		.map(WebAppConfigBean::getMenubarsLayoutXml)
+        		.orElse(null);
         if(menubarsLayoutResource==null) {
             warnNotFound();
             return null;
@@ -96,7 +100,7 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     }
 
     @Inject JaxbService jaxbService;
-    @Inject WebAppConfigBean webAppConfigBean;
+    @Autowired(required = false) WebAppConfigBean webAppConfigBean;
 
 }
 

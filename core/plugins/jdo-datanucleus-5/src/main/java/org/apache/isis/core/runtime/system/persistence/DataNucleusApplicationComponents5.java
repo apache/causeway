@@ -33,7 +33,7 @@ import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
-
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -203,6 +203,10 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
 
         registerMetadataListener(metaDataManager, datanucleusProps);
 
+        if(_NullSafe.isEmpty(persistableClassNameSet)) {
+        	return; // skip
+        }
+        
         schemaAwareStoreManager.createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
     }
 
