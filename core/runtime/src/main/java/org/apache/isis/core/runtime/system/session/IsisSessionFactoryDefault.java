@@ -56,7 +56,7 @@ import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -184,7 +184,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             // postConstructInSession
             //
 
-            IsisTransactionManager transactionManager = getTransactionManagerElseFail();
+            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
             transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
 
             //
@@ -334,8 +334,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     // -- HELPER
     
-    private IsisTransactionManager getTransactionManagerElseFail() {
-        return IsisContext.getTransactionManager()
+    private IsisTransactionManagerJdoInternal getTransactionManagerElseFail() {
+        return IsisContext.getTransactionManagerJdo()
                 .orElseThrow(()->new IllegalStateException("there is no TransactionManager currently accessible"));
     }
     
@@ -347,7 +347,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         // call @PreDestroy (in a session)
         openSession(new InitialisationSession());
-        IsisTransactionManager transactionManager = getTransactionManagerElseFail();
+        IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
         try {
             transactionManager.startTransaction();
             try {

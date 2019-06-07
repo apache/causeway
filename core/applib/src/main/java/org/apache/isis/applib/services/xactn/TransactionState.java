@@ -18,6 +18,11 @@
  */
 package org.apache.isis.applib.services.xactn;
 
+/**
+ * 
+ * @deprecated TODO[2112] for framework internal use only, move to an internal package  
+ */
+@Deprecated
 public enum TransactionState {
 
     /**

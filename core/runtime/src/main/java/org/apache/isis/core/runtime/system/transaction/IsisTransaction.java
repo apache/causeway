@@ -44,15 +44,15 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Used by the {@link IsisTransactionManager} to captures a set of changes to be
+ * Used by the {@link IsisTransactionManagerJdoInternal} to captures a set of changes to be
  * applied.
  *
  * <p>
  * Note that methods such as <tt>flush()</tt>, <tt>commit()</tt> and
  * <tt>abort()</tt> are not part of the API. The place to control transactions
- * is through the {@link IsisTransactionManager transaction manager}, because
+ * is through the {@link IsisTransactionManagerJdoInternal transaction manager}, because
  * some implementations may support nesting and such like. It is also the job of
- * the {@link IsisTransactionManager} to ensure that the underlying persistence
+ * the {@link IsisTransactionManagerJdoInternal} to ensure that the underlying persistence
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
 @Vetoed @Log4j2
@@ -162,7 +162,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     //    private final AuthenticationSession authenticationSession;
 
     private final Inbox<PersistenceCommand> persistenceCommands = new Inbox<>();
-    private final IsisTransactionManager transactionManager;
+    private final IsisTransactionManagerJdoInternal transactionManager;
     //    private final MessageBroker messageBroker;
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;

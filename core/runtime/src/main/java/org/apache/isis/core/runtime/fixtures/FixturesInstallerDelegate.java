@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -168,7 +168,7 @@ public class FixturesInstallerDelegate {
         return IsisContext.getServiceRegistry().lookupServiceElseFail(RuntimeEventService.class);
     }
 
-    private IsisTransactionManager getTransactionManager() {
+    private IsisTransactionManagerJdoInternal getTransactionManager() {
         return IsisSession.transactionManager().orElse(null);
     }
 

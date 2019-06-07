@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 
@@ -82,7 +82,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected final PersistenceManagerFactory jdoPersistenceManagerFactory;
 
     // not final only for testing purposes
-    protected IsisTransactionManager transactionManager;
+    protected IsisTransactionManagerJdoInternal transactionManager;
 
 
     /**
@@ -133,7 +133,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.persistenceQueryFactory = new PersistenceQueryFactory(
                 obj->this.getObjectAdapterProvider().adapterFor(obj), 
                 this.specificationLoader);
-        this.transactionManager = new IsisTransactionManager(this);
+        this.transactionManager = new IsisTransactionManagerJdoInternal(this);
 
         this.state = State.NOT_INITIALIZED;
     }
@@ -148,10 +148,10 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     }
 
     /**
-     * The configured {@link IsisTransactionManager}.
+     * The configured {@link IsisTransactionManagerJdoInternal}.
      */
     @Override
-    public IsisTransactionManager getTransactionManager() {
+    public IsisTransactionManagerJdoInternal getTransactionManager() {
         return transactionManager;
     }
 

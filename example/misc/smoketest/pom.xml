@@ -51,13 +51,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-<!-- experimental -->		
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-tx</artifactId>
-    <version>5.1.7.RELEASE</version>
-</dependency>
-
 		<!-- ISIS API -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

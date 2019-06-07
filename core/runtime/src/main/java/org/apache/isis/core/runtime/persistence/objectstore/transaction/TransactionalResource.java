@@ -19,28 +19,28 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 /**
- * Interface for the {@link IsisTransactionManager} to interact with some
+ * Interface for the {@link IsisTransactionManagerJdoInternal} to interact with some
  * transactional resource.
  */
 public interface TransactionalResource {
 
     /**
-     * Used by the {@link IsisTransactionManager} to tell the underlying
+     * Used by the {@link IsisTransactionManagerJdoInternal} to tell the underlying
      * object store to start a transaction.
      */
     void startTransaction();
 
     /**
-     * Used by the {@link IsisTransactionManager} to tell the underlying
+     * Used by the {@link IsisTransactionManagerJdoInternal} to tell the underlying
      * object store to commit a transaction.
      */
     void endTransaction();
 
     /**
-     * Used by the {@link IsisTransactionManager} to tell the underlying
+     * Used by the {@link IsisTransactionManagerJdoInternal} to tell the underlying
      * object store to abort a transaction.
      */
     void abortTransaction();

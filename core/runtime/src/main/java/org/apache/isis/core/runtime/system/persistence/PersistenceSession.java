@@ -39,7 +39,7 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 public interface PersistenceSession 
 extends 
@@ -53,7 +53,7 @@ extends
     // -------------------------------------------------------------------------------------------------
     
     IsisConfiguration getConfiguration();
-    IsisTransactionManager getTransactionManager();
+    IsisTransactionManagerJdoInternal getTransactionManager();
     ServiceInjector getServiceInjector();
     
     void open();

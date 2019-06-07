@@ -26,6 +26,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 
+/**
+ * @deprecated TODO[2112] for framework internal use only, move to an internal package  
+ */
+@Deprecated
 public interface TransactionService {
 
     /**

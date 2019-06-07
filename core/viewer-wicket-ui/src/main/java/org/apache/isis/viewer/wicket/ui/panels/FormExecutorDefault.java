@@ -362,11 +362,11 @@ implements FormExecutor {
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
         // (eg EntityModel) to hold the correct state.  I hope.
-        val txManager = IsisContext.getTransactionManager().get();
+        val txManager = IsisContext.getTransactionManagerJdo().get();
         txManager.flushTransaction();
 
         // "redirect-after-post"
-        final RequestCycle requestCycle = RequestCycle.get();
+        val requestCycle = RequestCycle.get();
         requestCycle.setResponsePage(entityPage);
     }
 
@@ -476,7 +476,7 @@ implements FormExecutor {
             // recognized
             raiseWarning(target, feedbackForm, recognizedErrorIfAny);
 
-            val txManager = IsisContext.getTransactionManager().get();
+            val txManager = IsisContext.getTransactionManagerJdo().get();
             txManager.getCurrentTransaction().clearAbortCause();
 
             // there's no need to abort the transaction, it will have already been done

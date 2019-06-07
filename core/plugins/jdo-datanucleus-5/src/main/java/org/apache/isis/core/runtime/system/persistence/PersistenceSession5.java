@@ -87,7 +87,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingA
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
@@ -208,7 +208,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * Closes the subcomponents.
      *
      * <p>
-     * Automatically {@link IsisTransactionManager#endTransaction() ends
+     * Automatically {@link IsisTransactionManagerJdoInternal#endTransaction() ends
      * (commits)} the current (Isis) {@link IsisTransaction}. This in turn commits the underlying
      * JDO transaction.
      *
@@ -632,7 +632,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     /**
      * {@link #newCreateObjectCommand(ObjectAdapter) Create}s a {@link CreateObjectCommand}, and adds to the
-     * {@link IsisTransactionManager}.
+     * {@link IsisTransactionManagerJdoInternal}.
      */
     private void addCreateObjectCommand(final ObjectAdapter object) {
         final CreateObjectCommand createObjectCommand = newCreateObjectCommand(object);

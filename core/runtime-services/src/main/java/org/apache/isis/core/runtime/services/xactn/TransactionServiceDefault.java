@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 @Singleton
 public class TransactionServiceDefault implements TransactionService {
@@ -99,8 +99,8 @@ public class TransactionServiceDefault implements TransactionService {
         return isisTransactionManager().executeWithinTransaction(task);
     }
     
-    IsisTransactionManager isisTransactionManager() {
-        return IsisContext.getTransactionManager().get();
+    IsisTransactionManagerJdoInternal isisTransactionManager() {
+        return IsisContext.getTransactionManagerJdo().get();
     }
     
     @Override

@@ -274,7 +274,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                     }
                                     );
 
-                    val txManager = IsisContext.getTransactionManager().get();
+                    val txManager = IsisContext.getTransactionManagerJdo().get();
                     txManager.flushTransaction();
 
                     // "redirect-after-post"

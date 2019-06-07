@@ -28,7 +28,7 @@ import org.apache.isis.core.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 
@@ -93,7 +93,7 @@ public class IsisSession extends RuntimeContextBase {
 				.map(AuthenticationSession::getMessageBroker);
 	}
 	
-	public static Optional<IsisTransactionManager> transactionManager() {
+	public static Optional<IsisTransactionManagerJdoInternal> transactionManager() {
 		return current()
 				.map(IsisSession::getTransactionManager);
 	}
@@ -148,8 +148,8 @@ public class IsisSession extends RuntimeContextBase {
 
     // -- Dependencies (from constructor)
 
-    private IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager().get();
+    private IsisTransactionManagerJdoInternal getTransactionManager() {
+        return IsisContext.getTransactionManagerJdo().get();
     }
 
 	

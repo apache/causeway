@@ -19,7 +19,7 @@ package org.apache.isis.core.runtime.services.background;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 /**
  */
@@ -42,7 +42,7 @@ public abstract class CommandExecutionAbstract extends AbstractIsisSessionTempla
      * </p>
      */
     protected final void execute(
-            final IsisTransactionManager transactionManager,
+            final IsisTransactionManagerJdoInternal transactionManager,
             final CommandWithDto commandWithDto) {
 
         transactionManager.startTransaction(commandWithDto);

@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -54,7 +54,7 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
     protected void doExecute(Object context) {
 
         final PersistenceSession persistenceSession = getPersistenceSession();
-        final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
+        final IsisTransactionManagerJdoInternal transactionManager = getTransactionManager(persistenceSession);
         final List<Command> commands = _Lists.newArrayList();
         transactionManager.executeWithinTransaction(() -> {
             commands.addAll(findBackgroundCommandsToExecute());

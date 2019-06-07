@@ -28,7 +28,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.incubator.IsisTransactionManagerForJdo;
+import org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
@@ -46,12 +46,12 @@ import lombok.val;
 	classes = { 
 		IsisBoot.class, 
 		JdoTestDomainModule.class,
-		IsisTransactionManagerForJdo.class,
+		IsisPlatformTransactionManagerForJdo.class,
 	}, 
 	properties = {
 		"logging.config=log4j2-test.xml",
+		"logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
 		// "isis.reflector.introspector.parallelize=false",
-		"logging.level.org.apache.isis.incubator.IsisTransactionManagerForJdo=DEBUG"
 		 //"logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 })
 @Transactional

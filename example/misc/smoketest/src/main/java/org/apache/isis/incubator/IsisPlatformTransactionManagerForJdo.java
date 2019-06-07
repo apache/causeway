@@ -35,7 +35,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Singleton @Log4j2
-public class IsisTransactionManagerForJdo implements PlatformTransactionManager {
+public class IsisPlatformTransactionManagerForJdo implements PlatformTransactionManager {
 	
 	@Inject private IsisSessionFactory isisSessionFactory;
 	@Inject private TransactionService transactionService;
@@ -77,12 +77,14 @@ public class IsisTransactionManagerForJdo implements PlatformTransactionManager 
 		
 		transactionService.nextTransaction();
 		((SimpleTransactionStatus)status).setCompleted();
+		
+		log.debug("committed {}", ()->""+status);
 	}
 
 	@Override
 	public void rollback(TransactionStatus status) throws TransactionException {
 		log.debug("about to rollback {}", ()->""+status);
-		log.warn("not implemented yet");
+		log.warn("rollback not implemented yet");
 	}
 
 	

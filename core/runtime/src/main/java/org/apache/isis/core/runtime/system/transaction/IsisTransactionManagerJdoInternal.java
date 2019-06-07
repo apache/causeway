@@ -39,7 +39,7 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-public class IsisTransactionManager implements SessionScopedComponent {
+public class IsisTransactionManagerJdoInternal implements SessionScopedComponent {
 
     private int transactionLevel;
 
@@ -58,7 +58,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     private final CommandContext commandContext;
     private final InteractionContext interactionContext;
 
-    public IsisTransactionManager(
+    public IsisTransactionManagerJdoInternal(
             final PersistenceSession persistenceSession) {
 
         this.persistenceSession = persistenceSession;

@@ -212,7 +212,7 @@ implements PersistenceSessionServiceInternal {
     }
 
     @Programmatic
-    public IsisTransactionManager getTransactionManager() {
+    public IsisTransactionManagerJdoInternal getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
 

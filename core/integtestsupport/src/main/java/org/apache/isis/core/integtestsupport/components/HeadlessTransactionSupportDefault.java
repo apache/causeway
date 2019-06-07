@@ -29,14 +29,14 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 @Singleton
 public class HeadlessTransactionSupportDefault implements HeadlessTransactionSupport {
 
     @Override
     public void beginTransaction() {
-        final IsisTransactionManager transactionManager = getTransactionManager();
+        final IsisTransactionManagerJdoInternal transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
 
         if(transaction == null) {
@@ -61,7 +61,7 @@ public class HeadlessTransactionSupportDefault implements HeadlessTransactionSup
 
     }
 
-    private void startTransactionForUser(IsisTransactionManager transactionManager) {
+    private void startTransactionForUser(IsisTransactionManagerJdoInternal transactionManager) {
         transactionManager.startTransaction();
 
         // specify that this command (if any) is being executed by a 'USER'
@@ -76,7 +76,7 @@ public class HeadlessTransactionSupportDefault implements HeadlessTransactionSup
      */
     @Override
     public void endTransaction() {
-        final IsisTransactionManager transactionManager = getTransactionManager();
+        final IsisTransactionManagerJdoInternal transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {
             throw new AssertionError("No transaction exists");
@@ -160,7 +160,7 @@ public class HeadlessTransactionSupportDefault implements HeadlessTransactionSup
 
     // -- Dependencies
 
-    private IsisTransactionManager getTransactionManager() {
+    private IsisTransactionManagerJdoInternal getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
 

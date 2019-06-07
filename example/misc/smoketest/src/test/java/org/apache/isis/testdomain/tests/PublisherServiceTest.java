@@ -18,23 +18,19 @@
  */
 package org.apache.isis.testdomain.tests;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.incubator.IsisTransactionManagerForJdo;
+import org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -55,11 +51,12 @@ import lombok.val;
 				IsisBoot.class, 
 				FixtureScriptsDefault.class, 
 				JdoTestDomainModule.class, 
-				IsisTransactionManagerForJdo.class,
-				PublisherServiceTest.PublisherServiceStub.class
+				IsisPlatformTransactionManagerForJdo.class,
+				PublisherServiceTest.PublisherServiceProbe.class
 		}, 
 		properties = {
 				"logging.config=log4j2-test.xml",
+				"logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
 				// "isis.reflector.introspector.parallelize=false",
 				// "logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 	})
@@ -67,8 +64,8 @@ import lombok.val;
 class PublisherServiceTest {
 
 	@Inject private RepositoryService repository;
-	@Inject private TransactionService transactionService;
 	@Inject private FixtureScripts fixtureScripts;
+	@Inject private PublisherServiceProbe publisherService;
 
 	@BeforeEach
 	void setUp() {
@@ -83,39 +80,33 @@ class PublisherServiceTest {
 	@Test @Rollback(false)
 	void publisherServiceShouldBeAwareOfInventoryChanges() {
 
-		val publisherServiceAny = IsisContext.getServiceRegistry()
-				.select(PublisherServiceStub.class)
-				.getFirst()
-				.orElse(null);
-
-		assertNotNull(publisherServiceAny);
-		assertEquals(PublisherServiceStub.class, publisherServiceAny.getClass());
-
 		// given
-        val publisherService = (PublisherServiceStub) publisherServiceAny; 
 		val book = repository.allInstances(Book.class).listIterator().next();
 
-		// when
-		publisherService.clearHistory();
-		book.setName("Book #2");
-		repository.persist(book);
-		
-		// then - before the commit
-		assertEquals("", publisherService.getHistory());
-		
-		transactionService.nextTransaction();
+		// when - running within its own transactional boundary
+		val transactionTemplate = IsisContext.getTransactionTemplate();
+		transactionTemplate.execute(status -> {
+
+			publisherService.clearHistory();
+			book.setName("Book #2");
+			repository.persist(book);
+			
+			// then - before the commit
+			assertEquals("", publisherService.getHistory());
+				
+			return null;
+		});
 		
 		// then - after the commit
-		assertEquals("publishedObjects=created=0,deleted=0,loaded=1,updated=1,modified=1,",
+		assertEquals("publishedObjects=created=0,deleted=0,loaded=0,updated=1,modified=1,",
 				publisherService.getHistory());
 
 	}
 
 	// -- HELPER
 
-	@DomainService(menuOrder = "1.0", nature = NatureOfService.DOMAIN)
-	@DomainServiceLayout()
-	public static class PublisherServiceStub implements PublisherService {
+	@Singleton
+	public static class PublisherServiceProbe implements PublisherService {
 
 		private StringBuilder history = new StringBuilder();
 

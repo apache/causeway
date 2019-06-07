@@ -24,7 +24,9 @@ import org.apache.isis.applib.services.HasUniqueId;
 
 /**
  * Representation of the current transaction, which conceptually wraps the underlying objectstore transaction.
+ * @deprecated TODO[2112] for framework internal use only, move to an internal package  
  */
+@Deprecated
 public interface Transaction extends HasUniqueId {
 
 

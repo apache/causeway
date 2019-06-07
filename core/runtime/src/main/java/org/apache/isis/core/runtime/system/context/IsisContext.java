@@ -42,10 +42,12 @@ import org.apache.isis.core.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import lombok.val;
 
@@ -167,13 +169,20 @@ public interface IsisContext {
     }
     
     /**
-     * TODO [2033] its unclear whether there is only one or multiple
      * @return framework's current IsisTransactionManager (if any)
      * @throws IllegalStateException - if IsisSessionFactory not resolvable
+     * 
      */
-    public static Optional<IsisTransactionManager> getTransactionManager() {
+    @Deprecated //TODO[2112] use spring-tx API instead
+    public static Optional<IsisTransactionManagerJdoInternal> getTransactionManagerJdo() {
     	return getPersistenceSession()
     			.map(PersistenceSession::getTransactionManager);
+    }
+    
+    // likely to be extended to support multiple PlatformTransactionManagers, by selecting one by its name
+    public static TransactionTemplate getTransactionTemplate() {
+    	val txMan = _Spring.getSingletonElseFail(PlatformTransactionManager.class);
+    	return new TransactionTemplate(txMan);
     }
     
     /**

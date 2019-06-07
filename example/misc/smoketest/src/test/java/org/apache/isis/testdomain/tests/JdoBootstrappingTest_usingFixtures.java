@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.incubator.IsisTransactionManagerForJdo;
+import org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -43,7 +43,7 @@ import lombok.val;
 			IsisBoot.class, 
 			FixtureScriptsDefault.class, 
 			JdoTestDomainModule.class, 
-			IsisTransactionManagerForJdo.class,
+			IsisPlatformTransactionManagerForJdo.class,
 	}, 
 	properties = {
 			"logging.config=log4j2-test.xml",

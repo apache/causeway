@@ -131,7 +131,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
                     val userRegistrationService = IsisContext.getServiceRegistry()
                     		.lookupServiceElseFail(UserRegistrationService.class);
 
-                    val txManager = IsisContext.getTransactionManager().get();
+                    val txManager = IsisContext.getTransactionManagerJdo().get();
                     txManager.executeWithinTransaction(() -> {
                             userRegistrationService.registerUser(userDetails);
                             removeAccountConfirmation();

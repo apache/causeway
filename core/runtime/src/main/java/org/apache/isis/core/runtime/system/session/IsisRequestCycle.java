@@ -24,7 +24,7 @@ public class IsisRequestCycle implements AutoCloseable {
 	}
 	
 	public void beforeServletFilter() {
-		val isisTransactionManager = IsisContext.getTransactionManager().orElse(null);
+		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
         // no-op if no session or transaction manager available.
         if(isisTransactionManager==null) {
             return;
@@ -41,7 +41,7 @@ public class IsisRequestCycle implements AutoCloseable {
 	public void close() {
 		
 		val isisSessionFactory = IsisContext.getSessionFactory();
-		val isisTransactionManager = IsisContext.getTransactionManager().orElse(null);
+		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
 		val inTransaction =
 				isisSessionFactory !=null && 
 				isisTransactionManager!=null &&
@@ -65,13 +65,13 @@ public class IsisRequestCycle implements AutoCloseable {
 		val isisSessionFactory = IsisContext.getSessionFactory();
 		isisSessionFactory.openSession(authenticationSession);
 		
-		IsisContext.getTransactionManager()
+		IsisContext.getTransactionManagerJdo()
 				.ifPresent(txMan->txMan.startTransaction());
 	}
 
 	public static void onRequestHandlerExecuted() {
 		
-		val isisTransactionManager = IsisContext.getTransactionManager().orElse(null);
+		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
 		if (isisTransactionManager==null) {
 			return;
 		}
@@ -96,7 +96,7 @@ public class IsisRequestCycle implements AutoCloseable {
 
 	public static void onEndRequest() {
 		
-		val isisTransactionManager = IsisContext.getTransactionManager().orElse(null);
+		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
 		if (isisTransactionManager==null) {
 			return;
 		}
