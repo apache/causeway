@@ -84,7 +84,7 @@ class PublisherServiceTest {
 		val book = repository.allInstances(Book.class).listIterator().next();
 
 		// when - running within its own transactional boundary
-		val transactionTemplate = IsisContext.getTransactionTemplate();
+		val transactionTemplate = IsisContext.createTransactionTemplate();
 		transactionTemplate.execute(status -> {
 
 			publisherService.clearHistory();

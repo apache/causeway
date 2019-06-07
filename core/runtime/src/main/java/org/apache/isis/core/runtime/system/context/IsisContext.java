@@ -171,7 +171,7 @@ public interface IsisContext {
     /**
      * @return framework's current IsisTransactionManager (if any)
      * @throws IllegalStateException - if IsisSessionFactory not resolvable
-     * 
+     * @deprecated use {@link #createTransactionTemplate()} instead
      */
     @Deprecated //TODO[2112] use spring-tx API instead
     public static Optional<IsisTransactionManagerJdoInternal> getTransactionManagerJdo() {
@@ -180,7 +180,7 @@ public interface IsisContext {
     }
     
     // likely to be extended to support multiple PlatformTransactionManagers, by selecting one by its name
-    public static TransactionTemplate getTransactionTemplate() {
+    public static TransactionTemplate createTransactionTemplate() {
     	val txMan = _Spring.getSingletonElseFail(PlatformTransactionManager.class);
     	return new TransactionTemplate(txMan);
     }
