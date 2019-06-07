@@ -1,9 +1,10 @@
 package org.ro.core.model
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import org.ro.to.TObject
 
-//@Serializable
+@Serializable
 class ObjectAdapter(val delegate: TObject) {
     init {
         //["sample"] = "Beispiel";

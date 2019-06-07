@@ -17,11 +17,14 @@ import org.ro.core.TransferObject
  */
 @Serializable
 data class Value(
-        @Optional @SerialName("value") val content: Any? = null
+        @Optional @ContextualSerialization @SerialName("value") val content: Any? = null
 ) : TransferObject {
 
     @Serializer(forClass = Value::class)
     companion object : KSerializer<Value> {
+        override fun serialize(encoder: Encoder, obj: Value) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
 
         override val descriptor: SerialDescriptor =
                 StringDescriptor.withName("Value")

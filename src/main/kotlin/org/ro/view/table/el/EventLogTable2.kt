@@ -1,6 +1,7 @@
 package org.ro.view.table.el
 
 import com.github.snabbdom._get
+import org.ro.core.Utils
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.view.IconManager
@@ -44,7 +45,7 @@ class EventLogTable2(val model: List<LogEntry>) : VPanel() {
                     sorter = Sorter.DATETIME,
                     formatter = Formatter.DATETIME,
                     formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
-                    width = "100"),
+                    width = "100"), 
             ColumnDefinition("req.len", field = "requestLength", align = Align.RIGHT),
             ColumnDefinition("offset", field = "offset", align = Align.RIGHT),
             ColumnDefinition("duration", field = "duration", align = Align.RIGHT),
@@ -62,7 +63,7 @@ class EventLogTable2(val model: List<LogEntry>) : VPanel() {
                     cellClick = { evt, cell ->
                         evt.stopPropagation()
                         showDetails(cell)
-                    })
+                    })  
     )
 
     init {
@@ -85,6 +86,8 @@ class EventLogTable2(val model: List<LogEntry>) : VPanel() {
                 persistenceMode = false
         )
 
+        console.log("[${this::class.simpleName}.init] model: ${model.size}")
+        Utils.debug(model.size.toString())
         val tabulator = Tabulator(model, options = options)
         marginTop = 0.px
         marginBottom = 0.px

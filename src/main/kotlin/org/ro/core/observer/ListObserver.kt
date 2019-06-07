@@ -1,6 +1,7 @@
 package org.ro.core.event
 
 import kotlinx.serialization.Serializable
+import org.ro.core.Utils
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.core.observer.BaseObserver
@@ -82,8 +83,11 @@ class ListObserver : BaseObserver() {
     private fun handleObject(obj: TObject) {
         list.list.add(ObjectAdapter(obj))
         if (!list.hasLayout()) {
-            val link = obj.getLayoutLink()!!
-            link.invoke(this)
+            Utils.debug(obj)
+            val link = obj.getLayoutLink()
+            if (link != null) {
+                link.invoke(this)
+            }
         }
     }
 

@@ -1,7 +1,5 @@
 package org.ro.core.event
 
-import kotlinx.serialization.Serializable
-
 /**
  * An Observer:
  * @item is initially created in a ResponseHandler,
@@ -19,7 +17,6 @@ import kotlinx.serialization.Serializable
  * Could be named collector or assembler as well.
  */
 
-@Serializable
 interface IObserver {
     fun update(le: LogEntry)
 }

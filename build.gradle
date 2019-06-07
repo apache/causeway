@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-//    id "com.moowork.grunt" version "1.2.0"
+    id "com.moowork.grunt" version "1.2.0"
 }
 
 apply plugin: 'kotlin2js'
@@ -84,7 +84,6 @@ compileTestKotlin2Js {
     kotlinOptions.moduleKind = 'umd'
 }
 
-/*
 task pot(type: GruntTask) {
     args = ["pot"]
 }
@@ -100,7 +99,7 @@ pot.dependsOn 'installGrunt'
 pot.dependsOn 'npmInstall'
 po2json.dependsOn 'installGrunt'
 po2json.dependsOn 'npmInstall'
-*/
+
 task copyResources(type: Copy) {
     from "src/main/resources"
     into file(buildDir.path + "/js")

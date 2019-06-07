@@ -1,9 +1,11 @@
 package org.ro.core.model
 
+import kotlinx.serialization.Serializable
 import org.ro.layout.Layout
 import org.ro.to.Extensions
 import org.ro.to.Property
 
+@Serializable
 class ObjectList : Visible {
     override fun tag(): String {
         return " "

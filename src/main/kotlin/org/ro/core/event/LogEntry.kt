@@ -1,5 +1,6 @@
 package org.ro.core.event
 
+import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.ro.core.TransferObject
 import org.ro.view.table.ActionMenu
@@ -29,9 +30,12 @@ data class LogEntry(
         title = stripHostPort(url)
     }
 
+    @ContextualSerialization
     var createdAt = Date()
     var start: Int = createdAt.getMilliseconds()
+    @ContextualSerialization
     var updatedAt: Date? = null
+    @ContextualSerialization
     private var lastAccessedAt: Date? = null
 
     private var fault: String? = null

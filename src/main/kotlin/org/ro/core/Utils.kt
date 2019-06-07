@@ -1,6 +1,27 @@
 package org.ro.core
 
-class Utils {
+import kotlinext.js.asJsObject
+import pl.treksoft.kvision.panel.StackPanel
+//import java.lang.Throwable
+
+object Utils {
+
+    fun debug(value: Any?, throwable: Throwable? = null) {
+        //var st = kotlin.test.cu
+        var message = ""
+        if (value is String) {
+            message = value
+        } else {
+            message = value!!.asJsObject().toString()
+        }
+        console.log("[DEBUG] $message")
+        if (throwable != null) {
+            val stacktrace: Collection<StackPanel>? = null
+            for (s in stacktrace!!) {
+                console.log("\\t" + s + "\\n")
+            }
+        }
+    }
 
     fun getSelfHref(jsonStr: String): String? {
         val startStr = "\"rel\": \"self\","
@@ -13,25 +34,23 @@ class Utils {
         return answer
     }
 
-    companion object {
-        fun deCamel(input: String): String {
-            var output = ""
-            var i = 0
-            for (c in input) {
-                if (i == 0) {
-                    output += c.toUpperCase()
+    fun deCamel(input: String): String {
+        var output = ""
+        var i = 0
+        for (c in input) {
+            if (i == 0) {
+                output += c.toUpperCase()
+            } else {
+                val o = if (c.toUpperCase() == c) {
+                    " $c"
                 } else {
-                    val o = if (c.toUpperCase() == c) {
-                        " $c"
-                    } else {
-                        c.toString()
-                    }
-                    output += o
+                    c.toString()
                 }
-                i++
+                output += o
             }
-            return output
+            i++
         }
+        return output
     }
 
 }

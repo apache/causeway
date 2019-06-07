@@ -74,3 +74,9 @@ Host ssh.github.com
   TCPKeepAlive yes
   IdentitiesOnly yes
 ```
+
+#### Corporate Firewall with SSL 'inspection'
+There are some questionable setups in coporate settings that are based on SSL replacement.
+In order to cope with it, you may try to import the Certificate into cacerts, 
+see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584-IDEA-Ultimate-2016-3-4-throwing-unable-to-find-valid-certification-path-to-requested-target-when-trying-to-refresh-gradle
+
