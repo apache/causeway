@@ -33,7 +33,7 @@
         <isis-maven-plugin.validate.appManifest>
             domainapp.modules.simple.SimpleModuleManifest
         </isis-maven-plugin.validate.appManifest>
-
+        
         <maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
         <maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
     </properties>
@@ -90,12 +90,12 @@
                     <name>!skip.isis-validate</name>
                 </property>
             </activation>
+            
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.isis.tool</groupId>
                         <artifactId>isis-maven-plugin</artifactId>
-                        <version>${isis.version}</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>

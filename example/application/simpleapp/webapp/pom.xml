@@ -103,7 +103,6 @@
                     <plugin>
                         <groupId>org.apache.isis.tool</groupId>
                         <artifactId>isis-maven-plugin</artifactId>
-                        <version>${isis.version}</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
