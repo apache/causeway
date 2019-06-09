@@ -11,22 +11,22 @@ Every domain object in Apache Isis consists of (at most) three types of members:
 
 * actions, such as a ``Customer'``s `placeOrder(...)` method.
 
-Some domain objects -- specifically domain services and mixins -- only have actions.
-In the case of contributing services and mixins these actions can (depending upon their semantics and signatures) be represented as derived properties or collections on the entity/view model to which they contribute/mix-in.
+In addition, mixins act as contributors of behaviour to an underlying domain object.
+Typically the behaviour being contributed is an action, but it could also be a derived property or a derived collection.
 
 
 == Properties
 
 Properties follow the standard getter/setter pattern, with the return type being a scalar (a value object or another entity or view model).
 
-For example, with:
+
+For example (using link:https://projectlombok.org/features/GetterSetter[Project Lombok] to avoid some boilerplate), with:
 
 [source,java]
 ----
 public class Customer
-    private String firstName;
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    @Getter @Setter
+    private String lastName;
     ...
 }
 ----
@@ -38,14 +38,13 @@ the framework infers the `Customer` domain entity, which in turn has a `firstNam
 
 Collections are also represented by a getter and setter, however the return type is a `Collection` or subtype.
 
-For example, with:
+For example (again, using link:https://projectlombok.org/features/GetterSetter[Project Lombok]), with:
 
 [source,java]
 ----
 public class Customer
+    @Getter @Setter
     private SortedSet<Order> orders = new TreeSet<Order>();
-    public SortedSet<Order> getOrders() { return orders; }
-    public void setOrders(SortedSet<Order> orders) { this.orders = orders; }
     ...
 }
 ----

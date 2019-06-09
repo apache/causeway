@@ -7,7 +7,7 @@ By default, parented collections all rendered lazily, in other words in a "colla
 
 For the more commonly used collections we want to show the table expanded:
 
-image::programming-model/todoapp-Dashboard.png[width="px",link="{imagesdir}/programming-model/todoapp-Dashboard.png"]
+image::programming-model/todoapp-Dashboard.png[width="400px",link="{imagesdir}/programming-model/todoapp-Dashboard.png"]
 
 For this we annotate the collection using xref:rg:ant:CollectionLayout/defaultView.adoc[`@CollectionLayout#defaultView()`]; for example
 

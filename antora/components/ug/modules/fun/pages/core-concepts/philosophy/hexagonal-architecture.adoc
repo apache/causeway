@@ -21,7 +21,7 @@ The hexagonal architecture is also known as the link:http://c2.com/cgi/wiki?Port
 ====
 
 .The hexagonal architecture emphasizes multiple implementations of the different layers.
-image::core-concepts/philosophy/hexagonal-architecture.png[width="700px"]
+image::core-concepts/philosophy/hexagonal-architecture.png[width="700px",link="{imagesdir}/core-concepts/philosophy/hexagonal-architecture.png"]
 
 What Cockburn is emphasizing is that there's usually more than one way *into* an application (what he called the *_user-side' ports_*) and more than one way  *out of* an application too (the *_data-side ports_*).
 This is very similar to the concept of primary and secondary actors in use cases: a primary actor (often a human user but not always) is active and initiates an interaction, while a secondary actor (almost always an external system) is passive and waits to be interacted with.

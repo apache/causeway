@@ -43,7 +43,7 @@ The stub/proxy is a type of view model: a view -- if you like -- onto the domain
 
 [NOTE]
 ====
-DataNucleus does in fact define its own link:http://www.datanucleus.org/documentation/extensions/store_manager.html[Store Manager] extension point, so an alternative architecture would be to implement this interface such that DataNucleus could make the calls to the external system; these externally-persisted domain entities would therefore be modelled as regular `@PersistenceCapable` entities after all.
+DataNucleus does in fact define its own link:http://www.datanucleus.org/javadocs/core/5.2/org/datanucleus/store/StoreManager.html[Store Manager] extension point, so an alternative architecture would be to implement this interface such that DataNucleus could make the calls to the external system; these externally-persisted domain entities would therefore be modelled as regular `@PersistenceCapable` entities after all.
 For entities not persisted externally the implementation would delegate down to the default RDBMS-specific `StoreManager` provided by DataNucleus itself.
 
 An implementation that supported only reading from an external entity ought to be comparatively straight-forward, but implementing one that also supported updating external entities would need to carefully consider error conditions if the external system is unavailable; distributed transactions are most likely difficult/impossible to implement (and not desirable in any case).
@@ -92,7 +92,7 @@ You certainly _shouldn't_ try to build out a domain layer that could support eve
 
 Instead, you should iterate.
 Identify the use case/story/end-user objective that will deliver value to the business.
-Then build out the minimum domain entities to support that use case (refining the xref:ug:fun:core-concepts/philosophy/domain-driven-design/ubiquitous-language.adoc[ubiquitous language] as you go).
+Then build out the minimum domain entities to support that use case.
 Then, identify if there any view models that could be introduced which would simplify the end-user interactions with the system (perhaps automating several related use cases together).
 ****
 
@@ -129,7 +129,7 @@ The view model simply needs to implement the xref:rg:cms:classes/mixins/Dto.adoc
 
 [TIP]
 ====
-Details of how to consume such DTOs can be found xref:ug:fun:programming-model/view-models/jaxb/dto-consumers.adoc[here].
+Details of how to consume such DTOs can be found xref:ug:fun:programming-model/view-models/dto/dto-consumers.adoc[here].
 ====
 
 

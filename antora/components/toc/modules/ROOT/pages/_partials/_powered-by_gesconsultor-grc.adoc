@@ -60,7 +60,7 @@ image::powered-by/gesconsultor-grc/fig-3-custom-ui-analyzing-risk-scenarios.png[
 Allows users to visually manage their projects and tasks through a KanBan-like interface.
 Again, the viewer provides drag-n-drop capabilities:
 
-image::powered-by/gesconsultor-grc/fig-4-managing-projects.png[width="px",link="{imagesdir}/powered-by/gesconsultor-grc/fig-4-managing-projects.png"]
+image::powered-by/gesconsultor-grc/fig-4-managing-projects.png[width="400px",link="{imagesdir}/powered-by/gesconsultor-grc/fig-4-managing-projects.png"]
 
 
 === Dashboard and Indicators

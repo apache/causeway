@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The xref:ug:fun/core-concepts/apache-isis-vs/cqrs.adoc[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
+The xref:ug:fun:core-concepts/apache-isis-vs/cqrs.adoc[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
 
 With event sourcing, each business operation emits a domain event (or possibly events) that allow other objects in the system to act accordingly.
 For example, if a customer places an order then this might emit the `OrderPlacedEvent`.

@@ -5,24 +5,24 @@ site:
 
 content:
   sources:
-  - url: .
-    start_path: antora/components/ug
-    branches: HEAD
-  - url: .
-    branches: HEAD
-    start_path: antora/components/rg
-  - url: .
-    branches: HEAD
-    start_path: antora/components/demoapp
-  - url: .
-    branches: HEAD
-    start_path: antora/components/arch
-  - url: .
-    branches: HEAD
-    start_path: antora/components/downloads
-  - url: .
-    branches: HEAD
-    start_path: antora/components/support
+#  - url: .
+#    start_path: antora/components/ug
+#    branches: HEAD
+#  - url: .
+#    branches: HEAD
+#    start_path: antora/components/rg
+#  - url: .
+#    branches: HEAD
+#    start_path: antora/components/demoapp
+#  - url: .
+#    branches: HEAD
+#    start_path: antora/components/arch
+#  - url: .
+#    branches: HEAD
+#    start_path: antora/components/downloads
+#  - url: .
+#    branches: HEAD
+#    start_path: antora/components/support
   - url: .
     branches: HEAD
     start_path: antora/components/toc

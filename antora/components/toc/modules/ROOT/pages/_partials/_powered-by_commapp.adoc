@@ -9,7 +9,7 @@ of a business.  You can get a feel for it from this screenshot:
 
 image::powered-by/commapp/screenshot-1.png[width="900px",link="{imagesdir}/powered-by/commapp/screenshot-1.png"]
 
-which shows how the app integrates a number of the (non-ASF) link:http://platform.incode.org[Incode Platform^] componennts
+which shows how the app integrates a number of the (non-ASF) link:http://platform.incode.org[Incode Platform^] components
 (excel, fullcalendar2, gmap3 and wickedcharts).
 
 

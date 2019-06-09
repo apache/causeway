@@ -1,0 +1,4 @@
+static_files:
+- index.html
+- _headers
+- robots.txt

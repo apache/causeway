@@ -42,7 +42,7 @@
 **** xref:building-blocks/types-of-domain-objects/mixins.adoc[Mixins]
 
 *** xref:building-blocks/identifiers.adoc[Identifiers]
-**** xref:building-blocks/identifiers/title-and-icon.adoc[Title and Icon]
+**** xref:building-blocks/identifiers/title-and-icon-and-css-class.adoc[Title, Icon and CSS Class]
 **** xref:building-blocks/identifiers/oid.adoc[OID]
 
 *** xref:building-blocks/object-members.adoc[Object Members]

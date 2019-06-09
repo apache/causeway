@@ -37,7 +37,7 @@ use the oid tuple to look up, render and allow the user to interact with domain 
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
 These are represented as `Bookmark`s, obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
-Deep links meanwhile can be obtained from the xref:rg:svc:presentation-api/DeepLinkService.adoc[`DeepLinkService`].
+Deep links meanwhile can be obtained from the xref:rg:svc:presentation-layer-api/DeepLinkService.adoc[`DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.
 The xref:rg:cms:schema/common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.

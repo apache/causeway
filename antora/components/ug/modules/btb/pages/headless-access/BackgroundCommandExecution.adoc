@@ -39,5 +39,5 @@ This implementation queries for ``Command``s persisted by the (non-ASF) link:htt
 The diagram below (link:http://yuml.me/edit/25343da1[yuml.me/25343da1]) shows the inheritance hierarchy for this class:
 
 .Inheritance Hierarchy for `BackgroundCommandExecutionFromBackgroundCommandServiceJdo`
-image::headless-access/BackgroundCommandExecutionFromBackgroundCommandServiceJdo.png[width="500px"]
+image::headless-access/BackgroundCommandExecutionFromBackgroundCommandServiceJdo.png[width="500px",link="{imagesdir}/headless-access/BackgroundCommandExecutionFromBackgroundCommandServiceJdo.png"]
 

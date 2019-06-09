@@ -43,12 +43,10 @@ xref:ug:fun:programming-model/mixins.adoc[here].
 .DCI Architecture
 ****
 Mixins are an implementation of the link:http://www.artima.com/articles/dci_vision.html[DCI architecture] architecture, as formulated and described by link:https://en.wikipedia.org/wiki/Trygve_Reenskaug[Trygve Reenskaug] and link:https://en.wikipedia.org/wiki/Jim_Coplien[Jim Coplien].
-Reenskaug was the inventor of the MVC pattern (and also the external examiner for Richard Pawson's PhD thesis), while Coplien has a long history in object-orientation, C++ and patterns.
+Reenskaug was the inventor of the MVC pattern (and also the external examiner for Richard Pawson's link:../../../../../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis]), while Coplien has a long history in object-orientation, C++ and patterns.
 
 DCI stands for Data-Context-Interaction and is presented as an evolution of object-oriented programming, but one where behaviour is bound to objects dynamically rather than statically in some context or other.
 The mixin pattern is Apache Isis' straightforward take on the same basic concept.
-
-You might also wish to check out link:http://zest.apache.org[Apache Zest] (formerly Qi4J), which implements a much more general purpose implementation of the same concepts.
 ****
 
 

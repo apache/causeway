@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-As explained xref:ug:fun:building-blocks/identifiers/title-and-icon.adoc[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
+As explained xref:ug:fun:building-blocks/identifiers/title-and-icon-and-css-class.adoc[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
 
 xref:ug:fun:ui-hints/object-titles-and-icons.adoc[Normally] the code to return title and icon of an object is part of the domain object's implementation.
 However, UI events allow this title and icon to be provided instead by a subscriber.
