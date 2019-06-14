@@ -25,17 +25,17 @@ module.exports = function(grunt) {
 		},
 
 		copy: {
-		    main: {
-                files: [
-                    {expand: true, cwd: "build/js", src: ['*.json'], dest: 'build/kotlin-js-min/main/'},
-                ],
-		    },
-        },
-	})
+			main: {
+				files: [
+					{expand: true, cwd: "build/js", src: ['*.json'], dest: 'build/kotlin-js-min/main/'},
+				],
+			},
+		},
+	});
 
-	grunt.loadNpmTasks('grunt-pot')
-	grunt.loadNpmTasks('grunt-po2json-remi')
-	grunt.loadNpmTasks('grunt-contrib-copy')
+	grunt.loadNpmTasks('grunt-pot');
+	grunt.loadNpmTasks('grunt-po2json-remi');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
-	grunt.registerTask('default', ['po2json', 'copy'])
-}
+	grunt.registerTask('default', ['po2json', 'copy']);
+};

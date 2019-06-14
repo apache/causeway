@@ -1,5 +1,6 @@
 package org.ro.handler
 
+import org.ro.core.Utils
 import org.ro.core.event.EventStore
 import org.ro.core.event.ListObserver
 import org.ro.core.event.LogEntry
@@ -8,6 +9,7 @@ import org.ro.urls.FR_OBJECT_PROPERTY_
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class PropertyHandlerTest : IntegrationTest() {
 
@@ -23,8 +25,12 @@ class PropertyHandlerTest : IntegrationTest() {
             // then 
             val actLe: LogEntry? = EventStore.find(FR_OBJECT_PROPERTY.url)
             assertNotNull(actLe)  //1
-            assertNotNull(actLe.getObj())  //2
-            val p = actLe.getObj() as Property
+            val p = actLe.getObj()
+            assertNotNull(p)  //2
+            console.log("[[WTF]]")
+            Utils.debug(p)
+//            assertTrue(p is TObject)
+            assertTrue(p is Property)
             assertNotNull(p.id)    // 3
             val links = p.links
             val descLink =  links.find {

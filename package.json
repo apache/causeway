@@ -1,33 +1,18 @@
 {
   "name": "kroViz",
-  "dependencies": {
-    "core-js": "^3.1.2",
-    "grunt-cli": "^1.3.2",
-    "kotlin": "^1.3.10"
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joerg-rade/kroviz"
   },
   "devDependencies": {
-    "browser-sync": "2.23.6",
-    "browser-sync-webpack-plugin": "2.0.1",
-    "browserify": "16.1.0",
-    "css-loader": "0.28.7",
     "grunt": "^0.4.5",
     "grunt-contrib-copy": "~1.0.0",
     "grunt-po2json-remi": "~0.2.0",
-    "grunt-pot": "~0.3.0",
-    "html-webpack-plugin": "2.30.1",
-    "karma": "2.0.0",
-    "karma-browserify": "5.2.0",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-mocha": "1.3.0",
-    "karma-mocha-reporter": "2.2.5",
-    "mocha": "5.0.0",
-    "style-loader": "0.20.1",
-    "watchify": "3.10.0",
-    "webpack": "3.11.0"
+    "grunt-pot": "~0.3.0"
   },
-  "scripts": {
-    "start": "webpack",
-    "bundle": "webpack --config webpack.deploy.config.js",
-    "test": "karma start"
+  "dependencies": {
+    "grunt-cli": "^1.3.2",
+    "kotlinx-serialization-runtime-js": "^0.5.0"
   }
 }

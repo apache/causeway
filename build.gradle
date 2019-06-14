@@ -25,7 +25,7 @@ if (production) {
     apply plugin: 'kotlin-dce-js'
 }
 apply plugin: 'org.jetbrains.kotlin.frontend'
-apply plugin: 'kotlinx-serialization'                                       
+apply plugin: 'kotlinx-serialization'
 
 repositories {
     jcenter()
@@ -90,9 +90,9 @@ task pot(type: GruntTask) {
 
 task po2json(type: GruntTask) {
     args = ["default"]
-    inputs.dir(file('translation'))
-    outputs.dir(file('build/js'))
-    outputs.dir(file('build/kotlin-js-min/main'))
+        inputs.dir(file('translation'))
+        outputs.dir(file('build/js'))
+        outputs.dir(file('build/kotlin-js-min/main'))
 }
 
 pot.dependsOn 'installGrunt'
