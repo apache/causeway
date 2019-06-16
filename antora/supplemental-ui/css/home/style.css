@@ -584,6 +584,13 @@ body.mobile-nav-active #mobile-nav-toggle {
   padding-bottom: 10px;
 }
 
+/* How it works Section
+--------------------------------*/
+
+#how-it-works {
+  padding: 30px 0 0 0;
+}
+
 /* Services Section
 --------------------------------*/
 
