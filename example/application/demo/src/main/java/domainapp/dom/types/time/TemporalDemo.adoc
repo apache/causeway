@@ -74,4 +74,4 @@ public class TemporalDemo extends DemoStub {
 ----
 
 See the temporal demo
-link:${SOURCES_DEMO}/domainapp/dom/scalars[sources].
+link:${SOURCES_DEMO}/domainapp/dom/types/time[sources].

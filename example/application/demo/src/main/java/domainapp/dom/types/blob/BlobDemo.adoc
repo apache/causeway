@@ -1,0 +1,24 @@
+(since 1.)
+
+The framework supports big large objects (blobs) for various MIME types:
+
+* images
+* documents
+
+== TODO
+- hint on file extension when downloading
+- disable client side caching with non-idempotent semantics
+- provide a readonly variant 
+
+[source,java]
+----
+public class BlobDemo {
+
+    @Property
+    @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
+    @Getter @Setter private Blob avatar; // rendered as image, according to its MIME type
+    
+}
+----
+
+See the text demo link:${SOURCES_DEMO}/domainapp/dom/types/blob[sources].

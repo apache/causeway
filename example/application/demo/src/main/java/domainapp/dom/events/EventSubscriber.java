@@ -18,11 +18,10 @@
  */
 package domainapp.dom.events;
 
+import static domainapp.utils.DemoUtils.emphasize;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -30,15 +29,15 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-
-import static domainapp.utils.DemoUtils.emphasize;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import domainapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
 import lombok.val;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 @DomainService(nature=NatureOfService.DOMAIN)
-@Log @Component
+@Log4j2 @Component
 public class EventSubscriber {
 
     @Inject private BackgroundService backgroundService;

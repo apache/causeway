@@ -149,12 +149,11 @@
 
 		<wicket.version>8.4.0</wicket.version>
 		<wicketstuff.version>8.4.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
-		<wicket-bootstrap.version>2.0.3</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
+		<wicket-bootstrap.version>2.0.10</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
 		<wicket-source.version>7.0.0</wicket-source.version>
+		<summernote.version>0.8.11</summernote.version> <!-- overrides wicket dependencies -->
 
-		<!-- [ahuber] update to newer versions just does not work as a drop in 
-			replacement <wicket-webjars.version>2.0.7</wicket-webjars.version> -->
-		<wicket-webjars.version>0.5.4</wicket-webjars.version>
+		<wicket-webjars.version>2.0.15</wicket-webjars.version>
 
 		<select2.version>4.0.5</select2.version>
 

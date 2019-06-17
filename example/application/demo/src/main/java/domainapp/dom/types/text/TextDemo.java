@@ -1,4 +1,4 @@
-package domainapp.dom.scalars;
+package domainapp.dom.types.text;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,13 +15,13 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import domainapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
-@Log
+@Log4j2
 public class TextDemo extends DemoStub {
 
     @Override

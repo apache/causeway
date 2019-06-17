@@ -1,4 +1,4 @@
-package domainapp.dom.scalars;
+package domainapp.dom.types.time;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,28 +12,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.util.JaxbAdapters.DateAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.LocalDateAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.LocalDateTimeAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.OffsetDateTimeAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlDateAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlTimestampAdapter;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 
 import domainapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
-@Log
+@Log4j2
 public class TemporalDemo extends DemoStub {
 
     public String title() {

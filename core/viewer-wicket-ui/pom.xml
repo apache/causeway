@@ -154,6 +154,17 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-extensions</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.webjars.bower</groupId>
+            		<artifactId>summernote</artifactId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+      		<groupId>org.webjars.bower</groupId>
+      		<artifactId>summernote</artifactId>
+      		<version>${summernote.version}</version>
         </dependency>
 
         <dependency>

@@ -21,4 +21,4 @@ public class TextDemo {
 }
 ----
 
-See the text demo link:${SOURCES_DEMO}/domainapp/dom/scalars[sources].
+See the text demo link:${SOURCES_DEMO}/domainapp/dom/types/text[sources].

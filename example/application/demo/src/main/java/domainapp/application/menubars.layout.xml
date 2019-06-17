@@ -2,13 +2,16 @@
 <mb3:menuBars xsi:schemaLocation="http://isis.apache.org/applib/layout/menubars/bootstrap3 http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd http://isis.apache.org/applib/layout/links http://isis.apache.org/applib/layout/links/links.xsd" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:lnk="http://isis.apache.org/applib/layout/links" xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>
         <mb3:menu>
-            <mb3:named>Scalars</mb3:named>
+            <mb3:named>Featured Types</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.scalars.ScalarMenu" id="temporals">
-                    <cpt:named>Temporals</cpt:named>
+                <mb3:serviceAction objectType="domainapp.dom.types.FeaturedTypesMenu" id="temporals">
+                    <cpt:named>Temporal Types</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="domainapp.dom.scalars.ScalarMenu" id="text">
+                <mb3:serviceAction objectType="domainapp.dom.types.FeaturedTypesMenu" id="text">
                     <cpt:named>Text</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="domainapp.dom.types.FeaturedTypesMenu" id="blobs">
+                    <cpt:named>Blob Type</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>

@@ -1,4 +1,4 @@
-package domainapp.dom.scalars;
+package domainapp.dom.types;
 
 import javax.inject.Inject;
 
@@ -9,11 +9,14 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+import domainapp.dom.types.blob.BlobDemo;
+import domainapp.dom.types.text.TextDemo;
+import domainapp.dom.types.time.TemporalDemo;
 import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW_MENU_ONLY)
-@DomainObjectLayout(named="Scalar Demo")
-public class ScalarMenu {
+@DomainObjectLayout(named="Featured Types")
+public class FeaturedTypesMenu {
     
     @Inject private FactoryService factoryService;
 
@@ -29,6 +32,14 @@ public class ScalarMenu {
     @ActionLayout(cssClassFa="fa-clock-o")
     public TemporalDemo temporals(){
         val demo = factoryService.instantiate(TemporalDemo.class);
+        demo.initDefaults();  
+        return demo;
+    }
+    
+    @Action
+    @ActionLayout(cssClassFa="fa-cloud")
+    public BlobDemo blobs(){
+        val demo = factoryService.instantiate(BlobDemo.class);
         demo.initDefaults();  
         return demo;
     }
