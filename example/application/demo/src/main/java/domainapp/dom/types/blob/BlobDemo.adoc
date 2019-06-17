@@ -14,11 +14,15 @@ The framework supports big large objects (blobs) for various MIME types:
 ----
 public class BlobDemo {
 
-    @Property
-    @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
-    @Getter @Setter private Blob avatar; // rendered as image, according to its MIME type
+	@Property
+    @PropertyLayout
+    @XmlElement @XmlJavaTypeAdapter(DemoBlobStore.BlobAdapter.class) // <1>
+    @Getter @Setter private Blob logo; // <2> 
     
 }
 ----
 
-See the text demo link:${SOURCES_DEMO}/domainapp/dom/types/blob[sources].
+<1> we use this BlobAdapter only for demo purposes here
+<2> renders as image, according to its MIME type
+
+See the blob demo link:${SOURCES_DEMO}/domainapp/dom/types/blob[sources].

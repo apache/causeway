@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
@@ -52,8 +53,8 @@ public class BlobDemo extends DemoStub {
         log.info("BlobDemo::initDefaults");
         
         try {
-	        val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "avatar.png"));
-			avatar = new Blob("family", "image/png", bytes);
+	        val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "isis-logo-568x286.png"));
+	        logo = new Blob("isis-logo-568x286.png", "image/png", bytes);
         } catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -63,8 +64,9 @@ public class BlobDemo extends DemoStub {
     // -- EDITABLE
     
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @PropertyLayout
     @XmlElement @XmlJavaTypeAdapter(DemoBlobStore.BlobAdapter.class)
-    @Getter @Setter private Blob avatar;
+    @Getter @Setter private Blob logo;
     
     // -- READONLY
     

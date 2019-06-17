@@ -14,7 +14,7 @@
         <bs3:col span="6">
             <cpt:fieldSet name="Editable" id="editable">
                 
-                <cpt:property id="avatar"/>
+                <cpt:property id="logo"/>
                 
             </cpt:fieldSet>
             
