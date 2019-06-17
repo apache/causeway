@@ -6,20 +6,11 @@ include::_attributes.adoc[]
 We tend to use Maven modules as a way to group related domain objects together; we can then reason about all the classes in that module as a single unit.
 By convention there will be a single top-level package corresponding to the module.
 
-For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s document module has a top-level package of `org.incode.module.document`.
+For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s http://platform.incode.org/modules/lib/excel/lib-excel.html[Excel] module has a top-level package of `org.incode.module.excel`.
 Within the module there may be various subpackages, but it's the module that defines the namespace.
 
-The bootstrapping of Apache Isis also relies on module classes.
-(Currently) the only role of these classes is to identify a fully qualified package name, for example `org.incode.modules.document`.
-The framework then performs classpath scanning across all such packages to locate any domain entities provided by that module (though some modules have no entities), all domain services provided by the module (every module is likely to define at least one), and also any fixture scripts provided by the module.
-
-In the same way that the Java module act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
-
-The module class does not _need_ to implement any specific interface; in this case the framework uses the module class simply to obtain a package to scan for entities and domain services.
-However, it's recommended to implement the xref:rg:cms:classes/Module.adoc[`Module`] interface because this allows the module to specify its direct dependencies; from these all transitive dependencies are calculated.
-This should match the compile-time dependencies declared within Maven.
-
-The `Module` interface also allows a module to declare any configuration properties that should be contributed, as well as fixture scripts for reference data, and to tear down (for integration testing).
-
-
+[NOTE]
+====
+TODO: flesh out with details on how modules are used under Spring Boot.
+====
 

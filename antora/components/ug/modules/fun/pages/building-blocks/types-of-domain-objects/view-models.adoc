@@ -33,7 +33,7 @@ xref:ug:fun:programming-model/view-models.adoc[here].
 
 == Externally-managed entities
 
-Sometimes the entities that make up your application are persisted not in the local JDO/DataNucleus database but reside in some other system, for example accessible only through a SOAP web service.
+Sometimes the entities that make up your application are persisted not in the local database but reside in some other system, for example accessible only through a SOAP web service.
 Logically that data might still be considered a domain entity and we might want to associate behaviour with it, however it cannot be modelled as a domain entity if only because JDO/DataNucleus doesn't know about the entity nor how to retrieve or update it.
 
 There are a couple of ways around this: we could either replicate the data somehow from the external system into the Isis-managed database (in which case it is once again just another domain entity), or we could set up a stub/proxy for the externally managed entity.
@@ -41,13 +41,6 @@ This proxy would hold the reference to the externally-managed domain entity (eg 
 
 The stub/proxy is a type of view model: a view -- if you like -- onto the domain entity managed by the external system.
 
-[NOTE]
-====
-DataNucleus does in fact define its own link:http://www.datanucleus.org/javadocs/core/5.2/org/datanucleus/store/StoreManager.html[Store Manager] extension point, so an alternative architecture would be to implement this interface such that DataNucleus could make the calls to the external system; these externally-persisted domain entities would therefore be modelled as regular `@PersistenceCapable` entities after all.
-For entities not persisted externally the implementation would delegate down to the default RDBMS-specific `StoreManager` provided by DataNucleus itself.
-
-An implementation that supported only reading from an external entity ought to be comparatively straight-forward, but implementing one that also supported updating external entities would need to carefully consider error conditions if the external system is unavailable; distributed transactions are most likely difficult/impossible to implement (and not desirable in any case).
-====
 
 
 == In-memory entities
@@ -59,7 +52,7 @@ A simple example might be read-only configuration data that is read from a confi
 
 == Application-layer view models
 
-Domain entities (whether locally persisted using JDO/DataNucleus or managed externally) are the bread-and-butter of Apache Isis applications: the focus after all, should be on the business domain concepts and ensuring that they are solid.
+Domain entities (whether locally persisted or managed externally) are the bread-and-butter of Apache Isis applications: the focus after all, should be on the business domain concepts and ensuring that they are solid.
 Generally those domain entities will make sense to the business domain experts: they form the _ubiquitous language_ of the domain.
 These domain entities are part of the domain layer.
 
@@ -102,10 +95,6 @@ For some applications this may well suffice.
 
 However, if the application needs to integrate with other systems, or if the application needs to support reasonably complex business processes, then you may need to look beyond just domain entities; view models are the tool of choice.
 
-[WARNING]
-====
-We strongly recommend that you build your applications from the domain layer up, rather than from the view model down.
-====
 
 
 == DTOs

@@ -8,7 +8,7 @@ These are similar to traits or extension methods in other programming languages,
 
 A mixin object allows one class to contribute behaviour - actions, (derived) properties and (derived) collections - to another domain object, either a domain entity or view model.
 
-The allows the app to stay decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
+This allows the app to stay decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
 Mixins allow dependencies to be inverted, so that the dependencies between modules can be kept acyclic and under control.
 
 For example, the contributee (eg `Customer`, being mixed into) is in one module, while the contributor mixin (`DocumentHolder_documents`) is in some other module.
@@ -17,6 +17,15 @@ The `customer` module knows about the `document` module, but not vice versa.
 Mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.
 Each mixin is in effect a single behavioural "responsibility" of the domain object.
 
+In fact, we find mixins nicely balance inside-out vs outside-in ways of thinking about a system:
+
+* inside-out tends to focus on the structure, the nouns that make up the domain.
+
+* outside-in tends to focus on the behaviour, that is the functionality that the system provides to automate the business processes; the verbs, in other words.
+
+So, while Apache Isis allows you to put behaviour onto the underlying domain entities, it can often be better to treat the domain entities as immutable.
+Instead, use mixins to implement behaviour.
+When using agile development methodology, it's common for a user story to correspond to a new mixin.
 
 There are also practical reasons for moving behaviour out of entities even within the same module, because structuring your application this way helps support hot-reloading of Java classes (so that you can modify and recompile your application without having to restart it).
 This can provide substantial productivity gains.
@@ -25,13 +34,6 @@ The Hotspot JVM has limited support for hot reloading; generally you can change 
 However, the link:https://dcevm.github.io/[DCEVM] open source project will patch the JVM to support much more complete hot reloading support.
 There are also, of course, commercial products such as JRebel.
 
-The main snag in all this is the DataNucleus enhancer... any change to entities is going to require the entity to be re-enhanced, and the JDO metamodel recreated, which invariably breaks things.
-So hot-reloading of an app whose fundamental structure is changing is likely to remain a no-no.
-
-However, chances are that the structure of your domain objects (the data) will change much less rapidly than the behaviour of those domain objects.
-Thus, it's the behaviour that you're most likely wanting to change while the app is still running.
-If you move that behaviour out into mixins, then these can be reloaded happily.
-(And when running in prototype mode), Apache Isis will automatically recreate the portion of the metamodel for any domain object as it is rendered.
 
 [TIP]
 ====

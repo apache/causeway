@@ -25,19 +25,15 @@ When the PDF is scanned by the mail room, the barcode could be read to attach th
 
 * as a handle to any object in an audit record, as used by xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`];
 
-* similarly within implementations of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] to persist `Command`
-objects
+* similarly within implementations of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] to persist `Command` objects
 
-* similarly within implementations of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`]
-to persist published action invocations
+* similarly within implementations of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] to persist published action invocations
 
-* and of course both the xref:ug:vro:about.adoc[RestfulObjects viewer] and
-xref:ug:vw:about.adoc[Wicket viewer]
-use the oid tuple to look up, render and allow the user to interact with domain objects.
+* and of course both the xref:ug:vro:about.adoc[RestfulObjects viewer] and xref:ug:vw:about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
-These are represented as `Bookmark`s, obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
-Deep links meanwhile can be obtained from the xref:rg:svc:presentation-layer-api/DeepLinkService.adoc[`DeepLinkService`].
+These are represented as ``Bookmark``s, obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[``BookmarkService``].
+Deep links meanwhile can be obtained from the xref:rg:svc:presentation-layer-api/DeepLinkService.adoc[``DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.
 The xref:rg:cms:schema/common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.

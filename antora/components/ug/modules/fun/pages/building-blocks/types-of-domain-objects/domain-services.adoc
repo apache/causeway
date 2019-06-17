@@ -27,14 +27,6 @@ This is discussed in more detail below, in the section on xref:ug:fun:building-b
 
 * to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Isis framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 
-* to contribute behaviour or (derived) state to entities/view models. +
-+
-
-[NOTE]
-====
-Mixins can do everything that contributed services can, and have a cleaner programming model.
-As such, contributed services should be considered a deprecated feature; it may be removed in a future release.
-====
 
 Domain objects of any type (entities, other services, view models, mixins) can also delegate to domain services; domain services are automatically injected into every other domain object.
 This injection of domain services into entities is significant: it allows business logic to be implemented in the domain entities, rather than have it "leach away" into
@@ -50,7 +42,7 @@ xref:ug:fun:programming-model/domain-services.adoc[here].
 ====
 
 
-== Hexagonal Arch. + services
+== Hexagonal Architecture
 
 It's worth extending the xref:ug:fun:core-concepts/philosophy/hexagonal-architecture.adoc[Hexagonal Architecture] to show where domain services fit in:
 
