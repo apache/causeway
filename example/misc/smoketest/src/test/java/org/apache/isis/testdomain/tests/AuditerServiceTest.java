@@ -98,16 +98,12 @@ class AuditerServiceTest {
 		val transactionTemplate = IsisContext.createTransactionTemplate();
 		transactionTemplate.execute(status -> {
 			
-				System.out.println("==== EXEC IN");
-				
 		    	auditerService.clearHistory();
 				book.setName("Book #2");
 				repository.persist(book);
 				
 				// then - before the commit
 				assertEquals("", auditerService.getHistory());
-				
-				System.out.println("==== EXEC OUT");
 				
 				return null;
 		});
