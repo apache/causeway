@@ -1,4 +1,2 @@
-* Simple App
-
-** xref:about.adoc[About]
+* xref:about.adoc[Simple App Archetype]
 

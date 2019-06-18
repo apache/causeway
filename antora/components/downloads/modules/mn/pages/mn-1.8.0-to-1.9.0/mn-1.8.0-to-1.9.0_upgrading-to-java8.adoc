@@ -1,0 +1,82 @@
+= Upgrading to Java 8
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+Apache Isis 1.9.0 is the first version to support Java 8.  You can continue to use Java 7, but if you want to move to Java 8 then there are several small changes to be made.
+
+
+
+== In the parent `pom.xml`
+
+under `build/pluginManagement/plugins`, add (or update) `maven-compiler-plugin`:
+
+[source,xml]
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.1</version>
+    <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+        <compilerArgument>-parameters</compilerArgument>
+    </configuration>
+    <executions>
+        <execution>
+            <id>source</id>
+            <phase>compile</phase>
+        </execution>
+        <execution>
+            <id>test</id>
+            <phase>test-compile</phase>
+        </execution>
+    </executions>
+</plugin>
+----
+
+[TIP]
+====
+The `-parameters` argument causes the Java compiler to capture the names of method parameters in the `.class` files.  Apache Isis can be configured to use this, thereby avoiding the requirement to annotate every parameter with `@ParameterLayout(named=...)`.  The necessary configuration is provided in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension.
+
+====
+
+We also recommend that you add the `maven-enforcer-plugin` (if not used already).  Again, this resides under `<build>/<pluginManagement>/<plugins>`:
+
+[source,xml]
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-enforcer-plugin</artifactId>
+    <version>1.3.1</version>
+    <configuration>
+        <rules>
+            <requireMavenVersion>
+                <version>[3.2.1,)</version>
+            </requireMavenVersion>
+            <requireJavaVersion>
+                <version>[1.8.0,)</version>
+            </requireJavaVersion>
+            <requirePluginVersions>
+                <message>All plugin versions must be defined!</message>
+                <banLatest>true</banLatest>
+                <banRelease>true</banRelease>
+            </requirePluginVersions>
+            <DependencyConvergence />
+        </rules>
+    </configuration>
+    <executions>
+        <execution>
+            <id>validate-enforce</id>
+            <phase>validate</phase>
+            <goals>
+                <goal>enforce</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+
+

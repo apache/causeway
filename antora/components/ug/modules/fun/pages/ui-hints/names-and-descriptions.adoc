@@ -53,7 +53,7 @@ If you're running on Java 8, then note that it's possible to write Isis applicat
 Support for this can be found in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension (non-ASF).
 (In the future we'll fold this into core).
 
-See also our guidance on xref:downloads:mn:migration-notes.adoc#_migration-notes_1.8.0-to-1.9.0_upgrading-to-java8[upgrading to Java 8].
+See also our guidance on xref:downloads:mn:about.adoc#_migration-notes_1.8.0-to-1.9.0_upgrading-to-java8[upgrading to Java 8].
 ====
 
 

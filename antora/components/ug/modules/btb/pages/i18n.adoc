@@ -127,7 +127,7 @@ Moreover, these messages must be captured in the `.pot` file such that they can 
 The first part of the puzzle is tackled by an extension to Apache Isis' programming model.
 Whereas previously the `disableXxx()` / `validateXxx()` / `title()` methods could only return a `java.lang.String`, they may now optionally return a `TranslatableString` (defined in Isis applib) instead.
 
-Here's a (silly) example from the xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp archetype]:
+Here's a (silly) example from the xref:arch:simpleapp:about.adoc[SimpleApp archetype]:
 
 [source,java]
 ----

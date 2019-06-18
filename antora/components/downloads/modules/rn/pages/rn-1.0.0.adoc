@@ -1,0 +1,124 @@
+= 1.0.0
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+== Core
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-240[ISIS-240] - Provide a bookmark service in order to lookup any object
+* link:https://issues.apache.org/jira/browse/ISIS-242[ISIS-242] - Provide support for JODA LocalDate and LocalDateTime as value types.
+* link:https://issues.apache.org/jira/browse/ISIS-250[ISIS-250] - Change MetaModelValidator such that multiple validation errors can be reported in a single shot....
+* link:https://issues.apache.org/jira/browse/ISIS-263[ISIS-263] - Introduce a new @CommonlyUsed annotation as a hint for the UI.  To be implemented by Wicket viewer (as a minimum)
+* link:https://issues.apache.org/jira/browse/ISIS-264[ISIS-264] - side paging as a minimum).  Implement in Wicket as a minimum
+
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-89[ISIS-89] - Finish off updating documentation post the first (pre 1.0) release of Apache Isis.
+* link:https://issues.apache.org/jira/browse/ISIS-131[ISIS-131] - Archive off (and no longer support) the default runtime&#39;s client/server remoting
+* link:https://issues.apache.org/jira/browse/ISIS-188[ISIS-188] - 1.0.0 release.
+* link:https://issues.apache.org/jira/browse/ISIS-192[ISIS-192] - based authorization
+* link:https://issues.apache.org/jira/browse/ISIS-202[ISIS-202] - Rename @Stable to @ViewModel
+* link:https://issues.apache.org/jira/browse/ISIS-203[ISIS-203] - Improve the logging at startup
+* link:https://issues.apache.org/jira/browse/ISIS-216[ISIS-216] - describing (ie make OidWithSpecification the norm, using an ObjectTypeFacet as a way of determining the type).
+* link:https://issues.apache.org/jira/browse/ISIS-227[ISIS-227] - exist better.
+* link:https://issues.apache.org/jira/browse/ISIS-228[ISIS-228] - Use JUnit categories to distinguish between tests that can be run on CI server and those that cannot.
+* link:https://issues.apache.org/jira/browse/ISIS-243[ISIS-243] - Remove the Maybe type from the Isis applib.
+* link:https://issues.apache.org/jira/browse/ISIS-245[ISIS-245] - Collapse the Version hierarchy
+* link:https://issues.apache.org/jira/browse/ISIS-248[ISIS-248] - Perform concurrency checking within the persistor (rather than rely on every viewer/client to do the check)
+* link:https://issues.apache.org/jira/browse/ISIS-252[ISIS-252] - Use enums instead of booleans in FacetFactory&#39;s/Facets/ValueSemanticsProvider
+* link:https://issues.apache.org/jira/browse/ISIS-253[ISIS-253] - Get rid of DateValueFacet#getLevel(), since unused
+* link:https://issues.apache.org/jira/browse/ISIS-257[ISIS-257] - Remove the @Executed annotation from the applib (and corresponding metadata stuff) since remoting no longer supported.
+* link:https://issues.apache.org/jira/browse/ISIS-258[ISIS-258] - Extend @Hidden and @Disabled to specify Where the object member should be hidden/disabled.
+* link:https://issues.apache.org/jira/browse/ISIS-259[ISIS-259] - Replace @QueryOnly and @Idempotent with a new @ActionSemantics annotation.
+* link:https://issues.apache.org/jira/browse/ISIS-260[ISIS-260] - If a property is annotated as @Title, then by default it should not appear as a column in tables.
+* link:https://issues.apache.org/jira/browse/ISIS-261[ISIS-261] - Remove obsolete code (Enumeration interface, AnnotationBasedFacetFactory)
+* link:https://issues.apache.org/jira/browse/ISIS-262[ISIS-262] - Real composite for ResourceSourceStream
+* link:https://issues.apache.org/jira/browse/ISIS-267[ISIS-267] - Handle &quot;recreating&quot; object adapters which are already resolved
+* link:https://issues.apache.org/jira/browse/ISIS-274[ISIS-274] - Simplify the bootstrapping of Apache Isis so that there are fewer configuration properties to set in isis.properties
+* link:https://issues.apache.org/jira/browse/ISIS-280[ISIS-280] - More consistent support for @Prototype and @Exploration, by utilizing the existing HidingInteractionAdvisor API
+* link:https://issues.apache.org/jira/browse/ISIS-281[ISIS-281] - Provide support for integration testing using a JUnit rule.
+* link:https://issues.apache.org/jira/browse/ISIS-283[ISIS-283] - Provide the ability to use fixtures as domain objects, eg within demo apps
+* link:https://issues.apache.org/jira/browse/ISIS-285[ISIS-285] - Add additional MetaModelValidators so that orphaned prefixes are treated as a validation error.
+* link:https://issues.apache.org/jira/browse/ISIS-286[ISIS-286] - Make sure pending changes are stored before issuing a query
+* link:https://issues.apache.org/jira/browse/ISIS-288[ISIS-288] - During start up the configuration files are read in repeatedly making it confusing to track down configuration issues
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-184[ISIS-184] - PasswordValueSemanticsProvider.doEncode threw exception when I provided a defaultXXX method
+* link:https://issues.apache.org/jira/browse/ISIS-255[ISIS-255] - Test in Runtime TestSupport component fails due to TimeZone
+* link:https://issues.apache.org/jira/browse/ISIS-265[ISIS-265] - NullPointerException when storing new objects
+* link:https://issues.apache.org/jira/browse/ISIS-266[ISIS-266] - BoundedFacetAbstract was invalidating using disabledReason()
+
+
+
+
+
+== Wicket Viewer
+
+
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-232[ISIS-232] - General improvements to the Wicket viewer
+* link:https://issues.apache.org/jira/browse/ISIS-263[ISIS-263] - Introduce a new @CommonlyUsed annotation as a hint for the UI.  To be implemented by Wicket viewer (as a minimum)
+* link:https://issues.apache.org/jira/browse/ISIS-264[ISIS-264] - side paging as a minimum).  Implement in Wicket as a minimum
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-239[ISIS-239] - Add support for MultiLine facet in Wicket viewer
+* link:https://issues.apache.org/jira/browse/ISIS-244[ISIS-244] - Hide properties in tables that are statically invisible within the Wicket viewer
+* link:https://issues.apache.org/jira/browse/ISIS-251[ISIS-251] - Implement concurrency exception handling in Wicket viewer
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-287[ISIS-287] - BigInteger types throw error in Wicket viewer
+
+
+
+=== Wish
+
+* link:https://issues.apache.org/jira/browse/ISIS-271[ISIS-271] - the option to overrule properties distributed as part of the application (read external properties)
+
+
+
+
+
+== RestfulObjects Viewer
+
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-194[ISIS-194] - memory objectstore.
+
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-256[ISIS-256] - NullPointerReference exceptions when attempting to persist an object
+
+
+
+
+== JDO ObjectStore
+
+
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-14[ISIS-14] - Add JDO 3.1 object store in order to support any datastore
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-246[ISIS-246] - DataNucleus
+

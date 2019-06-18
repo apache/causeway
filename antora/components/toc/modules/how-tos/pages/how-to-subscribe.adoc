@@ -1,7 +1,0 @@
-= How to Subscribe
-ifndef::env-site,env-github[]
-include::_attributes.adoc[]
-endif::[]
-
-CAUTION: TODO ... convert over from 1.x branch
-

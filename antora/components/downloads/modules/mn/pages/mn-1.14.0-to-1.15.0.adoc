@@ -1,0 +1,154 @@
+= From v1.14.x to 1.15.0
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+
+
+
+== `isis-mavendeps` Aggregator POMs
+
+To remove boilerplate in your application's `pom.xml`, three new maven "aggregator projects have been defined:
+
+* `org.apache.isis.mavendeps:isis-mavendeps-testing` +
++
+aggregates dependencies for unit, integration and BDD tests
+
+* `org.apache.isis.mavendeps:isis-mavendeps-webapp` +
++
+aggregates dependencies for running as a webapp
+
+* `org.apache.isis.mavendeps:isis-mavendeps-intellij` +
++
+brings in a dependency on `isis-core-webserver` (to run the application from the command line using `org.apache.isis.WebServer`).
+This is defined in a profile which is actived only when running under the Intellij IDE.
+
+The link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[HelloWorld] and link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes both make use of these new aggregators.
+
+
+== Rename of isis-viewer-wicket artifacts (link:https://issues.apache.org/jira/browse/ISIS-1528[ISIS-1528])
+
+The `<groupId>` and `<artifactId>` of the link:https://isis.apache.org/versions/1.15.0/guides/ugvw/ugvw.html#[Wicket viewer] have been made consistent with other artifacts:
+
+* the `<groupId>` has been changed from `org.apache.isis.viewer` to `org.apache.isis.core`
+* the `<artifactId>` has been changed from `isis-viewer-wicket-???` to `isis-core-viewer-wicket-???`
+
+
+For example:
+
+[source,xml]
+----
+<groupId>org.apache.isis.viewer</groupId>
+<artifactId>isis-viewer-wicket-applib</artifactId>
+----
+
+has been renamed to:
+
+[source,xml]
+----
+<groupId>org.apache.isis.core</groupId>
+<artifactId>isis-core-viewer-wicket-applib</artifactId>
+----
+
+
+== Overriding framework services (link:https://issues.apache.org/jira/browse/ISIS-1611[ISIS-1611])
+
+Domain services fall into three categories:
+
+* application services: written by the application developer and used only within the application
+* SPI services: written by the application developer but called by the framework
+* framework services: defined within the applib with a default implementation provided by the framework itself.
+
+As described
+link:https://isis.apache.org/versions/1.15.0/guides/ugbtb/ugbtb.html#_ugbtb_hints-and-tips_replacing-default-service-implementations[here], it is possible to override framework services so that the framework uses the replacement implementation.
+Previously this required explicitly setting either link:https://isis.apache.org/versions/1.15.0/guides/rgant/rgant.html#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] or link:https://isis.apache.org/versions/1.15.0/guides/rgant/rgant.html#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`].
+
+In 1.15.0, the default value for `menuOrder` has been set to a value lower than that of the framework-provided implementations, and so will a custom implementation will always take precedence over the framework implementations without having to remember to also set `menuOrder`.
+
+Of course, your application can still override `menuOrder` if it wishes.
+A small change (made in (link:https://issues.apache.org/jira/browse/ISIS-1688[ISIS-1688]) is that if both are set, then the minimum value is used.
+
+
+== Metamodel validators (link:https://issues.apache.org/jira/browse/ISIS-1504[ISIS-1504], link:https://issues.apache.org/jira/browse/ISIS-1622[ISIS-1622], link:https://issues.apache.org/jira/browse/ISIS-1669[ISIS-1669])
+
+The metamodel validator has been extended with several new checks relating to link:https://isis.apache.org/versions/1.15.0/ugfun.html#_ugfun_programming-model_view-models_jaxb[JAXB view models]:
+
+* that the view model can be instantiated:
+** has a public, no-arg constructor
+** is not abstract
+** is not a member inner class (nested static class is ok)
+* that JODA datetimes are annotated with the link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_programming-model_view-models_jaxb_joda-datatypes[appropriate implementation] of a JAXB `XmlAdapter`
+* that for references to persistent entities, that those persistent entities are annotated to use link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[`PersistentEntityAdapter`] as their JAXB adapter.
+
+\... in other words, that the view model can be instantiated.
+
+These checks are enabled by default but can be disabled with a link:https://isis.apache.org/versions/1.15.0/rgcfg.html#__rgcfg_configuring-core_metamodel-validation[configuration property] if required.
+
+
+== Logging workaround (link:https://issues.apache.org/jira/browse/ISIS-1613[ISIS-1613])
+
+`ISIS-1613` improves the UI so that the framework does not repaint the entire page after a property edit or after invoking an action that returns the same object (`this`).
+The overall effect is a smoother user experience.
+
+However, it also results in "WARN" messages being emitted by Apache Wicket.
+These are not harmful, but may pollute the log.
+
+To remove them, add the following to `logging.properties`:
+
+[source,properties]
+----
+log4j.logger.org.apache.wicket.page.XmlPartialPageUpdate=ERROR,console
+log4j.additivity.org.apache.wicket.page.XmlPartialPageUpdate=false
+----
+
+
+== Less boilerplate when bootstrapping (link:https://issues.apache.org/jira/browse/ISIS-1686[ISIS-1686])
+
+Bootstrapping the application can now be accomplished with less boilerplate, both for the regular webapp and in integration tests.
+
+For more information, see the link:https://isis.apache.org/versions/1.15.0/ugtst/ugtst.html#_ugtst_integ-test-support_bootstrapping[testing guide] and link:https://isis.apache.org/versions/1.15.0/rgcms/rgcms.html#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[reference guide for classes/methods/schema].
+
+
+
+== Fix for view models optionality (link:https://issues.apache.org/jira/browse/ISIS-1630[ISIS-1630])
+
+This ticket fixed a bug whereby - in the absence of an explicit `@Property(optionality=...)` or `@Nullable` annotation, a view model's properties would be defaulted as optional rather than mandatory.
+
+Note also that this bug fix means that numeric properties (eg `java.lang.Integer` and `java.lang.BigDecimal`) will default to zero if the view model is instantiated using `FactoryService#instantiate(...)`, and dates (eg `java.util.Date` and `org.jodatime.LocalDate`) will default to the current date.
+This could cause your application to behave differently.
+
+You should therefore inspect all properties of your view models and ensure that they are annotated as optional if required.
+
+
+
+== Fix to config variable (link:https://issues.apache.org/jira/browse/ISIS-1595[ISIS-1595])
+
+The configuration property link:https://isis.apache.org/versions/1.15.0/guides/rgcfg/rgcfg.html#__rgcfg_configuring-core_metamodel-validation[ `isis.reflector.validator.jdoqlVariablesClause`] was incorrectly named `variablesClause`.
+This has now been corrected.
+
+Any applications that used this configuration property should be updated.
+
+
+== `@PostConstruct` always called (link:https://issues.apache.org/jira/browse/ISIS-1690[ISIS-1690])
+
+In previous versions, if any domain service threw an exception in their initialization method (annotated `@PostConstruct`) then none of the remaining domain services would be initialized.
+Even though the failing service would cause an error to be logged during start-up, this could still manifest as the application starting (in a fashion) but then failing in unrelated areas later on.
+
+As of this version, the framework now always calls ensures that all services are initialized, even if one or more of them throw an exception.
+The first exception encountered is then re-thrown (to preserve similar behaviour as possible to earlier versions).
+
+
+
+== (non-ASF) Incode Platform
+
+The various (non-ASF) link:http://isisaddons.org[Isis Addons] and link:http://catalog.incode.org[Incode Catalog] have also been combined into a single link:http://platform.incode.org["Incode Platform"].
+
+While each module can still be consumed individually, the new platform versions consistently (a change in any one module will result in a re-release of all).
+This should make these modules easier to consume, and easier to maintain/develop.
+
+All the modules remain open source, still licensed under the ASF v2.0 license.
+
+As of this release, none of the ``groupId``s or ``artifactId``s have changed.
+They will be rationalized/made consistent in a future release; most probably to coincide with v2.0.0 of the framework.

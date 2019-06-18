@@ -56,12 +56,6 @@
 
 
 
-** xref:getting-started/helloworld-archetype.adoc[Helloworld Archetype] // FIXME: these should move to own component
-
-
-
-** xref:getting-started/simpleapp-archetype.adoc[SimpleApp Archetype]
-
 
 
 ** xref:programming-model.adoc[Programming Model]

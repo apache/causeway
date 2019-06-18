@@ -36,7 +36,7 @@ As noted in the introduction, all the goals require an xref:rg:cms:classes/AppMa
 This can be extremely minimal; it isn't necessary to use the main `AppManifest` (in the `app` module) used to bootstrap the application, you can instead use a cut-down one.
 This then allows the plugins to be run during the build of the `dom` module, rather than having to run in the context of the `integtest` module.
 
-For example, the xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp]'s
+For example, the xref:arch:simpleapp:about.adoc[SimpleApp]'s
 manifest is:
 
 [source,java]
@@ -82,6 +82,6 @@ We recommend the following:
 
 * run the `xsd` plugin in a new `xsd` submodule; contributed actions are irrelevant for this particular goal; having a separate submodule allows the configuration of both the `xsd` goal (to generate the XSD schemas) and any other XSD-related configuration to be kept in a single place.
 
-The xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp archetype] reflects these recommendations for the `validate` and `swagger` goals.
+The xref:arch:simpleapp:about.adoc[SimpleApp archetype] reflects these recommendations for the `validate` and `swagger` goals.
 You can find an example of the `xsd` plugin in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] application.
 

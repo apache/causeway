@@ -1,0 +1,169 @@
+= Updated annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+Prior to v2.0.0, several annotation attributes were defined as booleans.
+In order to support link:https://isis.apache.org/versions/2.0.0-M1/migration-notes/migration-notes.html#__migration-notes_1.15.0-to-1.16.0_meta-annotations[meta annotations], these have been replaced by enums which also include a `NOT_SPECIFIED` value.
+Other enums have been extended (where necessary) to also have a `NOT_SPECIFIED` value.
+In all cases `NOT_SPECIFIED` is the new default.
+
+
+.Updated annotations
+[cols="1a,1a,3a", options="header"]
+|===
+
+| Annotation
+| Updated attribute
+| Nature of change
+
+.7+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action[`@Action`]
+
+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_command[`command`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_hidden[`hidden`]
+| Default changed from `NOWHERE` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_invokeOn[`invokeOn`]
+| Default changed from `OBJECT_ONLY` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_publishing[`publishing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_publishing[`publishing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_restrictTo[`restrictTo`]
+| Default changed from `NO_RESTRICTIONS` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Action_semantics[`semantics`]
+| Default changed from `NON_IDEMPOTENT` to `NOT_SPECIFIED`.
+
+
+
+.3+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout[`@ActionLayout`]
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout_bookmarking[`bookmarking`]
+| Default changed from `NEVER` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout_contributed[`contributed`]
+| Default changed from `AS_BOTH` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ActionLayout_position[`position`]
+| Default changed from `BELOW` to `NOT_SPECIFIED`.
+
+
+.3+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection[`@Collection`]
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection_hidden[`hidden`]
+| Default changed from `NOWHERE` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection_editing[`editing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Collection_mementoSerialization[`mementoSerialization`]
+| Replaces `notPersisted`, taking values of `INCLUDED`, `EXCLUDED` or `NOT_SPECIFIED`.
+Defaults to `NOT_SPECIFIED`.
+
+
+
+.4+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject[`@DomainObject`]
+
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject_auditing[`auditing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject_bounding[`bounding`]
+| Replaces `bounded`, taking values of `BOUNDED`, `UNBOUNDED` and `NOT_SPECIFIED`.
+Defaults to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject_editing[`editing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObject_publishing[`publishing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+
+
+.1+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObjectLayout[`@DomainObjectLayout`]
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-DomainObjectLayout_bookmarking[`bookmarking`]
+| Default changed from `NEVER` to `NOT_SPECIFIED`.
+
+
+.1+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Parameter[`@Parameter`]
+[cols="1a,3a", options="header"]
+
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Parameter_optionality[`optionality`]
+| Default changed from `DEFAULT` to `NOT_SPECIFIED`.
+
+
+
+.2+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ParameterLayout[`@ParameterLayout`]
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ParameterLayout_labelPosition[`labelPosition`]
+| Default changed from `DEFAULT` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ParameterLayout_renderDay[`renderDay`]
+| Replaces `renderedAsDayBefore`, taking values of `AS_DAY`, `AS_DAY_BEFORE` or `NOT_SPECIFIED`.
+Defaults to `NOT_SPECIFIED`.
+
+
+.6+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property[`@Property`]
+
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property_commandReification[`commandReification`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property_editing[`editing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property_hidden[`hidden`]
+| Default changed from `NOWHERE` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property_mementoSerialization[`mementoSerialization`]
+| Replaces `notPersisted`, taking values of `INCLUDED`, `EXCLUDED` or `NOT_SPECIFIED`.
+Defaults to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property_optionality[`optionality`]
+| Default changed from `DEFAULT` to `NOT_SPECIFIED`.
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-Property_publishing[`publishing`]
+| Default changed from `AS_CONFIGURED` to `NOT_SPECIFIED`.
+
+
+
+.5+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout[`@PropertyLayout`]
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout_labelPosition[`labelPosition`]
+| Default changed from `DEFAULT` to `NOT_SPECIFIED`.
+
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout_promptStyle[`promptStyle`]
+| Default changed from `DEFAULT` to `NOT_SPECIFIED`.
+
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout_renderDay[`renderDay`]
+| Replaces `notPersisted`, taking values of `AS_DAY`, `AS_DAY_BEFORE` or `NOT_SPECIFIED`.
+Defaults to `NOT_SPECIFIED`.
+
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-PropertyLayout_repainting[`repainting`]
+| Replaces `unchanging`, taking values of `REPAINT`, `NO_REPAINT` or `NOT_SPECIFIED`.
+Defaults to `NOT_SPECIFIED`.
+
+
+
+.1+|link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout[`@ViewModelLayout`]
+
+| link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant-ViewModelLayout_bookmarking[`bookmarking`]
+| adds new NOT_SPECIFIED value
+
+
+|===
+
+

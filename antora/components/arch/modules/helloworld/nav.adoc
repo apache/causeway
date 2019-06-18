@@ -1,4 +1,2 @@
-* Hello World Archetype
-
-** xref:about.adoc[About]
+* xref:about.adoc[Hello World Archetype]
 

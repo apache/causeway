@@ -1,0 +1,120 @@
+= 1.7.0
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+== Core
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-809[ISIS-809] - Provide implementation of ViewModelFacet that doesn&#39;t require explicit implementation of the IViewModel interface.
+* link:https://issues.apache.org/jira/browse/ISIS-873[ISIS-873] - CommandContext.getCommand() should also expose the ActionInteractionEvent.
+* link:https://issues.apache.org/jira/browse/ISIS-917[ISIS-917] - Support pluggable representations for the RO viewer (object and list representations)
+
+
+
+=== Security fixes
+
+* link:https://issues.apache.org/jira/browse/ISIS-846[ISIS-846] - Enhance ExceptionRecognizer so that the stack trace can be suppressed in certain circumstances (for security)
+* link:https://issues.apache.org/jira/browse/ISIS-895[ISIS-895] - HomePage should honour authorization rules.
+
+
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-864[ISIS-864] - Command should be persisted if any dirty objects enlisted into transaction, in order to ensure no accidental orphans.
+* link:https://issues.apache.org/jira/browse/ISIS-866[ISIS-866] - scoped service should be told when the request is starting and stopping.
+* link:https://issues.apache.org/jira/browse/ISIS-882[ISIS-882] - Appropriate facets should be copied over to contributed collections and properties.
+* link:https://issues.apache.org/jira/browse/ISIS-907[ISIS-907] - downs are truncated... the (derived) typical length for enums uses the name() rather than the toString()
+* link:https://issues.apache.org/jira/browse/ISIS-908[ISIS-908] - strict&quot; mode
+* link:https://issues.apache.org/jira/browse/ISIS-916[ISIS-916] - provided services, such as MementoService or BookmarkService, can be overridden by the developer.
+* link:https://issues.apache.org/jira/browse/ISIS-918[ISIS-918] - case handling of DomainObjectContainer; is just another service.
+* link:https://issues.apache.org/jira/browse/ISIS-927[ISIS-927] - BookmarkService should be WrapperFactory aware...
+* link:https://issues.apache.org/jira/browse/ISIS-805[ISIS-805] - (Mac and Linux) Class discovery service throws errors on startup
+
+
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-404[ISIS-404] - Testing if a &quot;wrapped&quot; Domain Object has been persisted fails
+* link:https://issues.apache.org/jira/browse/ISIS-643[ISIS-643] - N relationship
+* link:https://issues.apache.org/jira/browse/ISIS-852[ISIS-852] - Derived property cannot be written properly
+* link:https://issues.apache.org/jira/browse/ISIS-871[ISIS-871] - ActionInvocationFacetForInteractionAbstract passes Null to &quot;ObjectSpecification.isViewModelCloneable&quot;
+* link:https://issues.apache.org/jira/browse/ISIS-879[ISIS-879] - ObjectMemberAbstract#isAlwaysHidden() does not honour where=Where.EVERYWHERE.
+* link:https://issues.apache.org/jira/browse/ISIS-899[ISIS-899] - Can&#39;t return a view model in Apache Isis 1.6.0 over RO viewer.
+* link:https://issues.apache.org/jira/browse/ISIS-905[ISIS-905] - arg action.
+* link:https://issues.apache.org/jira/browse/ISIS-912[ISIS-912] - fixture flag is broken).
+* link:https://issues.apache.org/jira/browse/ISIS-919[ISIS-919] - scoped) service when logging in DEBUG mode.
+
+
+
+=== Removed features
+
+Moved to (non-ASF) link:http://www.isisaddons.org[Isis Addons] (as of 1.15.0, part of (non-ASF) link:http://platform.incode.org[Incode Platform^]).
+
+* link:https://issues.apache.org/jira/browse/ISIS-851[ISIS-851] - Remove modules from Apache Isis core (available instead through isisaddons).
+* link:https://issues.apache.org/jira/browse/ISIS-887[ISIS-887] - xxx modules, as now in isisaddons.
+
+
+
+=== Removed features (obsolete)
+
+* link:https://issues.apache.org/jira/browse/ISIS-802[ISIS-802] - Remove the ProfileStore component (in future, can raise a ProfileService as and when we identify a concrete reqt).
+* link:https://issues.apache.org/jira/browse/ISIS-913[ISIS-913] - Remove the &quot;ViewerInstaller&quot; and &quot;EmbeddedWebServerInstaller&quot; APIs, since in effect defunct.
+
+
+
+=== Unreleased features (backed out)
+
+* link:https://issues.apache.org/jira/browse/ISIS-865[ISIS-865] - fast if an action is annotated with safe semantics but nevertheless results in dirty objects in the xactn.
+* link:https://issues.apache.org/jira/browse/ISIS-921[ISIS-921] - 865), since does not cater for edits with contributed properties.
+
+
+=== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-872[ISIS-872] - 1.7.0 release activities
+
+
+
+== Wicket viewer
+
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-902[ISIS-902] - Enhance ImageResourceCacheClassPath so that can have two entities with the same simple name but in different packages.
+
+
+
+=== Security fixes
+
+* link:https://issues.apache.org/jira/browse/ISIS-920[ISIS-920] - (As a configuration option), provide the ability to disable the Wicket viewer automatically continuing to original URL after successful login.
+* link:https://issues.apache.org/jira/browse/ISIS-846[ISIS-846] - Enhance ExceptionRecognizer so that the stack trace can be suppressed in certain circumstances (for security)
+* link:https://issues.apache.org/jira/browse/ISIS-895[ISIS-895] - HomePage should honour authorization rules.
+* link:https://issues.apache.org/jira/browse/ISIS-884[ISIS-884] - ErrorPage vulnerable to XSS attacks.
+* link:https://issues.apache.org/jira/browse/ISIS-885[ISIS-885] - To avoid leaking information (eg in the title) should have a &quot;special&quot; permission to throw a 404 if user doesn&#39;t have permission to view any of the class&#39; members.
+* link:https://issues.apache.org/jira/browse/ISIS-883[ISIS-883] - Bookmarkable action URLs can be submitted by a user without permissions to bring up action dialog (thereafter that user can invoke).
+
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-889[ISIS-889] - Action prompt dialog seems to be not quite big enough in Chrome (is ok in Firefox and IEv11)
+* link:https://issues.apache.org/jira/browse/ISIS-880[ISIS-880] - Appearance of Password field (in action dialogs) requires tweaking.
+* link:https://issues.apache.org/jira/browse/ISIS-910[ISIS-910] - Entering invalid data for Char type fails with an internal error
+
+
+=== Dependency upgrade
+* link:https://issues.apache.org/jira/browse/ISIS-794[ISIS-794] - Upgrade to Wicket 6.16.0, remove CharSequenceResource
+
+
+
+=== Task
+* link:https://issues.apache.org/jira/browse/ISIS-872[ISIS-872] - 1.7.0 release activities
+
+
+
+
+

@@ -1,0 +1,126 @@
+= 1.8.0
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+Apache Isis 1.8.0 incorporates the Wicket viewer, which was previously a separately released component.
+Other components that are included in core (that were previously released separately are: the Restful Objects viewer, Shiro Security and the JDO/DataNucleus ObjectStore.
+
+
+== New Feature
+
+
+* link:https://issues.apache.org/jira/browse/ISIS-284[ISIS-284] - Maven plugin to validate domain object model w.r.t. Apache Isis programming conventions
+* link:https://issues.apache.org/jira/browse/ISIS-537[ISIS-537] - Convert Wicket viewer to use Bootstrap, so that it can be themed.
+* link:https://issues.apache.org/jira/browse/ISIS-690[ISIS-690] - &#39;Show all&#39; button for tables.
+* link:https://issues.apache.org/jira/browse/ISIS-702[ISIS-702] - Provide new annotation/facet as a hint for the layout of the label for a property.
+* link:https://issues.apache.org/jira/browse/ISIS-703[ISIS-703] - Provide a switch in the Wicket viewer to make the positioning of a fields label either to the left or above the field.
+* link:https://issues.apache.org/jira/browse/ISIS-819[ISIS-819] - Wicket viewer should show the environment details so can distinguish if running in productnio vs UAT/systest/dev etc
+* link:https://issues.apache.org/jira/browse/ISIS-854[ISIS-854] - Separator between for menu items
+* link:https://issues.apache.org/jira/browse/ISIS-874[ISIS-874] - Allow individual items to stand out in a collection, eg new reserved method
+* link:https://issues.apache.org/jira/browse/ISIS-901[ISIS-901] - Use @DomainService(repositoryFor=...) as the basis for an implementation of the IconFacet.
+* link:https://issues.apache.org/jira/browse/ISIS-930[ISIS-930] - Support use of &quot;font awesome&quot; icons as decoration of actions and also instead of entity icons.
+* link:https://issues.apache.org/jira/browse/ISIS-933[ISIS-933] - Allow the RO viewer to be configured so that it can honour or ignore UI hints (in particular, the @Render(EAGERLY) facet).
+* link:https://issues.apache.org/jira/browse/ISIS-951[ISIS-951] - Add menu separators (bootstrap dividers) when multiple services define actions on the same menu
+* link:https://issues.apache.org/jira/browse/ISIS-956[ISIS-956] - icons to be specified using pattern matching on member names.
+* link:https://issues.apache.org/jira/browse/ISIS-963[ISIS-963] - Allow service actions to be rendered either on a primary, secondary or tertiary (the &quot;me&quot; icon) menu
+* link:https://issues.apache.org/jira/browse/ISIS-964[ISIS-964] - Unify UI hints into @XxxLayout annotations with corresponding support in .layout.json for properties, collections and actions.
+* link:https://issues.apache.org/jira/browse/ISIS-967[ISIS-967] - Let the LayoutMetadataReader implementation(s) be configured using isis.properties.
+* link:https://issues.apache.org/jira/browse/ISIS-983[ISIS-983] - Embedded Neo4J support
+* link:https://issues.apache.org/jira/browse/ISIS-985[ISIS-985] - Filter collections so that objects that are not visible to the current user are not shown.
+* link:https://issues.apache.org/jira/browse/ISIS-987[ISIS-987] - register for an Apache Isis application.
+* link:https://issues.apache.org/jira/browse/ISIS-990[ISIS-990] - Optional UserProfileService to allow the user profile information to be customized.
+* link:https://issues.apache.org/jira/browse/ISIS-995[ISIS-995] - Allow the label of a property to be rendered as HTML.  Also, allow the label of boolean panels to be rendered on the right hand side.
+* link:https://issues.apache.org/jira/browse/ISIS-999[ISIS-999] - Provide a log to administrator of which users logged in and logged out
+* link:https://issues.apache.org/jira/browse/ISIS-1000[ISIS-1000] - Allow objects to return CSS  class (analogous to iconName() method) so that their presentation can be dynamically reflected in tables or on an object form.
+* link:https://issues.apache.org/jira/browse/ISIS-1016[ISIS-1016] - Make it possible to use brand logo instead of plain text in the header
+* link:https://issues.apache.org/jira/browse/ISIS-1024[ISIS-1024] - Support imperative validation of a single action parameter argument (as well as of entire parameter args).
+* link:https://issues.apache.org/jira/browse/ISIS-1027[ISIS-1027] - Raise metamodel validation exceptions if deprecated annotations or method prefixes are used.
+* link:https://issues.apache.org/jira/browse/ISIS-1033[ISIS-1033] - Extend DomainObjectContainer, add isViewModel(...).
+
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-568[ISIS-568] - Drop support for JDK 1.6, standardize on JDK 1.7.
+* link:https://issues.apache.org/jira/browse/ISIS-650[ISIS-650] - Nested Menu Support in Apache ISIS
+* link:https://issues.apache.org/jira/browse/ISIS-705[ISIS-705] - Support actions accepting parameters that return Blobs/Clobs
+* link:https://issues.apache.org/jira/browse/ISIS-755[ISIS-755] - Allow external system data to be integrated and managed with an Apache Isis domain object
+* link:https://issues.apache.org/jira/browse/ISIS-779[ISIS-779] - Refactor EventBusService as a @RequestScoped service, and have it own the guava EventBus as a field.
+* link:https://issues.apache.org/jira/browse/ISIS-903[ISIS-903] - side locale.
+* link:https://issues.apache.org/jira/browse/ISIS-931[ISIS-931] - Make Apache Isis faster to start.
+* link:https://issues.apache.org/jira/browse/ISIS-934[ISIS-934] - printed if running in prototype mode.
+* link:https://issues.apache.org/jira/browse/ISIS-935[ISIS-935] - RO viewer should return a 404 exception if object not found.
+* link:https://issues.apache.org/jira/browse/ISIS-936[ISIS-936] - memory) into core (metamodel and runtime)
+* link:https://issues.apache.org/jira/browse/ISIS-937[ISIS-937] - Move TCK out of core
+* link:https://issues.apache.org/jira/browse/ISIS-938[ISIS-938] - bytecode modules (as no longer used by either objectstore)
+* link:https://issues.apache.org/jira/browse/ISIS-939[ISIS-939] - Simplify Persistor and ObjectStore components.
+* link:https://issues.apache.org/jira/browse/ISIS-944[ISIS-944] - Minor improvements to TitleBuffer.
+* link:https://issues.apache.org/jira/browse/ISIS-948[ISIS-948] - scoped services
+* link:https://issues.apache.org/jira/browse/ISIS-950[ISIS-950] - Suppress stack trace from Error page if exception is recognised.
+* link:https://issues.apache.org/jira/browse/ISIS-953[ISIS-953] - Minor enhancements to Fixture script execution context
+* link:https://issues.apache.org/jira/browse/ISIS-955[ISIS-955] - Merge JDO Java Type Mapping for Money.
+* link:https://issues.apache.org/jira/browse/ISIS-960[ISIS-960] - The event bus swallows errors thrown in the subscribers
+* link:https://issues.apache.org/jira/browse/ISIS-968[ISIS-968] - Rationalize handling of menu actions and contributed actions
+* link:https://issues.apache.org/jira/browse/ISIS-969[ISIS-969] - Create new @DomainServiceLayout annotation, and move UI hints out of @DomainService
+* link:https://issues.apache.org/jira/browse/ISIS-970[ISIS-970] - UI (layout) hints, and deprecate old annotations
+* link:https://issues.apache.org/jira/browse/ISIS-972[ISIS-972] - Make it possible to set FontAwesome icons after the label for action links
+* link:https://issues.apache.org/jira/browse/ISIS-973[ISIS-973] - Simplify the FixtureScript API so that child fixtures are executed using the ExecutionContext object
+* link:https://issues.apache.org/jira/browse/ISIS-980[ISIS-980] - menu sections in the tertiary actions menu panel
+* link:https://issues.apache.org/jira/browse/ISIS-981[ISIS-981] - Should be able to use the wrapper factory when installing fixtures.
+* link:https://issues.apache.org/jira/browse/ISIS-1002[ISIS-1002] - Recognize (JDO) exceptions for foreign key constraint violations
+* link:https://issues.apache.org/jira/browse/ISIS-1003[ISIS-1003] - Add &quot;veto&quot; as a simpler API for EventBusSubscribers
+* link:https://issues.apache.org/jira/browse/ISIS-1008[ISIS-1008] - Make it possible to stream Lobs after using the action prompt
+* link:https://issues.apache.org/jira/browse/ISIS-1012[ISIS-1012] - Use the same date and time format across tables and fields
+* link:https://issues.apache.org/jira/browse/ISIS-1014[ISIS-1014] - Modal window improvements
+* link:https://issues.apache.org/jira/browse/ISIS-1018[ISIS-1018] - Do not allow http session replacement in Wicket because Shiro knowledge becomes outdated
+* link:https://issues.apache.org/jira/browse/ISIS-1019[ISIS-1019] - Upgrade dependencies to javassist, org.reflections
+* link:https://issues.apache.org/jira/browse/ISIS-1026[ISIS-1026] - plugin to 1.56
+* link:https://issues.apache.org/jira/browse/ISIS-1032[ISIS-1032] - Contract test for bidirectional relationship can&#39;t handle overridden methods
+* link:https://issues.apache.org/jira/browse/ISIS-1036[ISIS-1036] - Inject services into Comparators specified in a @CollectionLayout(sortedBy=...) clause
+* link:https://issues.apache.org/jira/browse/ISIS-1038[ISIS-1038] - Extend ActionDomainEvent so that it provides the return value during the Executed phase.
+* link:https://issues.apache.org/jira/browse/ISIS-1039[ISIS-1039] - XmlSnapshot.Builder interface missing the build() method...
+* link:https://issues.apache.org/jira/browse/ISIS-1040[ISIS-1040] - Extend FixtureScript / ExecutionContext with defaultParam / checkParam...
+* link:https://issues.apache.org/jira/browse/ISIS-1043[ISIS-1043] - Enhance fixture script framework with better support for parameters being passed between scripts.
+* link:https://issues.apache.org/jira/browse/ISIS-1049[ISIS-1049] - Move Wicket viewer under core.
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-853[ISIS-853] - joda DateTime properties loose time when persisted
+* link:https://issues.apache.org/jira/browse/ISIS-878[ISIS-878] - Wicket viewer escape does not dismiss some (though not all) action dialog boxes
+* link:https://issues.apache.org/jira/browse/ISIS-881[ISIS-881] - deterministic?
+* link:https://issues.apache.org/jira/browse/ISIS-897[ISIS-897] - Wrong format for org.joda.time.LocalDateTime
+* link:https://issues.apache.org/jira/browse/ISIS-911[ISIS-911] - The blob panel&#39;s &quot;additionalLinks&quot; (for upload and clear buttons) should be hidden in Edit mode.
+* link:https://issues.apache.org/jira/browse/ISIS-941[ISIS-941] - Wicket viewer shouldn&#39;t try to flush properties that are disabled.
+* link:https://issues.apache.org/jira/browse/ISIS-942[ISIS-942] - Auditing broken for deleted objects.
+* link:https://issues.apache.org/jira/browse/ISIS-943[ISIS-943] - ObjectContracts#equals should be more resilient.
+* link:https://issues.apache.org/jira/browse/ISIS-946[ISIS-946] - Apache Isis application won&#39;t run from Eclipse
+* link:https://issues.apache.org/jira/browse/ISIS-954[ISIS-954] - Duplicate menu items in the application menu
+* link:https://issues.apache.org/jira/browse/ISIS-961[ISIS-961] - Throwing exception in application code does NOT abort the transaction (it should, of course).
+* link:https://issues.apache.org/jira/browse/ISIS-966[ISIS-966] - Restful viewer doesn&#39;t return a JSON representation when hits a 500 internally (instead getting an HTML page)
+* link:https://issues.apache.org/jira/browse/ISIS-971[ISIS-971] - Ignore anonymous classes which inherit from @DomainService (eg in integ tests).
+* link:https://issues.apache.org/jira/browse/ISIS-1010[ISIS-1010] - &quot;Session already open&quot; error if attempting to login in a second browser tab
+* link:https://issues.apache.org/jira/browse/ISIS-1011[ISIS-1011] - Select2 component doesn&#39;t filter the suggestions
+* link:https://issues.apache.org/jira/browse/ISIS-1017[ISIS-1017] - @PreDestroy annotated method is not called
+* link:https://issues.apache.org/jira/browse/ISIS-1029[ISIS-1029] - Hidden#where in layout is not honored by table representations
+* link:https://issues.apache.org/jira/browse/ISIS-1030[ISIS-1030] - Not possible for a declarative view model (@ViewModel) to reference another view model/
+* link:https://issues.apache.org/jira/browse/ISIS-1041[ISIS-1041] - Under certain circumstances, appears that auditing can cause the same tuple to be audited within a single transaction.
+* link:https://issues.apache.org/jira/browse/ISIS-1042[ISIS-1042] - Dropdown of Enums does not honour title() method
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-928[ISIS-928] - Apache Isis 1.8.0 release tasks
+* link:https://issues.apache.org/jira/browse/ISIS-959[ISIS-959] - Update Jackson dependency from 1.9.11 to 2.4.3
+
+
+== Sub-task
+* link:https://issues.apache.org/jira/browse/ISIS-512[ISIS-512] - Wicket: render icons for actions (if available)
+* link:https://issues.apache.org/jira/browse/ISIS-556[ISIS-556] - 537 branch to master
+* link:https://issues.apache.org/jira/browse/ISIS-876[ISIS-876] - Action prompt dialog box rendering when title too long...
+
+
+
+

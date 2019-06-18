@@ -1,0 +1,20 @@
+= 1.13.2.1
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+Update for the simpleapp archetype only, which improves docker support as well as reducing amount of boilerplate by backing out some of the mixins.
+It also fixes an issue with the fixture scripts (noted in previous release).
+
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-1559[ISIS-1559] - Remove the mixins from the simpleapp archetype - adds too much boilerplate
+* link:https://issues.apache.org/jira/browse/ISIS-1558[ISIS-1558] - Extend simpleapp archetype to also build docker images
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-1560[ISIS-1560] - Release 1.13.2.1 archetype

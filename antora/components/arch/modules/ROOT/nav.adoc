@@ -1,2 +1,2 @@
-* xref:about.adoc[About]
+* xref:about.adoc[Prerequisites]
 

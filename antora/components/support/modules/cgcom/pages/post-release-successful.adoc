@@ -319,7 +319,7 @@ mvn -Drevision=$ISISREL \
 
 In the main `isis` repo (ie containing the asciidoc source):
 
-* Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.
+* Paste in the JIRA-generated release notes generated above, adding to top of `antora/downloads/modules/rn/pages/about.adoc`.
 +
 Also add a summary line for the release.
 
@@ -448,8 +448,8 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes/release-notes.html#_release-notes_{isisnext}
-[2] http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_{isiscurr}-to-{isisnext}
+[1] http://isis.apache.org/downloads/rn/about.html#_release-notes_{isisnext}
+[2] http://isis.apache.org/downloads/mn/about.html#_migration-notes_{isiscurr}-to-{isisnext}
 [3] http://search.maven.org
 [4] http://isis.apache.org/downloads.html
 ----

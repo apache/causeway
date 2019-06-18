@@ -1,5 +1,118 @@
 = Downloads
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
 
-CAUTION: TODO ... convert over from 1.x branch.  Include link to github mirror etc.
 
+
+Apache Isis&trade; software is a framework for rapidly developing domain-driven apps in Java.
+Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or RESTful API.
+Use for prototyping or production.
+
+
+
+
+== Getting Started
+
+If you just want to get going quickly, we suggest using our xref:arch:simpleapp:about.adoc[Maven archetype].
+
+
+
+== Formal Releases
+
+If you want to build Apache Isis from formally released source tarballs, you can download from here:
+
+Core:
+
+* https://www.apache.org/dyn/closer.cgi/isis/isis-core/isis-{isiscurr}-source-release.zip[isis-{isiscurr}] (https://www.apache.org/dist/isis/isis-core/isis-{isiscurr}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/isis-core/isis-{isiscurr}-source-release.zip.md5[md5])
+
+HelloWorld Archetype:
+
+* https://www.apache.org/dyn/closer.cgi/isis/archetype/helloworld-archetype/helloworld-archetype-{isiscurr}-source-release.zip[helloworld-archetype-{isiscurr}] (https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-{isiscurr}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-{isiscurr}-source-release.zip.md5[md5])
+
+SimpleApp Archetype:
+
+* https://www.apache.org/dyn/closer.cgi/isis/archetype/simpleapp-archetype/simpleapp-archetype-{isiscurr}-source-release.zip[simpleapp-archetype-{isiscurr}] (https://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-{isiscurr}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-{isiscurr}-source-release.zip.md5[md5])
+
+
+
+== Verifying Releases
+
+It is essential that you verify the integrity of any downloaded files using the PGP or MD5 signatures.
+For more information on signing artifacts and why we do it, check out the http://www.apache.org/dev/release-signing.html[Release Signing FAQ].
+
+The PGP signatures can be verified using PGP or GPG. First download the http://www.apache.org/dist/isis/KEYS[KEYS] as well as the asc signature file for the artifact.
+Make sure you get these files from the http://www.apache.org/dist/isis/[main distribution directory], rather than from a mirror.
+
+Then verify the signatures using a command such as:
+
+[source,bash,subs="attributes+"]
+----
+pgpk -a KEYS
+pgpv isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
+----
+
+or
+
+[source,bash,subs="attributes+"]
+----
+pgp -ka KEYS
+pgp isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
+----
+
+or
+
+[source,bash,subs="attributes+"]
+----
+gpg –import KEYS
+gpg -verify isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
+----
+
+
+
+Alternatively, you can verify the MD5 signature on the files.
+A Unix/Linux program called `md5` or `md5sum` is included in most distributions.
+It is also available as part of http://www.gnu.org/software/textutils/textutils.html[GNU Textutils].
+Windows users can get binary md5 programs from these (and likely other) places:
+
+* http://www.md5summer.org/[http://www.md5summer.org/]
+* http://www.fourmilab.ch/md5/[http://www.fourmilab.ch/md5/]
+* http://www.pc-tools.net/win32/md5sums/[http://www.pc-tools.net/win32/md5sums/]
+
+
+
+== Source Code
+
+The Apache Isis source is hosted on github.
+You can download the Apache Isis source code using:
+
+[source,bash]
+----
+git clone https://github.com/apache/isis.git
+----
+
+Contributors can fork this repo using github's tools and contribute patches/new features using pull requests.
+
+Committers can push to this repo directly, once their ASF account and github account have been linked.
+See link:https://gitbox.apache.org/setup/[gitbox setup] for more details on how to do this.
+
+
+
+== DOAP RDF File
+
+The http://projects.apache.org/doap.html[description of a project] RDF file for Apache Isis can be downloaded link:https://isis.apache.org/doap_isis.rdf[here].
+
+
+
+== Incode Platform
+
+The link:http://platform.incode.org[Incode Platform^] provides a number of (open source, but not ASF) supporting modules and extensions for you to use:
+
+* technical libraries, such as excel, word and freemarker
+
+* SPI implementations, such as security, commands, auditing and publishing
+
+* framework extensions, such as flyway, quartz and feature toggles
+
+* wicket components, such as maps, calendars and PDF viewer
+
+Each module can be used independently or combined, and the Incode Platform also provides a quickstart application to get you started quickly.

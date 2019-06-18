@@ -8,26 +8,24 @@ include::_attributes.adoc[]
 
 | *What is Apache Isis?*
 
-* *xref:isis-in-pictures/isis-in-pictures.adoc[Apache Isis in pictures]*
-* xref:common-use-cases/common-use-cases.adoc[Common Use Cases]
-* xref:how-isis-works/how-isis-works.adoc[How Apache Isis Works]
-* Learning more: xref:screencasts/screencasts.adoc[Screencasts] & xref:tg/tg.adoc[Tutorials]
+* *xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]*
+* xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
+* xref:what-is-apache-isis/screencasts.adoc[Screencasts]
+* xref:what-is-apache-isis/powered-by.html[Powered By]
 
-|*Releases:*
 
-* xref:downloads:rn:release-notes.adoc[Release Notes]
-* xref:downloads:mn:migration-notes.adoc[Migration Notes]
+| *Getting Started*
+
+* xref:arch:helloworld:about.adoc[HelloWorld archetype]
+* xref:arch:simpleapp:about.adoc[SimpleApp archetype]
+
+* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic Tutorial]
 
 
 |*Developer Resources:*
 
-* *xref:cheat-sheet/cheat-sheet.adoc[Cheat Sheet]*
-//& *link:guides/htg.html[Hints-n-Tips]*
-* xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld archetype]
-* xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp archetype]
-* How to get xref:icons/icons.adoc[Icons]
-* Extension modules: https://platform.incode.org[Incode Platform] footnoteref:[ASF, Not Apache Software Foundation projects.]
-
+* *xref:developer-resources/cheat-sheet.adoc[Cheat Sheet]*
+* xref:developer-resources/icons.adoc[Icons]
 
 
 |*User Guides:*
@@ -51,8 +49,13 @@ include::_attributes.adoc[]
 *  xref:rg:fis:about.adoc[Framework Internal Services]
 
 
+|*Releases:*
 
-|*Get involved!*
+* xref:downloads:rn:about.adoc[Release Notes]
+* xref:downloads:mn:about.adoc[Migration Notes]
+
+
+|*Get involved*
 
 * *xref:support:dg:about.adoc[Developers' Guide]*
 ** xref:support:dg:ide/intellij.adoc[IntelliJ] & xref:support:dg:ide/eclipse.adoc[Eclipse]
@@ -62,44 +65,47 @@ include::_attributes.adoc[]
 *  xref:support:cgcom:about.adoc[Committers' Guide]
 ** xref:support:cgcom:cutting-a-release.adoc[Cutting] & xref:support:cgcom:verifying-releases.adoc[Verifying]
 
-* Source files: xref:support:ad:about.adoc[Architecture & Design]
+* xref:support:ad:about.adoc[Architecture & Design]
+
 
 
 
 |*Going Deeper:*
 
-* xref:articles-and-presentations/articles-and-presentations.html[Articles, Conferences, Podcasts]
-* xref:books/books.html[Books]
+* xref:going-deeper/articles-and-presentations.html[Articles, Conferences, Podcasts]
+* xref:going-deeper/books.html[Books]
 * link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
-* https://cwiki.apache.org/confluence/display/ISIS/Index[Apache Isis Wiki]
 
 Other academia:
 
 * https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Masters dissertation, Ginn)
 * https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
 
-|*Who uses Apache Isis?*
 
-* xref:powered-by/powered-by.html[Powered By]
+|*Third party* footnoteref:[ASF, Not Apache Software Foundation projects.]
 
-|*Example Apps:*
+*Libraries:*
 
-* https://github.com/estatio/estatio[Estatio] footnoteref:[ASF,Not an Apache Software Foundation project.]
-* https://github.com/incodehq/contactapp[ContactApp] footnoteref:[ASF]
-* https://github.com/incodehq/ecpcrm[ECP CRM] footnoteref:[ASF]
-* https://github.com/isisaddons/isis-app-todoapp[TodoApp] footnoteref:[ASF]
-* https://github.com/isisaddons/isis-app-kitchensink[Kitchensink] footnoteref:[ASF]
-* https://github.com/incodehq/incode-examples[Incode Domain Examples] footnoteref:[ASF]
-* https://github.com/incodehq/incode-camel[Incode Camel App] footnoteref:[ASF]
-* https://github.com/isisaddons/isis-app-quickstart[Quickstart] footnoteref:[ASF]
-* https://github.com/andi-huber/isis-2-demo[Isis 2.x Demo Showcase]footnoteref:[ASF]
+* https://platform.incode.org[Incode Platform]
+
+*Example Apps:*
+
+* https://github.com/estatio/estatio[Estatio]
+* https://github.com/incodehq/contactapp[ContactApp]
+* https://github.com/incodehq/ecpcrm[ECP CRM]
+* https://github.com/isisaddons/isis-app-todoapp[TodoApp]
+* https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
+* https://github.com/incodehq/incode-examples[Incode Domain Examples]
+* https://github.com/incodehq/incode-camel[Incode Camel App]
+* https://github.com/isisaddons/isis-app-quickstart[Quickstart]
 
 *Experiments:*
 
-* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example] footnoteref:[ASF]p
-* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example] footnoteref:[ASF]
+* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
+* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
+
+
 
 3+|For bug reports and feature requests see: *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board]* (JIRA)
-
 |===
 

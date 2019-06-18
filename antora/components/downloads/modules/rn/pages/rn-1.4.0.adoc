@@ -1,0 +1,236 @@
+= 1.4.0
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+== Core
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-592[ISIS-592] - Make XmlSnapshot (in core.runtime) available as an applib service.
+* link:https://issues.apache.org/jira/browse/ISIS-593[ISIS-593] - MementoService enhancements
+* link:https://issues.apache.org/jira/browse/ISIS-595[ISIS-595] - Validate metamodel to ensure that any bookmarkable actions are explicitly annotated as having safe action semantics.
+* link:https://issues.apache.org/jira/browse/ISIS-601[ISIS-601] - Extend the dynamic JSON layout so that the PagedFacet (@Paged annotation) can be specified for collections.
+* link:https://issues.apache.org/jira/browse/ISIS-602[ISIS-602] - Extend the dynamic JSON layout so that RenderFacet (@Render annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-603[ISIS-603] - Extend the dynamic JSON layout so that NamedFacet (@Named annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-604[ISIS-604] - Extend the dynamic JSON layout so that TypicalLengthFacet (@TypicalLength annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-605[ISIS-605] - Extend the dynamic JSON layout so that MultiLineFacet (@MultiLine annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-606[ISIS-606] - Extend the dynamic JSON layout so that CssClassFacet (@CssClass annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-607[ISIS-607] - Extend the dynamic JSON layout so that DescribedAsFacet (@DescribedAs annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-612[ISIS-612] - Return a URL from an action opens a new browser window
+* link:https://issues.apache.org/jira/browse/ISIS-613[ISIS-613] - Extend the dynamic JSON layout so that HiddenFacet (@Hidden annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-614[ISIS-614] - Extend the dynamic JSON layout so that DisabledFacet (@Disabled annotation) can be specified dynamically
+* link:https://issues.apache.org/jira/browse/ISIS-624[ISIS-624] - Use javax.validation.constraints.Digits to specify length and scale for BigDecimal action parameters (to avoid JDO exceptions later).
+* link:https://issues.apache.org/jira/browse/ISIS-625[ISIS-625] - Better reporting of metamodel violation errors
+* link:https://issues.apache.org/jira/browse/ISIS-648[ISIS-648] - Improve support for bulk update
+* link:https://issues.apache.org/jira/browse/ISIS-652[ISIS-652] - Support @RequestScoped beans (registered as services)
+* link:https://issues.apache.org/jira/browse/ISIS-653[ISIS-653] - scoped service, as a way of passing arbitrary user data from one place to another.  One use case is to coordinate the response of bulk actions.
+* link:https://issues.apache.org/jira/browse/ISIS-654[ISIS-654] - scoped QueryResultsCache service, as a technique for performance tuning.
+* link:https://issues.apache.org/jira/browse/ISIS-655[ISIS-655] - scoped Bulk.InteractionContextService bean.
+* link:https://issues.apache.org/jira/browse/ISIS-660[ISIS-660] - Profiling support and also infrastructure for background (async job) support
+* link:https://issues.apache.org/jira/browse/ISIS-661[ISIS-661] - BackgroundService and BackgroundTaskService as a way of creating mementos to execute jobs asynchronously
+* link:https://issues.apache.org/jira/browse/ISIS-662[ISIS-662] - Provide a &quot;contributions&quot; service to add a PublishedEvents contributed collection for the Interaction entity.
+* link:https://issues.apache.org/jira/browse/ISIS-663[ISIS-663] - Provide a &quot;contributions&quot; service for AuditEntry, so that audit entries are shown as a contributed collection to the Interaction entity.
+* link:https://issues.apache.org/jira/browse/ISIS-664[ISIS-664] - Provide an abstract class for running &quot;sudo&quot; scheduler jobs
+* link:https://issues.apache.org/jira/browse/ISIS-673[ISIS-673] - AbstractIsisSessionTemplate as a way to run arbitrary &#39;runnable&#39; in an Apache Isis session
+* link:https://issues.apache.org/jira/browse/ISIS-685[ISIS-685] - Add new @Command(async=true|false) flag, so that Command is automatically scheduled to run in the background
+* link:https://issues.apache.org/jira/browse/ISIS-696[ISIS-696] - Extra overload for BookmarkService for lookup with downcast (making more consistent with API of MementoService).
+* link:https://issues.apache.org/jira/browse/ISIS-697[ISIS-697] - Extend DeveloperUtilitiesService to be able to refresh services (for contributed actions)
+* link:https://issues.apache.org/jira/browse/ISIS-728[ISIS-728] - Provide facet factory to enable auditing by default on all objects, unless explicitly opted out
+* link:https://issues.apache.org/jira/browse/ISIS-729[ISIS-729] - Provide facet factory to treat all actions by default as commands, unless explicitly opted out
+* link:https://issues.apache.org/jira/browse/ISIS-730[ISIS-730] - Provide a very simple ClockService, so all services accessed in same way via DI
+
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-272[ISIS-272] - Adding ValueSemanticProviders for UUID and URI
+* link:https://issues.apache.org/jira/browse/ISIS-541[ISIS-541] - Enhance contributed actions/associations to support hideXxx, disableXxx, validateXxx, defaultXxx and choices where the contributee is automatically populated.
+* link:https://issues.apache.org/jira/browse/ISIS-543[ISIS-543] - title() should take precedence over @Title, or perhaps should fail eagerly?
+* link:https://issues.apache.org/jira/browse/ISIS-579[ISIS-579] - Add support for range queries in JDO objectstore
+* link:https://issues.apache.org/jira/browse/ISIS-583[ISIS-583] - Contributed collections ignore @Render annotation
+* link:https://issues.apache.org/jira/browse/ISIS-597[ISIS-597] - Services still not injected when entering @PostConstruct methods on a Service
+* link:https://issues.apache.org/jira/browse/ISIS-598[ISIS-598] - Add support for @Inject standard annotation
+* link:https://issues.apache.org/jira/browse/ISIS-599[ISIS-599] - Better message and diagnostics for Exception Recognizers
+* link:https://issues.apache.org/jira/browse/ISIS-600[ISIS-600] - Change format of facet properties file, scope by member then facet
+* link:https://issues.apache.org/jira/browse/ISIS-623[ISIS-623] - Make the default logging of JDO and IsisSytemForTest less verbose
+* link:https://issues.apache.org/jira/browse/ISIS-626[ISIS-626] - Recognize Wicket PageExpiredExceptions and display a friendlier error message
+* link:https://issues.apache.org/jira/browse/ISIS-634[ISIS-634] - downs (for enums/bounded and autocomplete) should honour TypicalLengthFacet.
+* link:https://issues.apache.org/jira/browse/ISIS-639[ISIS-639] - Jetty webserver support long URLs
+* link:https://issues.apache.org/jira/browse/ISIS-640[ISIS-640] - Extend MementoService.Memento API so that can also return the set of keys held in the Memento
+* link:https://issues.apache.org/jira/browse/ISIS-651[ISIS-651] - Modifications to enable JRebel support
+* link:https://issues.apache.org/jira/browse/ISIS-659[ISIS-659] - Extend MementoServiceDefault service to handle Bookmarks and also enums (as well as simple values)
+* link:https://issues.apache.org/jira/browse/ISIS-665[ISIS-665] - ObjectActionImpl should escalate a thrown Apache Isis ApplicationException to its underlying cause if the transaction is in a state of mustAbort.
+* link:https://issues.apache.org/jira/browse/ISIS-668[ISIS-668] - out&quot; services.
+* link:https://issues.apache.org/jira/browse/ISIS-670[ISIS-670] - Replace AuditingService and AuditingService2 with new AuditingService3 API, more consistent with other APIs
+* link:https://issues.apache.org/jira/browse/ISIS-671[ISIS-671] - Add a ReifiableActionFacet and @Reifiable annotation as a way to restrict which ReifiableActions are persisted.  Enable background task service to hint that an ReifiableAction should be persisted even if not annotated.
+* link:https://issues.apache.org/jira/browse/ISIS-672[ISIS-672] - Unify BackgroundTask and Interaction into same entity, rename to &quot;ReifiableAction&quot;.
+* link:https://issues.apache.org/jira/browse/ISIS-684[ISIS-684] - Rename ReifiableAction to simply &#39;Command&#39;, and update services also
+* link:https://issues.apache.org/jira/browse/ISIS-693[ISIS-693] - Minor extensions in support of Excel import/export functionality.
+* link:https://issues.apache.org/jira/browse/ISIS-708[ISIS-708] - BookmarkService null handling
+* link:https://issues.apache.org/jira/browse/ISIS-723[ISIS-723] - BookmarkService should support lookup of domain services as well as domain entities (and throw an exception for view models)
+
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-234[ISIS-234] - Persistence by reachability of aggregated instances fails.
+* link:https://issues.apache.org/jira/browse/ISIS-619[ISIS-619] - Extend IsisActions to support easy mocking of the DOC#newTransientInstance
+* link:https://issues.apache.org/jira/browse/ISIS-627[ISIS-627] - Lazily loaded object cannot be deleted, throws an NPE
+* link:https://issues.apache.org/jira/browse/ISIS-635[ISIS-635] - JDO Publishing Service impl causes ConcurrentModificationException in core.
+* link:https://issues.apache.org/jira/browse/ISIS-636[ISIS-636] - BookmarkServiceDefault throws NPE if the BookmarkHolder (to which it contributes a property) returns a null Bookmark
+* link:https://issues.apache.org/jira/browse/ISIS-641[ISIS-641] - Incompatibility of TreeSet for @Bulk.
+* link:https://issues.apache.org/jira/browse/ISIS-691[ISIS-691] - down list&#39;s handling of null entity or values
+* link:https://issues.apache.org/jira/browse/ISIS-700[ISIS-700] - (
+* link:https://issues.apache.org/jira/browse/ISIS-707[ISIS-707] - Support Bulk.InteractionContext with contributed actions.
+* link:https://issues.apache.org/jira/browse/ISIS-712[ISIS-712] - Inconsistency in domain logic for validation of optional strings causes Wicket viewer to trip up.
+
+
+
+=== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
+
+
+
+== Wicket Viewer
+
+=== New Feature
+* link:https://issues.apache.org/jira/browse/ISIS-472[ISIS-472] - Limit number of bookmarks
+* link:https://issues.apache.org/jira/browse/ISIS-608[ISIS-608] - Show count for collections (if rendered eagerly), else a hint to expand.
+* link:https://issues.apache.org/jira/browse/ISIS-609[ISIS-609] - Suppress showing actions for collections that are not rendered eagerly
+* link:https://issues.apache.org/jira/browse/ISIS-612[ISIS-612] - Return a URL from an action opens a new browser window
+* link:https://issues.apache.org/jira/browse/ISIS-625[ISIS-625] - Better reporting of metamodel violation errors
+* link:https://issues.apache.org/jira/browse/ISIS-633[ISIS-633] - Press ESC to close/cancel the action prompt dialog
+* link:https://issues.apache.org/jira/browse/ISIS-638[ISIS-638] - Provide the capability to capture UI hints, and copy to clipboard
+* link:https://issues.apache.org/jira/browse/ISIS-642[ISIS-642] - down; when revisiting a page, any UI hints from last visit should be retained.
+* link:https://issues.apache.org/jira/browse/ISIS-648[ISIS-648] - Improve support for bulk update
+* link:https://issues.apache.org/jira/browse/ISIS-649[ISIS-649] - In wicket viewer, make it easier to develop custom styling by wrapping the body of all pages in a div with custom style
+* link:https://issues.apache.org/jira/browse/ISIS-701[ISIS-701] - In Wicket viewer, make uppercase text switchable
+* link:https://issues.apache.org/jira/browse/ISIS-727[ISIS-727] - time type
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-486[ISIS-486] - Show action dialogs in a modal dialog rather than new page (less context switching for user)
+* link:https://issues.apache.org/jira/browse/ISIS-587[ISIS-587] - Various UI improvements for Wicket viewer.
+* link:https://issues.apache.org/jira/browse/ISIS-588[ISIS-588] - In Wicket viewer, make bookmark panel smaller, and enable with a keyboard shortcut
+* link:https://issues.apache.org/jira/browse/ISIS-589[ISIS-589] - (
+* link:https://issues.apache.org/jira/browse/ISIS-590[ISIS-590] - Wicket viewer strip wicket tags should depend on the deployment mode.
+* link:https://issues.apache.org/jira/browse/ISIS-591[ISIS-591] - For Wicket viewer, load Javascript libraries (except for JQuery) from the footer.
+* link:https://issues.apache.org/jira/browse/ISIS-594[ISIS-594] - Tidy up and simplify URLs in Wicket viewer.
+* link:https://issues.apache.org/jira/browse/ISIS-596[ISIS-596] - Require smarter handling of bookmarked objects that have been deleted
+* link:https://issues.apache.org/jira/browse/ISIS-618[ISIS-618] - Simplify ActionPage, separate out result components from prompt.
+* link:https://issues.apache.org/jira/browse/ISIS-626[ISIS-626] - Recognize Wicket PageExpiredExceptions and display a friendlier error message
+* link:https://issues.apache.org/jira/browse/ISIS-634[ISIS-634] - downs (for enums/bounded and autocomplete) should honour TypicalLengthFacet.
+* link:https://issues.apache.org/jira/browse/ISIS-658[ISIS-658] - Provide a custom panel for java.sql.Timestamp
+* link:https://issues.apache.org/jira/browse/ISIS-677[ISIS-677] - The blob/clob panel does not show the name of the blob/clob present (eg if just uploaded).
+* link:https://issues.apache.org/jira/browse/ISIS-680[ISIS-680] - fidelity) alternative to the clipboard link, for those environments where flash is not supported.
+* link:https://issues.apache.org/jira/browse/ISIS-682[ISIS-682] - In the Wicket viewer, the tooltip for icons should show the title (and perhaps also the type) of the icon being linked to.
+* link:https://issues.apache.org/jira/browse/ISIS-683[ISIS-683] - In Wicket viewer, if delete objects from a standalone collection, then selecting again causes an exception.
+* link:https://issues.apache.org/jira/browse/ISIS-692[ISIS-692] - down list box.
+* link:https://issues.apache.org/jira/browse/ISIS-699[ISIS-699] - In Wicket viewer, when redirect to next page after invoking an action, have the browser&#39;s address bar show the URL of the object
+* link:https://issues.apache.org/jira/browse/ISIS-706[ISIS-706] - Blob vs Clob request handling, also relationship with bulk actions.
+* link:https://issues.apache.org/jira/browse/ISIS-718[ISIS-718] - Actions that return a URL should open in new tab/window
+
+=== Bug
+* link:https://issues.apache.org/jira/browse/ISIS-429[ISIS-429] - coded dependency to WicketSignInPage in PageAbstract...
+* link:https://issues.apache.org/jira/browse/ISIS-617[ISIS-617] - Wicket viewer throws NPE when rendering Apache Isis DateTime in a collection
+* link:https://issues.apache.org/jira/browse/ISIS-620[ISIS-620] - When editing an entity twice a concurrency exception is thrown
+* link:https://issues.apache.org/jira/browse/ISIS-621[ISIS-621] - Improve the Wicket viewer&#39;s parsing of numbers
+* link:https://issues.apache.org/jira/browse/ISIS-629[ISIS-629] - Selecting a different option from a dropdown resets other fields
+* link:https://issues.apache.org/jira/browse/ISIS-630[ISIS-630] - LocalDates are parsed to a wrong date when running in different timezone
+* link:https://issues.apache.org/jira/browse/ISIS-637[ISIS-637] - down in action prompt
+* link:https://issues.apache.org/jira/browse/ISIS-669[ISIS-669] - Download of Excel files in Wicket viewer on *nix/OSx machines doesn&#39;t work.
+* link:https://issues.apache.org/jira/browse/ISIS-675[ISIS-675] - If try to upload attachment, then have to do the operation twice.
+* link:https://issues.apache.org/jira/browse/ISIS-676[ISIS-676] - down widget is no longer rendered.
+* link:https://issues.apache.org/jira/browse/ISIS-686[ISIS-686] - Logout as admin doesn&#39;t work (could be if on any machine other than localhost?)
+* link:https://issues.apache.org/jira/browse/ISIS-691[ISIS-691] - down list&#39;s handling of null entity or values
+* link:https://issues.apache.org/jira/browse/ISIS-711[ISIS-711] - Fix so that can raiseError in bulk actions.
+* link:https://issues.apache.org/jira/browse/ISIS-712[ISIS-712] - Inconsistency in domain logic for validation of optional strings causes Wicket viewer to trip up.
+
+
+=== Task
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
+
+
+
+== RestfulObjects Viewer
+
+=== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
+
+
+
+
+== Shiro Security
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-586[ISIS-586] - Allow the IsisLdapRealm to read its role/perm mappings from an .ini file
+* link:https://issues.apache.org/jira/browse/ISIS-656[ISIS-656] - Roles not setup when using Shiro
+
+
+=== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
+
+
+
+
+== JDO ObjectStore
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-660[ISIS-660] - Profiling support and also infrastructure for background (async job) support
+* link:https://issues.apache.org/jira/browse/ISIS-661[ISIS-661] - BackgroundService and BackgroundTaskService as a way of creating mementos to execute jobs asynchronously
+* link:https://issues.apache.org/jira/browse/ISIS-662[ISIS-662] - Provide a &quot;contributions&quot; service to add a PublishedEvents contributed collection for the Interaction entity.
+* link:https://issues.apache.org/jira/browse/ISIS-663[ISIS-663] - Provide a &quot;contributions&quot; service for AuditEntry, so that audit entries are shown as a contributed collection to the Interaction entity.
+* link:https://issues.apache.org/jira/browse/ISIS-664[ISIS-664] - Provide an abstract class for running &quot;sudo&quot; scheduler jobs
+* link:https://issues.apache.org/jira/browse/ISIS-685[ISIS-685] - Add new @Command(async=true|false) flag, so that Command is automatically scheduled to run in the background
+* link:https://issues.apache.org/jira/browse/ISIS-726[ISIS-726] - Provide a &#39;Recent changes&#39; contributed action that provides a unified view of commands and audit entries for domain objects.
+* link:https://issues.apache.org/jira/browse/ISIS-728[ISIS-728] - Provide facet factory to enable auditing by default on all objects, unless explicitly opted out
+* link:https://issues.apache.org/jira/browse/ISIS-729[ISIS-729] - Provide facet factory to treat all actions by default as commands, unless explicitly opted out
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-576[ISIS-576] - JDO exception recognizer for sql integrity constraints should only recognize uniqueness constraints
+* link:https://issues.apache.org/jira/browse/ISIS-577[ISIS-577] - Specify @Column(length=...) for JDO entities (ApplicationSetting, UserSetting, PublishedEvent)
+* link:https://issues.apache.org/jira/browse/ISIS-579[ISIS-579] - Add support for range queries in JDO objectstore
+* link:https://issues.apache.org/jira/browse/ISIS-597[ISIS-597] - Services still not injected when entering @PostConstruct methods on a Service
+* link:https://issues.apache.org/jira/browse/ISIS-599[ISIS-599] - Better message and diagnostics for Exception Recognizers
+* link:https://issues.apache.org/jira/browse/ISIS-611[ISIS-611] - Ensure classes are properly eagerly registered with JDO Object store
+* link:https://issues.apache.org/jira/browse/ISIS-616[ISIS-616] - JDO Implementation of the AuditingService should implement the AuditingService2 API
+* link:https://issues.apache.org/jira/browse/ISIS-623[ISIS-623] - Make the default logging of JDO and IsisSytemForTest less verbose
+* link:https://issues.apache.org/jira/browse/ISIS-651[ISIS-651] - Modifications to enable JRebel support
+* link:https://issues.apache.org/jira/browse/ISIS-657[ISIS-657] - JDO objectstore service implemenations should use &quot;IsisXxx&quot; as a common prefix to any tables.
+* link:https://issues.apache.org/jira/browse/ISIS-665[ISIS-665] - ObjectActionImpl should escalate a thrown Apache Isis ApplicationException to its underlying cause if the transaction is in a state of mustAbort.
+* link:https://issues.apache.org/jira/browse/ISIS-667[ISIS-667] - up/rationalization of JDO domain service impls
+* link:https://issues.apache.org/jira/browse/ISIS-670[ISIS-670] - Replace AuditingService and AuditingService2 with new AuditingService3 API, more consistent with other APIs
+* link:https://issues.apache.org/jira/browse/ISIS-671[ISIS-671] - Add a ReifiableActionFacet and @Reifiable annotation as a way to restrict which ReifiableActions are persisted.  Enable background task service to hint that an ReifiableAction should be persisted even if not annotated.
+* link:https://issues.apache.org/jira/browse/ISIS-672[ISIS-672] - Unify BackgroundTask and Interaction into same entity, rename to &quot;ReifiableAction&quot;.
+* link:https://issues.apache.org/jira/browse/ISIS-684[ISIS-684] - Rename ReifiableAction to simply &#39;Command&#39;, and update services also
+* link:https://issues.apache.org/jira/browse/ISIS-698[ISIS-698] - Allow JDOQL to be able to select scalars (eg project individual field(s)) rather than entire entities.
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-632[ISIS-632] - PublishingService&#39;s PublishedEvent id has an incorrect max length
+* link:https://issues.apache.org/jira/browse/ISIS-644[ISIS-644] - Update FrameworkSynchronizer to avoid the &quot;Object not yet known to Apache Isis&quot; exception
+
+
+=== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/ISIS-646[ISIS-646] - Upgrade DataNucleus to 3.3.6 (JDO 3.1), and use the convenience &#39;accessplatform&#39; POMs.
+
+
+
+=== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
+
+
+

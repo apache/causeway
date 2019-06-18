@@ -1,0 +1,38 @@
+= War packaging
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+As discussed in link:https://isis.apache.org/versions/1.9.0/arch/simpleapp/about.html[SimpleApp archetype] and elsewhere, the `org.apache.isis.WebServer` provides the ability to run your app from an embedded jetty.
+This is great for prototyping.
+The class resides in the `isis-core-webserver` module, which also has the dependency on jetty.
+
+In 1.9.0 we have upgraded the jetty dependency to use Jetty 9.2.0 (`org.eclipse.jetty.aggregate:jetty-all:9.2.11.v20150529`, to be precise).
+One consequence of this is that the packaged WAR file will not boot on Tomcat.
+
+One fix is to simply remove the `isis-core-webserver` module as a dependency of your webapp module, however this will prevent you from using our `org.apache.isis.WebServer` launcher.
+That's not necessarily a bad thing; you could continue to use `jetty:run`, say.
+But it might be a change to your development workflow that you don't want.
+
+Alternatively you can change your webapp's `pom.xml` so that when the war is packaged up it excludes the jetty files.
+To do this, locate the `maven-war-plugin` module definition (under `<build>/<plugins>` and add to its `<configuration>` section:
+
+[source,xml]
+----
+<plugin>
+    <artifactId>maven-war-plugin</artifactId>
+    <configuration>
+        ...
+        <packagingExcludes>
+            WEB-INF/lib/isis-core-webserver*.jar,
+            WEB-INF/lib/javax.servlet-api-*.jar,
+            WEB-INF/lib/javax.websocket-api-*.jar,
+            WEB-INF/lib/jetty-all-*.jar
+        </packagingExcludes>
+    </configuration>
+</plugin>
+----
+
+
+For future projects the link:https://isis.apache.org/versions/1.9.0/arch/simpleapp/about.html[SimpleApp archetype] has been updated with this change.

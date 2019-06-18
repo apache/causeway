@@ -4,8 +4,8 @@ image:https://builds.apache.org/buildStatus/icon?job=Isis master jdk8[]
 
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
-Start learning about Apache Isis using our http://isis.apache.org/guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype["Hello World"] Maven archetype.
-Build your own apps using our http://isis.apache.org/guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype["SimpleApp"] Maven archetype.
+Start learning about Apache Isis using our http://isis.apache.org/arch/helloworld/about.html["Hello World"] Maven archetype.
+Build your own apps using our http://isis.apache.org/arch/simpleapp/about.html["SimpleApp"] Maven archetype.
 
 For help and support, join the http://isis.apache.org/support.html[mailing lists].
 To contribute to our documentation, see our https://github.com/apache/isis/tree/master/adocs/documentation[Asciidoctor source].
@@ -253,7 +253,7 @@ Indeed, the example todoapp demonstrates this.
 
 The Apache Isis http://isis.apache.org[website] has lots of useful information and is being continually updated.
 
-Or, you can just start coding using one of the http://isis.apache.org/guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[Maven archetype]s.
+Or, you can just start coding using one of the http://isis.apache.org/arch/helloworld/about.html[Maven archetype]s.
 
 And if you need help or support, join the http://isis.apache.org/support.html[mailing lists].
 

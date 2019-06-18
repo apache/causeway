@@ -1,0 +1,139 @@
+= 1.9.0
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+Apache Isis 1.9.0 provides various new "under-the-cover" features, such as `AppManifest` for simplified bootstrapping, and content negotiation support within link:https://isis.apache.org/versions/1.9.0/guides/ugvro/ugvro.html#[RestfulObjects viewer].
+It also updates the DataNucleus version to DN 4.1.x.
+
+This release was also the first to include the updated Asciidoc website.
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-1167[ISIS-1167] - NullPrintStream in unittestsupport to reduce the noise of unit tests that log to stdout or stderr
+* link:https://issues.apache.org/jira/browse/ISIS-1166[ISIS-1166] - Support for unit testing using SOAP fake servers
+* link:https://issues.apache.org/jira/browse/ISIS-1165[ISIS-1165] - "Schema" module to support integration scenarios.
+* link:https://issues.apache.org/jira/browse/ISIS-1164[ISIS-1164] - For RO viewer content negotiation (via XRoDomainType), if in prototype mode then pretty-print.
+* link:https://issues.apache.org/jira/browse/ISIS-1159[ISIS-1159] - Make ExceptionRecognizerCompositeForJdoObjectStore into a @DomainService, so automatically registered.
+* link:https://issues.apache.org/jira/browse/ISIS-1149[ISIS-1149] - New ContentNegotiationService and ContentMappingService SPIs for Restful Objects viewer
+* link:https://issues.apache.org/jira/browse/ISIS-1148[ISIS-1148] - Extend DomainObjectContainer to allow services to be looked up
+* link:https://issues.apache.org/jira/browse/ISIS-1147[ISIS-1147] - Provide API in IsisJdoSupport to execute typesafe queries
+* link:https://issues.apache.org/jira/browse/ISIS-1145[ISIS-1145] - REST action invocations support limited conneg to JAXB-marshalled DTOs
+* link:https://issues.apache.org/jira/browse/ISIS-1144[ISIS-1144] - New "NatureOfService" to restrict domain services to be visible in the REST API (Restful Objects viewer) but not in the Wicket viewer.
+* link:https://issues.apache.org/jira/browse/ISIS-1143[ISIS-1143] - MetaModelService to provide formal access to certain (restricted) aspects of the Isis metamodel
+* link:https://issues.apache.org/jira/browse/ISIS-1129[ISIS-1129] - SudoService to allow the current user to be temporarily switched (for fixture scripts and integ tests)
+* link:https://issues.apache.org/jira/browse/ISIS-1102[ISIS-1102] - Allow translations service to toggle between read mode and write mode from UI
+* link:https://issues.apache.org/jira/browse/ISIS-1096[ISIS-1096] - Derive the object type from the schema and table of @PersistenceCapable (but ensure backward compatibility is preserved).
+* link:https://issues.apache.org/jira/browse/ISIS-1071[ISIS-1071] - Provide new HasUsername interface in applib (analogous to HasTransactionId) so that various addon services can contribute to it.
+* link:https://issues.apache.org/jira/browse/ISIS-1064[ISIS-1064] - Allow DB schemas (or any other setup) to be performed as DN metamodel is built up for each class.
+* link:https://issues.apache.org/jira/browse/ISIS-1028[ISIS-1028] - Create Event Bus Service based on Axon
+* link:https://issues.apache.org/jira/browse/ISIS-940[ISIS-940] - Extend the CommandService so that both the editing and also the rendering of an entity are shown as commands.
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-1191[ISIS-1191] - Broken links
+* link:https://issues.apache.org/jira/browse/ISIS-1188[ISIS-1188] - Refactoring/simplifying internals.
+* link:https://issues.apache.org/jira/browse/ISIS-1182[ISIS-1182] - Refactorings of the management of domain services; slightly simplified classpath scanning.
+* link:https://issues.apache.org/jira/browse/ISIS-1173[ISIS-1173] - Split out responsibilities of FixtureScript class so that framework can provide a default implementation, and be configured through an alternative.
+* link:https://issues.apache.org/jira/browse/ISIS-1171[ISIS-1171] - If DN autoCreate is missing, don't default to "true", instead default to "false".
+* link:https://issues.apache.org/jira/browse/ISIS-1170[ISIS-1170] - Throw a better exception if an class (through programmer error) has no properties.
+* link:https://issues.apache.org/jira/browse/ISIS-1169[ISIS-1169] - Simplify IsisSessionFilter, make more resilient to possible leakage of IsisSession on thread-local, also allow RO to force a logout
+* link:https://issues.apache.org/jira/browse/ISIS-1162[ISIS-1162] - For Shiro Realm,Make LDAP attributes as permision generator
+* link:https://issues.apache.org/jira/browse/ISIS-1161[ISIS-1161] - Allow member group (per @Member(name=...) to be internationalized
+* link:https://issues.apache.org/jira/browse/ISIS-1160[ISIS-1160] - Allow RO viewer to consume any media type (HTTP Accept)
+* link:https://issues.apache.org/jira/browse/ISIS-1158[ISIS-1158] - Extend o.a.i.applib.spec.Specification to support i18n
+* link:https://issues.apache.org/jira/browse/ISIS-1157[ISIS-1157] - Cache safe Actions results by annotating them
+* link:https://issues.apache.org/jira/browse/ISIS-1154[ISIS-1154] - Extend ActionDomainEvent and PublishingService's EventMetaData to include info on the action parameter names/types.
+* link:https://issues.apache.org/jira/browse/ISIS-1153[ISIS-1153] - Upgrade to DN 4.1
+* link:https://issues.apache.org/jira/browse/ISIS-1152[ISIS-1152] - Allow domain services to be registered "late" to the event bus
+* link:https://issues.apache.org/jira/browse/ISIS-1150[ISIS-1150] - Retire the InMemoryObjectStore
+* link:https://issues.apache.org/jira/browse/ISIS-1146[ISIS-1146] - Automatically ignore @PostConstruct and @PreDestroy methods from the metamodel.
+* link:https://issues.apache.org/jira/browse/ISIS-1141[ISIS-1141] - Integration tests should honour isis.reflector.facets.include and isis.reflector.facets.exclude for extending the programming model
+* link:https://issues.apache.org/jira/browse/ISIS-1139[ISIS-1139] - Make it clear that ObjectContracts.compare() is slow, and should mostly be used for prototyping.
+* link:https://issues.apache.org/jira/browse/ISIS-1133[ISIS-1133] - Convert website to asciidoctor, hosted in git and published via ASF's svnpubsub
+* link:https://issues.apache.org/jira/browse/ISIS-1126[ISIS-1126] - Improve deserialization logic in RO applib.
+* link:https://issues.apache.org/jira/browse/ISIS-1124[ISIS-1124] - Add the simple name of the domain entity as a CSS class next to 'entityPage' for easier custom styling
+* link:https://issues.apache.org/jira/browse/ISIS-1123[ISIS-1123] - Allow the member group label for properties to be translated.
+* link:https://issues.apache.org/jira/browse/ISIS-1120[ISIS-1120] - Hide the colon separating icon and title in modal window when there is no icon
+* link:https://issues.apache.org/jira/browse/ISIS-1116[ISIS-1116] - Use ResourceModel for labels in Wicket viewer
+* link:https://issues.apache.org/jira/browse/ISIS-1115[ISIS-1115] - Make it possible to set a custom favicon
+* link:https://issues.apache.org/jira/browse/ISIS-1114[ISIS-1114] - Allow to use EmailVerificationUrlService for custom pages too
+* link:https://issues.apache.org/jira/browse/ISIS-1113[ISIS-1113] - Vetoing subscribers should be able to provide a translatable reason.
+* link:https://issues.apache.org/jira/browse/ISIS-1110[ISIS-1110] - Check for available RequestCycle before trying to read the request locale
+* link:https://issues.apache.org/jira/browse/ISIS-1109[ISIS-1109] - Use titleOf(...) for the menu services, so that any translations get picked up.
+* link:https://issues.apache.org/jira/browse/ISIS-1108[ISIS-1108] - Allow informUser, warnUser, raiseError and also exception messages to be translated.
+* link:https://issues.apache.org/jira/browse/ISIS-1107[ISIS-1107] - Register Guice Injector in Wicket before trying to inject the application's dependencies
+* link:https://issues.apache.org/jira/browse/ISIS-1106[ISIS-1106] - Improve translation service to translate all enum constants of all enums, and also capture the title of all services automaticaly all domain services and of all enum constants.
+* link:https://issues.apache.org/jira/browse/ISIS-1105[ISIS-1105] - Improvements to the integration testing framework.
+* link:https://issues.apache.org/jira/browse/ISIS-1104[ISIS-1104] - Remove some of the chattiness in the log if there are no translations for a given locale
+* link:https://issues.apache.org/jira/browse/ISIS-1101[ISIS-1101] - Avoid unexpected concurrency exceptions if using a custom page.
+* link:https://issues.apache.org/jira/browse/ISIS-1100[ISIS-1100] - Improve algorithm for flushing transaction and similarly in capturing post values (for auditing) on transaction preCommit
+* link:https://issues.apache.org/jira/browse/ISIS-1099[ISIS-1099] - Make it possible to use images loaded from the classpath in email templates
+* link:https://issues.apache.org/jira/browse/ISIS-1095[ISIS-1095] - Make it possible to show the datepicker in a "birthdate" mode
+* link:https://issues.apache.org/jira/browse/ISIS-1091[ISIS-1091] - Simplify the format of bookmark, remove prefix (CUS:L_123 -> CUS:123)
+* link:https://issues.apache.org/jira/browse/ISIS-1090[ISIS-1090] - Deprecate IntegrationTestAbstract#runScript (static method)
+* link:https://issues.apache.org/jira/browse/ISIS-1088[ISIS-1088] - Lazily discover fixture scripts
+* link:https://issues.apache.org/jira/browse/ISIS-1087[ISIS-1087] - Restful Objects viewer's "services" representation should show only domain services on the menu
+* link:https://issues.apache.org/jira/browse/ISIS-1085[ISIS-1085] - Add cssClassFa to DomainObjectLayout
+* link:https://issues.apache.org/jira/browse/ISIS-1083[ISIS-1083] - Resetting dependent choice
+* link:https://issues.apache.org/jira/browse/ISIS-1081[ISIS-1081] - Make it possible to lookup Guice beans in Isis domain services
+* link:https://issues.apache.org/jira/browse/ISIS-1080[ISIS-1080] - Misc. bootstrap refinements.
+* link:https://issues.apache.org/jira/browse/ISIS-1078[ISIS-1078] - Wrapper factory should check visibility/usability/validity for contributed members also
+* link:https://issues.apache.org/jira/browse/ISIS-1077[ISIS-1077] - Use the provided 'cssClass' for action menu items
+* link:https://issues.apache.org/jira/browse/ISIS-1068[ISIS-1068] - Rationalize menuOrder for domain services that appear in UI
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-1190[ISIS-1190] - If an referenced object cannot be loaded (not found in the database), then this should be handled gracefully
+* link:https://issues.apache.org/jira/browse/ISIS-1179[ISIS-1179] - Prevent the defaultXxx(...) being called multiple times when invoke an action.
+* link:https://issues.apache.org/jira/browse/ISIS-1177[ISIS-1177] - Deserialization using RO applib fails in Jackson library
+* link:https://issues.apache.org/jira/browse/ISIS-1175[ISIS-1175] - Wicket viewer separators go missing when force refresh page (eg ctrl-R)
+* link:https://issues.apache.org/jira/browse/ISIS-1174[ISIS-1174] - In RO, posting to the ObjectsOfType resource (section 9) fails.
+* link:https://issues.apache.org/jira/browse/ISIS-1168[ISIS-1168] - Eagerly register entities with DataNucleus objectstore (for Neo4j)
+* link:https://issues.apache.org/jira/browse/ISIS-1155[ISIS-1155] - validate() vetoing - requiring rollback via the memento when editing - causes a ConcurrencyException to occur.
+* link:https://issues.apache.org/jira/browse/ISIS-1142[ISIS-1142] - FrameworkSynchronizer should handle case of adapter already marked as destroyed
+* link:https://issues.apache.org/jira/browse/ISIS-1137[ISIS-1137] - PermGen errors through WrapperFactory (javassist)
+* link:https://issues.apache.org/jira/browse/ISIS-1135[ISIS-1135] - Make a copy of the PojoAdapter and OidAdapter maps for debugging purposes
+* link:https://issues.apache.org/jira/browse/ISIS-1112[ISIS-1112] - ExceptionRecognizerComposite cannot self-inject its dependencies
+* link:https://issues.apache.org/jira/browse/ISIS-1111[ISIS-1111] - Trying to load an entity with wrong/non-existing OID fails with NullPointerException
+* link:https://issues.apache.org/jira/browse/ISIS-1103[ISIS-1103] - Translations service not picking up translated versions of property/collection names
+* link:https://issues.apache.org/jira/browse/ISIS-1097[ISIS-1097] - Suspicion that Isis may be leaving DB connections open under certain circumstances, leading to instability
+* link:https://issues.apache.org/jira/browse/ISIS-1089[ISIS-1089] - Should cascade state of tracing printstream to child fixture scripts
+* link:https://issues.apache.org/jira/browse/ISIS-1079[ISIS-1079] - FixtureScript#defaultParam should actually default the property on the fixture script...
+* link:https://issues.apache.org/jira/browse/ISIS-1076[ISIS-1076] - MetaModelValidation error page (MmvPage) is no longer shown...
+* link:https://issues.apache.org/jira/browse/ISIS-1074[ISIS-1074] - For SessionLoggingService, causedBy only meaningful for sessions that have been logged out...
+* link:https://issues.apache.org/jira/browse/ISIS-1073[ISIS-1073] - Action domain event for contributed actions should provide the contributee as an argument.
+* link:https://issues.apache.org/jira/browse/ISIS-1072[ISIS-1072] - When editing, if property validation vetoes the save, then not handled correctly.
+* link:https://issues.apache.org/jira/browse/ISIS-1069[ISIS-1069] - DomainChangeJdoAbstract's open action incorrectly annotated as being a bulk action.
+* link:https://issues.apache.org/jira/browse/ISIS-1065[ISIS-1065] - Auditing of editing of properties only audits one of the properties changed (the last one)
+* link:https://issues.apache.org/jira/browse/ISIS-1062[ISIS-1062] - Guice injector should create serializable proxies for the injected beans
+* link:https://issues.apache.org/jira/browse/ISIS-1057[ISIS-1057] - WebRequestCycleForIsis should use the configured SignIn page
+* link:https://issues.apache.org/jira/browse/ISIS-1004[ISIS-1004] - Infitinite recursion in updating() callback when call setter
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/ISIS-1163[ISIS-1163] - Update Jetty (as used by our IsisWebServer launcher) to 9.x
+* link:https://issues.apache.org/jira/browse/ISIS-1140[ISIS-1140] - Now that JDK7 is eol, we should build using Java8; retain source and target compiler level set to 1.7.
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-1187[ISIS-1187] - Mothball the legacy (never documented) integration testing support
+* link:https://issues.apache.org/jira/browse/ISIS-1178[ISIS-1178] - Mothball the TCK tests, with a view to replacing them by new tests in the isisaddons isis-app-kitchensink
+* link:https://issues.apache.org/jira/browse/ISIS-1058[ISIS-1058] - Upgrade embedded Jetty to latest 8.x
+* link:https://issues.apache.org/jira/browse/ISIS-1052[ISIS-1052] - Isis 1.9.0 release tasks
+
+
+== Wish
+
+* link:https://issues.apache.org/jira/browse/ISIS-1060[ISIS-1060] - An exception is logged when the provided credentials are invalid
+
+
+
