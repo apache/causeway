@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.collections.Inbox;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -40,6 +41,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -157,8 +159,8 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     // -- constructor, fields
 
-    private final UUID interactionId;
-    private final int sequence;
+    @Getter @Programmatic
+    private final TransactionId id;
     //    private final AuthenticationSession authenticationSession;
 
     private final Inbox<PersistenceCommand> persistenceCommands = new Inbox<>();
@@ -175,8 +177,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
             final UUID interactionId,
             final int sequence) {
 
-        this.interactionId = interactionId;
-        this.sequence = sequence;
+    	id = TransactionId.of(interactionId, sequence);
         //        this.authenticationSession = authenticationSession;
 
         ServiceRegistry serviceRegistry = IsisContext.getServiceRegistry();
@@ -194,20 +195,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
         log.debug("new transaction {}", this);
     }
-
-    // -- transactionId
-
-    @Override
-    @Programmatic
-    public final UUID getUniqueId() {
-        return interactionId;
-    }
-
-    @Override
-    public int getSequence() {
-        return sequence;
-    }
-
 
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
@@ -520,7 +507,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     public CountDownLatch countDownLatch() {
         return countDownLatch;
     }
-
 
 
 }

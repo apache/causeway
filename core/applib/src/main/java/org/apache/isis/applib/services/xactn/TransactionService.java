@@ -26,12 +26,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 
-/**
- * @deprecated TODO[2112] for framework internal use only, move to an internal package  
- */
-@Deprecated
 public interface TransactionService {
 
+	TransactionId currentTransactionId();
+	
     /**
      * Flush all changes to the object store.
      *
@@ -51,20 +49,22 @@ public interface TransactionService {
      * See also {@link TransactionService#nextTransaction(TransactionService.Policy)} with a {@link TransactionService.Policy} of {@link TransactionService.Policy#UNLESS_MARKED_FOR_ABORT}.
      */
     @Programmatic
-    void nextTransaction();
+    default void nextTransaction() {
+        nextTransaction((Command)null);
+    }
 
-    /**
-     * Returns a representation of the current transaction.
-     */
-    @Programmatic
-    Transaction currentTransaction();
+//    /**
+//     * Returns a representation of the current transaction.
+//     */
+//    @Programmatic
+//    Transaction currentTransaction();
 
     /**
      * Generally this is equivalent to using {@link #currentTransaction()} and {@link Transaction#getTransactionState()}.
      * However, if there is no current transaction, then this will return {@link TransactionState#NONE}.
      */
     @Programmatic
-    TransactionState getTransactionState();
+    TransactionState currentTransactionState();
 
     /**
      * Return a latch, that allows threads to wait on the current transaction to complete.
@@ -108,15 +108,18 @@ public interface TransactionService {
      * </p>
      */
     @Programmatic
-    void nextTransaction(Policy policy);
-
-
+    default void nextTransaction(Policy policy) {
+        nextTransaction(policy, null);
+    }
+    
     /**
      * If the current transaction does not use the specified {@link Command} as its
      * {@link CommandContext#getCommand() command context}, then commit and start a new one.
      * @param command
      */
-    void nextTransaction(Command command);
+    default void nextTransaction(Command command) {
+        nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT, command);
+    }
 
     /**
      * As per {@link #nextTransaction(Policy)} and {@link #nextTransaction(Command)}.
@@ -130,6 +133,8 @@ public interface TransactionService {
         UNLESS_MARKED_FOR_ABORT,
         ALWAYS
     }
+
+
 
 
 

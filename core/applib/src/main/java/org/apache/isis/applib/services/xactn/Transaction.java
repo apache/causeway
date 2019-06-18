@@ -20,23 +20,14 @@
 package org.apache.isis.applib.services.xactn;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.HasUniqueId;
 
 /**
- * Representation of the current transaction, which conceptually wraps the underlying objectstore transaction.
- * @deprecated TODO[2112] for framework internal use only, move to an internal package  
+ * Representation of the current transaction, which conceptually wraps the underlying transaction context's transaction.
  */
-@Deprecated
-public interface Transaction extends HasUniqueId {
+public interface Transaction {
 
-
-    /**
-     * The {@link HasUniqueId#getUniqueId()} is (as of 1.13.0) actually an identifier for the request/
-     * interaction, and there can actually be multiple transactions within such a request/interaction.  The sequence
-     * (0-based) is used to distinguish such.
-     */
-    @Programmatic
-    int getSequence();
+	@Programmatic
+	TransactionId getId();
 
     /**
      * Flush all changes to the object store.

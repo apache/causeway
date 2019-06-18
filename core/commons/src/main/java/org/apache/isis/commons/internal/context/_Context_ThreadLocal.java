@@ -43,8 +43,6 @@ import lombok.val;
  */
 final class _Context_ThreadLocal {
 
-	//TODO [2033] cleanup comments ...
-	
     // -- MIXINS
     
 	static <T> void put(Class<? super T> type, T variant) {
@@ -55,13 +53,6 @@ final class _Context_ThreadLocal {
     		? Bin.<T>ofSingleton(variant)
     				: Bin.<T>concat(_Casts.uncheckedCast(v), variant));
     }
-	
-//    static <T> void put(Class<? super T> type, Object payload, Runnable onCleanup) {
-//    	requires(type, "type");
-//    	requires(payload, "payload");
-//    	requires(onCleanup, "onCleanup");
-//    	THREAD_LOCAL_MAP.get().put(type, Payload.of(payload, onCleanup));
-//    }
 	
 	static <T> Bin<T> select(Class<? super T> type, Class<? super T> instanceOf) {
 		val bin = _Context_ThreadLocal.<T>get(type);
@@ -80,8 +71,11 @@ final class _Context_ThreadLocal {
     	return Bin.empty();
     }
     
+    static void clear(Class<?> type) {
+    	THREAD_LOCAL_MAP.get().remove(type);
+    }
+    
     static void cleanupThread() {
-//    	THREAD_LOCAL_MAP.get().forEach((key, payload)->payload.cleanUp());
     	THREAD_LOCAL_MAP.remove();
     }
     
@@ -94,20 +88,6 @@ final class _Context_ThreadLocal {
 	 */
     private final static ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
     		InheritableThreadLocal.withInitial(HashMap::new);
-
-
-//  @Value(staticConstructor="of")
-//  private final static class Payload<T> {
-//		final Instance<T> instance;
-//  	final Runnable onCleanup;
-//  	void cleanUp() {
-//			if(onCleanup!=null) {
-//				onCleanup.run();
-//			}
-//		}
-//  }
-
-
     
     
 }

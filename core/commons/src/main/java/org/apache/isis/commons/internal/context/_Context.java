@@ -254,6 +254,14 @@ public final class _Context {
     // -- THREAD LOCAL SUPPORT
 
     /**
+     * Clear key {@code type} from current thread's map.
+     * @param type - the key into the thread-local store
+     */
+	public static void threadLocalClear(Class<?> type) {
+		_Context_ThreadLocal.clear(type);
+	}
+    
+    /**
      * Puts {@code payload} onto the current thread's map.
      * @param type - the key into the thread-local store
      * @param payload
@@ -261,18 +269,6 @@ public final class _Context {
 	public static <T> void threadLocalPut(Class<? super T> type, T payload) {
 		_Context_ThreadLocal.put(type, payload);
 	}
-
-//TODO [2033] cleanup comments	
-//	/**
-//	 * Puts {@code payload} onto the current thread's map. The provided {@code onCleanup} is called whenever
-//	 * {@code threadLocalCleanup()} is called.  
-//	 * @param type
-//	 * @param payload
-//	 * @param onCleanup
-//	 */
-//	public static <T> void threadLocalPut(Class<? super T> type, T payload, Runnable onCleanup) {
-//		_Context_ThreadLocal.put(type, payload, onCleanup);
-//	}
 
     
     /**

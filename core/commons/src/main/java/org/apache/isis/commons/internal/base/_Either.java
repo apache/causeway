@@ -23,6 +23,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
@@ -133,6 +134,16 @@ public final class _Either<L, R> {
     			? leftMapper.apply(left)
     					: rightMapper.apply(right);
     }
+
+	// -- TERMINALS
+    
+    public void accept(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
+    	if(isLeft()) {
+    		leftConsumer.accept(left);
+    	} else {
+    		rightConsumer.accept(right);
+    	}
+	}
     
     
 }
