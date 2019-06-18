@@ -13,10 +13,9 @@ That said, it is the responsibility of the viewers to ensure that for each reque
 
 == Wicket Viewer
 
-The xref:ug:vw:about.adoc[Wicket viewer] defines a relatively small number of pages (by which we mean subclasses of link:http://ci.apache.org/projects/wicket/apidocs/6.0.x/org/apache/wicket/markup/html/WebPage.html[`org.apache.wicket.markup.html.WebPage`]):
+The xref:ug:vw:about.adoc[Wicket viewer] defines a relatively small number of pages (by which we mean subclasses of `org.apache.wicket.markup.html.WebPage`):
 
 * about page
-* action prompt page
 * entity page
 * error page
 * home page

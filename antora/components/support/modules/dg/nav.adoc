@@ -15,13 +15,6 @@
 ** xref:building-isis.adoc[Building Isis]
 
 
-** xref:asciidoc.adoc[Asciidoc]
-*** xref:asciidoc/naming-conventions.adoc[Naming Conventions]
-*** xref:asciidoc/writing-the-docs.adoc[Writing the Cods]
-*** xref:asciidoc/build-and-review.adoc[Build and Review]
-*** xref:asciidoc/instant-rebuild.adoc[Instant Rebuild]
-*** xref:asciidoc/publish-procedure.adoc[Publish Procedure]
-
 
 ** xref:contributing.adoc[Contributing]
 

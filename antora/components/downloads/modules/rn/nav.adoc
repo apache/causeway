@@ -1,4 +1,2 @@
-* Release Notes
-
-** xref:about.adoc[About]
+* xref:about.adoc[Release Notes]
 

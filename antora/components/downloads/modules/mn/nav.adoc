@@ -1,4 +1,2 @@
-* Migration Notes
-
-** xref:about.adoc[About]
+* xref:about.adoc[Migration Notes]
 

@@ -2,7 +2,7 @@
 ** *xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]*
 ** xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
 ** xref:what-is-apache-isis/screencasts.adoc[Screencasts]
-** xref:what-is-apache-isis/powered-by.html[Powered By]
+** xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
 
 * Getting Started
@@ -53,8 +53,8 @@
 
 * Going Deeper
 
-** xref:going-deeper/articles-and-presentations.html[Articles, Conferences, Podcasts]
-** xref:going-deeper/books.html[Books]
+** xref:going-deeper/articles-and-presentations.adoc[Articles, Conferences, Podcasts]
+** xref:going-deeper/books.adoc[Books]
 ** link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
 
 

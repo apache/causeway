@@ -3,14 +3,6 @@
 include::_attributes.adoc[]
 
 
-[WARNING]
-===
-This material is out of date.
-
-We have now switched to using https://antora.org[Antora], which is a static doc site generator that builds upon Asciidoctor.
-Antora has its own directory/file conventions, which supercede the file name conventions described here.
-===
-
 
 This appendix describes the main syntax conventions when writing Asciidoctor/Asciidoc.
 

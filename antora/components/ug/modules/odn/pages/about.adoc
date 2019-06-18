@@ -16,32 +16,5 @@ DataNucleus as a product also supports the JPA API; Apache Isis is likely to als
 
 
 
-== Other Guides
-
-Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
-
-The user guides available are:
-
-* xref:ug:fun:about.adoc[Fundamentals]
-* xref:ug:vw:about.adoc[Wicket viewer]
-* xref:ug:vro:about.adoc[Restful Objects viewer]
-* xref:ug:odn:about.adoc[DataNucleus object store] (this guide)
-* xref:ug:sec:about.adoc[Security]
-* xref:ug:tst:about.adoc[Testing]
-* xref:ug:btb:about.adoc[Beyond the Basics]
-
-The reference guides are:
-
-* xref:rg:ant:about.adoc[Annotations]
-* xref:rg:svc:about.adoc[Domain Services]
-* xref:rg:cfg:about.adoc[Configuration Properties]
-* xref:rg:cms:about.adoc[Classes, Methods and Schema]
-* xref:rg:mvn:about.adoc[Apache Isis Maven plugin]
-* xref:rg:fis:about.adoc[Framework Internal Services]
-
-The remaining guides are:
-
-* xref:support:dg:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
-* xref:support:cgcom:about.adoc[Committers' Guide]
 
 
