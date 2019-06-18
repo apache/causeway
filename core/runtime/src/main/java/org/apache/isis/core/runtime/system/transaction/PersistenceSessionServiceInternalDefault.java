@@ -49,7 +49,7 @@ import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
-@Singleton //@Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
+@Singleton
 public class PersistenceSessionServiceInternalDefault 
 implements PersistenceSessionServiceInternal {
 

@@ -30,11 +30,12 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+
+import lombok.val;
 
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
@@ -98,9 +99,10 @@ public class AuditingServiceInternal {
 
         final String targetClass = CommandUtil.targetClassNameFor(adapter);
 
-        Transaction transaction = transactionService.currentTransaction();
-        final UUID transactionId = transaction.getUniqueId();
-        final int sequence = transaction.getSequence();
+        val txId = transactionService.currentTransactionId();
+        
+        final UUID transactionId = txId.getUniqueId();
+        final int sequence = txId.getSequence();
 
         for (AuditerService auditerService : auditerServices) {
             if (auditerService.isEnabled()) {

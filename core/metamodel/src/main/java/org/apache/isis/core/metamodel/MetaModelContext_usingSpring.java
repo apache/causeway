@@ -116,7 +116,7 @@ class MetaModelContext_usingSpring implements MetaModelContext {
 
         @Override
         public final TransactionState getTransactionState() {
-            return getTransactionService().getTransactionState();
+            return getTransactionService().currentTransactionState();
         }
         
         // -- SERVICE SUPPORT

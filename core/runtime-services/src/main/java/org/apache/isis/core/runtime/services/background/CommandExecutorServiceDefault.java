@@ -36,7 +36,6 @@ import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -68,6 +67,7 @@ import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @DomainService(nature = NatureOfService.DOMAIN) @Log4j2
@@ -114,11 +114,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private void ensureTransactionInProgress() {
-        final Transaction currentTransaction = transactionService.currentTransaction();
-        if(currentTransaction == null) {
-            throw new IllegalStateException("No current transaction");
+        val transactionState = transactionService.currentTransactionState();
+        if(transactionState == null || transactionState == TransactionState.NONE) {
+        	throw new IllegalStateException("No current transaction");
         }
-        final TransactionState transactionState = currentTransaction.getTransactionState();
         if(!transactionState.canCommit()) {
             throw new IllegalStateException("Current transaction is not in a state to be committed, is: " + transactionState);
         }

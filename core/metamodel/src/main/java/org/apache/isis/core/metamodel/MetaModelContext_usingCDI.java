@@ -115,7 +115,7 @@ class MetaModelContext_usingCDI implements MetaModelContext {
 
         @Override
         public final TransactionState getTransactionState() {
-            return getTransactionService().getTransactionState();
+            return getTransactionService().currentTransactionState();
         }
         
         // -- SERVICE SUPPORT

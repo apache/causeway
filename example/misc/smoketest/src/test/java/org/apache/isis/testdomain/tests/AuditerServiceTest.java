@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo;
+import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -40,10 +40,9 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Depends on {@link JdoBootstrappingTest_usingFixtures} to succeed.
@@ -58,10 +57,11 @@ import lombok.val;
 		}, 
 		properties = {
 				"logging.config=log4j2-test.xml",
+				"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
 				// "isis.reflector.introspector.parallelize=false",
 				// "logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 	})
-@Transactional
+//@Transactional //XXX this test is non transactional
 class AuditerServiceTest {
 
 	@Inject private RepositoryService repository;
@@ -70,30 +70,44 @@ class AuditerServiceTest {
 
 	@BeforeEach
 	void setUp() {
+		
+		val transactionTemplate = IsisContext.createTransactionTemplate();
+		transactionTemplate.execute(status -> {
 
-		// cleanup
-		fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
+			// cleanup
+			fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
 
-		// given
-		fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
+			// given
+			fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
+			
+			return null;
+			
+		});
+
 	}
 
-	@Test @Rollback(false)
+	@Test
 	void auditerServiceShouldBeAwareOfInventoryChanges() {
 
 		// given
-		val book = repository.allInstances(Book.class).listIterator().next();
+		val books = repository.allInstances(Book.class);
+		assertEquals(1, books.size());
+		val book = books.listIterator().next();
 
 		// when - running within its own transactional boundary
 		val transactionTemplate = IsisContext.createTransactionTemplate();
 		transactionTemplate.execute(status -> {
 			
+				System.out.println("==== EXEC IN");
+				
 		    	auditerService.clearHistory();
 				book.setName("Book #2");
 				repository.persist(book);
 				
 				// then - before the commit
 				assertEquals("", auditerService.getHistory());
+				
+				System.out.println("==== EXEC OUT");
 				
 				return null;
 		});
@@ -105,7 +119,7 @@ class AuditerServiceTest {
 
 	// -- HELPER
 
-	@Singleton
+	@Singleton @Log4j2
 	public static class AuditerServiceProbe implements AuditerService {
 
 		private StringBuilder history = new StringBuilder();
@@ -119,17 +133,22 @@ class AuditerServiceTest {
 		public void audit(UUID interactionId, int sequence, String targetClassName, Bookmark target,
 				String memberIdentifier, String propertyName, String preValue, String postValue, String user,
 				Timestamp timestamp) {
-
+			
 			history.append("targetClassName=").append(targetClassName).append(",").append("propertyName=")
 					.append(propertyName).append(",").append("preValue=").append(preValue).append(",")
 					.append("postValue=").append(postValue).append(";");
+			
+			log.info("audit {}", history.toString());
 		}
 
 		void clearHistory() {
+			log.info("clearing");
 			history = new StringBuilder();
+			log.info("cleared");
 		}
 
 		String getHistory() {
+			log.info("get");
 			return history.toString();
 		}
 

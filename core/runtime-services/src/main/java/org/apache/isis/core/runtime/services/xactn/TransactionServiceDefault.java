@@ -26,6 +26,7 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -33,6 +34,8 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
+
+import lombok.val;
 
 @Singleton
 public class TransactionServiceDefault implements TransactionService {
@@ -44,23 +47,8 @@ public class TransactionServiceDefault implements TransactionService {
     }
 
     @Override
-    public void nextTransaction() {
-        nextTransaction((Command)null);
-    }
-
-    @Override
-    public void nextTransaction(final Command commandIfAny) {
-        nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT, commandIfAny);
-    }
-
-    @Override
-    public void nextTransaction(TransactionService.Policy policy) {
-        nextTransaction(policy, null);
-    }
-
-    @Override
     public void nextTransaction(TransactionService.Policy policy, final Command commandIfAny) {
-        final TransactionState transactionState = getTransactionState();
+        final TransactionState transactionState = currentTransactionState();
         switch (transactionState) {
         case NONE:
             break;
@@ -89,7 +77,7 @@ public class TransactionServiceDefault implements TransactionService {
         persistenceSessionServiceInternal.beginTran(commandIfAny);
     }
 
-    @Override
+	@Override
     public void executeWithinTransaction(Runnable task) {
         isisTransactionManager().executeWithinTransaction(task);
     }
@@ -104,8 +92,9 @@ public class TransactionServiceDefault implements TransactionService {
     }
     
     @Override
-    public Transaction currentTransaction() {
-        return persistenceSessionServiceInternal.currentTransaction();
+    public TransactionId currentTransactionId() {
+    	val tx = currentTransaction();
+    	return tx!=null ? tx.getId() : null;
     }
 
     @Override
@@ -114,9 +103,15 @@ public class TransactionServiceDefault implements TransactionService {
     }
 
     @Override
-    public TransactionState getTransactionState() {
+    public TransactionState currentTransactionState() {
         return persistenceSessionServiceInternal.getTransactionState();
     }
+    
+    // -- HELPER
+    
+    private Transaction currentTransaction() {
+		return persistenceSessionServiceInternal.currentTransaction();
+	}
 
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;

@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo;
+import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -38,8 +38,6 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.val;
 
@@ -60,7 +58,7 @@ import lombok.val;
 				// "isis.reflector.introspector.parallelize=false",
 				// "logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 	})
-@Transactional
+//@Transactional //XXX this test is non transactional
 class PublisherServiceTest {
 
 	@Inject private RepositoryService repository;
@@ -69,15 +67,23 @@ class PublisherServiceTest {
 
 	@BeforeEach
 	void setUp() {
+		
+		val transactionTemplate = IsisContext.createTransactionTemplate();
+		transactionTemplate.execute(status -> {
 
-		// cleanup
-		fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
+			// cleanup
+			fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
 
-		// given
-		fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
+			// given
+			fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
+			
+			return null;
+			
+		});
+
 	}
 
-	@Test @Rollback(false)
+	@Test
 	void publisherServiceShouldBeAwareOfInventoryChanges() {
 
 		// given
