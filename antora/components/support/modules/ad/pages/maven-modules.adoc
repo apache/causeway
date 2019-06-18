@@ -3,7 +3,10 @@
 
 include::_attributes.adoc[]
 
-
+[CAUTION]
+====
+This material is out-of-date.
+====
 
 [source]
 ----
