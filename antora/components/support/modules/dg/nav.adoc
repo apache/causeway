@@ -12,7 +12,7 @@
 *** xref:hints-and-tips/how-run-fixtures-on-app-startup.adoc[How to run Fixtures on App Startup]
 
 
-** xref:building-isis.adoc[Building Isis]
+** xref:building-apache-isis.adoc[Building Apache Isis]
 
 
 

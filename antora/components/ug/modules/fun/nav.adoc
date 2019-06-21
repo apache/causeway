@@ -66,7 +66,6 @@
 **** xref:programming-model/domain-services/repository-and-factory.adoc[Repository and Factory]
 **** xref:programming-model/domain-services/menu.adoc[Menu]
 **** xref:programming-model/domain-services/event-subscribers.adoc[Event Subscribers]
-**** xref:programming-model/domain-services/contributions.adoc[Contributions]
 **** xref:programming-model/domain-services/scoped-services.adoc[Scoped Services]
 **** xref:programming-model/domain-services/registering.adoc[Registering]
 **** xref:programming-model/domain-services/initialization.adoc[Initialization]

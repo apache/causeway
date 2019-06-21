@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-This page explains how you can contribute to Apache Isis. You'll probably also want xref:support:dg:ide.adoc[set up your IDE] and learn xref:support:dg:building-isis.adoc[how to build Apache Isis].
+This page explains how you can contribute to Apache Isis. You'll probably also want xref:support:dg:ide.adoc[set up your IDE] and learn xref:support:dg:building-apache-isis.adoc[how to build Apache Isis].
 
 Thanks for considering to help out, your contributions are appreciated!
 

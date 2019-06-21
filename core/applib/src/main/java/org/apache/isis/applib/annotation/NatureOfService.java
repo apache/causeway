@@ -24,17 +24,18 @@ package org.apache.isis.applib.annotation;
 public enum NatureOfService {
 
     /**
-     * The default; the service's actions appear on menus and can be contributed to domain objects as actions,
-     * properties or collections.
+     * The service's actions appear in the viewer, for example in the menu bar.
      */
     VIEW,
     /**
-     * The service's actions appear on menus but do not contribute.
+     * TODO: v2: remove for v2
+     *
+     * @deprecated - use {@link #VIEW} instead
      */
+    @Deprecated
     VIEW_MENU_ONLY,
     /**
-     * The service's actions can be contributed to domain objects as actions, properties or collections but do not
-     * appear on menus.
+     * TODO: v2: remove for v2
      *
      * @deprecated - use mixins instead
      */
@@ -55,9 +56,11 @@ public enum NatureOfService {
     boolean isView() {
         return this == VIEW;
     }
+    @Deprecated
     boolean isViewMenuOnly() {
         return this == VIEW_MENU_ONLY;
     }
+    @Deprecated
     boolean isViewContributionsOnly() {
         return this == VIEW_CONTRIBUTIONS_ONLY;
     }
@@ -65,6 +68,7 @@ public enum NatureOfService {
         return this == DOMAIN;
     }
 
+    @Deprecated
     boolean isViewOrViewMenuOnly() {
         return isView() || isViewMenuOnly();
     }

@@ -750,7 +750,7 @@ For example, this xref:support:dg:about.adoc[developers' guide] document is brok
 dg.adoc
 _dg_ide.adoc
 _dg_hints-and-tips.adoc
-_dg_building-isis.adoc
+_dg_building-apache-isis.adoc
 ...
 ....
 
@@ -762,7 +762,7 @@ These are included using:
 ----
 \include::_dg_ide.adoc[leveloffset=+1]
 \include::_dg_hints-and-tips.adoc[leveloffset=+1]
-\include::_dg_building-isis.adoc[leveloffset=+1]
+\include::_dg_building-apache-isis.adoc[leveloffset=+1]
 ...
 ----
 

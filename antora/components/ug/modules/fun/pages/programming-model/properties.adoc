@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:ug:fun:programming-model/class-definition/entities.adoc[domain entity] or a xref:ug:fun:programming-model/class-definition/view-models.adoc[view model].
+A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:ug:fun:programming-model/domain-entities.adoc[domain entity] or a xref:ug:fun:programming-model/view-models.adoc[view model].
 
 For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
 All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).
@@ -14,13 +14,13 @@ Most properties (those that are editable/modifiable) will also have a setter and
 And most properties will also have a number of annotations:
 
 * Apache Isis defines its own set own `@Property` annotation for capturing domain semantics.
-It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ug:vw:layout.adoc[`.layout.xml`] file
+It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ug:vw:layout.adoc[`.layout.xml`] file)
 
 * the properties of domain entities are often annotated with the JDO/DataNucleus `@javax.jdo.annotations.Column` annotation.
 For property references, there may be other annotations to indicate whether the reference is bidirectional.
 It's also possible (using annotations) to define a link table to hold foreign key columns.
 
-* for the properties of view models, then JAXB annotations such as `@javax.xml.bind.annotation.XmlElement` will be present
+* for the properties of view models, then JAXB annotations such as `@javax.xml.bind.annotation.XmlElement` may be present
 
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
@@ -60,7 +60,7 @@ Or to map a reference type:
 private Customer customer;
 ----
 
-It's ok for a xref:ug:fun:programming-model/class-definition/entities.adoc[domain entity] to reference another domain entity, and for a xref:ug:fun:programming-model/class-definition/view-models.adoc[view model] to reference both view model and domain entities.
+It's ok for a xref:ug:fun:programming-model/domain-entities.adoc[domain entity] to reference another domain entity, and for a xref:ug:fun:programming-model/view-models.adoc[view model] to reference both view model and domain entities.
 However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
 
 [NOTE]

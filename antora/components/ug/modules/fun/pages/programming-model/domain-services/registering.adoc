@@ -3,6 +3,8 @@
 include::_attributes.adoc[]
 
 
+// TODO: v2: this is out of date, need to xref Spring Boot mechanism instead.
+
 
 The easiest way to register domain services with the framework is to use an xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`].
 This specifies the modules which contain xref:rg:ant:DomainService.adoc[`@DomainService`]-annotated classes.
@@ -25,28 +27,6 @@ public class MyAppManifest implements AppManifest {
 
 will load all services in the packages underneath the four modules listed.
 
-An alternative (older) mechanism is to registered domain services in the `isis.properties` configuration file, under `isis.services` key (a comma-separated list); for example:
-
-[source,ini]
-----
-isis.services = com.mycompany.myapp.employee.Employees\,
-                com.mycompany.myapp.claim.Claims\,
-                ...
-----
-
-This will then result in the framework instantiating a single instance of each of the services listed.
-
-If all services reside under a common package, then the `isis.services.prefix` can specify this prefix:
-
-[source,ini]
-----
-isis.services.prefix = com.mycompany.myapp
-isis.services = employee.Employees,\
-                claim.Claims,\
-                ...
-----
-
-This is quite rare, however; you will often want to use default implementations of domain services that are provided by the framework and so will not reside under this prefix.
 
 Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rg:svc:about.adoc[domain services] reference guide for further details.
 

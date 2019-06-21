@@ -8,24 +8,12 @@ In larger applications we have found it worthwhile to ensure that our domain ser
 
 The application provides the `@DomainService(nature=...)` annotation that helps distinguish some of these responsibilities:
 
-* `VIEW_MENU_ONLY` indicates that the actions should appear on the menu of the xref:ug:vw:about.adoc[Wicket viewer], and as top-level actions for the REST API provided by the xref:ug:vro:about.adoc[Restful Objects viewer]
+* `VIEW` indicates that the actions should appear on the menu of the xref:ug:vw:about.adoc[Wicket viewer], and as top-level actions for the REST API provided by the xref:ug:vro:about.adoc[Restful Objects viewer]
 
 * `DOMAIN` indicates that the actions are for other domain objects to invoke (either directly or indirectly through the event bus), but in any case should not be rendered at all in the UI
 
 * `VIEW_REST_ONLY` indicates that the actions should appear in the REST API provided by the xref:ug:vro:about.adoc[Restful Objects viewer], but not rendered by the xref:ug:vw:about.adoc[Wicket viewer].
 
-There are also two other natures that should be considered "deprecated":
-
-* `VIEW_CONTRIBUTIONS_ONLY` which indicates that the actions should be contributed as actions to its action parameters. +
-+
-This feature is deprecated because xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] are equivalent in functionality with a simpler programming model.
-
-* `VIEW` combines both `VIEW_MENU_ONLY` and the deprecated `VIEW_CONTRIBUTIONS_ONLY`.
-
 If the domain service nature is not specified (or is left to its default, `VIEW`), then the service's actions will appear in the UI.
 
-While for long-term maintainability we do recommend the naming conventions described xref:ug:fun:building-blocks/domain-services/organizing-services.adoc[above], you can get away with far fewer services when just prototyping a domain.
-Later on it is easy enough to refactor the code to tease apart the different responsibilities.
-
-Pulling all the above together, here are our suggestions as to how you should organize your domain services.
 

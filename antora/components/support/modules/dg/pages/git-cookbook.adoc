@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 This appendix describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
 
-* xref:support:dg:building-isis.adoc[building Apache Isis]
+* xref:support:dg:building-apache-isis.adoc[building Apache Isis]
 * xref:support:dg:contributing.adoc[Contributing]
 * xref:support:cgcom:policies/git-policy.adoc[Git policy]
 

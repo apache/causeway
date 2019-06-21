@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 A collection is an instance variable of a domain object, of a collection type that holds references to other domain objects.
 For example, a `Customer` may have a collection of ``Order``s).
 
-It's ok for a xref:ug:fun:programming-model/class-definition/entities.adoc[domain entity] to reference another domain entity, and for a xref:ug:fun:programming-model/class-definition/view-models.adoc[view model] to reference both view model and domain entities.
+It's ok for a xref:ug:fun:programming-model/domain-entities.adoc[domain entity] to reference another domain entity, and for a xref:ug:fun:programming-model/view-models.adoc[view model] to reference both view model and domain entities.
 However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
 
 Formally speaking, a collection is simply a regular JavaBean getter, returning a collection type (subtype of `java.util.Collection`).

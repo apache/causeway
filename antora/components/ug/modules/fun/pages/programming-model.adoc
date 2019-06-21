@@ -48,17 +48,13 @@ Indeed, they can additionally be annotated using `@XmlTypeAdapter` if required.
 * *mixins* are annotated either with `@DomainObject(nature=MIXIN)` or using `@Mixin`.
 As for view models, which is used is a matter of personal preference.
 
-* finally, *domain services*` are annotated with `@DomainService(nature=...)` where the nature is either `VIEW_MENU_ONLY` (for domain services whose actions appear on the top-level menu bars), or `VIEW_CONTRIBUTIONS_ONLY` (for domain services whose actions are contributed to entities or view models), or `DOMAIN` (for domain services whose
-functionality is simply for other domain objects to invoke programmatically).
-+
-It is also possible to specify a nature of simply `VIEW`, this combining `VIEW_MENU_ONLY` and `VIEW_CONTRIBUTIONS_ONLY`.
-This is in fact the default, useful for initial prototyping.
-A final nature is `VIEW_REST_ONLY` which is for domain services whose functionality is surfaced only by the xref:ug:vro:about.adoc[RestfulObjects viewer].
+* finally, *domain services*` are annotated with `@DomainService(nature=...)` where the nature is either `VIEW` (for domain services whose actions appear in the viewers, eg on the top-level menu bars), or `DOMAIN` (for domain services whose
+functionality is simply for other domain objects to invoke programmatically), or `VIEW_REST_ONLY` (for domain services whose functionality is surfaced only by the xref:ug:vro:about.adoc[RestfulObjects viewer]).
 
 You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 
 It's worth emphasising is that domain entities and view models hold state, whereas domain services are generally stateless.
-If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be `@RequestScoped` so that this state is short-lived and usable only within a single request.
+If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be scoped, for example using `@RequestScoped` (so that this state is short-lived and usable only within a single request).
 
 The framework also defines supplementary annotations, `@DomainObjectLayout` and `@DomainServiceLayout`.
 These provide hints relating to the layout of the domain object in the user interface.
