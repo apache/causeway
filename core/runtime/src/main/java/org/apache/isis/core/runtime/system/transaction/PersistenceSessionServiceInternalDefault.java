@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.runtime.system.transaction;
 
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
 import javax.inject.Singleton;
@@ -44,10 +47,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-
-import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 @Singleton
 public class PersistenceSessionServiceInternalDefault 
@@ -164,12 +163,6 @@ implements PersistenceSessionServiceInternal {
     @Override
     public Transaction currentTransaction() {
         return getTransactionManager().getCurrentTransaction();
-    }
-
-    @Override
-    public CountDownLatch currentTransactionLatch() {
-        IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
-        return transaction==null ? new CountDownLatch(0) : transaction.countDownLatch();
     }
 
     @Override

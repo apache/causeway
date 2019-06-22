@@ -72,7 +72,6 @@ public interface TransactionService {
     @Programmatic
     CountDownLatch currentTransactionLatch();
 
-
     /**
      * Intended only for use by fixture scripts and integration tests.
      *

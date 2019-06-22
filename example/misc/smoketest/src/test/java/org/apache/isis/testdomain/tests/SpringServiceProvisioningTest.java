@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,7 @@ import lombok.val;
 	classes = { 
 			IsisBoot.class, 
 			JdoTestDomainModule.class, 
+			IsisPlatformTransactionManagerForJdo.class,
 	},
 	properties = {
 		"logging.config=log4j2-test.xml",

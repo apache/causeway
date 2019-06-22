@@ -21,12 +21,14 @@ package org.apache.isis.commons.internal.context;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.commons.collections.Bin;
 
+import lombok.Value;
 import lombok.val;
 
 /**
@@ -39,19 +41,36 @@ import lombok.val;
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
+ * 
  * @since 2.0.0-M3
+ * 
  */
 final class _Context_ThreadLocal {
 
     // -- MIXINS
     
-	static <T> void put(Class<? super T> type, T variant) {
+	@Value(staticConstructor = "of")
+	private final static class ThreadKey {
+		long threadId;
+		int threadHashCode;
+		static ThreadKey of(Thread thread) {
+			return of(thread.getId(), thread.hashCode());
+		}
+	}
+	
+	static <T> Runnable put(Class<? super T> type, T variant) {
 		requires(type, "type");
     	requires(variant, "variant");
-    	THREAD_LOCAL_MAP.get()
+    	
+    	val threadLocalMap = getOrCreateThreadLocalMap();
+    	threadLocalMap
     	.compute(type, (k, v) -> v == null 
     		? Bin.<T>ofSingleton(variant)
     				: Bin.<T>concat(_Casts.uncheckedCast(v), variant));
+    	
+    	val key = THREAD_LOCAL_MAP_KEY.get();
+    	    	
+		return ()->{MAPS_BY_KEY.remove(key);};
     }
 	
 	static <T> Bin<T> select(Class<? super T> type, Class<? super T> instanceOf) {
@@ -64,30 +83,70 @@ final class _Context_ThreadLocal {
 	}
     
     static <T> Bin<T> get(Class<? super T> type) {
-    	val bin = THREAD_LOCAL_MAP.get().get(type);
-    	if(bin!=null) {
-    		return _Casts.uncheckedCast(bin);
+    	val threadLocalMap = getThreadLocalMap();
+    	if(threadLocalMap==null) {
+    		return Bin.empty();
     	}
-    	return Bin.empty();
+    	val bin = threadLocalMap.get(type);
+    	if(bin==null) {
+    		return Bin.empty();	
+    	}
+    	return _Casts.uncheckedCast(bin);
     }
     
     static void clear(Class<?> type) {
-    	THREAD_LOCAL_MAP.get().remove(type);
+    	val threadLocalMap = getThreadLocalMap();
+    	if(threadLocalMap==null) {
+    		return;
+    	}
+    	threadLocalMap.remove(type);
     }
     
     static void cleanupThread() {
-    	THREAD_LOCAL_MAP.remove();
+    	val key = THREAD_LOCAL_MAP_KEY.get();
+    	THREAD_LOCAL_MAP_KEY.remove();
+    	MAPS_BY_KEY.remove(key);
     }
     
     // -- HELPER
     
     private _Context_ThreadLocal(){}
+    
+    static void clear() {
+    	MAPS_BY_KEY.clear();
+    }
+
+//	/**
+//	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
+//	 */
+//    private final static ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
+//    		InheritableThreadLocal.withInitial(HashMap::new);
 
 	/**
 	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
 	 */
-    private final static ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
-    		InheritableThreadLocal.withInitial(HashMap::new);
+    private final static ThreadLocal<ThreadKey> THREAD_LOCAL_MAP_KEY = 
+    		InheritableThreadLocal.withInitial(()->ThreadKey.of(Thread.currentThread()));
+
     
+    private final static _Multimaps.MapMultimap<ThreadKey, Class<?>, Bin<?>> MAPS_BY_KEY = 
+    		_Multimaps.newConcurrentMapMultimap(); 
+    
+    private static Map<Class<?>, Bin<?>> getThreadLocalMap() {
+    	val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
+    	val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
+    	return threadLocalMap;
+    }
+    
+    private static Map<Class<?>, Bin<?>> getOrCreateThreadLocalMap() {
+    	val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
+    	val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
+    	if(threadLocalMap!=null) {
+        	return threadLocalMap;
+    	}
+		val map = _Maps.<Class<?>, Bin<?>>newHashMap();
+		MAPS_BY_KEY.put(key, map);
+		return map;
+    }
     
 }

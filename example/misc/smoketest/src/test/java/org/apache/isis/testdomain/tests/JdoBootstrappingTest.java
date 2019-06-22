@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.tests;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -28,14 +29,19 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.Product;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,16 +60,24 @@ import lombok.val;
 		// "isis.reflector.introspector.parallelize=false",
 		 //"logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 })
-@Transactional
+@Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoBootstrappingTest {
 
 	@Inject private RepositoryService repository;
 
 	@BeforeAll
-	static void launchH2Console() throws SQLException {
-		// for troubleshooting ...
+	static void beforeAll() throws SQLException {
+		//XXX is it actually the case that tests might run in parallel?
+		//assertFalse(IsisSession.isInSession()); // expected pre condition 
+		// launch H2Console for troubleshooting ...
 		// Util_H2Console.main(null);
 	}
+	
+	@AfterAll
+	static void afterAll() throws SQLException {
+//		assertFalse(IsisSession.isInSession()); // expected post condition
+	}
+	
 
 	void cleanUp() {
 
@@ -85,9 +99,9 @@ class JdoBootstrappingTest {
 		repository.persist(inventory);
 	}
 
-	@Test @Rollback(false)
+	@Test @Order(1) @Rollback(false) 
 	void sampleInventoryShouldBeSetUp() {
-
+		
 		// given - expected pre condition: no inventories
 
 		cleanUp();
@@ -99,7 +113,7 @@ class JdoBootstrappingTest {
 
 		// then - expected post condition: ONE inventory
 
-		val inventories =repository.allInstances(Inventory.class);
+		val inventories = repository.allInstances(Inventory.class);
 		assertEquals(1, inventories.size());
 
 		val inventory = inventories.get(0);
@@ -110,6 +124,11 @@ class JdoBootstrappingTest {
 		val product = inventory.getProducts().iterator().next();
 		assertEquals("Sample Book", product.getName());
 
+	}
+	
+	@Test @Order(2) @Rollback(false)
+	void aSecondRunShouldWorkAsWell() {
+		sampleInventoryShouldBeSetUp();
 	}
 
 }

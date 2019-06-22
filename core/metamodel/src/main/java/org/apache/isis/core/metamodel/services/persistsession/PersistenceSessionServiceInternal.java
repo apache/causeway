@@ -17,7 +17,6 @@
 package org.apache.isis.core.metamodel.services.persistsession;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.query.Query;
@@ -93,8 +92,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
 
     Transaction currentTransaction();
 
-    CountDownLatch currentTransactionLatch();
-
     TransactionState getTransactionState();
 
     // -- makePersistent, remove
@@ -135,8 +132,10 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      */
     <T> ObjectAdapter firstMatchingQuery(Query<T> query);
 
+    @Deprecated //TODO[2125] use new TransactionServiceSpring instead
     void executeWithinTransaction(Runnable task);
     
+    @Deprecated //TODO[2125] use new TransactionServiceSpring instead
     <T> T executeWithinTransaction(Supplier<T> task);
 
 }

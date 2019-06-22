@@ -243,6 +243,7 @@ public final class _Context {
             closeAnyClosables(_Lists.newArrayList(singletonMap.values()));
 
             singletonMap.clear();
+            _Context_ThreadLocal.clear();
         }
     }
 
@@ -265,9 +266,10 @@ public final class _Context {
      * Puts {@code payload} onto the current thread's map.
      * @param type - the key into the thread-local store
      * @param payload
+     * @return a Runnable which, when run, removes any references to payload
      */
-	public static <T> void threadLocalPut(Class<? super T> type, T payload) {
-		_Context_ThreadLocal.put(type, payload);
+	public static <T> Runnable threadLocalPut(Class<? super T> type, T payload) {
+		return _Context_ThreadLocal.put(type, payload);
 	}
 
     

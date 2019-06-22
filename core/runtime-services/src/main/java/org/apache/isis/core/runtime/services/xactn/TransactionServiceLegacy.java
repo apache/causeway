@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.runtime.services.xactn;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
-
-import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
@@ -35,19 +32,19 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Singleton
-public class TransactionServiceDefault implements TransactionService {
+@RequiredArgsConstructor(staticName = "of")
+class TransactionServiceLegacy {
 
-
-    @Override
-    public void flushTransaction() {
+    void flushTransaction() {
         persistenceSessionServiceInternal.flush();
     }
 
-    @Override
-    public void nextTransaction(TransactionService.Policy policy, final Command commandIfAny) {
+    
+    void nextTransaction(TransactionService.Policy policy, final Command commandIfAny) {
         final TransactionState transactionState = currentTransactionState();
         switch (transactionState) {
         case NONE:
@@ -77,13 +74,13 @@ public class TransactionServiceDefault implements TransactionService {
         persistenceSessionServiceInternal.beginTran(commandIfAny);
     }
 
-	@Override
-    public void executeWithinTransaction(Runnable task) {
+	
+    void executeWithinTransaction(Runnable task) {
         isisTransactionManager().executeWithinTransaction(task);
     }
 
-    @Override
-    public <T> T executeWithinTransaction(Supplier<T> task) {
+    
+    <T> T executeWithinTransaction(Supplier<T> task) {
         return isisTransactionManager().executeWithinTransaction(task);
     }
     
@@ -91,19 +88,14 @@ public class TransactionServiceDefault implements TransactionService {
         return IsisContext.getTransactionManagerJdo().get();
     }
     
-    @Override
-    public TransactionId currentTransactionId() {
+    
+    TransactionId currentTransactionId() {
     	val tx = currentTransaction();
     	return tx!=null ? tx.getId() : null;
     }
 
-    @Override
-    public CountDownLatch currentTransactionLatch() {
-        return persistenceSessionServiceInternal.currentTransactionLatch();
-    }
-
-    @Override
-    public TransactionState currentTransactionState() {
+    
+    TransactionState currentTransactionState() {
         return persistenceSessionServiceInternal.getTransactionState();
     }
     
@@ -113,8 +105,8 @@ public class TransactionServiceDefault implements TransactionService {
 		return persistenceSessionServiceInternal.currentTransaction();
 	}
 
-    @javax.inject.Inject
-    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    @NonNull
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 
 }

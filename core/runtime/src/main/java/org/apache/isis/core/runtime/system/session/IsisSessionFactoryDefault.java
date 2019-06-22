@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
@@ -39,6 +40,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.config.IsisConfiguration;
@@ -56,8 +58,8 @@ import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -257,11 +259,14 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @PreDestroy
     @Override
     public void destroyServicesAndShutdown() {
+    	// call might originate from a different thread than main
         destroyServices();
         shutdown();
     }
 
     // -- 
+    
+    private final Set<IsisSession> openSessions = _Sets.newHashSet();
     
     @Override
     public IsisSession openSession(final AuthenticationSession authenticationSession) {
@@ -270,6 +275,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         val isisSession = new IsisSession(runtimeEventService, authenticationSession);
         isisSession.open();
+        openSessions.add(isisSession);
         return isisSession;
     }
 
@@ -281,6 +287,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             return;
         }
         existingSessionIfAny.close();
+        openSessions.remove(existingSessionIfAny);
     }
 
     @Override
@@ -367,6 +374,11 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
 
     private void shutdown() {
+    	
+    	// just in case we still have an open session, must also work if called from a different thread than 'main'
+    	openSessions.forEach(IsisSession::close);
+    	openSessions.clear();
+		
         runtimeEventService.fireAppPreDestroy();
         authenticationManager.shutdown();
         //specificationLoader.shutdown(); //[2112] lifecycle is managed by IoC

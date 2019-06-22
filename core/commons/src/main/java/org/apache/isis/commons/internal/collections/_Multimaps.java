@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
@@ -223,6 +224,13 @@ public class _Multimaps {
      */
     public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(){
         return newMapMultimap(HashMap<K1, Map<K2, V>>::new, HashMap::new);
+    }
+    
+    /**
+     * @return ConcurrentHashMap of HashMaps
+     */
+    public static <K1, K2, V> MapMultimap<K1, K2, V> newConcurrentMapMultimap(){
+        return newMapMultimap(ConcurrentHashMap<K1, Map<K2, V>>::new, HashMap::new);
     }
 
 

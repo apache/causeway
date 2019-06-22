@@ -23,7 +23,6 @@
   "org.apache.isis.core.runtime.services.menubars.MenuBarsLoaderServiceDefault",
   "org.apache.isis.core.runtime.services.menubars.bootstrap3.MenuBarsServiceBS3",
   "org.apache.isis.core.runtime.services.message.MessageServiceDefault",
-  "org.apache.isis.core.runtime.services.xactn.TransactionServiceDefault",
   "org.apache.isis.core.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault",
   "org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard",
   "org.apache.isis.core.wrapper.WrapperFactoryDefault"

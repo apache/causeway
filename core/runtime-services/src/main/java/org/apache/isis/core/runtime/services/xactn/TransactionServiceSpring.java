@@ -22,7 +22,8 @@ package org.apache.isis.core.runtime.services.xactn;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
-import javax.enterprise.inject.Vetoed;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.command.Command;
@@ -30,6 +31,8 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionObject;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -41,16 +44,25 @@ import org.springframework.transaction.support.TransactionTemplate;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Vetoed @Deprecated//does not work
+@Singleton
 @Log4j2
 public class TransactionServiceSpring implements TransactionService {
 	
+	@Inject private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+	
 	 // single TransactionTemplate shared amongst all methods in this instance
     private final TransactionTemplate transactionTemplate;
+    private TransactionServiceLegacy legacyTransactionService;
 
     // use constructor-injection to supply the PlatformTransactionManager
     public TransactionServiceSpring(PlatformTransactionManager transactionManager) {
         this.transactionTemplate = new TransactionTemplate(transactionManager);
+        
+    }
+    
+    @PostConstruct
+    public void init() {
+    	this.legacyTransactionService = TransactionServiceLegacy.of(persistenceSessionServiceInternal);
     }
 
 	@Override
@@ -108,22 +120,23 @@ public class TransactionServiceSpring implements TransactionService {
 	}
 
 	@Override
+	public void nextTransaction(Policy policy, Command command) {
+		
+		log.warn("deprecated");
+		//_Exceptions.throwNotImplemented();
+		
+		legacyTransactionService.nextTransaction(policy, command);
+	}
+	
+	@Override
 	public CountDownLatch currentTransactionLatch() {
 		
-		log.warn("not implemented");
-		_Exceptions.throwNotImplemented();
+		val txObject = IsisTransactionAspectSupport.currentTransactionObject();
+		if(txObject==null || txObject.getCurrentTransaction()==null) {
+			return new CountDownLatch(0);
+		}
 		
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void nextTransaction(Policy policy, Command command) {
-		// TODO Auto-generated method stub
-		
-		log.warn("not implemented");
-		_Exceptions.throwNotImplemented();
-		
+        return ((IsisTransaction)txObject.getCurrentTransaction()).countDownLatch();
 	}
 
 	@Override
@@ -161,6 +174,8 @@ public class TransactionServiceSpring implements TransactionService {
 		return txObject;
 		
 	}
+
+
 
 
 }

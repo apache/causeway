@@ -119,6 +119,7 @@ public class JdoPersistenceLifecycleService {
 		PersistenceSession.current(PersistenceSession.class)
                 .getSingleton()
                 .ifPresent(PersistenceSession::close);
+		_Context.threadLocalClear(PersistenceSession.class);
 	}
 	
 //	private void flushSession() {

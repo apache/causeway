@@ -51,7 +51,14 @@ public class IsisSession extends RuntimeContextBase {
      */
 	@Getter private long openedAtSystemNanos = -1L;
     
-	public IsisSession(
+	/**
+	 * 
+	 * @param runtimeEventService
+	 * @param authenticationSession
+	 * @implNote package private constructor, to let only IsisSessionFactory have access to it, 
+	 * since it must keep track of all opened sessions
+	 */
+	IsisSession(
 			final RuntimeEventService runtimeEventService,
 			final AuthenticationSession authenticationSession) {
 		
@@ -99,10 +106,12 @@ public class IsisSession extends RuntimeContextBase {
 	}
 	
 	// -- OPEN
+	
+	private Runnable cleanupHandle;  
     
     void open() {
     	openedAtSystemNanos = System.nanoTime();
-    	_Context.threadLocalPut(IsisSession.class, this);
+    	cleanupHandle = _Context.threadLocalPut(IsisSession.class, this);
     	runtimeEventService.fireSessionOpened(this);
     }
 
@@ -113,7 +122,9 @@ public class IsisSession extends RuntimeContextBase {
      */
     void close() {
         runtimeEventService.fireSessionClosing(this);
-        _Context.threadLocalCleanup();
+        if(cleanupHandle!=null) {
+        	cleanupHandle.run();
+        }
     }
 
     // -- FLUSH

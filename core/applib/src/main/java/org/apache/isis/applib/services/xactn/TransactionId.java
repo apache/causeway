@@ -18,4 +18,10 @@ public final class TransactionId implements HasUniqueId {
      */
 	private final int sequence;
 
+	private final static TransactionId EMPTY = TransactionId.of(UUID.fromString("0000-00-00-00-000000"), 0); 
+	
+	public static TransactionId empty() {
+		return EMPTY;
+	}
+
 }

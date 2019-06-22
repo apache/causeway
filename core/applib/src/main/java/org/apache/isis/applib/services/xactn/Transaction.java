@@ -46,5 +46,26 @@ public interface Transaction {
 
     @Programmatic
     TransactionState getTransactionState();
+    
+    // -- FACTORIES
+    
+    public static Transaction noop() {
+    	return new Transaction() {
+			
+			@Override
+			public TransactionState getTransactionState() {
+				return TransactionState.NONE;
+			}
+			
+			@Override
+			public TransactionId getId() {
+				return null;
+			}
+			
+			@Override
+			public void flush() {
+			}
+		};
+    }
 
 }

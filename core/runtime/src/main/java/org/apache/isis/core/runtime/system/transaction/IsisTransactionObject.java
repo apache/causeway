@@ -27,8 +27,9 @@ import lombok.Data;
 
 @Data @AllArgsConstructor(staticName = "of")
 public class IsisTransactionObject implements SmartTransactionObject {
+	
 	Transaction currentTransaction;
-
+	
 	@Override
 	public boolean isRollbackOnly() {
 		return currentTransaction.getTransactionState().mustAbort();
@@ -43,8 +44,9 @@ public class IsisTransactionObject implements SmartTransactionObject {
 	
 	public TransactionId getTransactionId() {
 		if(currentTransaction!=null) {
-			currentTransaction.getId();
+			return currentTransaction.getId();
 		}
 		return null;
 	}		
+
 }

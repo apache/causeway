@@ -58,6 +58,7 @@ import lombok.extern.log4j.Log4j2;
 		properties = {
 				"logging.config=log4j2-test.xml",
 				"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
+				"logging.level.org.apache.isis.core.runtime.system.transaction.IsisTransaction=DEBUG",
 				// "isis.reflector.introspector.parallelize=false",
 				// "logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 	})
@@ -134,17 +135,17 @@ class AuditerServiceTest {
 					.append(propertyName).append(",").append("preValue=").append(preValue).append(",")
 					.append("postValue=").append(postValue).append(";");
 			
-			log.info("audit {}", history.toString());
+			log.debug("audit {}", history.toString());
 		}
 
 		void clearHistory() {
-			log.info("clearing");
+			log.debug("clearing");
 			history = new StringBuilder();
-			log.info("cleared");
+			log.debug("cleared");
 		}
 
 		String getHistory() {
-			log.info("get");
+			log.debug("get {}", history.toString());
 			return history.toString();
 		}
 

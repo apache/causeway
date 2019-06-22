@@ -30,7 +30,8 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 /**
  * 
  * @since 2.0.0-M3
- *
+ * @implNote listeners to runtime events are hard-wired, because these events are already fired 
+ * during bootstrapping, when event handling might not work properly yet.   
  */
 @Singleton
 public class RuntimeEventService {
@@ -44,8 +45,6 @@ public class RuntimeEventService {
 	
 	// -- APP
 
-    //FIXME[2112] events are fired but not received
-    
 	public void fireAppPreMetamodel() {
 		//appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
 		listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));

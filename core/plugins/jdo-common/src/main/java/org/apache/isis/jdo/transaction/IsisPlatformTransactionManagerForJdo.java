@@ -21,12 +21,15 @@ package org.apache.isis.jdo.transaction;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionObject;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
@@ -42,17 +45,29 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 	
 	@Inject private IsisSessionFactory isisSessionFactory;
 	@Inject private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+	@Inject private ServiceRegistry serviceRegistry;
 
 	@Override
 	protected Object doGetTransaction() throws TransactionException {
-		log.debug("doGetTransaction");
 		
-		if(IsisSession.isInSession()) {
-			val transactionBeforeBegin = persistenceSessionServiceInternal.currentTransaction(); 
-			return IsisTransactionObject.of(transactionBeforeBegin);	
+		val isInSession = IsisSession.isInSession();
+		log.debug("doGetTransaction isInSession={}", isInSession);
+		
+		if(!isInSession) {
+
+			// get authenticationSession from IoC, or fallback to InitialisationSession 
+			val authenticationSession = serviceRegistry.select(AuthenticationSession.class)
+					.getFirst()
+					.orElseGet(InitialisationSession::new);
+					
+			log.debug("open new session authenticationSession={}", authenticationSession);
+			
+			isisSessionFactory.openSession(authenticationSession);
+			val transactionBeforeBegin = (Transaction)null;
+			return IsisTransactionObject.of(transactionBeforeBegin);
 		} else {
-			isisSessionFactory.openSession(new InitialisationSession()); //FIXME this is only for integration testing
-			return IsisTransactionObject.of(null);
+			val transactionBeforeBegin = persistenceSessionServiceInternal.currentTransaction(); 
+			return IsisTransactionObject.of(transactionBeforeBegin);
 		}
 		
 	}
