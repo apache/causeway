@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.MessageRegistry;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
@@ -94,7 +93,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private ServiceInitializer serviceInitializer;
 
     @PostConstruct
-    public void init() throws IsisSystemException {
+    public void init() {
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
         

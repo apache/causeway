@@ -28,6 +28,7 @@ import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -62,10 +63,12 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
      * Declaration of Beans that are managed by Isis and should be ignored by CDI.
      * (in addition to those that have the @DomainService annotation)
      */
-    private static final List<Predicate<Class<?>>> tabu = new ArrayList<>();
+    private static final List<Predicate<Class<?>>> vetos = new ArrayList<>();
     {
-        tabu.add(MetricsService.class::equals);
-        tabu.add(ExceptionRecognizer.class::isAssignableFrom);
+        vetos.add(MetricsService.class::equals);
+        vetos.add(ExceptionRecognizer.class::isAssignableFrom);
+        vetos.add(type->type.getName().startsWith("org.springframework."));
+        vetos.add(type->type.getName().startsWith("org.apache.isis."));
     }
 
     void beforeBeanDiscovery(@Observes BeforeBeanDiscovery event) {
@@ -80,7 +83,7 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
         val logScope = className.startsWith("org.apache.isis.") ||
         		className.startsWith("domainapp.");
         
-        val isTabu = isTabu(clazz, event);
+        val isTabu = isVetoed(clazz, event);
 
         if(logScope) {
         	probe.println("processAnnotatedType(%s)", className);
@@ -100,18 +103,16 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
 
     // -- HELPER
 
-    private boolean isTabu(Class<?> clazz, ProcessAnnotatedType<?> event) {
-        return false;
+    private boolean isVetoed(Class<?> clazz, ProcessAnnotatedType<?> event) {
         
-//[2033]        
-//        if(event.getAnnotatedType().isAnnotationPresent(DomainService.class)) {
-//            return true;
-//        }
-//        for(Predicate<Class<?>> isTabu : tabu) {
-//            if(isTabu.test(clazz))
-//                return true;
-//        }
-//        return false;
+        if(event.getAnnotatedType().isAnnotationPresent(DomainService.class)) {
+            return true;
+        }
+        for(Predicate<Class<?>> isVetoed : vetos) {
+            if(isVetoed.test(clazz))
+                return true;
+        }
+        return false;
     }
 
 }

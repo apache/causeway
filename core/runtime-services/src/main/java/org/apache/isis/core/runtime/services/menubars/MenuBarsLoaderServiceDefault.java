@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.AbstractResource;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -49,32 +50,39 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
         val menubarsLayoutResource = Optional.ofNullable(webAppConfigBean)
         		.map(WebAppConfigBean::getMenubarsLayoutXml)
         		.orElse(null);
+        
         if(menubarsLayoutResource==null) {
+        	 warnNotFound();
+             return null;
+        }
+        
+        val xmlString = loadMenubarsLayoutResource(menubarsLayoutResource);
+        if(xmlString==null) {
             warnNotFound();
             return null;
         }
         
         try {
-            
-            final String xml = 
-                    _Strings.read(menubarsLayoutResource.getInputStream(), StandardCharsets.UTF_8); 
-
-            // if the menubarsLayout resource is not found, print a warning only once and only when PROTOTYPING
-            if(_Strings.isEmpty(xml)) {
-                if(_Context.isPrototyping()) {
-                    warnNotFound();
-                }
-                return null;
-            }
-            
-            return jaxbService.fromXml(BS3MenuBars.class, xml);
+            return jaxbService.fromXml(BS3MenuBars.class, xmlString);
         } catch (Exception e) {
             severeCannotLoad(e);
             return null;
         }
     }
     
-    // -- HELPER
+    private String loadMenubarsLayoutResource(AbstractResource menubarsLayoutResource) {
+    	try {
+            final String xml = 
+                    _Strings.read(menubarsLayoutResource.getInputStream(), StandardCharsets.UTF_8); 
+            return xml;
+        } catch (Exception e) {
+            severeCannotLoad(e);
+            return null;
+        }
+
+	}
+
+	// -- HELPER
 
     private boolean warnedOnce = false;
     
