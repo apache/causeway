@@ -33,7 +33,7 @@ class PropertyHandlerTest : IntegrationTest() {
             assertTrue(p is Property)
             assertNotNull(p.id)    // 3
             val links = p.links
-            val descLink =  links.find {
+            val descLink = links.find {
                 it.rel == RelType.DESCRIBEDBY.type
             }
             assertNotNull(descLink)  //4
@@ -44,7 +44,7 @@ class PropertyHandlerTest : IntegrationTest() {
         }
     }
 
-//FIXME    @Test
+    @Test
     fun testObjectProperty() {
         if (isSimpleAppAvailable()) {
             // given
@@ -85,7 +85,7 @@ class PropertyHandlerTest : IntegrationTest() {
             val props = ol.propertyLabels
             assertNotNull(props) //5
             console.log("[PHT.testPropertyDescription] $props")
-            
+
             ol.initPropertyDescription()
             assertNotNull(property.id)  //6
             val lbl: String? = ol.getPropertyLabel(property.id)

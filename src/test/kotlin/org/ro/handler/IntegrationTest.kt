@@ -42,6 +42,7 @@ open class IntegrationTest {
         EventStore.start(url, method, "", observer)
         val le = EventStore.end(url, str)
         ResponseHandler.handle(le!!)
+        wait(100)
         return le
     }
 

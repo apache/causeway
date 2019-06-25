@@ -1,7 +1,13 @@
 module.exports = function (config) {
   config.set({
+ //   basePath: '.',
     frameworks: ['mocha', 'browserify'],
     reporters: ['mocha'],
+    plugins: [
+      'karma-browserify',
+      'karma-mocha',
+      'karma-mocha-reporter',
+      'karma-chrome-launcher'],
     files: [
       'build/node_modules/*.js',
       'build/classes/kotlin/main/*.js',
@@ -9,22 +15,13 @@ module.exports = function (config) {
     ],
     exclude: [],
     colors: true,
-    autoWatch: false,
-    browsers: [
-//            'ChromeHeadlessNoSandbox'
-      'Chrome'
-    ],
-    customLaunchers: {
-      ChromeHeadlessNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
-      }
-    },
-    captureTimeout: 5000,
-    singleRun: true,
-    reportSlowerThan: 500,
+    logLevel: config.LOG_INFO,
+    autoWatch: true,
+    browsers: ['Chrome'],
+    singleRun: false,
+    concurrency: Infinity,
     preprocessors: {
       'build/**/*.js': ['browserify'],
     }
   })
-};
+}

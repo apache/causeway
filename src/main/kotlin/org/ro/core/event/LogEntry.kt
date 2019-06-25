@@ -81,7 +81,7 @@ data class LogEntry(
     fun setSuccess(response: String) {
         updatedAt = Date()
         calculate()
-        this.response = response //TODO pretty print json 
+        this.response = response //TODO pretty print json
         state = EventState.SUCCESS
     }
 
