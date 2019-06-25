@@ -266,7 +266,7 @@ class ImposteriserTestUsingCodegenPlugin {
 
     @Test
     void happyCaseWhenClassInASignedJarFile() throws Exception {
-        File jarFile = new File("src/test/resources/signed.jar");
+        File jarFile = new File("src/test/resources/signed.jar").getAbsoluteFile();
 
         assertTrue(jarFile.exists());
 

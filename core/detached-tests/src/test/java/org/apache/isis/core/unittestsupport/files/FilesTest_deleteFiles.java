@@ -44,9 +44,9 @@ public class FilesTest_deleteFiles {
 
     @Test
     public void test() throws IOException {
-        final File cusIdxFile = new File("xml/objects/CUS.xml");
-        final File cus1File = new File("xml/objects/CUS/1.xml");
-        final File cus2File = new File("xml/objects/CUS/2.xml");
+        final File cusIdxFile = new File("xml/objects/CUS.xml").getAbsoluteFile();
+        final File cus1File = new File("xml/objects/CUS/1.xml").getAbsoluteFile();
+        final File cus2File = new File("xml/objects/CUS/2.xml").getAbsoluteFile();
         context.checking(new Expectations() {
             {
                 oneOf(deleter).deleteFile(with(equalsFile(cusIdxFile)));
