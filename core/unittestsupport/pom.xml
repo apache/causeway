@@ -42,7 +42,7 @@
 			<version>${slf4j-api.version}</version>
 			<scope>test</scope>
 		</dependency>
-
+		
 		<!-- framework default core-codegen-plugin for tests -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

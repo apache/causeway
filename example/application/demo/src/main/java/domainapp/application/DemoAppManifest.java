@@ -33,6 +33,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.security.shiro.IsisSecurityBootUsingShiro;
 import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
 
@@ -49,7 +50,8 @@ import domainapp.dom.DemoModule;
 })
 @Import({
     IsisWebWicketBoot.class,
-    IsisSecurityBootUsingShiro.class
+    IsisSecurityBootUsingShiro.class,
+    IsisPlatformTransactionManagerForJdo.class
 })
 @ComponentScan(
         basePackageClasses= {
