@@ -22,7 +22,7 @@ class PropertyHandlerTest : IntegrationTest() {
             // when
             mockResponse(FR_OBJECT_PROPERTY, obs)
             mockResponse(FR_OBJECT_LAYOUT, obs)
-            // then 
+            // then
             val actLe: LogEntry? = EventStore.find(FR_OBJECT_PROPERTY.url)
             assertNotNull(actLe)  //1
             val p = actLe.getObj()
@@ -52,7 +52,7 @@ class PropertyHandlerTest : IntegrationTest() {
             val obs = ListObserver()
             // when
             mockResponse(FR_OBJECT_PROPERTY_, obs)
-            // then 
+            // then
             val actLe: LogEntry = EventStore.find(FR_OBJECT_PROPERTY_.url)!!
             assertNotNull(actLe.getObj())  //1
             val p = actLe.getObj() as Property

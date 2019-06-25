@@ -34,42 +34,41 @@ class ListObserver : BaseObserver() {
             else -> log(le)
         }
 
-//        console.log("[ListObserver.handleView] hasLayout: ${list.hasLayout()}")
         if (list.hasLayout()) {
             handleView()
         }
     }
 
     private fun handleList(resultList: ResultList) {
-//        console.log("[ListObserver.handleList] obj == ResultList")
         val result = resultList.result!!
         val members = result.value
         for (l: Link in members) {
-//            console.log("[ListObserver.handleList] link:\n $l")
             l.invoke(this)
         }
     }
 
     private fun handleView() {
         val title: String = this::class.simpleName.toString()
-        //TODO on runFixtureScript this is passed multiple times  
+        //TODO on runFixtureScript this is passed multiple times
         if (isRendered) {
             console.log("[ListObserver.handleView] already opened: $title")
         } else {
-//            list.initPropertyDescription() leads to stackoveflow in PHT.testProperty
             console.log("[ListObserver.handleView] about to open: $title")
             val model = list.list
             console.log("[ListObserver.handleView] number of objects: ${model.size}")
             val panel = FixtureResultTable(model)
             RoView.addTab(title, panel)
-            // UiManager.addView(list) 
+            // UiManager.addView(list)
             isRendered = true
         }
     }
 
     private fun handleProperty(p: Property) {
         //TODO differentiate between Property and PropertyDescription
-        val ext = p.extensions!!
+        if (p.extensions == null) {
+            Utils.debug(p)
+        } else {
+            val ext = p.extensions
         if (ext.friendlyName.isNotEmpty()) {
             console.log("[ListObserver.handleProperty] -> description")
         } else {
@@ -77,7 +76,7 @@ class ListObserver : BaseObserver() {
             val descLink = p.descriptionLink()!!
             descLink.invoke(this)
             list.addProperty(p)
-        }
+        }  }
     }
 
     private fun handleObject(obj: TObject) {
