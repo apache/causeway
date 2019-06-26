@@ -20,6 +20,7 @@ package org.apache.isis.core.webapp.modules;
 
 import java.util.stream.Stream;
 
+import javax.annotation.Priority;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -29,6 +30,7 @@ import javax.servlet.annotation.WebListener;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.IsisWebAppContextListener;
+import org.springframework.core.annotation.Order;
 
 import lombok.val;
 
@@ -37,6 +39,11 @@ import lombok.val;
  * <p>
  * WebModule instances are used by the {@link IsisWebAppContextListener} to setup 
  * the ServletContext programmatically.
+ * </p>
+ * <p>
+ * The order in which all enabled/applicable WebModules are registered with the 
+ * filter-chain is determined by their specified {@link Order} or {@link Priority} 
+ * annotation. 
  * </p>
  * 
  * @since 2.0.0
@@ -77,7 +84,7 @@ public interface WebModule {
     // -- DISCOVERY 
     
     /**
-     * @return Stream of 'known' WebModules, whether applicable or not is not decided here 
+     * @return Stream of 'discovered' WebModules, whether applicable or not is not decided here 
      */
     static Stream<WebModule> discoverWebModules() {
         

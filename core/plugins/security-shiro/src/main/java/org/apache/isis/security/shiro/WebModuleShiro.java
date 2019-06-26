@@ -35,7 +35,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 /**
- * WebModule for Shiro.
+ * WebModule to enable support for Shiro.
  * @since 2.0.0
  */
 @Singleton @Order(Ordered.HIGHEST_PRECEDENCE)

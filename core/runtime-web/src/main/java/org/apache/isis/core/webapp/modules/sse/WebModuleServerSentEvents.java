@@ -30,7 +30,7 @@ import org.springframework.core.annotation.Order;
 import lombok.val;
 
 /**
- * WebModule providing Server Sent Events.
+ * WebModule providing support for Server Sent Events.
  * 
  * @since 2.0.0-M3
  */

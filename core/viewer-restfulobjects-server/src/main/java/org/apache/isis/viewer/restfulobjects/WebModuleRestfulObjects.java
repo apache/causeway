@@ -37,7 +37,7 @@ import org.apache.isis.core.webapp.modules.WebModuleContext;
 import org.springframework.core.annotation.Order;
 
 /**
- * Package private mixin for WebModule implementing WebModule.
+ * WebModule that provides the RestfulObjects Viewer.
  * 
  * @since 2.0.0
  */

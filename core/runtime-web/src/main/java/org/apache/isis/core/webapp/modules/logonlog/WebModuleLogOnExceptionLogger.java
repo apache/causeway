@@ -36,7 +36,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 /**
- * WebModule to log logon exceptions.
+ * WebModule to log log-on exceptions.
  * 
  * @since 2.0.0
  */
