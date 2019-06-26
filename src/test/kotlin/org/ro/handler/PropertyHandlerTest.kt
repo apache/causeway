@@ -57,6 +57,7 @@ class PropertyHandlerTest : IntegrationTest() {
             assertNotNull(actLe.getObj())  //1
             val p = actLe.getObj() as Property
             assertNotNull(p.id)    // 2
+            assertEquals("object", p.id) //3
         }
     }
 
