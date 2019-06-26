@@ -26,10 +26,12 @@
 
 	<name>Apache Isis App - Demo</name>
 
-	<packaging>war</packaging>
+	<packaging>${packaging.type}</packaging>
 
 	<properties>
-
+	
+		<packaging.type>war</packaging.type>
+		
 		<compiler-plugin.source>1.8</compiler-plugin.source>
 		<compiler-plugin.target>1.8</compiler-plugin.target>
 		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
@@ -256,6 +258,37 @@
 			<dependencies>
 				<!-- add flavor specific here-->
 			</dependencies>
+		</profile>
+
+		<!-- building: mvn clean install -Dspring -->
+		<!-- running: mvn spring-boot:run -Dspring -->
+		<profile>
+			<id>spring</id>
+			<activation>
+				<property>
+					<name>spring</name>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<version>2.1.6.RELEASE</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 
 		<!-- eclipse specific -->

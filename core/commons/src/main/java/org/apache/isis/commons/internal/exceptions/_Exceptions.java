@@ -200,6 +200,10 @@ public final class _Exceptions {
         .limit(maxLines)
         .forEach(writer::println);
     }
+    
+	public static void dumpStackTrace() {
+		dumpStackTrace(System.out, 0, 1000); 
+	}
 
     // -- CAUSAL CHAIN
 
@@ -335,8 +339,5 @@ public final class _Exceptions {
         }
     }
 
-
     
-
-
 }

@@ -57,7 +57,7 @@
 		
 		<!-- MIXIN OVERRIDES -->
 		
-		<jetty-maven-plugin.version>9.4.12.v20180830</jetty-maven-plugin.version>
+		<jetty-maven-plugin.version>${jetty.version}</jetty-maven-plugin.version>
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 		<datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
 		<datanucleus-core.version>5.2.1</datanucleus-core.version>

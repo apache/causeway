@@ -33,6 +33,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.core.webapp.IsisWebAppContextInitializer;
+import org.apache.isis.core.webapp.IsisWebAppContextListener;
 import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.security.shiro.IsisSecurityBootUsingShiro;
 import org.apache.isis.viewer.restfulobjects.IsisWebRestfulBoot;
@@ -54,7 +56,9 @@ import domainapp.dom.HelloWorldModule;
 	IsisWebRestfulBoot.class,
     IsisWebWicketBoot.class,
     IsisSecurityBootUsingShiro.class,
-    IsisPlatformTransactionManagerForJdo.class
+    IsisPlatformTransactionManagerForJdo.class,
+    IsisWebAppContextListener.class,
+    IsisWebAppContextInitializer.class
 })
 @ComponentScan(
         basePackageClasses= {

@@ -18,19 +18,32 @@
  */
 package org.apache.isis.core.webapp.modules;
 
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 
  * @since 2.0.0-M2
  *
  */
+@Log4j2
 public class WebModuleContext {
 
 //    /**
@@ -44,22 +57,22 @@ public class WebModuleContext {
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
     
-    private final ServletContext servletContext;
     private final IsisConfiguration isisConfiguration;
+	private List<WebModule> webModules;
+	private final List<ServletContextListener> activeListeners = new ArrayList<>();
     
-    public WebModuleContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
+    public WebModuleContext() {
         this.isisConfiguration = _Config.getConfiguration();
-    }
-    
-    public ServletContext getServletContext() {
-        return servletContext;
     }
     
     public IsisConfiguration getConfiguration() {
         return isisConfiguration;
     }
 
+    public ServletContext getServletContext() {
+        return _Context.getElseFail(ServletContext.class);
+    }
+    
     /**
      * Tell other modules that a bootstrapper is present.
      */
@@ -105,5 +118,46 @@ public class WebModuleContext {
         return _Strings.splitThenStream(list, ",");
     }
 
+	public void prepare() {
+		webModules =
+				WebModule.discoverWebModules()
+				.peek(module->module.prepare(this)) // prepare context
+				.collect(Collectors.toList());
+	}
+
+	public void init() {
+		
+		val event = new ServletContextEvent(getServletContext());
+		
+		webModules.stream()
+		.filter(module->module.isApplicable(this)) // filter those WebModules that are applicable
+		.forEach(module->addListener(event.getServletContext(), module));
+		
+		activeListeners.forEach(listener->listener.contextInitialized(event));
+	}
+
+	public void shutdown(ServletContextEvent event) {
+		activeListeners.forEach(listener->shutdownListener(event, listener));
+		activeListeners.clear();
+	}
+
+	// -- HELPER
+	
+	private void addListener(ServletContext context, WebModule module) {
+		log.info(String.format("Setup ServletContext, adding WebModule '%s'", module.getName()));
+		try {
+			acceptIfPresent(module.init(context), activeListeners::add);
+		} catch (ServletException e) {
+			log.error(String.format("Failed to add WebModule '%s' to the ServletContext.", module.getName()), e);
+		}  
+	}
+
+	private void shutdownListener(ServletContextEvent event, ServletContextListener listener) {
+		try {
+			listener.contextDestroyed(event);
+		} catch (Exception e) {
+			log.error(String.format("Failed to shutdown WebListener '%s'.", listener.getClass().getName()), e);
+		}
+	}
     
 }

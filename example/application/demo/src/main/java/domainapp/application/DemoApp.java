@@ -18,12 +18,12 @@
  */
 package domainapp.application;
 
+import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
-
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
-import org.apache.isis.runtime.spring.IsisBoot;
 
 /**
  * Bootstrap the application.
@@ -36,4 +36,13 @@ import org.apache.isis.runtime.spring.IsisBoot;
 })
 public class DemoApp extends SpringBootServletInitializer {
 
+	/**
+	 * 
+	 * @param args
+	 * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+	 * entry point by searching for classes having a {@code main(...)}
+	 */
+	public static void main(String[] args) {
+		SpringApplication.run(new Class[] { DemoApp.class }, args);
+	}
 }

@@ -28,9 +28,9 @@
         <welcome-file>about/index.html</welcome-file>
     </welcome-file-list>
 
-    <listener>
-        <listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class>
-    </listener>
+<!--     <listener> -->
+<!--         <listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class> -->
+<!--     </listener> -->
 
     <servlet>
         <servlet-name>H2Console</servlet-name>

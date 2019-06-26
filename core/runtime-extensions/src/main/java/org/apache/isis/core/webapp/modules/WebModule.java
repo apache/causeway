@@ -27,12 +27,12 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 
-import org.apache.isis.core.webapp.IsisWebAppContextListener;
+import org.apache.isis.core.webapp.IsisWebAppContextInitializer;
 
 /**
  * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
  * <p>
- * WebModule instances are used by the {@link IsisWebAppContextListener} to setup 
+ * WebModule instances are used by the {@link IsisWebAppContextInitializer} to setup 
  * the ServletContext programmatically.
  * </p>
  * 
@@ -80,9 +80,8 @@ public interface WebModule {
         
         //TODO [ahuber] instead of providing a static list of modules, modules could be discovered on 
         // the class-path (in case we have plugins that provide such modules). 
-        // We could use the AppManifest instead.
         // We need yet to decide a mechanism, that enforces a certain ordering of these modules, since
-        // this influences the order in which filters are processed.
+        // this effects the order in which filters are processed.
         
         return Stream.of(
                 new WebModule_Shiro(), // filters before all others
