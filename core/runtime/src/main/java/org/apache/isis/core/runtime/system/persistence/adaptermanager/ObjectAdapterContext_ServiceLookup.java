@@ -36,7 +36,7 @@ import lombok.val;
  * <p>
  * Responsibility: provides ObjectAdapters for registered services 
  * </p> 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 //@Log4j2
 class ObjectAdapterContext_ServiceLookup {

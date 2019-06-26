@@ -47,7 +47,7 @@ public interface CollectionFacet extends Facet {
      * @param collectionAdapter
      * @return Stream of specified {@code collectionAdapter}'s elements 
      * (typically the elements of a collection or array)
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     <T extends ManagedObject> Stream<T> stream(T collectionAdapter);
 
@@ -64,7 +64,7 @@ public interface CollectionFacet extends Facet {
      * @param elements
      * @param elementCount
      * @return a possibly new instance
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     <T extends ManagedObject> Object populatePojo(
             Supplier<Object> emptyCollectionPojoFactory, 

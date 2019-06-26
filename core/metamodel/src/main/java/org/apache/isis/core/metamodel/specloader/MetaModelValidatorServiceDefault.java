@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorSer
 import lombok.val;
 
 /**
- * @since 2.0.0
+ * @since 2.0
  */
 @Singleton
 public class MetaModelValidatorServiceDefault implements MetaModelValidatorService {

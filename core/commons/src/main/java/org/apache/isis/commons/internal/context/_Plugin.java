@@ -47,7 +47,7 @@ import org.apache.logging.log4j.Logger;
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * @since 2.0.0
+ * @since 2.0
  */
 public final class _Plugin {
 

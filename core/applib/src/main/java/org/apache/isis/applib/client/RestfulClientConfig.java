@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @XmlRootElement(name="restful-client-config")
 @XmlAccessorType(XmlAccessType.FIELD)

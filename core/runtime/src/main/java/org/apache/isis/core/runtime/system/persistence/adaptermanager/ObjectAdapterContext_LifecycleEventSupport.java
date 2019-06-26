@@ -30,7 +30,7 @@ import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
  * <p>
  * Responsibility: provides life-cycle event post support
  * </p> 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 class ObjectAdapterContext_LifecycleEventSupport {
     

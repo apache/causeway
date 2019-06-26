@@ -50,14 +50,14 @@ public interface AuthenticationSession extends Encodable, Serializable {
 
     /**
      * The roles this user belongs to
-     * @since 2.0.0
+     * @since 2.0
      */
     Stream<String> streamRoles();
     
     /**
      * Whether this user has specified {@code role}
      * @param role 
-     * @since 2.0.0
+     * @since 2.0
      */
     boolean hasRole(String role);
     

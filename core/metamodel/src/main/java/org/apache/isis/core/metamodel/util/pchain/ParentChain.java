@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  *
  * startNode --@Parent--&gt; node2 --@Parent--&gt; node3 ...
  *
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public interface ParentChain {

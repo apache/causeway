@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
  * <p>
  * Responsibility: provides ObjectAdapter factories
  * </p>
- * @since 2.0.0-M2
+ * @since 2.0
  */
 //@Log4j2
 @RequiredArgsConstructor

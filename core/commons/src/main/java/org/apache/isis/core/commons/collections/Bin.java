@@ -44,7 +44,7 @@ import lombok.val;
  * Immutable 'multi-set'. 
  * 
  * @param <T>
- * @since 2.0.0-M3
+ * @since 2.0
  */
 public interface Bin<T> extends Iterable<T> {
 

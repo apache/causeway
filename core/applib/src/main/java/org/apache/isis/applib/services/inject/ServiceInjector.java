@@ -29,7 +29,7 @@ import lombok.val;
  * Implementation must be thread-safe.
  * </p>
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  */
 public interface ServiceInjector {
 

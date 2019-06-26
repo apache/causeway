@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.collections._Arrays;
  * {@link IsisMavenPlugin_SpringContextConfig}
  * and all project's base packages to scan for configuration beans.
  * 
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public class IsisMavenPlugin_SpringContextLauncher {

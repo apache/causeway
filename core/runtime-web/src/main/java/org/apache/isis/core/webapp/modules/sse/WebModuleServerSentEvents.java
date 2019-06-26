@@ -32,7 +32,7 @@ import lombok.val;
 /**
  * WebModule providing support for Server Sent Events.
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  */
 @Singleton @Order(-99)
 public final class WebModuleServerSentEvents implements WebModule  {

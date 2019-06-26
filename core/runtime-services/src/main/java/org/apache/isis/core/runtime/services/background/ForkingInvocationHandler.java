@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Package private invocation handler that executes actions in the background using a ExecutorService
- * @since 2.0.0
+ * @since 2.0
  */
 @Log4j2
 class ForkingInvocationHandler<T> implements InvocationHandler {

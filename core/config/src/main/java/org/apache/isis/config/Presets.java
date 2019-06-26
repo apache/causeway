@@ -36,7 +36,7 @@ import lombok.val;
 /**
  * Introduced to support Spring's {@code @PrepertySource} annotation.
  * 
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public final class Presets  {

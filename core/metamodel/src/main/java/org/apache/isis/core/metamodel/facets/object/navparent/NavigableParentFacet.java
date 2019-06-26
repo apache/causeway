@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * of an instance of a class, used to build a navigable parent chain as required by the
  * 'where-am-I' feature.
  *
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public interface NavigableParentFacet extends Facet {

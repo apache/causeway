@@ -39,7 +39,7 @@ import org.springframework.core.annotation.Order;
 /**
  * WebModule that provides the RestfulObjects Viewer.
  * 
- * @since 2.0.0
+ * @since 2.0
  */
 @Singleton @Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {

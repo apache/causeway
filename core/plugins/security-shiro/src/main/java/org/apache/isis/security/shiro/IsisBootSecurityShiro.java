@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 /**
  * Configuration Bean to support Isis Security using Shiro.
  *  
- * @since 2.0.0
+ * @since 2.0
  */
 @Configuration
 @Import({

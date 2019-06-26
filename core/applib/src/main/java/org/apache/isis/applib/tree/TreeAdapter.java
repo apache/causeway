@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * 
  * @param <T> type of the tree nodes that make up the tree structure
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public interface TreeAdapter<T> {
 

@@ -46,7 +46,7 @@ public interface BackgroundCommandService extends AutoCloseable {
             final String targetArgs);
     
     /**
-     * @since 2.0.0
+     * @since 2.0
      */
     // refined from AutoCloseable to not throw catched exceptions
     default void close() { 

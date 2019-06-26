@@ -35,7 +35,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  * currently used by the framework's NavigationToolbars to add a 
  * 'took seconds' label to bottom of data tables 
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 class PrototypingMessageProvider {
 

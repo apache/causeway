@@ -29,7 +29,7 @@ import org.apache.isis.core.webapp.IsisBootWebApp;
 
 /**
  * 
- * @since 2.0.0
+ * @since 2.0
  */
 @Configuration
 @Import({

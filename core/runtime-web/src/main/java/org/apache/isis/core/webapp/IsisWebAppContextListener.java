@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
  * Installs {@link WebModule}s on the ServletContext. 
  * </p>   
  *  
- * @since 2.0.0-M2
+ * @since 2.0
  *
  */
 //@WebListener //[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 

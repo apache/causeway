@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.function.Supplier;
 
 /**
- * @since 2.0.0
+ * @since 2.0
  */
 public interface MetaModelValidatorService extends Supplier<MetaModelValidator>{
 

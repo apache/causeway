@@ -20,7 +20,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 
 /**
  * Layer of abstraction to PersistenceSession
- * @since 2.0.0-M3
+ * @since 2.0
  *
  */
 public interface ObjectAdapterService extends ObjectAdapterProvider {

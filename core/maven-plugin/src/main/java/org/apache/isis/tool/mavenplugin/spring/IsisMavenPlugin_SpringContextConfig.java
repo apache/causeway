@@ -29,7 +29,7 @@ import org.apache.isis.core.security.IsisBootSecurityBypass;
 import org.apache.isis.runtime.spring.IsisBoot;
 
 /**
- * @since 2.0.0
+ * @since 2.0
  *
  */
 @Configuration

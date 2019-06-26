@@ -27,7 +27,7 @@ import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 /**
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public final class ShiroSecurityContext {
 

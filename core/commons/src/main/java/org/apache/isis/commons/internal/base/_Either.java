@@ -43,7 +43,7 @@ import lombok.ToString;
  * These may be changed or removed without notice!
  * </p>
  *
- * @since 2.0.0-M3
+ * @since 2.0
  */
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE, staticName="of")
 @ToString @EqualsAndHashCode

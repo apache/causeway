@@ -27,7 +27,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 /**
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public enum SuppressionType {
 

@@ -31,7 +31,7 @@ import org.springframework.core.annotation.Order;
 /**
  * WebModule to provide static resources utilizing an in-memory cache.
  * 
- * @since 2.0.0
+ * @since 2.0
  */
 @Singleton @Order(-100)
 public final class WebModuleStaticResources implements WebModule  {

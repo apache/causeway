@@ -23,9 +23,9 @@ import javax.enterprise.inject.spi.CDIProvider;
 import org.apache.isis.commons.internal.context._Plugin;
 
 /**
- * No longer used since 2.0.0-M3.
+ * No longer used since 2.0.
  *  
- * @since 2.0.0-M2
+ * @since 2.0
  */
 interface CdiPlugin {
 

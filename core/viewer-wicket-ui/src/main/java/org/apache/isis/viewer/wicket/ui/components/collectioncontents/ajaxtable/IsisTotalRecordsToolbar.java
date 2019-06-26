@@ -32,7 +32,7 @@ import org.apache.wicket.model.Model;
  * <p>
  * Implementation Note: this is almost a copy of {@link NoRecordsToolbar}
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public class IsisTotalRecordsToolbar extends AbstractToolbar {
 

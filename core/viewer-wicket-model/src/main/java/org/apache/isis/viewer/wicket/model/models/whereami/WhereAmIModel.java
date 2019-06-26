@@ -26,7 +26,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 /**
  * Represents a navigable chain of parent nodes starting at the current node.
  *
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public interface WhereAmIModel {

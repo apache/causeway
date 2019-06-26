@@ -27,7 +27,7 @@ public final class PropertyResource {
     private final String resourceName;
 
     /**
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public static PropertyResource ofClassContext(final Class<?> resourceContext, final String resourceName) {
         return new PropertyResource(resourceContext, resourceName);
@@ -39,14 +39,14 @@ public final class PropertyResource {
     }
 
     /**
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public Class<?> getResourceContext() {
         return resourceContext;
     }
 
     /**
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public String getResourceName() {
         return resourceName;

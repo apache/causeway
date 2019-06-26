@@ -36,7 +36,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 /**
  * TODO [2033] this was introduced for refactoring, use MetaModelContext instead if possible
  *  
- * @since 2.0.0-M3
+ * @since 2.0
  * 
  */
 public interface RuntimeContext {

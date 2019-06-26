@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 /**
  *
- * @since 2.0.0
+ * @since 2.0
  *
  * @deprecated according to proposed spec, <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>
  * let's not introduce new 'keywords'.

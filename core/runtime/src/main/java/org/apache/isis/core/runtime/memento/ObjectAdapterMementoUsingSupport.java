@@ -33,7 +33,7 @@ import lombok.Value;
 
 /**
  * 
- * @since 2.0.0
+ * @since 2.0
  * @deprecated FIXME[2112] yet an experiment, not working
  */
 @Value(staticConstructor = "of")

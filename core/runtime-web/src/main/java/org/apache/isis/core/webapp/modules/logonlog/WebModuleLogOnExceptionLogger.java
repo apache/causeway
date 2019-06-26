@@ -38,7 +38,7 @@ import org.springframework.core.annotation.Order;
 /**
  * WebModule to log log-on exceptions.
  * 
- * @since 2.0.0
+ * @since 2.0
  */
 @Singleton @Order(Ordered.LOWEST_PRECEDENCE)
 public final class WebModuleLogOnExceptionLogger implements WebModule  {

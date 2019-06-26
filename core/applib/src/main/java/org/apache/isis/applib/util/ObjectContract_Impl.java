@@ -27,7 +27,7 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 /**
  * Package private default implementation for ObjectContract.
  *
- * @since 2.0.0
+ * @since 2.0
  */
 class ObjectContract_Impl<T> implements ObjectContract<T> {
 

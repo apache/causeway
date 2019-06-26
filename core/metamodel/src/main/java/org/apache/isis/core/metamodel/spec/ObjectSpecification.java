@@ -97,7 +97,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     /**
      * @param onType
      * @return
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
         return streamObjectActions(Contributed.INCLUDED)
@@ -202,7 +202,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * Returns this object's navigable parent, if any.
      * @param object
      * @return
-     * @since 2.0.0
+     * @since 2.0
      */
     Object getNavigableParent(Object object);
 
@@ -221,13 +221,13 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     /**
      * 
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     ObjectSpecification getElementSpecification();
     
     /**
      * 
-     * @since 2.0.0-M3
+     * @since 2.0
      */
     BeanSort getBeanSort();
 
@@ -382,7 +382,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     /**
      * 
-     * @since 2.0.0-M3
+     * @since 2.0
      */
 	default Object instantiatePojo() {
         final Class<?> correspondingClass = getCorrespondingClass();

@@ -32,14 +32,14 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @Priority(100)
 public class BasicAuthFilter implements ClientRequestFilter {
 
     /**
      * 
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public static class Credentials {
         final String user;

@@ -25,7 +25,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 /**
  * TODO[2112] possibly not final 
  * 
- * @since 2.0.0
+ * @since 2.0
  * 
  *
  */

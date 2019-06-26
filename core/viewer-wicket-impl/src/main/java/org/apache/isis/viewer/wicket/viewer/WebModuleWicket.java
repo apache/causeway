@@ -38,8 +38,8 @@ import org.apache.isis.core.webapp.modules.WebModuleContext;
 import org.springframework.core.annotation.Order;
 
 /**
- * WebModule providing the Wicket Viewer.
- * @since 2.0.0-M2
+ * WebModule that provides the Wicket Viewer.
+ * @since 2.0
  */
 @Singleton @Order(-80)
 public final class WebModuleWicket implements WebModule  {

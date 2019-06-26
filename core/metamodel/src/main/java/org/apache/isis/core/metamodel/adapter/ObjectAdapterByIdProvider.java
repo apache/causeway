@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
 /**
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  *
  */
 public interface ObjectAdapterByIdProvider {

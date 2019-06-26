@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Holds the set of domain services, persistent entities and fixture scripts.services etc.
- * @since 2.0.0-M3
+ * @since 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE) @Log4j2
 public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoCloseable {

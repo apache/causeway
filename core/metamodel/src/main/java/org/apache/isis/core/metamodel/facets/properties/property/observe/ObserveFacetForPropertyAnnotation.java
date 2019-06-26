@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.observe.ObserveFacetAbs
 
 /**
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  *
  */
 public class ObserveFacetForPropertyAnnotation extends ObserveFacetAbstract {

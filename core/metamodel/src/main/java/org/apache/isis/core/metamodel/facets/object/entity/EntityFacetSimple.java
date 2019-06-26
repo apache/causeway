@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
  * Package private impl. of EntityFacet  
- * @since 2.0.0-M3
+ * @since 2.0
  */
 class EntityFacetSimple extends FacetAbstract implements EntityFacet {
 

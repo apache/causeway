@@ -25,7 +25,7 @@ import java.util.Optional;
  *  
  * @see https://www.w3schools.com/html/html5_serversentevents.asp
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  *
  */
 public interface EventStreamService {

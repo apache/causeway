@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public class ResponseDigest<T> {
 

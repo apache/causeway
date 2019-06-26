@@ -126,7 +126,7 @@ if(digest.isSuccess()) {
 </dependency>
  * }</pre></blockquote>
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @Log4j2
 public class RestfulClient {

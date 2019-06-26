@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.persistence;
 
 /**
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  *
  */
 public enum FixturesInstalledState {

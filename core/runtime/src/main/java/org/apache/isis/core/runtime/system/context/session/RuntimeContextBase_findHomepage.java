@@ -40,7 +40,7 @@ import lombok.var;
 /**
  * TODO [2033], there's already a service doing this
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  */
 @RequiredArgsConstructor
 final class RuntimeContextBase_findHomepage {

@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
- * @since 2.0.0
+ * @since 2.0
  */
 public interface ObjectAdapterMemento extends Serializable {
     

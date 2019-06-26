@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.collections._Lists;
  * Fluent Object to String Composition.
  *
  * @param <T>
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public class ToString<T> {

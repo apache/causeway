@@ -40,7 +40,7 @@ import java.util.stream.Stream;
  *
  * Provides shortcuts for common java.lang.reflect idioms.
  *
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public class Reflect {

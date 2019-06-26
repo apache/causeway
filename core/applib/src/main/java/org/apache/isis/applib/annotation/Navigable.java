@@ -23,7 +23,7 @@ package org.apache.isis.applib.annotation;
  * Tells the framework which method or field to use in order to construct a navigable chain of
  * parent domain object instances. The Navigable.PARENT 'flag' can only be used once per class declaration.
  *
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public enum Navigable {

@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 
 /**
  * package private mixin for _Lazy 
- * @since 2.0.0
+ * @since 2.0
  */
 final class _Lazy_ThreadSafe<T> implements _Lazy<T> {
 

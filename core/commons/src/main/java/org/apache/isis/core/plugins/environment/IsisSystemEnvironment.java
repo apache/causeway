@@ -24,7 +24,7 @@ import org.apache.isis.commons.internal.base._Lazy;
  * Represents configuration, that is available in an early phase of bootstrapping. 
  * It is regarded immutable for an application's life-cycle.
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public interface IsisSystemEnvironment {
 

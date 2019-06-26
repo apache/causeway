@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 /**
  * Auth/bypass for eg. Integration Testing
  *  
- * @since 2.0.0
+ * @since 2.0
  */
 @Configuration
 @Import({

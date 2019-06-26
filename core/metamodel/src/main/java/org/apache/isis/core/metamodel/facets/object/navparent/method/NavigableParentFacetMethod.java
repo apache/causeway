@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 
 /**
  *
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public class NavigableParentFacetMethod extends NavigableParentFacetAbstract {

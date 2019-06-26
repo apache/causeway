@@ -37,21 +37,21 @@ public interface AuthenticationRequest {
     /**
      * Account's roles as Stream.
      * @return non-null
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public Stream<String> streamRoles();
     
     /**
      * Add a role to associate with the account. Null or empty roles are ignored.
      * @param role
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public void addRole(@Nullable String role);
     
     /**
      * Add a roles to associate with the account. Null or empty roles are ignored.
      * @param roles
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     public default void addRoles(@Nullable Collection<String> roles) {
         stream(roles)

@@ -53,7 +53,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * @since 2.0.0
+ * @since 2.0
  */
 @Singleton @Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {

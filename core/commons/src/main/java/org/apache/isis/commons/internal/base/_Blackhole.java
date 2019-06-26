@@ -36,7 +36,7 @@ import java.util.Random;
  * These may be changed or removed without notice!
  * </p>
  *
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public final class _Blackhole {
     

@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.collections._Lists;
  * Fluent Object Equality Composition.
  *
  * @param <T>
- * @since 2.0.0
+ * @since 2.0
  */
 public class Equality<T> {
 

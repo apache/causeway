@@ -44,7 +44,7 @@ import lombok.val;
 
 /**
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  *
  */
 @RequiredArgsConstructor

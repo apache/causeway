@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.headless;
 
 /**
  * Extends transaction management as required by integration tests.
- * @since 2.0.0
+ * @since 2.0
  */
 public interface HeadlessTransactionSupport {
     void beginTransaction();

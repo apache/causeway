@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public interface OidFactory {
     

@@ -48,7 +48,7 @@ import lombok.val;
 
 /**
  * @deprecated FIXME[2112] yet an experiment, not working
- * @since 2.0.0
+ * @since 2.0
  * 
  */
 @Vetoed// @Singleton

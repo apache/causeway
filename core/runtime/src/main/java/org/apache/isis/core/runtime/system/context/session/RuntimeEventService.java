@@ -29,7 +29,7 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 
 /**
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  * @implNote listeners to runtime events are hard-wired, because these events are already fired 
  * during bootstrapping, when event handling might not work properly yet.   
  */

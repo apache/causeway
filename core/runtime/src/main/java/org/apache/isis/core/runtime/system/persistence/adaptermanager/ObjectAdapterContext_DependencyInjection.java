@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  * <p>
  * Responsibility: creates new domain object instances  
  * </p> 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 //@Log4j2
 @RequiredArgsConstructor

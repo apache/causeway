@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
  * These may be changed or removed without notice!
  * </p>
  *
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public final class _Reduction<T> implements Consumer<T> {

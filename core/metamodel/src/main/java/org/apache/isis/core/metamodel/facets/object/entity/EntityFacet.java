@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
  * Indicates that this class is managed by a persistence context.
- * @since 2.0.0-M3
+ * @since 2.0
  */
 public interface EntityFacet extends Facet {
 

@@ -33,7 +33,7 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 /**
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  *
  */
 public interface ObjectAdapterProvider {

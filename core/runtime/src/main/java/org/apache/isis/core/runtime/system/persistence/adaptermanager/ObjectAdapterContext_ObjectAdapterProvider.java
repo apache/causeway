@@ -46,7 +46,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
  * <p>
  * Responsibility: provides ObjectAdapterProvider implementation
  * </p> 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvider {
     

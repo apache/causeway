@@ -47,7 +47,7 @@ import org.apache.isis.commons.internal.functions._Functions;
  * These may be changed or removed without notice!
  * </p>
  *
- * @since 2.0.0
+ * @since 2.0
  */
 public final class _Exceptions {
 

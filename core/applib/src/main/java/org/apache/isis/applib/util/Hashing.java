@@ -26,7 +26,7 @@ import org.apache.isis.commons.internal.collections._Lists;
  * Fluent Object Hash Code Composition.
  *
  * @param <T>
- * @since 2.0.0
+ * @since 2.0
  *
  */
 public class Hashing<T> {

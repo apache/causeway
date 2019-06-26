@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * Responsibility: re-creates domain object instances  
  * </p> 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @Log4j2
 class ObjectAdapterContext_ObjectCreation {

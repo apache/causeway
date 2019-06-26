@@ -49,7 +49,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
  * These may be changed or removed without notice!
  * </p>
  *
- * @since 2.0.0
+ * @since 2.0
  */
 public final class _Sets {
 

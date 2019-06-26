@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationHandler;
 /**
  * Generates dynamic classes and corresponding instances by rebasing a given 'base' class.
  *
- * @since 2.0.0
+ * @since 2.0
  * @param <T> type of proxy objects this factory creates
  */
 public interface ProxyFactory<T> {

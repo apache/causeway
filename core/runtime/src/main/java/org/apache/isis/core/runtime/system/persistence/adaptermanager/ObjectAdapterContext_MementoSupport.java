@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * Responsibility: provides object recreation to mementos
  * </p>
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @Log4j2
 class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSupport {

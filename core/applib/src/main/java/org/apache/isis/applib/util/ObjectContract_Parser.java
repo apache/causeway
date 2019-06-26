@@ -41,7 +41,7 @@ import org.apache.isis.commons.internal.base._Strings;
  * Not public API! Use ObjectContracts.parse(String) instead.
  *
  *
- * @since 2.0.0
+ * @since 2.0
  */
 class ObjectContract_Parser<T> {
 

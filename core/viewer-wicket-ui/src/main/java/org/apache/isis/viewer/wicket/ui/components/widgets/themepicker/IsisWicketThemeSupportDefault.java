@@ -41,7 +41,7 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 import lombok.extern.log4j.Log4j2;
 
 /**
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @Log4j2
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {

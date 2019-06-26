@@ -83,7 +83,7 @@ import lombok.extern.log4j.Log4j2;
  * automatically opening a {@link IsisSession} at the beginning of the request
  * and committing the transaction and closing the session at the end.
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  */
 @Log4j2
 public class WebRequestCycleForIsis implements IRequestCycleListener {

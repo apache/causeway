@@ -359,7 +359,7 @@ public final class Annotations  {
      * @return list of {@link Evaluator} that wraps each annotated member found on the class where
      * the search stopped, or an empty list if no such {@code annotationClass} annotation found.
      *
-     * @since 2.0.0
+     * @since 2.0
      */
     public static <T extends Annotation> List<Evaluator<T>> firstEvaluatorsInHierarchyHaving(
             final Class<?> cls,

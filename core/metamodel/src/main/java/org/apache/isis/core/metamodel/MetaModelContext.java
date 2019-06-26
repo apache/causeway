@@ -41,7 +41,7 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 /**
  * 
- * @since 2.0.0-M2
+ * @since 2.0
  *
  */
 public interface MetaModelContext {

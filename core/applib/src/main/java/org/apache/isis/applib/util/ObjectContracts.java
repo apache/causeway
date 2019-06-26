@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
  * }
  * </pre>
  *
- * @since 2.0.0 (re-invented)
+ * @since 2.0 (re-invented)
  *
  */
 @Log4j2
@@ -91,7 +91,7 @@ public final class ObjectContracts {
      * WARNING Possible misuse because of forgetting respectively the last method
      * argument with {@code equals}, [@code hashCode} and {@code toString}!
      *
-     * @since 2.0.0
+     * @since 2.0
      * @param <T>
      */
     public static interface ObjectContract<T> {

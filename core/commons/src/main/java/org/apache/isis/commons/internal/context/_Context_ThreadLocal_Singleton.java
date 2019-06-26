@@ -39,7 +39,7 @@ import lombok.val;
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
  * </p>
- * @since 2.0.0-M3
+ * @since 2.0
  */
 @Deprecated //TODO [2033] superseded by _Context_ThreadLocal 
 final class _Context_ThreadLocal_Singleton {

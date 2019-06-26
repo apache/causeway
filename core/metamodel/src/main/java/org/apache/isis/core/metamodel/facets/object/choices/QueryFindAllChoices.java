@@ -10,7 +10,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterPredicate;
  * 
  * Specialization of QueryFindAllInstances to honor also visibility. 
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  *
  * @param <T>
  */

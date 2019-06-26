@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 /**
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  *
  */
 public interface ObjectAdapterPredicate extends Predicate<ObjectAdapter> {

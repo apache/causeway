@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
 
 /**
  * Package private mixin for ResourceServlet
- * @since 2.0.0
+ * @since 2.0
  */
 final class ResourceServlet_HtmlTemplateVariables {
 

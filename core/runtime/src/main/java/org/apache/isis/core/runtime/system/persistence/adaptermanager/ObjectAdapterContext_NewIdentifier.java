@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  * <p>
  * Responsibility: creates RootOids 
  * </p> 
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @RequiredArgsConstructor
 class ObjectAdapterContext_NewIdentifier {

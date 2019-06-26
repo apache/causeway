@@ -44,7 +44,7 @@ import org.apache.isis.commons.internal.base._Strings;
  * </pre>
  * 
  *  
- * @since 2.0.0-M2
+ * @since 2.0
  */
 public final class JaxbAdapters {
 

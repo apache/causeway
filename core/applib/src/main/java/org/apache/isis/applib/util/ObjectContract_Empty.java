@@ -27,7 +27,7 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 /**
  * Package private default implementation for an empty ObjectContract.
  *
- * @since 2.0.0
+ * @since 2.0
  */
 class ObjectContract_Empty<T> implements ObjectContract<T> {
 

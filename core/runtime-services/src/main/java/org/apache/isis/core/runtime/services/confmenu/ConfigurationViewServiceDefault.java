@@ -34,7 +34,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 
 /**
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @DomainService(
         nature = NatureOfService.DOMAIN,

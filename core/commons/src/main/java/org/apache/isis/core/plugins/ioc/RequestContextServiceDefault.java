@@ -22,7 +22,7 @@ package org.apache.isis.core.plugins.ioc;
  * <p>
  * Introduced for CDI, no longer used since Spring.
  * 
- * @since 2.0.0-M3
+ * @since 2.0
  *
  */
 //@Singleton @Alternative @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)

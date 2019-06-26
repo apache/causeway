@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * Encapsulate ObjectAdpater life-cycling.  
  *  
- * @since 2.0.0-M2
+ * @since 2.0
  */
 @Log4j2
 final public class ObjectAdapterContext {

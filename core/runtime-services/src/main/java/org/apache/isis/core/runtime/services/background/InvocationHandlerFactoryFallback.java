@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 
 /**
  * only used if there is no BackgroundCommandService available
- * @since 2.0.0
+ * @since 2.0
  *
  */
 final class InvocationHandlerFactoryFallback implements InvocationHandlerFactory {

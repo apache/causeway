@@ -73,7 +73,7 @@ extends
      * Re-initializes the fields of an object. If the object is unresolved then
      * the object's missing data should be retrieved from the persistence
      * mechanism and be used to set up the value objects and associations.
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     default void refreshRootInTransaction(final Object domainObject) {
         getTransactionManager().executeWithinTransaction(()->refreshRoot(domainObject));
@@ -82,28 +82,28 @@ extends
     /**
      * @param pojo a persistable object
      * @return String representing an object's id.
-     * @since 2.0.0-M2
+     * @since 2.0
      */
     String identifierFor(Object pojo);
     
     /**
-     * @since 2.0.0-M3
+     * @since 2.0
      */
     ManagedObjectState stateOf(Object pojo);
     
     /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
-     * @since 2.0.0-M2*/
+     * @since 2.0*/
     boolean isRecognized(Object pojo);
     
-    /**@since 2.0.0-M2*/
+    /**@since 2.0*/
     Object fetchPersistentPojo(RootOid rootOid);
 
-    /**@since 2.0.0-M2*/
+    /**@since 2.0*/
     default Object fetchPersistentPojoInTransaction(final RootOid oid) {
         return getTransactionManager().executeWithinTransaction(()->fetchPersistentPojo(oid));
     }
 
-    /**@since 2.0.0-M2*/
+    /**@since 2.0*/
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
 
 

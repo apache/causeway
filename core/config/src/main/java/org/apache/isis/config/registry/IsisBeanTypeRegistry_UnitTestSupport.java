@@ -26,7 +26,7 @@ import org.apache.isis.core.plugins.beantyperegistry.BeanTypeRegistryPlugin;
  * Required workaround, to provide module 'unittestsupport' access into {@link IsisBeanTypeRegistry}
  * without creating a module dependency cycle.  
  * 
- * @since 2.0.0
+ * @since 2.0
  */
 public class IsisBeanTypeRegistry_UnitTestSupport implements BeanTypeRegistryPlugin {
 
