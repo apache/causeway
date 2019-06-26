@@ -16,34 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tool.mavenplugin.spring;
+package org.apache.isis.security.shiro;
 
+import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
+import org.apache.isis.core.security.authentication.manager.AuthorizationManagerStandard;
+import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
+import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.security.IsisBootSecurityBypass;
-import org.apache.isis.runtime.spring.IsisBoot;
-
 /**
+ * Configuration Bean to support Isis Security using Shiro.
+ *  
  * @since 2.0.0
- *
  */
 @Configuration
 @Import({
-    IsisBoot.class, 
-    IsisBootSecurityBypass.class})
-public class IsisMavenPlugin_SpringContextConfig {
-
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        // just empty        
-        return WebAppConfigBean.builder()
-                //.menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-                .build();
-    }
+        AuthorizationManagerStandard.class,
+        AuthenticationManagerStandard.class,
+        WebModuleShiro.class
+})
+public class IsisBootSecurityShiro {
     
+    @Bean @Produces @Singleton
+    public Authenticator authenticator() {
+        return new ShiroAuthenticator();
+    }
+
+    @Bean @Produces @Singleton
+    public Authorizor autorizor() {
+        return new ShiroAuthorizor();
+    }
+
+
 }

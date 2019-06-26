@@ -58,5 +58,10 @@ final class Bin_Singleton<T> implements Bin<T> {
 	public Iterator<T> iterator() {
 		return Collections.singletonList(element).iterator();
 	}
+	
+	@Override
+	public String toString() {
+		return "Bin["+element+"]";
+	}
 
 }

@@ -37,6 +37,11 @@
 
     <dependencies>
 
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime-web</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>

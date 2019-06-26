@@ -16,34 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tool.mavenplugin.spring;
 
-import javax.inject.Singleton;
+package org.apache.isis.viewer.restfulobjects;
 
-import org.springframework.context.annotation.Bean;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.core.webapp.IsisBootWebApp;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.security.IsisBootSecurityBypass;
-import org.apache.isis.runtime.spring.IsisBoot;
-
 /**
+ * 
  * @since 2.0.0
- *
  */
 @Configuration
 @Import({
-    IsisBoot.class, 
-    IsisBootSecurityBypass.class})
-public class IsisMavenPlugin_SpringContextConfig {
+	IsisBootWebApp.class
+})
+@ComponentScan(
+        basePackageClasses= {
+                IsisBootWebRestfulObjects.class,
+           },
+        includeFilters= {
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
+public class IsisBootWebRestfulObjects {
 
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        // just empty        
-        return WebAppConfigBean.builder()
-                //.menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-                .build();
-    }
-    
+ 
 }

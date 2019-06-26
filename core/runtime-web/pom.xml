@@ -7,9 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
          http://www.apache.org/licenses/LICENSE-2.0
-         
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -23,100 +23,57 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-    	<version>${revision}</version>
-    	<relativePath>../../pom.xml</relativePath>
+        <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-plugins-security-shiro</artifactId>
-
-    <name>Apache Isis Plugin for Security (Shiro)</name>
-	<description>
-        Authentication and Authorization using Apache Shiro.
-    </description>
+    <artifactId>isis-core-runtime-web</artifactId>
+    <name>Apache Isis Runtime Web</name>
+    <description>Introduced to keep the 'runtime' package concise. 
+    Bundles all the web specific classes a srequired by viewers.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime-web</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/core/runtime-web</git-plugin.propertiesDir>
     </properties>
 
-
     <build>
-        <pluginManagement>
-            <plugins>
-                <!-- Apache Release Audit Tool -->
-                <plugin>
-                    <groupId>org.apache.rat</groupId>
-                    <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.10</version>
-	                <configuration>
-	                    <excludes>
-	                    	<!-- 
-	                    	overriding inherited excludes from oia.core:isis 
-	                    	with a more specific set for this component
-	                    	 -->
-	                        <exclude>**/target/**</exclude>
-	                        <exclude>**/target-ide/**</exclude>
-
-	                        <exclude>**/*.project</exclude>
-	                        <exclude>**/.classpath</exclude>
-	                        <exclude>**/.settings/**</exclude>
-	                    </excludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
     </build>
 
-    <dependencyManagement>
-    	<!-- for benefit of application developers, using scope=import -->
-    	<dependencies>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-security-shiro</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-    	</dependencies>
-    </dependencyManagement>
-
     <dependencies>
-    
+	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-security</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
         
-        <dependency>
+		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-web</artifactId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
         </dependency>
-	
+        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-	
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
-            <exclusions>
-            	<exclusion>
-            		<groupId>org.slf4j</groupId>
-            		<artifactId>slf4j-api</artifactId>
-            	</exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
-        </dependency>
-
 
 
     </dependencies>

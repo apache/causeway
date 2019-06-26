@@ -30,11 +30,11 @@ import org.springframework.context.annotation.PropertySources;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.security.IsisSecurityBoot;
+import org.apache.isis.core.security.IsisBootSecurityBypass;
 
 @Configuration
 
-@Import({IsisSecurityBoot.class})
+@Import({IsisBootSecurityBypass.class})
 @ComponentScan(
         basePackageClasses= {
                 JdoTestDomainModule.class

@@ -23,8 +23,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
-import org.apache.isis.security.shiro.IsisSecurityBootUsingShiro;
-import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
+import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.application.manifest.DomainAppAppManifest;
 
@@ -34,8 +34,8 @@ import domainapp.application.manifest.DomainAppAppManifest;
 @SpringBootApplication
 @Import({
     DomainAppAppManifest.class,
-    IsisWebWicketBoot.class,
-    IsisSecurityBootUsingShiro.class
+    IsisBootWebWicket.class,
+    IsisBootSecurityShiro.class
 })
 @PropertySource("classpath:/domainapp/application/isis.properties")
 public class SimpleApp extends SpringBootServletInitializer {

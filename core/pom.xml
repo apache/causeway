@@ -1275,6 +1275,20 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
+			
+			<!-- runtime-services -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-core-runtime-web</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-core-runtime-web</artifactId>
+				<version>${isis.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
 
 			<!-- webserver -->
 			<dependency>
@@ -2522,7 +2536,7 @@
 		<module>runtime</module>
 		<module>runtime-services</module>
 		<module>runtime-extensions</module>
-		<module>webserver</module>
+		<module>runtime-web</module>
 
 		<module>security</module>
 

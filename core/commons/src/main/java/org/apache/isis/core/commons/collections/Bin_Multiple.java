@@ -22,10 +22,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName="of")
 final class Bin_Multiple<T> implements Bin<T> {
@@ -58,6 +60,14 @@ final class Bin_Multiple<T> implements Bin<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return Collections.unmodifiableList(elements).iterator();
+	}
+	
+	@Override
+	public String toString() {
+		val literal = stream()
+				.map(s->""+s)
+				.collect(Collectors.joining(", "));
+		return "Bin["+literal+"]";
 	}
 
 }
