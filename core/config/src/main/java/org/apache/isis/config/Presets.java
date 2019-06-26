@@ -23,12 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.apache.isis.applib.AppManifest;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertySourceFactory;
-
-import org.apache.isis.applib.AppManifest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -49,7 +48,6 @@ public final class Presets  {
         DataNucleus(AppManifest.Presets::withDataNucleusProperties),
         IsisIntegTest(AppManifest.Presets::withIsisIntegTestProperties),
 		NoTranslations(map->map.put("isis.services.translation.po.mode", "disable")),
-    
         ;
         
         private final Consumer<Map<String, String>> populator;

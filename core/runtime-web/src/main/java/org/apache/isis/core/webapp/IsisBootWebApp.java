@@ -1,5 +1,7 @@
 package org.apache.isis.core.webapp;
 
+import org.apache.isis.core.webapp.modules.h2console.H2ManagerMenu;
+import org.apache.isis.core.webapp.modules.h2console.WebModuleH2Console;
 import org.apache.isis.core.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
 import org.apache.isis.core.webapp.modules.resources.WebModuleStaticResources;
 import org.apache.isis.core.webapp.modules.sse.WebModuleServerSentEvents;
@@ -11,10 +13,15 @@ import org.springframework.context.annotation.Import;
 	IsisWebAppContextListener.class,
     IsisWebAppContextInitializer.class,
     
-    //default modules
+    // default modules
     WebModuleLogOnExceptionLogger.class,
     WebModuleStaticResources.class,
     WebModuleServerSentEvents.class,
+    
+    // h2 console
+    WebModuleH2Console.class,
+    H2ManagerMenu.class,
+    
 })
 public class IsisBootWebApp {
 

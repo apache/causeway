@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.services.h2;
-
-import java.util.Map;
+package org.apache.isis.core.webapp.modules.h2console;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
@@ -30,9 +29,8 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -45,13 +43,15 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
         )
 public class H2ManagerMenu {
 
-
-    private String url;
+	@Inject private ServiceRegistry serviceRegistry;
+	
+    private WebModuleH2Console webModule;
 
     @PostConstruct
-    public void init(Map<String,String> properties) {
-        this.url = IsisContext.getConfiguration()
-                .getString("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL");
+    public void init() {
+    	webModule = serviceRegistry.select(WebModuleH2Console.class)
+    			.getFirst()
+    			.orElse(null);
     }
 
 
@@ -68,11 +68,14 @@ public class H2ManagerMenu {
             cssClassFa = "database"
             )
     public LocalResourcePath openH2Console() {
-        // TODO: this is a bit of a hack, needs to be improved, eg by searching on the classpath, also make the URL configurable
-        return new LocalResourcePath("/db/");
+        if(webModule==null) {
+    		return null;
+    	}
+    	return webModule.getLocalResourcePathIfEnabled();
     }
+    
     public boolean hideOpenH2Console() {
-        return _Strings.isNullOrEmpty(url) || !url.contains("h2:mem");
+    	return webModule==null || webModule.getLocalResourcePathIfEnabled()==null;
     }
 
 }
