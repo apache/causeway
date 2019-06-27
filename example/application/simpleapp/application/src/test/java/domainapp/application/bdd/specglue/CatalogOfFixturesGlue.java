@@ -16,7 +16,7 @@
  */
 package domainapp.application.bdd.specglue;
 
-import org.apache.isis.core.specsupport.specs.CukeGlueAbstract2;
+import org.apache.isis.specsupport.specs.CukeGlueAbstract2;
 
 import cucumber.api.java.Before;
 import domainapp.application.fixture.scenarios.DomainAppDemo;

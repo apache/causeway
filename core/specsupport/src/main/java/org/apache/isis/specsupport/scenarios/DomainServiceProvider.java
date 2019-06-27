@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.specsupport.scenarios;
+package org.apache.isis.specsupport.scenarios;
 
 /**
  * Provides access to the any domain services

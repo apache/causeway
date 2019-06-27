@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.apache.isis.core.specsupport.specs.CukeGlueAbstract2;
+import org.apache.isis.specsupport.specs.CukeGlueAbstract2;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;

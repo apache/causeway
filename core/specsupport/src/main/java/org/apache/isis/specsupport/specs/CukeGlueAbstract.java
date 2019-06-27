@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.specsupport.specs;
+package org.apache.isis.specsupport.specs;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -26,15 +26,15 @@ import java.util.List;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionForUnit;
-import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 import org.jmock.Sequence;
 import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
 
 import java.util.Objects;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.specsupport.scenarios.ScenarioExecution;
+import org.apache.isis.specsupport.scenarios.ScenarioExecutionForUnit;
+import org.apache.isis.specsupport.scenarios.ScenarioExecutionScope;
 
 import cucumber.api.java.Before;
 
