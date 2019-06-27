@@ -23,7 +23,7 @@ import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
-import org.apache.isis.commons.internal.spring._Spring;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.commons.internal.cdi;
+package org.apache.isis.commons.internal.ioc.cdi;
 
 import java.util.stream.Stream;
 

@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.commons.internal.spring._Spring;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
 import lombok.Builder;

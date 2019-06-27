@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
-import org.apache.isis.commons.internal.spring._Spring;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 
 @Configuration
 public class RuntimeEventSupport_Spring {

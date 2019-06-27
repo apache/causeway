@@ -25,6 +25,7 @@ import java.util.List;
 import javax.annotation.CheckForNull;
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.ioc.cdi._CDI;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

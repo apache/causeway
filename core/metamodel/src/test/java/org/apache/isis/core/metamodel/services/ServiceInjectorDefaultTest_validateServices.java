@@ -33,7 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.spring._Spring;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
