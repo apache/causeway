@@ -29,6 +29,9 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.Encodable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -23,7 +23,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.core.security.authentication.manager.RegistrationDetails;
 
 public interface Registrar extends Authenticator, ApplicationScopedComponent {

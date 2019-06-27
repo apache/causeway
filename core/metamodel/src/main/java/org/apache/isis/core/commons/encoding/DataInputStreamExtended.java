@@ -23,6 +23,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
+
 public class DataInputStreamExtended implements DataInputExtended {
 
     private final DataInputStream dataInputStream;

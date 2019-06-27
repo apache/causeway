@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.facets.actions.prototype;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.plugins.environment.DeploymentType;
 
 public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract implements PrototypeFacet {
 

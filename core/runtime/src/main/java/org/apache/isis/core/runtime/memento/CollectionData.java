@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public class CollectionData extends Data {

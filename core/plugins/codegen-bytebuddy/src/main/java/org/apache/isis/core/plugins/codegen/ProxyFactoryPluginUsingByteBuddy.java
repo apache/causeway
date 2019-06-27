@@ -29,6 +29,8 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryPlugin;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;

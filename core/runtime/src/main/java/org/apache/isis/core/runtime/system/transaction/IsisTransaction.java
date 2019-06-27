@@ -30,9 +30,9 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.core.commons.collections.Inbox;
-import org.apache.isis.core.commons.components.TransactionScopedComponent;
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.collections._Inbox;
+import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
@@ -163,7 +163,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     private final TransactionId id;
     //    private final AuthenticationSession authenticationSession;
 
-    private final Inbox<PersistenceCommand> persistenceCommands = new Inbox<>();
+    private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
     private final IsisTransactionManagerJdoInternal transactionManager;
     //    private final MessageBroker messageBroker;
     private final PublishingServiceInternal publishingServiceInternal;

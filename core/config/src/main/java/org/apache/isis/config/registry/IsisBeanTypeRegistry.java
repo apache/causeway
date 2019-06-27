@@ -17,13 +17,13 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
+import org.apache.isis.commons.internal.components.SessionScopedComponent;
+import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
 import org.apache.isis.commons.internal.spring._Spring;
-import org.apache.isis.commons.ioc.BeanSort;
-import org.apache.isis.commons.ioc.BeanSortClassifier;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.components.TransactionScopedComponent;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;

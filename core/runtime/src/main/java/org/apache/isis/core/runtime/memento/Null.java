@@ -21,9 +21,9 @@ package org.apache.isis.core.runtime.memento;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.Encodable;
 
 public class Null implements Encodable, Serializable {
     private static final long serialVersionUID = 1L;

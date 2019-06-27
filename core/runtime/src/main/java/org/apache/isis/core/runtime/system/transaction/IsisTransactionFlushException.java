@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 
 public class IsisTransactionFlushException extends IsisException {
 

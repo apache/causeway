@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.tool.mavenplugin.spring.IsisMavenPlugin_SpringContextLauncher;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;

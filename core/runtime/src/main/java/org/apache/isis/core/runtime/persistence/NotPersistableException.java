@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 
 public class NotPersistableException extends IsisException {
     private static final long serialVersionUID = 1L;

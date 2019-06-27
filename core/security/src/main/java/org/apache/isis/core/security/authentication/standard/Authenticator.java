@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 

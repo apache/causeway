@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.commons.exceptions;
 
+import org.apache.isis.commons.exceptions.IsisException;
+
 /**
  * Indicates that a call was made to a method (normally an overridden one) that
  * was not expected, and hence not coded for.

@@ -18,13 +18,11 @@
  */
 package org.apache.isis.commons.internal.spring;
 
+import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.commons.internal.ioc.LifecycleContext;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-
-import org.apache.isis.commons.ioc.BeanAdapter;
-import org.apache.isis.commons.ioc.BeanSort;
-import org.apache.isis.commons.ioc.LifecycleContext;
-import org.apache.isis.core.commons.collections.Bin;
 
 import lombok.Value;
 import lombok.val;
@@ -40,12 +38,6 @@ final class BeanAdapterSpring implements BeanAdapter {
     
     @Override
     public Bin<?> getInstance() {
-//[2112] debug        
-//        if(beanClass.getName().contains("MessageService")) {
-//            beanProvider.stream()
-//            .sorted(AnnotationAwareOrderComparator.INSTANCE)  
-//            .forEach(x->System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + x));
-//        }
         val allMatchingBeans = beanProvider.stream(); 
         return Bin.ofStream(allMatchingBeans);
     }

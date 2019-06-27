@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facetapi;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.commons.collections.Bin;
+import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 

@@ -23,10 +23,10 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.Map;
 
+import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.core.commons.collections.Bin;
 
 import lombok.Value;
 import lombok.val;

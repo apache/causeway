@@ -20,7 +20,7 @@
 package org.apache.isis.core.security.authentication.manager;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 

@@ -26,8 +26,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.exceptions.IsisException;
 
 public final class ArrayExtensions {
 

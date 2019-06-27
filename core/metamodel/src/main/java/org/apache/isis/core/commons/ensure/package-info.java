@@ -18,9 +18,9 @@
  */
 
 /**
- * Provides an infrastructure for encoding {@link org.apache.isis.core.commons.encoding.Encodable}
- * into an {@link org.apache.isis.core.commons.encoding.DataOutputExtended output stream}
- * or from an {@link org.apache.isis.core.commons.encoding.DataInputExtended input stream}.
+ * Provides an infrastructure for encoding {@link org.apache.isis.commons.internal.encoding.Encodable}
+ * into an {@link org.apache.isis.commons.internal.encoding.DataOutputExtended output stream}
+ * or from an {@link org.apache.isis.commons.internal.encoding.DataInputExtended input stream}.
  *
  * <p>
  * This is primarily for remoting (marshalling objects across the wire) but

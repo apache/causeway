@@ -23,10 +23,10 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
-import org.apache.isis.core.plugins.environment.DeploymentType;
 
 public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
 

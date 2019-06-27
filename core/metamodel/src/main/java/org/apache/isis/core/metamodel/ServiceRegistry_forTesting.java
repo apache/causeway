@@ -24,16 +24,16 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.spring._Spring;
-import org.apache.isis.commons.ioc.BeanAdapter;
-import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
-import org.apache.isis.core.commons.collections.Bin;
 
 import lombok.Builder;
 import lombok.Value;

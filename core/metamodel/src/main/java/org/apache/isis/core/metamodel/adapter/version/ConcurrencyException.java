@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.adapter.version;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public class ConcurrencyException extends IsisException {

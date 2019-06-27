@@ -22,6 +22,8 @@ package org.apache.isis.core.commons.encoding;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
+
 public class DataInputExtendedDecorator implements DataInputExtended {
 
     private final DataInputExtended underlying;

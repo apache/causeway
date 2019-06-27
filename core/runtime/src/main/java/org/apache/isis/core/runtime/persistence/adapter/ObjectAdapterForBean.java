@@ -1,6 +1,6 @@
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;

@@ -19,7 +19,7 @@ package org.apache.isis.core.unittestsupport.jmocking;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.core.plugins.codegen.ProxyFactory;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 import org.jmock.api.Imposteriser;
 import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;

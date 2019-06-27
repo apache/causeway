@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.services;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
  * Indicates a problem initialising the Apache Isis framework.

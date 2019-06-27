@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.ioc.BeanSort;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 /**

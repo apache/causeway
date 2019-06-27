@@ -22,7 +22,7 @@ package org.apache.isis.core.security.authentication.standard;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;

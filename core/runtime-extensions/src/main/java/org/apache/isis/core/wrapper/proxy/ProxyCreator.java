@@ -28,9 +28,9 @@ import java.util.WeakHashMap;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
-import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
 
 public class ProxyCreator {

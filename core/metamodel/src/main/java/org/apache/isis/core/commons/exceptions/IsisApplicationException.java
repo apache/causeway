@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.commons.exceptions;
 
+import org.apache.isis.commons.exceptions.IsisException;
+
 /**
  * Indicates an error raised by the application code.
  *

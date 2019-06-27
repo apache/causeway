@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.commons.internal.encoding.Encodable;
 
 /**
  * The representation within the system of an authenticated user.

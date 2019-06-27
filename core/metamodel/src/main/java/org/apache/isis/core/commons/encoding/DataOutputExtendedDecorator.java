@@ -22,6 +22,8 @@ package org.apache.isis.core.commons.encoding;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
+
 public class DataOutputExtendedDecorator implements DataOutputExtended {
 
     private final DataOutputExtended underlying;

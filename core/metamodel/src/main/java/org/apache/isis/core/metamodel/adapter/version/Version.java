@@ -27,9 +27,9 @@ import java.util.Date;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.core.commons.lang.DateExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;

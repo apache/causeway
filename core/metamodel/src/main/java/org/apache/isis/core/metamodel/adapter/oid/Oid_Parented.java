@@ -24,8 +24,8 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import java.io.IOException;
 import java.util.Objects;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
 final class Oid_Parented implements ParentedOid {

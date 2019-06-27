@@ -27,9 +27,9 @@ import javax.inject.Singleton;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @Singleton

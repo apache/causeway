@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

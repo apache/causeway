@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;

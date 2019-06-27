@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.io.IOException;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.OidDto;

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.integtestsupport.components;
 
-import org.apache.isis.core.commons.components.Noop;
+import org.apache.isis.commons.internal.components.Noop;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;

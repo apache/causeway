@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 

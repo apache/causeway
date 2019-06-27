@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.Encodable;
 
 import lombok.extern.log4j.Log4j2;
 

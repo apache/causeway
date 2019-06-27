@@ -20,7 +20,7 @@ package org.apache.isis.config.registry;
 
 import java.util.Set;
 
-import org.apache.isis.core.plugins.beantyperegistry.BeanTypeRegistryPlugin;
+import org.apache.isis.commons.internal.plugins.beantyperegistry.BeanTypeRegistryPlugin;
 
 /**
  * Required workaround, to provide module 'unittestsupport' access into {@link IsisBeanTypeRegistry}

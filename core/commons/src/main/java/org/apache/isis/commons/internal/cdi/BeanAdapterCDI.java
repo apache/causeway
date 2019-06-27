@@ -20,10 +20,10 @@ package org.apache.isis.commons.internal.cdi;
 
 import javax.enterprise.inject.spi.Bean;
 
-import org.apache.isis.commons.ioc.BeanAdapter;
-import org.apache.isis.commons.ioc.LifecycleContext;
-import org.apache.isis.commons.ioc.BeanSort;
-import org.apache.isis.core.commons.collections.Bin;
+import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.commons.internal.ioc.LifecycleContext;
 
 import lombok.Value;
 import lombok.val;

@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;

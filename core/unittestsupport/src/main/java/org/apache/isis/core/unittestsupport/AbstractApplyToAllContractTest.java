@@ -28,7 +28,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.junit.Test;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.core.plugins.beantyperegistry.BeanTypeRegistryPlugin;
+import org.apache.isis.commons.internal.plugins.beantyperegistry.BeanTypeRegistryPlugin;
 import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
 
 /**

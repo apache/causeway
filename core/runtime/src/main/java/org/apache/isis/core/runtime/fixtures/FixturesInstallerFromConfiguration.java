@@ -22,8 +22,8 @@ package org.apache.isis.core.runtime.fixtures;
 import java.util.List;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 
 import lombok.extern.log4j.Log4j2;

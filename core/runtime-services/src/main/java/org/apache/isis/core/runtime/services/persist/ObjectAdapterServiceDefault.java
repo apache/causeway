@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Primary;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;

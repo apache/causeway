@@ -24,7 +24,7 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import java.util.List;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.ioc.BeanSort;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;

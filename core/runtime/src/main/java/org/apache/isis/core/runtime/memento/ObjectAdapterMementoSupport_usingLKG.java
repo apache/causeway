@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.memento;
 import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.ioc.BeanSort;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;

@@ -22,7 +22,7 @@ package org.apache.isis.core.security.authentication.health;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 public class HealthAuthSession extends AuthenticationSessionAbstract {

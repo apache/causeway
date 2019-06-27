@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.commons.ensure;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.IsisException;
 
 public class IsisAssertException extends IsisException {
 

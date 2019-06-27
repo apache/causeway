@@ -26,8 +26,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.exceptions.IsisException;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;

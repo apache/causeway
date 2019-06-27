@@ -27,9 +27,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;

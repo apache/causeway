@@ -18,7 +18,7 @@
  */
 
 /**
- * Defines {@link org.apache.isis.core.commons.exceptions.IsisException base class}
+ * Defines {@link org.apache.isis.commons.exceptions.IsisException base class}
  * for exceptions raised either by Isis itself or by the domain model
  * running on top of Isis.
  */

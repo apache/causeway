@@ -21,10 +21,9 @@ package org.apache.isis.core.metamodel.facets.actions.prototype;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
-
+import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.junit.Assert.assertEquals;

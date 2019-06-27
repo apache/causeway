@@ -31,11 +31,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.collections.Bin;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironmentPlugin;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironmentPlugin;
 
 /**
  * <h1>- internal use only -</h1>

@@ -21,6 +21,8 @@ package org.apache.isis.core.commons.encoding;
 
 import java.io.IOException;
 
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
+
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

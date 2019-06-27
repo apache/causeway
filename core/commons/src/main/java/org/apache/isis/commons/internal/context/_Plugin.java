@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.plugins.PluginResolveException;
+import org.apache.isis.commons.internal.plugins.PluginResolveException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

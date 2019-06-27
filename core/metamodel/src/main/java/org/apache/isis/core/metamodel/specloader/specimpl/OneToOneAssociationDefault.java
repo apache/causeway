@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;

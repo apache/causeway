@@ -41,17 +41,16 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
-
+import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.ioc.BeanAdapter;
-import org.apache.isis.commons.ioc.LifecycleContext;
-import org.apache.isis.commons.ioc.BeanSortClassifier;
-import org.apache.isis.core.commons.collections.Bin;
+import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
+import org.apache.isis.commons.internal.ioc.LifecycleContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;

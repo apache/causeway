@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 
+import org.apache.isis.commons.internal.encoding.DataOutputExtended;
+import org.apache.isis.commons.internal.encoding.Encodable;
+
 public class DataOutputStreamExtended implements DataOutputExtended {
 
     private final DataOutputStream dataOutputStream;
