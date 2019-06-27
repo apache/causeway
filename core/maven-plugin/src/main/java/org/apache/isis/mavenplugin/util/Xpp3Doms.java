@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.integtests;
+package org.apache.isis.mavenplugin.util;
 
-import org.apache.isis.integtestsupport.IntegrationTestJupiter;
+import java.util.function.Function;
 
-import domainapp.modules.simple.SimpleModule;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 
-public abstract class SimpleModuleIntegTestAbstract /*extends IntegrationTestJupiter*/ {
+public final class Xpp3Doms {
 
-  //FIXME[2112] needs migration
-//    public SimpleModuleIntegTestAbstract() {
-//        super(new SimpleModule().withConfigurationProperty("isis.objects.editing", "false"));
-//    }
+    private Xpp3Doms(){}
+
+    public static Function<Xpp3Dom, String> GET_VALUE = Xpp3Dom::getValue;
 
 
 }

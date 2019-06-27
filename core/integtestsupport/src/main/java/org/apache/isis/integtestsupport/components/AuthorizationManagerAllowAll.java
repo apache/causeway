@@ -16,18 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.integtests;
 
-import org.apache.isis.integtestsupport.IntegrationTestJupiter;
+package org.apache.isis.integtestsupport.components;
 
-import domainapp.modules.simple.SimpleModule;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
-public abstract class SimpleModuleIntegTestAbstract /*extends IntegrationTestJupiter*/ {
+public class AuthorizationManagerAllowAll implements AuthorizationManager {
 
-  //FIXME[2112] needs migration
-//    public SimpleModuleIntegTestAbstract() {
-//        super(new SimpleModule().withConfigurationProperty("isis.objects.editing", "false"));
-//    }
+    @Override
+    public void init() {
+    }
 
+    @Override
+    public void shutdown() {
+    }
+
+    @Override
+    public boolean isUsable(final AuthenticationSession session, final Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isVisible(final AuthenticationSession session, final Identifier identifier) {
+        return true;
+    }
 
 }

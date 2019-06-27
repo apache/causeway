@@ -27,7 +27,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LogStream;
-import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
+import org.apache.isis.logging.IsisLoggingConfigurer;
 import org.apache.logging.log4j.Level;
 
 import lombok.val;

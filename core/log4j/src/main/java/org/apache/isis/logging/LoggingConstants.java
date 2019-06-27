@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.integtests;
 
-import org.apache.isis.integtestsupport.IntegrationTestJupiter;
+package org.apache.isis.logging;
 
-import domainapp.modules.simple.SimpleModule;
+public final class LoggingConstants {
 
-public abstract class SimpleModuleIntegTestAbstract /*extends IntegrationTestJupiter*/ {
+    public static final String LOGGING_CONFIG_FILE = "logging.properties";
 
-  //FIXME[2112] needs migration
-//    public SimpleModuleIntegTestAbstract() {
-//        super(new SimpleModule().withConfigurationProperty("isis.objects.editing", "false"));
-//    }
+    public static final String DEBUG_OPT = "debug";
+    public static final String VERBOSE_OPT = "verbose";
+    public static final String QUIET_OPT = "quiet";
 
+    private LoggingConstants() {
+    }
 
 }

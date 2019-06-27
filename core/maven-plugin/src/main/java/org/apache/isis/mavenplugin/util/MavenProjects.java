@@ -16,18 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.integtests;
+package org.apache.isis.mavenplugin.util;
 
-import org.apache.isis.integtestsupport.IntegrationTestJupiter;
+import java.util.List;
 
-import domainapp.modules.simple.SimpleModule;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.project.MavenProject;
 
-public abstract class SimpleModuleIntegTestAbstract /*extends IntegrationTestJupiter*/ {
+public final class MavenProjects {
 
-  //FIXME[2112] needs migration
-//    public SimpleModuleIntegTestAbstract() {
-//        super(new SimpleModule().withConfigurationProperty("isis.objects.editing", "false"));
-//    }
+    private MavenProjects(){}
 
+    public static Plugin lookupPlugin(MavenProject mavenProject, String key) {
+
+        List<Plugin> plugins = mavenProject.getBuildPlugins();
+
+        for (Plugin plugin : plugins) {
+            if (key.equalsIgnoreCase(plugin.getKey())) {
+                return plugin;
+            }
+        }
+        return null;
+    }
 
 }
