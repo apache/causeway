@@ -24,7 +24,7 @@ import java.util.List;
 
 import javax.servlet.FilterConfig;
 
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.IsisRestfulObjectsSessionFilter;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

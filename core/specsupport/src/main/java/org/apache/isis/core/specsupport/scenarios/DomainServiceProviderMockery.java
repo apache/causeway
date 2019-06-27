@@ -28,7 +28,7 @@ import org.jmock.api.Invocation;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.unittestsupport.jmocking.Imposterisers;
+import org.apache.isis.unittestsupport.jmocking.Imposterisers;
 
 /**
  * @deprecated - with no replacement

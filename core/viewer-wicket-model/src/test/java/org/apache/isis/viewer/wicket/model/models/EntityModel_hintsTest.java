@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.jmock.Expectations;
@@ -23,8 +24,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

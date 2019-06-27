@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
 

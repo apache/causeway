@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
+import org.apache.isis.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class VersionTest_valueSemantics extends ValueTypeContractTestAbstract<Version> {
 

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.spec;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
+import org.apache.isis.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class ObjectSpecIdTest_valueSemantics extends ValueTypeContractTestAbstract<ObjectSpecId> {
 

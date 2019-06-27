@@ -69,7 +69,7 @@ import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValid
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 

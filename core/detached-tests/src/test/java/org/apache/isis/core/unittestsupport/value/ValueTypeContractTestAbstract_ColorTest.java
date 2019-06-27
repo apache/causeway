@@ -22,6 +22,8 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.unittestsupport.value.ValueTypeContractTestAbstract;
+
 
 public class ValueTypeContractTestAbstract_ColorTest extends ValueTypeContractTestAbstract<Color> {
 

@@ -39,6 +39,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactoryPlugin;
+import org.apache.isis.unittestsupport.jmocking.Imposterisers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

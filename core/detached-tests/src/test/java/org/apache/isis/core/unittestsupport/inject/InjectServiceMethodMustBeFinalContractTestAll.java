@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.unittestsupport.inject;
 
+import org.apache.isis.unittestsupport.inject.InjectServiceMethodMustBeFinalContractTestAbstract;
+
 public class InjectServiceMethodMustBeFinalContractTestAll extends InjectServiceMethodMustBeFinalContractTestAbstract {
 
     public InjectServiceMethodMustBeFinalContractTestAll() {

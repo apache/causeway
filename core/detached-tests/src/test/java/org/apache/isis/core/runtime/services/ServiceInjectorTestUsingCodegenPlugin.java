@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ServiceInjectorTestUsingCodegenPlugin {
 
