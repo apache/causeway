@@ -58,9 +58,11 @@ dependencies {
 }
 
 kotlinFrontend {
-
+    sourceMaps = true // CHANGE HERE
+    
     webpackBundle {
         bundleName = "main"
+        sourceMapEnabled = false // CHANGE HERE (it must be false!)
         contentPath = file('src/main/web')
         mode = production ? "production" : "development"
     }

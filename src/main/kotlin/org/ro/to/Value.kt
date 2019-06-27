@@ -126,7 +126,7 @@ data class Value(
             val keywordRemoved = unEscaped.replaceFirst(keyword, "")
             val delimRemoved = keywordRemoved.replaceFirst(delim, "")
             val unQuoted = delimRemoved.replace("\"", "")
-            val result = unQuoted.trim()
+            val result = unQuoted.trim().removeSuffix(",")
             console.log("[${this::class}.decodeStringMayBeWrong] found String: $result")
 
             return result

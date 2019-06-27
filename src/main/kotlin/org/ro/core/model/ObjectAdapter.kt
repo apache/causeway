@@ -1,15 +1,10 @@
 package org.ro.core.model
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 import org.ro.to.TObject
 
 @Serializable
 class ObjectAdapter(val delegate: TObject) {
-    init {
-        //["sample"] = "Beispiel";
-    }
-    //TODO have getters peek into delegate
     val resultClass = "resultClass"
     val fixtureScript = "fixtureScript"
     val resultKey: String
@@ -21,17 +16,16 @@ class ObjectAdapter(val delegate: TObject) {
             return delegate.domainType
         }
 
-    fun sample(): JsonObject {
-        //val answer = JsonObject(JSON.stringify(delegate))
-        return delegate.asDynamic()
-    }
-
-    fun get(propertyName: String): String {
+    fun get(propertyName: String): Any? {
         val that: dynamic = delegate
         if (that.hasOwnProperty(propertyName)) {
-            return that.propertyName()
+            return that[propertyName]
         } else {
-            return "null"
+            val delegatedProperty =  delegate.getProperty(propertyName)
+            if (delegatedProperty != null) {
+                return delegatedProperty.value
+            }
+            return null
         }
     }
 
@@ -40,5 +34,5 @@ class ObjectAdapter(val delegate: TObject) {
             resultClass.contains(it, true) ?: false
         } ?: true
     }
-    
-} 
+
+}

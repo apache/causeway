@@ -22,6 +22,15 @@ data class TObject(val links: List<Link> = emptyList(),
         return result
     }
 
+    fun getProperty(key: String): Member? {
+        for (m in members) {
+            if (m.key == key) {
+                return m.value
+            }
+        }
+        return null
+    }
+
     /**
      * Post-Constructor fun using dynamic nature of class.
      */
