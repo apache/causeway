@@ -28,8 +28,8 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong;
-import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
+import org.apache.isis.metamodel.services.jdosupport.Persistable_datanucleusIdLong;
+import org.apache.isis.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.fixture.SimpleObject_persona;

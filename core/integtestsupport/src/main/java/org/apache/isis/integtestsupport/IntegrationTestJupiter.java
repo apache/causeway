@@ -26,10 +26,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
-import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
-import org.apache.isis.core.runtime.headless.IsisSystem;
-import org.apache.isis.core.runtime.headless.logging.LogConfig;
+import org.apache.isis.runtime.headless.HeadlessTransactionSupport;
+import org.apache.isis.runtime.headless.HeadlessWithBootstrappingAbstract;
+import org.apache.isis.runtime.headless.IsisSystem;
+import org.apache.isis.runtime.headless.logging.LogConfig;
 
 /**
  * Base class for integration tests for the JUnit 5 Jupiter Engine,

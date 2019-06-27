@@ -45,8 +45,6 @@ import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -70,6 +68,8 @@ import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 

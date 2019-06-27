@@ -22,12 +22,12 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 /**
  * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s,

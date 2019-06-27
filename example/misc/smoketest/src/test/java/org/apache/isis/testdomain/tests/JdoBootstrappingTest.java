@@ -29,9 +29,9 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;

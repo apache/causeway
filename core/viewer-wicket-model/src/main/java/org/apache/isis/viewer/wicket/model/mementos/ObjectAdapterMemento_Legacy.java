@@ -31,9 +31,6 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.memento.Memento;
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -42,6 +39,9 @@ import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.memento.Memento;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

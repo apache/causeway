@@ -23,12 +23,12 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
-import org.apache.isis.core.runtime.system.internal.InitialisationSession;
-import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionAspectSupport;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionObject;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.runtime.system.internal.InitialisationSession;
+import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
+import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;

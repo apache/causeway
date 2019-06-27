@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
-import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;

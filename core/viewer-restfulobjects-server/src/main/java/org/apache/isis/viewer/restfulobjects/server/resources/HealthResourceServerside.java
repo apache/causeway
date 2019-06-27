@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.health.Health;
 import org.apache.isis.applib.services.health.HealthCheckService;
-import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
+import org.apache.isis.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.security.authentication.health.HealthAuthSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

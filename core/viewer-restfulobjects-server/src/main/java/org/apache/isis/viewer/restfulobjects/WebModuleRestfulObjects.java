@@ -32,8 +32,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.core.webapp.modules.WebModule;
-import org.apache.isis.core.webapp.modules.WebModuleContext;
+import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleContext;
 import org.springframework.core.annotation.Order;
 
 /**

@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.authentication.AuthenticationSession;

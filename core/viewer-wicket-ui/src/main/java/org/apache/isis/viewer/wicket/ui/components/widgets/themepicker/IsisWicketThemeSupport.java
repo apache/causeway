@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 import lombok.val;

@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.runtime.headless.IsisSystem;
+import org.apache.isis.runtime.headless.IsisSystem;
 
 import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.CucumberException;

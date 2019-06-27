@@ -17,9 +17,9 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 
 import static org.apache.isis.viewer.wicket.model.models.EntityModel.createPageParameters;
 

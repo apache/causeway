@@ -23,9 +23,9 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 

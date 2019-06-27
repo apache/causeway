@@ -28,7 +28,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 @Path("/swagger")
 public class SwaggerSpecResource {

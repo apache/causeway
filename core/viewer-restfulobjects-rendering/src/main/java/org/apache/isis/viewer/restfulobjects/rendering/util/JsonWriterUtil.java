@@ -21,8 +21,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 import java.io.IOException;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 public final class JsonWriterUtil {

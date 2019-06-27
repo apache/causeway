@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

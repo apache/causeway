@@ -22,7 +22,7 @@ import java.util.Set;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 public enum JdoTestDomainPersona 
 implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {

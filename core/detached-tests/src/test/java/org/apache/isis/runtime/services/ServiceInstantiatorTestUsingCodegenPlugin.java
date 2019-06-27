@@ -34,8 +34,8 @@ import org.junit.Test;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.services.ServiceInstantiator;
+import org.apache.isis.runtime.services.RequestScopedService;
+import org.apache.isis.runtime.services.ServiceInstantiator;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;

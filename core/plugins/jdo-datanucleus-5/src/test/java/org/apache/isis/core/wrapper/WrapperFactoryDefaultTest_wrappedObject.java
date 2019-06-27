@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -64,6 +63,7 @@ import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDef
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepositoryImpl;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.authentication.standard.SimpleSession;

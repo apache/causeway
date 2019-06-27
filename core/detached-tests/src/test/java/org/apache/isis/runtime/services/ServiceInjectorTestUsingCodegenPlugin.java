@@ -38,10 +38,10 @@ import org.junit.Test;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.services.ServiceInstantiator;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.runtime.services.RequestScopedService;
+import org.apache.isis.runtime.services.ServiceInstantiator;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ServiceInjectorTestUsingCodegenPlugin {

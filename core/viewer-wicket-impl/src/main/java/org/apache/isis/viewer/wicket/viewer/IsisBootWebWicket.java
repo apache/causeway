@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
-import org.apache.isis.core.webapp.IsisBootWebApp;
+import org.apache.isis.webapp.IsisBootWebApp;
 
 /**
  * 

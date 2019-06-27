@@ -32,8 +32,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;

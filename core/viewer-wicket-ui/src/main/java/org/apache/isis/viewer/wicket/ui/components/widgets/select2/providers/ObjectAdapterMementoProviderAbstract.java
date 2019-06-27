@@ -26,13 +26,13 @@ import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

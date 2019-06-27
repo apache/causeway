@@ -23,8 +23,8 @@ import javax.inject.Inject;
 
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;

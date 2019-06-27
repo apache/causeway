@@ -24,9 +24,9 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.wicket.Component;
 import org.apache.wicket.Localizer;

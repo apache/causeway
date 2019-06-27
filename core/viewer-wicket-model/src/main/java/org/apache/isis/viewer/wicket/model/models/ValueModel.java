@@ -19,10 +19,10 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 
 /**
  * Represents a standalone value.

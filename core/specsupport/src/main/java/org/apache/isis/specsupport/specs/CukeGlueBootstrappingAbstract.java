@@ -19,8 +19,8 @@ package org.apache.isis.specsupport.specs;
 import com.fasterxml.jackson.databind.Module;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
-import org.apache.isis.core.runtime.headless.logging.LogConfig;
+import org.apache.isis.runtime.headless.HeadlessWithBootstrappingAbstract;
+import org.apache.isis.runtime.headless.logging.LogConfig;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;

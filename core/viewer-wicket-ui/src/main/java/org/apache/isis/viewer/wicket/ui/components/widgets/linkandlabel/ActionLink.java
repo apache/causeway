@@ -33,11 +33,11 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;

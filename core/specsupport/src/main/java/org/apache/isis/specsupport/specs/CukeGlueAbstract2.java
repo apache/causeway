@@ -16,7 +16,7 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package org.apache.isis.specsupport.specs;
 
-import org.apache.isis.core.runtime.headless.HeadlessAbstract;
+import org.apache.isis.runtime.headless.HeadlessAbstract;
 
 /**
  * Base class for BDD spec glue.

@@ -29,10 +29,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;

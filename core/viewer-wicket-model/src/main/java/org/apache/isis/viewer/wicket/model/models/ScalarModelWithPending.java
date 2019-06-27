@@ -18,7 +18,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 

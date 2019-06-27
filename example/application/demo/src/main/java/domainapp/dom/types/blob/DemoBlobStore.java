@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
 

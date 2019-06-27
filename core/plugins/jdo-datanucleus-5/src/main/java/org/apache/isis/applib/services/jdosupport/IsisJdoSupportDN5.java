@@ -41,11 +41,11 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

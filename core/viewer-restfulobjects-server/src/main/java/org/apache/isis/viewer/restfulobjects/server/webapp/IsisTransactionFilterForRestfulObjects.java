@@ -25,7 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.isis.core.runtime.system.session.IsisRequestCycle;
+import org.apache.isis.runtime.system.session.IsisRequestCycle;
 
 //@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"}) //[ahuber] to support 
 //Servlet 3.0 annotations @WebFilter, @WebListener or others 

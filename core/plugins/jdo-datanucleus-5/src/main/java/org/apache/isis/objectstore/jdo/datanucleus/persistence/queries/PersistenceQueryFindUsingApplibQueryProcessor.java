@@ -27,13 +27,13 @@ import javax.jdo.Query;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
+import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
+import org.apache.isis.runtime.system.persistence.PersistenceSession5;
 
 import lombok.extern.log4j.Log4j2;
 

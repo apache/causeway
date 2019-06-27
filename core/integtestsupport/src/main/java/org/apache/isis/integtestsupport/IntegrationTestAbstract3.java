@@ -30,10 +30,10 @@ import org.junit.runners.model.Statement;
 
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
-import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
-import org.apache.isis.core.runtime.headless.IsisSystem;
-import org.apache.isis.core.runtime.headless.logging.LogConfig;
+import org.apache.isis.runtime.headless.HeadlessTransactionSupport;
+import org.apache.isis.runtime.headless.HeadlessWithBootstrappingAbstract;
+import org.apache.isis.runtime.headless.IsisSystem;
+import org.apache.isis.runtime.headless.logging.LogConfig;
 import org.apache.logging.log4j.Level;
 
 /**

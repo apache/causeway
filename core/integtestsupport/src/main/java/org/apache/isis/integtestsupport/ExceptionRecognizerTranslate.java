@@ -22,8 +22,8 @@ import org.junit.runners.model.Statement;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 public class ExceptionRecognizerTranslate implements MethodRule {
 

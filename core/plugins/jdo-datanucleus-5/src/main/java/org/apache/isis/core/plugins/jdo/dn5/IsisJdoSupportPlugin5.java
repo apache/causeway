@@ -20,10 +20,10 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.metamodel.IsisJdoRuntimePlugin;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory5;
 import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
+import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
+import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory5;
 
 public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin, IsisJdoRuntimePlugin {
 

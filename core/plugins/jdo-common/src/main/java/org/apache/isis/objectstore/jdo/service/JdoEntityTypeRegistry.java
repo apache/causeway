@@ -28,8 +28,8 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

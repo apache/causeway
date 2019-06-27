@@ -29,7 +29,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.metamodel.MetaModelContext;
@@ -57,6 +56,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

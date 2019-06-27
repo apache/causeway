@@ -24,12 +24,12 @@ import javax.inject.Singleton;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
+import org.apache.isis.runtime.headless.HeadlessTransactionSupport;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
+import org.apache.isis.runtime.system.transaction.IsisTransaction.State;
 
 @Singleton
 public class HeadlessTransactionSupportDefault implements HeadlessTransactionSupport {

@@ -19,7 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.errors;
 
 import org.apache.isis.commons.internal.base._Strings;
-
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,8 +30,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.MessageBroker;
 
 /**

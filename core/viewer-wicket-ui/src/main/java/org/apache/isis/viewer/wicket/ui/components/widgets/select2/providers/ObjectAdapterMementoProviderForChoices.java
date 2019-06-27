@@ -38,7 +38,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.List;
 
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 
 public interface ObjectAdapterMementoProviderForChoices {
 

@@ -31,8 +31,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
-
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;

@@ -30,8 +30,8 @@ import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
 
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 @Provider

@@ -26,7 +26,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.base._Timing.StopWatch;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 /**
  * Responsibility: produce additional info when in prototyping mode 

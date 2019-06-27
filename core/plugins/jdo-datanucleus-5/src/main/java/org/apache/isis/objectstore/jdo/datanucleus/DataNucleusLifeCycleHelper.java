@@ -20,7 +20,7 @@ package org.apache.isis.objectstore.jdo.datanucleus;
 
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.datanucleus.enhancer.EnhancementHelper;
 
 /**

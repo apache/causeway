@@ -26,7 +26,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.headless.IsisSystem;
+import org.apache.isis.runtime.headless.IsisSystem;
 
 public abstract class TransactionRuleAbstract {
 

@@ -31,8 +31,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -43,6 +41,8 @@ import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFace
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;

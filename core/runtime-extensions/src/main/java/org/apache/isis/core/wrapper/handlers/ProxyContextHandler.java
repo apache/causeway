@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.wrapper.proxy.ProxyCreator;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 public class ProxyContextHandler {
 

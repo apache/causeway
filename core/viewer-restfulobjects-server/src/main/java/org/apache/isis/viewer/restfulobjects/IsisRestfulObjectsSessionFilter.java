@@ -43,13 +43,13 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategy;
-import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault;
-import org.apache.isis.core.webapp.modules.resources.ResourceCachingFilter;
+import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.webapp.auth.AuthenticationSessionStrategy;
+import org.apache.isis.webapp.auth.AuthenticationSessionStrategyDefault;
+import org.apache.isis.webapp.modules.resources.ResourceCachingFilter;
 
 import lombok.val;
 

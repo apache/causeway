@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.pages.actionprompt;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
