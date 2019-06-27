@@ -28,10 +28,10 @@ import org.springframework.context.annotation.FilterType;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
-import org.apache.isis.core.wrapper.IsisWrapperModule;
 import org.apache.isis.metamodel.IsisMetamodelModule;
 import org.apache.isis.runtime.IsisRuntimeModule;
 import org.apache.isis.runtime.services.IsisRuntimeServicesModule;
+import org.apache.isis.wrapper.IsisWrapperModule;
 
 @Configuration 
 @ComponentScan(

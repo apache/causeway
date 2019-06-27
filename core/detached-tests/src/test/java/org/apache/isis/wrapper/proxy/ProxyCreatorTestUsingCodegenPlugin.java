@@ -22,8 +22,8 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
-import org.apache.isis.core.wrapper.proxy.ProxyCreator;
+import org.apache.isis.wrapper.handlers.DelegatingInvocationHandler;
+import org.apache.isis.wrapper.proxy.ProxyCreator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
