@@ -21,9 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;

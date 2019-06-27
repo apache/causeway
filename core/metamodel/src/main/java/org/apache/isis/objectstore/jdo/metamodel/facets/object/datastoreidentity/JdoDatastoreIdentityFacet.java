@@ -22,7 +22,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentit
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 
 /**

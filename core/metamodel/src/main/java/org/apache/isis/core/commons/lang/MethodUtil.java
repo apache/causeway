@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class MethodUtil {
 

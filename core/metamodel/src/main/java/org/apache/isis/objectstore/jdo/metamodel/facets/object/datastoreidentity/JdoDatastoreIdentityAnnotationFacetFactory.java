@@ -22,11 +22,11 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentit
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 
-import org.apache.isis.core.metamodel.JdoMetamodelUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.metamodel.facetapi.FacetUtil;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.Annotations;
+import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 
 
 public class JdoDatastoreIdentityAnnotationFacetFactory extends FacetFactoryAbstract {

@@ -26,18 +26,18 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.ObjectAdapterForBean;
 import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.services.ServiceUtil;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

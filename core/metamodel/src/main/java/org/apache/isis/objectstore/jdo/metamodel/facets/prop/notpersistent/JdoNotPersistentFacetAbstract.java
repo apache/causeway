@@ -18,9 +18,9 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
 
 
 public abstract class JdoNotPersistentFacetAbstract extends MarkerFacetAbstract implements

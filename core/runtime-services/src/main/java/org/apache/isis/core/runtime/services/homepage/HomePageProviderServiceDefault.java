@@ -28,14 +28,14 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.homepage.HomePageProviderService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.MetaModelContext;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.consent.Consent;
+import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.Contributed;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
 

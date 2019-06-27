@@ -21,8 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
-
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;

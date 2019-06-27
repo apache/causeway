@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 
 /**

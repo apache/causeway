@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 public class AuthorizationFacetImpl extends AuthorizationFacetAbstract {
 

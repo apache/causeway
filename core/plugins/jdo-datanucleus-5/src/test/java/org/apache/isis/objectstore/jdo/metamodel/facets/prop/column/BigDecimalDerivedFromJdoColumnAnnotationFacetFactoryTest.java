@@ -24,11 +24,11 @@ import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
 public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

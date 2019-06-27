@@ -21,10 +21,10 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.isis.core.metamodel.spec.Hierarchical;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.spec.Hierarchical;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 class VisitorForFromClause extends VisitorForClauseAbstract {
 

@@ -26,13 +26,13 @@ import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -106,7 +106,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
 
     /**
      * Filters all choices against a term by using their
-     * {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter#titleString(org.apache.isis.core.metamodel.adapter.ObjectAdapter) title string}
+     * {@link org.apache.isis.metamodel.adapter.ObjectAdapter#titleString(org.apache.isis.metamodel.adapter.ObjectAdapter) title string}
      *
      * @param term The term entered by the user
      * @param choicesMementos The collections of choices to filter

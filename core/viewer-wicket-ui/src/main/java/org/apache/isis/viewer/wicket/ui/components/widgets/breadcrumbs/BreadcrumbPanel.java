@@ -33,9 +33,9 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.runtime.memento;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 
 /**
  * TODO[2112] possibly not final 

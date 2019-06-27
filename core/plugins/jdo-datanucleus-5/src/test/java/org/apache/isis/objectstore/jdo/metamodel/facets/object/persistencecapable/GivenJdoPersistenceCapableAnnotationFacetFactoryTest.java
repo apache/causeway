@@ -24,12 +24,11 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.datanucleus.enhancement.Persistable;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 
 import junit.framework.Assert;
 

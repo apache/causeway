@@ -31,11 +31,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.core.runtime.memento.ObjectAdapterMementoSupport;
 import org.apache.isis.core.runtime.memento.ObjectAdapterMementoUsingSupport;
@@ -43,6 +38,11 @@ import org.apache.isis.core.runtime.persistence.adapter.ObjectAdapterForBean;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 

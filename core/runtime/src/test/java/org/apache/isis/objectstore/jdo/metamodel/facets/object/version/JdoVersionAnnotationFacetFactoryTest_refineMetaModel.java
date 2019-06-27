@@ -24,11 +24,11 @@ import org.jmock.Sequence;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

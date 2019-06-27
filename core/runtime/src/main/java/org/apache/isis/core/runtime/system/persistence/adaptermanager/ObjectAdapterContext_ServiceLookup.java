@@ -26,8 +26,8 @@ import org.apache.isis.commons.internal.base._Timing.StopWatch;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 
 import lombok.val;
 

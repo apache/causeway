@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -50,7 +50,7 @@ public final class LinkAndLabelUtil {
     }
 
     /**
-     * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its) {@link org.apache.isis.core.metamodel.spec.feature.ObjectAction}s into a
+     * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its) {@link org.apache.isis.metamodel.spec.feature.ObjectAction}s into a
      * list of {@link org.apache.isis.viewer.wicket.model.links.LinkAndLabel}s intended to be passed
      * to the {@link AdditionalLinksPanel}.
      *

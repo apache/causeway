@@ -37,7 +37,7 @@ import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
+import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 
 import lombok.extern.log4j.Log4j2;
 

@@ -23,8 +23,7 @@ import java.sql.Timestamp;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
-
-import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 public class Utils {

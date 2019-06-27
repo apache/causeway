@@ -27,9 +27,8 @@ import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
 import org.junit.Test;
-
-import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodReturn;
 
 public class TypeExtractorMethodReturnTest {
 

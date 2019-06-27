@@ -26,7 +26,7 @@ import java.util.Map;
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.Oid;
 
 public class ObjectData extends Data {
 

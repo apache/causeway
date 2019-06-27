@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.Oid;
 
 public class PojoRefreshException extends ObjectNotFoundException {
     private static final long serialVersionUID = 1L;

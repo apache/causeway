@@ -48,7 +48,7 @@ import lombok.val;
 	properties = {
 			"logging.config=log4j2-test.xml",
 			// "isis.reflector.introspector.parallelize=false",
-			// "logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+			// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 })
 @Transactional
 class JdoBootstrappingTest_usingFixtures {

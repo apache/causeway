@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.query;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery {
 

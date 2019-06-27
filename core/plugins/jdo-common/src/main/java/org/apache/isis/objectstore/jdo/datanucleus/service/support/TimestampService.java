@@ -29,7 +29,7 @@ import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedBy;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.core.metamodel.JdoMetamodelUtil;
+import org.apache.isis.metamodel.JdoMetamodelUtil;
 
 @RequestScoped
 @DomainService(

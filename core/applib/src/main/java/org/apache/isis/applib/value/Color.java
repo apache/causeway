@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Value;
  * Where there is no basic colors (RGB all equal 0) then you get black; where
  * each color is at maximum (RGB all equal 255) you get white.
  */
-@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.color.ColorValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.metamodel.facets.value.color.ColorValueSemanticsProvider")
 public class Color extends Magnitude<Color> {
 
     private static final long serialVersionUID = 1L;

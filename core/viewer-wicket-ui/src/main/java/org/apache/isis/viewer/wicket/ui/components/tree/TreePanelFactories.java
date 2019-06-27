@@ -21,8 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.tree;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;

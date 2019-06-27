@@ -23,12 +23,12 @@ import java.util.List;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 
 public class GivenJdoPrimaryKeyAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

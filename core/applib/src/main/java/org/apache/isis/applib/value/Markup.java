@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Value;
  * Immutable value type holding pre-rendered HTML.
  *
  */
-@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
 public class Markup implements Serializable {
     private static final long serialVersionUID = 1L;
     private final String html;

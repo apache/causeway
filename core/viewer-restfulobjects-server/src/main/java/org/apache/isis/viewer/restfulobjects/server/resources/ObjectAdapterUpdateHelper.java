@@ -18,19 +18,19 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.stream.Stream;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.consent.Consent;
+import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.Contributed;
+import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 /**
  * Utility class that encapsulates the logic for updating an
- * {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter object}'s with the
+ * {@link org.apache.isis.metamodel.adapter.ObjectAdapter object}'s with the
  * values of a {@link org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation}.
  *
  * <p>

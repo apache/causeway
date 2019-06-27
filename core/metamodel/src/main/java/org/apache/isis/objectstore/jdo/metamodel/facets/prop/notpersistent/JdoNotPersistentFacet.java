@@ -20,7 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import org.apache.isis.metamodel.facets.MarkerFacet;
 
 
 /**

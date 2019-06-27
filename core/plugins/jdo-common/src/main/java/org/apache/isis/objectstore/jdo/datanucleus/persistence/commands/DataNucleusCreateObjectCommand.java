@@ -20,9 +20,9 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
 import lombok.extern.log4j.Log4j2;
 

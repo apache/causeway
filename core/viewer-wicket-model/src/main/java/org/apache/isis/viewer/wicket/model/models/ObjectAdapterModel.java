@@ -18,10 +18,9 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public interface ObjectAdapterModel extends IModel<ObjectAdapter> {
 

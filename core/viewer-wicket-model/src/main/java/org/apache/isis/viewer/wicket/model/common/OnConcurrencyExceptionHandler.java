@@ -20,10 +20,11 @@
 package org.apache.isis.viewer.wicket.model.common;
 
 import java.io.Serializable;
+
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 
 /**
  * Decouples the handling of concurrency exceptions when a bulk action is invoked (between the toggle box column and the

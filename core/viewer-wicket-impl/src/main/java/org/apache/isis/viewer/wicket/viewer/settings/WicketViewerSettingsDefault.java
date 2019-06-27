@@ -23,8 +23,8 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 @Singleton

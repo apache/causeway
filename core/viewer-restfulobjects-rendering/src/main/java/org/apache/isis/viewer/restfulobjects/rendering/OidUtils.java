@@ -20,15 +20,15 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
-import org.apache.isis.core.metamodel.MetaModelContext;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.exceptions.persistence.ObjectNotFoundException;
-import org.apache.isis.core.metamodel.exceptions.persistence.PojoRecreationException;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.exceptions.persistence.ObjectNotFoundException;
+import org.apache.isis.metamodel.exceptions.persistence.PojoRecreationException;
+import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 final class OidUtils {
 

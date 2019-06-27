@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapab
 
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.Facet;
 
 
 /**

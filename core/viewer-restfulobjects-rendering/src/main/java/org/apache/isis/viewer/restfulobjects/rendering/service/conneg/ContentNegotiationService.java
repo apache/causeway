@@ -23,7 +23,7 @@ import javax.annotation.PreDestroy;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;

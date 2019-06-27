@@ -22,8 +22,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.RequiredArgsConstructor;
 

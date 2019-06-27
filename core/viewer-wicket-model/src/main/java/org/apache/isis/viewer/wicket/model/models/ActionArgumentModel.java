@@ -19,8 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 public interface ActionArgumentModel extends IModel<ObjectAdapter> {

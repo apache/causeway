@@ -18,9 +18,9 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 class VisitorForVariablesClause extends VisitorForClauseAbstract {

@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Plugin;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlTimestamp;
@@ -44,7 +44,7 @@ import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 public class IsisConverterLocator {
 
     /**
-     * Locates the best IConverter implementation for a given {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter}
+     * Locates the best IConverter implementation for a given {@link org.apache.isis.metamodel.adapter.ObjectAdapter}
      *
      * @param objectAdapter The object adapter to locate converter for
      * @param wicketViewerSettings The date related settings

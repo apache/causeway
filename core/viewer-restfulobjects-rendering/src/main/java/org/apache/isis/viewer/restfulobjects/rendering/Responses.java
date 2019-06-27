@@ -26,8 +26,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.util.JsonWriterUtil;

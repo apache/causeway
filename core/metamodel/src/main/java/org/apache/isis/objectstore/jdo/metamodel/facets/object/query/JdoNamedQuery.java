@@ -20,7 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 /**
  * Value object that represents the information of a

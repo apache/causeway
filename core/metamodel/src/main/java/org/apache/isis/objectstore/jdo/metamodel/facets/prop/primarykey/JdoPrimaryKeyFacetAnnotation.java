@@ -18,7 +18,7 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 
 public class JdoPrimaryKeyFacetAnnotation extends JdoPrimaryKeyFacetImpl {

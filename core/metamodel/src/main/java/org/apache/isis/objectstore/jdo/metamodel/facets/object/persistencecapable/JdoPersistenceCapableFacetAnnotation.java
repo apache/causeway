@@ -20,7 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapab
 
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 
 public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableFacetImpl {

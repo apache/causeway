@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.runtime.services.menubars.bootstrap3;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.metamodel.spec.ManagedObject;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 class ServiceAndAction {
     final String serviceName;

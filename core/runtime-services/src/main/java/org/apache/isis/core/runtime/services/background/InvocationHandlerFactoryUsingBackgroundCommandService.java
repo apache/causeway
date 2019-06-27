@@ -22,9 +22,9 @@ import java.lang.reflect.InvocationHandler;
 
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.Builder;
 

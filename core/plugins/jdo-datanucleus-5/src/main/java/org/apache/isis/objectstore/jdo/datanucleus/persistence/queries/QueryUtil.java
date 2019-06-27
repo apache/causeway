@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.extern.log4j.Log4j2;
 

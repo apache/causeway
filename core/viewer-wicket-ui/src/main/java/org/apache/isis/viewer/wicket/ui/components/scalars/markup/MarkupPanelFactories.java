@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;

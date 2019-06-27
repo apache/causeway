@@ -22,9 +22,9 @@ import java.util.Map;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 
 public abstract class JdoDatastoreIdentityFacetAbstract extends FacetAbstract implements

@@ -17,11 +17,11 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.consent.Consent;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -67,7 +67,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected ObjectAdapter objectAdapter;
     protected Mode mode = Mode.INLINE; // unless we determine otherwise
     /**
-     * Derived from {@link #objectMember} using {@link org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType#determineFrom(org.apache.isis.core.metamodel.spec.feature.ObjectFeature)}
+     * Derived from {@link #objectMember} using {@link org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType#determineFrom(org.apache.isis.metamodel.spec.feature.ObjectFeature)}
      */
     protected MemberType objectMemberType;
     protected T objectMember;

@@ -25,9 +25,9 @@ import java.io.Serializable;
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 public class Data implements Encodable, Serializable {
 

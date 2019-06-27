@@ -34,10 +34,10 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -303,7 +303,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     /**
-     * Applies the {@literal @}{@link org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet} and also CSS based on
+     * Applies the {@literal @}{@link org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet} and also CSS based on
      * whether any of the associated actions have {@literal @}{@link org.apache.isis.applib.annotation.ActionLayout layout} positioned to
      * the {@link org.apache.isis.applib.annotation.ActionLayout.Position#RIGHT right}.
      *

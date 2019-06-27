@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.Oid;
 
 /**
  * Indicates that the <tt>PojoRecreator</tt> was unable to instantiate a new pojo for the specified
- * {@link org.apache.isis.core.metamodel.adapter.oid.Oid}.
+ * {@link org.apache.isis.metamodel.adapter.oid.Oid}.
  */
 public class ObjectNotFoundException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;

@@ -25,8 +25,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.linking.DeepLinkService;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterService;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;

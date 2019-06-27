@@ -21,8 +21,8 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager.factories
 
 import java.util.function.Function;
 
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 /**
  * @since 2.0

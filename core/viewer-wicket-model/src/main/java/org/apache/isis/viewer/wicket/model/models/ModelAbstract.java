@@ -20,9 +20,9 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.wicket.model.LoadableDetachableModel;
 

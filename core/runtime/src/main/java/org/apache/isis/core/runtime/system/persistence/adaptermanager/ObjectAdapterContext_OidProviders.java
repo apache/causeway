@@ -20,16 +20,16 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.UUID;
 
-import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory.OidProvider;
+import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 class ObjectAdapterContext_OidProviders {
 

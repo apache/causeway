@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorToCheckModuleExtent;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorToCheckObjectSpecIdsUnique;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorToCheckModuleExtent;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorToCheckObjectSpecIdsUnique;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;

@@ -25,8 +25,8 @@ import java.util.function.Consumer;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
+import org.apache.isis.metamodel.exceptions.MetaModelException;
+import org.apache.isis.metamodel.specloader.ReflectiveActionException;
 
 public final class ThrowableExtensions {
 

@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.FacetUtil;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 
 public class AuthorizationFacetFactory extends FacetFactoryAbstract {
 

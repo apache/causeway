@@ -22,7 +22,7 @@ package org.apache.isis.core.wrapper.handlers;
 import java.util.Map;
 
 import org.apache.isis.core.commons.lang.ObjectExtensions;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {
 

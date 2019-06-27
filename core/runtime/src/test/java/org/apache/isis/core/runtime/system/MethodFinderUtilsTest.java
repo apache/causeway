@@ -36,7 +36,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.metamodel.methodutils.MethodScope;
 
 @RunWith(Parameterized.class)
 public class MethodFinderUtilsTest {

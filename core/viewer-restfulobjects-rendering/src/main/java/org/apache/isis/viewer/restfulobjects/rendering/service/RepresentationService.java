@@ -19,7 +19,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;

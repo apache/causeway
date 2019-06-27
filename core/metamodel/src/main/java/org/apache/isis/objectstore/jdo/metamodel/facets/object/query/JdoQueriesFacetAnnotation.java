@@ -20,7 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 
 public class JdoQueriesFacetAnnotation extends JdoQueryFacetAbstract

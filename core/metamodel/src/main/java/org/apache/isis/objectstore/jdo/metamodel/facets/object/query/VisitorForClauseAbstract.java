@@ -20,10 +20,10 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Visitor {
 

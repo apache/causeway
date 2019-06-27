@@ -20,12 +20,12 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
 import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.core.metamodel.JdoMetamodelUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.metamodel.facetapi.FacetUtil;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.Annotations;
+import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.metamodel.facets.FacetedMethod;
 
 
 public class JdoNotPersistentAnnotationFacetFactory extends FacetFactoryAbstract {

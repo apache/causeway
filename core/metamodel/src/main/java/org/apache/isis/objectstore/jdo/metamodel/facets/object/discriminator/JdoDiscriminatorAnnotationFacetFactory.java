@@ -22,16 +22,16 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
 import javax.jdo.annotations.Discriminator;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.JdoMetamodelUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.JdoMetamodelUtil;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facetapi.FacetUtil;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.Annotations;
+import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
+import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
 public class JdoDiscriminatorAnnotationFacetFactory
         extends FacetFactoryAbstract

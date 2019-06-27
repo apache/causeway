@@ -28,8 +28,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 
 
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {

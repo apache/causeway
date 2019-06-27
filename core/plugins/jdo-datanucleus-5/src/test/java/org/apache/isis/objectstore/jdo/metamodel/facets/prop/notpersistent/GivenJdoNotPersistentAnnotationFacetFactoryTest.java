@@ -23,11 +23,11 @@ import java.util.List;
 
 import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 
 public class GivenJdoNotPersistentAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

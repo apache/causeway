@@ -24,10 +24,10 @@ import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 
 public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

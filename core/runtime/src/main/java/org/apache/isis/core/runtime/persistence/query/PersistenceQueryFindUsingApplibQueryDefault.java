@@ -24,10 +24,10 @@ import java.util.Map;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.

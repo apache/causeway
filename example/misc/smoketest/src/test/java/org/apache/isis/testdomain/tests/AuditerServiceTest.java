@@ -60,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
 				"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
 				"logging.level.org.apache.isis.core.runtime.system.transaction.IsisTransaction=DEBUG",
 				// "isis.reflector.introspector.parallelize=false",
-				// "logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+				// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 	})
 //@Transactional //XXX this test is non transactional
 class AuditerServiceTest {

@@ -25,6 +25,16 @@ import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.metamodel.interactions.InteractionUtils;
+import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.metamodel.interactions.VisibilityContext;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.ObjectSpecificationException;
+import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+
 import com.google.common.collect.Ordering;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -33,15 +43,6 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 

@@ -30,8 +30,8 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
+import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 
 public class ProxyCreator {
 

@@ -28,9 +28,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 public class LinkAndLabel implements Serializable {
 

@@ -23,10 +23,10 @@ import java.util.List;
 import javax.jdo.JDOQLTypedQuery;
 
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.extern.log4j.Log4j2;
 

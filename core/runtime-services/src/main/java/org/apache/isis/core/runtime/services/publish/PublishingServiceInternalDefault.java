@@ -42,10 +42,10 @@ import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.runtime.system.transaction.ChangedObjectsServiceInternal;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
+import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.

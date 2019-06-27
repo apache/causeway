@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory.OidFactoryBuilder;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory.OidProvider;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 class OidFactory_Builder implements OidFactoryBuilder {
     

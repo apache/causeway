@@ -27,7 +27,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
 public class MarkupComponent extends WebComponent {
 

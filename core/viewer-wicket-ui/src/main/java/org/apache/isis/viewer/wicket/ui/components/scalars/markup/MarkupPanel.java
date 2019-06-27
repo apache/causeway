@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.core.metamodel.facets.objectvalue.observe.ObserveFacet;
+import org.apache.isis.metamodel.facets.objectvalue.observe.ObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;

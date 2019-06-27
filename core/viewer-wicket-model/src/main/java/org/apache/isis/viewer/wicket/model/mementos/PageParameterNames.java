@@ -26,7 +26,7 @@ import org.apache.wicket.util.string.StringValue;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.Oid;
 
 public enum PageParameterNames {
 

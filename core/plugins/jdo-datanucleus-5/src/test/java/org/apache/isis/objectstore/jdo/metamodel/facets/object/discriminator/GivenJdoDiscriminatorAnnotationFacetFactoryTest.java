@@ -24,14 +24,13 @@ import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.datanucleus.enhancement.Persistable;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

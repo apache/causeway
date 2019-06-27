@@ -27,10 +27,10 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
+import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

@@ -20,12 +20,12 @@ package org.apache.isis.objectstore.jdo.metamodel.specloader.validator;
 
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.facets.object.parented.ParentedCollectionFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public class JdoMetaModelValidator extends MetaModelValidatorComposite {
