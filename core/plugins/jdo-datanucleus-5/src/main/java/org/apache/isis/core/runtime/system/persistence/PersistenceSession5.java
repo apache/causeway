@@ -88,13 +88,13 @@ import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;

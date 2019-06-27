@@ -18,9 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
+import org.apache.isis.security.authentication.MessageBroker;
 import org.apache.wicket.util.string.Strings;
-
-import org.apache.isis.core.security.authentication.MessageBroker;
 
 public class JGrowlUtil {
 

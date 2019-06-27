@@ -40,8 +40,8 @@ import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidator
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
 import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;

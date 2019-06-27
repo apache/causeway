@@ -41,12 +41,12 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.standard.Authenticator;
+import org.apache.isis.security.authentication.standard.SimpleSession;
+import org.apache.isis.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.ShiroSecurityContext;
 
 import static org.apache.isis.config.internal._Config.getConfiguration;

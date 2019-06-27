@@ -38,7 +38,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.config.property.ConfigPropertyEnum;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;

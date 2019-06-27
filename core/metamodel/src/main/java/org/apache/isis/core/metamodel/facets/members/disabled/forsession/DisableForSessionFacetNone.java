@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.members.disabled.forsession;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 public class DisableForSessionFacetNone extends DisableForSessionFacetAbstract {
 

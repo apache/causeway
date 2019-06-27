@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.security.authorization.manager.AuthorizationManager;
 
 public abstract class AuthorizationFacetAbstract extends FacetAbstract implements AuthorizationFacet {
 

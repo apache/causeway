@@ -25,8 +25,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.security.IsisBootSecurityBypass;
 import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.IsisBootSecurityBypass;
 
 /**
  * @since 2.0

@@ -21,10 +21,10 @@ package org.apache.isis.security.shiro;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
-import org.apache.isis.core.security.authentication.manager.AuthorizationManagerStandard;
-import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.security.authentication.manager.AuthorizationManagerStandard;
+import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.security.authentication.standard.Authenticator;
+import org.apache.isis.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
 import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 import org.springframework.context.annotation.Bean;

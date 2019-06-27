@@ -90,8 +90,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

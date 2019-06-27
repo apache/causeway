@@ -24,8 +24,8 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.security.authentication.standard.Authenticator;
+import org.apache.isis.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.ShiroSecurityContext;
 
 /**

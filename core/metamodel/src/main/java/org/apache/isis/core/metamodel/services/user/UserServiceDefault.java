@@ -32,8 +32,8 @@ import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 @Singleton
 public class UserServiceDefault implements UserService {

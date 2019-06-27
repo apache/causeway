@@ -30,7 +30,7 @@
     <name>Apache Isis Security + Bypass</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.security</jar-plugin.automaticModuleName>
+        <jar-plugin.automaticModuleName>org.apache.isis.security</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core/security</git-plugin.propertiesDir>
     </properties>
 

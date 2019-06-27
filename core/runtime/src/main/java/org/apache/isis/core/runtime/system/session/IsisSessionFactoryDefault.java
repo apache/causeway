@@ -60,11 +60,11 @@ import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

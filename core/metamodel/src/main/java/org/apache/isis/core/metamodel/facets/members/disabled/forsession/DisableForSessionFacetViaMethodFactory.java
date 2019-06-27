@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 public class DisableForSessionFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 

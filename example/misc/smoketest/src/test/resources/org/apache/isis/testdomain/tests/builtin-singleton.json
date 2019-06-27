@@ -69,7 +69,7 @@
  "org.apache.isis.core.runtime.services.xmlsnapshot.XmlSnapshotServiceDefault",
  "org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory5",
  "org.apache.isis.core.runtime.system.session.IsisSessionFactory",
- "org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard",
+ "org.apache.isis.security.authentication.standard.AuthenticationManagerStandard",
  "org.apache.isis.core.wrapper.WrapperFactoryDefault",
  "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo"
 ]

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.hidden.forsession;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 /**
  * Hide a property, collection or action based on the current session.

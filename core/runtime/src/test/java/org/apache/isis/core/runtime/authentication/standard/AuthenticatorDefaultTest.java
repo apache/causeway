@@ -27,8 +27,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.authentication.standard.AuthenticatorAbstract;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

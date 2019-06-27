@@ -34,7 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 public abstract class EncodabilityContractTest {
 

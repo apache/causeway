@@ -53,11 +53,11 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.wrapper.proxy.ProxyCreator;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 /**
  * This service provides the ability to &quot;wrap&quot; of a domain object such that it can

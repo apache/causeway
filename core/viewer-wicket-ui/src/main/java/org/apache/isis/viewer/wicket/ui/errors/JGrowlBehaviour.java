@@ -31,7 +31,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.security.authentication.MessageBroker;
 
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls

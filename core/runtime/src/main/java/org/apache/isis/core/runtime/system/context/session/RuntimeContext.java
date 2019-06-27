@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Data;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 /**
  * TODO [2033] this was introduced for refactoring, use MetaModelContext instead if possible

@@ -30,7 +30,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.security.IsisBootSecurityBypass;
+import org.apache.isis.security.IsisBootSecurityBypass;
 
 @Configuration
 

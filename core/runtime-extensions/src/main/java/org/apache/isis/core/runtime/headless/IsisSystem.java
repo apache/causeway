@@ -29,9 +29,9 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;
 

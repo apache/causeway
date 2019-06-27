@@ -42,7 +42,7 @@ import org.apache.isis.core.runtime.memento.Data;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionAspectSupport;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;

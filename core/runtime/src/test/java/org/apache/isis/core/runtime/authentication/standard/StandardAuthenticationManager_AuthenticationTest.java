@@ -30,15 +30,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.security.authentication.standard.Authenticator;
+import org.apache.isis.security.authentication.standard.RandomCodeGenerator;
 
 @RunWith(JMock.class)
 public class StandardAuthenticationManager_AuthenticationTest {

@@ -37,9 +37,9 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 import junit.framework.TestCase;
 

@@ -40,7 +40,7 @@ import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.extern.log4j.Log4j2;
 

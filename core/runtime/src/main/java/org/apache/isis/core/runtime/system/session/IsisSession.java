@@ -29,8 +29,8 @@ import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.MessageBroker;
 
 import lombok.Getter;
 

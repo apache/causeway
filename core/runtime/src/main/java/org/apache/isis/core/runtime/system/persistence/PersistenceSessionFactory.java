@@ -18,7 +18,7 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import org.apache.isis.core.metamodel.IsisJdoRuntimePlugin;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 public interface PersistenceSessionFactory {
 

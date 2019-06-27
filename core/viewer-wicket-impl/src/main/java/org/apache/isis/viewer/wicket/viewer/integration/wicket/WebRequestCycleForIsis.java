@@ -65,8 +65,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisRequestCycle;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;

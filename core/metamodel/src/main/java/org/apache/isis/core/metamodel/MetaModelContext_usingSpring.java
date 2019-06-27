@@ -41,10 +41,10 @@ import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.authorization.manager.AuthorizationManager;
 
 import lombok.Getter;
 import lombok.val;

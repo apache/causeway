@@ -27,8 +27,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.manager.AuthenticationManager;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using

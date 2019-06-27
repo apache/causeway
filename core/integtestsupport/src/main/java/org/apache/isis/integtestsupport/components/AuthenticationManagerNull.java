@@ -20,10 +20,10 @@
 package org.apache.isis.integtestsupport.components;
 
 import org.apache.isis.commons.internal.components.Noop;
-import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.manager.RegistrationDetails;
+import org.apache.isis.security.authentication.AuthenticationRequest;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.authentication.manager.RegistrationDetails;
 
 public class AuthenticationManagerNull implements AuthenticationManager, Noop {
 

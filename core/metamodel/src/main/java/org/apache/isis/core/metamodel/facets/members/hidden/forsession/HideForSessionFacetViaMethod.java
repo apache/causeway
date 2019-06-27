@@ -27,7 +27,7 @@ import java.util.Map;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract implements ImperativeFacet {
 

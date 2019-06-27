@@ -26,12 +26,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.security.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.core.security.authentication.fixtures.AuthenticationRequestLogonFixture;
-import org.apache.isis.core.security.authentication.fixtures.LogonFixtureAuthenticator;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.security.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.security.authentication.fixtures.AuthenticationRequestLogonFixture;
+import org.apache.isis.security.authentication.fixtures.LogonFixtureAuthenticator;
 
 @RunWith(JMock.class)
 public class LogonFixtureAuthenticatorTest {

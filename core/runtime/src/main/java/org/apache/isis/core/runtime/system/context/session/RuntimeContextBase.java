@@ -36,7 +36,7 @@ import org.apache.isis.core.runtime.memento.Data;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

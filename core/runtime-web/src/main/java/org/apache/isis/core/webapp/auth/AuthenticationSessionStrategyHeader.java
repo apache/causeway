@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.standard.SimpleSession;
 
 /**
  * Implements a home-grown protocol, whereby the user id and roles are passed

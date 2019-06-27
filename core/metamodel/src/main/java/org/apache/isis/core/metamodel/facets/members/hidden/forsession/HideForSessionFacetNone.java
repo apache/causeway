@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.members.hidden.forsession;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 public class HideForSessionFacetNone extends HideForSessionFacetAbstract {
 

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtime.headless.auth;
 
-import org.apache.isis.core.security.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.security.authentication.AuthenticationRequestAbstract;
 
 public class AuthenticationRequestNameOnly extends AuthenticationRequestAbstract {
 

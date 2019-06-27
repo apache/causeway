@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.security.authentication.MessageBroker;
 
 @Singleton @Primary
 public class MessageServiceDefault implements MessageService {

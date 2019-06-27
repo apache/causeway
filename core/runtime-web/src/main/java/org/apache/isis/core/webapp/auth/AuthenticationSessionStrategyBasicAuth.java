@@ -29,8 +29,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 /**
  * Implements the HTTP Basic Auth protocol; does not bind the

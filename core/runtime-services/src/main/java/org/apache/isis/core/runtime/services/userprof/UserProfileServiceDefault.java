@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userprof.UserProfileService;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class UserProfileServiceDefault implements UserProfileService {

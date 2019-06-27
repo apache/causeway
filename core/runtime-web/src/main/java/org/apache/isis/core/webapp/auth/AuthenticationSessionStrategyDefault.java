@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.config.WebAppConstants;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.manager.AuthenticationManager;
 
 /**
  * Returns a valid {@link AuthenticationSession} through a number of mechanisms;

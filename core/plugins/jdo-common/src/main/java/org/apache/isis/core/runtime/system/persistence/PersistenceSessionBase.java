@@ -39,8 +39,8 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerJdoInternal;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;

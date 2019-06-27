@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.security.authentication.standard.SimpleSession;
 
 public abstract class SimpleSessionEncodabilityTestAbstract extends EncodabilityContractTest {
 
