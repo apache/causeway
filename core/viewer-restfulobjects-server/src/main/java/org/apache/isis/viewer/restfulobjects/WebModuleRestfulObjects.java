@@ -95,7 +95,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
             
             filter.setInitParameter(
                     "authenticationSessionStrategy", 
-                    "org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyBasicAuth");
+                    "org.apache.isis.webapp.auth.AuthenticationSessionStrategyBasicAuth");
             filter.setInitParameter(
                     "whenNoSession", // what to do if no session was found ...
                     "auto"); // ... 401 and a basic authentication challenge if request originates from web browser

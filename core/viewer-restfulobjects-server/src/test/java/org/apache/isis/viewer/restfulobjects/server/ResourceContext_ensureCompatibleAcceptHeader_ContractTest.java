@@ -87,7 +87,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 //[ISIS-1976] IsisSessionFactory does no longer live on the ServletContext
 //              allowing(mockHttpServletRequest).getServletContext();
 //              will(returnValue(mockServletContext));
-//              allowing(mockServletContext).getAttribute("org.apache.isis.core.webapp.isisSessionFactory");
+//              allowing(mockServletContext).getAttribute("org.apache.isis.webapp.isisSessionFactory");
 //              will(returnValue(mockIsisSessionFactory));
 //                allowing(mockIsisSessionFactory).getServiceInjector();
 //                will(returnValue(mockServicesInjector));

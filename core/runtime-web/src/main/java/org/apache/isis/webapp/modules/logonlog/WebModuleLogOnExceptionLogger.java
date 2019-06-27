@@ -44,7 +44,7 @@ import org.springframework.core.annotation.Order;
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
     private final static String LOGONLOGGER_FILTER_CLASS_NAME = 
-            "org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter";
+            "org.apache.isis.webapp.diagnostics.IsisLogOnExceptionFilter";
     private final static String LOGONLOGGER_FILTER_NAME = 
             "IsisLogOnExceptionFilter";
     private WebModuleContext webModuleContext;
