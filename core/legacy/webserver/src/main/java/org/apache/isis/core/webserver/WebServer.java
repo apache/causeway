@@ -22,12 +22,11 @@ package org.apache.isis.core.webserver;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -54,9 +53,10 @@ public class WebServer {
                             @Override public Class convert(final String className) {
                                 try {
                                     final Class<?> aClass = _Context.getDefaultClassLoader().loadClass(className);
-                                    if(!AppManifest.class.isAssignableFrom(aClass)) {
-                                        throw new ValueConversionException("not a subclass of " + AppManifest.class.getName() );
-                                    }
+                                    _Exceptions.throwNotImplemented();
+//                                    if(!AppManifest.class.isAssignableFrom(aClass)) {
+//                                        throw new ValueConversionException("not a subclass of " + AppManifest.class.getName() );
+//                                    }
                                     return aClass;
                                 } catch (ClassNotFoundException e) {
                                     throw new ValueConversionException("not recognised as a class");

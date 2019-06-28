@@ -113,6 +113,7 @@ public class MetaModelServicesMenu {
 
 
     public static class DownloadMetaModelXmlEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;
     }
 
     @Action(

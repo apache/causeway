@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.AppManifest;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.support.EncodedResource;
@@ -33,24 +32,74 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Introduced to support Spring's {@code @PrepertySource} annotation.
+ * Introduced to support Spring's {@code @PropertySource} annotation.
  * 
  * @since 2.0
  *
  */
 public final class Presets  {
 
+	public static final String ISIS_PERSISTOR                   = "isis.persistor.";
+    public static final String ISIS_PERSISTOR_DATANUCLEUS       = ISIS_PERSISTOR + "datanucleus.";
+    public static final String ISIS_PERSISTOR_DATANUCLEUS_IMPL  = ISIS_PERSISTOR_DATANUCLEUS + "impl.";
+	
     @RequiredArgsConstructor
     private static enum Providers {
     
-        H2InMemory(AppManifest.Presets::withH2InMemoryProperties),
-        HsqlDbInMemory(AppManifest.Presets::withHsqlDbInMemoryProperties),
-        DataNucleus(AppManifest.Presets::withDataNucleusProperties),
-        IsisIntegTest(AppManifest.Presets::withIsisIntegTestProperties),
+        H2InMemory(Providers::withH2InMemoryProperties),
+        HsqlDbInMemory(Providers::withHsqlDbInMemoryProperties),
+        DataNucleus(Providers::withDataNucleusProperties),
+        IsisIntegTest(Providers::withIsisIntegTestProperties),
 		NoTranslations(map->map.put("isis.services.translation.po.mode", "disable")),
         ;
         
         private final Consumer<Map<String, String>> populator;
+        
+        private static Map<String,String> withH2InMemoryProperties(final Map<String, String> map) {
+            //map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:h2:mem:test-" + UUID.randomUUID().toString());
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:h2:mem:test");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.h2.Driver");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
+            
+            return map;
+        }
+        
+        private static Map<String,String> withHsqlDbInMemoryProperties(final Map<String, String> map) {
+            //map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test-" + UUID.randomUUID().toString());
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
+            
+            return map;
+        }
+
+        private static Map<String,String> withDataNucleusProperties(final Map<String, String> map) {
+
+            // Don't do validations that consume setup time.
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.schema.autoCreateAll", "true");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.schema.validateAll", "false");
+
+            // other properties as per WEB-INF/persistor_datanucleus.properties
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.persistenceByReachabilityAtCommit", "false");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.identifier.case", "MixedCase");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.cache.level2.type"  ,"none");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.cache.level2.mode", "ENABLE_SELECTIVE");
+
+            return map;
+        }
+
+        private static Map<String,String> withIsisIntegTestProperties(final Map<String, String> map) {
+
+            // automatically install any fixtures that might have been registered
+            map.put(ISIS_PERSISTOR_DATANUCLEUS + "install-fixtures", "true");
+            map.put(ISIS_PERSISTOR + "enforceSafeSemantics", "false");
+            map.put("isis.services.eventbus.allowLateRegistration", "true");
+
+            return map;
+        }
+
     }
     
     public static final String H2InMemory = "H2InMemory";
