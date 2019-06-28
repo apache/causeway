@@ -23,7 +23,7 @@ public interface IsisJdoRuntimePlugin {
 
     // -- INTERFACE
 
-    public PersistenceSessionFactory getPersistenceSessionFactory(/*ConfigurationServiceInternal configuration*/);
+    public PersistenceSessionFactory getPersistenceSessionFactory();
 
     // -- LOOKUP
 

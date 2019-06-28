@@ -32,26 +32,20 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+@RequiredArgsConstructor(staticName = "of") @Log4j2
 public class PersistenceQueryFactory {
 
-    private final SpecificationLoader specificationLoader;
-    private final Function<Object, ObjectAdapter> adapterProvider;
-
-    PersistenceQueryFactory(
-            final Function<Object, ObjectAdapter> adapterProvider,
-            final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
-        this.adapterProvider = adapterProvider;
-    }
-
+	private final Function<Object, ObjectAdapter> adapterProvider;
+	private final SpecificationLoader specificationLoader;
+    
     /**
      * Converts the {@link org.apache.isis.applib.query.Query applib representation of a query} into the
      * {@link PersistenceQuery NOF-internal representation}.
      */
-    final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
+    public final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
         if (log.isDebugEnabled()) {
             log.debug("createPersistenceQueryFor: {}", query.getDescription());
         }
