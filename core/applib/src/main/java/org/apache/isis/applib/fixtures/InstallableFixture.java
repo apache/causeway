@@ -19,6 +19,14 @@
 
 package org.apache.isis.applib.fixtures;
 
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
+
+/**
+ * 
+ * @deprecated replace with {@link FixtureScripts}
+ * <a href="https://issues.apache.org/jira/browse/ISIS-1684">ISIS-1684</a>
+ *
+ */
 public interface InstallableFixture {
 
     /**

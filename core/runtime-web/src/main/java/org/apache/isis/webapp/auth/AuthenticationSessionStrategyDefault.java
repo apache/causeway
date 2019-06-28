@@ -37,13 +37,14 @@ import org.apache.isis.security.authentication.manager.AuthenticationManager;
  * <ul>
  * <li>it looks up from the {@link HttpSession} using the value
  * {@link WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
- * <li>failing that, if a {@link LogonFixture} has been provided and not already
- * used, will provide an session for that fixture. The {@link HttpSession} also
+ * </ul>
+ * 
+ * @implNote prior to version 2.0 ... failing that, if a {@link LogonFixture} has been provided and not already
+ * used, will provide a session for that fixture. The {@link HttpSession} also
  * stores the value
  * {@link WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY}
  * in the session to track whether this has been done</li>
- * </ul>
- * <p>
+ * 
  */
 public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
 

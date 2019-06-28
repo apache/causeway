@@ -41,9 +41,5 @@
  * <li><p>specifying the {@link org.apache.isis.applib.fixtures.LogonFixture currently logged on} user once the fixtures have been installed</p></li>
  * </ul>
  *
- * <p>
- * Fixtures are typically combined into a {@link org.apache.isis.applib.fixtures.CompositeFixture composite}
- * pattern; the {@link org.apache.isis.applib.fixtures.AbstractFixture} adapter
- * class provides built-in support for this if required.
  */
 package org.apache.isis.applib.fixtures;
