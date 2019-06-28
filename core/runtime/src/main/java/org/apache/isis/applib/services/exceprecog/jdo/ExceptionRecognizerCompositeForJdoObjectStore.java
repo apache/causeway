@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.exceprecog.jdo;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -27,7 +25,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.internal._Config;
 
 /**

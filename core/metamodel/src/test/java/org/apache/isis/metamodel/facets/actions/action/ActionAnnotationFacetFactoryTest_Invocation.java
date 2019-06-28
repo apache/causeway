@@ -1,6 +1,6 @@
 package org.apache.isis.metamodel.facets.actions.action;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
+import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.annotation.Action;

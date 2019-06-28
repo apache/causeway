@@ -76,7 +76,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
+import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
