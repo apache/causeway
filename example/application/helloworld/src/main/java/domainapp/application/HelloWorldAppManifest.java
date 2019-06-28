@@ -24,7 +24,6 @@ import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
@@ -48,7 +47,7 @@ import domainapp.dom.HelloWorldModule;
     @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
-    @PropertySource(name=Presets.DataNucleus, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(name=Presets.DataNucleusAutoCreate, factory = Presets.Factory.class, value = { "" }),
 })
 @Import({
 	IsisBootWebRestfulObjects.class,

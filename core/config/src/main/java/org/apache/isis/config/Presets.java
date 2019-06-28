@@ -48,7 +48,7 @@ public final class Presets  {
     
         H2InMemory(Providers::withH2InMemoryProperties),
         HsqlDbInMemory(Providers::withHsqlDbInMemoryProperties),
-        DataNucleus(Providers::withDataNucleusProperties),
+        DataNucleusAutoCreate(Providers::withDataNucleusProperties),
         IsisIntegTest(Providers::withIsisIntegTestProperties),
 		NoTranslations(map->map.put("isis.services.translation.po.mode", "disable")),
         ;
@@ -104,7 +104,7 @@ public final class Presets  {
     
     public static final String H2InMemory = "H2InMemory";
     public static final String HsqlDbInMemory = "HsqlDbInMemory";
-    public static final String DataNucleus = "DataNucleus";
+    public static final String DataNucleusAutoCreate = "DataNucleusAutoCreate";
     public static final String IsisIntegTest = "IsisIntegTest";
     public static final String NoTranslations = "NoTranslations";
     
