@@ -22,7 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.apache.isis.runtime.spring.IsisBoot;
 
-@SpringBootApplication(scanBasePackageClasses= {JdoTestDomainModule.class, IsisBoot.class})
+@SpringBootApplication(scanBasePackageClasses= {JdoTestDomainModule.class})
 public class JdoTestApplication {
     
 

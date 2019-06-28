@@ -26,7 +26,7 @@ import org.datanucleus.enhancement.Persistable;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
-public class Utils {
+final class Utils {
 
     @SuppressWarnings("unused")
     private static Object jdoObjectIdFor(InstanceLifecycleEvent event) {

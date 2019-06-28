@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.tests;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -30,8 +29,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
-import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -50,7 +47,6 @@ import lombok.val;
 
 @SpringBootTest(
 	classes = { 
-		IsisBoot.class, 
 		JdoTestDomainModule.class,
 		IsisPlatformTransactionManagerForJdo.class,
 	}, 

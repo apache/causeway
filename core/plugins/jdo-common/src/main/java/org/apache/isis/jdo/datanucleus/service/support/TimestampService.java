@@ -19,6 +19,7 @@ package org.apache.isis.jdo.datanucleus.service.support;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Vetoed;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -36,6 +37,7 @@ import org.apache.isis.metamodel.JdoMetamodelUtil;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
         )
+@Vetoed @Deprecated //FIXME is this still required? does initialize too early 
 public class TimestampService implements
 javax.jdo.listener.StoreLifecycleListener {
 

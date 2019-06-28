@@ -19,6 +19,12 @@ package org.apache.isis.testdomain.jdo;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
+import org.apache.isis.config.Presets;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.jdo.IsisBootDataNucleus;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.IsisBootSecurityBypass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -27,17 +33,16 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.apache.isis.config.Presets;
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.security.IsisBootSecurityBypass;
 
 @Configuration
-
-@Import({IsisBootSecurityBypass.class})
+@Import({
+	IsisBoot.class,
+	IsisBootSecurityBypass.class,
+	IsisBootDataNucleus.class,
+})
 @ComponentScan(
-        basePackageClasses= {
-                JdoTestDomainModule.class
+        basePackageClasses= {        		
+        		JdoTestDomainModule.class
         },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})

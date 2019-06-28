@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
@@ -53,7 +54,7 @@ import domainapp.dom.HelloWorldModule;
 	IsisBootWebRestfulObjects.class,
     IsisBootWebWicket.class,
     IsisBootSecurityShiro.class,
-    IsisPlatformTransactionManagerForJdo.class
+    IsisBootDataNucleus.class,
 })
 @ComponentScan(
         basePackageClasses= {
