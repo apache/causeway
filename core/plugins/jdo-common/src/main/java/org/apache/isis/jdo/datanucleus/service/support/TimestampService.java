@@ -37,7 +37,7 @@ import org.apache.isis.metamodel.JdoMetamodelUtil;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
         )
-@Vetoed @Deprecated //FIXME is this still required? does initialize too early 
+@Vetoed @Deprecated //FIXME[2128] does initialize too early 
 public class TimestampService implements
 javax.jdo.listener.StoreLifecycleListener {
 
