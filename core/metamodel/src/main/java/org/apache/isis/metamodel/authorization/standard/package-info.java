@@ -17,18 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence;
-
-import org.apache.isis.metamodel.adapter.oid.Oid;
-
-public class PojoRefreshException extends ObjectNotFoundException {
-    private static final long serialVersionUID = 1L;
-
-    public PojoRefreshException(Oid oid) {
-        super(oid);
-    }
-
-    public PojoRefreshException(Oid oid, Throwable cause) {
-        super(oid, cause);
-    }
-}
+/**
+ * Authorization API..
+ *
+ * <p>
+ * Used in two different ways:
+ * <ul>
+ * <li>in prototyping or single user, used by the {@link org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizationFacetFactoryImpl facet factory}
+ *     implementations, that is, enforcing authorization on the "client-side".
+ *     </li>
+ * <li>In client/server mode, used by a {@link org.apache.isis.metamodel.facetdecorator.FacetDecorator} for proxy authorization,
+ *     that is, enforcing authorization by delegating to the "server-side".</li>
+ * </ul>
+ */
+package org.apache.isis.metamodel.authorization.standard;

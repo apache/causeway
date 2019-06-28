@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.isis.core.runtime.snapshot.XmlSchema.ExtensionData;
+import org.apache.isis.metamodel.util.snapshot.XmlSchema.ExtensionData;
 
 
 public final class FacetUtil {

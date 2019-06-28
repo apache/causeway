@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.threadpool;
+package org.apache.isis.commons.internal.threadpool;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -31,6 +31,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.threadpool.ThreadPoolExecutionMode;
+import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 
 class ThreadPoolSupportTest {
 

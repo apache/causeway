@@ -17,26 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence;
+package org.apache.isis.metamodel.adapter.oid;
 
-import org.apache.isis.commons.exceptions.IsisException;
-
-public class ObjectPersistenceException extends IsisException {
+public class PojoRefreshException extends ObjectNotFoundException {
     private static final long serialVersionUID = 1L;
 
-    public ObjectPersistenceException() {
-        super();
+    public PojoRefreshException(Oid oid) {
+        super(oid);
     }
 
-    public ObjectPersistenceException(final String message) {
-        super(message);
-    }
-
-    public ObjectPersistenceException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public ObjectPersistenceException(final Throwable cause) {
-        super(cause);
+    public PojoRefreshException(Oid oid, Throwable cause) {
+        super(oid, cause);
     }
 }

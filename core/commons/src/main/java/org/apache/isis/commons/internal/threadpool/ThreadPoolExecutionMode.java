@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.threadpool;
+package org.apache.isis.commons.internal.threadpool;
 
 /**
  *  ThreadPollSupport's executions mode where the enum's ordinal corresponds to the level of concurrency.

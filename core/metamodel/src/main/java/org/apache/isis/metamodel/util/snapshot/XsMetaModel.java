@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.snapshot;
+package org.apache.isis.metamodel.util.snapshot;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
  * Stateless utility methods relating to the w3.org schema and schema-instance
  * meta models.
  */
-public final class XsMetaModel {
+final class XsMetaModel {
 
     private final Helper helper;
     /**

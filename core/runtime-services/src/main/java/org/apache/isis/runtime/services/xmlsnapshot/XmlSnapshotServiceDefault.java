@@ -21,8 +21,8 @@ import javax.inject.Singleton;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
-import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 /**

@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence;
-
-import org.apache.isis.metamodel.adapter.oid.Oid;
+package org.apache.isis.metamodel.adapter.oid;
 
 /**
  * Indicates that the <tt>PojoRecreator</tt> was unable to instantiate a new pojo for the specified

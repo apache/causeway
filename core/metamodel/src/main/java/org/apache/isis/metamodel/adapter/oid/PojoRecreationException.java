@@ -17,17 +17,13 @@
  *  under the License.
  */
 
-/**
- * Authorization API..
- *
- * <p>
- * Used in two different ways:
- * <ul>
- * <li>in prototyping or single user, used by the {@link org.apache.isis.runtimes.dflt.runtime.authorization.standard.AuthorizationFacetFactoryImpl facet factory}
- *     implementations, that is, enforcing authorization on the "client-side".
- *     </li>
- * <li>In client/server mode, used by a {@link org.apache.isis.metamodel.facetdecorator.FacetDecorator} for proxy authorization,
- *     that is, enforcing authorization by delegating to the "server-side".</li>
- * </ul>
- */
-package org.apache.isis.core.runtime.authorization;
+package org.apache.isis.metamodel.adapter.oid;
+
+public class PojoRecreationException extends ObjectPersistenceException {
+    private static final long serialVersionUID = 1L;
+
+    public PojoRecreationException(Oid oid, Throwable cause) {
+        super("Could not recreate pojo for oid oid " + oid, cause);
+
+    }
+}

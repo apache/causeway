@@ -40,7 +40,7 @@ import org.apache.isis.applib.events.sse.EventStreamSource;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
+import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.Getter;

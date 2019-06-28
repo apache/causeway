@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.snapshot;
+package org.apache.isis.metamodel.util.snapshot;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.w3c.dom.Element;

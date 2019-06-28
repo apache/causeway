@@ -17,31 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authorization.standard;
+package org.apache.isis.metamodel.authorization.standard;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetUtil;
-import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 
-public class AuthorizationFacetFactory extends FacetFactoryAbstract {
+public class AuthorizationFacetImpl extends AuthorizationFacetAbstract {
 
-    public AuthorizationFacetFactory() {
-        super(FeatureType.EVERYTHING_BUT_PARAMETERS);
-    }
-
-    @Override
-    public void process(final ProcessClassContext processClassContext) {
-        FacetUtil.addFacet(createFacet(processClassContext.getFacetHolder()));
-    }
-
-    @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-        FacetUtil.addFacet(createFacet(processMethodContext.getFacetHolder()));
-    }
-
-    private AuthorizationFacetImpl createFacet(final FacetHolder holder) {
-        return new AuthorizationFacetImpl(holder);
+    public AuthorizationFacetImpl(final FacetHolder holder) {
+        super(holder);
     }
 
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.snapshot;
+package org.apache.isis.metamodel.util.snapshot;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -25,7 +25,7 @@ import org.w3c.dom.Element;
 /**
  * Stateless utility methods for manipulating XML documents.
  */
-public final class Helper {
+final class Helper {
 
     /**
      * Helper method

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.snapshot;
+package org.apache.isis.metamodel.util.snapshot;
 
 import java.util.function.BiConsumer;
 

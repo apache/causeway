@@ -21,9 +21,9 @@ package org.apache.isis.runtime.services.xmlsnapshot;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.snapshot.XmlSchema;
-import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.util.snapshot.XmlSchema;
+import org.apache.isis.metamodel.util.snapshot.XmlSnapshot;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 /**

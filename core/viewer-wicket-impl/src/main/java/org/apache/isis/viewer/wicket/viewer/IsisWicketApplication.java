@@ -67,9 +67,9 @@ import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;

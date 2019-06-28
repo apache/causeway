@@ -25,12 +25,12 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.PojoRecreationException;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.adapter.version.Version;
@@ -100,7 +100,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
      * will be {@link RootOid#setVersion(Version) set} to the current
      * value.  This allows the client to retry if they wish.
      *
-     * @throws {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} if the object does not exist.
+     * @throws {@link org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException} if the object does not exist.
      */
     @Override
     public ObjectAdapter adapterFor(

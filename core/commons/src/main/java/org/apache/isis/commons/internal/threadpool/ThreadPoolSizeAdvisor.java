@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.threadpool;
+package org.apache.isis.commons.internal.threadpool;
 
 final class ThreadPoolSizeAdvisor {
 
