@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.context._Context;
 public class ScenarioExecutionScope {
 
     public final static ScenarioExecutionScope UNIT = new ScenarioExecutionScope(ScenarioExecutionForUnit.class);
-    public final static ScenarioExecutionScope INTEGRATION = new ScenarioExecutionScope("org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration");
+    public final static ScenarioExecutionScope INTEGRATION = new ScenarioExecutionScope("org.apache.isis.integtestsupport.scenarios.ScenarioExecutionForIntegration");
 
     private final Class<? extends ScenarioExecution> scenarioExecutionClass;
 

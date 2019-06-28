@@ -18,11 +18,6 @@
  */
 
 /**
- * Defines a {@link org.apache.isis.commons.internal.components.Component}
- * architecture, along with factories (called {@link org.apache.isis.core.commons.components.Installer}s)
- * to install (or create) those components.
- *
- * <p>
  * There are three subinterfaces of
  * {@link org.apache.isis.commons.internal.components.Component}, for three different
  * scopes:
@@ -31,12 +26,5 @@
  * <li><p> {@link org.apache.isis.commons.internal.components.SessionScopedComponent session-scoped} </p></li>
  * <li><p> {@link org.apache.isis.commons.internal.components.TransactionScopedComponent transaction-scoped} </p></li>
  * </ul>
- *
- * <p>
- * Many {@link org.apache.isis.commons.internal.components.Component}s may also be injectable,
- * meaning that they know hot to inject themselves to a candidate object &quot;if appropriate&quot;.
- * The convention adopted in most cases is for an object requiring injection of
- * component <tt>Xxx</tt> to implement an <tt>XxxAware</tt> interface that
- * defines a <tt>setXxx(Xxx)</tt> method.
  */
 package org.apache.isis.commons.internal.components;

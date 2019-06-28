@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -90,10 +92,7 @@ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.security.authentication.AuthenticationSession;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -1228,7 +1227,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected BeanSort sortOf(ObjectSpecification spec) {
-//TODO [2033] this is the way we want it to work in the future; by now we do prime the #managedObjectSort in case its a service in the default service implementataion        
+//TODO [2033] this is the way we want it to work in the future; 
+//	by now we do prime the #managedObjectSort in case its a service in the default service implementation        
 //        if(containsFacet(BeanFacet.class)) {
 //            return ManagedObjectSort.DOMAIN_SERVICE;
 //        }
@@ -1249,10 +1249,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(containsFacet(CollectionFacet.class)) {
             return BeanSort.COLLECTION;
         }
-        if(containsFacet(EntityFacet.class)) { // not yet used
-            return BeanSort.ENTITY;
-        }
-        if(containsFacet(JdoPersistenceCapableFacet.class)) {
+        if(containsFacetWithInterface(EntityFacet.class)) {
             return BeanSort.ENTITY;
         }
         val correspondingClass = getCorrespondingClass();

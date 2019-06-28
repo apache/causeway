@@ -62,7 +62,9 @@ class SpringServiceProvisioningTest {
 	void builtInServicesShouldBeSetUp() throws IOException {
 
 		val serviceRegistry = IsisContext.getServiceRegistry();
-		val managedServices = serviceRegistry.streamRegisteredBeans().map(BeanAdapter::getBeanClass).map(Class::getName)
+		val managedServices = serviceRegistry.streamRegisteredBeans()
+				.map(BeanAdapter::getBeanClass)
+				.map(Class::getName)
 				.collect(Collectors.toCollection(TreeSet::new));
 
 		val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-IsisBoot.json", StandardCharsets.UTF_8);

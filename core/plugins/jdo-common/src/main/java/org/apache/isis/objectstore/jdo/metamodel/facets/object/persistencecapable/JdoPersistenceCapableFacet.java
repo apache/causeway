@@ -21,13 +21,13 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapab
 
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facets.object.entity.EntityFacet;
 
 
 /**
  * Corresponds to annotating the class with the {@link javax.jdo.annotations.PersistenceCapable} annotation.
  */
-public interface JdoPersistenceCapableFacet extends Facet {
+public interface JdoPersistenceCapableFacet extends EntityFacet {
 
     IdentityType getIdentityType();
 

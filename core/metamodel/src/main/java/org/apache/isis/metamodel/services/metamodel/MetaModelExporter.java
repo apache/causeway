@@ -45,7 +45,6 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.schema.metamodel.v1.Action;
 import org.apache.isis.schema.metamodel.v1.Collection;
 import org.apache.isis.schema.metamodel.v1.DomainClassDto;
@@ -460,15 +459,15 @@ class MetaModelExporter {
         } else if(attributeObj instanceof String) {
             str = asStr((String) attributeObj);
         } else if(attributeObj instanceof Enum) {
-            str = asStr((Enum) attributeObj);
+            str = asStr((Enum<?>) attributeObj);
         } else if(attributeObj instanceof Class) {
-            str = asStr((Class) attributeObj);
+            str = asStr((Class<?>) attributeObj);
         } else if(attributeObj instanceof Specification) {
             str = asStr((Specification) attributeObj);
         } else if(attributeObj instanceof Facet) {
             str = asStr((Facet) attributeObj);
-        } else if(attributeObj instanceof JdoNamedQuery) {
-            str = asStr((JdoNamedQuery) attributeObj);
+        } else if(attributeObj instanceof MetaModelExportSupport) {
+            str = asStr((MetaModelExportSupport) attributeObj);
         } else if(attributeObj instanceof Pattern) {
             str = asStr((Pattern) attributeObj);
         } else if(attributeObj instanceof CommandDtoProcessor) {
@@ -499,8 +498,8 @@ class MetaModelExporter {
         return attributeObj.getFullIdentifier();
     }
 
-    private String asStr(final JdoNamedQuery attributeObj) {
-        return attributeObj.getName();
+    private String asStr(final MetaModelExportSupport attributeObj) {
+        return attributeObj.toMetamodelString();
     }
 
     private String asStr(final CommandDtoProcessor attributeObj) {
@@ -519,11 +518,11 @@ class MetaModelExporter {
         return attributeObj.getId();
     }
 
-    private String asStr(final Class attributeObj) {
+    private String asStr(final Class<?> attributeObj) {
         return attributeObj.getCanonicalName();
     }
 
-    private String asStr(final Enum attributeObj) {
+    private String asStr(final Enum<?> attributeObj) {
         return attributeObj.name();
     }
 

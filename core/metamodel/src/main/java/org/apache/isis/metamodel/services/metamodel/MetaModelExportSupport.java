@@ -8,6 +8,6 @@ package org.apache.isis.metamodel.services.metamodel;
  */
 public interface MetaModelExportSupport {
 
-	public String asString();
+	public String toMetamodelString();
 	
 }

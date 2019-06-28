@@ -22,8 +22,13 @@ package org.apache.isis.metamodel.facetapi;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 /**
  * For base subclasses or, more likely, to help write tests.
@@ -31,10 +36,16 @@ import java.util.stream.Stream;
 public class FacetHolderImpl implements FacetHolder {
 
     private final Map<Class<? extends Facet>, Facet> facetsByClass = new HashMap<>();
+    private final Set<Class<? extends Facet>> implementedFacetInterfaces = new HashSet<>();
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return facetsByClass.containsKey(facetType);
+    }
+    
+    @Override
+    public boolean containsFacetWithInterface(final Class<? extends Facet> facetType) {
+        return implementedFacetInterfaces.contains(facetType);
     }
 
     @Override
@@ -60,22 +71,6 @@ public class FacetHolderImpl implements FacetHolder {
         .forEach(facetType->addFacet(facetType, mtFacet.getFacet(facetType)));
     }
 
-    private void addFacet(final Class<? extends Facet> facetType, final Facet facet) {
-        final Facet existingFacet = getFacet(facetType);
-        if (existingFacet == null || existingFacet.isNoop()) {
-            facetsByClass.put(facetType, facet);
-            return;
-        }
-        if (!facet.alwaysReplace()) {
-            return;
-        }
-        if (facet.isDerived() && !existingFacet.isDerived()) {
-            return;
-        }
-        facet.setUnderlyingFacet(existingFacet);
-        facetsByClass.put(facetType, facet);
-    }
-
     @Override
     public void removeFacet(final Facet facet) {
         FacetUtil.removeFacet(facetsByClass, facet);
@@ -95,12 +90,40 @@ public class FacetHolderImpl implements FacetHolder {
     public Stream<Facet> streamFacets() {
         return facetsByClass.values()
                 .stream()
-                .distinct(); //FIXME[ISIS-1976] not sure why this is required for MultiTypedFacet support as was in legacy code
+                .distinct();
     }
 
     @Override
     public int getFacetCount() {
         return facetsByClass.size();
+    }
+    
+    // -- HELPER
+    
+    private void addFacet(final Class<? extends Facet> facetType, final Facet facet) {
+        final Facet existingFacet = getFacet(facetType);
+        if (existingFacet == null || existingFacet.isNoop()) {
+            put(facetType, facet);
+            return;
+        }
+        if (!facet.alwaysReplace()) {
+            return;
+        }
+        if (facet.isDerived() && !existingFacet.isDerived()) {
+            return;
+        }
+        facet.setUnderlyingFacet(existingFacet);
+        put(facetType, facet);
+    }
+    
+    private void put(final Class<? extends Facet> facetType, final Facet facet) {
+    	facetsByClass.put(facetType, facet);
+    	
+    	_NullSafe.stream(facetType.getInterfaces())
+    	.filter(intfc->Facet.class.isAssignableFrom(intfc))
+    	.map(intfc-> _Casts.<Class<? extends Facet>>uncheckedCast(intfc))
+    	.forEach(implementedFacetInterfaces::add);
+    	
     }
     
 }

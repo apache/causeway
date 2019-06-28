@@ -58,7 +58,7 @@ import lombok.extern.log4j.Log4j2;
 		properties = {
 				"logging.config=log4j2-test.xml",
 				"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
-				"logging.level.org.apache.isis.core.runtime.system.transaction.IsisTransaction=DEBUG",
+				"logging.level.org.apache.isis.runtime.system.transaction.IsisTransaction=DEBUG",
 				// "isis.reflector.introspector.parallelize=false",
 				// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 	})
