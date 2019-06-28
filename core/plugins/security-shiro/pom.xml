@@ -72,7 +72,7 @@
     	<dependencies>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-security-shiro</artifactId>
+                <artifactId>isis-security-shiro</artifactId>
                 <version>${isis.version}</version>
             </dependency>
     	</dependencies>
