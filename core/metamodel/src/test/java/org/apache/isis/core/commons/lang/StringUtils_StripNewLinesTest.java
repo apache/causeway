@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.lang;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.metamodel.commons.StringExtensions;
 import org.junit.Test;
 
 public class StringUtils_StripNewLinesTest {

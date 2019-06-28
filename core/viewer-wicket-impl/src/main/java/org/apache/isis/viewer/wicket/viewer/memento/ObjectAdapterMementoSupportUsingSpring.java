@@ -28,9 +28,9 @@ import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -151,7 +151,7 @@ public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMeme
         probe.println("reconstruct [%s] %s", sort, memento.getObjectSpecId());
         
         //TODO[2112] if always equal remove field 'beanSort' from ObjectAdapterMemento
-        Assert.assertEquals("expected same sort", sort, spec.getBeanSort());
+        _Assert.assertEquals("expected same sort", sort, spec.getBeanSort());
         
         val key = memento.getStoreKey();
         
@@ -168,7 +168,7 @@ public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMeme
             
                 probe.println("fetch from persistence oid='%s'", memento.getRootOid());
                 val rootOid = memento.getRootOid();
-                Assert.assertTrue("expected persistent", rootOid.isPersistent());
+                _Assert.assertTrue("expected persistent", rootOid.isPersistent());
                 val ps = IsisContext.getPersistenceSession().get();
                 return ps.getObjectAdapterByIdProvider().adapterFor(rootOid);
             } else {

@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.metamodel.commons.ClassUtil;
 
 /**
  * Provides capability to translate or ignore classes.

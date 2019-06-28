@@ -28,15 +28,14 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.isis.metamodel.commons.ClassExtensions;
+import org.apache.isis.metamodel.commons.MethodUtil;
+import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import org.apache.isis.core.commons.lang.ClassExtensions;
-import org.apache.isis.core.commons.lang.MethodUtil;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 
 @RunWith(Parameterized.class)
 public class MethodFinderUtilsTest {

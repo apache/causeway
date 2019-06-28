@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.objectspecid.classname;
 
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 

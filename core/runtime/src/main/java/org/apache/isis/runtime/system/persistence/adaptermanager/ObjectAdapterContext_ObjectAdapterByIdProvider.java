@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.assertions._Ensure;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -221,7 +221,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             pojo = objectAdapterContext.instantiateAndInjectServices(spec);
         }
         
-        Ensure.ensure("unlikely", !(pojo instanceof Oid));
+        _Ensure.ensure("unlikely", !(pojo instanceof Oid));
         
         return pojo;
     }

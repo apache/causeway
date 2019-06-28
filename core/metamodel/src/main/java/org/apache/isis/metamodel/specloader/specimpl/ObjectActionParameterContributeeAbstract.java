@@ -18,8 +18,8 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;

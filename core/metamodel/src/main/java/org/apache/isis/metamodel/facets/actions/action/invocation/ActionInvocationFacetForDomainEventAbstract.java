@@ -53,11 +53,11 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.core.commons.lang.ArrayExtensions;
-import org.apache.isis.core.commons.lang.MethodInvocationPreprocessor;
-import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.commons.MethodInvocationPreprocessor;
+import org.apache.isis.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;
@@ -350,7 +350,7 @@ implements ImperativeFacet {
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
         if(cacheable) {
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
-            final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
+            final Object[] targetPojoPlusExecutionParameters = _Arrays.combine(executionParameters, targetPojo);
             return queryResultsCache.execute(
                     ()->MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters),
                     targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);

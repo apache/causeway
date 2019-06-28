@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-
+import org.apache.isis.metamodel.commons.ListExtensions;
 import org.junit.Test;
 
 public class ListUtilsTest_insert {

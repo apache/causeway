@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.metamodel.commons.ListExtensions;
 import org.junit.Test;
 
 public class ListUtilsTest_adjust {

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -84,7 +84,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
             
         } else {
-            Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
+            _Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
             // recreate an adapter for the original OID (with correct version)
             adapter = persistenceSession.adapterFor(typedOid);
@@ -108,7 +108,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         // reference to entity
 
         Oid oid = data.getOid();
-        Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
+        _Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
 
         final RootOid rootOid = (RootOid) oid;
         final ObjectAdapter referencedAdapter = persistenceSession.adapterFor(rootOid);

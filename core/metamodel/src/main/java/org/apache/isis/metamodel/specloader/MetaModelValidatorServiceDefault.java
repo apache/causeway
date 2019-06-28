@@ -23,8 +23,8 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;

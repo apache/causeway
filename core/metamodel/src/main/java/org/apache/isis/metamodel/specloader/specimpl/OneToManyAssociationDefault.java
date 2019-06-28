@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;

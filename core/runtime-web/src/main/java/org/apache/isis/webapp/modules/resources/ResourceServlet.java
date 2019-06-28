@@ -37,9 +37,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.core.commons.lang.InputStreamExtensions;
-import org.apache.isis.core.commons.lang.ResourceUtil;
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.metamodel.commons.InputStreamExtensions;
+import org.apache.isis.metamodel.commons.ResourceUtil;
+import org.apache.isis.metamodel.commons.StringExtensions;
 
 import lombok.extern.log4j.Log4j2;
 

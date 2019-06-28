@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.adapter.oid;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.commons.url.UrlDecoderUtil;
+import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 
 /**
  * Used as the {@link Oid} for collections.

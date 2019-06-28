@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.services.appfeat;
 
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.metamodel.commons.StringExtensions;
 
 public enum ApplicationFeatureType {
     PACKAGE {

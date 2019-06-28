@@ -30,7 +30,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.metamodel.commons.StringExtensions;
 
 public class RedirectFilter implements Filter {
 

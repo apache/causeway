@@ -36,7 +36,7 @@ import com.google.common.base.Splitter;
 import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.lang.CloseableExtensions;
+import org.apache.isis.metamodel.commons.CloseableExtensions;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 public class JarManifestModel extends ModelAbstract<JarManifestModel> {

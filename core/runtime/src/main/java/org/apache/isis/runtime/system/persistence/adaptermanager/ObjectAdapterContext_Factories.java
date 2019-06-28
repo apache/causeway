@@ -18,7 +18,6 @@
  */
 package org.apache.isis.runtime.system.persistence.adaptermanager;
 
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
@@ -31,6 +30,8 @@ import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterCo
 import org.apache.isis.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import org.apache.isis.commons.internal.assertions._Assert;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,7 +69,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
             final RootOid parentOid,
             final OneToManyAssociation otma) {
 
-        Assert.assertNotNull(pojo);
+        _Assert.assertNotNull(pojo);
 
         // persistence of collection follows the parent
         final ParentedOid collectionOid = Oid.Factory.parentedOfOneToMany(parentOid, otma);

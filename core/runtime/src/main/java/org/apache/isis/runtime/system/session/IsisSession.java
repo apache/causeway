@@ -22,7 +22,7 @@ package org.apache.isis.runtime.system.session;
 import java.util.Optional;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;

@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -434,7 +434,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         } 
         // -- //
 
-        Assert.assertFalse("expected not to be transient", rootOid.isTransient());
+        _Assert.assertFalse("expected not to be transient", rootOid.isTransient());
 
         this.sort = Sort.SCALAR;
 

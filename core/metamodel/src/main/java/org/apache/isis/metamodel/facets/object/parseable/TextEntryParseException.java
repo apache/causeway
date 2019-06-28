@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.parseable;
 
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
+import org.apache.isis.commons.exceptions.IsisApplicationException;
 
 /**
  * Indicates that a text entry could not be satisfactorily parsed into a useful

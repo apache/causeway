@@ -43,7 +43,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.core.commons.url.UrlDecoderUtil;
+import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;

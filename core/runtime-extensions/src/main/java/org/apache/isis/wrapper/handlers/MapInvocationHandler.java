@@ -21,7 +21,7 @@ package org.apache.isis.wrapper.handlers;
 
 import java.util.Map;
 
-import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.metamodel.commons.ObjectExtensions;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {

@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.commons.internal.assertions._Ensure;
 import org.apache.isis.metamodel.MetaModelContext;
 
 
@@ -99,7 +99,7 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
                     throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
                 }
             } else {
-                Ensure.ensureThatArg(
+                _Ensure.ensureThatArg(
                         underlyingFacet.facetType(), 
                         type->Objects.equals(type, facetType), 
                         ()->String.format("type-missmatch: underlying facet's type '%s' must match this facet's type '%s'"));

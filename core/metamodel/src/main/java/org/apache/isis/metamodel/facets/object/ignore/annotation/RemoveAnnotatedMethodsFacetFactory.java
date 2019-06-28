@@ -32,7 +32,7 @@ import javax.annotation.PreDestroy;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.facets.Annotations;

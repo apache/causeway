@@ -48,8 +48,7 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.core.commons.lang.ThrowableExtensions;
-import org.apache.isis.core.commons.reflection.Reflect;
+import org.apache.isis.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -486,7 +485,7 @@ public final class Annotations  {
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            return Reflect.handleOf(method);
+            return _Reflect.handleOf(method);
         }
     }
 
@@ -505,7 +504,7 @@ public final class Annotations  {
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            return Reflect.handleOf(field);
+            return _Reflect.handleOfGetterOn(field);
         }
 
         public Field getField() {
@@ -515,7 +514,7 @@ public final class Annotations  {
         public Optional<Method> getGetter(Class<?> originatingClass) {
             try {
                 return Optional.ofNullable(
-                        Reflect.getGetter(originatingClass, field.getName())    );
+                        _Reflect.getGetter(originatingClass, field.getName())    );
             } catch (IntrospectionException e) {
                 e.printStackTrace();
             }

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 import java.util.List;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import de.agilecoders.wicket.core.settings.ThemeProvider;

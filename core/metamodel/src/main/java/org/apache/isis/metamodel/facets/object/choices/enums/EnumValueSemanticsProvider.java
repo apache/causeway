@@ -27,7 +27,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.util.Enums;
-import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.metamodel.commons.MethodExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;

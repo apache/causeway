@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 
+import org.apache.isis.metamodel.commons.StringExtensions;
 import org.junit.Test;
 
 public class StringUtils_toLineSeparated {

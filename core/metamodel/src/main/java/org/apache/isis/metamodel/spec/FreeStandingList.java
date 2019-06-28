@@ -23,7 +23,7 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.metamodel.commons.ToString;
 
 /**
  * A list returned from an action, ie not associated or owned by any entity.

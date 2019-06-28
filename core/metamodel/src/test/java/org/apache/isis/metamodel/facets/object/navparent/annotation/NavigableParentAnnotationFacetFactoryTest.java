@@ -21,24 +21,22 @@ package org.apache.isis.metamodel.facets.object.navparent.annotation;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.metamodel.facets.object.navparent.NavigableParentFacet;
+import org.apache.isis.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
+import org.apache.isis.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.core.commons.reflection.Reflect;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.navparent.NavigableParentFacet;
-import org.apache.isis.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
-import org.apache.isis.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
-import org.apache.isis.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -104,7 +102,7 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
 		final Method parentMethod = domainClass.getMethod(parentMethodName);
 
 		Assert.assertEquals(
-				parentMethod.invoke(domainObject, Reflect.emptyObjects), 
+				parentMethod.invoke(domainObject, _Constants.emptyObjects), 
 				navigableParentFacetMethod.navigableParent(domainObject)	);
 
 	}

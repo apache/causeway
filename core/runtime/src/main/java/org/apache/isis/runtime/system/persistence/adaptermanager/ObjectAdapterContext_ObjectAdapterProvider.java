@@ -23,9 +23,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -156,7 +156,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return runtimeContext.getServiceRegistry().streamRegisteredBeans()
         .map(this::adapterForBean)
         .peek(serviceAdapter->{
-            Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
+            _Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
         })
         .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }

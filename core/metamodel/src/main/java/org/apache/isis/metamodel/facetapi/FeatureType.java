@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facets.FacetFactory;
 
 /**

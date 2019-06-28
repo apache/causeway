@@ -16,7 +16,7 @@
  */
 package org.apache.isis.metamodel.facets;
 
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.metamodel.commons.StringExtensions;
 
 public class MethodPrefixConstants {
 

@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;

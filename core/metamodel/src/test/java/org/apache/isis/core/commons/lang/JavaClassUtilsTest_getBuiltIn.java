@@ -21,6 +21,7 @@ package org.apache.isis.core.commons.lang;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.isis.metamodel.commons.ClassUtil;
 import org.junit.Test;
 
 public class JavaClassUtilsTest_getBuiltIn {

@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.metamodel.commons.ClassUtil;
 
 final class ImageResourceCacheKey implements Serializable {
 

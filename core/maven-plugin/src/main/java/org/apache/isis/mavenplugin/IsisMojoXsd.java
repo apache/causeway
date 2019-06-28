@@ -35,7 +35,7 @@ import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 @Mojo(

@@ -26,8 +26,9 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.metamodel.commons.ObjectExtensions;
 import org.apache.isis.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -122,7 +123,7 @@ public interface ImperativeFacet extends Facet {
                 return (ImperativeFacet) facet.getUnderlyingFacet();
             }
             if (facet instanceof DecoratingFacet) {
-                final DecoratingFacet<?> decoratingFacet = ObjectExtensions.asT(facet);
+                final DecoratingFacet<?> decoratingFacet = _Casts.uncheckedCast(facet);
                 return getImperativeFacet(decoratingFacet.getDecoratedFacet());
             }
             return null;

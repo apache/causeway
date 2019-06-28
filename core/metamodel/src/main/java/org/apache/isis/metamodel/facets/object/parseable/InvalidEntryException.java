@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.parseable;
 
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
+import org.apache.isis.commons.exceptions.IsisApplicationException;
 
 /**
  * Indicates that a value entry is not valid. Note the entry may still parse

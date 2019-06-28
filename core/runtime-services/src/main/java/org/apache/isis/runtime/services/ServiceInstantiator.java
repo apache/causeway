@@ -29,14 +29,14 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.factory.InstanceCreationClassException;
+import org.apache.isis.commons.internal.factory.InstanceCreationException;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.core.commons.factory.InstanceCreationClassException;
-import org.apache.isis.core.commons.factory.InstanceCreationException;
-import org.apache.isis.core.commons.lang.ArrayExtensions;
-import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.metamodel.commons.MethodExtensions;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 
 import lombok.extern.log4j.Log4j2;
@@ -117,7 +117,7 @@ public final class ServiceInstantiator {
 
     private <T> T instantiateRequestScopedProxy(final Class<T> cls) {
 
-        final Class<?>[] interfaces = ArrayExtensions.combine(
+        final Class<?>[] interfaces = _Arrays.combine(
                 cls.getInterfaces(),
                 new Class<?>[] { RequestScopedService.class, ProxyEnhanced.class });
 

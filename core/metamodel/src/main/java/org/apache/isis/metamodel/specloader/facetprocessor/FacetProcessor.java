@@ -27,8 +27,8 @@ import java.util.Set;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;

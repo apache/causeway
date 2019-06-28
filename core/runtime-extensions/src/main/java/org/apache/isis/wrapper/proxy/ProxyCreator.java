@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.wrapper.handlers.DelegatingInvocationHandler;
 
@@ -72,7 +71,7 @@ public class ProxyCreator {
 
     private <T> ProxyFactory<T> createProxyFactoryFor(final Class<T> toProxyClass) {
 
-        final Class<?>[] interfaces = ArrayExtensions.combine(
+        final Class<?>[] interfaces = _Arrays.combine(
                 toProxyClass.getInterfaces(),
                 new Class<?>[] { ProxyEnhanced.class, WrappingObject.class });
 

@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.all.i18n;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;

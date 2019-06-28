@@ -29,7 +29,7 @@ import org.apache.wicket.model.IModel;
  * <p>
  * If the {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} doesn't implement this interface or the implementation
  * of any of its methods return {@code null} then {@link ComponentFactory#getName()} will be used as title and its
- * {@link org.apache.isis.core.commons.lang.StringExtensions#asLowerDashed(java.lang.String) dashed representation}
+ * {@link org.apache.isis.metamodel.commons.StringExtensions#asLowerDashed(java.lang.String) dashed representation}
  * as CSS class for the optional image.
  * </p>
  */

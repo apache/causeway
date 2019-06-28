@@ -25,8 +25,8 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.IsisLifecycleListener;
@@ -58,11 +58,11 @@ implements PersistenceQueryProcessor<T> {
             if(pojo instanceof Persistable) {
                 // an entity
                 adapter = persistenceSession.initializeMapAndCheckConcurrency((Persistable) pojo);
-                Assert.assertNotNull(adapter);
+                _Assert.assertNotNull(adapter);
             } else {
                 // a value type
                 adapter = persistenceSession.adapterFor(pojo);
-                Assert.assertNotNull(adapter);
+                _Assert.assertNotNull(adapter);
             }
             adapters.add(adapter);
         }

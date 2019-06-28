@@ -20,8 +20,8 @@
 package org.apache.isis.metamodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;

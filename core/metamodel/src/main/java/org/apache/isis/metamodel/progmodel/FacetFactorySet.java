@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.progmodel;
 
 import java.util.List;
 
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.ReflectorConstants;
 

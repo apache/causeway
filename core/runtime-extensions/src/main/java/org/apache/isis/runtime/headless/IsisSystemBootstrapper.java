@@ -25,9 +25,9 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.assertions._Ensure;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.runtime.headless.logging.LogConfig;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -49,7 +49,7 @@ public class IsisSystemBootstrapper {
             final LogConfig logConfig,
             final IsisConfiguration isisConfiguration) {
         
-        Ensure.ensure("Should have an IsisConfiguration!", isisConfiguration!=null);
+        _Ensure.ensure("Should have an IsisConfiguration!", isisConfiguration!=null);
 
         this.isisConfiguration = isisConfiguration;
         this.logger = new LeveledLogger(log, logConfig.getTestLoggingLevel());

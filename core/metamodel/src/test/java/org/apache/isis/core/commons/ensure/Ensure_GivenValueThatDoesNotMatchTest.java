@@ -24,6 +24,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.commons.internal.assertions._Ensure;
 import org.junit.Test;
 
 public class Ensure_GivenValueThatDoesNotMatchTest {
@@ -31,7 +32,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
     @Test
     public void whenCallEnsureThatArgOverloadedShouldThrowIllegalArgumentExceptionUsingSuppliedMessage() {
         try {
-            Ensure.ensureThatArg("foo", is(nullValue())::matches, "my message");
+            _Ensure.ensureThatArg("foo", is(nullValue())::matches, "my message");
             fail();
         } catch (final IllegalArgumentException ex) {
             assertThat(ex.getMessage(), is("my message"));
@@ -41,7 +42,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
     @Test
     public void whenCallEnsureThatStateOverloadedShouldThrowIllegalStateExceptionUsingSuppliedMessage() {
         try {
-            Ensure.ensureThatState("foo", is(nullValue())::matches, "my message");
+            _Ensure.ensureThatState("foo", is(nullValue())::matches, "my message");
             fail();
         } catch (final IllegalStateException ex) {
             assertThat(ex.getMessage(), is("my message"));
@@ -51,7 +52,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
     @Test
     public void whenCallEnsureThatContextOverloadedShouldThrowIllegalThreadStateExceptionUsingSuppliedMessage() {
         try {
-            Ensure.ensureThatContext("foo", is(nullValue())::matches, "my message");
+            _Ensure.ensureThatContext("foo", is(nullValue())::matches, "my message");
             fail();
         } catch (final IllegalThreadStateException ex) {
             assertThat(ex.getMessage(), is("my message"));

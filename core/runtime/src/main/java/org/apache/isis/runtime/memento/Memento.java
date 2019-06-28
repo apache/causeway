@@ -23,10 +23,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;

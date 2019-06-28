@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.property.ConfigPropertyBoolean;
 import org.apache.isis.config.property.ConfigPropertyEnum;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;

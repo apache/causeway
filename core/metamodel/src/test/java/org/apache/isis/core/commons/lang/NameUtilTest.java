@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.commons.lang;
 
+import org.apache.isis.metamodel.commons.StringExtensions;
+
 import junit.framework.TestCase;
 
 public class NameUtilTest extends TestCase {

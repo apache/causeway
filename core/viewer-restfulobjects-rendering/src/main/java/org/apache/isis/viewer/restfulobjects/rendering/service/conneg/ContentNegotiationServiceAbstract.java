@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;

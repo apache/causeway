@@ -16,6 +16,8 @@
  */
 package org.apache.isis.runtime.services.background;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.lang.reflect.InvocationHandler;
 
 import javax.annotation.PostConstruct;
@@ -29,15 +31,13 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
-import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
-
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.val;
 
@@ -108,7 +108,7 @@ public class BackgroundServiceDefault implements BackgroundService {
             final Object mixedInIfAny,
             final InvocationHandler methodHandler) {
 
-        final Class<?>[] interfaces = ArrayExtensions.combine(
+        final Class<?>[] interfaces = _Arrays.combine(
                 cls.getInterfaces(),
                 new Class<?>[] { ProxyEnhanced.class });
 

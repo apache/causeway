@@ -22,7 +22,7 @@ package org.apache.isis.wrapper.handlers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.metamodel.commons.ObjectExtensions;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHandler<T, R> {

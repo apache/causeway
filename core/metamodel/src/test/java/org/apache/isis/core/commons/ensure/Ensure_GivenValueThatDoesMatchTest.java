@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.commons.internal.assertions._Ensure;
 import org.junit.Test;
 
 public class Ensure_GivenValueThatDoesMatchTest {
@@ -32,28 +33,28 @@ public class Ensure_GivenValueThatDoesMatchTest {
     @Test
     public void whenCallEnsureThatArgThenShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, ()->"some message");
+        final String returnedObject = _Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, ()->"some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatArgWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, "some message");
+        final String returnedObject = _Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatStateWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatState(object, is(not(nullValue(String.class)))::matches, "some message");
+        final String returnedObject = _Ensure.ensureThatState(object, is(not(nullValue(String.class)))::matches, "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatContextWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class)))::matches, "some message");
+        final String returnedObject = _Ensure.ensureThatContext(object, is(not(nullValue(String.class)))::matches, "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 

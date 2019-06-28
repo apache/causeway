@@ -21,8 +21,8 @@ package org.apache.isis.runtime.system.persistence.adaptermanager;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.ensure.IsisAssertException;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.assertions.IsisAssertException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -274,7 +274,7 @@ final public class ObjectAdapterContext {
         final RootOid persistentOid = createPersistentOrViewModelOid(rootAdapter.getPojo());
         
         Objects.requireNonNull(persistentOid);
-        Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
+        _Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
         if(persistentOid.isTransient()) {
             throw new IsisAssertException("hintRootOid must be persistent");
         }

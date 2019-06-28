@@ -25,7 +25,7 @@ import javax.annotation.PreDestroy;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.metamodel.commons.MethodExtensions;
 
 import lombok.extern.log4j.Log4j2;
 

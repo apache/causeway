@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.metamodel.commons.MethodExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.MarkerFacetAbstract;

@@ -30,9 +30,9 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
-import org.apache.isis.core.commons.lang.DateExtensions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.commons.DateExtensions;
 
 /**
  * An instance of this class is held by each {@link ObjectAdapter} and is used

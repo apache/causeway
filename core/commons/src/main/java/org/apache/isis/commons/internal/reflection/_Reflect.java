@@ -19,7 +19,13 @@
 
 package org.apache.isis.commons.internal.reflection;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -342,6 +348,40 @@ public final class _Reflect {
             }
         }
         return false;
+    }
+    
+    // -- METHOD/FIELD HANDLES
+
+    public static MethodHandle handleOf(Method method) throws IllegalAccessException {
+        if(!method.isAccessible()) {
+            method.setAccessible(true);
+            MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
+            method.setAccessible(false);
+            return mh;
+        }
+        return MethodHandles.publicLookup().unreflect(method);
+    }
+
+    public static MethodHandle handleOfGetterOn(Field field) throws IllegalAccessException {
+        if(!field.isAccessible()) {
+            field.setAccessible(true);
+            MethodHandle mh = MethodHandles.lookup().unreflectGetter(field);
+            field.setAccessible(false);
+            return mh;
+        }
+        return MethodHandles.lookup().unreflectGetter(field);
+    }
+    
+    // -- FIND GETTER
+    
+    public static Method getGetter(Class<?> cls, String propertyName) throws IntrospectionException {
+        final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
+        for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
+            if(!pd.getName().equals(propertyName))
+                continue;
+            return pd.getReadMethod();
+        }
+        return null;
     }
 
 
