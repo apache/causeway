@@ -20,7 +20,7 @@
 		<version>${revision}</version>
 	</parent>
 
-	<artifactId>isis-core-unittestsupport</artifactId>
+	<artifactId>isis-unittestsupport</artifactId>
 	<name>Apache Isis Unit Test Support</name>
 
 	<properties>
@@ -46,7 +46,7 @@
 		<!-- framework default core-codegen-plugin for tests -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 		</dependency>
 
 		<!-- SPRING -->

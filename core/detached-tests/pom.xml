@@ -20,12 +20,12 @@
 		<version>${revision}</version>
 	</parent>
 
-	<artifactId>isis-core-detached-tests</artifactId>
+	<artifactId>isis-detached-tests</artifactId>
 	<name>Apache Isis Detached Tests (tests only)</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.core.detached-tests</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core/detached-tests</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.detached-tests</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/detached-tests</git-plugin.propertiesDir>
 	</properties>
 
 	<description>
@@ -38,54 +38,54 @@
 		<!-- core plugin loading -->
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-commons</artifactId>
+            <artifactId>isis-commons</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-config</artifactId>
+            <artifactId>isis-config</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-metamodel</artifactId>
+			<artifactId>isis-metamodel</artifactId>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
         
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime-services</artifactId>
+			<artifactId>isis-runtime-services</artifactId>
 			<scope>test</scope>
 		</dependency>
         
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime-extensions</artifactId>
+			<artifactId>isis-runtime-extensions</artifactId>
 			<scope>test</scope>
 		</dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-integtestsupport</artifactId>
+            <artifactId>isis-integtestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         
         <!-- core plugins required to run this module's own tests -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+            <artifactId>isis-plugins-codegen-bytebuddy</artifactId>
             <scope>runtime</scope>
         </dependency>
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+            <artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>

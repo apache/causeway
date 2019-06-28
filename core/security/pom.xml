@@ -26,22 +26,22 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-security</artifactId>
+    <artifactId>isis-security</artifactId>
     <name>Apache Isis Security + Bypass</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.security</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/security</git-plugin.propertiesDir>
+        <git-plugin.propertiesDir>org/apache/isis/security</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <artifactId>isis-applib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-config</artifactId>
+            <artifactId>isis-config</artifactId>
         </dependency>
 <!--     	<dependency> -->
 <!--             <groupId>org.apache.isis.core</groupId> -->

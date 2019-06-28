@@ -20,7 +20,7 @@
 		<version>${revision}</version>
 	</parent>
 
-	<artifactId>isis-core-commons</artifactId>
+	<artifactId>isis-commons</artifactId>
 
 	<name>Apache Isis Commons</name>
 	<description>

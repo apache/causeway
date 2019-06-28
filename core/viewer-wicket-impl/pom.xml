@@ -29,7 +29,7 @@
 
     <name>Apache Isis Wicket Viewer Implementation</name>
 
-    <artifactId>isis-core-viewer-wicket-impl</artifactId>
+    <artifactId>isis-viewer-wicket-impl</artifactId>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.impl</jar-plugin.automaticModuleName>
@@ -58,12 +58,12 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-viewer-wicket-ui</artifactId>
+            <artifactId>isis-viewer-wicket-ui</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-web</artifactId>
+            <artifactId>isis-runtime-web</artifactId>
         </dependency>
 
         <dependency>
@@ -120,7 +120,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

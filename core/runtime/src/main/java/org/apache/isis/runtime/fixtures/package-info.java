@@ -24,6 +24,6 @@
  * Used during prototyping and testing to initial objects, typically to see an
  * in-memory object store.
  *
- * @see org.apache.isis.core.runtime.services.ServicesInstaller
+ * @see org.apache.isis.runtime.services.ServicesInstaller
  */
 package org.apache.isis.runtime.fixtures;

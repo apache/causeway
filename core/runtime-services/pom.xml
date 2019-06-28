@@ -26,13 +26,13 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-runtime-services</artifactId>
+    <artifactId>isis-runtime-services</artifactId>
     <name>Apache Isis Runtime Services</name>
     <description>Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime-services</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/runtime-services</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.runtime-services</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/runtime-services</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -65,18 +65,18 @@
 	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

@@ -38,7 +38,7 @@
  *
  * <p>
  * Note that the {@link PersistenceSession} both extends a number of superinterfaces as well as uses implementations of
- * various helpers (for example {@link org.apache.isis.ServicesInjector.services.ServicesInjector} and {@link org.apache.isis.core.runtime.system.persistence.runtime.persistence.oidgenerator.OidGenerator}).
+ * various helpers (for example {@link org.apache.isis.ServicesInjector.services.ServicesInjector} and {@link org.apache.isis.runtime.system.persistence.runtime.persistence.oidgenerator.OidGenerator}).
  * These superinterfaces and helper interfaces are not normally implemented directly, and it is the
  * responsibility of the {@link PersistenceMechanismInstaller} to ensure that the correct helper objects
  * are passed to the {@link PersistenceSession} implementation.

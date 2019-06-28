@@ -26,13 +26,13 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-runtime-extensions</artifactId>
+    <artifactId>isis-runtime-extensions</artifactId>
     <name>Apache Isis Runtime Extensions</name>
     <description>Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime-extensions</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/runtime-extensions</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.runtime-extensions</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/runtime-extensions</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -67,24 +67,24 @@
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
         
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-services</artifactId>
+            <artifactId>isis-runtime-services</artifactId>
         </dependency>
         
         
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -98,7 +98,7 @@
 
         <dependency>
         	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-core-log4j</artifactId>
+        	<artifactId>isis-log4j</artifactId>
         </dependency>
     </dependencies>
 

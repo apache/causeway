@@ -20,7 +20,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
+	<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 
 	<name>Apache Isis Plugin for JAX-RS (Resteasy v4)</name>
 	<description>
@@ -57,7 +57,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+			<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.xml.bind</groupId>
@@ -68,7 +68,7 @@
 		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+			<artifactId>isis-viewer-restfulobjects-server</artifactId>
 		</dependency>
 
 		<dependency>
@@ -158,7 +158,7 @@
 		
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
             <exclusions>
             	<exclusion>
@@ -174,14 +174,14 @@
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+            <artifactId>isis-viewer-restfulobjects-server</artifactId>
             <type>test-jar</type>            
             <scope>test</scope>
         </dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+			<artifactId>isis-viewer-restfulobjects-applib</artifactId>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>

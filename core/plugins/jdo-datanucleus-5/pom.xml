@@ -20,7 +20,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+	<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
 
 	<name>Apache Isis Plugin for JDO (Datanucleus 5)</name>
 	<description>
@@ -108,19 +108,19 @@
 		<!-- Core Runtime -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
+			<artifactId>isis-runtime</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime-extensions</artifactId>
+			<artifactId>isis-runtime-extensions</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-jdo-common</artifactId>
+			<artifactId>isis-plugins-jdo-common</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		
@@ -137,35 +137,35 @@
 		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-services</artifactId>
+            <artifactId>isis-runtime-services</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-extensions</artifactId>
+            <artifactId>isis-runtime-extensions</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
+            <artifactId>isis-metamodel</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

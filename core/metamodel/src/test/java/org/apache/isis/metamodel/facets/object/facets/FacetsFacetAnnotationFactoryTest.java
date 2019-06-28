@@ -87,7 +87,7 @@ public class FacetsFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testFacetsFactoryNames() {
-        @Facets(facetFactoryNames = { "org.apache.isis.metamodel.facets.object.facets.FacetsFacetAnnotationFactoryTest$CustomerFacetFactory", "org.apache.isis.core.metamodel.facets.object.facets.FacetsFacetAnnotationFactoryTest$CustomerNotAFacetFactory" })
+        @Facets(facetFactoryNames = { "org.apache.isis.metamodel.facets.object.facets.FacetsFacetAnnotationFactoryTest$CustomerFacetFactory", "org.apache.isis.metamodel.facets.object.facets.FacetsFacetAnnotationFactoryTest$CustomerNotAFacetFactory" })
         class Customer {
         }
 

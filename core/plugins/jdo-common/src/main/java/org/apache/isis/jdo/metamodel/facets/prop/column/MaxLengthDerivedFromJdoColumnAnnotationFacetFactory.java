@@ -89,7 +89,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
     }
 
     /* (non-Javadoc)
-     * @see org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner#refineMetaModelValidator(org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.core.commons.config.IsisConfiguration)
+     * @see org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner#refineMetaModelValidator(org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.commons.config.IsisConfiguration)
      */
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {

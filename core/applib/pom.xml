@@ -26,7 +26,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-applib</artifactId>
+    <artifactId>isis-applib</artifactId>
 
     <name>Apache Isis AppLib</name>
     <description>
@@ -62,12 +62,12 @@
     
     	<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-commons</artifactId>
+            <artifactId>isis-commons</artifactId>
         </dependency>
     
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-schema</artifactId>
+            <artifactId>isis-schema</artifactId>
         </dependency>
 		
 		<!-- JDO API (non transient, provided by plugin) -->
@@ -89,7 +89,7 @@
         <!-- TESTS -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
             <exclusions>
             	<!-- whatever unittestsupport is dependent on, it should not be transitive  -->

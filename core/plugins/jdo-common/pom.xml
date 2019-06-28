@@ -20,7 +20,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-core-plugins-jdo-common</artifactId>
+	<artifactId>isis-plugins-jdo-common</artifactId>
 
 	<name>Apache Isis Plugin for JDO (Common)</name>
 	<description>
@@ -81,7 +81,7 @@
 		<!-- Core Runtime -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
+			<artifactId>isis-runtime</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		
@@ -89,21 +89,21 @@
 		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
+            <artifactId>isis-metamodel</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         

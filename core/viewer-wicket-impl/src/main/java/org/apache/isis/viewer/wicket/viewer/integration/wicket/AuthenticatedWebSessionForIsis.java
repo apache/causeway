@@ -92,7 +92,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
         //        org.apache.shiro.mgt.DefaultSecurityManager.logout(DefaultSecurityManager.java:547)
         //        org.apache.shiro.subject.support.DelegatingSubject.logout(DelegatingSubject.java:363)
         //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
-        //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
+        //        org.apache.isis.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
         getAuthenticationManager().closeSession(authenticationSession);
         getIsisSessionFactory().closeSession();

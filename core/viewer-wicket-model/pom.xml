@@ -27,7 +27,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-viewer-wicket-model</artifactId>
+    <artifactId>isis-viewer-wicket-model</artifactId>
     <name>Apache Isis Wicket Viewer Model</name>
 
     <properties>
@@ -47,18 +47,18 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
 	
 	<!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
+            <artifactId>isis-metamodel</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

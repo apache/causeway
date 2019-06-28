@@ -54,18 +54,18 @@
 		<!-- ISIS API -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-applib</artifactId>
+			<artifactId>isis-applib</artifactId>
 		</dependency>
 
 		<!-- ISIS CORE PLUGINS -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -76,12 +76,12 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
+			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-security-shiro</artifactId>
+			<artifactId>isis-plugins-security-shiro</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>

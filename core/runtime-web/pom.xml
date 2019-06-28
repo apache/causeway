@@ -26,14 +26,14 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-runtime-web</artifactId>
+    <artifactId>isis-runtime-web</artifactId>
     <name>Apache Isis Runtime Web</name>
     <description>Introduced to keep the 'runtime' package concise. 
     Bundles all the web specific classes a srequired by viewers.</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime-web</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/runtime-web</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.runtime-web</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/runtime-web</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -59,18 +59,18 @@
 	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
         
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

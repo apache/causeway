@@ -26,7 +26,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-config</artifactId>
+    <artifactId>isis-config</artifactId>
 
     <name>Apache Isis Configuration</name>
     <description>
@@ -61,7 +61,7 @@
     
     	<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <artifactId>isis-applib</artifactId>
         </dependency>
         
         <!-- [2039] only to discover persistence capable classes, not required if every 
@@ -76,14 +76,14 @@
         <!-- [2039] only to configure log4j from servlet context resources -->
 		<dependency>
         	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-core-log4j</artifactId>
+        	<artifactId>isis-log4j</artifactId>
         	<scope>provided</scope>
         </dependency>
     
         <!-- TESTS -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
             <exclusions>
             	<!-- whatever unittestsupport is dependent on, it should not be transitive  -->
@@ -96,7 +96,7 @@
 
         <dependency>
         	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-core-applib</artifactId>
+        	<artifactId>isis-applib</artifactId>
         	<type>test-jar</type>
         </dependency>
 

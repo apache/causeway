@@ -18,24 +18,24 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-log4j</artifactId>
+    <artifactId>isis-log4j</artifactId>
     <name>Apache Isis Log4j Impls</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.log4j</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/log4j</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.log4j</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/log4j</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
     
     	<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-commons</artifactId>
+            <artifactId>isis-commons</artifactId>
         </dependency>
     
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

@@ -84,50 +84,50 @@
 		<!-- ISIS API -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-commons</artifactId>
+			<artifactId>isis-commons</artifactId>
 			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-applib</artifactId>
+			<artifactId>isis-applib</artifactId>
 			</dependency>
 
 		<!-- ISIS CORE -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-wicket-impl</artifactId>
+			<artifactId>isis-viewer-wicket-impl</artifactId>
 			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+			<artifactId>isis-viewer-restfulobjects-server</artifactId>
 			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-security</artifactId>
+			<artifactId>isis-security</artifactId>
 			</dependency>
 
 		<!-- ISIS CORE PLUGINS -->
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-security-shiro</artifactId>
+			<artifactId>isis-plugins-security-shiro</artifactId>
 			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
 			</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
+			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 			</dependency>
 
 		<!-- OTHER DEPENDENCIES -->

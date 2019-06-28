@@ -23,7 +23,7 @@ import org.apache.isis.unittestsupport.sortedsets.SortedSetsContractTestAbstract
 public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
     public SortedSetsContractTestAll() {
-        super("org.apache.isis.core.unittestsupport.sortedsets");
+        super("org.apache.isis.unittestsupport.sortedsets");
         withLoggingTo(System.out);
     }
 

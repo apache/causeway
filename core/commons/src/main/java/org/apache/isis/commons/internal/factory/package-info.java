@@ -23,7 +23,6 @@
  * they are assignable from a specified interface (if supplied).
  *
  * <p>
- * Used in various places throughout the framework, and specifically by
- * {@link org.apache.isis.core.commons.components.Installer} implementations.
+ * Used in various places throughout the framework.
  */
 package org.apache.isis.commons.internal.factory;

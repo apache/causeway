@@ -27,7 +27,7 @@
     	<relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-core-plugins-security-shiro</artifactId>
+    <artifactId>isis-plugins-security-shiro</artifactId>
 
     <name>Apache Isis Plugin for Security (Shiro)</name>
 	<description>
@@ -35,8 +35,8 @@
     </description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/security/shiro</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.plugins.security.shiro</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/plugins/security/shiro</git-plugin.propertiesDir>
     </properties>
 
 
@@ -82,23 +82,23 @@
     
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-security</artifactId>
+            <artifactId>isis-security</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-web</artifactId>
+            <artifactId>isis-runtime-web</artifactId>
         </dependency>
 	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 	

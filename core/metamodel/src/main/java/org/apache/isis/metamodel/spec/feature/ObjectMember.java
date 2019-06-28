@@ -144,7 +144,7 @@ public interface ObjectMember extends ObjectFeature {
      *
      * <p>
      *     For the former case, is thrown by
-     *     {@link ObjectAction#executeWithRuleChecking(org.apache.isis.metamodel.adapter.ObjectAdapter, org.apache.isis.metamodel.adapter.ObjectAdapter[], org.apache.isis.core.commons.authentication.AuthenticationSession, org.apache.isis.applib.annotation.Where)}
+     *     {@link ObjectAction#executeWithRuleChecking(org.apache.isis.metamodel.adapter.ObjectAdapter, org.apache.isis.metamodel.adapter.ObjectAdapter[], org.apache.isis.commons.authentication.AuthenticationSession, org.apache.isis.applib.annotation.Where)}
      *     when the action being executed is not visible or not usable for the specified session.  One reason this
      *     might occur if there was an attempt to construct a URL (eg a bookmarked action) and invoke in an unauthenticated session.
      * </p>

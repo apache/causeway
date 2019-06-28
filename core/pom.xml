@@ -1136,19 +1136,19 @@
 			<!-- isis commons -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-commons</artifactId>
+				<artifactId>isis-commons</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<!-- unittestsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-unittestsupport</artifactId>
+				<artifactId>isis-unittestsupport</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-unittestsupport</artifactId>
+				<artifactId>isis-unittestsupport</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1157,14 +1157,14 @@
 			<!-- applib -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-applib</artifactId>
+				<artifactId>isis-applib</artifactId>
 				<version>${isis.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-applib</artifactId>
+				<artifactId>isis-applib</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1173,14 +1173,14 @@
 			<!-- config -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-config</artifactId>
+				<artifactId>isis-config</artifactId>
 				<version>${isis.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-config</artifactId>
+				<artifactId>isis-config</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1196,14 +1196,14 @@
 			<!-- schema -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-schema</artifactId>
+				<artifactId>isis-schema</artifactId>
 				<version>${isis.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-schema</artifactId>
+				<artifactId>isis-schema</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1212,7 +1212,7 @@
 			<!-- log4j -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-log4j</artifactId>
+				<artifactId>isis-log4j</artifactId>
 				<version>${isis.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
@@ -1221,14 +1221,14 @@
 			<!-- metamodel -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-metamodel</artifactId>
+				<artifactId>isis-metamodel</artifactId>
 				<version>${isis.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-metamodel</artifactId>
+				<artifactId>isis-metamodel</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1237,12 +1237,12 @@
 			<!-- runtime -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime</artifactId>
+				<artifactId>isis-runtime</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime</artifactId>
+				<artifactId>isis-runtime</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1251,12 +1251,12 @@
 			<!-- runtime-extensions -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime-extensions</artifactId>
+				<artifactId>isis-runtime-extensions</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime-extensions</artifactId>
+				<artifactId>isis-runtime-extensions</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1265,12 +1265,12 @@
 			<!-- runtime-services -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime-services</artifactId>
+				<artifactId>isis-runtime-services</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime-services</artifactId>
+				<artifactId>isis-runtime-services</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1279,12 +1279,12 @@
 			<!-- runtime-services -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime-web</artifactId>
+				<artifactId>isis-runtime-web</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-runtime-web</artifactId>
+				<artifactId>isis-runtime-web</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1293,57 +1293,57 @@
 			<!-- webserver -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-webserver</artifactId>
+				<artifactId>isis-webserver</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<!-- specsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-specsupport</artifactId>
+				<artifactId>isis-specsupport</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<!-- integtestsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-integtestsupport</artifactId>
+				<artifactId>isis-integtestsupport</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<!-- Restful Objects viewer -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-				<version>${isis.version}</version>
-				<type>test-jar</type>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-				<version>${isis.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+				<version>${isis.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-viewer-restfulobjects-server</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-viewer-restfulobjects-server</artifactId>
 				<version>${isis.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1352,7 +1352,7 @@
 			<!-- security support -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-security</artifactId>
+				<artifactId>isis-security</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
@@ -1360,37 +1360,31 @@
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-plugins-security-shiro</artifactId>
+				<artifactId>isis-plugins-security-shiro</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+				<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-plugins-jdo-common</artifactId>
+				<artifactId>isis-plugins-jdo-common</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-plugins-jdo-datanucleus-4</artifactId>
+				<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
-				<version>${isis.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
+				<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 
@@ -1398,36 +1392,36 @@
 			<!-- also for benefit of application developers, using scope=import -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-wicket-model</artifactId>
+				<artifactId>isis-viewer-wicket-model</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-wicket-model</artifactId>
-				<version>${isis.version}</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-wicket-ui</artifactId>
-				<version>${isis.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-wicket-ui</artifactId>
+				<artifactId>isis-viewer-wicket-model</artifactId>
 				<version>${isis.version}</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-wicket-impl</artifactId>
+				<artifactId>isis-viewer-wicket-ui</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-viewer-wicket-impl</artifactId>
+				<artifactId>isis-viewer-wicket-ui</artifactId>
+				<version>${isis.version}</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-viewer-wicket-impl</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-viewer-wicket-impl</artifactId>
 				<version>${isis.version}</version>
 				<scope>test</scope>
 				<type>test-jar</type>
@@ -1935,7 +1929,7 @@
 			</dependency>
 
 
-			<!-- TESTING LIBRARIES (not scope=test because used by isis-core-integtest) -->
+			<!-- TESTING LIBRARIES (not scope=test because used by isis-integtest) -->
 
 			<dependency>
 				<!-- JUnit API for writing tests and extensions -->

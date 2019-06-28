@@ -20,7 +20,7 @@
 		<version>${revision}</version>
 	</parent>
 
-	<artifactId>isis-core-schema</artifactId>
+	<artifactId>isis-schema</artifactId>
 
 	<packaging>jar</packaging>
 	<name>Apache Isis Schemas</name>
@@ -36,7 +36,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-commons</artifactId>
+			<artifactId>isis-commons</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>

@@ -487,12 +487,12 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     // -- getMessageBroker
 
     //    /**
-    //     * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.
+    //     * The {@link org.apache.isis.commons.authentication.MessageBroker} for this transaction.
     //     *
     //     * <p>
     //     * Injected in constructor
     //     *
-    //     * @deprecated - obtain the {@link org.apache.isis.core.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
+    //     * @deprecated - obtain the {@link org.apache.isis.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
     //     */
     //    public MessageBroker getMessageBroker() {
     //        return messageBroker;

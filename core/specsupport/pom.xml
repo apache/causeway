@@ -18,28 +18,28 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-specsupport</artifactId>
+    <artifactId>isis-specsupport</artifactId>
     <name>Apache Isis Spec Support</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.specsupport</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/specsupport</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.specsupport</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/specsupport</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-runtime</artifactId>
         </dependency>
 
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-extensions</artifactId>
+            <artifactId>isis-runtime-extensions</artifactId>
         </dependency>
 
 

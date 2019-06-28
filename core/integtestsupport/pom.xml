@@ -20,12 +20,12 @@
 		<version>${revision}</version>
 	</parent>
 
-	<artifactId>isis-core-integtestsupport</artifactId>
+	<artifactId>isis-integtestsupport</artifactId>
 	<name>Apache Isis Integration Testing Support</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.core.integtestsupport</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/core/integtestsupport</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.integtestsupport</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/integtestsupport</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
@@ -41,11 +41,11 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-unittestsupport</artifactId>
+			<artifactId>isis-unittestsupport</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-specsupport</artifactId>
+			<artifactId>isis-specsupport</artifactId>
 		</dependency>
 
 		<!-- JUPITER -->
@@ -77,22 +77,22 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-security</artifactId>
+			<artifactId>isis-security</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
+			<artifactId>isis-runtime</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime-services</artifactId>
+			<artifactId>isis-runtime-services</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime-extensions</artifactId>
+			<artifactId>isis-runtime-extensions</artifactId>
 		</dependency>
 
 

@@ -26,12 +26,12 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>isis-core-runtime</artifactId>
+    <artifactId>isis-runtime</artifactId>
     <name>Apache Isis Runtime</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.core.runtime</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/core/runtime</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.runtime</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/runtime</git-plugin.propertiesDir>
     </properties>
 
     <build>
@@ -73,33 +73,33 @@
 	
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <artifactId>isis-applib</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
+            <artifactId>isis-metamodel</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-metamodel</artifactId>
+            <artifactId>isis-metamodel</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-schema</artifactId>
+            <artifactId>isis-schema</artifactId>
         </dependency>
 
 
