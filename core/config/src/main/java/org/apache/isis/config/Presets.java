@@ -128,5 +128,16 @@ public final class Presets  {
         }
        
     }
+
+    /**
+     * Use PROTOTYPING mode as the default. Does not override if the system-property 
+     * 'PROTOTYPING' was already set.
+     */
+    public static void prototyping() {
+        if(System.getProperty("PROTOTYPING")==null) {
+            System.setProperty("PROTOTYPING", "true");    
+        }
+    }
+    
     
 }

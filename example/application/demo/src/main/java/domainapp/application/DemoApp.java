@@ -18,12 +18,14 @@
  */
 package domainapp.application;
 
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
-import org.apache.isis.runtime.spring.IsisBoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.config.Presets;
+import org.apache.isis.runtime.spring.IsisBoot;
 
 /**
  * Bootstrap the application.
@@ -43,6 +45,7 @@ public class DemoApp extends SpringBootServletInitializer {
 	 * entry point by searching for classes having a {@code main(...)}
 	 */
 	public static void main(String[] args) {
+	    Presets.prototyping();
 		SpringApplication.run(new Class[] { DemoApp.class }, args);
 	}
 }

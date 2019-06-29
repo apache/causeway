@@ -19,6 +19,7 @@
 package domainapp.application;
 
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.config.Presets;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -46,6 +47,7 @@ public class HelloWorldApp extends SpringBootServletInitializer {
 	 * entry point by searching for classes having a {@code main(...)}
 	 */
 	public static void main(String[] args) {
+	    Presets.prototyping();
 		SpringApplication.run(new Class[] { HelloWorldApp.class }, args);
 	}
 
