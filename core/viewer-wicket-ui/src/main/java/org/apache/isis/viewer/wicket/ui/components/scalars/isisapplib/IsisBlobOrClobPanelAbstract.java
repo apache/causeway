@@ -39,7 +39,6 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
-import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
@@ -346,7 +345,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         component.add(new AttributeModifier("accept", new AcceptAttributeModel()));
     }
 
-
     private Label updateFileNameLabel(String idFileName, MarkupContainer formComponent) {
         class FileNameModel extends Model<String> {
             private static final long serialVersionUID = 1L;
@@ -399,7 +397,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     private MarkupContainer updateDownloadLink(String downloadId, MarkupContainer container) {
-        final ResourceLink<?> resourceLink = createResourceLink(downloadId);
+        val resourceLink = createResourceLink(downloadId);
         if(resourceLink != null) {
             container.addOrReplace(resourceLink);
         } else {
@@ -408,13 +406,13 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         return resourceLink;
     }
 
-    private ResourceLink<?> createResourceLink(String id) {
+    private ResourceLinkVolatile createResourceLink(String id) {
         final T blob = getBlobOrClobFromModel();
         if(blob == null) {
             return null;
         }
-        final IResource bar = newResource(blob);
-        return new ResourceLink<Object>(id, bar);
+        val resource = newResource(blob);
+        return new ResourceLinkVolatile(id, resource);
     }
 
     private T getBlobOrClobFromModel() {
