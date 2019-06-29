@@ -69,34 +69,34 @@
                 
             </dependencies>
         </profile>
-        <profile>
-            <id>isis-mavendeps-intellij</id>
-            <activation>
-                <property>
-                    <name>idea.version</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.isis.core</groupId>
-                    <artifactId>isis-webserver</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>isis-mavendeps-eclipse</id>
-            <activation>
-                <property>
-                    <name>m2e.version</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.isis.core</groupId>
-                    <artifactId>isis-webserver</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
+<!--         <profile> -->
+<!--             <id>isis-mavendeps-intellij</id> -->
+<!--             <activation> -->
+<!--                 <property> -->
+<!--                     <name>idea.version</name> -->
+<!--                 </property> -->
+<!--             </activation> -->
+<!--             <dependencies> -->
+<!--                 <dependency> -->
+<!--                     <groupId>org.apache.isis.core</groupId> -->
+<!--                     <artifactId>isis-webserver</artifactId> -->
+<!--                 </dependency> -->
+<!--             </dependencies> -->
+<!--         </profile> -->
+<!--         <profile> -->
+<!--             <id>isis-mavendeps-eclipse</id> -->
+<!--             <activation> -->
+<!--                 <property> -->
+<!--                     <name>m2e.version</name> -->
+<!--                 </property> -->
+<!--             </activation> -->
+<!--             <dependencies> -->
+<!--                 <dependency> -->
+<!--                     <groupId>org.apache.isis.core</groupId> -->
+<!--                     <artifactId>isis-webserver</artifactId> -->
+<!--                 </dependency> -->
+<!--             </dependencies> -->
+<!--         </profile> -->
         <profile>
             <id>flatten</id>
             <activation>
