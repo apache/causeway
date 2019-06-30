@@ -19,7 +19,6 @@ class TObjectTest {
 
     @Test
     fun testMembers() {
-        //TODO authors@ro.org members should be modeled as elements of an Array []
         val jsonStr = SO_0.str
         val to = TObjectHandler().parse(jsonStr) as TObject
         assertEquals("Object: Foo", to.links[0].title)
@@ -30,12 +29,11 @@ class TObjectTest {
         assertEquals(4, properties.size)
 
         val objectList = ObjectList()
-        to.addMembersAsProperties()
+        to.addMembersAsProperties()  //FIXME move fun from TObject to OA?
         val oa1 = ObjectAdapter(to)
         objectList.list.add(oa1)
 
         val oa: ObjectAdapter = objectList.last()!!
-        console.log("[TOT.testMembers] $oa")
         val actualDnId =  oa.get("datanucleusIdLong") as Value
         assertEquals(0, actualDnId.content)
 

@@ -1,4 +1,4 @@
-if (defined.PRODUCTION === false || defined.PRODUCTION === 'false') {
+/*if (defined.PRODUCTION === false || defined.PRODUCTION === 'false') {
   config.module.rules.push({
     enforce: 'pre',
     test: /\.js$/,
@@ -9,4 +9,4 @@ if (defined.PRODUCTION === false || defined.PRODUCTION === 'false') {
     ]
   });
   config.devtool = "eval-source-map";
-}
+}   */

@@ -9,6 +9,7 @@ data class TObject(val links: List<Link> = emptyList(),
                    val title: String = "",
                    val domainType: String = "",
                    val instanceId: String? = null,
+        //TODO authors@ro.org : Shouldn't members be modeled as elements of Array/[] instead of Map/{} ?
                    val members: Map<String, Member> = emptyMap()
 ) : TransferObject {
 

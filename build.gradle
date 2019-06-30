@@ -1,5 +1,5 @@
 buildscript {
-    
+
     ext.production = (findProperty('prod') ?: 'false') == 'true'
 
     repositories {
@@ -59,7 +59,7 @@ dependencies {
 
 kotlinFrontend {
     sourceMaps = true // CHANGE HERE
-    
+
     webpackBundle {
         bundleName = "main"
         sourceMapEnabled = false // CHANGE HERE (it must be false!)

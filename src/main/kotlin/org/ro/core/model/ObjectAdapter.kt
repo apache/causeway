@@ -4,16 +4,16 @@ import kotlinx.serialization.Serializable
 import org.ro.to.TObject
 
 @Serializable
-class ObjectAdapter(val delegate: TObject) {
-    val resultClass = "resultClass"
-    val fixtureScript = "fixtureScript"
-    val resultKey: String
-        get() {
-            return delegate.title
-        }
+class ObjectAdapter(private val delegate: TObject) {
+
     val result: String
         get() {
             return delegate.domainType
+        }
+
+    val resultClass: String
+        get() {
+            return "resultClass" //TODO where can this be taken from?
         }
 
     fun get(propertyName: String): Any? {
@@ -21,7 +21,7 @@ class ObjectAdapter(val delegate: TObject) {
         if (that.hasOwnProperty(propertyName)) {
             return that[propertyName]
         } else {
-            val delegatedProperty =  delegate.getProperty(propertyName)
+            val delegatedProperty = delegate.getProperty(propertyName)
             if (delegatedProperty != null) {
                 return delegatedProperty.value
             }
@@ -30,9 +30,10 @@ class ObjectAdapter(val delegate: TObject) {
     }
 
     fun match(search: String?): Boolean {
-        return search?.let {
-            resultClass.contains(it, true) ?: false
+        val result = search?.let {
+            resultClass.contains(it, true)
         } ?: true
+        return result;
     }
 
 }

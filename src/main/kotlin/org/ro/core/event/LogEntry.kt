@@ -23,11 +23,16 @@ data class LogEntry(
     var state = EventState.INITIAL
     var menu: ActionMenu? = null  //TODO Deprecated, use iconName
     var title: String = ""
+    var requestLength: Int = 0
+    var response = ""
+    var responseLength: Int = 0
 
     init {
         state = EventState.RUNNING
         menu = ActionMenu("fa-ellipsis-h")
         title = stripHostPort(url)
+        requestLength = request.length
+        responseLength = response.length
     }
 
     @ContextualSerialization
@@ -39,13 +44,6 @@ data class LogEntry(
     private var lastAccessedAt: Date? = null
 
     private var fault: String? = null
-    val requestLength: Int
-        get() = request.length
-
-    var response = ""
-    val responseLength: Int
-        get() = response.length
-
     var offset = 0
     var duration = 0
     var cacheHits = 0

@@ -1,13 +1,13 @@
 package org.ro.core.event
 
 import kotlinx.serialization.Serializable
+import org.ro.core.UiManager
 import org.ro.core.Utils
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.core.observer.BaseObserver
 import org.ro.layout.Layout
 import org.ro.to.*
-import org.ro.view.RoView
 import org.ro.view.table.fr.FixtureResultTable
 
 /** sequence of operations:
@@ -34,7 +34,7 @@ class ListObserver : BaseObserver() {
             else -> log(le)
         }
 
-        if (list.hasLayout()) {
+        if (list.hasLayout() && !isRendered) {
             handleView()
         }
     }
@@ -49,18 +49,11 @@ class ListObserver : BaseObserver() {
 
     private fun handleView() {
         val title: String = this::class.simpleName.toString()
-        //TODO on runFixtureScript this is passed multiple times
-        if (isRendered) {
-            console.log("[ListObserver.handleView] already opened: $title")
-        } else {
-            console.log("[ListObserver.handleView] about to open: $title")
-            val model = list.list
-            console.log("[ListObserver.handleView] number of objects: ${model.size}")
-            val panel = FixtureResultTable(model)
-            RoView.addTab(title, panel)
-            // UiManager.addView(list)
-            isRendered = true
-        }
+        console.log("[ListObserver.handleView] about to open: $title")
+        val model = list.list
+        val panel = FixtureResultTable(model)
+        UiManager.addView(title, panel)
+        isRendered = true
     }
 
     private fun handleProperty(p: Property) {
@@ -69,20 +62,21 @@ class ListObserver : BaseObserver() {
             Utils.debug(p)
         } else {
             val ext = p.extensions
-        if (ext.friendlyName.isNotEmpty()) {
-            console.log("[ListObserver.handleProperty] -> description")
-        } else {
-            console.log("[ListObserver.handleProperty]")
-            val descLink = p.descriptionLink()!!
-            descLink.invoke(this)
-            list.addProperty(p)
-        }  }
+            if (ext.friendlyName.isNotEmpty()) {
+                console.log("[ListObserver.handleProperty] -> description")
+            } else {
+                console.log("[ListObserver.handleProperty]")
+                val descLink = p.descriptionLink()!!
+                descLink.invoke(this)
+                list.addProperty(p)
+            }
+        }
     }
 
     private fun handleObject(obj: TObject) {
         list.list.add(ObjectAdapter(obj))
+        console.log("[ListObserver.handleObject] number of objects: ${list.list.size}")
         if (!list.hasLayout()) {
-            Utils.debug(obj)
             val link = obj.getLayoutLink()
             if (link != null) {
                 link.invoke(this)
