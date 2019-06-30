@@ -41,7 +41,7 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      */
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
-    ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
+    //ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
 
     // -- retrieve
 

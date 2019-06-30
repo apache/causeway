@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -29,8 +32,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import lombok.val;
 
@@ -53,10 +54,10 @@ public class HomePage extends PageAbstract {
 
     private void buildGui() {
         val isisSession = IsisSession.currentOrElseNull();
-        val adapterActionPair = isisSession.findHomePageAction();
-        if(adapterActionPair != null) {
-            val objectAdapter = adapterActionPair.get_1();
-            val action = adapterActionPair.get_2();
+        val homePageAction = isisSession.getHomePageAction();
+        if(homePageAction != null) {
+            val objectAdapter = homePageAction.getObjectAdapter();
+            val action = homePageAction.getObjectAction();
             
             Components.permanentlyHide(themeDiv, ComponentType.WELCOME);
             final ActionModel actionModel = 

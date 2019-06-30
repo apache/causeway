@@ -18,19 +18,20 @@
  */
 package org.apache.isis.runtime.system.context.session;
 
+import java.util.function.Supplier;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObjectState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
@@ -58,6 +59,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter protected final SpecificationLoader specificationLoader;
     @Getter protected final AuthenticationSession authenticationSession;
     @Getter protected final ObjectAdapterProvider objectAdapterProvider;
+    @Getter protected final Supplier<HomePageAction> homePageActionResolver;
     
     // -- NO ARG CONSTRUCTOR
     
@@ -69,6 +71,12 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         specificationLoader = mmc.getSpecificationLoader();
         authenticationSession = mmc.getAuthenticationSession();
         objectAdapterProvider = mmc.getObjectAdapterProvider();
+        homePageActionResolver = mmc::getHomePageAction;
+    }
+    
+    @Override
+    public HomePageAction getHomePageAction() {
+        return homePageActionResolver.get();
     }
     
     // -- OBJECT ADAPTER SUPPORT
@@ -88,14 +96,6 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Override //FIXME [2033] decouple from JDO
     public FixturesInstalledState getFixturesInstalledState() {
     	return ps().getFixturesInstalledState();
-    }
-    
-    // -- HOMEPAGE LOOKUP SUPPORT
-    
-    @Override
-    public Tuple2<ObjectAdapter, ObjectAction> findHomePageAction() {
-    	val finderMixin = new RuntimeContextBase_findHomepage(this);
-    	return finderMixin.findHomePageAction();
     }
     
     // -- AUTH

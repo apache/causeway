@@ -129,10 +129,10 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return objectAdapterContext.objectCreationMixin.newInstance(objectSpec);
     }
     
-    @Override
-    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
-        return objectAdapterContext.objectCreationMixin.recreateInstance(objectSpec, memento);
-    }
+//    @Override
+//    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
+//        return objectAdapterContext.objectCreationMixin.recreateInstance(objectSpec, memento);
+//    }
     
     // -- SERVICE SUPPORT
     

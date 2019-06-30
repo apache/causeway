@@ -32,6 +32,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -77,6 +78,8 @@ public interface MetaModelContext {
     TransactionService getTransactionService();
     
     TransactionState getTransactionState();
+    
+    HomePageAction getHomePageAction();
     
 	Stream<ObjectAdapter> streamServiceAdapters();
 	
@@ -172,6 +175,11 @@ public interface MetaModelContext {
         @Override
         public default TransactionState getTransactionState() {
             return getMetaModelContext().getTransactionState();
+        }
+        
+        @Override
+        public default HomePageAction getHomePageAction() {
+            return getMetaModelContext().getHomePageAction();
         }
         
         @Override

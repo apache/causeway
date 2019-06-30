@@ -20,21 +20,20 @@ package org.apache.isis.runtime.system.context.session;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Tuples;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ManagedObjectState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.Data;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 /**
- * TODO [2033] this was introduced for refactoring, use MetaModelContext instead if possible
+ * TODO [2033] this was introduced when refactoring, maybe use MetaModelContext instead if possible
  *  
  * @since 2.0
  * 
@@ -46,12 +45,7 @@ public interface RuntimeContext {
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();
     ServiceRegistry getServiceRegistry();
-    
-	//Stream<ObjectAdapter> streamServiceAdapters();
-    
-	_Tuples.Tuple2<ObjectAdapter, ObjectAction> findHomePageAction(); //TODO [2033] there's also a HomepageService
-	
-	//ObjectAdapter lookupService(String serviceId);
+    HomePageAction getHomePageAction();
 	
 	ObjectAdapter adapterOfPojo(Object pojo);
 	ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);

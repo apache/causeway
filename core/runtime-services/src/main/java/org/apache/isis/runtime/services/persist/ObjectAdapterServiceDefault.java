@@ -141,10 +141,10 @@ public class ObjectAdapterServiceDefault implements ObjectAdapterService {
         return ps().specificationForViewModel(viewModelPojo);
     }
 
-    @Override
-    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, String memento) {
-        return ps().recreateViewModelInstance(objectSpec, memento);
-    }
+//    @Override
+//    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, String memento) {
+//        return ps().recreateViewModelInstance(objectSpec, memento);
+//    }
 
     @Override
     public Stream<ObjectAdapter> streamServices() {

@@ -36,6 +36,7 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
+import org.apache.isis.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -77,6 +78,8 @@ final class MetaModelContext_forTesting implements MetaModelContext {
 	private AuthenticationManager authenticationManager;
 
 	private TitleService titleService;
+	
+	private HomePageAction homePageAction;
 
 	private RepositoryService repositoryService;
 

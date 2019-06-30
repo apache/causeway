@@ -98,7 +98,7 @@ public interface ObjectAdapterProvider {
      */
     ObjectAdapter newTransientInstance(ObjectSpecification objectSpec);
     
-    @Nullable ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, @Nullable final String memento);
+//    @Nullable ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, @Nullable final String memento);
     
     // -- SERVICE LOOKUP 
     
@@ -145,9 +145,9 @@ public interface ObjectAdapterProvider {
         }
         
         
-        default ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
-            return getObjectAdapterProvider().recreateViewModelInstance(objectSpec, memento);
-        }
+//        default ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
+//            return getObjectAdapterProvider().recreateViewModelInstance(objectSpec, memento);
+//        }
         
         
         default Stream<ObjectAdapter> streamServices() {

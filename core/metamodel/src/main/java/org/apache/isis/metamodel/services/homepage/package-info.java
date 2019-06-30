@@ -16,32 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.routing;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.homepage.HomePageProviderService;
-
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
-public class RoutingServiceDefault implements RoutingService {
-
-    @Programmatic
-    @Override
-    public boolean canRoute(final Object original) {
-        return true;
-    }
-
-    @Programmatic
-    @Override
-    public Object route(final Object original) {
-        return original != null? original: homePageProviderService.homePage();
-    }
-
-    @javax.inject.Inject
-    HomePageProviderService homePageProviderService;
-
-}
+/**
+ * The {@link org.apache.isis.metamodel.services.homepage.HomePageResolverService} service simply provides access to the
+ * home page object (if any) that is returned from the domain service action annotated with {@link org.apache.isis.applib.annotation.HomePage @HomePage}.
+ *
+ * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-spi_HomePageProviderService">Reference guide</a>
+ */
+package org.apache.isis.metamodel.services.homepage;

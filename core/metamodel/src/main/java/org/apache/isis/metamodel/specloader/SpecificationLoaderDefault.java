@@ -158,7 +158,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 typeRegistry.getEntityTypes().add(type);
                 mixinSpecs.add(spec);
                 return;
-
+            case VIEW_MODEL:
+                typeRegistry.getViewModelTypes().add(type);
+                return;
+                
             default:
                 return;
             }
@@ -266,28 +269,25 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 			return null;
 		}
 
-		final String typeName = substitutedType.getName();
-		ObjectSpecification spec = cache.get(typeName);
-		if (spec != null) {
-			return spec;
-		}
+		val typeName = substitutedType.getName();
 
 		//TODO[2033] don't block on long running code ... 'specSpi.introspectUpTo(upTo);'
 		synchronized (cache) {
 			
-			spec = cache.get(typeName);
+			val spec = cache.get(typeName);
 			if (spec != null) {
-				return spec;
+			    if(spec instanceof ObjectSpecificationAbstract) {
+			        ((ObjectSpecificationAbstract)spec).introspectUpTo(upTo);
+			    }
+			    return spec;
 			}
 
-			final ObjectSpecification specification = createSpecification(substitutedType);
+			val specification = createSpecification(substitutedType);
 
 			// put into the cache prior to introspecting, to prevent
 			// infinite loops
 			cache.cache(typeName, specification);
-
-			final ObjectSpecificationAbstract specSpi = (ObjectSpecificationAbstract) specification;
-			specSpi.introspectUpTo(upTo);
+			specification.introspectUpTo(upTo);
 
 			return specification;
 		}
@@ -341,7 +341,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 	/**
 	 * Creates the appropriate type of {@link ObjectSpecification}.
 	 */
-	private ObjectSpecification createSpecification(final Class<?> cls) {
+	private ObjectSpecificationAbstract createSpecification(final Class<?> cls) {
 
 		// ... and create the specs
 		final ObjectSpecificationAbstract objectSpec;

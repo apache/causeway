@@ -39,8 +39,8 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -72,10 +72,10 @@ implements PersistenceSessionServiceInternal {
         return getPersistenceSession().newTransientInstance(spec);
     }
 
-    @Override
-    public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
-        return getPersistenceSession().recreateViewModelInstance(spec, memento);
-    }
+//    @Override
+//    public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
+//        return getPersistenceSession().recreateViewModelInstance(spec, memento);
+//    }
 
     @Override
     public Object lookup(

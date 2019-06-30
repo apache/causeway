@@ -16,11 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.metamodel.services.homepage;
+
+import org.apache.isis.applib.annotation.HomePage;
 
 /**
- * The {@link org.apache.isis.applib.services.homepage.HomePageProviderService} service simply provides access to the
- * home page object (if any) that is returned from the domain service action annotated with {@link org.apache.isis.applib.annotation.HomePage @HomePage}.
- *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-spi_HomePageProviderService">Reference guide</a>
+ * Resolves the home-page-providing action (if any).
+ * @since 2.0
  */
-package org.apache.isis.applib.services.homepage;
+public interface HomePageResolverService {
+
+    /**
+     * Returns meta information on the home-page-providing action 
+     * (an action of a managed bean annotated with {@link HomePage}.
+     */
+    HomePageAction getHomePageAction();
+
+}

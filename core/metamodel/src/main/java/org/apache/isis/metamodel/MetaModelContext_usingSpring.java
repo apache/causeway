@@ -38,6 +38,8 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.ServiceUtil;
+import org.apache.isis.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -103,6 +105,9 @@ class MetaModelContext_usingSpring implements MetaModelContext {
         private final TransactionService transactionService =
                 _Spring.getSingletonElseFail(TransactionService.class);
         
+        @Getter(lazy=true) 
+        private final HomePageResolverService homePageResolverService =
+                _Spring.getSingletonElseFail(HomePageResolverService.class);
 
         @Override
         public final AuthenticationSession getAuthenticationSession() {
@@ -117,6 +122,11 @@ class MetaModelContext_usingSpring implements MetaModelContext {
         @Override
         public final TransactionState getTransactionState() {
             return getTransactionService().currentTransactionState();
+        }
+        
+        @Override
+        public final HomePageAction getHomePageAction() {
+            return getHomePageResolverService().getHomePageAction();
         }
         
         // -- SERVICE SUPPORT
@@ -144,8 +154,8 @@ class MetaModelContext_usingSpring implements MetaModelContext {
             return getServiceRegistry().streamRegisteredBeans()
             .filter(registeredBean->!registeredBean.getManagedObjectSort().isUnknown())        
             .map(objectAdapterProvider::adapterForBean) 
-            .peek(serviceAdapter->{
-                val oid = serviceAdapter.getOid();
+            .peek(objectAdapter->{
+                val oid = objectAdapter.getOid();
                 if(oid.isTransient()) {
                     val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
                     throw _Exceptions.unrecoverable(msg);

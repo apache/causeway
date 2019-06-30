@@ -16,28 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.homepage;
+package org.apache.isis.runtime.services.routing;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.services.routing.RoutingService;
-import org.apache.isis.applib.services.routing.RoutingServiceDefault;
+import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
 
-/**
- * Provides access to the home page object (if any).
- *
- * <p>
- *     Used by the {@link RoutingServiceDefault default implementation} of the {@link RoutingService}.
- * </p>
- */
-public interface HomePageProviderService {
+import lombok.val;
 
-    /**
-     * Returns the object returned by invoking the home page action (an action of a {@link DomainService} annotated
-     * with {@link HomePage}.
-     */
-    @Programmatic
-    Object homePage();
+@Singleton
+public class RoutingServiceDefault implements RoutingService {
+
+    @Override
+    public boolean canRoute(final Object original) {
+        return true;
+    }
+
+    @Override
+    public Object route(final Object original) {
+        if(original!=null) {
+            return original;
+        }
+        val homePageDescriptor = homePageProviderService.getHomePageAction();
+        return homePageDescriptor!=null
+                ? homePageDescriptor.getHomePagePojo()
+                        : null;
+    }
+
+    @javax.inject.Inject
+    HomePageResolverService homePageProviderService;
 
 }

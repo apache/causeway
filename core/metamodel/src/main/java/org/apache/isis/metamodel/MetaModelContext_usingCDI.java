@@ -38,6 +38,8 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.ServiceUtil;
+import org.apache.isis.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -102,6 +104,10 @@ class MetaModelContext_usingCDI implements MetaModelContext {
         private final TransactionService transactionService =
                 _CDI.getSingletonElseFail(TransactionService.class);
         
+        @Getter(lazy=true) 
+        private final HomePageResolverService homePageResolverService =
+                _CDI.getSingletonElseFail(HomePageResolverService.class);
+        
 
         @Override
         public final AuthenticationSession getAuthenticationSession() {
@@ -116,6 +122,11 @@ class MetaModelContext_usingCDI implements MetaModelContext {
         @Override
         public final TransactionState getTransactionState() {
             return getTransactionService().currentTransactionState();
+        }
+        
+        @Override
+        public final HomePageAction getHomePageAction() {
+            return getHomePageResolverService().getHomePageAction();
         }
         
         // -- SERVICE SUPPORT

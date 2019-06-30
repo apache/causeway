@@ -1,5 +1,9 @@
 package org.apache.isis.config.registry;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;
+import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +17,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
@@ -25,10 +32,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-
-import static org.apache.isis.commons.internal.base._With.requires;
-import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;
-import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -57,7 +60,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
 //    @Getter private final Set<Class<? extends FixtureScript>> fixtureScriptTypes = new HashSet<>();
-//    @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
+    @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
 //    @Getter private final Set<Class<?>> xmlElementTypes = new HashSet<>();
     
     //@Getter private final Set<Class<?>> iocManaged = new HashSet<>();
@@ -66,7 +69,8 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
     private final List<Set<? extends Class<? extends Object>>> allTypeSets = _Lists.of(
             beanTypes,
             entityTypes,
-            mixinTypes
+            mixinTypes,
+            viewModelTypes
             );
 
     @Override
@@ -247,6 +251,14 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         }
 
         if(getAnnotation(type, Singleton.class)!=null) {
+            return BeanSort.MANAGED_BEAN;
+        }
+        
+        if(getAnnotation(type, Service.class)!=null) {
+            return BeanSort.MANAGED_BEAN;
+        }
+        
+        if(getAnnotation(type, Component.class)!=null) {
             return BeanSort.MANAGED_BEAN;
         }
         

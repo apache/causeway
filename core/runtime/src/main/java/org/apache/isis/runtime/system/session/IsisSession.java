@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.commons.ToString;
+import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
@@ -67,7 +68,11 @@ public class IsisSession extends RuntimeContextBase {
 				IsisContext.getServiceRegistry(),
 				IsisContext.getSpecificationLoader(),
 				authenticationSession,
-				IsisContext.getObjectAdapterProvider());
+				IsisContext.getObjectAdapterProvider(),
+				()->IsisContext.getServiceRegistry()
+				    .lookupServiceElseFail(HomePageResolverService.class)
+				    .getHomePageAction()
+				);
 		
 		this.runtimeEventService = runtimeEventService;
         
