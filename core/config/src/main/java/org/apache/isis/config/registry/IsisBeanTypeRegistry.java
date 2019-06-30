@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
@@ -215,6 +216,10 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
                 // continue
                 break; 
             } 
+        }
+        
+        if(getAnnotation(type, Mixin.class)!=null) {
+            return BeanSort.MIXIN;
         }
 
         if(getAnnotation(type, ViewModel.class)!=null) {

@@ -138,6 +138,9 @@ public final class Presets  {
             System.setProperty("PROTOTYPING", "true");    
         }
     }
-    
+
+    public static void logging(Class<?> clazz, String loggingLevel) {
+        System.setProperty("logging.level." + clazz.getName(), loggingLevel);
+    }
     
 }

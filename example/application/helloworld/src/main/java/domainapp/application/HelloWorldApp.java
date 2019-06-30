@@ -18,22 +18,19 @@
  */
 package domainapp.application;
 
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
-import org.apache.isis.config.Presets;
-import org.apache.isis.runtime.spring.IsisBoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.config.Presets;
+
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    IsisBoot.class,
-    FixtureScriptsDefault.class,
     HelloWorldAppManifest.class,
 })
 @ServletComponentScan(basePackageClasses = {

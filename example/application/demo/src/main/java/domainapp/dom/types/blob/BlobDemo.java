@@ -25,9 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
@@ -70,13 +67,6 @@ public class BlobDemo extends DemoStub {
     @PropertyLayout
     @XmlElement @XmlJavaTypeAdapter(DemoBlobStore.BlobAdapter.class)
     @Getter @Setter private Blob logo;
-    
-    
-    @Action(associateWith = "logo") //XXX remove once mixins are fixed
-    @ActionLayout(position = Position.PANEL)
-    public Blob downloadLogo() {
-        return getLogo();
-    }
     
     // -- READONLY
     

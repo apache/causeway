@@ -23,17 +23,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.config.Presets;
-import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    IsisBoot.class,
-    FixtureScriptsDefault.class,
     DemoAppManifest.class,
 })
 public class DemoApp extends SpringBootServletInitializer {
@@ -46,6 +44,8 @@ public class DemoApp extends SpringBootServletInitializer {
 	 */
 	public static void main(String[] args) {
 	    Presets.prototyping();
+	    Presets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
+	    Presets.logging(IsisBeanTypeRegistry.class, "DEBUG");
 		SpringApplication.run(new Class[] { DemoApp.class }, args);
 	}
 }

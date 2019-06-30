@@ -34,7 +34,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisBeanScanInterceptorForSpring implements TypeFilter {
 	
-	@Getter(lazy=true) private final IsisBeanTypeRegistry typeRegistry = IsisBeanTypeRegistry.current();
+	@Getter(lazy=true) 
+	private final IsisBeanTypeRegistry typeRegistry = IsisBeanTypeRegistry.current();
 
 	@Override
 	public boolean match(
@@ -47,11 +48,13 @@ public class IsisBeanScanInterceptorForSpring implements TypeFilter {
 			return false;
 		}
 		
-		if(log.isDebugEnabled()) log.debug("scanning concrete type {}", classMetadata.getClassName());
-		
 		//val annotationMetadata = metadataReader.getAnnotationMetadata();
 		//val annotationTypes = annotationMetadata.getAnnotationTypes();
 		val typeMetaData = TypeMetaData.of(classMetadata.getClassName()/*, annotationTypes*/);
+		
+		if(log.isDebugEnabled()) {
+            log.debug("scanning concrete type {} -> {}", classMetadata.getClassName(), typeMetaData);
+        }
 		
 		return getTypeRegistry().isIoCManagedType(typeMetaData);
 	}
