@@ -14,12 +14,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-    	<groupId>org.apache.isis.examples</groupId>
-    	<artifactId>isis-examples</artifactId>
-        <version>${revision}</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+	<parent>
+		<groupId>org.apache.isis.examples</groupId>
+		<artifactId>isis-examples</artifactId>
+		<version>${revision}</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
 
 	<groupId>org.apache.isis.example.application</groupId>
 	<artifactId>demo</artifactId>
@@ -29,14 +29,14 @@
 	<packaging>${packaging.type}</packaging>
 
 	<properties>
-	
+
 		<packaging.type>war</packaging.type>
-		
+
 		<compiler-plugin.source>1.8</compiler-plugin.source>
 		<compiler-plugin.target>1.8</compiler-plugin.target>
 		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
-		
+
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
@@ -51,7 +51,7 @@
 	</properties>
 
 	<dependencies>
-	
+
 		<!-- SPRING -->
 
 		<dependency>
@@ -85,50 +85,58 @@
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-commons</artifactId>
-			</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-applib</artifactId>
-			</dependency>
+		</dependency>
 
 		<!-- ISIS CORE -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-viewer-wicket-impl</artifactId>
-			</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-viewer-restfulobjects-server</artifactId>
-			</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-security</artifactId>
-			</dependency>
+		</dependency>
 
 		<!-- ISIS CORE PLUGINS -->
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-security-shiro</artifactId>
-			</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
-			</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
-			</dependency>
-		
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
-			</dependency>
+		</dependency>
+		
+		<!-- ISIS EXTENSIONS -->
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-viewer-wicket-excel</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
 		<dependency>
@@ -136,10 +144,10 @@
 			<artifactId>hsqldb</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -148,12 +156,12 @@
 		</dependency>
 
 		<!-- provides a markdown parser -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.vladsch.flexmark</groupId> -->
-<!-- 			<artifactId>flexmark-all</artifactId> -->
-<!-- 			<version>0.34.32</version> -->
-<!-- 		</dependency> -->
-		
+		<!-- <dependency> -->
+		<!-- <groupId>com.vladsch.flexmark</groupId> -->
+		<!-- <artifactId>flexmark-all</artifactId> -->
+		<!-- <version>0.34.32</version> -->
+		<!-- </dependency> -->
+
 		<!-- provides a ASCII-DOC parser -->
 		<dependency>
 			<groupId>org.asciidoctor</groupId>
@@ -230,7 +238,7 @@
 	</dependencies>
 
 	<profiles>
-	
+
 		<profile>
 			<id>jdk11</id>
 			<activation>
@@ -271,7 +279,7 @@
 				</property>
 			</activation>
 			<dependencies>
-				<!-- add flavor specific here-->
+				<!-- add flavor specific here -->
 			</dependencies>
 		</profile>
 
@@ -284,7 +292,7 @@
 				</property>
 			</activation>
 			<dependencies>
-				<!-- add flavor specific here-->
+				<!-- add flavor specific here -->
 			</dependencies>
 		</profile>
 
@@ -346,19 +354,19 @@
 		</profile>
 	</profiles>
 
-<!-- 	<pluginRepositories> -->
-<!-- 		<pluginRepository> -->
-<!-- 			<id>apache-staging</id> -->
-<!-- 			<url>https://repository.apache.org/content/groups/staging/</url> -->
-<!-- 			<releases> -->
-<!-- 				<enabled>true</enabled> -->
-<!-- 				<checksumPolicy>fail</checksumPolicy> -->
-<!-- 				<updatePolicy>always</updatePolicy> -->
-<!-- 			</releases> -->
-<!-- 			<snapshots> -->
-<!-- 				<enabled>false</enabled> -->
-<!-- 			</snapshots> -->
-<!-- 		</pluginRepository> -->
-<!-- 	</pluginRepositories> -->
+	<!-- <pluginRepositories> -->
+	<!-- <pluginRepository> -->
+	<!-- <id>apache-staging</id> -->
+	<!-- <url>https://repository.apache.org/content/groups/staging/</url> -->
+	<!-- <releases> -->
+	<!-- <enabled>true</enabled> -->
+	<!-- <checksumPolicy>fail</checksumPolicy> -->
+	<!-- <updatePolicy>always</updatePolicy> -->
+	<!-- </releases> -->
+	<!-- <snapshots> -->
+	<!-- <enabled>false</enabled> -->
+	<!-- </snapshots> -->
+	<!-- </pluginRepository> -->
+	<!-- </pluginRepositories> -->
 
 </project>
