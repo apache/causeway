@@ -40,7 +40,16 @@
             <artifactId>simpleapp-module-simple</artifactId>
         </dependency>
         
+        <!-- ISIS WEB-APP BUNDLE -->
+		
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-webapp</artifactId>
+			<type>pom</type>
+		</dependency>
+
 		<!-- ISIS CORE PLUGINS -->
+        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-plugins-codegen-bytebuddy</artifactId>
@@ -61,28 +70,8 @@
             <artifactId>isis-plugins-security-shiro</artifactId>
         </dependency>
         
-       	<!-- SPRING -->
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring-boot.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.validation</groupId>
-					<artifactId>validation-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<version>${spring-boot.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
         <!-- TESTS -->
+        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-module-simple</artifactId>

@@ -52,60 +52,12 @@
 
 	<dependencies>
 
-		<!-- SPRING -->
-
+		<!-- ISIS WEB-APP BUNDLE -->
+		
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring-boot.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.validation</groupId>
-					<artifactId>validation-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-jcl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<version>${spring-boot.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- ISIS API -->
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-commons</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-applib</artifactId>
-		</dependency>
-
-		<!-- ISIS CORE -->
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-wicket-impl</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-viewer-restfulobjects-server</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-security</artifactId>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-webapp</artifactId>
+			<type>pom</type>
 		</dependency>
 
 		<!-- ISIS CORE PLUGINS -->

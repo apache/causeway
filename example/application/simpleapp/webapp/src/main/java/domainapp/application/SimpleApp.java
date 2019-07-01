@@ -18,13 +18,14 @@
  */
 package domainapp.application;
 
+import org.apache.isis.config.Presets;
+import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.application.manifest.DomainAppAppManifest;
 
@@ -40,4 +41,15 @@ import domainapp.application.manifest.DomainAppAppManifest;
 @PropertySource("classpath:/domainapp/application/isis.properties")
 public class SimpleApp extends SpringBootServletInitializer {
 
+	/**
+	 * 
+	 * @param args
+	 * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+	 * entry point by searching for classes having a {@code main(...)}
+	 */
+	public static void main(String[] args) {
+	    Presets.prototyping();
+		SpringApplication.run(new Class[] { SimpleApp.class }, args);
+	}
+	
 }
