@@ -17,6 +17,6 @@ class EventLogTab {
         csList.add(ColDef(LogEntry::duration, 4))
         csList.add(ColDef(LogEntry::responseLength, 5, "resp.len", "response"))
         csList.add(ColDef(LogEntry::cacheHits, 2))
-        csList.add(ColDef(LogEntry::menu, 2))
+        csList.add(ColDef(LogEntry::iconName, 2))
     }
 }

@@ -3,7 +3,6 @@ package org.ro.core.event
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.ro.core.TransferObject
-import org.ro.view.table.ActionMenu
 import kotlin.js.Date
 
 enum class EventState(val id: String, val iconName: String) {
@@ -21,7 +20,7 @@ data class LogEntry(
         val method: String? = "",
         val request: String = "") {
     var state = EventState.INITIAL
-    var menu: ActionMenu? = null  //TODO Deprecated, use iconName
+    var iconName: String? = "/resources/img/crow.gif"//"fa-ellipsis-h"
     var title: String = ""
     var requestLength: Int = 0
     var response = ""
@@ -29,7 +28,6 @@ data class LogEntry(
 
     init {
         state = EventState.RUNNING
-        menu = ActionMenu("fa-ellipsis-h")
         title = stripHostPort(url)
         requestLength = request.length
         responseLength = response.length

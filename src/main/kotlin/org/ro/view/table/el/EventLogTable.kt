@@ -27,6 +27,8 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     private lateinit var search: TextInput
     private lateinit var searchTypes: RadioGroup
 
+    private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true;  tickElement ="<i class='fa fa-ellipsis-h'></i>";  crossElement ="<i class='fa fa-ellipsis-h'></i>"}
+
     private val columns = listOf(
             ColumnDefinition<LogEntry>("", field = "state", width = "80"),
             ColumnDefinition("Title", "title", width = "400"),
@@ -52,10 +54,8 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
             ColumnDefinition("cacheHits", field = "cacheHits", align = Align.RIGHT),
             ColumnDefinition("",
                     field = "iconName",
-                    formatter = Formatter.IMAGE,
-                    formatterFunction = { cell, _, _ ->
-                        cell.getValue()?.let { "<img src='" + cell.getValue() + "'/>" } ?: ""
-                    },
+                    formatter = Formatter.TICKCROSS,
+                    formatterParams = faFormatterParams,
                     align = Align.CENTER,
                     width = "40",
                     headerSort = false,
@@ -92,7 +92,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
             marginBottom = 0.px
             setEventListener<Tabulator<LogEntry>> {
                 tabulatorRowClick = { e ->
-//                    EditPanel.edit((e.detail as pl.treksoft.kvision.tabulator.js.Tabulator.RowComponent).getIndex() as Int)
+                    //                    EditPanel.edit((e.detail as pl.treksoft.kvision.tabulator.js.Tabulator.RowComponent).getIndex() as Int)
                 }
             }
             setFilter { address ->
