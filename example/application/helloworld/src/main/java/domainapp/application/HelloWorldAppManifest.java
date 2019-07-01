@@ -73,7 +73,12 @@ public class HelloWorldAppManifest {
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()
                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
+               .brandLogoHeader("/images/gift_48.png")
+               .applicationCss("css/application.css")
+               .applicationJs("scripts/application.js")
+               .applicationName("Isis Hello World App")
+               .faviconUrl("/images/favicon.png")
                .build();
    }
-
+   
 }

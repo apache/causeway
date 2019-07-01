@@ -21,6 +21,7 @@ package org.apache.isis.applib.fixturescripts;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -50,8 +51,11 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.val;
 
 
 /**
@@ -239,12 +243,17 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private Set<Class<? extends FixtureScript>> findFixtureScriptSubTypesInPackage() {
-        return findSubTypesOfClasses(FixtureScript.class, getPackagePrefix());
+    	
+    	val packagePrefix = getPackagePrefix();
+    	
+    	return serviceRegistry.streamRegisteredBeansOfType(FixtureScript.class)
+    	.map(beanAdapter->beanAdapter.getBeanClass())
+    	.map(type->_Casts.<Class<? extends FixtureScript>>uncheckedCast(type))
+    	.filter(type->type.getPackage().getName().startsWith(packagePrefix))
+    	.collect(Collectors.toCollection(HashSet::new));
     }
 
-    private <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> cls, final String packagePrefix) {
-        throw _Exceptions.notImplemented(); //TODO[2112] Use IsisBeanTypeRegistry or ServiceRegistry
-    }
+    
 
     private FixtureScript newFixtureScript(final Class<? extends FixtureScript> fixtureScriptCls) {
         try {

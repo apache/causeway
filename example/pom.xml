@@ -46,25 +46,70 @@
 
 		<mavenmixin-standard.version>0.0.4</mavenmixin-standard.version>
 		<mavenmixin-datanucleusenhance.version>0.0.5</mavenmixin-datanucleusenhance.version>
-		<mavenmixin-jettywar.version>0.0.2</mavenmixin-jettywar.version>
 		<mavenmixin-surefire.version>0.0.6</mavenmixin-surefire.version>
 		<mavenmixin-docker.version>0.0.4</mavenmixin-docker.version>
 		<mavenmixin-enforcerrelaxed.version>0.0.2</mavenmixin-enforcerrelaxed.version>
 		<mavenmixin-sourceandjavadoc.version>0.0.2</mavenmixin-sourceandjavadoc.version>
 		<mavenmixin-staticanalysis.version>0.0.2</mavenmixin-staticanalysis.version>
 		<mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version>
-		<mavenmixin-jettyconsole.version>0.0.2</mavenmixin-jettyconsole.version>
 		
 		<!-- MIXIN OVERRIDES -->
 		
-		<jetty-maven-plugin.version>${jetty.version}</jetty-maven-plugin.version>
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
 		<datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
 		<datanucleus-core.version>5.2.1</datanucleus-core.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 		
-
 	</properties>
+	
+	<profiles>
+		<profile>
+		    <id>dn-enhance</id>
+		    <activation>
+			    <file>
+			    	<exists>${basedir}/logging-dn-enhance.properties</exists>
+			    </file>
+			</activation>
+			<properties>
+				<!-- because this does affect the activation of the 'mavenmixin-datanucleusenhance' profile, 
+				we redeclare the entire build section below -->
+				<skip.mavenmixin-datanucleusenhance>false</skip.mavenmixin-datanucleusenhance>
+			</properties>
+			<build>
+			
+				<plugins>
+				
+					<plugin>
+						<groupId>com.github.odavid.maven.plugins</groupId>
+						<artifactId>mixin-maven-plugin</artifactId>
+						<version>0.1-alpha-39</version>
+						<extensions>true</extensions>
+						<configuration>
+							<mixins>
+								<mixin>
+									<groupId>com.danhaywood.mavenmixin</groupId>
+									<artifactId>standard</artifactId>
+								</mixin>
+								<mixin>
+									<groupId>com.danhaywood.mavenmixin</groupId>
+									<artifactId>datanucleusenhance</artifactId>
+								</mixin>
+								<mixin>
+									<groupId>com.danhaywood.mavenmixin</groupId>
+									<artifactId>surefire</artifactId>
+								</mixin>
+								<mixin>
+									<groupId>com.danhaywood.mavenmixin</groupId>
+									<artifactId>docker</artifactId>
+								</mixin>
+							</mixins>
+						</configuration>
+					</plugin>
+				
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<build>
 		<resources>
@@ -99,17 +144,14 @@
 							<groupId>com.danhaywood.mavenmixin</groupId>
 							<artifactId>standard</artifactId>
 						</mixin>
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>datanucleusenhance</artifactId>
-						</mixin>
+<!-- activated only with profile 'dn-enhance' above -->						
+<!-- 						<mixin> -->
+<!-- 							<groupId>com.danhaywood.mavenmixin</groupId> -->
+<!-- 							<artifactId>datanucleusenhance</artifactId> -->
+<!-- 						</mixin> -->
 						<mixin>
 							<groupId>com.danhaywood.mavenmixin</groupId>
 							<artifactId>surefire</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>jettywar</artifactId>
 						</mixin>
 						<mixin>
 							<groupId>com.danhaywood.mavenmixin</groupId>
@@ -151,6 +193,7 @@
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
+				<version>1.2.0</version>
 				<configuration>
 					<dockerDirectory>src/main/resources/docker/${flavor}</dockerDirectory>
 				</configuration>
@@ -242,12 +285,6 @@ ${license.additional-notes}
 			</dependency>
 			<dependency>
 				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>jettywar</artifactId>
-				<version>${mavenmixin-jettywar.version}</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
 				<artifactId>standard</artifactId>
 				<version>${mavenmixin-standard.version}</version>
 				<type>pom</type>
@@ -282,13 +319,6 @@ ${license.additional-notes}
 				<version>${mavenmixin-cucumberreporting.version}</version>
 				<type>pom</type>
 			</dependency>
-			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>jettyconsole</artifactId>
-				<version>${mavenmixin-jettyconsole.version}</version>
-				<type>pom</type>
-			</dependency>
-
 
 		</dependencies>
 	</dependencyManagement>

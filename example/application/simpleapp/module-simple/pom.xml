@@ -96,6 +96,7 @@
                     <plugin>
                         <groupId>org.apache.isis.tool</groupId>
                         <artifactId>isis-maven-plugin</artifactId>
+<!--                         <version>${isis.version}</version> -->
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -113,11 +114,17 @@
                                 <artifactId>${project.artifactId}</artifactId>
                                 <version>${project.version}</version>
                             </dependency>
-                            <dependency>
+							<dependency>
                                 <groupId>org.hsqldb</groupId>
                                 <artifactId>hsqldb</artifactId>
+                                <!-- workaround to avoid conflict with plexus-default -->
                                 <version>2.3.1</version>
                             </dependency>
+                            <dependency>
+					            <groupId>com.h2database</groupId>
+					            <artifactId>h2</artifactId>
+					            <version>${h2.version}</version>
+					        </dependency>
                         </dependencies>
                     </plugin>
                 </plugins>
