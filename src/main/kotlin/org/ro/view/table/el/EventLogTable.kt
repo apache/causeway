@@ -23,7 +23,7 @@ import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 
-class EventLogTable : VPanel() {
+class EventLogTable(val model: List<LogEntry>) : VPanel() {
     private lateinit var search: TextInput
     private lateinit var searchTypes: RadioGroup
 
@@ -85,9 +85,8 @@ class EventLogTable : VPanel() {
                 persistenceMode = false
         )
 
-        val model = EventStore.log
         val tabulator = tabulator(
-                EventStore.log, options = options
+                model, options = options
         ) {
             marginTop = 0.px
             marginBottom = 0.px
