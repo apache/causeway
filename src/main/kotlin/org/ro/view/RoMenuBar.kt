@@ -3,9 +3,7 @@ package org.ro.view
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
 import org.ro.core.event.EventStore
-import org.ro.view.table.el.EventLogTab
 import org.ro.view.table.el.EventLogTable
-import org.ro.view.table.el.EventLogTableOld
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
@@ -37,17 +35,10 @@ object RoMenuBar {
 
         val title = "Log Entries"
         val log = createLink(title).onClick {
-            val tableSpec = EventLogTab().csList
-            RoView.addTab(tr(title), EventLogTableOld(tableSpec))
+            val model = EventStore.log
+            RoView.addTab(tr(title), EventLogTable(model))
         }
         mainMenu.add(log)
-
-        val title2 = "Tabulator"
-        val log2 = createLink(title2).onClick {
-            val model = EventStore.log
-            RoView.addTab(tr(title2), EventLogTable(model))
-        }
-        mainMenu.add(log2)
 
         return mainMenu
     }

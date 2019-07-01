@@ -7,11 +7,7 @@ import org.ro.view.IconManager
 import org.ro.view.RoView
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.dropdown.Header.Companion.header
-import pl.treksoft.kvision.form.check.RadioGroup
-import pl.treksoft.kvision.form.check.RadioGroup.Companion.radioGroup
-import pl.treksoft.kvision.form.text.TextInput
-import pl.treksoft.kvision.form.text.TextInput.Companion.textInput
-import pl.treksoft.kvision.form.text.TextInputType
+import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.Link.Companion.link
 import pl.treksoft.kvision.i18n.I18n
 import pl.treksoft.kvision.panel.FlexAlignItems
@@ -24,14 +20,18 @@ import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
-    private lateinit var search: TextInput
-    private lateinit var searchTypes: RadioGroup
 
-    private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true;  tickElement ="<i class='fa fa-ellipsis-h'></i>";  crossElement ="<i class='fa fa-ellipsis-h'></i>"}
+    private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true; tickElement = "<i class='fa fa-ellipsis-h'></i>"; crossElement = "<i class='fa fa-ellipsis-h'></i>" }
 
     private val columns = listOf(
-            ColumnDefinition<LogEntry>("", field = "state", width = "80"),
-            ColumnDefinition("Title", "title", width = "400"),
+            ColumnDefinition<LogEntry>("Title", "title",
+                    headerFilter = Editor.INPUT,
+                    formatterComponentFunction = { cell, onRendered, data ->
+                        Button(data.title ?: "", icon = data.state.iconName).onClick {
+                            console.log(data.title)
+                        }
+                    },
+                    width = "400"),
             ColumnDefinition("Method", "method", width = "80"),
             ColumnDefinition(
                     title = "Created",
@@ -68,14 +68,6 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     init {
         hPanel(FlexWrap.NOWRAP, alignItems = FlexAlignItems.CENTER, spacing = 20) {
             padding = 10.px
-            searchTypes = radioGroup(listOf("all" to "All",
-                    "err" to "Errors",
-                    "ui" to "UI"), "all", inline = true) {
-                marginBottom = 0.px
-            }
-            search = textInput(TextInputType.SEARCH) {
-                placeholder = "Search ..."
-            }
         }
 
         val options = TabulatorOptions(
@@ -94,20 +86,6 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 tabulatorRowClick = { e ->
                     //                    EditPanel.edit((e.detail as pl.treksoft.kvision.tabulator.js.Tabulator.RowComponent).getIndex() as Int)
                 }
-            }
-            setFilter { address ->
-                address.match(search.value) && (searchTypes.value == "all" ?: false)
-            }
-        }
-
-        search.setEventListener {
-            input = {
-                tabulator.applyFilter()
-            }
-        }
-        searchTypes.setEventListener {
-            change = {
-                tabulator.applyFilter()
             }
         }
     }

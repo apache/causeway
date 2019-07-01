@@ -12,8 +12,8 @@ import pl.treksoft.kvision.panel.SimplePanel
  * - attribute types (can only be determined at runtime) and
  * - accessor names are not fixed
  */
-class DynamicTable(private val tableSpec:List<ColDef>) : SimplePanel() {
-    
+class DynamicTable(private val tableSpec:List<Any>) : SimplePanel() {
+
     //TODO see EventLogTable
     //button(tr("Link button"), style = ButtonStyle.LINK) { width = 200.px }
 
