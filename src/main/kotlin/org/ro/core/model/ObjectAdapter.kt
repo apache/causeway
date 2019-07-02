@@ -6,14 +6,20 @@ import org.ro.to.TObject
 @Serializable
 class ObjectAdapter(private val delegate: TObject) {
 
-    val result: String
+    var result: String
         get() {
             return delegate.domainType
         }
+        set(arg:String) {
+            // is ignored
+        }
 
-    val resultClass: String
+    var resultClass: String
         get() {
             return "resultClass" //TODO where can this be taken from?
+        }
+        set(arg:String) {
+            // is ignored
         }
 
     fun get(propertyName: String): Any? {
