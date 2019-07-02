@@ -60,6 +60,7 @@
 		</property>
             </activation>
             <modules>
+                <module>example/application/demo</module>
                 <module>example/application/helloworld</module>
                 <module>example/application/simpleapp</module>
             </modules>
