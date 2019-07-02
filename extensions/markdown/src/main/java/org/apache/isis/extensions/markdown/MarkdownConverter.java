@@ -28,6 +28,13 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 
 public final class MarkdownConverter {
 
+	/**
+	 * For syntax highlighting to work, the client/browser needs to load specific 
+	 * java-script. eg. like the one bundled with {@code src/main/resources/prism1.14.js}
+	 *   
+	 *  
+	 * @param markdown
+	 */
 	public static String mdToHtml(String markdown) {
 		if(markdownSupport==null) {
 			markdownSupport = new MarkdownSupport();
