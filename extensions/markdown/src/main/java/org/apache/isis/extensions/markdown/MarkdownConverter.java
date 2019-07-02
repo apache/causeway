@@ -30,10 +30,21 @@ public final class MarkdownConverter {
 
 	/**
 	 * For syntax highlighting to work, the client/browser needs to load specific 
-	 * java-script. eg. like the one bundled with {@code src/main/resources/prism1.14.js}
-	 *   
+	 * java-script. To enable load it with your {@code application.js}
+	 * <p>
+	 * eg. like the one bundled with {@code src/main/resources/prism1.14.js}.
+	 * <pre>
+	 * function includeJs(jsFilePath) {
+	 *     var js = document.createElement("script");
+	 *     js.type = "text/javascript";
+	 *     js.src = jsFilePath;
+	 *     document.body.appendChild(js);
+	 * }
+	 * 
+	 * includeJs("/scripts/prism1.14.js");
+	 * </pre>
 	 *  
-	 * @param markdown
+	 * @param markdown - markdown formated input to be converted to HTML
 	 */
 	public static String mdToHtml(String markdown) {
 		if(markdownSupport==null) {
