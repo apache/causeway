@@ -18,9 +18,13 @@
  */
 package org.apache.isis.runtime.services.homepage;
 
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -57,30 +61,26 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private HomePageAction lookupHomePageAction() {
         
-        val metaModelContext = MetaModelContext.current();
+    	val metaModelContext = MetaModelContext.current();
         val specLoader = metaModelContext.getSpecificationLoader();
-        
-        val specRef = new ObjectSpecification[] {null}; // simple object reference
-        
-        // -- 1) lookup view-models
-        
-        HomePageAction homePageAction =
-                IsisBeanTypeRegistry.current().getViewModelTypes()
-                .stream()
-                .map(viewModelType->specLoader.loadSpecification(viewModelType))
-                .filter(_NullSafe::isPresent)
-                .peek(spec->specRef[0]=spec)
-                .flatMap(spec->spec.streamObjectActions(Contributed.EXCLUDED))
-                .map(objectAction->homePageActionIfUsable(objectAction, specRef[0]))
-                .filter(_NullSafe::isPresent)
-                .findAny()
-                .orElse(null);
-        
-        if(homePageAction!=null) {
+    	
+    	val viewModelTypes = IsisBeanTypeRegistry.current().getViewModelTypes();
+    	
+    	// -- 1) lookup view-models that are type annotated with @HomePage
+    	
+    	HomePageAction homePageAction = viewModelTypes.stream()
+    	.map(viewModelType->homePageViewModelIfUsable(viewModelType))
+    	.filter(_NullSafe::isPresent)
+    	.findFirst()
+    	.orElse(null);
+    	
+    	if(homePageAction!=null) {
             return homePageAction;
         }
+    	
+        val specRef = new ObjectSpecification[] {null}; // simple object reference
         
-        // -- 2) lookup managed beans
+        // -- 2) lookup managed beans that have actions annotated with @HomePage
         
         homePageAction = 
                 serviceRegistry.streamRegisteredBeans()
@@ -95,7 +95,62 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
                 .findAny()
                 .orElse(null);
         
+        // -- 3) lookup view-models that have actions annotated with @HomePage
+        
+        homePageAction = viewModelTypes.stream()
+                .map(viewModelType->specLoader.loadSpecification(viewModelType))
+                .filter(_NullSafe::isPresent)
+                .peek(spec->specRef[0]=spec)
+                .flatMap(spec->spec.streamObjectActions(Contributed.EXCLUDED))
+                .map(objectAction->homePageActionIfUsable(objectAction, specRef[0]))
+                .filter(_NullSafe::isPresent)
+                .findAny()
+                .orElse(null);
+        
+        if(homePageAction!=null) {
+            return homePageAction;
+        }
+        
         return homePageAction;
+    }
+    
+    @Vetoed @ViewModel
+    public static class HomePageActionContainer {
+    	
+    	@Inject private FactoryService factoryService;
+    	private static Class<?> viewModelType;
+    	
+    	@Action @HomePage
+    	public Object homePage() {
+    		val viewModelPojo = factoryService.instantiate(viewModelType);
+    		return viewModelPojo;
+    	}
+    }
+    
+    
+    protected HomePageAction homePageViewModelIfUsable(Class<?> type) {
+    	if(!type.isAnnotationPresent(HomePage.class)) {
+    		return null; 
+    	}
+    	
+    	val metaModelContext = MetaModelContext.current();
+        val specLoader = metaModelContext.getSpecificationLoader();
+    	val spec = specLoader.loadSpecification(type);
+    	if(!spec.isViewModel()) {
+    		return null;
+    	}
+    	
+    	HomePageActionContainer.viewModelType = type;
+    	
+    	val containerSpec = specLoader.loadSpecification(HomePageActionContainer.class);
+    	
+    	val homePageAction = containerSpec.streamObjectActions(Contributed.EXCLUDED)
+    	.map(objectAction->homePageActionIfUsable(objectAction, containerSpec))
+        .filter(_NullSafe::isPresent)
+        .findAny()
+        .orElse(null);
+    	
+    	return homePageAction;
     }
 
     protected HomePageAction homePageActionIfUsable(ObjectAction objectAction, ObjectSpecification spec) {

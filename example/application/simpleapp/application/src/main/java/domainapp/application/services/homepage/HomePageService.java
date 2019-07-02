@@ -19,16 +19,12 @@
 package domainapp.application.services.homepage;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.springframework.stereotype.Service;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN, // trick to suppress the actions from the top-level menu
-        objectType = "homepage.HomePageService"
-)
+@Service
 public class HomePageService {
 
     @Action(semantics = SemanticsOf.SAFE)

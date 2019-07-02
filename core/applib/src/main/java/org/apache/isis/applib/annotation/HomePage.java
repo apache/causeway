@@ -35,9 +35,12 @@ import org.apache.isis.applib.ViewModel;
  * Typically this action would return a {@link ViewModel} representing a dashboard
  * (from which the user can navigate to commonly used objects and invoked actions);
  * it might also simply invoke an action that returns a list.
+ * <p>
+ * Might also be placed on a type typically a {@link ViewModel} to be used as the home page.
+ * 
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HomePage {
 }

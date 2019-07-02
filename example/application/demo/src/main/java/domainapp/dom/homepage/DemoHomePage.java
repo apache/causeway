@@ -18,14 +18,19 @@
  */
 package domainapp.dom.homepage;
 
+import java.time.LocalDateTime;
+
+import javax.annotation.PostConstruct;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.util.JaxbAdapters.MarkupAdapter;
@@ -39,6 +44,7 @@ import lombok.Setter;
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL)
+@HomePage
 public class DemoHomePage extends DemoStub {
     
     public String title() {
@@ -49,7 +55,12 @@ public class DemoHomePage extends DemoStub {
     @Getter @Setter 
     private Markup greetings; 
     
-    @Override @Programmatic
+    @XmlTransient
+    public Markup getTime() {
+    	return new Markup("<i>" + LocalDateTime.now() + "</i>");
+    }
+    
+    @Override @Programmatic @PostConstruct
     public void initDefaults() {
         greetings = new Markup("Greetings! This is the Apache Isis Demo App.");
     }
