@@ -19,11 +19,7 @@
 
 package domainapp.utils;
 
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.apache.isis.extensions.asciidoc.AsciiDocConverter;
 
 public class DemoUtils {
 
@@ -36,65 +32,7 @@ public class DemoUtils {
     }
 
     public static String asciidocToHtml(String adoc) {
-        if(asciidoctor==null) {
-            asciidoctor = Asciidoctor.Factory.create();
-            options = defaultOptions();
-        }
-        return asciidoctor.convert(adoc, options);
+        return AsciiDocConverter.adocToHtml(adoc);
     }
-
-    // -- HELPER
-
-    private static Asciidoctor asciidoctor;
-    private static Options options;
-    
-    private static Options defaultOptions() {
-        return OptionsBuilder.options()
-                .safe(SafeMode.UNSAFE)
-                .toFile(false)
-                .attributes(AttributesBuilder.attributes()
-                        .sourceHighlighter("coderay")
-                        .get())
-                .get();
-    }
-	
-/////////////////////////////////////////////////////////////////////	
-// MARKDOWN SUPPORT REMOVED
-//
-//   public static String markdownToHtml(String markdown) {
-//        if(markdownSupport==null) {
-//            markdownSupport = new MarkdownSupport();
-//        }
-//        return markdownSupport.toHtml(markdown);
-//    }
-//	
-//	// -- HELPER
-//	
-//	private static MarkdownSupport markdownSupport;
-//	
-//	private static class MarkdownSupport {
-//		private Parser parser;
-//		private HtmlRenderer renderer;
-//		
-//		public MarkdownSupport() {
-//			MutableDataSet options = new MutableDataSet();
-//
-//			// uncomment to set optional extensions
-//			options.set(Parser.EXTENSIONS, Arrays.asList(
-//					TablesExtension.create(), 
-//					StrikethroughExtension.create()));
-//
-//			// uncomment to convert soft-breaks to hard breaks
-//			//options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
-//
-//			parser = Parser.builder(options).build();
-//			renderer = HtmlRenderer.builder(options).build();
-//		}
-//		
-//		public String toHtml(String markdown) {
-//			return renderer.render(parser.parse(markdown));
-//		}
-//	}
-	
 
 }

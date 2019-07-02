@@ -177,6 +177,7 @@ ${license.additional-notes}
 
 	<modules>
 <!-- 		<module>security-manager</module> -->
+		<module>asciidoc</module>
 		<module>viewer-wicket-excel</module>
 	</modules>
 

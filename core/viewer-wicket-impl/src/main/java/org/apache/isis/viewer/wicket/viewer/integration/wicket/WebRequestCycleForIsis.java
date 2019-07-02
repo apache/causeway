@@ -26,8 +26,31 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import com.google.common.base.Throwables;
-
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.plugins.ioc.RequestContextHandle;
+import org.apache.isis.commons.internal.plugins.ioc.RequestContextService;
+import org.apache.isis.commons.internal.plugins.ioc.RequestContextServiceDefault;
+import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisRequestCycle;
+import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.MessageBroker;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
+import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
@@ -48,32 +71,7 @@ import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.internal.plugins.ioc.RequestContextHandle;
-import org.apache.isis.commons.internal.plugins.ioc.RequestContextService;
-import org.apache.isis.commons.internal.plugins.ioc.RequestContextServiceDefault;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisRequestCycle;
-import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.MessageBroker;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
-import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
+import com.google.common.base.Throwables;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -90,8 +88,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     private PageClassRegistry pageClassRegistry;
 
-    private final static _Probe probe = _Probe.unlimited().label("WebRequestCycleForIsis");
-
     private _Lazy<RequestContextService> requestContextService = _Lazy.of(()->new RequestContextServiceDefault());
         //IsisContext.getServiceRegistry().lookupServiceElseFail(RequestContextService.class));
 
@@ -102,7 +98,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         @Override
         public synchronized void onBeginRequest(RequestCycle requestCycle) {
 
-            probe.println("onBeginRequest in");
+            log.debug("onBeginRequest in");
 
             // this handle needs to be closed when the request-scope's life-cycle ends
             // so we store it onto the requestCycle as meta-data entry, to be 
@@ -110,33 +106,33 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             val requestContextHandle = requestContextService.get().startRequest();
             if(requestContextHandle!=null) {
                 requestCycle.setMetaData(REQUEST_CONTEXT_HANDLE_KEY, requestContextHandle);
-                probe.println("request context created");
+                log.debug("request context created");
             } else {
-                probe.println("no request context created");
+            	log.debug("no request context created");
             }
 
             if (!Session.exists()) {
 
-                probe.println("onBeginRequest out - session was not opened (because no Session)");
+            	log.debug("onBeginRequest out - session was not opened (because no Session)");
                 return;
             }
 
             final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
             final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();
             if (authenticationSession == null) {
-                probe.println("onBeginRequest out - session was not opened (because no authenticationSession)");
+            	log.debug("onBeginRequest out - session was not opened (because no authenticationSession)");
                 return;
             }
 
             IsisRequestCycle.onBeginRequest(authenticationSession);
 
-            probe.println("onBeginRequest out - session was opened");
+            log.debug("onBeginRequest out - session was opened");
         }
 
         @Override
         public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
 
-            probe.println("onRequestHandlerResolved in");
+        	log.debug("onRequestHandlerResolved in");
 
             if(handler instanceof RenderPageRequestHandler) {
                 ConcurrencyChecking.disable();
@@ -154,7 +150,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 }
             }
 
-            probe.println("onRequestHandlerResolved out");
+            log.debug("onRequestHandlerResolved out");
 
         }
 
@@ -166,8 +162,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         @Override
         public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
             log.debug("onRequestHandlerExecuted: handler: {}", handler);
-
-            probe.println("onRequestHandlerExecuted");
 
             if(handler instanceof RenderPageRequestHandler) {
                 ConcurrencyChecking.reset(ConcurrencyChecking.CHECK);
@@ -199,7 +193,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         @Override
         public synchronized void onEndRequest(RequestCycle requestCycle) {
 
-            probe.println("onEndRequest");
+        	log.debug("onEndRequest");
 
             IsisRequestCycle.onEndRequest();
 
@@ -219,7 +213,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         @Override
         public IRequestHandler onException(RequestCycle cycle, Exception ex) {
 
-            probe.println("onException");
+        	log.debug("onException");
 
             val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
             if(metaModelDeficiencies != null) {
