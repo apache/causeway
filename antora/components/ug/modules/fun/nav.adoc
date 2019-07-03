@@ -73,8 +73,8 @@
 *** xref:programming-model/properties.adoc[Properties]
 *** xref:programming-model/collections.adoc[Collections]
 *** xref:programming-model/actions.adoc[Actions]
+p*** xref:programming-model/properties-vs-parameters.adoc[Properties vs Parameters]
 *** xref:programming-model/inject-services.adoc[Inject Services]
-*** xref:programming-model/properties-vs-parameters.adoc[Properties vs Parameters]
 
 *** xref:programming-model/view-models.adoc[View Models]
 **** xref:programming-model/view-models/jaxb.adoc[JAXB]
@@ -93,7 +93,6 @@
 **** xref:programming-model/mixins/inferred-name.adoc[Inferred Name]
 **** xref:programming-model/mixins/nested-static-classes.adoc[Nested Static Classes]
 **** xref:programming-model/mixins/programmatic-usage.adoc[Programming Usage]
-**** xref:programming-model/mixins/contributed-services.adoc[Contributed Services]
 
 
 

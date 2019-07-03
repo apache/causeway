@@ -31,23 +31,24 @@ public class CompareCustomers {
     }
 
     @XmlTransient                                   // <5>
-    public String getCustomer1Address() {
-        return getCustomer1().getAddress();
+    public String getCustomer2Name() {
+        return getCustomer2().getName();
     }
 
     ...
 }
 ----
 <1> The JAXB `@XmlRootElement` annotation indicates this is a view model to Apache Isis, which then uses JAXB to serialize the state of the view model between interactions
-<2> All properties of the view model must be listed using the `XmlType#propOrder` attribute.
+
+<2> Optionally, the properties of the view model can be listed using the `XmlType#propOrder` attribute.
++
+This is an all-or-nothing affair: either all properties must be listed, or else the annotation omitted.
+
 <3> Specifying field accessor type allows the Lombok `@Getter` and `@Setter` annotations to be used.
-<4> The `XmlElement` indicates the property is part of the view model's state.
+<4> The `@XmlElement` indicates the property is part of the view model's state.
 For collections, the `@XmlElementWrapper` would also typically be used.
 <5> The `@XmlTransient` indicates that the property is derived and should be ignored by JAXB.
-
-Use JAXB elements such as `@XmlElement` for properties and the combination of `@XmlElementWrapper` and `@XmlElement` for collections.
-Properties can be ignored (for serialization) using `@XmlTransient`.
-
++
 The derived properties could also have been implemented using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins].
 
 

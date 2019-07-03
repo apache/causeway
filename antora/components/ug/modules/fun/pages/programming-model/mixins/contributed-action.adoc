@@ -8,20 +8,24 @@ Contributed actions are defined similarly, for example:
 
 [source,java]
 ----
-@Mixin(method="act")
+@Mixin(method="act")                                            // <1>
 public class DocumentHolder_addDocument {
 
     private final DocumentHolder holder;
     public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
 
     @Action()
-    @ActionLayout(contributed = Contributed.AS_ACTION)          // <1>
-    public Document> act(Document doc) {
+    @ActionLayout(contributed = Contributed.AS_ACTION)          // <2>
+    public Document> act(Document doc) {                        // <3>
         ...
     }
-    public boolean hideAct() { ... }                            // <2>
+    public boolean hideAct() { ... }                            // <4>
 }
 ----
-<1> recommended
-<2> supporting methods follow the usual naming conventions.
+<1> indicates this is a mixin, and in this case nominates the method name.
+The recommended name for properties is "prop" (if none is specified the default name is "$$").
+<2> recommended
+<3> method must match `@Mixin#method` above.
+Unlike contributed properties and collections, contributed actions can accept parameters.
+<4> supporting methods follow the usual naming conventions.
 

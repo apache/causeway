@@ -10,7 +10,7 @@ All properties have at least a "getter" method, and most properties have also a 
 Properties that do _not_ have a setter method are derived properties, and so are not persisted.
 
 Formally speaking, a property is simply a regular JavaBean getter, returning a scalar value recognized by the framework.
-Most properties (those that are editable/modifiable) will also have a setter and (if persisted) a backing instance field.
+Most properties (those that are editable/modifiable) will also have a setter and, if persisted, a backing instance field.
 And most properties will also have a number of annotations:
 
 * Apache Isis defines its own set own `@Property` annotation for capturing domain semantics.
@@ -148,17 +148,21 @@ For example:
 ----
 @javax.jdo.annotations.NotPersistent
 @Property(editing=Editing.ENABLED)
-public String getAddress() { return addressService.toAddress( getLatLong() ); }             // <1>
-public void setAddress(String address) { setLatLong(addressService.toLatLong(address)); }
+public String getAddress() {
+    return addressService.toAddress( getLatLong() );                // <1>
+}
+public void setAddress(String address) {
+    setLatLong(addressService.toLatLong(address));
+}
 
 @javax.jdo.annotations.Column
 private String latLong;
 @Programmatic
-public String getLatLong() { return latLong; }                                              // <2>
+public String getLatLong() { return latLong; }                      // <2>
 public void setLatLong(String latLong) { this.latLong = latLong; }
 
 @javax.inject.Inject
-AddressService addressService;                                                              // <3>
+AddressService addressService;                                      // <3>
 ----
 <1> the representation of the address, in human readable form, eg "10 Downing Street, London, UK"
 <2> the lat/long representation of the address, eg "51.503363;-0.127625"
@@ -253,10 +257,10 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
 
-As for xref:ug:fun:programming-model/properties/datatypes/joda-dates.adoc[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation.
+As for Joda dates, this requires the `@javax.jdo.annotations.Persistent` annotation.
 However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
 
-For example, in the `ToDoItem` class (of the https://github.com/isisaddons/isis-app-todoapp/blob/0333852ddd18ad67e3356fccf805aa442246790d/dom/src/main/java/todoapp/dom/todoitem/ToDoItem.java#L442[todoapp example app] (non-ASF) the `attachment` property is as follows:
+For example, in the `ToDoItem` class (in the (non-ASF) https://github.com/isisaddons/isis-app-todoapp/blob/0333852ddd18ad67e3356fccf805aa442246790d/dom/src/main/java/todoapp/dom/todoitem/ToDoItem.java#L442[todoapp example app]) the `attachment` property is as follows:
 
 [source,java]
 ----
@@ -265,9 +269,7 @@ For example, in the `ToDoItem` class (of the https://github.com/isisaddons/isis-
     @javax.jdo.annotations.Column(name = "attachment_mimetype"),
     @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "LONGVARBINARY")
 })
-@Property(
-        optionality = Optionality.OPTIONAL
-)
+@Property(optionality = Optionality.OPTIONAL)
 @lombok.Getter @lombok.Setter
 private Blob attachment;
 ----
@@ -286,9 +288,7 @@ If the `Blob` is mandatory, then use:
                                   jdbcType="BLOB", sqlType = "LONGVARBINARY",
                                   allowsNull="false")
 })
-@Property(
-    optionality = Optionality.MANDATORY
-)
+@Property( optionality = Optionality.MANDATORY )
 @lombok.Getter @lombok.Setter
 private Blob attachment;
 ----
@@ -302,7 +302,7 @@ There can be differences in behaviour between JDBC drivers.
 === ``Clob``s
 
 
-Mapping `Clob`s works in a very similar way to xref:ug:fun:programming-model/properties/datatypes/blobs.adoc[``Blob``]s, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
+Mapping `Clob`s works in a very similar way to ``Blob``s, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
 
 [source,java]
 ----
@@ -310,18 +310,12 @@ Mapping `Clob`s works in a very similar way to xref:ug:fun:programming-model/pro
     @javax.jdo.annotations.Column(name = "attachment_name"),
     @javax.jdo.annotations.Column(name = "attachment_mimetype"),
     @javax.jdo.annotations.Column(name = "attachment_chars",
-                                  jdbcType="CLOB", sqlType = "LONGVARCHAR")
+                                  jdbcType="CLOB",
+                                  sqlType = "LONGVARCHAR")
 })
+@Property( optionality = Optionality.OPTIONAL )
+@lombok.Getter @lombok.Setter
 private Clob doc;
-@Property(
-    optionality = Optionality.OPTIONAL
-)
-public Clob getDoc() {
-    return doc;
-}
-public void setDoc(final Clob doc) {
-    this.doc = doc;
-}
 ----
 
 [NOTE]
@@ -339,14 +333,20 @@ For example:
 
 [source,java]
 ----
-@javax.jdo.annotations.Column(name = "attachment_bytes", jdbcTypr="BLOB", sqlType = "VARBINARY", length=2048)
+@javax.jdo.annotations.Column(
+        name = "attachment_bytes",
+        jdbcTypr="BLOB", sqlType = "VARBINARY", length=2048
+)
 ----
 
 The same argument applies to `LONGVARCHAR` (or `CLOB`); you could instead map to a regular `VARCHAR`:
 
 [source,java]
 ----
-@javax.jdo.annotations.Column(name = "attachment_chars", sqlType = "VARCHAR", length=2048)
+@javax.jdo.annotations.Column(
+        name = "attachment_chars",
+        sqlType = "VARCHAR", length=2048
+)
 ----
 Support and maximum allowed length will vary by database vendor.
 

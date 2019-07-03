@@ -9,26 +9,28 @@ The example below shows how to contribute a collection:
 
 [source,java]
 ----
-@Mixin(method="coll")
+@Mixin(method="coll")                                           // <1>
 public class DocumentHolder_documents {
 
     private final DocumentHolder holder;
     public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
 
-    @Action(semantics=SemanticsOf.SAFE)                         // <1>
-    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
+    @Action(semantics=SemanticsOf.SAFE)                         // <2>
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <3>
     @CollectionLayout(defaultView="table")
-    public List<Document> coll() {                              // <3>
+    public List<Document> coll() {                              // <4>
         ...
     }
-    public boolean hideColl() { ... }                           // <4>
+    public boolean hideColl() { ... }                           // <5>
 }
 ----
-<1> required; actions that have side-effects cannot be contributed as collections
-<2> required; otherwise the mixin will default to being rendered as an action
-<3> must accept no arguments.
+<1> indicates this is a mixin, and in this case nominates the method name.
+The recommended name for collections is "coll" (if none is specified the default name is "$$").
+<2> required; actions that have side-effects cannot be contributed as collections
+<3> required; otherwise the mixin will default to being rendered as an action
+<4> method (which must match `@Mixin#method` above), must accept no arguments.
 The mixin is a collection rather than a property because the return type is a collection, not a scalar.
-<4> supporting methods follow the usual naming conventions.
+<5> supporting methods follow the usual naming conventions.
 (That said, in the case of collections, because the collection is derived/read-only, the only supporting method that is relevant is `hideColl()`).
 
 The above will result in a contributed collection "documents" for all types that implement/extend from `DocumentHolder`.

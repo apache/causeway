@@ -9,25 +9,27 @@ Contributed properties are defined similarly, for example:
 
 [source,java]
 ----
-@Mixin(method="prop")
+@Mixin(method="prop")                                           // <1>
 public class DocumentHolder_mostRecentDocument {
 
     private final DocumentHolder holder;
     public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
 
-    @Action(semantics=SemanticsOf.SAFE)                         // <1>
-    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
-    public Document prop() {                                    // <3>
+    @Action(semantics=SemanticsOf.SAFE)                         // <2>
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <3>
+    public Document prop() {                                    // <4>
         ...
     }
-    public boolean hiderProp() { ... }                          // <4>
+    public boolean hiderProp() { ... }                          // <5>
 }
 ----
-<1> required; actions that have side-effects cannot be contributed as collections
-<2> required; otherwise the mixin will default to being rendered as an action
-<3> must accept no arguments.
+<1> indicates this is a mixin, and in this case nominates the method name.
+The recommended name for properties is "prop" (if none is specified the default name is "$$").
+<2> required; actions that have side-effects cannot be contributed as collections
+<3> required; otherwise the mixin will default to being rendered as an action
+<4> method (which must match `@Mixin#method` above), must accept no arguments.
 The mixin is a property rather than a collection because the return type is a scalar.
-<4> supporting methods follow the usual naming conventions.
+<5> supporting methods follow the usual naming conventions.
 (That said, in the case of properties, because the property is derived/read-only, the only supporting method that is relevant is `hideProp()`).
 
 

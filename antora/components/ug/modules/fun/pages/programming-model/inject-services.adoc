@@ -3,29 +3,16 @@
 include::_attributes.adoc[]
 
 
-Apache Isis autowires (automatically injects) domain services into each entity, as well as into the domain services themselves, using either method injection or field injection.
-The framework defines many additional services (such as xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]); these are injected in exactly the same manner.
+Apache Isis runs on top of SpringBoot, and uses SpringBoot for dependency injection, both of the applications own domain services and als of the very many additional services defined by the framework (such as xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]).
 
-Sometimes there may be multiple services that implement a single type.
-This is common for example for SPI service, whereby one module defines an SPI service, and other module(s) in the application implement that service.
-To support this, the framework also allows lists of services to be injected.
-
-When there are multiple service implementations of a given type, the framework will inject the service with highest priority, as defined through xref:rg:ant:DomainService/menuOrder.adoc[`@DomainService#menuOrder()`] (even for domain services that are not menus), lowest first.
-If a list of services is injected, then that list will be ordered according to `menuOrder`, again lowest first.
+However, not only does it autowire domain services into other services, it also ensures that services are injected into any domain object (eg entity, view model, fixture script, specification etc).
 
 
-
-[NOTE]
-====
-Isis currently does _not_ support qualified injection of services; the domain service of each type must be distinct from any other.
-
-If you find a requirement to inject two instances of type `SomeService`, say, then the work-around is to create trivial subclasses `SomeServiceA` and `SomeServiceB` and inject these instead.
-====
 
 
 == Field Injection
 
-Field injection is recommended, using the `@javax.inject.Inject` annotation.
+Field injection is generally recommended, using the `@javax.inject.Inject` annotation.
 For example:
 
 [source,java]
@@ -92,10 +79,27 @@ Note that the method name can be anything; it doesn't need to be related to the 
 
 == Constructor injection
 
-Simply to note that constructor injection is _not_ supported by Apache Isis (and is unlikely to be, because the JDO specification for entities requires a no-arg constructor).
+TODO: v2: this is now supported, because of Spring Boot, I think.
+
+
+== Multiple Implementations
+
+Sometimes there may be multiple services that implement a single type.
+This is common for example for SPI service, whereby one module defines an SPI service, and other module(s) in the application implement that service.
+To support this, lists of services can be injected.
+
+When there are multiple service implementations of a given type, annotate the different implementations using Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] or https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Primary.html[`@Primary`].
+
+
+== Scoping
+
+TODO: v2: should describe how this works.
 
 
 
+== Qualified Injection
+
+TODO: v2: x-ref to Spring Boot docs.
 
 
 

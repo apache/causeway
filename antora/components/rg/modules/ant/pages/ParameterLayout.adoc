@@ -45,10 +45,15 @@ If set > 1, then then xref:rg:ant:ParameterLayout/labelPosition.adoc[`labelPosit
 
 |xref:rg:ant:ParameterLayout/named.adoc[`named()`]
 |String
-|the name of this parameter. +
+|the name of this parameter.
 
-For Java 7 this is generally required. For Java 8, the name can often be inferred from the code so this attribute allows the name to be overridden.
-A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+[TIP]
+====
+There's no need to name the action parameters if the code is compiled using the `-parameters` flag to the Java compiler (javac); the framework will then use the name of the parameter itself.
+
+The only reason then to name the parameter is if the desired name is a reserved Java keyword, such as `default` or `package`.
+====
+
 
 
 |`namedEscaped()`
