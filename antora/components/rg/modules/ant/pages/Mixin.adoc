@@ -1,0 +1,37 @@
+= `@Mixin`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `@Mixin` annotation indicates that the class acts as a mixin, contributing behaviour - actions, (derived) properties and (derived) collections - to another domain object.
+
+Mixins were originally introduced as a means of allowing contributions from one module to the types of another module; in such cases the mixin type is often an interface type (eg `DocumentHolder`) that might be implemented by numerous different concrete types.
+However, mixins are also a convenient mechanism for grouping functionality even for a concrete type.
+
+For further discussion on using mixins, see xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] in the user guide.
+
+The table below summarizes the annotation's attributes.
+
+.`@Mixin` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:rg:ant:Mixin/method.adoc[`method()`]
+|Method name within the mixin
+|How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
+Typical examples are "exec", "execute", "invoke", "apply" and so on.
+The default "reserved" method name is `$$`.
+
+|===
+
+An alternative and equivalent approach is to use the
+xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
+
+

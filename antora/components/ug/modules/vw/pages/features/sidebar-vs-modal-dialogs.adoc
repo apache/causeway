@@ -1,0 +1,32 @@
+= Sidebar vs Modal Dialogs
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The Wicket viewer supports two different styles of dialog prompts for actions that have parameters:
+
+* the first is a (movable) modal dialog.
++
+This was the only style available for 1.16.x and earlier versions.
+
+* the second is as sidebar
++
+This is available (and the default) for 1.17+.
+
+
+The benefit of the sidebar dialog mode compared to the modal dialog is that it doesn't obscure the rest of the information shown on the page; it also doesn't interrupt the end-user's context so much (they are more likely to remember why they invoked the action).
+For these reasons the sidebar mode is now the default.
+
+For example, here's what invoking an action (to create a new object) looks like using the original modal dialog:
+
+image::dialog-mode/modal.png[width="800px",link="{imagesdir}/dialog-mode/modal.png"]
+
+
+And here's what it looks like with the sidebar dialog:
+
+image::dialog-mode/sidebar.png[width="800px",link="{imagesdir}/dialog-mode/sidebar.png"]
+
+
+
+However, the original modal dialog can still be be used if end-users prefer that style, by setting the `isis.viewer.wicket.dialog` xref:ug:vw:configuration-properties/presentation.adoc[configuration property].

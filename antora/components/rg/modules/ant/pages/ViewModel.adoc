@@ -1,0 +1,66 @@
+= `@ViewModel`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `@ViewModel` annotation, applied to a class, indicates that the class is a view model.
+It's a synonym for using `@DomainObject(nature=VIEW_MODEL)`.
+
+View models are not persisted to the database, instead their state is encoded within their identity (ultimately represented in the URL).
+
+For example:
+
+[source,java]
+----
+@ViewModel
+public class CustomerViewModel {
+    public CustomerViewModel() {}
+    public CustomerViewModel(String firstName, int lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    ...
+}
+----
+
+Although there are several ways to instantiate a view model, we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
+The xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] can then be used to inject dependencies into the view model.
+For example:
+
+[source,java]
+----
+Customer cust = ...
+CustomerViewModel vm = new CustomerViewModel(cust.getFirstName(),cust.getLastName());
+serviceRegistry.injectServicesInto(vm);
+----
+
+[TIP]
+====
+See this xref:ug:btb:hints-and-tips/view-model-instantiation.adoc[tip] for further discussion about instantiating view models.
+====
+
+View models must have a no-arg constructor; this is used internally by the framework for subsequent "recreation".
+
+The view model's memento will be derived from the value of the view model object's properties.
+Any xref:rg:ant:Property/notPersisted.adoc[`@Property#notPersisted()`] properties will be excluded from the memento, as will any xref:rg:ant:Programmatic.adoc[`@Programmatic`] properties.
+Properties that are merely xref:rg:ant:Property/hidden.adoc[hidden] _are_ included in the memento.
+
+Only properties supported by the configured xref:rg:svc:integration-api/MementoService.adoc[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
+
+View models, as defined by `@ViewModel` (or `@DomainObject(nature=VIEW_MODEL)` for that matter) have some limitations:
+
+* view models cannot hold collections other view models (simple properties _are_ supported, though)
+* collections (of either view models or entities) are ignored.
+* not every data type is supported,
+
+However, these limitations do _not_ apply to xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB] view models.
+If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
+
+
+[NOTE]
+====
+The `@ViewModel` does not allow the objectType to be specified, meaning that it is incompatible with the metamodel validation check ennabled by the xref:rg:cfg:configuring-core.adoc#metamodel-validation[`explicitObjectType`] configuration property.
+
+Instead, use xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:rg:ant:DomainObject/objectType.adoc[`@DomainObject#objectType()`].
+====

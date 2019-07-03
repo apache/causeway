@@ -1,0 +1,142 @@
+= Domain Entities
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Entities are persistent domain objects, with their persistence handled by JDO/DataNucleus.
+As such, they are mapped to a persistent object store, typically an RDBMS, with DataNucleus taking care of both lazy loading and also the persisting of modified ("dirty") objects.
+
+Domain entities are generally decorated with both DataNucleus and Apache Isis annotations.
+Let's look at some of the most commonly-used annotations.
+
+To start with, entities are flagged as being "persistence capable", indicating how JDO/DataNucleus should manage their identity:
+
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable(                                      // <1>
+        identityType=IdentityType.DATASTORE,                                    // <2>
+        schema = "simple",                                                      // <3>
+        table = "SimpleObject"
+)
+@javax.jdo.annotations.DatastoreIdentity(                                       // <4>
+        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
+        column="id"
+)
+@javax.jdo.annotations.Version(                                                 // <5>
+        strategy= VersionStrategy.DATE_TIME,
+        column="version"
+)
+@DomainObject(                                                                  // <6>
+        objectType = "simple.SimpleObject"
+)
+public class SimpleObject { ... }
+----
+<1> The `@PersistenceCapable` annotation indicates that this is an entity to DataNucleus.
+The DataNucleus enhancer acts on the bytecode of compiled entities, injecting lazy loading and dirty object tracking functionality.
+Enhanced entities end up also implementing the `javax.jdo.spi.PersistenceCapable` interface.
+<2> Indicates how identifiers for the entity are handled.
+Using `DATASTORE` means that a DataNucleus is responsible for assigning the value (rather than the application).
+<3> Specifies the RDBMS database schema and table name for this entity will reside.
+The schema should correspond with the module in which the entity resides.
+The table will default to the entity name if omitted.
+<4> For entities that are using `DATASTORE` identity, indicates how the id will be assigned.
+A common strategy is to allow the database to assign the id, for example using an identity column or a sequence.
+<5> The `@Version` annotation is useful for optimistic locking; the strategy indicates what to store in the `version` column.
+<6> The `@DomainObject` annotation identifies the domain object to Apache Isis (not DataNucleus).
+It isn't necessary to include this annotation -- at least, not for entities -- but it is nevertheless recommended.
+In particular, its strongly recommended that the `objectType` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
+
+
+All domain entities will have some sort of mandatory key properties.
+The example below is a very simple case, where the entity is identified by a `name` property:
+
+[source,java]
+----
+...
+@javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"}) // <1>
+public class SimpleObject
+             implements Comparable<SimpleObject> {                              // <2>
+
+    public SimpleObject(final String name) {                                    // <3>
+        setName(name);
+    }
+
+    @javax.jdo.annotations.Column(allowsNull="false", length=50)                // <4>
+    @lombok.Getter @lombok.Setter
+    private String name;
+
+    @Override
+    public String toString() {
+        return ObjectContracts.toString(this, "name");                          // <5>
+    }
+    @Override
+    public int compareTo(final SimpleObject other) {
+        return ObjectContracts.compare(this, other, "name");                    // <2>
+    }
+}
+----
+<1> DataNucleus will automatically add a unique index to the primary surrogate id (discussed above), but additional alternative keys can be defined using the `@Unique` annotation.
+In the example above, the "name" property is assumed to be unique.
+<2> Although not required, we strongly recommend that all entities are naturally `Comparable`.
+This then allows parent/child relationships to be defined using ``SortedSet``s; RDBMS after all are set-oriented.
+The `ObjectContracts` utility class provided by Apache Isis makes it easy to implement the `compareTo()` method, but you can also just use an IDE to generate an implementation or roll your own.
+<3> Chances are that some of the properties of the entity will be mandatory, for example any properties that represent an alternate unique key to the entity.
+In regular Java programming we would represent this using a constructor that defines these mandatory properties, and in Apache Isis/DataNucleus we can likewise define such a constructor.
+When DataNucleus rehydrates domain entities from the database at runtime, it actually requires a no-arg constructor (it then sets all state reflectively).
+However, there is no need to provide such a no-arg constructor; it is added by the enhancer process.
+<4> The `name` property itself, using Lombok to generate the getter and setter.
+The `@Column` annotation specifies the length of the column in the RDBMS; this metadata is read by JDO/DataNucleus but Apache Isis itself also infers that the property is mandatory and its length from this annotation.
+<5> The `ObjectContracts` utility class also provides assistance for `toString()`, useful when debugging in an IDE.
+
+It's also common for domain entities to have queries annotated on them.
+These are used by repository domain services to query for instances of the entity:
+
+[source,java]
+----
+...
+@javax.jdo.annotations.Queries({
+    @javax.jdo.annotations.Query(                                           // <1>
+        name = "findByName",                                                // <2>
+        value = "SELECT "                                                   // <3>
+                + "FROM domainapp.modules.simple.dom.impl.SimpleObject "    // <4>
+                + "WHERE name.indexOf(:name) >= 0 ")                        // <5>
+})
+...
+public class SimpleObject { ... }
+----
+<1> There may be several `@Query` annotations, nested within a `@Queries` annotation) defines queries using JDOQL.
+<2> Defines the name of the query.
+<3> The definition of the query, using JDOQL syntax.
+<4> The fully-qualified class name.
+Must correspond to the class on which the annotation is defined (the framework checks this automatically on bootstrapping).
+<5> In this particular query, is an implementation of a LIKE "name%" query.
+
+DataNucleus provides several APIs for defining queries, including entirely programmatic and type-safe APIs; but JDOQL is very similar to SQL and so easily learnt.
+
+The corresponding repository method for the above query is:
+
+[source,java]
+----
+public List<SimpleObject> findByName(String name) {
+    return repositoryService.allMatches(                                    // <1>
+            new QueryDefault<>(SimpleObject.class,                          // <2>
+                        "findByName",                                       // <3>
+                        "name",                                             // <4>
+                        name);
+}
+
+@javax.inject.Inject
+RepositoryService repositoryService;
+----
+<1> The `RepositoryService` is a generic facade over the JDO/DataNucleus API, provided by the Apache Isis framework.
+<2> Specifies the class that is annotated with `@Query`
+<3> Corresponds to the `@Query#name()` attribute
+<4> Corresponds to the `:name` parameter in the query JDOQL string
+
+
+[TIP]
+====
+See the xref:ug:odn:about.adoc[DataNucleus objectstore guide] for further information on annotating domain entities.
+====
+

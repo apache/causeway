@@ -1,0 +1,39 @@
+* xref:about.adoc[Developers' Guide]
+
+** xref:ide.adoc[IDE]
+*** xref:ide/intellij.adoc[IntelliJ]
+*** xref:ide/eclipse.adoc[Eclipse]
+
+
+** xref:hints-and-tips.adoc[Hints-n-Tips]
+*** xref:hints-and-tips/datanucleus-enhancer.adoc[Datanucleus Enhancer]
+*** xref:hints-and-tips/enabling-logging.adoc[Enabling Logging]
+*** xref:hints-and-tips/enhance-only.adoc[Enhance Only]
+*** xref:hints-and-tips/how-run-fixtures-on-app-startup.adoc[How to run Fixtures on App Startup]
+
+
+** xref:building-apache-isis.adoc[Building Apache Isis]
+
+
+
+** xref:contributing.adoc[Contributing]
+
+
+** xref:git-cookbook.adoc[Git Cookbook]
+
+
+** xref:working-with-many-repos.adoc[Working with many Repos]
+
+
+** xref:asciidoc-syntax.adoc[Asciidoc Syntax]
+
+
+//** xref:asciidoc-templates.adoc[Asciidoc Templates]
+
+
+** xref:project-lombok.adoc[Project Lombok]
+
+
+** xref:agilej.adoc[AgileJ]
+
+

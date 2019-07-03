@@ -1,0 +1,135 @@
+= `@Action`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `@Action` annotation groups together all domain-specific metadata for an invokable action on a domain object or domain service.
+
+The table below summarizes the annotation's attributes.
+
+.`@Action` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:rg:ant:Action/associateWith.adoc[`associateWith()`]
+|_memberId_ +
+("")
+|associates an action with another property or collection of the action.
+
+|xref:rg:ant:Action/associateWith.adoc[`associateWith-Sequence()`]
+|_memberId_ +
+("")
+|associates an action with another property or collection of the action.
+
+|xref:rg:ant:Action/command.adoc[`command()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether the action invocation should be reified into a `o.a.i.applib.` +
+`services.command.Command` object through the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] service.
+
+
+|`commandExecuteIn()`
+|`FOREGROUND`,`BACKGROUND` +
+(`FOREGROUND`)
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+
+
+|`commandPersistence()`
+|`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
+(`PERSISTED`)
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured).
+
+
+|`commandDtoProcessor()`
+|Implementation of `CommandDtoProcessor` interface +
+(null)
+|If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
+
+
+|xref:rg:ant:Action/domainEvent.adoc[`domainEvent()`]
+|subtype of `ActionDomainEvent` +
+(`ActionDomainEvent.Default`)
+|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to
+broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and
+post-execute).
+
+
+|xref:rg:ant:Action/hidden.adoc[`hidden()`]
+|`EVERYWHERE`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the action should be hidden from the user.
+
+
+|xref:rg:ant:Action/invokeOn.adoc[`invokeOn()`]
+|`OBJECT_ONLY`, `COLLECTION_ONLY`, `OBJECT_AND_COLLECTION` +
+(`OBJECT_ONLY`)
+|(deprecated - use view models and associated actions instead).
+
+whether an action can be invoked on a single object and/or on many objects in a collection.
+
+Currently this is only supported for no-arg actions.
+
+
+|xref:rg:ant:Action/publishing.adoc[`publishing()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether the action invocation should be published to the registered xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+
+|xref:rg:ant:Action/restrictTo.adoc[`restrictTo()`]
+|`NO_RESTRICTIONS`,`PROTOTYPING` +
+(`NO_RESTRICTIONS`)
+|whether the action is only available in prototyping mode, or whether it is available also in production mode.
+
+|xref:rg:ant:Action/semantics.adoc[`semantics()`]
+|`SAFE_AND_REQUEST_CACHEABLE`, `SAFE`, +
+`IDEMPOTENT`, `IDEMPOTENT_ARE_YOU_SURE` +
+`NON_IDEMPOTENT`, `NON_IDEMPOTENT_ARE_YOU_SURE` + +
+(`NON_IDEMPOTENT`)
+|the action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change; if not whether the results can be cached for the remainder of the request).
+
+The `...ARE_YOU_SURE` variants cause a confirmation dialog to be displayed in the xref:ug:vw:about.adoc[Wicket viewer].
+
+|xref:rg:ant:Action/typeOf.adoc[`typeOf()`]
+|(none)
+|if the action returns a collection, hints as to the run-time type of the objects within that collection (as a fallback)
+
+|===
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }
+    @Action(
+        command=CommandReification.ENABLED,
+        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <1>
+        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <2>
+        domainEvent=CompletedEvent.class,
+        hidden = Where.NOWHERE,                                // <3>
+        invokeOn = InvokeOn.OBJECT_ONLY,                       // <4>
+        publishing = Publishing.ENABLED,
+        semantics = SemanticsOf.IDEMPOTENT
+    )
+    public ToDoItem completed() { ... }
+}
+----
+<1> default value, so could be omitted
+<2> default value, so could be omitted
+<3> default value, so could be omitted
+<4> default value, so could be omitted
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,64 @@
+= Finding Objects
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Retrieving domain entities typically requires a JDOQL query defined on the domain entity, and a corresponding repository service for that domain entity type.
+This repository calls the framework-provided xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] to actually submit the query.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Queries({
+    @javax.jdo.annotations.Query(                       // <1>
+        name = "findByName",                            // <2>
+        value = "SELECT "                               // <3>
+                + "FROM com.mydomain.myapp.Customer "   // <4>
+                + "WHERE name.indexOf(:name) >= 0 ")    // <5>
+})
+...
+public class Customer { ... }
+----
+<1> There may be several `@Query` annotations, nested within a `@Queries` annotation) defines queries using JDOQL.
+<2> Defines the name of the query.
+<3> The definition of the query, using JDOQL syntax.
+<4> The fully-qualified class name.
+Must correspond to the class on which the annotation is defined (the framework checks this automatically on bootstrapping).
+<5> In this particular query, is an implementation of a LIKE "name%" query.
+
+and
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class CustomerRepository {
+
+    public List<Customer> findByName(String name) {
+        return repositoryService.allMatches(            // <1>
+                new QueryDefault<>(Customer.class,      // <2>
+                            "findByName",               // <3>
+                            "name",                     // <4>
+                            name);
+    }
+
+    @javax.inject.Inject
+    RepositoryService repositoryService;
+}
+----
+<1>	The xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] is a generic facade over the JDO/DataNucleus API.
+<2> Specifies the class that is annotated with @Query
+<3> Corresponds to the `@Query#name()` attribute
+<4> Corresponds to the `:name` parameter in the query JDOQL string
+
+Whenever a query is submitted, the framework will automatically "flush" any pending changes.
+This ensures that the database query runs against an up-to-date table so that all matching instances (with respect to the current transaction) are correctly retrieved.
+
+
+When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle event].
+
+
+== Type-safe queries
+
+DataNucleus also supports type-safe queries; see xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc#type-safe-jdoql-queries[here] for further details.
+

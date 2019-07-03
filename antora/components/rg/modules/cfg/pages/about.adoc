@@ -1,0 +1,25 @@
+= Core Configuration Properties
+include::_attributes.adoc[]
+
+
+Apache Isis' own configuration properties are simple key-value pairs, typically held in the `WEBINF/isis.properties`
+file and other related files.
+This guide describes how to configure an Apache Isis application.
+
+[NOTE]
+====
+This guide covers only the core configuration properties (relating to Apache Isis' metamodel and runtime management).
+Configuration properties for the viewers can be found in the xref:ug:vw:about.adoc[Wicket Viewer] guide and the xref:ug:vro:about.adoc[RestfulObjects viewer] guide.
+Likewise details of configuring security (Apache Shiro) can be
+found in the xref:ug:sec:about.adoc#[Security] guide, and details for configuring the DataNucleus Object Store can be found in the xref:ug:odn:about.adoc#[DataNucleus] guide.
+====
+
+[TIP]
+====
+By default the configuration values are part of the built WAR file.
+Details on how to override these configuration properties externally for different environments can be found in the xref:ug:btb:deployment.adoc[Beyond the Basics] guide, (deployment chapter).
+====
+
+
+
+

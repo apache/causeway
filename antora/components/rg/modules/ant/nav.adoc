@@ -1,0 +1,262 @@
+* xref:about.adoc[Annotations]
+
+** xref:aaa.adoc[Summary]
+*** xref:aaa/main.adoc[Main]
+*** xref:aaa/other.adoc[Other]
+*** xref:aaa/jdo.adoc[JDO]
+*** xref:aaa/jee.adoc[JEE]
+*** xref:aaa/partial.adoc[Partial]
+
+
+
+** xref:Action.adoc[Action]
+*** xref:Action/associateWith.adoc[associateWith]
+*** xref:Action/command.adoc[command]
+*** xref:Action/domainEvent.adoc[domainEvent]
+*** xref:Action/hidden.adoc[hidden]
+*** xref:Action/invokeOn.adoc[invokeOn]
+*** xref:Action/publishing.adoc[publishing]
+*** xref:Action/restrictTo.adoc[restrictTo]
+*** xref:Action/semantics.adoc[semantics]
+*** xref:Action/typeOf.adoc[typeOf]
+
+
+
+** xref:ActionLayout.adoc[ActionLayout]
+*** xref:ActionLayout/bookmarking.adoc[bookmarking]
+*** xref:ActionLayout/contributedAs.adoc[contributedAs]
+*** xref:ActionLayout/cssClass.adoc[cssClass]
+*** xref:ActionLayout/cssClassFa.adoc[cssClassFa]
+*** xref:ActionLayout/describedAs.adoc[describedAs]
+*** xref:ActionLayout/hidden.adoc[hidden]
+*** xref:ActionLayout/named.adoc[named]
+*** xref:ActionLayout/position.adoc[position]
+
+
+
+** xref:Collection.adoc[Collection]
+*** xref:Collection/domainEvent.adoc[domainEvent]
+*** xref:Collection/editing.adoc[editing]
+*** xref:Collection/hidden.adoc[hidden]
+*** xref:Collection/notPersisted.adoc[notPersisted]
+*** xref:Collection/typeOf.adoc[typeOf]
+
+
+
+** xref:CollectionLayout.adoc[CollectionLayout]
+*** xref:CollectionLayout/cssClass.adoc[cssClass]
+*** xref:CollectionLayout/defaultView.adoc[defaultView]
+*** xref:CollectionLayout/describedAs.adoc[describedAs]
+*** xref:CollectionLayout/hidden.adoc[hidden]
+*** xref:CollectionLayout/named.adoc[named]
+*** xref:CollectionLayout/paged.adoc[paged]
+*** xref:CollectionLayout/sortedBy.adoc[sortedBy]
+
+
+
+** xref:Column.adoc[Column]
+
+
+
+** xref:Digits.adoc[Digits]
+
+
+
+** xref:Discriminator.adoc[Discriminator]
+
+
+
+** xref:DomainObject.adoc[DomainObject]
+*** xref:DomainObject/auditing.adoc[auditing]
+*** xref:DomainObject/autoCompleteRepository.adoc[autoCompleteRepository]
+*** xref:DomainObject/bounding.adoc[bounding]
+*** xref:DomainObject/createdLifecycleEvent.adoc[createdLifecycleEvent]
+*** xref:DomainObject/editing.adoc[editing]
+*** xref:DomainObject/loadedLifecycleEvent.adoc[loadedLifecycleEvent]
+*** xref:DomainObject/mixinMethod.adoc[mixinMethod]
+*** xref:DomainObject/nature.adoc[nature]
+*** xref:DomainObject/persistedLifecycleEvent.adoc[persistedLifecycleEvent]
+*** xref:DomainObject/persistingLifecycleEvent.adoc[persistingLifecycleEvent]
+*** xref:DomainObject/objectType.adoc[objectType]
+*** xref:DomainObject/publishing.adoc[publishing]
+*** xref:DomainObject/removingLifecycleEvent.adoc[removingLifecycleEvent]
+*** xref:DomainObject/updatingLifecycleEvent.adoc[updatingLifecycleEvent]
+*** xref:DomainObject/updatedLifecycleEvent.adoc[updatedLifecycleEvent]
+
+
+
+** xref:DomainObjectLayout.adoc[DomainObjectLayout]
+*** xref:DomainObjectLayout/bookmarking.adoc[bookmarking]
+*** xref:DomainObjectLayout/cssClass.adoc[cssClass]
+*** xref:DomainObjectLayout/cssClassFa.adoc[cssClassFa]
+*** xref:DomainObjectLayout/cssClassUiEvent.adoc[cssClassUiEvent]
+*** xref:DomainObjectLayout/describedAs.adoc[describedAs]
+*** xref:DomainObjectLayout/iconUiEvent.adoc[iconUiEvent]
+*** xref:DomainObjectLayout/layoutUiEvent.adoc[layoutUiEvent]
+*** xref:DomainObjectLayout/named.adoc[named]
+*** xref:DomainObjectLayout/paged.adoc[paged]
+*** xref:DomainObjectLayout/plural.adoc[plural]
+*** xref:DomainObjectLayout/titleUiEvent.adoc[titleUiEvent]
+
+
+
+
+** xref:DomainService.adoc[DomainService]
+*** xref:DomainService/nature.adoc[nature]
+*** xref:DomainService/objectType.adoc[objectType]
+*** xref:DomainService/repositoryFor.adoc[repositoryFor]
+
+
+
+** xref:DomainServiceLayout.adoc[DomainServiceLayout]
+*** xref:DomainServiceLayout/menuBar.adoc[menuBar]
+*** xref:DomainServiceLayout/menuOrder.adoc[menuOrder]
+*** xref:DomainServiceLayout/named.adoc[named]
+
+
+
+** xref:Facets.adoc[Facets]
+
+
+
+** xref:HomePage.adoc[HomePage]
+
+
+
+** xref:Inject.adoc[Inject]
+
+
+
+** xref:MemberGroupLayout.adoc[MemberGroupLayout]
+
+
+
+** xref:MemberOrder.adoc[MemberOrder]
+
+
+
+** xref:Mixin.adoc[Mixin]
+*** xref:Mixin/method.adoc[method]
+
+
+
+** xref:NotPersistent.adoc[NotPersistent.]
+
+
+
+** xref:Nullable.adoc[Nullable]
+
+
+
+** xref:MinLength.adoc[MinLength]
+
+
+
+** xref:Parameter.adoc[Parameter]
+*** xref:Parameter/fileAccept.adoc[fileAccept]
+*** xref:Parameter/maxLength.adoc[maxLength]
+*** xref:Parameter/mustSatisfy.adoc[mustSatisfy]
+*** xref:Parameter/optionality.adoc[optionality]
+*** xref:Parameter/regexPattern.adoc[regexPattern]
+
+
+
+** xref:ParameterLayout.adoc[ParameterLayout]
+*** xref:ParameterLayout/cssClass.adoc[cssClass]
+*** xref:ParameterLayout/describedAs.adoc[describedAs]
+*** xref:ParameterLayout/labelPosition.adoc[labelPosition]
+*** xref:ParameterLayout/multiLine.adoc[multiLine]
+*** xref:ParameterLayout/named.adoc[named]
+*** xref:ParameterLayout/renderedAsDayBefore.adoc[renderedAsDayBefore]
+*** xref:ParameterLayout/typicalLength.adoc[typicalLength]
+
+
+
+** xref:Pattern.adoc[Pattern]
+
+
+
+** xref:PersistenceCapable.adoc[PersistenceCapable]
+
+
+
+** xref:PostConstruct.adoc[PostConstruct]
+
+
+
+** xref:PreDestroy.adoc[PreDestroy]
+
+
+
+** xref:PrimaryKey.adoc[PrimaryKey]
+
+
+
+** xref:Programmatic.adoc[Programmatic]
+
+
+
+** xref:Property.adoc[Property]
+*** xref:Property/command.adoc[command]
+*** xref:Property/domainEvent.adoc[domainEvent]
+*** xref:Property/editing.adoc[editing]
+*** xref:Property/fileAccept.adoc[fileAccept]
+*** xref:Property/hidden.adoc[hidden]
+*** xref:Property/maxLength.adoc[maxLength]
+*** xref:Property/mustSatisfy.adoc[mustSatisfy]
+*** xref:Property/notPersisted.adoc[notPersisted]
+*** xref:Property/optionality.adoc[optionality]
+*** xref:Property/projecting.adoc[projecting]
+*** xref:Property/publishing.adoc[publishing]
+*** xref:Property/regexPattern.adoc[regexPattern]
+
+
+
+** xref:PropertyLayout.adoc[PropertyLayout]
+*** xref:PropertyLayout/cssClass.adoc[cssClass]
+*** xref:PropertyLayout/describedAs.adoc[describedAs]
+*** xref:PropertyLayout/labelPosition.adoc[labelPosition]
+*** xref:PropertyLayout/multiLine.adoc[multiLine]
+*** xref:PropertyLayout/named.adoc[named]
+*** xref:PropertyLayout/navigable.adoc[navigable]
+*** xref:PropertyLayout/promptStyle.adoc[promptStyle]
+*** xref:PropertyLayout/renderedAsDayBefore.adoc[renderedAsDayBefore]
+*** xref:PropertyLayout/typicalLength.adoc[typicalLength]
+*** xref:PropertyLayout/unchanging.adoc[unchanging]
+
+
+
+** xref:RequestScoped.adoc[RequestScoped]
+
+
+
+** xref:Title.adoc[Title]
+
+
+
+** xref:ViewModel.adoc[ViewModel]
+*** xref:ViewModel/objectType.adoc[objectType]
+
+
+
+** xref:ViewModelLayout.adoc[ViewModelLayout]
+*** xref:ViewModelLayout/cssClass.adoc[cssClass]
+*** xref:ViewModelLayout/cssClassFa.adoc[cssClassFa]
+*** xref:ViewModelLayout/cssClassUiEvent.adoc[cssClassUiEvent]
+*** xref:ViewModelLayout/describedAs.adoc[describedAs]
+*** xref:ViewModelLayout/iconUiEvent.adoc[iconUiEvent]
+*** xref:ViewModelLayout/layoutUiEvent.adoc[layoutUiEvent]
+*** xref:ViewModelLayout/named.adoc[named]
+*** xref:ViewModelLayout/paged.adoc[paged]
+*** xref:ViewModelLayout/plural.adoc[plural]
+*** xref:ViewModelLayout/titleUiEvent.adoc[titleUiEvent]
+
+
+
+** xref:XmlJavaTypeAdapter.adoc[XmlJavaTypeAdapter]
+
+
+
+** xref:XmlRootElement.adoc[XmlRootElement]
+
+

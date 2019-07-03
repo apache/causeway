@@ -1,0 +1,106 @@
+= `CommandService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `CommandService` service supports the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] service such that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
+
+The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`], or implicitly by way of the xref:rg:ant:Action/command.adoc[`@Action#command()`] annotation.
+
+Persistent ``Command``s also support the ability to replicate from a master to a slave instance of an application.
+One use case for this is for regression testing, allowing a production usages to be replayed against a new release candidate, eg after upgrading that application to a new version of Apache Isis itself (or some other dependency).
+
+There are a number of related use cases:
+
+* they enable profiling of the running application (which actions are invoked then most often, what is their response time)
+
+
+* if xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] is configured, they provide
+better traceability as the `Command` is also correlated with any published events, again through the unique
+`transactionId` GUID
+* if xref:rg:svc:spi/AuditerService.adoc[`AuditerService`](s) are configured, they provide better audit
+information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
+the action) through the `transactionId` GUID
+
+However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
+
+
+
+== Screencast
+
+The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] below provides a run-through of the command (profiling) service, auditing service, publishing service.
+It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+
+
+[NOTE]
+====
+Note that this screencast shows an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+
+== SPI
+
+The `CommandService` service defines the following very simple API:
+
+[source,java]
+----
+public interface CommandService {
+    Command create();                                               // <1>
+    boolean persistIfPossible(Command command);                     // <2>
+    void complete(Command command);                                 // <3>
+}
+----
+<1> Instantiate the appropriate instance of the `Command` (as defined by the
+xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] service).
+Its members will be populated automatically by the framework.
+<2> Set the hint that the `Command` should be persisted if possible (when completed, see below).
+<3> "Complete" the command, typically meaning that the command should be persisted it if its `Command#getPersistence()` flag and persistence hint (`Command#isPersistHint()`) indicate that it should be.  +
++
+The framework will automatically have set the `completedAt` property of the `Command`.
+
+
+
+== Implementation
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.
+It further provides a number of supporting services:
+
+* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
+
+* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
+
+* implementation of the
+xref:rg:svc:application-layer-spi/CommandService.adoc[`BackgroundCommandService`].
+
+All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
+
+
+
+== Alternative Implementations
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
+This module also provides service implementations of the xref:rg:svc:application-layer-spi/CommandService.adoc[`BackgroundCommandService`].
+
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
+
+
+
+
+== Related Services
+
+As discussed above, this service supports the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`], providing the ability for `Command` objects to be persisted.
+This is closely related to the xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]that allows the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`] to schedule commands for background/asynchronous execution.
+
+The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
+
+The services provided by this module combines very well with the xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`].
+The `CommandService` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `AuditerService` captures the __effect__ of that interaction in terms of changed state.
+
+You may also want to configure the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+
+All three of these services collaborate implicitly by way of the xref:rg:cms:classes/mixins/HasTransactionId.adoc[`HasTransactionId`] interface.
+

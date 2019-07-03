@@ -1,0 +1,143 @@
+= `@PropertyLayout`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `@PropertyLayout` annotation applies to properties collecting together all UI hints within a single annotation.
+
+
+The table below summarizes the annotation's attributes.
+
+.`@PropertyLayout` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:rg:ant:PropertyLayout/cssClass.adoc[`cssClass()`]
+|Any string valid as a CSS class
+|the css class that a property should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
+
+
+|xref:rg:ant:PropertyLayout/describedAs.adoc[`describedAs()`]
+|String
+|description of this property, eg to be rendered in a tooltip.
+
+
+|xref:rg:ant:PropertyLayout/hidden.adoc[`hidden()`]
+|`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the property should be hidden from the user.
+
+
+|xref:rg:ant:PropertyLayout/labelPosition.adoc[`labelPosition()`]
+|`LEFT`, `TOP`, `RIGHT`, `NONE` +
+(`LEFT`)
+|in forms, the positioning of the label relative to the property value. +
+
+Defaults is `LEFT`, unless xref:rg:ant:PropertyLayout/multiLine.adoc[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
+
+It is also possible to change the default through a xref:rg:cfg:configuring-core.adoc#isis-viewers-propertyLayout-labelPosition[configuration property]
+
+
+|xref:rg:ant:PropertyLayout/multiLine.adoc[`multiLine()`]
+|Positive integer
+|for string properties, render as a text area over multiple lines.  +
+
+If set > 1, then xref:rg:ant:PropertyLayout/labelPosition.adoc[`labelPosition`] defaults to TOP.
+
+
+|xref:rg:ant:PropertyLayout/named.adoc[`named()`]
+|String
+|to override the name inferred from the collection's name in code. +
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+
+
+|`namedEscaped()`
+|`true`, `false` +
+(`true`)
+|whether to HTML escape the name of this property.
+
+
+|xref:rg:ant:PropertyLayout/navigable.adoc[`navigable()`]
+|`PARENT`, `IGNORE`, `NOT_CONFIGURED` +
+(`NOT_CONFIGURED`)
+|whether a property should be used as the navigable parent (parent breadcrumb) of this object
+
+
+|xref:rg:ant:PropertyLayout/promptStyle.adoc[`promptStyle()`]
+|`DIALOG`, `INLINE`, `AS_CONFIGURED` +
+(`AS_CONFIGURED`)
+|how a property prompt should be displayed within the UI
+
+
+|xref:rg:ant:PropertyLayout/renderedAsDayBefore.adoc[`renderedAsDayBefore()`]
+|`true`, `false` +
+(`false`)
+|for date properties only, render the date as one day prior to the actually stored date.
+
+
+|xref:rg:ant:PropertyLayout/typicalLength.adoc[`typicalLength()`]
+|Positive integer.
+|the typical entry length of a field, use to determine the optimum width for display
+
+|xref:rg:ant:PropertyLayout/unchanging.adoc[`unchanging()`]
+|`false`, `true` +
+(`false`)
+|indicates that the value held by the property never changes over time (even if other properties of the object do change).
+
+Used as a hint to the viewer not to redraw the property if possible after an AJAX update.
+
+|===
+
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    @PropertyLayout(
+        cssClass="x-key",
+        named="Description of this <i>item</i>",
+        namedEscaped=false,
+        describedAs="What needs to be done",
+        labelPosition=LabelPosition.LEFT,
+        typicalLength=80
+    )
+    public String getDescription() { ... }
+    ...
+}
+----
+
+It is also possible to apply the annotation to actions of domain services that are acting as contributed properties.
+
+
+
+[TIP]
+====
+As an alternative to using the `@PropertyLayout` annotation, a xref:ug:vw:layout/file-based.adoc[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+====
+
+
+
+
+
+[TIP]
+====
+The annotation is one of a handful (others including xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:rg:ant:Property.adoc[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
+so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
+====
+
+
+
+
+
+
+
+
+

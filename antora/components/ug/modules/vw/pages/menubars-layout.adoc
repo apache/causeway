@@ -1,0 +1,35 @@
+= Menu Bars Layout
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The actions of domain services are made available as menu items on menus.
+By default each domain service corresponds to a single menu on this menu bar, with its actions as the drop-down menu items.
+This is rarely exactly what is required, however; it often makes sense to group menu items for similar domain services together.
+
+For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules provides services whose actions appear into two top-level menus:
+
+* its `ApplicationUsers`, `ApplicationRoles`, `ApplicationPermission`, `ApplicationFeatureViewModels` and `ApplicationTenancies` domain services are all grouped together in a single "Security" top-level menu, on the SECONDARY menu bar
+
+* its `MeService` domain service, which provides the `me()` action, is placed on the TERTIARY menu bar.
+
+
+The menus themselves can be placed either on a primary, secondary or tertiary menu bar, as shown in this screenshot (taken from http://github.com/estatio/estatio[Estatio], an open source estate management application built using Apache Isis):
+
+image::application-menu/layout-menus.png[width="800px",link="{imagesdir}/application-menu/layout-menus.png"]
+
+Within a single top-level menu (eg "Fixed Assets") there can be actions from multiple services.
+The Wicket viewer shows these as separate sections, with a divider between each:
+
+image::application-menu/dividers.png[width="400px",link="{imagesdir}/application-menu/dividers.png"]
+
+
+The tertiary menu bar consists of a single unnamed menu, rendered underneath the user's login, top right.
+This is intended primarily for actions pertaining to the user themselves, eg their account, profile or settings:
+
+image::application-menu/tertiary.png[width="300px",link="{imagesdir}/application-menu/tertiary.png"]
+
+
+The Apache Isis framework provides two mechanisms to control the arrangement of domain service actions across menubars and menus, either using annotations or using a file-based layout.
+

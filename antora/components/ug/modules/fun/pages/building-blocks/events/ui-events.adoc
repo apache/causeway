@@ -1,0 +1,22 @@
+= UI Events
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+As explained xref:ug:fun:building-blocks/identifiers/title-and-icon-and-css-class.adoc[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
+
+xref:ug:fun:ui-hints/object-titles-and-icons.adoc[Normally] the code to return title and icon of an object is part of the domain object's implementation.
+However, UI events allow this title and icon to be provided instead by a subscriber.
+UI events have higher precedence than the other mechanisms of supplying a title.
+
+If annotated with xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
+ Similarly for xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`cssClassUiEvent()`].
+
+This can be particularly useful for xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Isis framework.
+Here a subscriber on the default events can provide a title and icon for such an object.
+Behaviour on such DTOs can also be provided using xref:building-blocks/types-of-domain-objects/mixins.adoc[mixins].
+
+Events also allow one module to influence/fine-tune the title of entities provided by some other module.
+One such case is when reusing library modules, eg as provided by (non-ASF) link:http://platform.incode.org[Incode Platform^].
+
+

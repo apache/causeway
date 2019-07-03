@@ -1,0 +1,38 @@
+= Configuration Files
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+When running an Apache Isis webapp, configuration properties are read from configuration files held in the `WEB-INF` directory.
+
+The `WEBINF/isis.properties` file is always read and must exist.
+
+In addition, the following other properties are searched for and if present also read:
+
+* `viewer_wicket.properties` - if the xref:ug:vw:about.adoc[Wicket viewer] is in use
+
+* `viewer_restfulobjects.properties` - if the xref:ug:vro:about.adoc[RestfulObjects viewer] is in use
+
+* `viewer.properties` - for any other viewer configuration (but there are none currently)
+
+* `persistor_datanucleus.properties` - assuming the JDO/DataNucleus objectstore is in use
+
+* `persistor.properties` - for any other objectstore configuration.  +
++
+This typically is used to hold `JDBC` ``URL``s, which is arguably a slight violation of the file (because there's nothing in Apache Isis to say that persistors have to use `JDBC`.  However, it is generally convenient to put these `JDBC` settings into a single location.  If you want, they could reside inin any of `persistor_datanucleus.properties`, `persistor.properties` or (even) `isis.properties`
+
+* `authentication_shiro.properties`, `authorization_shiro.properties`
++
+assuming the Shiro Security is in use (but there are no security-related config properties currently; use shiro.ini for Shiro config)
+
+* `authentication.properties`, `authorization.properties` +
++
+for any other security-related config properties (but there are none currently).
+
+You can if you wish simply store all properties in the `isis.properties` file; but we think that breaking properties out into sections is preferable.
+
+
+
+
+
+

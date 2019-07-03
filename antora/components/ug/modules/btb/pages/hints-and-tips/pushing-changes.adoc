@@ -1,0 +1,138 @@
+include::_attributes.adoc[]
+= Pushing Changes (deprecated)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+[NOTE]
+====
+This technique is much less powerful than using xref:ug:fun/building-blocks/events/domain-events.adoc[the event bus] or an SPI service.
+We present it mostly for completeness.
+====
+
+
+
+
+== When a property is changed
+
+If you want to invoke functionality whenever a property is changed by the user, then you can create a supporting `modifyXxx()` method and include the functionality within that. The syntax is:
+
+[source,java]
+--
+public void modifyPropertyName(PropertyType param) { ... }
+--
+
+Why not just put this functionality in the setter? Well, the setter is used by the object store to recreate the state of an already persisted object. Putting additional behaviour in the setter would cause it to be triggered incorrectly.
+
+For example:
+
+[source,java]
+--
+public class Order() {
+    public Integer getAmount() { ... }
+    public void setAmount(Integer amount) { ... }
+    public void modifyAmount(Integer amount) { // <1>
+        setAmount(amount);  // <3>
+        addToTotal(amount); // <2>
+    }
+    ...
+}
+--
+<1> The `modifyAmount()` method calls ...
+<2> ... the `addToTotal()` (not shown) to maintain some running total.
+
+We don't want this `addToCall()` method to be called when pulling the object back from the object store, so we put it into the modify, not the setter.
+
+You may optionally also specify a `clearXxx()` which works the same way as modify `modify Xxx()` but is called when the property is cleared by the user (i.e. the current value replaced by nothing). The syntax is:
+
+[source,java]
+--
+public void clearPropertyName() { ... }
+--
+
+To extend the above example:
+
+[source,java]
+--
+public class Order() {
+    public Integer getAmount() { ... }
+    public void setAmount(Integer amount) { ... }
+    public void modifyAmount(Integer amount) { ... }
+    public void clearAmount() {
+        removeFromTotal(this.amount);
+        setAmount(null);
+    }
+    ...
+}
+--
+
+
+
+== When a collection is modified
+
+A collection may have a corresponding `addToXxx()` and/or
+`removeFromXxx()` method. If present, and direct manipulation of the
+contents of the connection has not been disabled (see ?), then they will
+be called (instead of adding/removing an object directly to the
+collection returned by the accessor).
+
+The reason for this behaviour is to allow other behaviour to be
+triggered when the contents of the collection is altered. That is, it is
+directly equivalent to the supporting `modifyXxx()` and `clearXxx()`
+methods for properties (see ?).
+
+The syntax is:
+
+[source,java]
+--
+public void addTo<CollectionName>(EntityType param) { ... }
+--
+
+and
+
+[source,java]
+--
+public void removeFromCollectionName(EntityType param) { ... }
+--
+
+where `EntityType` is the same type as the generic collection type.
+
+For example:
+
+[source,java]
+--
+public class Employee { ... }
+
+public class Department {
+
+    private int numMaleEmployees;                           // <1>
+    private int numFemaleEmployees;                         // <2>
+
+    private Set<Employee> employees = new TreeSet<Employee>();
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+    private void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
+    }
+    public void addToEmployees(Employee employee) {         // <3>
+        numMaleEmployees += countOneMale(employee);
+        numFemaleEmployees += countOneFemale(employee);
+        employees.add(employee);
+    }
+    public void removeFromEmployees(Employee employee) {    // <4>
+        numMaleEmployees -= countOneMale(employee);
+        numFemaleEmployees -= countOneFemale(employee);
+        employees.remove(employee);
+    }
+    private int countOneMale(Employee employee) { return employee.isMale()?1:0; }
+    private int countOneFemale(Employee employee) { return employee.isFemale()?1:0; }
+
+    ...
+}
+--
+<1> maintain a count of the number of male ...
+<2> ... and female employees (getters and setters omitted)
+<3> the xref:rg:cms:methods/prefixes/addTo.adoc[`addTo...()`] method increments the derived properties
+<4> the xref:rg:cms:methods/prefixes/removeFrom.adoc[`removeFrom...()`] method similarly decrements the derived properties
+
+

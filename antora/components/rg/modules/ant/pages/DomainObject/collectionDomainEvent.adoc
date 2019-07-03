@@ -1,0 +1,60 @@
+= `collectionDomainEvent()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Whenever a collection of a domain object is interacted with then a domain event will be fired, for each of the various phases (hidden, disabled, validated, executing, executed).
+Using xref:rg:ant:Collection/domainEvent.adoc[`@Collection#domainEvent()`], the actual domain event class fired can be customised.
+the `@DomainObject#collectionDomainEvent()` attribute allows a common event domain class to be fired for all of the collections of the domain object.
+
+For example:
+
+[source,java]
+----
+@DomainObject(
+    collectionDomainEvent=ToDoItem.CollectionDomainEventDefault.class
+)
+public class ToDoItem {
+    public static class CollectionDomainEventDefault
+        extends org.apache.isis.applib.events.domain.CollectionDomainEvent<Object> { }
+    ...
+
+    @Getter @Setter
+    private Set<Category> categories = Sets.newTreeSet();
+}
+----
+
+If there is a mixin for the domain object, then this will also honour the domain event.
+For example:
+
+[source,java]
+----
+@Mixin(method="coll")
+public class ToDoItem_related {
+    private final ToDoItem todoItem;
+    // constructor omitted
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
+    @Collection
+    @CollectionLayout(defaultView = "table")
+    public List<ToDoItem> coll() { ... }
+}
+----
+
+Interactions with the collection contributed by this mixin will emit the domain event of the subject (`ToDoItem`).
+
+One small difference between the events emitted by a "regular" collection and a contributed action is that the source of the event (as in `event#getSource()` will be different.
+In the former case it will be the domain object instance, in the latter it will be the mixin object instantiated automatically by the framework.
+
+However, the domain object is available using `event#getMixedIn()`.
+Even easier, `event#getSubject()` will always return the domain object (it returns the `#getMixedIn()` if present, otherwise the `#getSource()`.
+
+[NOTE]
+====
+Collection domain events have generic types, with the first generic type indicating the event's source's type, and the second generic type indicating the element type.
+
+Because an event specified at the class level might have either the domain object or a mixin for the domain object as its source, they should therefore use simply `Object` as their first generic type.
+
+They should _also_ have `Object` for their second generic type, because the element type of the various collections of the domain object will or could be different.
+====

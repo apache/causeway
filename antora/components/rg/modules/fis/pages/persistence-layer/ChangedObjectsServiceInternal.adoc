@@ -1,0 +1,59 @@
+= `ChangedObjectsServiceInternal`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `ChangedObjectsServiceInternal` class is an (internal) request-scoped domain service that is responsible for collecting the details of all changes to domain objects within an interaction.
+This is then used by various other  (internal) domain services, notably xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] and xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`].
+
+
+
+== SPI and Implementation
+
+The SPI of the service is:
+
+[source,java]
+----
+@RequestScoped
+public class ChangedObjectsServiceInternal {
+    public void enlistCreated(final ObjectAdapter adapter);                                     // <1>
+    public void enlistUpdating(final ObjectAdapter adapter);
+    public void enlistDeleting(final ObjectAdapter adapter);
+
+    public boolean hasChangedAdapters();                                                        // <2>
+
+    public Map<ObjectAdapter, PublishingChangeKind> getChangeKindByEnlistedAdapter();     // <3>
+    public int numberObjectsDirtied();
+    public int numberObjectPropertiesModified();
+
+    public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties();   // <4>
+
+    public void clearChangedObjectProperties();                                                 // <5>
+}
+----
+<1> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
+<2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`]).
+<3> Used by xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] to obtain details of and
+counters of all objects changed within the transaction.
+<4> Used by xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] to obtain all pairs of
+pre/post values of changed properties
+<5> Called by the framework to for clean up after auditing and publishing has completed.
+
+For enlisted objects, if just created, then a dummy value `"[NEW]"` is used for the pre-modification value; if just
+deleted, then a dummy value `"[DELETED]"` is used for the post-modification value.  The post-modification values of
+properties are captured when the transaction commits.
+
+
+The service implementation is `o.a.i.c.r.s.changes.ChangedObjectsServiceInternal`.
+
+
+
+== Registering the Service
+
+Apache Isis' default implementation of `ChangedObjectsServiceInternal` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+
+
+
+== Related Classes
+
+Both the xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] and xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] (internal) domain services query this object.

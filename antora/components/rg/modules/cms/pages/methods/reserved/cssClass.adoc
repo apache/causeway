@@ -1,0 +1,52 @@
+= `cssClass()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `cssClass()` returns a CSS class for a particular object instance.
+
+The xref:ug:vw:about.adoc[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.
+This is done both for rendering the object either in a table or when rendering the object on its own page.
+
+In conjunction with xref:rg:cfg:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
+
+
+For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add a strikethrough for completed todo items.
+This is shown on the home page:
+
+image::reference-methods/reserved/cssClass/strikethrough.png[width="800px",link="{imagesdir}/reference-methods/reserved/cssClass/strikethrough.png"]
+
+
+The code to accomplish this is straightforward:
+
+[source,java]
+----
+public class ToDoItem ... {
+    public String cssClass() {
+        return !isComplete() ? "todo" : "done";
+    }
+    ...
+}
+----
+
+In the xref:rg:cfg:application-specific/application-css.adoc[application.css], the following styles were then added:
+
+[source,css]
+----
+tr.todo {
+}
+tr.done {
+    text-decoration: line-through;
+    color: #d3d3d3;
+}
+----
+
+
+== See also
+
+See also:
+
+* xref:rg:cms:methods/reserved/title.adoc[`title()`]
+* xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`]
+* xref:rg:cms:methods/reserved/layout.adoc[`layout()`]

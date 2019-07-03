@@ -1,0 +1,97 @@
+= `disabled()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+One use case that Apache Isis supports is that of a domain object with a lifecycle whereby at some stage it should become immutable: all its properties/collections should be disabled, and/or its actions become not invokable.
+
+It would be painful to have to write a separate xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`] method for each and every member, so instead Isis allows a single `disable...(...)` method to be implemented that is applied to all members.
+
+The signature of the method is:
+
+[source,java]
+----
+public String disabled(Identifier.Type identifierType) { ... }
+----
+
+where `Identifier.Type` is part of the Isis applib (nested static class of `o.a.i.applib.Identifier`) to distinguish between an interaction with an action, a property or an action.
+
+Note that Apache Isis' xref:ug:btb:i18n.adoc[i18n support] extends this so that the returned reason can also be internationalized.
+
+For example:
+
+[source,java]
+----
+public String disabled(Identifier.Type identifierType) {
+    return !calendarService.isOfficeHours(clock.today()
+            ? "Cannot modify objects outside of office hours"
+            : null;
+}
+----
+
+See also the similar methods to xref:rg:cms:methods/reserved/hide.adoc[`hide()`] object members en-masse.
+
+
+== Alternatives
+
+An alternative design -- and one that could be easily argued is actually more flexible -- is to leverage domain events with vetoing subscribers.
+
+With this approach we define, for a given domain class, a base `PropertyDomainEvent`, `CollectionDomainEvent` and `ActionDomainEvent`.
+A good pattern is to make these nested static classes.
+For example:
+
+[source,java]
+----
+public class ToDoItem ... {
+    public static abstract class PropertyDomainEvent<T>
+            extends ToDoAppDomainModule.PropertyDomainEvent<ToDoItem, T> {
+        ...
+    }
+    ...
+}
+----
+
+where in turn:
+
+[source,java]
+----
+public final class ToDoAppDomainModule {
+    private ToDoAppDomainModule(){}
+    public abstract static class PropertyDomainEvent<S,T>
+            extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> { }
+    ...
+}
+----
+
+Then, each property/collection/action emits either these base domain events or their own subclass:
+
+[source,java]
+----
+public class ToDoItem ... {
+    public static class DescriptionDomainEvent extends PropertyDomainEvent<String> { }
+    @Property(
+        domainEvent = DescriptionDomainEvent.class
+    )
+    public String getDescription() { ... }
+    ...
+}
+----
+
+A vetoing subscriber can then subscribe to the domain events and veto access, eg:
+
+[source,java]
+----
+@DomainObject
+public class VetoOutOfOfficeHours {
+    @Subscribe
+    public void on(ToDoItem.PropertyDomainEvent ev) {
+        if(!calendarService.isOfficeHours(clock.today()) {
+            ev.veto("Cannot modify objects outside of office hours");
+        }
+    }
+    ...
+}
+----
+
+Obviously there's an awful lot more boilerplate here, but there's also a lot more flexibility.
+

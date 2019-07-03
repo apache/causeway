@@ -1,0 +1,60 @@
+= `promptStyle()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `promptStyle()` attribute is used to specify whether, when invoking an action associated with a domain object property, the parameters for the action are prompted either in modal dialog box, a (non-modal) sidebar dialog box, or is prompted using an inline panel (replacing the property on the page).
+For more on sidebar vs modal dialogs, see xref:ug:vw:features/sidebar-vs-modal-dialogs.adoc[Wicket viewer features].
+
+The prompt style is influenced by two xref:ug:vw:configuration-properties.adoc[configuration properties]:
+
+* if the `promptStyle()` attribute is set to `DIALOG`, then a configuration property is used to determine whether to render using a modal dialog or a sidebar:
+
+** `isis.viewer.wicket.dialogMode` if the action is for a domain object (entity or view model)
++
+If the configuration property is not set, then sidebar is used.
+
+** `isis.viewer.wicket.dialogModeForMenu` if the action is for a domain service
++
+If the configuration property is not set, then modal is used.
+
+
+* If the attribute is not set at all, then the `isis.viewer.wicket.promptStyle` configuration property is used to specify the preferred prompt style.
++
+If the configuration property is not set, then an inline prompt is used.
++
+And, if this _is_ set but is set to just `DIALOG`, then the `isis.viewer.wicket.dialogMode` configuration property determines which style.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    public int getNotes(){ ... }
+    public void setNotes(String notes) { ... }
+
+    @MemberOrder(
+            named="notes",                          // <1>
+            sequence="1")
+    @ActionLayout(
+        promptStyle=PromptStyle.INLINE              // <2>
+    )
+    public int getNotes(){ ... }
+    public void setNotes(String notes) { ... }
+}
+----
+<1> associate this action with the "notes" property
+<2> prompt for the action's parameters using an inline panel.
+
+Exactly one action for a given property can be specified with `INLINE_AS_IF_EDIT`.
+Assuming that the corresponding property is not itself editable, this means that the property will be rendered as if it is editable, but the action's prompt form will be rendered instead.
+The net effect is that a property conceptually consisting of different parts (eg a name, an address or a date) can be updated using an action that lets each separate part be specified independently.
+
+
+== Alternatives
+
+
+As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+
+

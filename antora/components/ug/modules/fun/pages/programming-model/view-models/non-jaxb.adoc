@@ -1,0 +1,78 @@
+= Non-JAXB View Models
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Instead of using JAXB to specify a view model, it is also possible to use Apache Isis-specific annotations.
+
+[WARNING]
+====
+As was explained xref:ug:fun:programming-model/view-models.adoc[earlier], the approach is described here is neither as flexible nor as powerful as using the JAXB-style of view models.
+As such, it may be deprecated in the future.
+====
+
+While the underlying technique is the same irrespective of use case, the programming model provides various ways of defining a view model so that the original intent is not lost.
+They are:
+
+.View model programming model
+[cols="1a,4a,2a", options="header"]
+|===
+
+| Use case
+| Code
+| Description
+
+
+| External entity
+|[source,java]
+----
+@DomainObject(nature=Nature.EXTERNAL_ENTITY)
+public class CustomerRecordOnSAP { ... }
+----
+|Annotated with xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature()`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.  Collections are ignored, as are any properties annotated as xref:rg:ant:Property/notPersisted.adoc[not persisted].
+
+| In-memory entity
+|[source,java]
+----
+@DomainObject(nature=Nature.INMEMORY_ENTITY)
+public class Log4JAppender { ... }
+----
+|As preceding, but using a nature of `INMEMORY_ENTITY`.
+
+|Application view model
+|[source,java]
+----
+@DomainObject(nature=Nature.VIEW_MODEL)
+public class Dashboard { ... }
+----
+|As preceding, but using a nature of `VIEW_MODEL`.
+
+|Application view model
+|
+[source,java]
+----
+@ViewModel
+public class Dashboard { ... }
+----
+
+|Annotated with xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation (effectively just an alias)' memento is as preceding: from "persisted" properties, collections ignored
+
+|Application view model
+|
+[source,java]
+----
+public class ExcelUploadManager implements ViewModel {
+  public String viewModelMemento() { ... }
+  public void viewModelInit(String memento) { ... }
+}
+----
+|Implement xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface.  The memento is as defined by the
+interface's methods: the programmer has full control (but also full responsibility) for the string memento.
+
+|===
+
+
+
+
+

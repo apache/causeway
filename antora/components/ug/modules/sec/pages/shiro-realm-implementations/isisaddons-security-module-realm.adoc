@@ -1,0 +1,35 @@
+= Security Module Realm
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module provides a complete security subdomain for users, roles, permissions; all are persisted as domain entities.
+
+What that means, of course, that they can also be administered through your Apache Isis application.
+Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
+
+
+In order to play along, the module includes a Shiro realm, which fits in as follows:
+
+The general configuration is as follows:
+
+image::security/security-apis-impl/configure-shiro-to-use-isisaddons-security-module-realm.PNG[width="600px",link="{imagesdir}/security/security-apis-impl/configure-shiro-to-use-isisaddons-security-module-realm.PNG"]
+
+where the `IsisModuleSecurityRealm` realm is the implementation provided by the module.
+
+In the configuration above user passwords are stored in the database.  The module uses link:http://www.mindrot.org/projects/jBCrypt/[jBCrypt] so that passwords are only stored in a (one-way) encrypted form in the database.
+
+
+
+The security module also supports a slightly more sophisticated configuration.  Most organizations use LDAP for user credentials, and maintaining two separate user accounts would be less than ideal.  The `IsisModuleSecurityRealm` can therefore be configured with a subsidiary "delegate" realm that is responsible for performing the primary authentication of the user; if that passes then a user is created (as a domain entity) automatically.
+In most cases this delegate realm will be the LDAP realm, and so the architecture becomes:
+
+image::security/security-apis-impl/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG[width="600px",link="{imagesdir}/security/security-apis-impl/configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-realm.PNG"]
+
+
+The security module has many more features than are described here, all of which are described in the module's README.
+The README also explains in detail how to configure an existing app to use this module.
+
+You can also look at the Isisaddons https://github.com/isisaddons/isis-app-todoapp[todoapp example] (not ASF), which is preconfigured to use the security module.
+

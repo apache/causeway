@@ -1,0 +1,93 @@
+= About page
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+Isis' Wicket viewer has an About page that, by default, will provide a dump of the JARs that make up the webapp.
+This page will also show the manifest attributes of the WAR archive itself, if there are any.
+One of these attributes may also be used as the application version number.
+
+
+== Screenshot
+
+Here's what the About page looks like with this configuration added:
+
+image::about-page/about-page.png[width="800px",link="{imagesdir}/about-page/about-page.png"]
+
+[NOTE]
+====
+Note that this screenshot shows an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+Note that the `Build-Time` attribute has been used as the version number.
+The Wicket viewer is hard-coded to search for specific attributes and use as the application version.
+In order, it searches for:
+
+* `Implementation-Version`
+* `Build-Time`
+
+If none of these are found, then no version is displayed.
+
+
+== Configuration
+
+=== Adding attributes to the WAR's manifest
+
+Add the following to the webapp's `pom.xml` (under `<build>/<plugins>`):
+
+[source,xml]
+----
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>build-helper-maven-plugin</artifactId>
+    <version>1.5</version>
+      <executions>
+        <execution>
+          <phase>validate</phase>
+          <goals>
+            <goal>maven-version</goal>
+          </goals>
+        </execution>
+      </executions>
+</plugin>
+
+<plugin>
+    <artifactId>maven-war-plugin</artifactId>
+    <configuration>
+        <archive>
+            <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+                <Build-Time>${maven.build.timestamp}</Build-Time>
+                <Build-Number>${buildNumber}</Build-Number>
+                <Build-Host>${agent.name}</Build-Host>
+                <Build-User>${user.name}</Build-User>
+                <Build-Maven>Maven ${maven.version}</Build-Maven>
+                <Build-Java>${java.version}</Build-Java>
+                <Build-OS>${os.name}</Build-OS>
+                <Build-Label>${project.version}</Build-Label>
+            </manifestEntries>
+        </archive>
+    </configuration>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>war</goal>
+            </goals>
+            <configuration>
+                <classifier>${env}</classifier>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+
+If you then build the webapp from the Maven command line (`mvn clean package`), then the WAR should contain a `META-INF/MANIFEST.MF` with those various attribute entries.
+This will be picked up automatically and used in the about page.
+
+
+
+

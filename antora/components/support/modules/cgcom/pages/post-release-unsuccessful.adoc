@@ -1,0 +1,94 @@
+= Post Release (Unsuccessful)
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+
+
+The release process consists of:
+
+* the release manager xref:support:cgcom:cutting-a-release.adoc[cutting the release]
+* members of the Apache Isis PMC xref:support:cgcom:verifying-releases.adoc[verifying] and voting on the release
+* the release manager performing post-release tasks, for either a xref:support:cgcom:post-release-successful.adoc[successful] or an unsuccessful vote (latter documented below).
+
+If the vote did not succeed (did not achieve +3 votes after 72 hours and/or is unlikely to do so), then the vote should be closed and the following steps performed.
+
+Note that a release manager may also decide to cancel a vote before 72 hours has elapsed (for example if an error is quickly discovered).
+
+
+== Inform dev ML
+
+Post the results to the `dev@isis.a.o` mailing list.
+
+For example, use the following subject for a vote on Apache Isis Core:
+
+[source,bash,subs="attributes+"]
+----
+[RESULT] [VOTE] Apache Isis Core release {isisnext}
+----
+
+using the body (alter last line as appropriate):
+
+[source,bash,subs="attributes+"]
+----
+The vote has completed with the following result :
+
+  +1 (binding): _list of names_
+  +1 (non binding): _list of names_
+
+  -1 (binding): _list of names_
+  -1 (non binding): _list of names_
+
+The vote is UNSUCCESSFUL.
+----
+
+
+== Tidy up branches
+
+Tidy up remote branches in the git repo:
+
+* delete the remote branch, for example: +
++
+[source,bash,subs="attributes+"]
+----
+git push --delete origin release-{isisnext}-RC1
+----
+
+
+* delete the remote origin server's tags, for example: +
++
+[source,bash,subs="attributes+"]
+----
+git push --delete origin isis-{isisnext}-RC1
+git push --delete origin helloworld-archetype-{isisnext}-RC1
+git push --delete origin simpleapp-archetype-{isisnext}-RC1
+----
+
+
+* delete the tags that were created locally, for example: +
++
+[source,bash,subs="attributes+"]
+----
+git tag -d isis-{isisnext}
+git tag -d helloworld-archetype-{isisnext}
+git tag -d simpleapp-archetype-{isisnext}
+----
+
+
+== Tidy up the Nexus repo
+
+Drop staging repositories:
+
+* drop the staging repository in http://repository.apache.org[Nexus]
+
+
+
+
+== Reset
+
+Finally, rewind the release branch to prior to the previous release candidate, and continue from there.
+
+
+
+

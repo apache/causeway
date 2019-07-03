@@ -1,0 +1,42 @@
+= `Markup`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `Markup` value type (introduced in `1.15.1`) is intended to be used as a read-only property, to render arbitrary markup into the user interface.
+
+For example:
+
+image::value-types/markup.png[width="400px",link="{imagesdir}/value-types/markup.png"]
+
+Corresponds to:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent
+@javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
+@lombok.Getter @lombok.Setter
+@Property(optionality=Optionality.OPTIONAL, editing = Editing.DISABLED)
+private Markup someMarkup;
+
+public BlobClobObject updateSomeMarkup(Markup markup) {
+    setSomeMarkup(markup);
+    return this;
+}
+public Markup defaultUpdate0SomeMarkup(String markup) {
+    return getSomeMarkup();
+}
+----
+
+with this corresponding `layout.xml`:
+
+[source,xml]
+----
+<cpt:fieldSet name="Markup" id="markup">
+    <cpt:action id="updateSomeMarkup"/>
+    <cpt:property id="someMarkup" labelPosition="NONE">
+    </cpt:property>
+</cpt:fieldSet>
+----
+
+If the property is also editable then an text edit box is also displayed - unlikely to be the desired effect.

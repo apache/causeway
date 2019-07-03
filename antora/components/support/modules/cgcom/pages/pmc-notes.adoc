@@ -1,0 +1,274 @@
+= Appendix: PMC
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+
+Every ASF project has a Project Management Committee, or PMC.
+This committee is ultimately responsible for the long-term management of the framework.
+More information about PMCs can be found link:http://www.apache.org/dev/pmc.html[here]
+
+In Apache Isis, every committer is a member of the PMC.
+
+This page contains some general notes on maintenance activities required by PMC members.
+
+
+
+== Prereqs
+
+To complete the procedures documented here, you'll need `ssh` access to `minotaur.apache.org`.
+For example:
+
+[source,bash]
+----
+ssh danhaywood@minotaur.apache.org
+----
+
+When prompted, provide passphrase for private key.
+
+[NOTE]
+====
+To set up ssh in the first place, take a look at https://www.apache.org/dev/new-committers-guide.html#ssh-setup[this section in the ASF new committers' guide] looks relevant.
+====
+
+
+
+== New Committer/PMC member
+
+Currently we don't distinguish between committers and PMC members: every committer is automatically invited to also be a member of the PMC.
+
+Further notes on the steps for new PMC members can be found http://www.apache.org/dev/pmc.html#newpmc[here].
+
+=== Start a vote thread on private@
+
+First, send a [VOTE] email to `private@isis.apache.org`, making the case for the new committer to join.
+
+For example:
+
+[source]
+----
+[VOTE] Joe Bloggs as a committer and PMC Member                                         <1>
+----
+<1> update as required
+
+with body:
+
+[source]
+----
+I'd like to nominate Joe Bloggs as a committer and also a PMC member for Apache Isis.   <1>
+
+Joe this ...                                                                            <1>
+
+Joe that ...                                                                            <1>
+
+Overall, I think Joe would be a great addition to Isis' committers and PMC; ...
+
+Voting ends in one week's time, i.e. midnight UTC on YYYY-MM-DD                         <1>
+http://www.timeanddate.com/countdown/to?year=YYYY&month=MM&day=DD
+----
+<1> update as required
+
+By convention, we run these votes for 7 days (a minimum of 3 days is required by ASF).
+
+
+
+=== Close the vote, announce results
+
+After the 7 days has expired, close the vote thread.
+
+[source]
+----
+I'm now closing this vote.  Result will be posted on a new thread.
+----
+
+In a separate thread, announce the results.
+For example:
+
+[source]
+----
+[RESULT] [VOTE] Joe Bloggs as a committer and PMC Member                                <1>
+----
+<1> update as required
+
+with body:
+
+[source]
+----
+The vote has now closed. The results are:
+
++3 (PMC)                                                                                <1>
+
+consisting of:
+* Mary (PMC)                                                                            <1>
+* Mungo (PMC)
+* Midge (PMC)
+
+There were no other votes cast.
+
+The vote is ***successful***
+
+I'll announce to users@ and dev@ by separate thread.
+----
+<1> update as required
+
+
+
+=== ICLA, obtain new account
+
+If required (that is, if the committer is not already a committer for a different ASF project),
+then ask them to complete an ICLA.
+As a result of this, they should also get an @apache.org user name.
+
+More info can be found in the https://www.apache.org/dev/new-committers-guide.html#icla-required-before-account-creation[ASF new committers guide].
+
+
+=== Update the `isis` unix group
+
+All committers must be added to the `isis` UNIX group.
+This will give them commit access to the Apache Isis git repo.
+
+To do this, log onto `minotaur.apache.org`, then eg:
+
+[source,bash]
+----
+list_unix_group.pl isis
+----
+
+and
+
+[source,bash]
+----
+modify_unix_group.pl isis --add joebloggs                                               <1>
+----
+<1> update as required
+
+=== Update the LDAP committee (if a PMC member)
+
+(Assuming that the new committer is a PMC member), also add them as to the PMC committee.
+This takes two steps:
+
+* first, log onto `minotaur.apache.org` and update LDAP committee: +
++
+[source,bash]
+----
+list_committee.pl isis
+----
++
+and +
++
+[source,bash]
+----
+modify_committee.pl isis --add joebloggs                                                <1>
+----
+<1> update as required
+
+* second, update `committee-info.txt` +
++
+This is held in SVN, under https://svn.apache.org/repos/private[https://svn.apache.org/repos/private]; the file resides at `committers/board/committee-info.txt`
+
+The new committer does not officially become a member of the PMC until the ASF records have been updated.
+
+
+=== Notify the ASF board and private mailing list
+
+Send a `[NOTICE]` email to `board@apache.org` and also to `private@isis.apache.org`
+
+For example:
+
+[source]
+----
+[NOTICE] Joe Bloggs to join Apache Isis as committer and member of the PMC              <1>
+----
+<1> update as required
+
+with body:
+
+[source]
+----
+The Apache Isis PMC has voted Joe Bloggs as a committer and also member of the PMC.     <1>
+
+Voting thread:
+https://mail-search.apache.org/members/private-arch/isis-private/xxx                    <1>
+
+Results announcement:
+https://mail-search.apache.org/members/private-arch/isis-private/xxx                    <1>
+
+The committee-info.txt file has been updated, as have the LDAP groups (modify_unix_group.pl,  modify_committee.pl).
+----
+<1> update as required
+
+[NOTE]
+====
+update the private threads above
+====
+
+
+=== Update project metadata
+
+Update the `STATUS` file (in the root directory of the Apache Isis git repo) with the new committer details.
+
+
+
+=== Announce to the world
+
+Send an `[ANNOUNCE]` email TO `users@isis.apache.org` and to `dev@isis.apache.org`.
+
+For example:
+
+[source]
+----
+[ANNOUNCE] New committer - Joe Bloggs                                                   <1>
+----
+<1> update as required
+
+with body:
+
+[source]
+----
+I'm delighted to announce that Joe Bloggs has been voted in as a committer on Isis, and also as a member of the Isis PMC.  The first gives Joe the right to commit changes directly to Isis' codebase, the second gives him the right to be involved in future votes.
+
+Joe this ...                                                                            <1>
+
+Joe that ...
+
+I'm looking forward to working with Joe in the future; another great addition to Isis' committers.  So please join me in welcoming him to our happy band!
+
+Dan Haywood
+Apache Isis PMC Chair
+----
+<1> update as required
+
+
+Also, write a similar blog post at https://blogs.apache.org/isis[blogs.apache.org/isis]
+
+
+
+
+== Removing a committer
+
+[WARNING]
+====
+these notes are only draft, will need fleshing out.
+====
+
+* remove from `isis` UNIX group: +
++
+[source]
+----
+modify_unix_group.pl isis --remove joebloggs
+----
+
+* remove from `isis` committee: +
++
+[source]
+----
+modify_committee.pl isis --add joebloggs
+modify_committee.pl isis --remove joebloggs
+----
+
+* remove from `committee-info.txt`
+
+* send a [NOTICE] email to board@ and private@
+
+

@@ -1,0 +1,33 @@
+= Contact App
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+The _Contact App_ is a contact management application (like xref:powered-by.adoc#_powered-by_estatio[Estatio]) developed for and deployed at link:http://eurocommercial.com[Eurocommercial].
+
+This app originated out of our users' need to quickly look up different employees of Eurocommercial's.
+At the same time the app managers would need to be able to easily edit or add to the existing contact information.
+We decided to create different Contact Groups consisting of multiple Contacts, each with their role within the group.
+
+image:https://github.com/incodehq/contactapp/blob/master/docs/contactapp-backend-benoit-foure.png[width="97%"]
+
+== Apache Isis with Ionic
+
+Because of the requirements of the app - quick and portable access - we decided to create a mobile app for it
+using the link:http://ionicframework.com/[Ionic Framework]. For the backend we decided to use link:http://isis.apache.org[Apache Isis]
+since this allowed us to rapidly develop the required backend application and surface a REST API to which the
+mobile application could connect. We found that it worked together quite well, and with part of the team
+behind http://github.com/estatio/estatio[Estatio] we were able to create an app that is clear to use and manage.
+
+image:https://github.com/incodehq/contactapp/blob/master/docs/contactapp-frontend.png[width="97%"]
+
+As our first Apache Isis app making use of mobile technologies it opens the doors for more to follow.
+Ionic has proven easy to learn and build apps with, and has a helpful community.  Meanwhile we've used
+Apache Isis' support for xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB view models]
+and in particular the http://isis.apache.org/guides/ugvro/ugvro.html#__ugvro_simplified-representations_apache-isis-profile[simplified REST representations] introduced in v1.12.0.  The result is code that is easy to follow and enhance.
+
+We expect that the scope of _Contact App_ will expand and new features added, these will (almost certainly) remain open source.
+Meanwhile we're now set up nicely to build further mobile apps using this technology stack.
+
+_Case study provided by Rosco Kalis, for link:http://incode.org[Incode]_

@@ -1,0 +1,53 @@
+= Security
+include::_attributes.adoc[]
+
+This guide describes the authentication and authorization features available to secure your Apache Isis application.
+
+
+
+
+
+
+== Terminology
+
+Apache Isis has built-in support for authentication and authorization:
+
+* By "authentication" we mean logging into the application using some credentials, typically a username and password.
+Authentication also means looking up the set of roles to which a user belongs.
+
+* By "authorization" we mean permissions: granting roles to have access to features (object member) of the app.
+
+Isis has two levels of permissions.
+_Read_ permission means that the user can view the object member; it will be rendered in the UI.  An action with only read permission will be shown disabled ("greyed out".
+_Write_ permission means that the object member can be changed.  For actions this means that they can be invoked.
+
+Isis provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].
+Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
+
+Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.
+The xref:arch:helloworld:about.adoc[HelloWorld] and xref:arch:simpleapp:about.adoc[SimpleApp] archetypes are both configured to use this realm.
+
+Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
+Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
+
+In addition, the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules provides the security module, which also provides an implementation of the Shiro `Realm` API.
+However, the security module also represents users, roles and permissions as domain objects, allowing them to be administered through Apache Isis itself.
+Moreover, the security module can optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
+
+In addition to Apache Isis' Shiro-based implementation of its authentication and authorization APIs, Isis also provides a "bypass" implementation, useful for quick-n-dirty prototyping when you want to in effect disable (bypass) security completely.
+
+[NOTE]
+.What about auditing?
+====
+A further aspect of security is auditing: recording what data was modified by which user.
+
+Apache Isis provides the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`]
+can be used to track the actions being invoked, and the xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`]
+captures what data was modified as a result (auditing).
+When ``Interaction``s are persisted (eg by way of (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module) this provides excellent
+traceability.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of the `AuditerService`.
+
+For xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] can be also be used to capture actions.
+====
+

@@ -1,0 +1,11 @@
+= Domain Services
+include::_attributes.adoc[]
+
+
+
+This guide documents Apache Isis' domain services, both those that act as an API (implemented by the framework for
+your domain objects to call), and those domain services that act as an SPI (implemented by your domain application and
+which are called by the framework).
+
+
+

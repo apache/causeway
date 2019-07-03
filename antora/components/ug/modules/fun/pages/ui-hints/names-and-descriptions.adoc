@@ -1,0 +1,61 @@
+include::_attributes.adoc[]
+= Names and Descriptions
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+The name of classes and class members are usually inferred from the Java source code directly.
+For example, an action method called `placeOrder` will be rendered as "Place Order", and a collection called `orderItems` is rendered as "Order Items".
+
+Occasionally though the desired name is not possible; either the name is a Java reserved word (eg "class"), or might require characters that are not valid, for example abbreviations.
+
+In such cases the name can be specified declaratively.
+
+It is also possible to specify a description declaratively; this is used as a tooltip in the UI.
+
+The table below summarizes the annotations available:
+
+.Names and descriptions
+[cols="1a,1a,1a", options="header"]
+|===
+
+| Feature
+| Named
+| Description
+
+
+| Class
+| xref:rg:ant:DomainObjectLayout/named.adoc[`@DomainObjectLayout#named()`]
+| xref:rg:ant:DomainObjectLayout/describedAs.adoc[`@DomainObjectLayout#describedAs()`]
+
+
+| Property
+| xref:rg:ant:PropertyLayout/named.adoc[`@PropertyLayout#named()`]
+| xref:rg:ant:PropertyLayout/describedAs.adoc[`@PropertyLayout#describedAs()`]
+
+| Collection
+| xref:rg:ant:CollectionLayout/named.adoc[`@CollectionLayout#named()`]
+| xref:rg:ant:CollectionLayout/describedAs.adoc[`@CollectionLayout#describedAs()`]
+
+| Action
+| xref:rg:ant:ActionLayout/named.adoc[`@ActionLayout#named()`]
+| xref:rg:ant:ActionLayout/describedAs.adoc[`@ActionLayout#describedAs()`]
+
+| Action Parameters
+| xref:rg:ant:ParameterLayout/named.adoc[`@ParameterLayout#named()`]
+| xref:rg:ant:ParameterLayout/describedAs.adoc[`@ParameterLayout#describedAs()`]
+
+|===
+
+
+[TIP]
+====
+If you're running on Java 8, then note that it's possible to write Isis applications without using `@ParameterLayout(named=...)` annotation.
+Support for this can be found in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension (non-ASF).
+(In the future we'll fold this into core).
+
+See also our guidance on xref:downloads:mn:about.adoc#_migration-notes_1.8.0-to-1.9.0_upgrading-to-java8[upgrading to Java 8].
+====
+
+
+The framework also supports i18n: locale-specific names and descriptions.
+For more information, see the xref:ug:btb:i18n.adoc[beyond-the-basics] guide.

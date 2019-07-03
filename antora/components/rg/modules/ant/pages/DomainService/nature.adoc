@@ -1,0 +1,92 @@
+= `nature()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+By default, a domain service's actions will be rendered in the application menu bar _and_ be contributed _and_ appear in the REST API _and_ (of course) be available to invoke programmatically wherever that domain service is injected.
+This is great for initial prototyping, but later on you may prefer to add a little more structure.
+This is the purpose of the `nature()` attribute: to indicates the intent of (all of) the actions defined within the domain service.
+
+The values of the enum are:
+
+* `VIEW` +
++
+The default; the service's actions appear on menu bars, can be contributed, appear in the REST API
+
+* `VIEW_MENU_ONLY` +
++
+The service's actions appear on menus and in the REST API, but are not contributed to domain objects or view models
+
+* `VIEW_CONTRIBUTIONS_ONLY` +
++
+The service's actions are intended only to be used as contributed actions/associations to domain objects and view model
++
+The related xref:rg:ant:ActionLayout/contributedAs.adoc[`@ActionLayout#contributedAs()`] determines whether any given (1-arg) action is contributed as an association rather than an action.
+
+* `VIEW_REST_ONLY` +
++
+The service's actions are intended only to be listed in the REST API exposed by the xref:ug:vro:about.adoc[RestfulObjects viewer].
+
+* `DOMAIN` +
++
+The service and its actions are only intended to be invoked programmatically; they are a domain layer responsibility.
+
+
+The actual class name of the domain service is only rendered for the `VIEW`, `VIEW_MENU_ONLY` and `VIEW_REST_ONLY` natures.
+Thus, you might also want to adopt naming conventions for your domain classes so you can infer the nature from the class.
+For example, the naming convention adopted (by and large) by the (non-ASF) link:http://platform.incode.org[Incode Platform^] is `ProgrammaticServices` or `Repository` as a suffix for `DOMAIN` services, and `Contributions` as a suffix for `VIEW_CONTRIBUTIONS_ONLY` services.
+
+For example:
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY
+)
+public class LoanContributions {                                  // <1>
+    @Action(semantics=SemanticsOf.SAFE)                           // <2>
+    @ActionLayout(contributed=Contributed.AS_ASSOCIATION )
+    public List<Loan> currentLoans(Borrower borrower) { ... }
+    public Borrower newLoan(Borrower borrower, Book book) { ... }
+}
+----
+<1> `Contributions` as a suffix for a domain service that contributes a number of actions to ``Borrower``s.
+Note that `Borrower` could be a (marker) interface, so this functionality is "mixed in" merely by the class (eg `LibraryMember`) implementing this interface
+<2> actions contibuted as associations (a collection in this case) must have safe semantics
+
+
+Another example:
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.DOMAIN
+)
+public class LoanRepository {                                  // <1>
+    @Programmatic                                              // <2>
+    public List<Loan> findLoansFor(Borrower borrower) { ... }
+}
+----
+<1> `Repository` as a suffix for a domain-layer service
+<2> methods on `DOMAIN` services are often xref:rg:ant:Programmatic.adoc[`@Programmatic`]; they will never be exposed in the UI, so there's little point in including them in Apache Isis' metamodel
+
+
+
+A final example:
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.VIEW_MENU_ONLY
+)
+public class Loans {                               // <1>
+    @Action(semantics=SemanticsOf.SAFE)
+    public List<Loan> findOverdueLoans() { ... }
+    @Inject
+    LoanRepository loanRepository;                 // <2>
+}
+----
+<1> name is intended to be rendered in the UI
+<2> it's common for domain-layer domain services to be injected into presentation layer services (such as `VIEW_MENU_ONLY` and `VIEW_CONTRIBUTIONS_ONLY`).
+
+

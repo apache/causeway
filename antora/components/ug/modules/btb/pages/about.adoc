@@ -1,0 +1,11 @@
+= Beyond the Basics
+include::_attributes.adoc[]
+
+
+This guide provides xref:ug:btb:other-techniques.adoc[more advanced] guidance on writing maintainable larger
+applications.
+
+Later chapters discuss how to xref:ug:btb:deployment.adoc[deploy] your app, and discuss other ways in which you can xref:ug:btb:programming-model.adoc[extend] or adapt the framework itself to your particular needs.
+
+
+

@@ -1,0 +1,945 @@
+= Configuration Properties
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Wicket configuration properties alter the way in which Apache Isis' Wicket viewer renders domain objects.
+
+== Loading Configuration Properties
+
+Configuration properties are typically stored in `WEB-INF/isis.properties` or in `WEB-INF/viewer_wicket.properties`.
+
+To tell Apache Isis that the Wicket viewer is in use (and should therefore search for the `viewer_wicket.properties` file), add the following to `WEB-INF/web.xml`:
+
+[source, xml]
+----
+<context-param>
+    <param-name>isis.viewers</param-name>
+    <param-value>wicket</param-value>
+</context-param>
+----
+
+Alternatively, because most of these configuration properties tend not to change between environment (development and production), another practice is to load them programmatically from the `AppManifest`:
+
+[source,java]
+----
+public class MyAppAppManifest extends AppManifestAbstract2 {
+
+    public static final Builder BUILDER = Builder
+            .forModule(new MyApplicationModule())
+            ...
+            .withConfigurationPropertiesFile(
+            MyAppManifest.class, "isis-non-changing.properties") ;
+
+    ...
+}
+----
+
+where `isis-non-changing.properties` is on the classpath in the same package as `MyAppAppManifest`.
+
+Whichever approach is used, the configuration properties from all config files are merged together.
+
+
+== Application Identity
+
+Configuration properties that identify the application, in the sign-in page, welcome and about pages.
+
+These also include top-level overrides for CSS and Javascript.
+
+.Application Identity
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.viewer.wicket.` +
+`application.about`
+|Apache Isis ™
+|Label used on the about page.
+
+If not specified, then `application.name` is used instead.
+
+|`isis.viewer.wicket.` +
+`application.` +
+`brandLogoHeader`
+|Image URL
+|Either the location of the image file (relative to `src/main/webapp`), or an absolute URL.
+This is rendered on the header panel.
+
+An image with a size of 160x40 works well.
+
+If not specified, the `application.name` is used instead.
+
+
+|`isis.viewer.wicket.` +
+`application.` +
+`brandLogoSignin`
+|Image URL
+|Either the location of the image file (relative to `src/main/webapp`), or an absolute URL.
+This is rendered on the sign-in page.
+
+An image with a size of 400x40 works well.
+
+If not specified, the `application.name` is used instead.
+
+|`isis.viewer.wicket.` +
+`application.css`
+|File name +
+(_`scripts/application.css`_)
+|File to read any custom CSS, relative to `src/main/webapp` directory.
+
+|`isis.viewer.wicket.` +
+`application.js`
+|File name +
+(_`scripts/application.js`_)
+|File to read any custom Javascript, relative to `src/main/webapp` directory.
+
+|`isis.viewer.wicket.` +
+`application.name`
+|Apache Isis ™
+|Identifies the application on the sign-in page (unless a `brandLogoSignin` image is configured) and on top-left in the header (unless a `brandLogoHeader` image is configured).
+
+|`isis.viewer.wicket.` +
+`application.version`
+|(none)
+|The version of the application, eg `1.0`, `1.1`, or something more complex such as `20181115.2011.EST-1862.8d8e1c16`.
+
+If present, then this will be shown in the footer on every page as well as on the about page.
+
+See below for further discussion on this topic.
+
+
+|`isis.viewer.wicket.` +
+`welcome.file`
+|File name +
+(_`welcome.html`_)
+|Location of the HTML file (relative to `src/main/webapp`) whose contents should be displayed on the application's home page.
+
+Note though that if a xref:rg:ant:HomePage.adoc[@HomePage] action exists, then that will take precedence.
+
+If no welcome file exists, then the value of `welcome.text` is shown as a fallback.
+
+|`isis.viewer.wicket.` +
+`welcome.text`
+|Text
+|To be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
+
+Note though that if a xref:rg:ant:HomePage.adoc[@HomePage] action exists, then that will take precedence.
+
+
+|===
+
+
+
+
+=== Application versioning
+
+If the `isis.viewer.wicket.application.version` configuration property is present, then this will be shown in the footer on every page as well as on the about page.
+
+However, maintaining this configuration property manually is likely to be error prone.
+An alternative approach is to configure your build system to generate a version identifier automatically.
+
+For example, the version `20181115.2011.EST-1862.8d8e1c16` consists of four parts:
+
+* the date of the build
+* the time of the build (to the nearest minute)
+* the branch
+* the git shaId
+
+This can be computed using a simple script, for example:
+
+[source,bash]
+----
+DATE=$(date +%Y%m%d.%H%M)
+BRANCH=$(echo $GIT_BRANCH | sed 's|^rel/||g' | sed 's|[.]|_|g' | awk -F/ '{ print $NF }')
+GIT_SHORT_COMMIT=$(echo $GIT_COMMIT | cut -c1-8)
+REVISION=$DATE.$BRANCH.$GIT_SHORT_COMMIT
+----
+
+where `$GIT_BRANCH` and `$GIT_COMMIT` are provided by the CI server/build environment.
+
+This environment variable can be passed into the (Maven) build using a system property, for example:
+
+[source,bash]
+----
+mvn -Drevision=$REVISION clean install
+----
+
+If we provide a file `application-version.properties` is in the same package as the app manifest file, but in the `src/main/resources` directory:
+
+[source,ini]
+.application-version.properties
+----
+isis.viewer.wicket.application.version=$\{revision}
+----
+
+then Maven will automatically interpolate the actual revision when this file is copied over to the build (ie `target/classes`) directory.
+
+Finally, this file can be loaded in the app manifest using:
+
+[source,java]
+----
+public class MyAppManifest extends AppManifestAbstract2 {
+
+    public static final AppManifestAbstract2.Builder BUILDER =
+            AppManifestAbstract2.Builder.forModule(new MyApplicationModule())
+            .withConfigurationPropertiesFile(
+                    MyAppManifest.class, "application-version.properties");
+
+    public MyAppManifest() {
+        super(BUILDER);
+    }
+}
+----
+
+
+
+
+
+== Sign-in, Sign-up and Remember Me
+
+Configuration properties that influence the behaviour and appearance of the sign-in page.
+
+.Sign-in, Sign-up and Remember Me
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.viewer.wicket.` +
+`rememberMe.cookieKey`
+| ascii chars +
+(`_isisWicketRememberMe_`)
+|Cookie key holding the (encrypted) 'rememberMe' user/password.
+There is generally no need to change this.
+
+Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOverflow answer].
+
+|`isis.viewer.wicket.` +
+`rememberMe.encryptionKey`
+| any string +
+(in prod, a random UUID each time)
+|Encryption key is used to encrypt the rememberMe user/password.
+
+Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered user/passwords in an encrypted cookie.
+
+If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.
+This configuration property therefore allows a private key to be specified, baked into the application.
+
+If no value is set then, in production, a random UUID will be used as the encryption key.
+The net effect of this fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have to log in again.
+In prototype mode, though, a fixed key will still be used; this saves the developer having to login each time.
+
+|`isis.viewer.wicket.` +
+`rememberMe.suppress`
+| `true`,`false` +
+(`_false_`)
+|Whether to suppress "remember me" checkbox on the login page.
+
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_remember-me[below].
+
+|`isis.viewer.wicket.` +
+`suppressPasswordReset`
+| `true`,`false` +
+(`_false_`)
+|If user registration is enabled, whether to suppress the "password reset" link on the login page.
+
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_password-reset[below].
+
+|`isis.viewer.wicket.` +
+`suppressRememberMe`
+| `true`,`false` +
+(`_false_`)
+|Wphether to suppress "remember me" checkbox on the login page.
+
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_remember-me[below].
+
+[NOTE]
+====
+(Deprecated in `1.13.0`, replaced by `rememberMe.suppress`).
+====
+
+
+|`isis.viewer.wicket.` +
+`suppressSignUp`
+| `true`,`false` +
+(`_false_`)
+|Whether to suppress "sign-up" link.
+
+Note though that user registration services must also be configured.
+
+Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_sign-up[below].
+
+
+|===
+
+
+
+=== Remember Me
+
+The 'remember me' checkbox on the login page can be suppressed, if required, by setting a configuration flag:
+
+[source,ini]
+----
+isis.viewer.wicket.rememberMe.suppress=true
+----
+
+
+With 'remember me' not suppressed (the default):
+
+image::suppress-remember-me/login-page-default.png[width="300px",link="{imagesdir}/suppress-remember-me/login-page-default.png"]
+
+and with the checkbox suppressed:
+
+image::suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{imagesdir}/suppress-remember-me/login-page-suppress-remember-me.png"]
+
+
+
+
+
+
+=== Sign-up
+
+If user registration has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
+
+The 'sign up' link can be suppressed, if required, by setting a configuration flag.
+
+[source,ini]
+----
+isis.viewer.wicket.suppressSignUp=true
+----
+
+
+With 'sign up' not suppressed (the default):
+
+image::suppress-sign-up/login-page-default.png[width="300px",link="{imagesdir}/suppress-sign-up/login-page-default.png"]
+
+and with the link suppressed:
+
+image::suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{imagesdir}/suppress-sign-up/login-page-suppress-sign-up.png"]
+
+
+
+=== Password Reset
+
+If user registration has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
+
+The 'password reset' link can be suppressed, if required, by setting a configuration flag:
+
+[source,ini]
+----
+isis.viewer.wicket.suppressPasswordReset=true
+----
+
+
+With 'password reset' not suppressed (the default):
+
+image::suppress-password-reset/login-page-default.png[width="300px",link="{imagesdir}/suppress-password-reset/login-page-default.png"]
+
+and with the link suppressed:
+
+image::suppress-password-reset/login-page-suppress-password-reset.png[width="300px",link="{imagesdir}/suppress-password-reset/login-page-suppress-password-reset.png"]
+
+
+
+
+
+
+== Header and Footer
+
+Configuration properties that influence the appearance of the header and footer panels.
+
+See also the xref:ug:vw:configuration-properties/bookmarks-and-breadcrumbs.adoc[bookmarks and breadcrumbs] and xref:ug:vw:configuration-properties/themes
+.adoc[themes] configuration properties, because these also control UI elements that appear on the header/footer panels.
+
+.Header and Footer
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+
+|`isis.viewer.wicket.+`
+`credit.1.image`
+|File path
+|File path to a logo image for the first credited organisation, relative to `src/main/webapp` directory.
+
+For example: +
+`/images/apache-isis/logo-48x48.png`.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.1.name`
+|String
+|Name of the first credited organisation.
+
+For example: "Apache Isis"
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.1.url`
+|URL
+|URL to the website of the first credited organisation.
+
+For example: +
+`http://isis.apache.org`.
+
+Optional.
+
+|`isis.viewer.wicket.+`
+`credit.2.image`
+|File path
+|File path to a logo image for the second credited organisation, relative to `src/main/webapp` directory.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.2.name`
+|String
+|Name of the second credited organisation.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.2.url`
+|URL
+|URL to the website of the second credited organisation.
+
+Optional.
+
+|`isis.viewer.wicket.+`
+`credit.3.image`
+|File path
+|File path to a logo image for the third credited organisation, relative to `src/main/webapp` directory.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.3.name`
+|String
+|Name of the third credited organisation.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.3.url`
+|URL
+|URL to the website of the third credited organisation.
+
+Optional.
+
+|`isis.viewer.wicket.showFooter`
+| `true`,`false` +
+(`_true_`)
+| Whether to show the footer at all.
+
+|===
+
+
+
+== Presentation
+
+These configuration properties that effect the overall presentation and appearance of the viewer.
+
+[NOTE]
+====
+Some of the properties below use the prefix `isis.viewers.` (rather than the usual `isis.viewer.wicket.`).
+====
+
+.Presentation
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+
+|`isis.viewers.` +
+`collectionLayout.` +
+`defaultView`
+|`hidden`, `table` +
+(`hidden`)
+|Default for the default view for all (parented) collections if not explicitly specified using xref:rg:ant:CollectionLayout/defaultView.adoc[`@CollectionLayout#defaultView()`]
+
+By default the framework renders (parented) collections as "hidden", ie collapsed.
+These can be overridden on a case-by-case basis using the xref:rg:ant:CollectionLayout/defaultView.adoc[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
+
+If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
+
+
+|`isis.viewers.` +
+`paged.parented`
+|positive integer (12)
+|Default page size for parented collections (as owned by an object, eg `Customer#getOrders()`)
+
+
+|`isis.viewers.` +
+`paged.standalone`
+|positive integer (25)
+|Default page size for standalone collections (as returned from an action invocation)
+
+
+|`isis.viewers.` +
+`propertyLayout.` +
+`labelPosition`
+|`TOP`, `LEFT` +
+(`LEFT`)
+|Default for label position for all properties if not explicitly specified using xref:rg:ant:PropertyLayout/labelPosition.adoc[`@PropertyLayout#labelPosition()`]
+
+
+If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
+
+If these are not present then Apache Isis will render according to internal defaults.
+At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+
+
+|`isis.viewer.wicket.` +
+`maxTitleLength` +
+`InParentedTables`
+| +ve integer +
+(`_12_`)
+| See further discussion (immediately below).
+
+|`isis.viewer.wicket.` +
+`maxTitleLength` +
+`InStandaloneTables`
+| +ve integer, +
+(`_12_`)
+| See further discussion (immediately below).
+
+|`isis.viewer.wicket.` +
+`maxTitleLengthInTables`
+| +ve integer, +
+(`_12_`)
+| See further discussion (immediately below).
+
+|`isis.viewer.wicket.` +
+`promptStyle`
+|`dialog`,`inline`, +
+`inline_as_if_edit` +
+(`inline`)
+| whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
+For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
+The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
+
+The property can be overridden on a property-by-property basis using xref:rg:ant:PropertyLayout/promptStyle.adoc[`@Property#promptStyle()`]) or  xref:rg:ant:ActionLayout/promptStyle.adoc[`@Action#promptStyle()`]).
+
+Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
+
+
+|`isis.viewer.wicket.` +
+`dialogMode`
+| `sidebar`,`modal` +
+(`_sidebar_`)
+| Whether an action on a domain object (entity or view model) which prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
+
+See the discussion on the xref:ug:vw:features/sidebar-vs-modal-dialogs.adoc[sidebar vs modal dialogs] feature for further details.
+
+|`isis.viewer.wicket.` +
+`dialogModeForMenu`
+| `sidebar`,`modal` +
+(`_sidebar_`)
+| Whether an action for a domain service should be rendered using a sidebar or alternatively in a modal dialog box.
+
+See the discussion on the xref:ug:vw:features/sidebar-vs-modal-dialogs.adoc[sidebar vs modal dialogs] feature for further details.
+
+
+
+|===
+
+
+Objects whose title is overly long can be cumbersome in titles.
+The Wicket viewer has a xref:ug:vw:features/titles-in-tables.adoc[mechanism to automatically shorten] the titles of objects specified using `@Title`.
+As an alternative/in addition, the viewer can also be configured to simply truncate titles longer than a certain length.
+
+The properties themselves are:
+
+[source,ini]
+----
+isis.viewer.wicket.maxTitleLengthInStandaloneTables=20
+isis.viewer.wicket.maxTitleLengthInParentedTables=8
+----
+
+If you wish to use the same value in both cases, you can also specify just:
+
+[source,ini]
+----
+isis.viewer.wicket.maxTitleLengthInTables=15
+----
+
+This is used as a fallback if the more specific properties are not provided.
+
+If no properties are provided, then the Wicket viewer defaults to abbreviating titles to a length of `12`.
+
+
+
+
+
+
+
+== Bookmarks and Breadcrumbs
+
+These configuration properties enable or disable the mechanisms for locating previously accessed objects.
+
+.Bookmarks and Breadcrumbs
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.viewer.wicket` +
+`whereAmI.` +
+`maxParentChainLength`
+| +ve int +
+(`_64_`)
+| The number of levels to show in the "Where am I" chain.
+
+|`isis.viewer.wicket.` +
+`bookmarkedPages.maxSize`
+| +ve int +
+(`_15_`)
+| number of pages to bookmark
+
+|`isis.viewer.wicket.` +
+`bookmarkedPages.showChooser`
+| +ve int +
+(`_15_`)
+| whether to show the bookmark panel (top-left in the Wicket viewer)
+
+|`isis.viewer.wicket.` +
+`breadcrumbs.showChooser`
+| `true`,`false` +
+(`_true_`)
+| Whether to show chooser for Breadcrumbs (bottom-left footer in the Wicket viewer)
+
+
+
+|===
+
+
+
+
+== Themes
+
+These configuration properties control the switching of themes.
+
+.Themes
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.viewer.wicket.` +
+`themes.enabled`
+| comma separated list ...
+| \... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.
+
+See further discussion below.
+
+|`isis.viewer.wicket.` +
+`themes.initial`
+| theme name
+| Which theme to show initially.
+
+See further discussion below.
+
+|`isis.viewer.wicket.` +
+`themes.showChooser`
+| `true`,`false` +
+(`_false_`)
+| Whether to show chooser for Bootstrap themes.
+
+See further discussion below.
+
+|`isis.viewer.wicket.` +
+`themes.default`
+| bootswatch theme name +
+(`_Flatly_`)
+| Which Bootstrap theme to use by default.
+
+
+|===
+
+
+
+The Wicket viewer uses link:http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
+
+By default the viewer uses the "Flatly" theme from http://bootswatch.com[bootswatch.com].
+This can be overridden using the following configuration property:
+
+[source,ini]
+----
+isis.viewer.wicket.themes.initial=Darky
+----
+
+[TIP]
+====
+Set this configuration property to different values for different environments (dev, test, prod) so you can know at a glance which environment you are connected to.
+====
+
+The end-user can also be given the choice of changing the theme:
+
+[source,ini]
+----
+isis.viewer.wicket.themes.showChooser=true
+----
+
+.Example 1
+image::theme-chooser/example-1.png[width="720px",link="{imagesdir}/theme-chooser/example-1.png"]
+
+
+.Example 2:
+image::theme-chooser/example-2.png[width="720px",link="{imagesdir}/theme-chooser/example-2.png"]
+
+
+It is also possible to restrict the themes shown to some subset of those in bootswatch.
+This is done using a further
+property:
+
+[source,ini]
+----
+isis.viewer.wicket.themes.enabled=bootstrap-theme,Cosmo,Flatly,Darkly,Sandstone,United
+----
+
+where the value is the list of themes (from http://bootswatch.com[bootswatch.com]) to be made available.
+
+[TIP]
+====
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:ug:vw:extending/custom-bootstrap-theme.adoc[Extending] chapter for further details.
+====
+
+
+
+== Date Formatting & Date Picker
+
+These configuration properties influence the way in which date/times are rendered and can be selected using the date/time pickers.
+
+.Date Formatting & Date Picker
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+
+|`isis.viewer.wicket.` +
+`datePattern`
+| date format +
+(`dd-MM-yyyy`)
+|The `SimpleDateFormat` used to render dates.
+For the date picker (which uses `moment.js` library), this is converted dynamically into the corresponding `moment.js` format.
+
+|`isis.viewer.wicket.` +
+`dateTimePattern`
+| date/time format +
+(`dd-MM-yyyy HH:mm`)
+|The `SimpleDateFormat` used to render date/times.
+For the date picker (which uses `moment.js` library), this is
+converted dynamically into the corresponding `moment.js` format.
+
+|`isis.viewer.wicket.` +
+`datePicker.maxDate`
+| ISO format date +
+(`2100-01-01T00:00:00.000Z`)
+|Specifies a maximum date after which dates may not be specified.
+
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for further details.
+The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
+for further details).
+
+|`isis.viewer.wicket.` +
+`datePicker.minDate`
+| ISO format date +
+(`1900-01-01T00:00:00.000Z`)
+|Specifies a minimum date before which dates may not be specified.
+
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate[datetimepicker reference docs] for further details.
+The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here] for further details).
+
+
+|`isis.viewer.wicket.` +
+`timestampPattern`
+| date/time format +
+(`yyyy-MM-dd HH:mm:ss.SSS`)
+|The `SimpleDateFormat` used to render timestamps.
+
+
+
+
+|===
+
+
+== Debugging
+
+These configuration properties can assist with debugging the behaviour of the Wicket viewer itself.
+
+.Debugging
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.viewer.wicket.` +
+`ajaxDebugMode`
+| `true`,`false` +
+(`_false_`)
+| whether the Wicket debug mode should be enabled.
+
+|`isis.viewer.wicket.` +
+`developmentUtilities.enable`
+| `true`,`false` +
+(`_false_`)
+| when running in production mode, whether to show enable the Wicket development utilities anyway.
+From a UI perspective, this will cause the DebugBar to be shown (top-right).
+
+If running in prototyping mode, the development utilities (debug bar) is always enabled.
+This feature is primarily just to help track any memory leakage issues that might be suspected when running in production.
+
+|`isis.viewer.wicket.` +
+`liveReloadUrl`
+| URL
+|Specifies the URL if xref:support:dg:ide/intellij.adoc#advanced_gradle-liveReload[live reload] is set up, eg: +
+
+`http://localhost:35729/livereload.js?snipver=1`
+
+|`isis.viewer.wicket.` +
+`stripWicketTags`
+| `true`,`false` +
+(`_true_`)
+| Whether to force Wicket tags to be stripped in prototype/development mode.
+
+[NOTE]
+====
+In 1.7.0 and earlier, the behaviour is different; the Apache Isis Wicket viewer will preserve wicket tags when running in Apache Isis' prototype/development mode, but will still strip wicket tags in Apache Isis' server/deployment mode.
+
+We changed the behaviour in 1.8.0 because we found that Internet Explorer can be sensitive to the presence of Wicket tags.
+====
+
+|`isis.viewer.wicket.` +
+`wicketSourcePlugin`
+| `true`,`false` +
+(`_false_`)
+| Whether the WicketSource plugin should be enabled; by default it is not enabled.
+
+[WARNING]
+====
+Enabling this setting can significantly slow down rendering performance of the Wicket viewer.
+====
+
+|===
+
+
+
+
+
+
+
+
+
+== Feature Toggles
+
+These configuration properties are used to enable/disable features that are either on the way to becoming the default behaviour (but can temporarily be disabled) or conversely for features that are to be removed (but can temporarily be left as enabled).
+
+.Feature Toggles
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.viewer.wicket.` +
+`whereAmI.enabled`
+| `true`,`false` +
+(`_true_`)
+| To disable the xref:ug:vw:features/where-am-i.adoc["Where am I"] feature.
+
+
+|`isis.viewer.wicket.` +
+`disableDependent` +
+`ChoiceAutoSelection`
+| `true`,`false` +
+(`_false_`)
+| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
+
+|`isis.viewer.wicket.` +
+`disableModalDialogs`
+| `true`,`false` +
+(`_false_`)
+|No longer supported.
+
+|`isis.viewer.wicket.` +
+`preventDoubleClick` +
+`ForFormSubmit`
+| `true`,`false` +
+(`_true_`)
+| Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click.
+
+|`isis.viewer.wicket.` +
+`preventDoubleClick` +
+`ForNoArgAction`
+| `true`,`false` +
+(`_true_`)
+| Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
+
+
+|`isis.viewer.wicket.` +
+`redirectEvenIfSameObject`
+| `true`,`false` +
+(`_false_`)
+| By default, an action invocation that returns the same object will result in the page being updated.
+The same is true for property edits.
+
+If this setting is enabled, then the viewer will always render to a new page.
+
+[NOTE]
+====
+Note that the default behaviour is new in `1.15.0`, providing a better end-user experience.
+Setting this option retains the behaviour of the viewer pre-`1.15.0`.
+====
+
+|`isis.viewer.wicket.` +
+`regularCase`
+| `true`,`false` +
+(`_false_`)
+| Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
+
+|`isis.viewer.wicket.` +
+`replaceDisabledTag`- +
+`WithReadonlyTag`
+| `true`,`false` +
+(`_true_`)
+| Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
+
+|`isis.viewer.wicket.` +
+`useIndicatorForFormSubmit`
+| `true`,`false` +
+(`_true_`)
+| Whether to show an indicator for a form submit button that it has been clicked.
+
+|`isis.viewer.wicket.` +
+`useIndicatorForNoArgAction`
+| `true`,`false` +
+(`_true_`)
+| Whether to show an indicator for a no-arg action button that it has been clicked.
+
+
+|===
+
+

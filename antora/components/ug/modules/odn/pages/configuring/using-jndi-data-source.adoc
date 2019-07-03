@@ -1,0 +1,76 @@
+= Using JNDI DataSource
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+Isis' JDO objectstore can be configured either to connect to the database using its own connection pool, or by using a container-managed datasource.
+
+
+
+== Application managed
+
+Using a connection pool managed directly by the application (that is, by Apache Isis' JDO objectstore and ultimately by DataNucleus) requires a single set of configuration properties to be specified.
+
+In either `WEB-INF\isis.properties` file (or `WEB-INF\persistor.properties`, or `WEB-INF\persistor_datanucleus.properties`), specify the connection driver, url, username and password.
+
+For example:
+
+[source,ini]
+----
+isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName=net.sf.log4jdbc.DriverSpy
+isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL=jdbc:log4jdbc:hsqldb:mem:test
+isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName=sa
+isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword=
+----
+
+Those configuration properties that start with the prefix `isis.persistor.datanucleus.impl.` are passed through directly to DataNucleus (with the prefix removed).
+
+It is also possible to specify the `
+datanucleus.ConnectionPasswordDecrypter
+` property; see the link:http://www.datanucleus.org/products/accessplatform_4_1/persistence_properties.html#ConnectionPasswordDecrypter[DataNucleus documentation] for further details.
+
+
+
+
+== Container managed (JNDI)
+
+Using a datasource managed by the servlet container requires three separate bits of configuration.
+
+Firstly, specify the name of the datasource in the `WEB-INF\persistor_datanucleus.properties` file. For example:
+
+If connection pool settings are also present in this file, they will simply be ignored. Any other configuration properties that start with the prefix `isis.persistor.datanucleus.impl.` are passed through directly to DataNucleus (with the prefix removed).
+
+Secondly, in the `WEB-INF/web.xml`, declare the resource reference:
+
+[source,xml]
+----
+<resource-ref>
+    <description>db</description>
+    <res-ref-name>jdbc/simpleapp</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+</resource-ref>
+----
+
+Finally, declare the datasource as required by the servlet container. For example, if using Tomcat 7, the datasource can be specified by adding the following to `$TOMCAT_HOME/conf/context.xml`:
+
+[source,xml]
+----
+<Resource name="jdbc/simpleapp"
+  auth="Container"
+  type="javax.sql.DataSource"
+  maxActive="100"
+  maxIdle="30"
+  maxWait="10000"
+  username="sa"
+  password="p4ssword"
+  driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+  url="jdbc:sqlserver://127.0.0.1:1433;instance=.;databaseName=simpleapp"/>
+----
+
+You will also need to make sure that the JDBC driver is on the servlet container's classpath. For Tomcat, this means copying the driver to `$TOMCAT_HOME/lib`.
+
+[NOTE]
+====
+According to Tomcat's documentation, it is supposedly possible to copy the `conf/context.xml` to the name of the webapp, eg `conf/mywebapp.xml`, and scope the connection to that webapp only.  I was unable to get this working, however.
+====
+

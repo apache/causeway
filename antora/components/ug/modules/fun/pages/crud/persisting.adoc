@@ -1,0 +1,63 @@
+= Persisting
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+Once a domain entity has been instantiated, it must be persisted.
+This is done using the xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`].
+For example:
+
+[source,java]
+----
+Customer customer = ...
+
+repositoryService.persist(customer);
+----
+
+If using the no-arg form to instantiate the entity, then (to save having to inject two services), the `RepositoryService` can also be used to instantiate.
+This gives rise to this common idiom:
+
+[source,java]
+----
+Customer customer = repositoryService.instantiate(Customer.class);
+customer.setReference(reference);
+customer.setFirstName(firstName);
+customer.setLastName(lastName);
+...
+repositoryService.persist(customer);
+----
+
+It's worth being aware that the framework does _not_ eagerly persist the object.
+Rather, it queues up an internal command structure representing the object persistence request.
+This is then executed either at the end of the transaction, or if a xref:ug:fun:crud/finding.adoc[query is run], or if the internal queue is manually flushed using xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`]'s `flush()` method.
+
+Alternatively, you can use:
+
+[source,java]
+----
+repositoryService.persistAndFlush(customer);
+----
+
+to eagerly perform the object insertion into the database.
+
+When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle events].
+
+
+
+[TIP]
+====
+It is also possible to configure DataNucleus to automatically persist domain entities if they are associated with other already-persistent entities.
+This avoid the need to explicitly call "persist".
+
+For this, configure the persistence-by-reachability property:
+
+.isis.properties
+[source,ini]
+----
+isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=true
+----
+
+The downside is that the code is arguably less easy to debug.
+====
+

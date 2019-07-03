@@ -1,0 +1,47 @@
+include::_attributes.adoc[]
+= Subclass properties in tables
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+Suppose you have a hierarchy of classes where a property is derived and abstract in the superclass, concrete implementations in the subclasses. For example:
+
+[source,java]
+----
+public abstract class LeaseTerm {
+    public abstract BigDecimal getEffectiveValue();
+    ...
+}
+
+public class LeaseTermForIndexableTerm extends LeaseTerm {
+    public BigDecimal getEffectveValue() { ... }
+    ...
+}
+----
+
+Currently the Wicket viewer will not render the property in tables (though the property is correctly rendered in views).
+
+[NOTE]
+====
+For more background on this workaround, see https://issues.apache.org/jira/browse/ISIS-582[ISIS-582].
+====
+
+The work-around is simple enough; make the method concrete in the superclass and return a dummy implementation, eg:
+
+[source,java]
+----
+public abstract class LeaseTerm {
+    public BigDecimal getEffectiveValue() {
+        return null;        // workaround for ISIS-582
+    }
+    ...
+}
+----
+
+
+Alternatively the implementation could throw a `RuntimeException`, eg
+
+[source,java]
+----
+throw new RuntimeException("never called; workaround for ISIS-582");
+----

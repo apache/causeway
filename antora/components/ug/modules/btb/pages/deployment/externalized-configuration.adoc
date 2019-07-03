@@ -1,0 +1,256 @@
+    = Externalized Configuration
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+As described xref:rg:cfg:configuration-files.adoc[here], by default Apache Isis itself bootstraps from the
+`isis.properties` configuration file.
+It will also read configuration from the (optional) component/implementation-specific configuration files (such as `persistor_datanucleus.properties` or `viewer_wicket.properties`), and also (optional) component-specific configuration files (such as `persistor.properties` or `viewer.properties`).
+
+It's generally not good practice to have the same configuration property in more than one file, but if that does occur, then the subsequent configuration property will be ignored.
+
+[TIP]
+====
+In addition the framework will also load the `overrides.properties` file.
+This is intended to support deployment through Docker, as discussed xref:ug:btb:deployment/docker.adoc[next].
+====
+
+All of these files are read from the `WEB-INF` directory.
+Having this configuration "baked into" the application is okay in a development environment, but when the app needs to be deployed to a test or production environment, this configuration should be read from an external location.
+
+There are in fact several frameworks involved here, all of which need to be pointed to this external location:
+
+* Apache Isis itself, which (as already discussed) reads `isis.properties` and optional component-specific config files.
+
+* link:http://shiro.apache.org[Apache Shiro],  which reads the `shiro.ini` file (and may read other files referenced from that file)
+
+* http://logging.apache.org/log4j/1.2[Apache log4j 1.2], for logging, which reads `logging.properties` file
+
+* although not used by Apache Isis, there's a good chance you may be using the Spring framework (eg if using http://activemq.apache.org[Apache Active MQ] or http://camel.apache.org[Apache Camel].
+
+Each of these frameworks has its own way of externalizing its configuration.
+
+
+[TIP]
+====
+Subsequent sections explain how to externalize configuration for xref:ug:btb:deployment/tomcat.adoc[Tomcat] and for xref:ug:btb:deployment/docker.adoc[Docker].
+====
+
+
+
+== Apache Isis' Config
+
+To tell Apache Isis to load configuration from an external directory, specify the `isis.config.dir` context parameter.
+
+
+If the external configuration directory is fixed for all environments (systest, UAT, prod etc), then you can specify within the `web.xml` itself:
+
+TODO: v2: this has almost certainly changed, because the configuration is picked up earlier; this probably no longer works.
+
+[source,xml]
+----
+<context-param>
+    <param-name>isis.config.dir</param-name>
+    <param-value>location of external config directory</param-value>
+</context-param>
+----
+
+If however the configuration directory varies by environment, then the context parameter will be specified to each installation of your servlet container.
+Most (if not all) servlet containers will provide a means to define context parameters through proprietary config files.
+
+
+
+[NOTE]
+====
+Note that running the app using Apache Isis' `org.apache.isis.WebServer` bootstrapper does not use externalized Apache Isis configuration.
+====
+
+
+
+
+
+
+== Shiro Config
+
+If using Apache Isis' xref:ug:sec:configuring-isis-to-use-shiro.adoc[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file.
+By default this also resides in `WEB-INF`.
+
+Similar to Apache Isis, Shiro lets this configuration directory be altered, by specifying the `shiroConfigLocations` context parameter.
+
+You can therefore override the default location using the same technique as described above for Apache Isis' `isis.config.dir` context parameter.
+For example:
+
+[source,xml]
+----
+<Parameter name="shiroConfigLocations"
+           value="file:/usr/local/myapp/conf/shiro.ini"
+           override="false" />
+----
+
+[TIP]
+====
+Note that Shiro is more flexible than Apache Isis; it will read its configuration from any URL, not just a directory on the local filesystem.
+====
+
+
+
+
+== Log4j Config
+
+By default Apache Isis configures log4j to read the `logging.properties` file in the `WEB-INF` directory.
+This can be overridden by setting the `log4j.properties` system property to the URL of the log4j properties file.
+
+=== Tomcat
+
+For example, if deploying to Tomcat7 or Tomcat8, this amounts to adding the following to the `CATALINA_OPTS` flags:
+
+[source,bash]
+----
+export CATALINA_OPTS="-Dlog4j.configuration=/usr/local/tomcat/myapp/conf/logging.properties"
+----
+
+[TIP]
+====
+`CATALINA_OPTS` was called `TOMCAT_OPTS` in earlier versions of Tomcat.
+====
+
+Further details an be found in the link:https://logging.apache.org/log4j/1.2/manual.html#Example_Configurations[log4j documentation].
+
+
+
+
+== Spring Config
+
+Although Apache Isis does not use Spring, it's possible that your app may use other components that do use Spring.
+For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module uses ActiveMQ and Camel to support publishing; both of these leverage Spring.
+
+There are several ways to externalized Spring config, but the mechanism described here is similar in nature to those that we use for externalizing Apache Isis' and Shiro's configuration.
+In your `web.xml`, you will probably load the Spring application context using code such as:
+
+[source,xml]
+----
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+        classpath:my-application-context-config.xml
+    </param-value>
+</context-param>
+----
+
+Add a new application context `propertyPlaceholderConfigurer-config.xml` defining a `PropertyPlaceholderConfigurer` bean.
+
+[source,xml]
+----
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>${spring.config.file}</value>
+            </list>
+        </property>
+    </bean>
+</beans>
+----
+
+This reads the properties from a `spring.config.file`, defined as a context-param in the `web.xml`:
+
+[source,xml]
+----
+<context-param>
+    <param-name>spring.config.file</param-name>
+    <param-value>classpath:spring.properties</param-value>
+</context-param>
+
+----
+
+Then update the bootstrapping in `web.xml` to use this new application context, eg:
+
+[source,xml]
+----
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+        classpath:my-application-context-config.xml,
+        classpath:propertyPlaceholderConfigurer-config.xml
+    </param-value>
+</context-param>
+----
+
+To use some other externalized configuration, override the `spring.config.file` property, eg using Tomcat's config file:
+
+[source,xml]
+----
+<Parameter name="spring.config.dir"
+           value="file:/usr/local/myapp/conf/spring.properties"
+           override="false" />
+----
+
+
+
+=== An alternative approach
+
+As mentioned, there are several other ways to externalize Spring's config; one approach is to use Spring's profile support.
+
+For example, in the application context you could have:
+
+[source,xml]
+----
+<beans profile="default">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:dev.properties</value>
+            </list>
+        </property>
+    </bean>
+</beans>
+<beans profile="externalized">
+    <bean id="propertyPlaceHolder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:prod.properties</value>
+            </list>
+        </property>
+    </bean>
+</beans>
+----
+
+The idea being that specifying the "prod" profile rather than the "default" profile would cause a different set of configuration properties to be read.
+
+The active profile can be overridden with a system property, eg:
+
+[source,bash]
+----
+-Dspring.active.profiles=prod
+----
+
+
+take a look at link:http://stackoverflow.com/a/10041835/56880[this SO answer] on using Spring profiles.
+
+
+
+
+
+== JVM Args
+
+The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] uses link:http://www.javassist.org[Javassist] to create on-the-fly classes acting as a proxy.
+The cost of these proxies can be mitigated using:
+
+[source,ini]
+----
+-XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC
+----
+
+
+
+== Using a JNDI Datasource
+
+See the guidance in the xref:ug:odn:configuring/using-jndi-data-source.adoc[configuring datanucleus] section.

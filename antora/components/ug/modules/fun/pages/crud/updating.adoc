@@ -1,0 +1,23 @@
+= Updating Objects
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+There is no specific API to update a domain entity.
+Rather, the ORM (DataNucleus) automatically keeps track of the state of each object and will update the corresponding database rows when the transaction completes.
+
+That said, it is possible to "flush" pending changes:
+
+* xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`] acts at the Apache Isis layer, and flushes any pending object persistence or object deletions
+
+* using xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] it is possible to reach down to the underlying JDO API, and perform a flush of pending object updates also.
+
+
+When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle events].
+
+
+
+
+
+

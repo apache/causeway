@@ -1,0 +1,205 @@
+= Drop Downs and Defaults
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Invoking an action whose parameters are primitives or values (int, date, string etc) is simple: the user can just type in or use a date picker.
+Invoking an action with a parameter of reference type (such as `Customer` or `Order`) requires the viewer to provide some mechanism by which the end-user can select the relevant instance.
+
+If the list of available options is fixed then the developer can provided a list a xref:rg:cms:methods/prefixes/choices.adoc[`choices...()`] supporting method (for either and action parameter or when editing a property).
+These are rendered in a drop-down.
+
+If the list of available options is much larger, then the developer can use an xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoComplete...()`] supporting method.
+The user user enters a few characters and this is used to search for matching reference(s), again rendered in a drop-down.
+
+Similarly, when invoking an action, there may well be suitable defaults for the action arguments.
+For example, if placing an `Order` then -- even if the `Product` argument might not have a sensible default -- the quantity argument could reasonably be defaulted to 1.
+Or, the `Product` might indeed have a default, say the product previously placed by this user.
+The developer indicates this using a xref:rg:cms:methods/prefixes/default.adoc[`default...()`] supporting method.
+
+
+== Choices and Default
+
+For example, _choices_ for a property are specified using:
+
+[source,java]
+----
+@Getter @Setter
+private String paymentMethod;
+
+public List<String> choicesPaymentMethod() {
+    return Arrays.asList("Visa", "Mastercard", "Amex");
+}
+----
+
+Note the "choices" prefix, while the suffix matches up with the getter.
+
+Or, for an action the _choices_ and a suitable _default_ method would be:
+
+[source,java]
+----
+public Order changePaymentMethod(
+                @ParameterLayout(named="Payment Method")
+                String paymentMethod) {
+    setPaymentMethod(paymentMethod);
+    return this;
+}
+
+public List<String> choices0ChangePaymentMethod() {
+    return Arrays.asList("Visa", "Mastercard", "Amex");
+}
+
+public String default0ChangePaymentMethod() {
+    return getPaymentMethod();
+}
+----
+
+Note the "choices" and "default" prefix, the digit is the 0-based argument number, while the suffix matches up with the action's name.
+
+
+== AutoComplete
+
+The _autocomplete_ is similar to _choices_, but accepts a string parameter, to search for matching results.
+A property for example might have:
+
+[source,java]
+----
+@Getter @Setter
+private Product product;
+
+public List<Product> autoCompleteProduct(@MinLength(2) String search) {
+    return productRepository.findByReferenceOrName(search);
+}
+----
+
+Note the "autoComplete" prefix, while (again) the suffix matches up with the getter.
+The `@MinLength(...)` annotation indicates the minimum number of characters that must be entered before a search is initiated.
+
+Actions are very similar:
+
+[source,java]
+----
+public Order changeProduct(Product product) {
+    setProduct(product);
+    return this;
+}
+
+public List<Product> autoComplete0Product(@MinLength(2) String search) {
+    return productRepository.findByReferenceOrName(search);
+}
+----
+
+An _autoComplete_ method can be used in conjunction with a _default_ method, but it doesn't make sense to provide both an _autoComplete_ and a _choices_ method.
+
+
+
+== "Globally" defined drop-downs
+
+Very often the set of available choices depends on the data type of the property/action parameter, rather than the individual property/parameter itself.
+And similarly the algorithm to search for references again may well depend only on that reference type.
+
+In the case of _choices_, annotating a class as "bounded" (as in a "bounded" or fixed number of instances) means that a _choices_ drop-down will automatically be defined.
+For example:
+
+[source,java]
+----
+@DomainObject(
+    bounded = true
+)
+public class Product { ... }
+----
+
+For more on this, see xref:rg:ant:DomainObject/bounding.adoc[`@DomainObject#bounding()`].
+
+Or, if the data type is an enum, then a drop-down will be provided automatically.
+A payment method is a good example of this:
+
+
+[source,java]
+----
+public enum PaymentMethod {
+    VISA, MASTERCARD, AMEX;
+}
+----
+
+Something similar can be achieved for _autoComplete_.
+Here the domain object indicates a repository query to execute.
+For example:
+
+[source,java]
+----
+@DomainObject(
+    autoCompleteRepository = Customers.class,
+    autoCompleteAction = "findByReferenceOrName"
+)
+public class Customer { ... }
+----
+
+with:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.VIEW_MENU_ONLY)
+public class Customers {
+    @Action(semantics=SemanticsOf.SAFE)
+    public List<Customer> findByReferenceOrName(@MinLength(3) String refOrName) {
+        ...
+    }
+}
+----
+
+For more on this, see xref:rg:ant:DomainObject/autoCompleteRepository.adoc[`@DomainObject#autoCompleteRepository()`].
+
+[TIP]
+====
+There's no need for the nominated method to be an actual action; any method of any domain service will do, so long as it accepts a string and returns the correct list.
+====
+
+
+== Multi-select action parameters
+
+As well as scalar values, action parameters can also be collections.
+For this to be valid, a _choices_ or _autoComplete_ supporting method must be provided.
+
+For example, suppose we want to "tag" or "label" an object:
+
+[source,java]
+----
+public StoryCard tag(List<Tag> tags) {
+    getTags().addAll(tags);
+}
+
+public List<Tag> autoCompleteTag(@MinLength(1) search) {
+    return tagRepository.findByName(search);
+}
+----
+
+
+
+
+== Dependent choices for action parameters
+
+For action it is also possible (in a limited form) to define dependencies between parameters.
+Specifically, if one parameter is a drop-down choice, then other drop-down choices can be derived from it.
+
+A good example is a category/sub-category:
+
+[source,java]
+----
+public ToDoItem categorize(Category category, Subcategory subcategory) {
+    setCategory(category);
+    setSubcategory(subcategory);
+}
+
+public List<Category> choices0Categorize() {
+    return categoryRepository.allCategories();
+}
+public List<Subcategory> choices1Categorize(Category category) {
+    return subcategoryRepository.findBy(category);
+}
+----
+
+Note how the _choices_ method for the 2nd parameter also accepts the first parameter.
+
+
+

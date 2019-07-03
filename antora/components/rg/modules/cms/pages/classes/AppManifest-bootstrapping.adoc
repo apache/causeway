@@ -1,0 +1,321 @@
+= `AppManifest` (bootstrapping)
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+This section describes how to implement the `AppManifest` interface to bootstrap both an Apache Isis web application, and also its integration tests.
+
+[TIP]
+====
+The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` makes it easy to write an `AppManifest`, defined by a set of xref:rg:cms:classes/Module.adoc[`Module`] implementations.
+The app manifest can then be used both to bootstrap the application "proper", or for integration tests.
+====
+
+TODO: v2: these two versions of `AppManifestAbstract` and `AppManifestAbstract2` will be unified.
+
+== API
+
+
+The `AppManifest` interface allows the constituent parts of an application to be defined programmatically, most specifically the packages that contain domain services and/or persistent entities.
+Its API is defined as:
+
+[source,java]
+----
+public interface AppManifest {
+    public List<Class<?>> getModules();                         // <1>
+    public List<Class<?>> getAdditionalServices();              // <2>
+    public String getAuthenticationMechanism();                 // <3>
+    public String getAuthorizationMechanism();                  // <4>
+    public List<Class<? extends FixtureScript>> getFixtures();  // <5>
+    public Map<String,String> getConfigurationProperties();     // <6>
+}
+----
+<1> Must return a non-null list of classes, each of which representing the root of one of the modules containing services and possibly entities, which together makes up the running application.
+<2> If non-`null`, overrides the value of `isis.services` configuration property to specify a list of additional classes to be instantiated as domain services (over and above the domain services defined via `getModules()` method.
+<3> If non-`null`, overrides the value of `isis.authentication` configuration property to specify the authentication mechanism.
+<4> If non-`null`, overrides the value of `isis.authorization` configuration property to specify the authorization mechanism.
+<5> If non-`null`, overrides the value of `isis.fixtures` configuration property to specify a fixture script to be installed.
+<6> Overrides for any other configuration properties.
+
+The following sections describe each of these methods in a little more detail.
+
+
+
+
+=== `getModules()`
+
+The most significant method (the only one which must return a non-`null` value) is the `getModules()` method.
+Each module is identified by a class; the framework simply uses that class' package as the root to search for domain services (annotated with xref:rg:ant:DomainService.adoc[`@DomainService`]) and entities (annotated with xref:rg:ant:PersistenceCapable.adoc[`@PersistenceCapable`]).
+Generally there is one such module class per Maven module.
+
+A module class for a domain module might for example be defined as:
+
+[source,java]
+----
+package com.mycompany.myapp.dom;
+public final class MyAppDomainModule {
+    private MyAppDomainModule() {}
+}
+----
+
+This tells the framework that the package and subpackages under `com.mycompany.myapp.dom` should be searched for domain services (annotated with `@DomainService`), mixins (`@Mixin`) and entities (`@PersistenceCapabable`).
+
+As is perhaps apparent, the `getModules()` method replaces and overrides both the `isis.services.ServicesInstallerFromAnnotation.packagePrefix` key (usually found in the `isis.properties`  file) and also the`isis.persistor.datanucleus.RegisterEntities.packagePrefix` key (usually found in the `persistor_datanucleus.properties` file).
+The value of the `isis.services-installer` configuration property is also ignored.
+
+For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] defines the following:
+
+[source,java]
+----
+@Override
+public List<Class<?>> getModules() {
+    return Arrays.asList(
+            ToDoAppDomainModule.class,
+            ToDoAppFixtureModule.class,
+            ToDoAppAppModule.class,
+            org.isisaddons.module.audit.AuditModule.class,
+            org.isisaddons.module.command.CommandModule.class,
+            org.isisaddons.module.devutils.DevUtilsModule.class,
+            org.isisaddons.module.docx.DocxModule.class,
+            org.isisaddons.module.publishing.PublishingModule.class,
+            org.isisaddons.module.sessionlogger.SessionLoggerModule.class,
+            org.isisaddons.module.settings.SettingsModule.class,
+            org.isisaddons.wicket.gmap3.cpt.service.Gmap3ServiceModule.class
+    );
+}
+----
+
+As can be seen, the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules also each provide a module class that can be easily referenced.
+
+
+=== `getAdditionalServices()`
+
+We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
+However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:rg:ant:DomainService.adoc[`@DomainService`] annotation.
+
+For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
+
+[source,java]
+----
+@Override
+public List<Class<?>> getAdditionalServices() {
+    return Arrays.asList(
+            org.isisaddons.module.security.dom.permission.PermissionsEvaluationServiceVetoBeatsAllow.class
+    );
+}
+----
+
+If this method returns a non-`null` value, then it overrides the value of `isis.services` configuration property.
+
+
+
+
+=== `getAuthenticationMechanism()`
+
+If non-`null`, this method specifies the authentication mechanism to use.
+The valid values are currently `"shiro"`  or `"bypass"`.
+If null is returned then the value of the `isis.authentication` configuration property (in `isis.properties` file) is used instead.
+
+See the xref:ug:sec:about.adoc[security guide] for further details on configuring shiro or bypass security.
+
+[NOTE]
+====
+This property is ignored for integration tests (which always uses the `"bypass"` mechanism).
+====
+
+
+
+=== `getAuthorizationMechanism()`
+
+If non-`null`, this method specifies the authorization mechanism to use.
+The valid values are currently `"shiro"`  or `"bypass"`.
+If null is returned then the value of the `isis.authorization` configuration property (in `isis.properties` file) is used instead.
+
+See the xref:ug:sec:about.adoc[security guide] for further details on configuring shiro or bypass security.
+
+[NOTE]
+====
+This property is ignored for integration tests (which always uses the `"bypass"` mechanism).
+====
+
+
+
+
+=== `getFixtures()`
+
+If non-`null`, this method specifies the fixture script(s) to be run on startup.
+This is particularly useful when developing or demoing while using an in-memory database.
+
+For example:
+
+[source,java]
+----
+@Override
+public List<Class<? extends FixtureScript>> getFixtures() {
+    return Lists.newArrayList(todoapp.fixture.demo.DemoFixture.class);
+}
+----
+
+
+
+Note that in order for fixtures to be installed it is also necessary to set the `isis.persistor.datanucleus.install-fixtures` key to `true`.
+This can most easily be done using the `getConfigurationProperties()` method, discussed below.
+
+
+
+=== `getConfigurationProperties()`
+
+This method allow arbitrary other configuration properties to be overridden.
+One common use case is in conjunction with the `getFixtures()` method, discussed above:
+
+[source,java]
+----
+@Override
+public Map<String, String> getConfigurationProperties() {
+    Map<String, String> props = Maps.newHashMap();
+    props.put("isis.persistor.datanucleus.install-fixtures", "true");
+    return props;
+}
+----
+
+
+
+== Bootstrapping
+
+[NOTE]
+====
+The recommendations in this section no longer apply if using the xref:rg:cms:classes/AppManifest2-bootstrapping/bootstrapping.adoc[`AppManifest2`] interface and ``Module``s to bootstrap your application.
+====
+
+One of the primary goals of the `AppManifest` is to unify the bootstrapping of both integration tests and the webapp.
+This requires that the integration tests and webapp can both reference the implementation.
+
+We strongly recommend using a `myapp-app` Maven module to hold the implementation of the `AppManifest`.
+This Maven module can then also hold dependencies which are common to both integration tests and the webapp, specifically the `org.apache.isis.core:isis-core-runtime` and the `org.apache.isis.core:isis-core-wrapper` modules.
+
+We also strongly recommend that any application-layer domain services and view models (code that references persistent domain entities but that is not referenced back) is moved to this `myapp-app` module.
+This will allow the architectural layering of the overall application to be enforced by Maven.
+
+What then remains is to update the bootstrapping code itself.
+
+There are several different contexts in which the framework needs to be bootstrapped:
+
+* the first is as a "regular" webapp (using the xref:ug:vw:about.adoc[Wicket viewer]).
+Here the `AppManifest` just needs to be specified as a configuration property, usually done using the `WEB-INF/isis.properties` configuration file: +
++
+[source,ini]
+----
+isis.appManifest=domainapp.app.MyAppAppManifest
+----
+
+* the second is also as a webapp, but from within the context of the IDE. +
++
+Here, it's common to use the `org.apache.isis.WebServer` class to launch your application from the xref:ug:btb:deployment/cmd-line.adoc[command line].
+This allows the `AppManifest` to be specified using the `-m` (or `--manifest`) flag: +
++
+[source,ini]
+----
+java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtures
+----
+
+* the third case is within an integration test. +
++
+The code to boostrap an integration test is shown in the xref:ug:tst:integ-test-support/bootstrapping.adoc[testing guide], but once again an `AppManifest` is required.
+
+In some cases an integration test uses the exact same `AppManifest` as the regular webapp.
+Sometimes though it is necessary to "tweak" the `AppManifest`:
+
+* it might use additional services, such as services to mock out external dependencies, or to provide fake data
+
+* it might override certain configuration properties, eg to run against an in-memory HSQLDB database.
+
+The next section describes some helper classes that the framework provides to help achieve this.
+
+
+=== AppManifestAbstract
+
+[IMPORTANT]
+====
+The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder` supercede `AppManifestAbstract`, making it easy to write an `AppManifest` defined by a set of xref:rg:cms:classes/Module.adoc[`Module`] implementations.
+====
+
+The `AppManifestAbstract` and its associated builder (`AppManifestAbstract.Builder`) make it easy to bootstrap the application both as a webapp and also as an integration test.
+
+Rather than implement `AppManifest` interface directly, instead your application subclasses from `AppManifestAbstract`.
+This takes an instance of a `AppManifestAbstract.Builder` in its constructor; the builder is what allows for variation between environments.
+
+Moreover, these classes recognise that configuration properties fall into two broad classes:
+
+* those that are fixed and do not change between environments. +
++
+In other words these describe how the application chooses to configure the framework itself, eg global disable of editing of properties, or enabling of auditing.
+
+* those that change between environments. +
++
+The classic example here is the JDBC URL.
+
+For example, the xref:arch:simpleapp:about.adoc[SimpleApp archetype]'s `AppManifest` is defined as:
+
+[source,java]
+----
+public class DomainAppAppManifest extends AppManifestAbstract {
+
+    public static final Builder BUILDER = Builder.forModules(
+                    SimpleModuleDomSubmodule.class,                         // <1>
+                    DomainAppApplicationModuleFixtureSubmodule.class,
+                    DomainAppApplicationModuleServicesSubmodule.class
+            )
+            .withConfigurationPropertiesFile(DomainAppAppManifest.class,    // <2>
+                    "isis.properties",
+                    "authentication_shiro.properties",
+                    "persistor_datanucleus.properties",
+                    "viewer_restfulobjects.properties",
+                    "viewer_wicket.properties"
+            ).withAuthMechanism("shiro");                                   // <3>
+
+    public DomainAppAppManifest() {
+        super(BUILDER);                                                     // <4>
+    }
+}
+----
+<1> the modules that make up the application; corresponds to `AppManifest#getModules()`
+<2> the (non-changing with environment) set of configuration properties, loaded relative to the manifest itself;  corresponds to `AppManifest#getConfigurationProperties()`
+<3> override of components; correponds to both `AppManifest#getAuthenticationMechanism()` and `AppManifest#getAuthorizationMechanism()`
+<4> Pass the builder up to the superclass.
+
+If the integration tests requires no tweaking, then the `AppManifest` can be used directly, for example:
+
+[source,java]
+----
+public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract2 {
+    @BeforeClass
+    public static void initSystem() {
+        bootstrapUsing(new DomainAppAppManifest());
+    }
+}
+----
+
+On the other hand, if tweaking is required then exposing the builder as a `public static` field makes this easy to do:
+
+[source,java]
+----
+public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract2 {
+    @BeforeClass
+    public static void initSystem() {
+        bootstrapUsing(DomainAppAppManifest.BUILDER
+                            .withAdditionalModules(...)
+                            .withAdditionalServices(...)
+                            .withConfigurationPropertiesFile("...")
+                            .withConfigurationProperty("...","...")
+                            .build()
+        );
+    }
+}
+----
+
+
+
+
+
+

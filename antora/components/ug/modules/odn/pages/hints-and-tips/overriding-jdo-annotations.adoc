@@ -1,0 +1,81 @@
+include::_attributes.adoc[]
+= Overriding JDO Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+The JDO Objectstore (or rather, the underlying DataNucleus implementation) builds its own persistence metamodel by reading both annotations on the class and also by searching for metadata in XML files.
+The metadata in the XML files takes precedence over the annotations, and so can be used to override metadata that is "hard-coded" in annotations.
+
+In fact, JDO/DataNucleus provides two different XML files that have slightly different purposes and capabilities:
+
+* first, a `.jdo` file can be provided which - if found - completely replaces the annotations. +
++
+The idea here is simply to use XML as the means by which metadata is specified.
+
+* second, an `.orm` file can be provided which - if found - provides individual overrides for a particular database vendor. +
++
+The idea here is to accommodate for subtle differences in support for SQL between vendors.
+A good example is the default schema for a table: `dbo` for SQL Server, `public` for HSQLDB, `sys` for Oracle, and so on.
+
+If you want to use the first approach (the `.jdo` file), you'll find that you can download the effective XML representation of domain entities using the xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Persistable_downloadJdoMetadata[downloadJdoMetadata] mixin action available in prototyping mode.
+This then needs to be renamed and placed in the appropriate location on the classpath; see the link:http://www.datanucleus.org[DataNucleus documentation] for details.
+
+However, using this first approach does create a maintenance effort; if the domain entity's class structure changes over time, then the XML metadata file will need to be updated.
+
+The second approach (using an `.orm` file) is therefore often more useful than the first, because the metadata provided overrides rather than replaces the annotations (and annotations not overridden continue to be honoured).
+
+A typical use case is to change the database schema for an entity.
+For example, the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules use schemas for each entity. For example, the `AuditEntry` entity in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module is annotated as:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable(
+        identityType=IdentityType.DATASTORE,
+        schema = "IsisAddonsAudit",
+        table="AuditEntry")
+public class AuditEntry {
+    ...
+}
+----
+
+This will map the `AuditEntry` class to a table `&quot;IsisAddonsAudit&quot;.&quot;AuditEntry&quot;`; that is using a custom schema to own the object.
+
+Suppose though that for whatever reason we didn't want to use a custom schema but would rather use the default.
+Also suppose we are using SQL Server as our target database.
+
+We can override the above annotation using a `AuditEntry-sqlserver.orm` file, placed in the same package as the `AuditEntry` entity.
+For example:
+
+.AuditEntry-sqlserver.orm
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8" ?>
+<orm xmlns="http://xmlns.jcp.org/xml/ns/jdo/orm"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/jdo/orm
+        http://xmlns.jcp.org/xml/ns/jdo/orm_3_0.xsd">
+
+    <package name="org.isisaddons.module.audit.dom">
+        <class name="AuditEntry"
+               schema="isisaudit"
+               table="AuditEntry">
+        </class>
+    </package>
+</orm>
+
+----
+
+It's also necessary to tell JDO/DataNucleus about which vendor is being used (`sqlserver` in the example above).
+This is done using a configuration property:
+
+
+.isis.properties
+[source,ini]
+----
+isis.persistor.datanucleus.impl.datanucleus.Mapping=sqlserver
+----
+
+
+
+

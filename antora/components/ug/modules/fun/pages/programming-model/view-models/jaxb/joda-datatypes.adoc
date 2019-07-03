@@ -1,0 +1,72 @@
+= JODA Time Datatypes
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+If your JAXB view model contains fields using the JODA datatypes (`LocalDate` and so on), then `@XmlJavaTypeAdapter` additional annotations in order to "teach" JAXB how to serialize out the state.
+
+The Apache Isis applib provides a number of adapters to use out-of-the-box.
+For example:
+
+
+[source,java]
+----
+@XmlRootElement(name = "categorizeIncomingInvoice")
+@XmlType(
+        propOrder = {
+                ...
+                "dateReceived",
+                ...
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)
+public class IncomingInvoiceViewModel extends IncomingOrderAndInvoiceViewModel {
+
+    @XmlJavaTypeAdapter(JodaLocalDateStringAdapter.ForJaxb.class)
+    private LocalDate dateReceived;
+
+    ...
+}
+----
+
+The full list of adapter classes are:
+
+
+
+.JAXB adapters
+[cols="1a,2a", options="header"]
+|===
+
+| JODA datatype
+| Adapter
+
+.2+| `org.joda.time.DateTime`
+| `JodaDateTimeStringAdapter.ForJaxb`
+| `JodaDateTimeXMLGregorianCalendarAdapter.ForJaxb`
+
+.2+| `org.joda.time.LocalDate`
+| `JodaLocalDateStringAdapter.ForJaxb`
+| `JodaLocalDateXMLGregorianCalendarAdapter.ForJaxb`
+
+.2+| `org.joda.time.LocalDateTime`
+| `JodaLocalDateTimeStringAdapter.ForJaxb`
+| `JodaLocalDateTimeXMLGregorianCalendarAdapter.ForJaxb`
+
+
+.2+| `org.joda.time.LocalTime`
+| `JodaLocalTimeStringAdapter.ForJaxb`
+| `JodaLocalTimeXMLGregorianCalendarAdapter.ForJaxb`
+
+| `java.sql.Timestamp`
+| `JavaSqlTimestampXmlGregorianCalendarAdapter.ForJaxb`
+
+
+|===
+
+
+[TIP]
+====
+If you want to roll-your-own, take a look at link:http://blog.bdoughan.com/2011/05/jaxb-and-joda-time-dates-and-times.html[this blog post].
+====
+

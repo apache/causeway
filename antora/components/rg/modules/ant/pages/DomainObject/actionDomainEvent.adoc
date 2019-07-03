@@ -1,0 +1,43 @@
+= `actionDomainEvent()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Whenever an action of a domain object is interacted with then a domain event will be fired, for each of the various phases (hidden, disabled, validated, executing, executed).
+Using xref:rg:ant:Action/domainEvent.adoc[`@Action#domainEvent()`], the actual domain event class fired can be customised.
+the `@DomainObject#actionDomainEvent()` attribute allows a common event domain class to be fired for all of the actions of the domain object.
+
+For example:
+
+[source,java]
+----
+@DomainObject(
+    actionDomainEvent=ToDoItem.ActionDomainEventDefault.class
+)
+public class ToDoItem {
+    public static class ActionDomainEventDefault
+        extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<Object> { }
+    ...
+
+    public void updateDescription(final String description) {
+        this.description = description;
+    }
+
+}
+----
+
+
+Interactions with the property contributed by this mixin will emit the domain event of the subject (`ToDoItem`).
+
+One small difference between the events emitted by a "regular" action and a contributed action is that the source of the event (as in `event#getSource()` will be different.
+In the former case it will be the domain object instance, in the latter it will be the mixin object instantiated automatically by the framework.
+
+However, the domain object is available using `event#getMixedIn()`.
+Even easier, `event#getSubject()` will always return the domain object (it returns the `#getMixedIn()` if present, otherwise the `#getSource()`.
+
+[NOTE]
+====
+Action domain events have generic types, with the (first and only) generic type indicating the event's source's type.
+
+Because an event specified at the class level might have either the domain object or a mixin for the domain object as its source, they should therefore use simply `Object` as their generic type.
+====

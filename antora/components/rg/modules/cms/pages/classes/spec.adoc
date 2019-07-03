@@ -1,0 +1,104 @@
+= Specification pattern
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The interfaces and classes listed in this chapter provide support for the  `Specification` pattern, as described in Eric Evans' book _Domain Driven Design_, p224.
+
+Apache Isis will automatically apply such specifications as validation rules on properties (as per xref:rg:ant:Property/mustSatisfy.adoc[`@Property#mustSatisfy()`]) and on action parameters (as per xref:rg:ant:Parameter/mustSatisfy.adoc[`@Parameter#mustSatisfy()`]).
+
+
+
+== `Specification`
+
+The heart of the support for this pattern is the `Specification` interface:
+
+[source,java]
+----
+public interface Specification {
+    public String satisfies(Object obj);  // <1>
+}
+----
+<1> if returns `null`, then the constraint is satisfies; otherwise returns the reason why the constraint has not been satisfied.
+
+
+For example:
+
+[source,java]
+----
+public class StartWithCapitalLetterSpecification implements Specification {
+    public String satisfies(Object proposedObj) {
+        String proposed = (String)proposedObj;               // <1>
+        return "".equals(proposed)
+            ? "Empty string"
+            : !Character.isUpperCase(proposed.charAt(0))
+                ? "Does not start with a capital letter"
+                : null;
+    }
+}
+public class Customer {
+    @Property(mustSatisfy=StartWithCapitalLetterSpecification.class)
+    public String getFirstName() { ... }
+    ...
+}
+----
+<1> this ugly cast can be avoided using some of the other classes available; see below.
+
+
+
+== `Specification2`
+
+The `Specification2` interface extends the `Specification` API to add support for i18n.
+This is done by defining an additional method that returns a xref:rg:cms:classes/i18n/TranslatableString.adoc[translatable string]:
+
+[source,java]
+----
+public interface Specification2 extends Specification {
+    public TranslatableString satisfiesTranslatable(Object obj);  // <1>
+}
+----
+<1> if returns `null`, then the constraint is satisfies; otherwise returns the reason why the constraint has not been satisfied.
+
+
+Note that if implementing `Specification2` then there is no need to also provide an implementation of the inherited `satisfies(Object)` method; this will never be called by the framework for `Specification2` instances.
+
+
+
+
+== Adapter classes
+
+The `AbstractSpecification` and `AbstractSpecification2` adapter classes provide a partial implementation of the respective interfaces, providing type-safety.
+(Their design is modelled on the `TypesafeMatcher` class within link:http://hamcrest.org/JavaHamcrest/[Hamcrest]).
+
+For example:
+
+[source,java]
+----
+public class StartWithCapitalLetterSpecification extends AbstractSpecification<String> {
+    public String satisfiesSafely(String proposed) {
+        return "".equals(proposed)
+            ? "Empty string"
+            : !Character.isUpperCase(proposed.charAt(0))
+                ? "Does not start with a capital letter"
+                : null;
+    }
+}
+public class Customer {
+    @Property(mustSatisfy=StartWithCapitalLetterSpecification.class)
+    public String getFirstName() { ... }
+    ...
+}
+----
+
+The `AbstractSpecification2` class is almost identical; its type-safe method is `satisfiesTranslatableSafely(T)` instead.
+
+
+== Combining specifications
+
+There are also adapter classes that can be inherited from to combine specifications:
+
+* `SpecificationAnd` - all provided specifications' constraints must be met
+* `SpecificationOr` - at least one provided specifications' constraints must be met
+* `SpecificationNot` - its constraints are met if-and-only-if the provided specification's constraint was _not_ met.
+
+Note that these adapter classes inherit `Specification` but do not inherit `Specification2`; in other words they do not support i18n.

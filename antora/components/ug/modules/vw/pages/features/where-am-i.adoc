@@ -1,0 +1,105 @@
+= Where am I
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The Wicket viewer provides a secondary navigation scheme that allows users to quickly access domain objects, that are organized in a hierarchical manner. 
+
+This hierarchy can be understood as a navigable tree-structure, where the navigable tree-nodes are either domain objects or domain views.
+Domain objects that take part in such a navigable-tree-structure need to declare their actual navigable parent within this hierarchy.
+That's all the framework needs, in order to build a navigable-tree.
+With version 2.0 we introduced the `Navigable` enum to use with the `@PropertyLayout` annotation to allow declarative specification of a domain object's navigable parent.
+
+In other words: a domain object or view may declare its parent (with respect to the navigable tree-structure it is part of) via use of a `@PropertyLayout(navigable=Navigable.PARENT)` annotation.
+
+
+== Screenshots
+
+The following screenshot shows the navigation links below the top menu bar.
+
+image::where-am-i/hello_grey_bg.png[width="720px",link="{imagesdir}/where-am-i/hello_grey_bg.png"]
+
+
+== Domain Code
+
+To declare a domain object's (or view's) navigable parent, add a `@PropertyLayout(navigable=Navigable.PARENT)` annotation to a field (that has an associated getter) or a no-arg method, that returns the parent object:
+
+[source,java]
+----
+
+@DomainObject
+public class Company { ... }
+
+@DomainObject
+public class Employee {
+
+    @PropertyLayout(navigable=Navigable.PARENT) // annotated field with e.g. lombok provided getter
+    @Getter 
+    Company myCompany;
+}
+
+@DomainObject
+public class PhoneNumber {
+
+    @PropertyLayout(navigable=Navigable.PARENT)  // annotated no-arg supplier
+    Employee employee(){
+        return ...
+    }
+
+}
+
+----
+
+This results in a navigable tree-structure ...
+
+Company > Employee > PhoneNumber
+
+=== How to use `Navigable.PARENT`
+
+. Any use of `@PropertyLayout(navigable=Navigable.PARENT)` with Java interfaces is simply ignored.
+These do not contribute to the domain meta model.
+
+. Any class (abstract or concrete) may at most have one `@PropertyLayout` annotation, having `navigable=Navigable.PARENT` 'flag' set (on either a method or a field); otherwise meta-model validation will fail.
+
+. The annotated member (method or field), when ...
+
+.. \... a method: then must be a no-arg method returning a non-primitive type (e.g. a getter)
+
+.. \... a field: then the field must be of non-primitive type and must also have a getter (as specified by the Java Beans Standard, particularly to allow `@PropertyLayout(navigable=Navigable.PARENT)` annotations on fields that use the lombok `@Getter` annotation)
+
+. Starting from the current domain-object, we search the object's class inheritance hierarchy (super class, super super class, ...), until we find the first class that has a `@PropertyLayout(navigable=Navigable.PARENT)` annotation.
+That's the one we use to resolve the current domain-object's navigable parent.
+
+
+== User Experience
+
+When viewing a domain object that is part of a hierarchical structure, one can easily navigate to any parent of this object.
+Horizontally arranged text links separated by the 'greater than' symbol (>) are provided below the main menu.
+(Traditionally called breadcrumbs.)
+
+
+
+== Related functionality
+
+
+The navigable tree-structure, as provided by the 'Where am I' feature, is declared at compile-time (predefined by the programmer), whereas related features (xref:ug:vw:features/recent-pages.adoc[Recent Pages] and xref:ug:vw:features/bookmarked-pages.adoc[Bookmarked Pages]) are populated at runtime only after user interaction.
+
+
+== Configuration
+
+By default, the 'Where am I' feature will show a maximum of 64 links.
+This can be overridden using a property (in `isis.properties`), for example:
+
+[source,ini]
+----
+isis.viewer.wicket.whereAmI.maxParentChainLength=20
+----
+
+To disable the 'Where am I' feature, override the default (=enabled) by using a property (in `isis.properties`):
+
+[source,ini]
+----
+isis.viewer.wicket.whereAmI.enabled=false
+----
+

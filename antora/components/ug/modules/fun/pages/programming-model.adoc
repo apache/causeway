@@ -1,0 +1,69 @@
+= Programming Model
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Apache Isis works by building a metamodel of the domain objects: entities, domain services, view models and mixins.
+Dependent on the sort of domain object, the class methods represent
+both state -- (single-valued) properties and (multi-valued) collections -- and behaviour -- actions.
+
+More specifically, both entities and view models can have properties, collections and actions, while domain services have just actions.
+Mixins also define only actions, though depending on their semantics they may be rendered as derived properties or collections on the domain object to which they contribute.
+
+In the automatically generated UI a property is rendered as a field.
+This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.
+A collection is generally rendered as a table.
+
+In order for Apache Isis to build its metamodel the domain objects must follow some conventions: what we call the _Apache Isis Programming Model_.
+This is just an extension of the pojo / JavaBean standard of yesteryear: properties and collections are getters/setters, while actions are simply any remaining `public` methods.
+
+Additional metamodel semantics are inferred both imperatively from _supporting methods_ and declaratively from annotations.
+
+In this section we discuss the mechanics of writing domain objects that comply with Apache Isis' programming model.
+
+[TIP]
+====
+In fact, the Apache Isis programming model is extensible; you can teach Apache Isis new programming conventions and you can remove existing ones; ultimately they amount to syntax.
+The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
+
+You can learn more about extending Apache Isis programming model xref:ug:btb:programming-model.adoc[here].
+====
+
+
+The Apache Isis programming model uses annotations to distinguish these object types:
+
+* *view models* are annotated either with `@DomainObject(nature=VIEW_MODEL)` or using `@ViewModel` (which is used is a matter of personal preference); the framework will automatically manage the view model's state (properties only, not collections). +
++
+Or, they can be annotated using the JAXB `@XmlTypeAdapter` annotation, which allows the view models' properties _and_ collections state to be managed.
+
+* *domain entities* that are persisted to the database (as the vast majority will) are annotated with `@DomainObject(nature=ENTITY)`.
+In addition such domain entities are annotated with the JDO/DataNucleus annotation of
+`@javax.jdo.annotations.PersistenceCapable`. +
++
+In addition, if a domain entity is a proxy for state managed in an external system, or merely for some state held in-memory, then `@DomainObject(nature=EXTERNAL_ENTITY)` or `@DomainObject(nature=INMEMORY_ENTITY)` can be used. +
++
+These entities' state is managed by the framework, in the same ways as view models.
+Indeed, they can additionally be annotated using `@XmlTypeAdapter` if required.
+
+* *mixins* are annotated either with `@DomainObject(nature=MIXIN)` or using `@Mixin`.
+As for view models, which is used is a matter of personal preference.
+
+* finally, *domain services*` are annotated with `@DomainService(nature=...)` where the nature is either `VIEW` (for domain services whose actions appear in the viewers, eg on the top-level menu bars), or `DOMAIN` (for domain services whose
+functionality is simply for other domain objects to invoke programmatically), or `VIEW_REST_ONLY` (for domain services whose functionality is surfaced only by the xref:ug:vro:about.adoc[RestfulObjects viewer]).
+
+You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
+
+It's worth emphasising is that domain entities and view models hold state, whereas domain services are generally stateless.
+If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be scoped, for example using `@RequestScoped` (so that this state is short-lived and usable only within a single request).
+
+The framework also defines supplementary annotations, `@DomainObjectLayout` and `@DomainServiceLayout`.
+These provide hints relating to the layout of the domain object in the user interface.
+(Alternatively, these UI hints can be defined in a supplementary xref:ug:vw:layout.adoc[`.layout.xml`] file.
+
+
+
+
+
+
+
+

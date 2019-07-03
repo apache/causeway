@@ -1,0 +1,170 @@
+= Wrapper Factory
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
+And the role of this wrapper is to simulate the UI.
+
+[NOTE]
+====
+`WrapperFactory` uses link:http://www.javassist.org[javassist] to perform its magic; this is the same technology that ORMs such as link:http://hibernate.org/[Hibernate] use to manage lazy loading/dirty tracking (DataNucleus uses a different mechanism).
+====
+
+
+
+It does this by allowing through method invocations that would be allowed if the user were interacting with the domain object through one of the viewers, but throwing an exception if the user attempts to interact with the domain object in a way that would not be possible if using the UI.
+
+The mechanics are as follows:
+
+. the integration test calls the `WrapperFactory` to obtain a wrapper for the domain object under test.
+This is usually done in the test's `setUp()` method.
+
+. the test calls the methods on the wrapper rather than the domain object itself
+
+. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Apache Isis metamodel
+
+. (like a viewer), the wrapper then performs the "see it/use it/do it" checks, checking that the member is visible, that it is enabled and (if there are arguments) that the arguments are valid
+
+. if the business rule checks pass, then the underlying member is invoked.
+Otherwise an exception is thrown.
+
+The type of exception depends upon what sort of check failed.
+It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'll get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
+
+image::testing/wrapper-factory.png[width="600px",link="{imagesdir}/testing/wrapper-factory.png"]
+
+Let's look in a bit more detail at what the test can do with the wrapper.
+
+
+
+
+
+== Wrapping and Unwrapping
+
+Wrapping a domain object is very straightforward; simply call `WrapperFactory#wrap(...)`.
+
+For example:
+
+[source,java]
+----
+Customer customer = ...;
+Customer wrappedCustomer = wrapperFactory.wrap(wrappedCustomer);
+----
+
+
+Going the other way -- getting hold of the underlying (wrapped) domain object -- is just as easy; just call `WrapperFactory#unwrap(...)`.
+
+For example:
+
+[source,java]
+----
+Customer wrappedCustomer = ...;
+Customer customer = wrapperFactory.unwrap(wrappedCustomer);
+----
+
+If you prefer, you also can get the underlying object from the wrapper itself, by downcasting to `WrappingObject` and calling `__isis_wrapped()` method:
+
+[source,java]
+----
+Customer wrappedCustomer = ...;
+Customer customer = (Customer)((WrappingObject)wrappedCustomer).__isis_wrapped());
+----
+
+We're not sure that's any easier (in fact we're certain it looks rather obscure).  Stick with calling `unwrap(...)`!
+
+
+
+
+== Using the wrapper
+
+As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's members are allowed to be called.
+That means:
+
+* for *_object properties_* the test can call the getter or setter method
+
+* for *_object collections_* the test can call the getter.
++
+If there is a supporting `addTo...()` or `removeFrom...()` method, then these can be called.
+It can also call `add(...)` or `remove(...)` on the collection (returned by the gettter) itself.
++
+[NOTE]
+====
+In this respect the wrapper is more functional than the xref:ug:vw:about.adoc[Wicket viewer] (which does not expose the ability to mutate collections directly).
+====
+
+* for *_object actions_* the test can call the action method itself.
+
+As a convenience, we also allow the test to call any `default...()`,`choices...()` or `autoComplete...()` method.
+These are often useful for obtaining a valid value to use.
+
+What the test can't call is any of the remaining supporting methods, such as `hide...()`, `disable...()` or `validate...()`.
+That's because their value is implied by the exception being thrown.
+
+The wrapper _does_ also allow the object's `title()` method or its  `toString()` , however this is little use for objects whose title is built up using the `@Title` annotation.
+Instead, we recommend that your test verifies an object's title by calling `TitleService#titleOf(...)` method.
+
+
+
+
+
+== Firing Domain Events
+
+As well as enforcing business rules, the wrapper has another important feature, namely that it will cause domain events to be fired.
+
+For example, if we have an action annotated with `@Action(domainEvent=...`):
+
+[source,java]
+----
+public class ToDoItem ... {
+    @Action(
+            domainEvent =CompletedEvent.class
+    )
+    public ToDoItem completed() { ... }
+    ...
+}
+----
+
+then invoking the action through the proxy will cause the event (`CompletedEvent` above) to be fired to any subscribers.
+A test might therefore look like:
+
+[source,java]
+----
+@Inject
+private EventBusService eventBusService;                                          // <1>
+
+@Test
+public void subscriberReceivesEvents() throws Exception {
+
+    // given
+    final ToDoItem.CompletedEvent[] evHolder = new ToDoItem.CompletedEvent[1];    // <2>
+    eventBusService.register(new Object() {
+        @Subscribe
+        public void on(final ToDoItem.CompletedEvent ev) {                        // <3>
+            evHolder[0] = ev;
+        }
+    });
+
+    // when
+    toDoItem.completed();                                                         // <4>
+
+    // then
+    then(evHolder[0].getSource()).isEqualTo(unwrap(toDoItem));                    // <5>
+    then(evHolder[0].getIdentifier().getMemberName()).isEqualTo("completed");
+}
+----
+<1> inject xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] into this test
+<2> holder for subscriber to capture event to
+<3> subscriber's callback, using the guava subscriber syntax
+<4> invoking the domain object using the wrapper
+<5> assert that the event was populated
+
+
+The wrapper will also fire domain events for properties (if annotated with `@Property(domainEvent=...)`) or collections (if annotated with `@Collection(domainEvent=...)`).
+
+
+[NOTE]
+====
+It isn't possible to use the `WrapperFactory` in a unit test, because there needs to be a running instance of Apache Isis that holds the metamodel.
+====
+

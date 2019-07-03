@@ -1,0 +1,117 @@
+= Domain-Driven Design
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+There's no doubt that we developers love the challenge of understanding and deploying complex technologies.
+But understanding the nuances and subtleties of the business domain itself is just as great a challenge, perhaps more so.
+If we devoted our efforts to understanding and addressing those subtleties, we could build better, cleaner, and more maintainable software that did a better job for our stakeholders.
+And there's no doubt that our stakeholders would thank us for it.
+
+A couple of years back Eric Evans wrote his book link:http://www.amazon.co.uk/Domain-driven-Design-Tackling-Complexity-Software/dp/0321125215[Domain-Driven Design], which is well on its way to becoming a seminal work.
+In fact, most if not all of the ideas in Evans' book have been expressed before, but what he did was pull those ideas together to show how predominantly object-oriented techniques can be used to develop rich, deep, insightful, and ultimately useful business applications.
+
+There are two central ideas at the heart of domain-driven design.
+
+* the *_ubiquitous language_* is about getting the whole team (both domain experts and developers) to communicate more transparently using a domain model.
+
+* Meanwhile, *_model-driven design_* is about capturing that model in a very straightforward manner in code.
+
+Let's look at each in turn.
+
+
+== Ubiquitous Language
+
+It's no secret that the IT industry is plagued by project failures.
+Too often systems take longer than intended to implement, and when finally implemented, they don't address the real requirements anyway.
+
+Over the years we in IT have tried various approaches to address this failing.
+Using waterfall methodologies, we've asked for requirements to be fully and precisely written down before starting on anything else.
+Or, using agile methodologies, we've realized that requirements are likely to change anyway and have sought to deliver systems incrementally using feedback loops to refine the implementation.
+
+But let's not get distracted talking about methodologies.
+At the end of the day what really matters is communication between the domain experts (that is, the business) who need the system and the techies actually implementing it.
+If the two don't have and cannot evolve a shared understanding of what is required, then the chance of delivering a useful system will be next to nothing.
+
+Bridging this gap is traditionally what business analysts are for; they act as interpreters between the domain experts and the developers.
+However, this still means there are two (or more) languages in use, making it difficult to verify that the system being built is correct.
+If the analyst mistranslates a requirement, then neither the domain expert nor the application developer will discover this until (at best) the application is first demonstrated or (much worse) an end user sounds the alarm once the application has been deployed into production.
+
+Rather than trying to translate between a business language and a technical language, with  _DDD_ we aim to have the business and developers using the same terms for the same concepts in order to create a single *_domain model_*.
+This domain model identifies the relevant concepts of the domain, how they relate, and ultimately where the responsibilities are.
+This single domain model provides the vocabulary for the  ubiquitous language for our system.
+
+
+.Ubiquitous Language
+****
+Build a common language between the domain experts and developers by using the concepts of the domain model as the primary means of communication. Use the terms in speech, in diagrams, in writing, and when presenting.
+
+If an idea cannot be expressed using this set of concepts, then go back and extend the model. Look for and remove ambiguities and inconsistencies.
+****
+
+
+Creating a  ubiquitous language calls upon everyone involved in the system's development to express what they are doing through the vocabulary provided by the model.
+If this can't be done, then our model is incomplete. Finding the missing words deepens our understanding of the domain being modeled.
+
+This might sound like nothing more than me insisting that the developers shouldn't use jargon when talking to the business.
+Well, that's true enough, but it's not a one-way street.
+A  *ubiquitous language* demands that the developers work hard to understand the problem domain, but it also demands that the business works hard in being  *precise* in its naming and descriptions of those concepts.
+After all, ultimately the developers will have to express those concepts in a computer programming language.
+
+Also, although here I'm talking about the "domain experts" as being a homogeneous group of people, often they may come from different branches of the business. Even if we weren't building a computer system, there's a lot of value in helping the domain experts standardize their own terminology.
+Is the marketing department's "prospect" the same as sales' "customer," and is that the same as an after-sales "contract"?
+
+The need for precision within the  ubiquitous language also helps us scope the system. Most business processes evolve piecemeal and are often quite ill-defined.
+If the domain experts have a very good idea of what the business process should be, then that's a good candidate for automation, that is, including it in the scope of the system.
+But if the domain experts find it hard to agree, then it's probably best to leave it out.
+After all, human beings are rather more capable of dealing with fuzzy situations than computers.
+
+So, if the development team (business and developers together) continually searches to build their  ubiquitous language, then the domain model naturally becomes richer as the nuances of the domain are uncovered.
+At the same time, the knowledge of the business domain experts also deepens as edge conditions and contradictions that have previously been overlooked are explored.
+
+We use the  ubiquitous language to build up a domain model.
+But what do we do  *with* that model? The answer to that is the second of our central ideas.
+
+
+== Model-Driven Design
+
+Of the various methodologies that the IT industry has tried, many advocate the production of separate analysis models and implementation models.
+One example (from the mid 2000s) was that of the  _OMG_'s Model-Driven Architecture ( _MDA_) initiative, with its platform-independent model (the  _PIM_) and a platform-specific model (the  _PSM_).
+
+Bah and humbug!
+If we use our ubiquitous language just to build up a high-level analysis model, then we will re-create the communication divide.
+The domain experts and business analysts will look only to the analysis model, and the developers will look only to the implementation model. Unless the mapping between the two is completely mechanical, inevitably the two will diverge.
+
+What do we mean by  *model* anyway?
+For some, the term will bring to mind UML class or sequence diagrams and the like.
+But this isn't a model; it's a visual  *representation* of some aspect of a model.
+No, a domain model is a group of related concepts, identifying them, naming them, and defining how they relate.
+What is in the model depends on what our objective is.
+We're not looking to simply model everything that's out there in the real world.
+Instead, we want to take a relevant abstraction or simplification of it and then make it do something useful for us.
+A model is neither right nor wrong, just more or less useful.
+
+For our ubiquitous language to have value, the domain model that encodes it must have a straightforward, literal representation to the design of the software, specifically to the implementation.
+Our software's design should be driven by this model; we should have a model-driven design.
+
+
+.Model-Driven Design
+****
+There must be a straightforward and very literal way to represent the domain model in terms of software.
+The model should balance these two requirements: form the ubiquitous language of the development team and be representable in code.
+
+Changing the code means changing the model; refining the model requires a change to the code.
+****
+
+
+Here also the word *design* might mislead; some might be thinking of design documents and design diagrams, or perhaps of user interface (UX) design.
+But by *design* we mean a way of organizing the domain concepts, which in turn leads to the way in which we organize their representation in code.
+
+Luckily, using *_object-oriented_* (_OO_) languages such as Java, this is relatively easy to do;  _OO_ is based on a modeling paradigm anyway.
+We can express domain concepts using classes and interfaces, and we can express the relationships between those concepts using associations.
+
+So far so good.
+Or maybe, so far so much motherhood and apple pie.
+Understanding the  _DDD_ concepts isn't the same as being able to apply them, and some of the  _DDD_ ideas can be difficult to put into practice.
+Time to discuss the naked objects pattern and how it eases that path by applying these central ideas of _DDD_ in a very concrete way.
+
+

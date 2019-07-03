@@ -1,0 +1,12 @@
+= Configuring DataNucleus
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+Apache Isis programmatically configures DataNucleus; any Apache Isis properties with the prefix `isis.persistor.datanucleus.impl` are passed through directly to the JDO/DataNucleus objectstore (with the prefix stripped off, of course).
+
+DataNucleus will for itself also and read the `META-INF/persistence.xml`; at a minimum this defines the name of the "persistence unit".
+In theory it could also hold mappings, though in Apache Isis we tend to use annotations instead.
+
+Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.  A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].  The metadata in these XML can be used to override the annotations of annotated entities; see xref:ug:btb:other-techniques/overriding-jdo-annotations.adoc[Overriding JDO Annotatons] for further discussion.
+
+

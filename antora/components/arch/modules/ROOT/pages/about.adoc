@@ -1,0 +1,37 @@
+= Maven Archetypes
+include::_attributes.adoc[]
+
+Apache Isis provides two different Maven archetypes to use as a "quick start" for your applications.
+
+* the xref:arch:helloworld:about.adoc[helloworld] archetype is a single Maven module that contains the absolute minimum; there are not tests or fixture scripts, just a single entity and domain service
+
+* the xref:arch:simpleapp:about.adoc[simpleapp] archetype is similar to "helloworld", however it provides more structure and guidance:
+
+** it is broken up into several Maven modules, separating out the bootstrapping code from the domain logic.
+** it contains examples of unit tests, integration tests and BDD (cucumber) specs.
+
++
+The simpleapp archetype's functionality is still minimal though: just a single entity, a domain service and a home page.
+
+Follow the links above for more details on getting started with these archetypes.
+
+
+== Prerequisites
+
+Apache Isis is a Java based framework, so in terms of prerequisites, you'll need to install:
+
+* Java 8 JDK
+* link:http://maven.apache.org[Apache Maven] 3.5+
+
+You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:support:dg:ide.adoc[Developers' Guide] we have detailed setup instructions for using these two IDEs.
+If you're a NetBeans user you should have no problems as it too has strong support for Maven.
+
+When building and running within an IDE, you'll also need to configure the Datanucleus enhancer.
+This is implemented as a Maven plugin, so in the case of IntelliJ, it's easy enough to run the enhancer as required.
+It should be just as straightforward for NetBeans too.
+
+For Eclipse the maven integration story is a little less refined.
+All is not lost, however; DataNucleus also has an implementation of the enhancer as an Eclipse plugin, which usually works well enough.
+
+
+

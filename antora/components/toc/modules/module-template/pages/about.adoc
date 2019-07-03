@@ -1,0 +1,8 @@
+= About
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+This doc module is empty, intended for use as a template when creating new modules.
+
+

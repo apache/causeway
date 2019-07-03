@@ -1,0 +1,34 @@
+= Versioning Policy
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+
+
+
+
+## Semantic Versioning
+
+Starting from v1.0.0, Apache Isis has adopted link:http://semver.org[semantic versioning] for its versioning policy.
+
+Version numbers are in the form `x.y.z`:
+
+- x is bumped up whenever there a breaking API change
+- y is bumped up whenever there is a new feature that does not break API
+- z is bumped up for minor bug fixes.
+
+This scheme would be adopted for both core and components.  
+
+
+
+
+
+
+## Version ranges
+
+Version ranges may not be used.  If necessary, end-users can use `<dependencyManagement` elements to have combine components built against different versions of core.
+
+That said, this can introduce instability and so generally we recommend that end-users configure the `maven-enforcer-plugin` and its link:http://maven.apache.org/enforcer/enforcer-rules/dependencyConvergence.html[DependencyConvergence] rule.  This will help avoid "jar hell" (components having conflicting dependencies of core).
+
+If there is a conflict, we would ask that end-users engage with Apache Isis committers to have an updated version of the component(s) pushed out.

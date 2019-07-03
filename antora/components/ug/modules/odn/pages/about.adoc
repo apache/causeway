@@ -1,0 +1,20 @@
+= DataNucleus Object Store
+include::_attributes.adoc[]
+
+
+The DataNucleus Object Store enables domain objects to be persisted to relational as well as NoSQL databases.
+The object store is implemented using link:http://datanucleus.org[DataNucleus].
+
+This user guide discuss end-user features, configuration and customization of the DataNucleus object store.
+
+
+
+[NOTE]
+====
+DataNucleus as a product also supports the JPA API; Apache Isis is likely to also support JPA in the future.
+====
+
+
+
+
+

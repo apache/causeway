@@ -1,0 +1,47 @@
+= Login via Query Args (for Prototyping)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+This section describes a (slightly hacky) way of allowing logins using query args, eg http://localhost:8080/?user=sven&pass=pass[http://localhost:8080/?user=sven&pass=pass].  This might be useful while prototyping or demonstrating a scenario involving multiple different interacting users.
+
+First, you'll need to subclass `IsisWicketApplication` (and register in `web.xml`).
+Then, override `newSession()`:
+
+[source,ini]
+----
+private final static boolean DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS = false;
+
+@Override
+public Session newSession(final Request request, final Response response) {
+    if(!DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS) {
+        return super.newSession(request, response);
+    }
+    // else demo mode
+    final AuthenticatedWebSessionForIsis s = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
+    IRequestParameters requestParameters = request.getRequestParameters();
+    final org.apache.wicket.util.string.StringValue user = requestParameters.getParameterValue("user");
+    final org.apache.wicket.util.string.StringValue password = requestParameters.getParameterValue("pass");
+    s.signIn(user.toString(), password.toString());
+    return s;
+}
+
+@Override
+public WebRequest newWebRequest(HttpServletRequest servletRequest, String filterPath) {
+    if(!DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS) {
+        return super.newWebRequest(servletRequest, filterPath);
+    }
+    // else demo mode
+    try {
+        String uname = servletRequest.getParameter("user");
+        if (uname != null) {
+            servletRequest.getSession().invalidate();
+        }
+    } catch (Exception e) {
+    }
+    WebRequest request = super.newWebRequest(servletRequest, filterPath);
+    return request;
+}
+----
+
+Rather than using the static `DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS`, you might also explore using the feature toggle library provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s togglz module.

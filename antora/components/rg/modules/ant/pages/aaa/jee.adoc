@@ -1,0 +1,84 @@
+= Java EE Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+While Apache Isis does, as of today, define a good number of its own annotations, the policy is to reuse standard Java/JEE annotations wherever they exist or are added to the Java platform.
+
+The table below lists the JEE annotations currently recognized.  Expect to see more added in future releases of Apache Isis.
+
+
+.Java EE Annotations
+[cols="2,4a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+|xref:ug:vw:layout/file-based.adoc[File-based layout]?
+
+|xref:rg:ant:Digits.adoc[`@javax.validation.` +
+`constraints.` +
+`Digits`]
+|Precision/scale for BigDecimal values.
+|Domain
+|
+
+|xref:rg:ant:Pattern.adoc[`@javax.validation.` +
+`constraints.` +
+`Pattern`]
+|Regular expressions for strings
+|Domain
+|
+
+|xref:rg:ant:Inject.adoc[`@javax.inject.` +
+`Inject`]
+|Inject domain service into a domain object (entity or view model) or another domain service.
+|Domain
+|
+
+|xref:rg:ant:Digits.adoc[`@javax.annotation.` +
+`Nullable`]
+|Specify that a property/parameter is optional.
+|Domain
+|
+
+|xref:rg:ant:PostConstruct.adoc[`@javax.annotation.` +
+`PostConstruct`]
+|Callback for domain services (either singleton or xref:rg:ant:RequestScoped.adoc[request-scoped]) to initialize themselves once instantiated.
+
+|Domain
+|
+
+|xref:rg:ant:PreDestroy.adoc[`@javax.annotation.` +
+`PreDestroy`]
+|Callback for domain services (either singleton or xref:rg:ant:RequestScoped.adoc[request-scoped]) to clean up resources prior to destruction.
+
+|Domain
+|
+
+|xref:rg:ant:RequestScoped.adoc[`@javax.enterprise.` +
+`context.` +
+`RequestScoped`]
+|Specify that a domain service has request-scope (rather than a singleton).
+|Domain
+|
+
+|xref:rg:ant:XmlRootElement.adoc[`javax.xml.bind` +
+`.annotation` +
+`XmlRootElement`]
+|JAXB annotation indicating the XML root element when serialized to XML; also used by the framework for view models (whose memento is the XML), often also acting as a DTO.
+|Application
+|
+
+|xref:rg:ant:XmlJavaTypeAdapter.adoc[`javax.xml.bind` +
+`.annotation` +
+`XmlJavaTypeAdapter`]
+|JAXB annotation defining how to serialize an entity.  Used in conjunction with the (framework provided) `PersistentEntityAdapter` class to serialize persistent entities into a canonical OID (equivalent to the `Bookmark` provided by the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`]).
+|Domain
+|
+
+
+|===
+
+
+

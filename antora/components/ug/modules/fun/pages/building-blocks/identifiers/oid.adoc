@@ -1,0 +1,41 @@
+= OIDs
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+As well as defining a xref:ug:fun:building-blocks/metamodel.adoc[metamodel] of the structure (domain classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
+
+When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an object identifier.
+Fundamentally this is a combination of its type (domain class), along with an identifier.
+You can think of it as its "primary key", except across all domain entity types.
+
+For portability and resilience, though, the object type is generally an alias for the actual domain class: thus "customers.CUS", say, rather than "com.mycompany.myapp.customers.Customer".
+This is derived from an annotation.
+The identifier meanwhile is always converted to a string.
+
+Although simple, the OID is an enormously powerful concept: it represents a URI to any domain object managed by a given Apache Isis application.
+With it, we have the ability to lookup any arbitrary domain objects.
+
+Some examples:
+
+* an OID allows sharing of information between users, eg as a deep link to be pasted into an email.
+
+* the information within an OID could be converted into a barcode, and stamped onto a PDF form.
+When the PDF is scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
+
+* as a handle to any object in an audit record, as used by xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`];
+
+* similarly within implementations of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] to persist `Command` objects
+
+* similarly within implementations of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] to persist published action invocations
+
+* and of course both the xref:ug:vro:about.adoc[RestfulObjects viewer] and xref:ug:vw:about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
+
+Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
+These are represented as ``Bookmark``s, obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[``BookmarkService``].
+Deep links meanwhile can be obtained from the xref:rg:svc:presentation-layer-api/DeepLinkService.adoc[``DeepLinkService`].
+
+OIDs can also be converted into XML format, useful for integration scenarios.
+The xref:rg:cms:schema/common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
+
+

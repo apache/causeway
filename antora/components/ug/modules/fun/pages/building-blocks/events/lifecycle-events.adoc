@@ -1,0 +1,38 @@
+= Lifecycle Events
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Lifecycle events allow domain object subscribers to listen for changes to the persistence state of domain entities, and act accordingly.
+
+[NOTE]
+====
+Lifecycle events are _not_ fired for view models.
+====
+
+
+The lifecycle events supported are:
+
+* object created - just instantiated. +
++
+Note that this requires that the object is instantiated using the framework, see xref:ug:fun:crud/instantiating.adoc[here] for further discussion
+
+* updated loaded - just retrieved from the database
+
+* object persisting - object about to be inserted into the database
+
+* object persisted - object just inserted into the database
+
+* object updating - object about to be updated
+
+* object updated - object just updated
+
+* object removing - object about to be deleted from the database
+
+There is no lifecycle event for object creating because the framework doesn't know about newly created objects until they have been created; and there is no lifecycle event for obejcts removed because it is not valid to "touch" a domain entity once deleted.
+
+
+For example, if annotated with xref:rg:ant:DomainObject/updatingLifecycleEvent.adoc[`@DomainObjectLayout#updatingLifecycleEvent()`], the appropriate (subclass of) `ObjectUpdatingEvent` will be emitted.
+ Similarly for xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`cssClassUiEvent()`].
+
+

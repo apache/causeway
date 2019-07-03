@@ -1,0 +1,84 @@
+= Interim Releases
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+
+
+The intent of an "interim" release is to allow a developer team to release their application based on a `-SNAPSHOT` version of the framework.
+Since `-SNAPSHOT` changes on a day-to-day basis, the idea is to tag a particular revision and to release this, thereby providing stability/traceability for the application being developed.
+
+Whereas xref:support:cgcom:cutting-a-release.adoc[formal release]s and xref:support:cgcom:release-process-for-snapshots.adoc[snapshot release]s are public (released through the Maven repository maintained by Apache Software Foundation), interim releases are non-public and rely on infrastructure provided by a developer team.
+The tagged release resides __not__ in the xref:toc:ROOT:downloads.adoc#\__downloads_source_code[official Apache Isis git repository], but instead in a fork/clone maintained by the developer team.
+
+[NOTE]
+====
+The procedure developed here was put together for the team working on the xref:toc:ROOT:powered-by/powered-by.adoc#_powered-by_estatio[Estatio app], which maintains its own link:https://github.com/incodehq/isis[fork on github] and uses link:https://www.cloudbees.com/[CloudBees] as a Jenkins build server/private Maven repo.
+====
+
+
+== Prerequisites
+
+Create a remote fork/clone of the Apache Isis repository (eg using link:http://github.com[github] or link:http://bitbucket.org[bitbucket] or similar), and ensure that your local fork specifies this remote.
+
+Also, set up a CI server against your fork/clone, to build against any branches called `origin/interim/*`.
+To build it should use the command:
+
+[source,bash]
+----
+mvn clean install -Dskip.app -Dskip.arch
+----
+
+that is, skipping the example simpleapp and archetype; only `core` framework is built
+
+The CI server should then also publish the resultant artifacts to a local Maven repository.
+For example, Jenkins provides post-build plugins to perform such a task.
+
+
+
+== Sanity Check
+
+Ensure that the framework builds ok using the same command that your CI server is set up to execute (see section above).
+
+
+
+== Release
+
+Deploy the framework using:
+
+[source,bsah]
+----
+sh interim-release.sh xxx yyyyy
+----
+
+where `xxx` is the most recent release of Isis (to act as the base), and `yyyyy` is the name of the remote.
+
+For example,
+
+[source,bash]
+----
+sh interim-release.sh 1.13.0 incodehq
+----
+
+This will result in a new branch and tagged being pushed to the remote, with an appropriate version (details below).
+
+As noted in the prereqs (above), the CI server configured should then detect the new branch (or tag, if you prefer), build the framework (skipping application and architecture, as in the prerequisites) and then publish the resultant artifacts to a private Maven repo.
+
+
+
+=== Implementation details
+
+The script itself:
+
+* removes any local branches called `interim/*`
+* creates a new branch called `interim/YYYYmmDD-HHMM`
+** eg `interim/1.13.0.20160909-0758`
+* updates the version of the pom.xml to the baseline plus the date
+** eg `<version>1.13.0.20160909-0758</version>`
+* commits the changes and tags the new commit
+** eg `isis-1.13.0.20160909-0758`
+* removes any remote branches called `interim/*`
+* pushes both the branch and the tag to the remote.
+
+

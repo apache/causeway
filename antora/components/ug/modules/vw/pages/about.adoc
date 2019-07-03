@@ -1,0 +1,11 @@
+= Wicket Viewer
+include::_attributes.adoc[]
+
+The Wicket Viewer automatically exposes an Apache Isis domain object model for use by end-users.  The viewer is
+implemented using link:http://wicket.apache.org[Apache Wicket].
+
+This user guide discuss end-user features, configuration and customization of the Wicket viewer.
+
+It also discusses how to extend the viewer, and the (non-ASF) link:http://platform.incode.org[Incode Platform^] wicket components.
+
+

@@ -1,0 +1,4 @@
+ifndef::env-site,env-github[]
+:moduledir: ../..
+include::{moduledir}/_attributes.adoc[]
+endif::[]

@@ -1,0 +1,123 @@
+= Action Invocation
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+When an action is invoked, it can return a domain object, a list, a scalar, or return nothing.
+
+== Returning an Object
+
+If the action returned an object, then the xref:ug:vro:simplified-representations/domain-object.adoc[domain object representation] is returned.
+
+For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+this resource:
+
+[source]
+----
+http://localhost:8080/restful/objects/TODO/45/actions/updateCost/invoke
+----
+
+with an `Accept` request header of:
+
+[source]
+----
+Accept: application/json;profile="urn:org.apache.isis/v1"
+----
+
+returns the following representation:
+
+[source]
+----
+
+{
+  "$$href" : "http://localhost:8080/restful/objects/TODO/45",
+  "$$instanceId" : "45",
+  "$$title" : "Buy bread due by 2015-12-04",
+  "description" : "Buy bread",
+  "category" : "Domestic",
+  "subcategory" : "Shopping",
+  "complete" : false,
+  ...
+  "similarTo" : [ ... ]
+  ...
+  "$$ro" : { ... }
+}
+----
+
+with a `Content-Type` of:
+
+[source]
+----
+Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="object"
+----
+
+\... in other words no different to a representation obtained of the returned domain object directly.
+
+
+== Returning a List
+
+On the other hand if the action returned a list (a "standalone" collection, then an array representation is returned.
+This is very similar to that returned by a xref:ug:vro:simplified-representations/object-collection.adoc[(parented) object collection], though with a slightly different `Content-Type` to distinguish.
+
+For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+this resource:
+
+[source]
+----
+http://localhost:8080/restful/services/ToDoItems/actions/notYetComplete/invoke
+----
+
+with an `Accept` request header of:
+
+[source]
+----
+Accept: application/json;profile="urn:org.apache.isis/v1"
+----
+
+returns the following representation:
+
+[source]
+----
+[ {
+  "$$href" : "http://localhost:8080/restful/objects/TODO/45",
+  "$$instanceId" : "45",
+  "$$title" : "Buy bread due by 2015-12-04",
+  "description" : "Buy bread",
+  "category" : "Domestic",
+  ...
+}, {
+  "$$href" : "http://localhost:8080/restful/objects/TODO/46",
+  "$$instanceId" : "46",
+  "$$title" : "Buy milk due by 2015-12-04",
+  "description" : "Buy milk",
+  "category" : "Domestic",
+  ...
+},
+...
+, {
+  "$$ro" : {
+    "links" : [ ... ]
+    "resulttype" : "list",
+    "result" : { ... }
+      "value" : [ ... ],
+      "links" : [ ... ],
+      "extensions" : { }
+    }
+  }
+} ]
+----
+
+with a `Content-Type` header:
+
+[source]
+----
+Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="list"
+----
+
+== Returning Scalar/Nothing
+
+Note that actions returning scalar values or nothing (which includes `void` actions) are not supported; for these the
+regular RO spec representation will be returned.
+
+

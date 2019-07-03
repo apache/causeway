@@ -1,0 +1,46 @@
+= `layout()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Every object has a xref:ug:vw:layout.adoc[layout] .
+This may be specified using annotations such as xref:rg:ant:MemberOrder.adoc[`@MemberOrder`], xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and the like,  but it much more commonly specified using an xref:ug:vw:layout/file-based .adoc[XML layout file].
+
+The `layout` method allows the domain object to specify an alternate layout to its usual layout.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    @Getter @Setter
+    @PropertyLayout(hidden=ALWAYS)
+    private String layout;
+
+    public String layout() {                // <1>
+        return layout;
+    }
+
+    @ActionLayout(
+        redirect=EVEN_IF_SAME               // <2>
+    )
+    public Customer switchToEditMode() {
+        setLayout("edit");
+        return this;
+    }
+}
+----
+<1> specifies the alternate layout to use, eg `Customer-edit.layout.xml`.
+<2> even though this action returns the same target object, still re-render the page.
+
+If `switchToEditMode()` action is invoked, then the UI will attempt to render the customer using a `Customer.layout.edit.xml` layout file (instead of the default `Customer.layout.xml`).
+
+
+== See also
+
+See also:
+
+* xref:rg:cms:methods/reserved/title.adoc[`title()`]
+* xref:rg:cms:methods/reserved/iconName.adoc[`iconName()`]
+* xref:rg:cms:methods/reserved/cssClass.adoc[`cssClass()`]

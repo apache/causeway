@@ -1,0 +1,28 @@
+= 1.3.1
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+== Wicket Viewer
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-575[ISIS-575] - Tiny new feature... add a tooltip to icons/titles so can see what type it represents.
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-560[ISIS-560] - When invoking an action, drop downs get cleared (in the UI) if there is a validation error, but the underlying model is set.
+* link:https://issues.apache.org/jira/browse/ISIS-570[ISIS-570] - Drop downs for action parameters don&#39;t repaint themselves correctly when a validation error occurs for other parameters on the form.
+* link:https://issues.apache.org/jira/browse/ISIS-580[ISIS-580] - Date fields are cleared  when tabbing through other fields.
+
+
+=== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-581[ISIS-581] - Release tasks for Apache Isis wicket viewer v1.3.1
+
+
+
+

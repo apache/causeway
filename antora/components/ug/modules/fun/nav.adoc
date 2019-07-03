@@ -1,0 +1,133 @@
+* xref:about.adoc[Fundamentals]
+
+
+** xref:core-concepts.adoc[Core Concepts]
+
+*** xref:core-concepts/philosophy.adoc[Philosophy]
+**** xref:core-concepts/philosophy/domain-driven-design.adoc[Domain Driven Design]
+**** xref:core-concepts/philosophy/naked-objects-pattern.adoc[Naked Objects Pattern]
+**** xref:core-concepts/philosophy/hexagonal-architecture.adoc[Hexagonal Architecture]
+**** xref:core-concepts/philosophy/aop.adoc[AOP]
+// **** xref:core-concepts/philosophy/dci.adoc[DCI] // FIXME: incomplete
+**** xref:core-concepts/philosophy/how-eases-ddd.adoc[How eases DDD]
+
+*** xref:core-concepts/principles.adoc[Principles]
+**** xref:core-concepts/principles/build-not-buy.adoc[Build not Buy]
+**** xref:core-concepts/principles/for-the-long-term.adoc[For the Long Term]
+//**** xref:core-concepts/principles/testable.adoc[Testable] // FIXME: incomplete
+//**** xref:core-concepts/principles/lego-blocks.adoc[Lego Blocks] // FIXME: incomplete
+//**** xref:core-concepts/principles/isis-itself.adoc[Isis Itself] // FIXME: incomplete
+//***** xref:core-concepts/principles/isis-itself/full-stack-but-extensible.adoc[Full Stack but Extensible] // FIXME: incomplete
+//***** xref:core-concepts/principles/isis-itself/focuses-on-its-usp.adoc[Focuses on its USP] // FIXME: incomplete
+
+*** xref:core-concepts/apache-isis-vs.adoc[Apache Isis vs.]
+**** xref:core-concepts/apache-isis-vs/mvc-server-side.adoc[MVC Server Side]
+**** xref:core-concepts/apache-isis-vs/cqrs.adoc[CQRS]
+**** xref:core-concepts/apache-isis-vs/event-sourcing.adoc[Event Sourcing]
+
+*** xref:core-concepts/deployment-options.adoc[Deployment Options]
+
+
+
+
+
+** xref:building-blocks.adoc[Building Blocks]
+
+*** xref:building-blocks/metamodel.adoc[Metamodel]
+
+*** xref:building-blocks/types-of-domain-objects.adoc[Types of Domain Objects]
+**** xref:building-blocks/types-of-domain-objects/domain-entities.adoc[Domain Entities]
+**** xref:building-blocks/types-of-domain-objects/domain-services.adoc[Domain Services]
+**** xref:building-blocks/types-of-domain-objects/view-models.adoc[View Models]
+**** xref:building-blocks/types-of-domain-objects/mixins.adoc[Mixins]
+
+*** xref:building-blocks/identifiers.adoc[Identifiers]
+**** xref:building-blocks/identifiers/title-and-icon-and-css-class.adoc[Title, Icon and CSS Class]
+**** xref:building-blocks/identifiers/oid.adoc[OID]
+
+*** xref:building-blocks/object-members.adoc[Object Members]
+
+*** xref:building-blocks/events.adoc[Events]
+**** xref:building-blocks/events/domain-events.adoc[Domain Events]
+**** xref:building-blocks/events/ui-events.adoc[UI Events]
+**** xref:building-blocks/events/lifecycle-events.adoc[Lifecycle Events]
+
+*** xref:building-blocks/modules.adoc[Modules]
+
+
+
+
+
+** xref:programming-model.adoc[Programming Model]
+*** xref:programming-model/domain-entities.adoc[Domain Entities]
+
+*** xref:programming-model/domain-services.adoc[Domain Services]
+**** xref:programming-model/domain-services/organizing-services.adoc[Organizing Services]
+**** xref:programming-model/domain-services/repository-and-factory.adoc[Repository and Factory]
+**** xref:programming-model/domain-services/menu.adoc[Menu]
+**** xref:programming-model/domain-services/event-subscribers.adoc[Event Subscribers]
+**** xref:programming-model/domain-services/scoped-services.adoc[Scoped Services]
+**** xref:programming-model/domain-services/registering.adoc[Registering]
+**** xref:programming-model/domain-services/initialization.adoc[Initialization]
+
+*** xref:programming-model/properties.adoc[Properties]
+*** xref:programming-model/collections.adoc[Collections]
+*** xref:programming-model/actions.adoc[Actions]
+*** xref:programming-model/inject-services.adoc[Inject Services]
+*** xref:programming-model/properties-vs-parameters.adoc[Properties vs Parameters]
+
+*** xref:programming-model/view-models.adoc[View Models]
+**** xref:programming-model/view-models/jaxb.adoc[JAXB]
+***** xref:programming-model/view-models/jaxb/referencing-domain-entities.adoc[Referencing Domain Entities]
+***** xref:programming-model/view-models/jaxb/joda-datatypes.adoc[JODA Datatypes]
+**** xref:programming-model/view-models/dto.adoc[DTO]
+***** xref:programming-model/view-models/dto/versioning.adoc[Versioning]
+***** xref:programming-model/view-models/dto/generating-xsds.adoc[Generating XSDs]
+***** xref:programming-model/view-models/dto/dto-consumers.adoc[DTO Consumers]
+**** xref:programming-model/view-models/non-jaxb.adoc[Non JAXB]
+
+*** xref:programming-model/mixins.adoc[Mixins]
+**** xref:programming-model/mixins/contributed-collection.adoc[Contributed Collection]
+**** xref:programming-model/mixins/contributed-property.adoc[Contributed Property]
+**** xref:programming-model/mixins/contributed-action.adoc[Contributed Action]
+**** xref:programming-model/mixins/inferred-name.adoc[Inferred Name]
+**** xref:programming-model/mixins/nested-static-classes.adoc[Nested Static Classes]
+**** xref:programming-model/mixins/programmatic-usage.adoc[Programming Usage]
+**** xref:programming-model/mixins/contributed-services.adoc[Contributed Services]
+
+
+
+** xref:ui-hints.adoc[UI Hints]
+*** xref:ui-hints/layout.adoc[Layout]
+*** xref:ui-hints/object-titles-and-icons.adoc[Object Titles and Icons]
+*** xref:ui-hints/action-icons-and-css.adoc[Action Icons and CSS]
+*** xref:ui-hints/names-and-descriptions.adoc[Names and Descriptions]
+*** xref:ui-hints/eager-rendering.adoc[Eager Rendering]
+
+
+
+
+** xref:crud.adoc[CRUD]
+*** xref:crud/instantiating.adoc[Instantiating]
+*** xref:crud/persisting.adoc[Persisting]
+*** xref:crud/finding.adoc[Finding]
+*** xref:crud/updating.adoc[Updating]
+*** xref:crud/deleting.adoc[Deleting]
+
+
+
+** xref:business-rules.adoc[Business Rules]
+
+
+** xref:drop-downs-and-defaults.adoc[Drop downs and Defaults]
+
+
+** xref:available-domain-services.adoc[Available Domain Services]
+*** xref:available-domain-services/framework-provided.adoc[Framework Provided]
+*** xref:available-domain-services/incode-platform.adoc[Incode Platform]
+
+
+
+
+
+

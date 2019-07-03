@@ -1,0 +1,54 @@
+= `Clob`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+`Clob` (in the `org.apache.isis.applib.value` package) is a value type defined by the Apache Isis framework to
+represent a character large object.  Conceptually you can consider it as a set of characters (an RTF or XML document,
+for example), though in fact it wraps three pieces of information:
+
+- the set of characters
+- a name
+- a mime type.
+
+
+This is reflected in the class' constructors and properties:
+
+[source,java]
+----
+public final class Clob ... {
+    ...
+    public Clob(String name, String primaryType, String subType, char[] chars) { ... }
+    public Clob(String name, String mimeTypeBase, char[] chars) { ... }
+    public Clob(String name, MimeType mimeType, char[] chars) { ... }
+    public Clob(String name, String primaryType, String subType, CharSequence chars) { ... }
+    public Clob(String name, String mimeTypeBase, CharSequence chars) { ... }
+    public Clob(String name, MimeType mimeType, CharSequence chars) { ... }
+    ...
+    public String getName() { ... }
+    public MimeType getMimeType() { ... }
+    public CharSequence getChars() { ... }
+    ...
+}
+----
+
+
+Properties of this type can be mapped to JDO/DataNucleus using:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+        @javax.jdo.annotations.Column(name = "someClob_name"),
+        @javax.jdo.annotations.Column(name = "someClob_mimetype"),
+        @javax.jdo.annotations.Column(name = "someClob_chars", jdbcType = "CLOB", sqlType = "LONGVARCHAR")
+})
+private Clob someClob;
+----
+
+
+[TIP]
+====
+For binary large objects, use xref:rg:cms:classes/value-types/Blob.adoc[`Blob`] value type.
+====
+
+

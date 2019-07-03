@@ -1,0 +1,38 @@
+= Mandatory Properties in Subtypes
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+If you have a hierarchy of classes then you need to decide which inheritance strategy to use.
+
+* "table per hierarchy", or "rollup" (`InheritanceStrategy.SUPERCLASS_TABLE`) +
++
+whereby a single table corresponds to the superclass, and also holds the properties of the subtype (or subtypes) being rolled up
+
+* "table per class" (`InheritanceStrategy.NEW_TABLE`) +
++
+whereby there is a table for both superclass and subclass, in 1:1 correspondence
+
+* "rolldown" (`InheritanceStrategy.SUBCLASS_TABLE`) +
++
+whereby a single table holds the properties of the subtype, and also holds the properties of its supertype
+
+In the first "rollup" case, we can have a situation where - logically speaking - the property is mandatory in the subtype - but it must be mapped as nullable in the database because it is n/a for any other subtypes that are rolled up.
+
+In this situation we must tell JDO that the column is optional, but to Apache Isis we want to enforce it being mandatory. This can be done using the `@Property(optionality=Optionality.MANDATORY)` annotation.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
+public class SomeSubtype extends SomeSuperType {
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @Property(optionality=Optionality.MANDATORY)
+    @lombok.Getter @lombok.Setter
+    private LocalDate date;
+}
+----
+
+

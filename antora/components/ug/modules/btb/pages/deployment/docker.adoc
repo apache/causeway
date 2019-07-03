@@ -1,0 +1,87 @@
+= Docker
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+When running the application within a Docker container, the problem that must be solved is to override the
+configuration properties baked into the war file, eg to point to the app to a different JDBC URL.
+
+There are several options.
+
+[WARNING]
+====
+All the options here rely on starting the Docker container with a set of arguments, some of which would very likely
+be passwords for database connections etc.  As such these techniques are only suitable where the security of the
+Docker host can be assured.
+====
+
+
+== Using an `overrides.properties`
+
+In addition to loading the regular configuration properties from `WEB-INF` directory (described
+xref:rg:cfg:configuration-files.adoc[here]), Apache Isis will also load the `overrides.properties` file.
+
+This file is treated slightly differently than the other configuration files; it is loaded last, and any configuration
+properties defined in it will _override_ any configuration properties already read from other files (this includes
+any properties specified via the command line).
+
+While the regular configuration files are "baked into" the application WAR file, the `overrides.properties` file is
+created dynamically as part of the Docker `ENTRYPOINT` script, eg as documented in the
+link:https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/[Dockerfile best practices].
+
+Thus, Docker can be supported as follows:
+
+* use `mvn` (as currently) to create a WAR file; set up with the `pom.xml` with the JDBC drivers of all DB servers that
+  you might want to connect to (hsqldb, sql server, postgresql etc)
+
+* in the `Dockerfile`, specify a base image containing Tomcat 8 + Java 8 (say)
+
+* also in the `Dockerfile`, arrange it such that the WAR file is "exploded" (there is no need to copy over the WAR file itself)
+
+* write a script that:
+** explodes the WAR file, copying it into the Tomcat's `webapp` directory.  There is no need to copy
+over the WAR file itself.
+** creates the `overrides.properties` file from any input arguments, placing it into the `WEB-INF` directory
+** sets all files to read-only
+
+* use `ENTRYPOINT` (and probably also `CMD`) to invoke above script.
+
+
+
+== Using system properties
+
+The servlet context initializer will search for any system properties called `isis.xxx`
+ and if present will use them as overrides.
+
+Thus, an alternative option for a Docker image is to bootstrap the servlet container (Tomcat, Jetty) with appropriate
+system properties set up.  For example, with Tomcat this can be done by writing into the `conf/catalina.properties` file
+(see for example link:http://stackoverflow.com/a/16566920[this stackoverflow] post).
+
+The Docker's `ENTRYPOINT` therefore just needs to parse the Docker container's own command line arguments and use to
+create this file.
+
+
+== Using `$ISIS_OPTS`
+
+The servlet context initializer will search for an environment variable called `$ISIS_OPTS`
+ and if present will parse the content as a set of key/value pairs.  Each key/value pair is separated by "||".
+
+For example:
+
+[source,bash]
+----
+export ISIS_OPTS="isis.appManifest=domainapp.app.DomainAppAppManifestWithFixtures||isis.objects.editing=false"
+----
+
+can be used to run with a different app manifest, and also to disable editing of properties.
+
+To use a different separator, set the (optional) `$ISIS_OPTS_SEPARATOR` variable.
+
+[source,bash]
+----
+export ISIS_OPTS_SEPARATOR=";"
+export ISIS_OPTS="isis.appManifest=domainapp.app.DomainAppAppManifestWithFixtures;isis.objects.editing=false"
+----
+
+The Docker's `ENTRYPOINT` therefore just needs to parse the Docker container's own command line arguments and use to
+set this environment variable.

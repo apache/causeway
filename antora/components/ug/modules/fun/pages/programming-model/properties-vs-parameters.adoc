@@ -1,0 +1,36 @@
+= Properties vs Parameters
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+In many cases the value types of properties and of action parameters align.
+For example, a `Customer` entity might have a `surname` property, and there might also be corresponding `changeSurname`.
+Ideally we want the surname property and surname action parameter to use the same value type.
+
+Since JDO/DataNucleus handles persistence, its annotations are requiredto specify semantics such as optionality or maximum length on properties.
+However, they cannot be applied to action parameters.
+It is therefore necessary to use Apache Isis' equivalent annotations for action parameters.
+
+The table below summarises the equivalence of some of the most common cases.
+
+.Comparing annotations of Properties vs Action Parameters
+[cols="2,3,3", options="header"]
+|===
+|value type/semantic
+|(JDO) property
+|action parameter
+
+|string (length)
+|`@javax.jdo.annotations.Column(length=50)`
+|`@javax.jdo.annotations.Parameter(maxLength=50)`
+
+|big decimal (precision)
+|`@javax.jdo.annotations.Column(scale=2)`
+|`@javax.validation.constraints.Digits(fraction=2)`
+
+|optionality
+|`@Column(allowsNull="true")`
+|`@Nullable` or `ParameterLayout(optionality=Optionality.OPTIONAL`)
+|===
+
+

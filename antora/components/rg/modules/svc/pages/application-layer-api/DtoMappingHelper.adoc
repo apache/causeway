@@ -1,0 +1,25 @@
+= `DtoMappingHelper`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `DtoMappingHelper` converts the domain object's internal identifier into a serializable `OidDto` for use in the xref:rg:cms:schema/cmd.adoc[command] and xref:rg:cms:schema/ixn.adoc[interaction] schemas.
+
+
+== API and Usage
+
+The API of `DtoMappingHelper` is:
+
+[source,java]
+----
+public class DtoMappingHelper {
+
+    public OidDto oidDtoFor(final Object object) { ... }    // <1>
+}
+----
+<1> Uses the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`] to convert the domain object's internal identifier into a serializable `OidDto`.
+
+This class (`o.a.i.applib.services.dto.DtoMappingHelper`) is also the implementation.
+
+
+

@@ -1,0 +1,73 @@
+= As Nested Static Classes
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+As noted in the introduction, while mixins were originally introduced as a means of allowing contributions from one module to the types of another module, they are also a convenient mechanism for grouping functionality/behaviour against a concrete type.
+All the methods and supporting methods end up in a single construct, and the dependency between that functionality and the rest of the object is made more explicit.
+
+When using mixins in this fashion, it is idiomatic to write the mixin as a nested static class, using the naming convention described above to reduce duplication.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    @Mixin(method="act")
+    public static class placeOrder {                                            // <1>
+
+        private final Customer customer;
+        public documents(Customer customer) { this.customer = customer; }       // <2>
+
+        @Action
+        @ActionLayout(contributed = Contributed.AS_ACTION)
+        public List<Order> act(Product p, int quantity) {                        // <3>
+            ...
+        }
+        public boolean hideAct() { ... }                                         // <4>
+        public String validate0Act(Product p) { ...  }
+    }
+}
+----
+<1> Prior to `1.13.2`, had to be prefixed by an "_"; this is no longer required because "$" is also recognized as a way of parsing the class name in order to infer the mixin's name (eg `Customer$placeOrder`).
+<2> typically contributed to concrete class
+<3> supporting methods as usual
+
+
+The mixin class can also be capitalized if desired.
+Thus:
+
+[source,java]
+----
+public class Customer {
+
+    @Mixin(method="act")
+    public static class PlaceOrder {
+        private final Customer customer;
+        public documents(Customer customer) { this.customer = customer; }
+
+        @Action
+        @ActionLayout(contributed = Contributed.AS_ACTION)
+        public List<Order> act(Product p, int quantity) {
+            ...
+        }
+        public boolean hideAct() { ... }
+        public String validate0Act(Product p) { ...  }
+    }
+}
+----
+
+
+In other words, all of the following are allowed:
+
+* `public static class Documents { ... }`
+* `public static class documents { ... }`
+* `public static class _Documents { ... }`
+* `public static class _documents { ... }`
+
+
+
+

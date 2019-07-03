@@ -1,0 +1,67 @@
+include::_attributes.adoc[]
+= Angular Tips
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+The hypermedia API exposed by Apache Isis' Restful Objects viewer is intended be support both bespoke custom-written viewers as well as generic viewers. Indeed, we expect most clients consuming the API will be bespoke, not generic.
+
+This page captures one or two tips on using Angular to write such a bespoke client.
+
+
+== Invoking a GET link (eg invoking a query action)
+
+Suppose you have a `CustomerService` providing a `findCustomer` action:
+
+[source,java]
+----
+public class CustomerService {
+    public String id() { return "customers"; }
+    @Action(semantics=SemanticsOf.SAFE)
+    public Customer findCustomer(
+            @ParameterLayout(named="customerName")
+            final String customerName) {
+        ...
+    }
+}
+----
+
+Restful Objects will expose this as action with the following link that looks something like:
+
+[source,javascript]
+----
+{
+  "rel" : "urn:org.restfulobjects:rels/invoke",
+  "href" : "http://localhost:8080/restful/services/customers/actions/findCustomer/invoke",
+  "method" : "GET",
+  "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/action-result\"",
+  "arguments" : {
+    "customerName" : {
+      "value" : null
+    }
+  }
+}
+----
+
+You can then invoke this using Angular' `$resource` service as follows.
+
+[source,javascript]
+----
+var findCustomer = $resource("http://localhost:8080/restful/services/customers/actions/findCustomer/invoke?:queryString");
+var findCustomerArgs = {
+  "customerName": {
+      "value": "Fred"
+    }
+};
+findCustomer.get({queryString: JSON.stringify(findCustomerArgs)}, function(data) { ... } )
+----
+
+Here the `:queryString` placeholder in the initial `$resource` constructor is expanded with a stringified version of the JSON object representing the args. Note how the `findCustomerArgs` is the same as the `&quot;arguments&quot;` attribute in the original link (with a value provided instead of `null`).
+
+
+== Invoking a PUT or POST link
+
+If the method is a PUT or a POST, then no `:queryString` placeholder is required in the URL, and the args are instead part of the body.
+
+Use `$resource.put(...)` or `$resource.post(...)` instead.
+
