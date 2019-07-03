@@ -67,6 +67,18 @@
         </profile>
 
         <profile>
+            <id>ext</id>
+            <activation>
+	        <property>
+		    <name>!skip.ext</name>
+		</property>
+            </activation>
+            <modules>
+                <module>extensions</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>arch</id>
             <activation>
 	        <property>
