@@ -30,25 +30,6 @@
 		<git-plugin.propertiesDir>org/apache/isis/extensions/markdown</git-plugin.propertiesDir>
 	</properties>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
-	</build>
-
 	<dependencies>
 
 		<!-- provides a markdown parser -->
@@ -56,8 +37,19 @@
 			<groupId>com.vladsch.flexmark</groupId>
 			<artifactId>flexmark-all</artifactId>
 			<version>0.34.32</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jsoup</groupId>
+					<artifactId>jsoup</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<profiles>

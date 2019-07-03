@@ -30,25 +30,6 @@
 		<git-plugin.propertiesDir>org/apache/isis/extensions/fixtures</git-plugin.propertiesDir>
 	</properties>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
-	</build>
-
 	<dependencies>
 
 		<!-- JDO API (non transient, provided by plugin) -->
