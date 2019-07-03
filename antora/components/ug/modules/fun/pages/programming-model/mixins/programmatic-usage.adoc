@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 When a domain object is rendered, the framework will automatically instantiate all required mixins and delegate to them dynamically.
 If writing integration tests or fixtures, or (sometimes) just regular domain logic, then you may need to instantiate mixins directly.
 
-For this you can use the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService#mixin(...)` method.
+For this you can use the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService#mixin(...)`] method.
 
 For example:
 

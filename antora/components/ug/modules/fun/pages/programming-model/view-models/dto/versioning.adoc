@@ -18,7 +18,8 @@ We can distinguish two types of changes:
 * backwardly compatible changes
 * breaking changes.
 
-We can immediately say that the XSD namespace should change only when there is a major/breaking change, if following link:http://semver.org[semantic versioning] that means when we bump the major version number v1, v2, etc.
+We can immediately say that the XSD namespace should change only when there is a major/breaking change.
+If following link:http://semver.org[semantic versioning] that means when we bump the major version number v1, v2, etc.
 
 XML namespaces correspond (when using JAXB) to Java packages.
 We should therefore place our DTOs in a package that contains only the major number; this package will eventually contain a range of DTOs that are intended to be backwardly compatible with one another.

@@ -20,7 +20,7 @@ public class Customer {
     public static class placeOrder {                                            // <1>
 
         private final Customer customer;
-        public documents(Customer customer) { this.customer = customer; }       // <2>
+        public placeOrder(Customer customer) { this.customer = customer; }      // <2>
 
         @Action
         @ActionLayout(contributed = Contributed.AS_ACTION)
@@ -32,42 +32,9 @@ public class Customer {
     }
 }
 ----
-<1> Prior to `1.13.2`, had to be prefixed by an "_"; this is no longer required because "$" is also recognized as a way of parsing the class name in order to infer the mixin's name (eg `Customer$placeOrder`).
-<2> typically contributed to concrete class
-<3> supporting methods as usual
-
-
-The mixin class can also be capitalized if desired.
-Thus:
-
-[source,java]
-----
-public class Customer {
-
-    @Mixin(method="act")
-    public static class PlaceOrder {
-        private final Customer customer;
-        public documents(Customer customer) { this.customer = customer; }
-
-        @Action
-        @ActionLayout(contributed = Contributed.AS_ACTION)
-        public List<Order> act(Product p, int quantity) {
-            ...
-        }
-        public boolean hideAct() { ... }
-        public String validate0Act(Product p) { ...  }
-    }
-}
-----
-
-
-In other words, all of the following are allowed:
-
-* `public static class Documents { ... }`
-* `public static class documents { ... }`
-* `public static class _Documents { ... }`
-* `public static class _documents { ... }`
-
-
+<1> By convention, start with a lower case, though will also work fine if capitalized.
+<2> typically contributed to concrete class, ie the outer class
+<3> implementation as usual
+<4> supporting methods as usual
 
 

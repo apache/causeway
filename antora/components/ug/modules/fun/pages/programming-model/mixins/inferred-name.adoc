@@ -6,9 +6,8 @@ include::_attributes.adoc[]
 
 
 
-Where the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated, and the name of the member being contributed is inferred from the name of the class itself, beingeverything after the last '_'.
+Where the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated, and the name of the member being contributed is inferred from the name of the class itself, being everything after the last '_'.
 
-The default abbreviation to "$$".
 
 For example:
 
@@ -30,8 +29,6 @@ public class DocumentHolder_documents {
 }
 ----
 
-
-Alternatively, if the xref:rg:ant:Mixin/method.adoc[`@Mixin#method()`] attribute is specified, then this can nominate a different abbreviation.
 
 The examples above (for xref:ug:fun:programming-model/mixins/contributed-property.adoc[property], xref:ug:fun:programming-model/mixins/contributed-collection.adoc[collection] and xref:ug:fun:programming-model/mixins/contributed-action.adoc[action]) demonstrate this.
 

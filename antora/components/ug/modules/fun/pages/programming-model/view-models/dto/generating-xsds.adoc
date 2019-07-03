@@ -5,22 +5,16 @@ include::_attributes.adoc[]
 
 
 
-In the section xref:ug:fun:programming-model/view-models/jaxb/referencing-domain-entities.adoc[above] it was explained how a view model DTO can transparent reference any "backing" entities; these references are converted to internal object identifiers.
+In the section xref:ug:fun:programming-model/view-models/jaxb/referencing-domain-entities.adoc[above] it was explained how a view model DTO can transparently reference any "backing" entities; these references are converted to internal object identifiers.
 
 However, if the consumer of the XML is another Java process (eg running within an Apache Camel route), then you might be tempted/expect to be able to use the same DTO within that Java process.
-After a little thought though you'll realize that (duh!) of course you cannot; the consumer runs in a different process space, and will not have references to those containing entities.
+But of course you cannot; the consumer runs in a different process space, and will not have references to the entity types themselves.
 
-There are therefore two options:
+For integration scenarios you'll therefore generally want to define a DTO in a technology independent fashion, for example using XSD schema.
+This can be generated as a DTO for use within Apache Isis, while still allowing XML instances of the schema to be consumed by any other client.
 
-* either choose not to have the view model DTO reference any persistent entities, and simply limit the DTO to simple scalars. +
-+
-Such a DTO will then be usable in both the Apache Isis app (to generate the original XML) and in the consumer.
-The xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`] can be used to obtain the object identifiers
-
-* alternatively, generate a different DTO for the consumer from the XSD of the view model DTO.
-
-The (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses the second approach; generating the XSD and consumer's DTO is mostly just boilerplate `pom.xml` file.
-In the todoapp this can be found in the `todoapp-xsd` Maven module, whose `pom.xml` is structured as two profiles:
+The (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] demonstrates how use an XSD to generate a DTO; it's mostly just boilerplate.
+In the todoapp it can be found in the `todoapp-xsd` Maven module, whose `pom.xml` is structured as two profiles:
 
 [source,xml]
 ----

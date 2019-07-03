@@ -7,8 +7,7 @@ In many cases the value types of properties and of action parameters align.
 For example, a `Customer` entity might have a `surname` property, and there might also be corresponding `changeSurname`.
 Ideally we want the surname property and surname action parameter to use the same value type.
 
-Since JDO/DataNucleus handles persistence, its annotations are requiredto specify semantics such as optionality or maximum length on properties.
-However, they cannot be applied to action parameters.
+Since JDO/DataNucleus handles persistence, its annotations can only be specified for properties, not for action parameters.
 It is therefore necessary to use Apache Isis' equivalent annotations for action parameters.
 
 The table below summarises the equivalence of some of the most common cases.

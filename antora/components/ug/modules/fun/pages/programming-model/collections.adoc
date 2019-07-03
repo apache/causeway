@@ -10,20 +10,20 @@ It's ok for a xref:ug:fun:programming-model/domain-entities.adoc[domain entity] 
 However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
 
 Formally speaking, a collection is simply a regular JavaBean getter, returning a collection type (subtype of `java.util.Collection`).
-Most collections (those that are modifiable) will also have a setter and (if persisted) a backing instance field.
+Most collections (those that are modifiable) will also have a setter and, if persisted, a backing instance field.
 And collections properties will also have a number of annotations:
 
-* Apache Isis defines its own set own `@Collection` annotation for capturing domain semantics.
-It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ug:vw:layout.adoc[`.layout.xml`] file
+* Apache Isis defines its own `@Collection` annotation for capturing domain semantics.
+It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ug:vw:layout.adoc[`.layout.xml`] file)
 
-* the collections of domain entities are often annotated with various JDO/DataNucleus annotations, most notable `javax.jdo.annotations.Persistent`.
+* the collections of domain entities are often annotated with various JDO/DataNucleus annotations, most notably `javax.jdo.annotations.Persistent`.
 This and other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
 
 * for the collections of view models, then JAXB annotations such as `@javax.xml.bind.annotation.XmlElementWrapper` and `@javax.xml.bind.annotation.XmlElement` will be present
 
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
-Unlike xref:ug:fun:programming-model/properties.adoc[properties], the framework (at least, the xref:ug:vw:about.adoc[Wicket viewer]) does not allow collections to be "edited".
+Unlike xref:ug:fun:programming-model/properties.adoc[properties], the framework does not allow collections to be "edited".
 Instead, xref:ug:fun:programming-model/actions.adoc[action]s can be written that will modify the contents of the collection as a side-effect.
 For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 
