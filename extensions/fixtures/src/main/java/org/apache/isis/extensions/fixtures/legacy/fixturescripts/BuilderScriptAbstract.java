@@ -22,6 +22,10 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
+import org.apache.isis.extensions.fixtures.api.PersonaWithFinder;
+import org.apache.isis.extensions.fixtures.api.WithPrereqs;
 
 @Programmatic
 public abstract class BuilderScriptAbstract<T>

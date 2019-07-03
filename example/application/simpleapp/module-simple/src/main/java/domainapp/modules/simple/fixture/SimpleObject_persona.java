@@ -20,8 +20,8 @@
 package domainapp.modules.simple.fixture;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.PersonaWithBuilderScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.PersonaWithFinder;
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
+import org.apache.isis.extensions.fixtures.api.PersonaWithFinder;
 import org.apache.isis.extensions.fixtures.legacy.setup.PersonaEnumPersistAll;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;

@@ -16,11 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
 
-public interface PersonaWithBuilderScript<T extends BuilderScriptAbstract<?>>  {
+package org.apache.isis.extensions.fixtures.events;
 
-    T builder();
+import java.util.EventObject;
+
+public class FixturesInstallingEvent extends EventObject {
+
+    private static final long serialVersionUID = 1L;
+
+    public FixturesInstallingEvent(final Object source) {
+        super(source);
+    }
 
 }
-

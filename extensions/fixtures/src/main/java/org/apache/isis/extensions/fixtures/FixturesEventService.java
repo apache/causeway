@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.extensions.fixtures.legacy.events.FixturesInstalledEvent;
-import org.apache.isis.extensions.fixtures.legacy.events.FixturesInstallingEvent;
+import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
+import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 

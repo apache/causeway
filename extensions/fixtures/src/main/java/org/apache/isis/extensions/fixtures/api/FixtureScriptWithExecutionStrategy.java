@@ -16,11 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.fixtures.api;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts.MultipleExecutionStrategy;
+import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecification;
 
 /**
- * Provides a mechanism to set up an application, typically running in prototype mode (with an in-memory database)
- * or for integration testing.
- *
- * @see <a href="http://isis.apache.org/guides/ugtst/ugtst.html#_ugtst_fixture-scripts">Testing guide</a>.
+ * Overrides the {@link FixtureScriptsSpecification#getMultipleExecutionStrategy() globally-defined}
+ * {@link FixtureScripts.MultipleExecutionStrategy} strategy, allowing individual fixtures to indicate that they have their own execution strategy.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+public interface FixtureScriptWithExecutionStrategy {
+
+    @Programmatic
+    FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy();
+}

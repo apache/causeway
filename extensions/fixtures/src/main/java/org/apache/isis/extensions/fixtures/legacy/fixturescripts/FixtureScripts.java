@@ -52,6 +52,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecification;
 

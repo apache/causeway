@@ -16,17 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.fixtures.api;
 
-package org.apache.isis.extensions.fixtures.legacy.events;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 
-import java.util.EventObject;
+public interface PersonaWithFinder<T> {
 
-public class FixturesInstalledEvent extends EventObject {
-
-    private static final long serialVersionUID = 1L;
-
-    public FixturesInstalledEvent(final Object source) {
-        super(source);
-    }
+    T findUsing(final ServiceRegistry serviceRegistry);
 
 }
+

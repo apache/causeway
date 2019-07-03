@@ -17,16 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.extensions.fixtures.legacy.events;
-
-import java.util.EventObject;
-
-public class FixturesInstallingEvent extends EventObject {
-
-    private static final long serialVersionUID = 1L;
-
-    public FixturesInstallingEvent(final Object source) {
-        super(source);
-    }
-
-}
+/**
+ * Provides a mechanism to set up an application, typically running in prototype mode (with an in-memory database)
+ * or for integration testing.
+ *
+ * @see <a href="http://isis.apache.org/guides/ugtst/ugtst.html#_ugtst_fixture-scripts">Testing guide</a>.
+ */
+package org.apache.isis.extensions.fixtures.api;

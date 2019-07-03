@@ -20,10 +20,10 @@ package org.apache.isis.extensions.fixtures.legacy.clock;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.extensions.fixtures.legacy.TickingFixtureClock;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;

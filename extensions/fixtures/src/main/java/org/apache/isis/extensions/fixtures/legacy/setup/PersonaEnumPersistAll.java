@@ -22,11 +22,11 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.PersonaWithBuilderScript;
 
 @Programmatic
 public class PersonaEnumPersistAll<

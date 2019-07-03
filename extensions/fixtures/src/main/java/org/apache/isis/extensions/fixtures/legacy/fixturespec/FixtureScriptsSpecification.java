@@ -17,9 +17,9 @@
 package org.apache.isis.extensions.fixtures.legacy.fixturespec;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResultList;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
 
 /**

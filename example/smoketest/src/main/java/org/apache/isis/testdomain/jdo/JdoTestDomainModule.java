@@ -22,6 +22,7 @@ import javax.inject.Singleton;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.IsisBootSecurityBypass;
@@ -39,7 +40,7 @@ import org.springframework.context.annotation.PropertySources;
 	IsisBoot.class,
 	IsisBootSecurityBypass.class,
 	IsisBootDataNucleus.class,
-	//FixtureScriptsDefault.class,
+	IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {        		

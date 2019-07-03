@@ -32,12 +32,12 @@ import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.extensions.fixtures.legacy.TickingFixtureClock;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.PersonaWithBuilderScript;
 
 /**
  * Reworked base class for headless access.

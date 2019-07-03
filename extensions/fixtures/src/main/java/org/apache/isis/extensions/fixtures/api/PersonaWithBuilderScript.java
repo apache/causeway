@@ -16,17 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+package org.apache.isis.extensions.fixtures.api;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecification;
+import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
 
-/**
- * Overrides the {@link FixtureScriptsSpecification#getMultipleExecutionStrategy() globally-defined}
- * {@link FixtureScripts.MultipleExecutionStrategy} strategy, allowing individual fixtures to indicate that they have their own execution strategy.
- */
-public interface FixtureScriptWithExecutionStrategy {
+public interface PersonaWithBuilderScript<T extends BuilderScriptAbstract<?>>  {
 
-    @Programmatic
-    FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy();
+    T builder();
+
 }
+

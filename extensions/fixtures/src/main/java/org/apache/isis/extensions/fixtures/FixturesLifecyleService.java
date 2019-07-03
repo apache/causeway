@@ -26,7 +26,6 @@ import javax.inject.Singleton;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
-import org.apache.isis.extensions.fixtures.legacy.installer.FixturesInstallerFromConfiguration;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 @Singleton
@@ -48,9 +47,9 @@ public class FixturesLifecyleService {
         //
         // installFixturesIfRequired
         //
-        final FixturesInstallerFromConfiguration fixtureInstaller =
-                new FixturesInstallerFromConfiguration();
-        fixtureInstaller.installFixtures();  
+//        final FixturesInstallerFromConfiguration fixtureInstaller =
+//                new FixturesInstallerFromConfiguration();
+//        fixtureInstaller.installFixtures();  
 
 		
 	}
