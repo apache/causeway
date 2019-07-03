@@ -176,8 +176,8 @@ ${license.additional-notes}
 	</dependencyManagement>
 
 	<modules>
-<!-- 		<module>security-manager</module> -->
 		<module>asciidoc</module>
+		<module>markdown</module>
 		<module>viewer-wicket-excel</module>
 	</modules>
 
