@@ -22,8 +22,6 @@ package org.apache.isis.extensions.fixtures.legacy;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import javax.ejb.Singleton;
-
 import org.apache.isis.applib.clock.Clock;
 
 /**

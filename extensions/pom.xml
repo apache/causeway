@@ -65,6 +65,7 @@
 				</excludes>
 			</resource>
 		</resources>
+
 		<plugins>
 
 			<plugin>
@@ -95,48 +96,77 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-						<plugin>
-				<!-- This is a duplicate of core's pom.xml entry,
-					while valid, we don't let child modules inherit from this.
-					If for any reason this plugin causes any issues, we could
-					migrate to using a shared SupplementalModelArtifact.
-					see https://maven.apache.org/plugins/maven-remote-resources-plugin/supplemental-models.html
-					-->
-                <artifactId>maven-remote-resources-plugin</artifactId>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>process-remote-resources</id>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <configuration>
-                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                            <appendedResourcesDirectory>${basedir}/../core/src/main/appended-resources</appendedResourcesDirectory>
-                            <supplementalModels>
-                                <supplementalModel>supplemental-models.xml</supplementalModel>
-                            </supplementalModels>
-                            <resourceBundles>
-                                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
-                            </resourceBundles>
-                            <properties>
-                                <projectTimespan>2010~2019</projectTimespan>
-                                <postDepListText>
-The above (auto-generated) list aggregates the dependencies (either directly
-or transitively) of all the modules that make up ${project.name}. You can use 
-mvn dependency:list or mvn dependency:tree to view dependencies by submodule.
 
-${license.additional-notes}
-                        </postDepListText>
-                            </properties>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+			<plugin>
+				<!-- This is a duplicate of core's pom.xml entry, while valid, we don't 
+					let child modules inherit from this. If for any reason this plugin causes 
+					any issues, we could migrate to using a shared SupplementalModelArtifact. 
+					see https://maven.apache.org/plugins/maven-remote-resources-plugin/supplemental-models.html -->
+				<artifactId>maven-remote-resources-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>process-remote-resources</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+							<appendedResourcesDirectory>${basedir}/../core/src/main/appended-resources</appendedResourcesDirectory>
+							<supplementalModels>
+								<supplementalModel>supplemental-models.xml</supplementalModel>
+							</supplementalModels>
+							<resourceBundles>
+								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+							</resourceBundles>
+							<properties>
+								<projectTimespan>2010~2019</projectTimespan>
+								<postDepListText>
+									The above (auto-generated) list aggregates the
+									dependencies
+									(either directly
+									or transitively) of all the modules
+									that make up ${project.name}.
+									You can use
+									mvn dependency:list or
+									mvn dependency:tree to view dependencies by
+									submodule.
+
+									${license.additional-notes}
+								</postDepListText>
+							</properties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 	</build>
+	
+		<profiles>
+		<profile>
+			<id>jdk11</id>
+			<activation>
+				<jdk>[11,)</jdk>
+			</activation>
+
+			<dependencies>
+				<dependency>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</dependency>
+			</dependencies>
+
+		</profile>
+	</profiles>
 
 	<dependencyManagement>
 		<dependencies>
@@ -164,7 +194,7 @@ ${license.additional-notes}
 				<artifactId>poi-ooxml</artifactId>
 				<version>${poi.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml-schemas</artifactId>
