@@ -19,7 +19,7 @@
 
 package domainapp.modules.simple.fixture;
 
-import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;

@@ -1,135 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-  
-         http://www.apache.org/licenses/LICENSE-2.0
-         
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.apache.isis.example.application</groupId>
-        <artifactId>simpleapp</artifactId>
-        <version>${revision}</version>
-    </parent>
+	<parent>
+		<groupId>org.apache.isis.example.application</groupId>
+		<artifactId>simpleapp</artifactId>
+		<version>${revision}</version>
+	</parent>
 
-    <artifactId>simpleapp-module-simple</artifactId>
-    <name>Apache Isis App - SimpleApp Simple Module</name>
+	<artifactId>simpleapp-module-simple</artifactId>
+	<name>Apache Isis App - SimpleApp Simple Module</name>
 
-    <properties>
-        <isis-maven-plugin.validate.appManifest>
-            domainapp.modules.simple.SimpleModuleManifest
-        </isis-maven-plugin.validate.appManifest>
-        
-        <maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
-        <maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
-    </properties>
+	<properties>
+		<isis-maven-plugin.validate.appManifest>
+			domainapp.modules.simple.SimpleModuleManifest
+		</isis-maven-plugin.validate.appManifest>
 
-    <dependencies>
-    
-    	<!-- ISIS API -->
-    	
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
-        </dependency>
-        
-        <!-- ISIS CORE PLUGINS -->
+		<maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
+		<maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
+	</properties>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-plugins-codegen-bytebuddy</artifactId>
-        </dependency>
-        
-      	<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
-        </dependency>
-        
+	<dependencies>
 
-    	<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
-        </dependency>
+		<!-- ISIS API -->
 
-        <!-- TESTS -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-applib</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.mavendeps</groupId>
-            <artifactId>isis-mavendeps-testing</artifactId>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
+		<!-- ISIS CORE PLUGINS -->
 
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-codegen-bytebuddy</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
+		</dependency>
+
+		<!-- ISIS EXTENSIONS -->
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-fixtures</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-specsupport</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<!-- TESTS -->
+
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-testing</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 
-    <profiles>
-        <profile>
-            <id>isis-validate</id>
-            <activation>
-                <property>
-                    <name>!skip.isis-validate</name>
-                </property>
-            </activation>
-            
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.isis.tool</groupId>
-                        <artifactId>isis-maven-plugin</artifactId>
-<!--                         <version>${isis.version}</version> -->
-                        <executions>
-                            <execution>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>validate</goal>
-                                </goals>
-                                <configuration>
-                                    <appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>${project.artifactId}</artifactId>
-                                <version>${project.version}</version>
-                            </dependency>
+	<profiles>
+		<profile>
+			<id>isis-validate</id>
+			<activation>
+				<property>
+					<name>!skip.isis-validate</name>
+				</property>
+			</activation>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.isis.tool</groupId>
+						<artifactId>isis-maven-plugin</artifactId>
+						<!-- <version>${isis.version}</version> -->
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>validate</goal>
+								</goals>
+								<configuration>
+									<appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
 							<dependency>
-                                <groupId>org.hsqldb</groupId>
-                                <artifactId>hsqldb</artifactId>
-                                <!-- workaround to avoid conflict with plexus-default -->
-                                <version>2.3.1</version>
-                            </dependency>
-                            <dependency>
-					            <groupId>com.h2database</groupId>
-					            <artifactId>h2</artifactId>
-					            <version>${h2.version}</version>
-					        </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+								<groupId>${project.groupId}</groupId>
+								<artifactId>${project.artifactId}</artifactId>
+								<version>${project.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.hsqldb</groupId>
+								<artifactId>hsqldb</artifactId>
+								<!-- workaround to avoid conflict with plexus-default -->
+								<version>2.3.1</version>
+							</dependency>
+							<dependency>
+								<groupId>com.h2database</groupId>
+								<artifactId>h2</artifactId>
+								<version>${h2.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

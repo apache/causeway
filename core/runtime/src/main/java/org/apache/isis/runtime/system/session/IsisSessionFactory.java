@@ -46,7 +46,7 @@ import org.apache.isis.security.authentication.manager.AuthenticationManager;
  */
 public interface IsisSessionFactory {
 
-    public void initServicesAndRunFixtures();
+    public void initServices();
     public void destroyServicesAndShutdown();
 
     public IsisSession openSession(final AuthenticationSession authenticationSession);

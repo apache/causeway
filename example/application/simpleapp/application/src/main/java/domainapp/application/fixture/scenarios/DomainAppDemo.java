@@ -20,8 +20,8 @@ package domainapp.application.fixture.scenarios;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
 
 public class DomainAppDemo extends FixtureScript {
 

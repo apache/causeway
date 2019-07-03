@@ -22,13 +22,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.isis.applib.Defaults;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-
-import org.apache.isis.applib.Defaults;
-import org.apache.isis.applib.fixtures.FixtureClock;
 
 /**
  * Provides a mechanism to get (and possible to set) the current time.
@@ -43,8 +41,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
  * call to {@link #getInstance()} will instantiate an implementation that just
  * uses the system's own clock. Alternate implementations can be created via
  * suitable subclasses, but this must be done <b><i>before</i></b> the first
- * call to {@link #getInstance()}. See for example
- * {@link FixtureClock#getInstance()}.
+ * call to {@link #getInstance()}. 
  */
 public abstract class Clock {
     protected static Clock instance;

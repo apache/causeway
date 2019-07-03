@@ -1297,13 +1297,6 @@
 				<version>${isis.version}</version>
 			</dependency>
 
-			<!-- specsupport -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-specsupport</artifactId>
-				<version>${isis.version}</version>
-			</dependency>
-
 			<!-- integtestsupport -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
@@ -2187,48 +2180,6 @@
 			</build>
 		</profile>
 
-
-		<profile>
-			<id>jdk11plus</id>
-			<activation>
-				<!-- disabled for now, because I have not found a way to enforce jdk8 
-					build when this condition evaluates true -->
-				<!-- <jdk>[11,)</jdk> -->
-			</activation>
-			<build>
-				<plugins>
-					<!-- Compile -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<showDeprecation>true</showDeprecation>
-							<showWarnings>true</showWarnings>
-							<source>11</source>
-							<target>11</target>
-							<!-- TODO on build WARNING: __add-opens has no effect at compile time -->
-							<compilerArgs>
-								<arg>--add-opens</arg>
-								<arg>javax.xml/javax.xml.bind=ALL-UNNAMED</arg>
-							</compilerArgs>
-						</configuration>
-						<!-- goal:compile binds to phase:compile -->
-						<!-- goal:testCompile binds to phase:test-compile -->
-					</plugin>
-
-					<plugin>
-						<groupId>org.jvnet.jaxb2.maven2</groupId>
-						<artifactId>maven-jaxb2-plugin</artifactId>
-						<version>0.14.0</version>
-						<configuration>
-							<removeOldOutput>true</removeOldOutput>
-							<episode>true</episode>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
 		<profile>
 			<id>m2e</id>
 			<activation>
@@ -2535,7 +2486,6 @@
 		<module>security</module>
 
 		<module>unittestsupport</module>
-		<module>specsupport</module>
 		<module>integtestsupport</module>
 
 		<module>viewer-restfulobjects-applib</module>

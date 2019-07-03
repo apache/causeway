@@ -34,8 +34,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
@@ -51,7 +49,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
-import org.apache.isis.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.runtime.system.MessageRegistry;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
@@ -105,14 +102,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);
-
-        // a bit of a workaround, but required if anything in the metamodel (for example, a
-        // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
-        // we do this after loading the services to allow a service to prime a different clock
-        // implementation (eg to use an NTP time service).
-        if (_Context.isPrototyping() && !Clock.isInitialized()) {
-            FixtureClock.initialize();
-        }
 
         val serviceRegistry = IsisContext.getServiceRegistry();
         val authenticationManager = IsisContext.getAuthenticationManager();
@@ -168,7 +157,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
 
     @Override
-    public void initServicesAndRunFixtures() {
+    public void initServices() {
 
         // do postConstruct.  We store the initializer to do preDestroy on shutdown
         serviceInitializer = new ServiceInitializer(configuration, 
@@ -189,16 +178,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
 
             //
-            // installFixturesIfRequired
-            //
-            final FixturesInstallerFromConfiguration fixtureInstaller =
-                    new FixturesInstallerFromConfiguration();
-            fixtureInstaller.installFixtures(); //TODO [2033] if too early, pass over 'this' ... new FixturesInstallerFromConfiguration(this) 
-
-            //
             // translateServicesAndEnumConstants
             //
-
             val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
             
             final Stream<Object> domainServices = serviceRegistry.streamRegisteredBeans()

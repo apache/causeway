@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.specloader.specimpl.dflt;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +29,9 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -68,8 +68,6 @@ import org.apache.isis.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.OneToOneAssociationDefault;
-
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -204,7 +202,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
         final List<ObjectAssociation> associations = _Lists.newArrayList();
-        if(skipAssociationsAndActions()) {
+        if(isExcludedFromMetamodel()) {
             // add no associations
         } else {
             final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
@@ -230,7 +228,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private List<ObjectAction> createActions() {
         final List<ObjectAction> actions = _Lists.newArrayList();
-        if(skipAssociationsAndActions()) {
+        if(isExcludedFromMetamodel()) {
             // create no actions
         } else {
             final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
@@ -251,14 +249,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         } else {
             return null;
         }
-    }
-
-    private boolean skipAssociationsAndActions() {
-        return isFixtureScript();
-    }
-
-    private boolean isFixtureScript() {
-        return FixtureScript.class.isAssignableFrom(getCorrespondingClass());
     }
 
     // -- PREDICATES

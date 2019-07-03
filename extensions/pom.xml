@@ -178,6 +178,8 @@ ${license.additional-notes}
 	<modules>
 		<module>asciidoc</module>
 		<module>markdown</module>
+		<module>fixtures</module>
+		<module>specsupport</module>
 		<module>viewer-wicket-excel</module>
 	</modules>
 

@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.sessmgmt;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 /**
  * Intended primarily for {@link org.apache.isis.applib.fixturescripts.FixtureScript}s that define long-running/large
@@ -27,6 +26,8 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  * their own session, but all within a single request.
  *
  * <p>
+ * 	   
+ *     <br>
  *     Care must be taken not to use any objects from one session to the next.  In other words, the service does
  *     <i>not</i> detach any persistent objects in one session and re-attach them in the next.  Also, any objects
  *     created in previous sessions cannot be exposed in the UI.  In practical terms this means that

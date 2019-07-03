@@ -337,4 +337,9 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 		return BeanSort.UNKNOWN; // [2033] not implemented yet
 	}
 
+	@Override
+	public boolean isExcludedFromMetamodel() {
+		return false; // [2133] not implemented yet
+	}
+
 }

@@ -89,6 +89,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- ISIS EXTENSIONS -->
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-fixtures</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
 		<!-- <dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 

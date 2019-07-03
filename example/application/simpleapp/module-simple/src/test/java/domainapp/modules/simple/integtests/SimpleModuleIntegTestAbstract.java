@@ -18,10 +18,6 @@
  */
 package domainapp.modules.simple.integtests;
 
-import org.apache.isis.integtestsupport.IntegrationTestJupiter;
-
-import domainapp.modules.simple.SimpleModule;
-
 public abstract class SimpleModuleIntegTestAbstract /*extends IntegrationTestJupiter*/ {
 
   //FIXME[2112] needs migration

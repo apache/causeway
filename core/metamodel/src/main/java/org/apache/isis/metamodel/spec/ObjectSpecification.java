@@ -379,9 +379,13 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     default boolean isEntity() {
         return getBeanSort().isEntity();
     }
+    
+    /**
+     * @since 2.0
+     */
+	boolean isExcludedFromMetamodel();
 
     /**
-     * 
      * @since 2.0
      */
 	default Object instantiatePojo() {
@@ -404,8 +408,6 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
         
         return newInstance; 
 	}
-
-    
     
 
 }

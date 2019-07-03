@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -44,6 +43,8 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+
+import lombok.val;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactory
         extends FacetFactoryAbstract
@@ -127,13 +128,15 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
                         if(skip(objectSpec)) {
                             return;
                         }
-                        ObjectSpecIdFacet objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
-                        if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName &&
-                                // as a special case, don't enforce this for fixture scripts... we never invoke actions on fixture scripts anyway
-                                !FixtureScript.class.isAssignableFrom(objectSpec.getCorrespondingClass()) ) {
-
+                        val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
+                        if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
                             validationFailures.add(
-                                    "%s: the object type must be specified explicitly ('%s' config property).  Defaulting the object type from the package/class/package name can lead to data migration issues for apps deployed to production (if the class is subsequently refactored).  Use @Discriminator, @DomainObject(objectType=...) or @PersistenceCapable(schema=...) to specify explicitly.",
+                                    "%s: the object type must be specified explicitly ('%s' config property). "
+                                    + "Defaulting the object type from the package/class/package name can lead "
+                                    + "to data migration issues for apps deployed to production (if the class is "
+                                    + "subsequently refactored). "
+                                    + "Use @Discriminator, @DomainObject(objectType=...) or "
+                                    + "@PersistenceCapable(schema=...) to specify explicitly.",
                                     objectSpec.getFullIdentifier(), ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY);
                         }
                     }
@@ -148,8 +151,13 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
     }
 
     public static boolean check(final ObjectSpecification objectSpec) {
+    	if(objectSpec.isExcludedFromMetamodel()) {
+    		// as a special case, don't enforce this for fixture scripts... 
+    		// we never invoke actions on fixture scripts anyway
+            return false; //skip validation
+        }
         if(objectSpec.isAbstract()) {
-            return false;
+            return false; //skip validation
         }
         if (objectSpec.isEntity()) {
             return true;
@@ -159,12 +167,12 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
             // don't check JAXB DTOs
             final XmlType xmlType = objectSpec.getCorrespondingClass().getAnnotation(XmlType.class);
             if(xmlType != null) {
-                return false;
+                return false; //skip validation
             }
             return true;
         }
         if(objectSpec.isMixin()) {
-            return false;
+            return false; //skip validation
         }
         if (objectSpec.isManagedBean()) {
             // don't check if domain service isn't a target in public API (UI/REST)
@@ -172,7 +180,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
             if(domainServiceFacet != null) {
                 if(domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN ||
                         domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-                    return false;
+                    return false; //skip validation
                 }
             }
 
@@ -181,7 +189,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
             return objectActions.anyMatch(__->true); // return true if not empty
             
         }
-        return false;
+        return false; //skip validation
     }
 
 }

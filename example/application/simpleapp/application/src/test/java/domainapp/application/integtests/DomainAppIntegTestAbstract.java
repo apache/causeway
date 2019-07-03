@@ -18,7 +18,7 @@
  */
 package domainapp.application.integtests;
 
-import org.apache.isis.integtestsupport.IntegrationTestAbstract3;
+//import org.apache.isis.integtestsupport.IntegrationTestAbstract3;
 
 public abstract class DomainAppIntegTestAbstract /*extends IntegrationTestAbstract3*/ {
 

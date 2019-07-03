@@ -19,9 +19,9 @@ package org.apache.isis.testdomain.jdo;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.fixtures.legacy.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 public enum JdoTestDomainPersona 

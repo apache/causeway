@@ -22,8 +22,6 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
-import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.runtime.system.persistence.JdoPersistenceLifecycleService;
 import org.apache.isis.runtime.system.session.IsisSession;
 
@@ -40,9 +38,7 @@ public class RuntimeEventService {
     
 	@Inject Event<AppLifecycleEvent> appLifecycleEvents;
 	@Inject Event<SessionLifecycleEvent> sessionLifecycleEvents;
-	@Inject Event<FixturesInstallingEvent> fixturesInstallingEvents;
-    @Inject Event<FixturesInstalledEvent> fixturesInstalledEvents;
-	
+		
 	// -- APP
 
 	public void fireAppPreMetamodel() {
@@ -75,16 +71,6 @@ public class RuntimeEventService {
 //	public void fireSessionFlushing(IsisSession session) {
 //		sessionLifecycleEvent.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
 //	}
-
-	// -- FIXTURES
-	
-	public void fireFixturesInstalling(FixturesInstallingEvent fixturesInstallingEvent) {
-		fixturesInstallingEvents.fire(fixturesInstallingEvent);
-	}
-
-	public void fireFixturesInstalled(FixturesInstalledEvent fixturesInstalledEvent) {
-		fixturesInstalledEvents.fire(fixturesInstalledEvent);
-	}
 		
 
 }

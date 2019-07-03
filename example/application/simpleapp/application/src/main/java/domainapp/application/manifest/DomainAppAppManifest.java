@@ -20,10 +20,10 @@ package domainapp.application.manifest;
 
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.springframework.context.annotation.Bean;

@@ -38,8 +38,10 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.MetaModelContext;
@@ -94,6 +96,7 @@ import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -152,6 +155,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final String shortName;
     private final Identifier identifier;
     private final boolean isAbstract;
+    
+    @Getter(onMethod=@__({@Override})) private final boolean excludedFromMetamodel;
     // derived lazily, cached since immutable
     protected ObjectSpecId specId;
 
@@ -175,8 +180,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
+        
+        val exclusions = _Sets.of( //TODO[2133] make this configurable, or find an alternative, perhaps a specific type annotation?
+        		"org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult",
+        		"org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript",
+        		"org.apache.isis.applib.fixturescripts.FixtureResult",
+        		"org.apache.isis.applib.fixturescripts.FixtureScript"
+        		);
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
+        this.excludedFromMetamodel = _Reflect
+        		.streamTypeHierarchy(introspectedClass, /*includeInterfaces*/ false)
+                .anyMatch(type->exclusions.contains(type.getName())); 
+        
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
         this.facetProcessor = facetProcessor;
@@ -631,9 +647,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return stream(this.associations)
         .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
-
-
-    private static ThreadLocal<Boolean> invalidatingCache = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
     @Override
     public ObjectMember getMember(final String memberId) {

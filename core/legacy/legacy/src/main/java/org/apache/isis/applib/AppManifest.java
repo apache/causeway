@@ -19,17 +19,7 @@
 
 package org.apache.isis.applib;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import javax.jdo.annotations.PersistenceCapable;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.commons.internal.context._Context;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * TODO[2112] keep or remove?

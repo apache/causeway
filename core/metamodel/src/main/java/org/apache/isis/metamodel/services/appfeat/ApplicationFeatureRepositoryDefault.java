@@ -18,6 +18,9 @@
  */
 package org.apache.isis.metamodel.services.appfeat;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.config.internal._Config.getConfiguration;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +34,6 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -53,9 +55,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @Singleton
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
@@ -324,12 +323,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return spec.isAbstract() ||
                 isBuiltIn(spec) ||
                 isHidden(spec) ||
-                isFixtureScript(spec) ||
+                spec.isExcludedFromMetamodel() ||
                 isSuperClassOfService(spec);
-    }
-
-    private boolean isFixtureScript(final ObjectSpecification spec) {
-        return FixtureScript.class.isAssignableFrom(spec.getCorrespondingClass());
     }
 
     /**

@@ -43,10 +43,6 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-unittestsupport</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-specsupport</artifactId>
-		</dependency>
 
 		<!-- JUPITER -->
 		<dependency>
