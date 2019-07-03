@@ -53,7 +53,9 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
     }
 
     private String translateText() {
-        return translationService.translate(context, originalText);
+        return translationService!=null
+        		? translationService.translate(context, originalText)
+        				: originalText;
     }
 
     @Override

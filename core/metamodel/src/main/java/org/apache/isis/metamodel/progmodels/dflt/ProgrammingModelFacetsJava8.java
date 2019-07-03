@@ -97,6 +97,7 @@ import org.apache.isis.metamodel.facets.param.disable.method.ActionParameterDisa
 import org.apache.isis.metamodel.facets.param.hide.method.ActionParameterHiddenFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
+import org.apache.isis.metamodel.facets.param.name.ParameterNameFacetFactoryUsingReflection;
 import org.apache.isis.metamodel.facets.param.parameter.ParameterAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessorFactory;
@@ -160,9 +161,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin.FacetFactoryCategory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin.FactoryCollector;
 
-public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
+public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
 
-    public ProgrammingModelFacetsJava5(final DeprecatedPolicy deprecatedPolicy) {
+    public ProgrammingModelFacetsJava8(final DeprecatedPolicy deprecatedPolicy) {
         super(deprecatedPolicy);
 
         final FactoryCollector factoriesFromPlugins = discoverFactories();
@@ -297,6 +298,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
         addFactory(new CollectionAnnotationFacetFactory());
 
+        addFactory(new ParameterNameFacetFactoryUsingReflection());
         addFactory(new ParameterAnnotationFacetFactory());
 
         // must come after DomainObjectAnnotationFacetFactory

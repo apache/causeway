@@ -26,7 +26,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
-import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
 @Singleton
 public class ProgrammingModelServiceDefault implements ProgrammingModelService {
@@ -47,7 +47,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         
         final DeprecatedPolicy deprecatedPolicy = DeprecatedPolicy.parse(configuration);
 
-        final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava5(deprecatedPolicy);
+        final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava8(deprecatedPolicy);
         ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
         ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
         return programmingModel;

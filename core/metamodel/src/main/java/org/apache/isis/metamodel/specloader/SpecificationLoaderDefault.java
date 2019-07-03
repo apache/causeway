@@ -21,7 +21,7 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
-import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
  * <ul>
  * <li>The most important plug-in point is {@link ProgrammingModel} that
  * specifies the set of {@link Facet} that make up programming model. If not
- * specified then defaults to {@link ProgrammingModelFacetsJava5} (which should
+ * specified then defaults to {@link ProgrammingModelFacetsJava8} (which should
  * be used as a starting point for your own customizations).
  * <li>The only mandatory plug-in point is {@link ClassSubstitutor}, which
  * allows the class to be loaded to be substituted if required. This is used in

@@ -28,7 +28,7 @@ import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
@@ -58,7 +58,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     protected final DeprecatedPolicy deprecatedPolicy;
 
     public ProgrammingModelAbstract(
-            final ProgrammingModelFacetsJava5.DeprecatedPolicy deprecatedPolicy) {
+            final ProgrammingModelFacetsJava8.DeprecatedPolicy deprecatedPolicy) {
 
         this.deprecatedPolicy = deprecatedPolicy;
     }

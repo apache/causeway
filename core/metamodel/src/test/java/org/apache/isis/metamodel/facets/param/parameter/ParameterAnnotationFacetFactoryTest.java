@@ -49,6 +49,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+@SuppressWarnings("unused")
 public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     ParameterAnnotationFacetFactory facetFactory;
@@ -92,7 +93,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
         public void withAnnotation() {
 
             class Customer {
-                public void someAction(
+				public void someAction(
                         @Parameter(
                                 maxLength = 30
                         )
@@ -135,7 +136,6 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
         public void withAnnotation() {
 
             class Customer {
-                @SuppressWarnings("unused")
                 public void someAction(
                         @Parameter(
                                 mustSatisfy = {NotTooHot.class, NotTooCold.class}

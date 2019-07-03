@@ -38,7 +38,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
-import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -85,7 +85,7 @@ abstract class SpecificationLoaderTestAbstract {
         //@Produces
         SpecificationLoader getSpecificationLoader() {
             return SpecificationLoaderDefault.getInstance(
-                    new ProgrammingModelFacetsJava5(DeprecatedPolicy.HONOUR),
+                    new ProgrammingModelFacetsJava8(DeprecatedPolicy.HONOUR),
                     new MetaModelValidatorDefault());
         }
         
