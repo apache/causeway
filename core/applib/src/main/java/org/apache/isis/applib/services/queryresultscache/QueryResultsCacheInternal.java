@@ -15,18 +15,20 @@
  *  limitations under the License.
  */
 package org.apache.isis.applib.services.queryresultscache;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -56,7 +58,7 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
             final Class<?> callingClass,
             final String methodName,
             final Object... keys) {
-        if(control.isFixturesInstalling()) {
+        if(isIgnoreCache()) {
             try {
                 return callable.call();
             } catch (Exception e) {
@@ -69,7 +71,7 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
 
     @Programmatic
     private <T> T execute(final Callable<T> callable, final Key cacheKey) {
-        if(control.isFixturesInstalling()) {
+        if(isIgnoreCache()) {
             try {
                 return callable.call();
             } catch (Exception e) {
@@ -144,8 +146,14 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         cache.clear();
     }
 
-
-    @Inject
-    protected QueryResultCacheControl control;
+    // -- HELPER
+    
+    @Autowired(required = false)
+    protected List<QueryResultCacheControl> cacheControl;
+    
+    private boolean isIgnoreCache() {
+    	return _NullSafe.stream(cacheControl)
+    	.anyMatch(c->c.isIgnoreCache());
+    }
 
 }

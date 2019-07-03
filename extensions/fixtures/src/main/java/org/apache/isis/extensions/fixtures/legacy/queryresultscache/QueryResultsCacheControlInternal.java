@@ -44,7 +44,7 @@ public class QueryResultsCacheControlInternal implements QueryResultCacheControl
     private boolean fixturesInstalling;
 
     @Override
-    public boolean isFixturesInstalling() {
+    public boolean isIgnoreCache() {
         return fixturesInstalling;
     }
 }

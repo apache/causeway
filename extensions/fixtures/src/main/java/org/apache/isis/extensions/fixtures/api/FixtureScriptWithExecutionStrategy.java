@@ -20,7 +20,6 @@ package org.apache.isis.extensions.fixtures.api;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts.MultipleExecutionStrategy;
 import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecification;
 
 /**

@@ -18,6 +18,6 @@ package org.apache.isis.applib.services.queryresultscache;
 
 public interface QueryResultCacheControl {
 
-    public boolean isFixturesInstalling();
+    public boolean isIgnoreCache();
 
 }
