@@ -16,17 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.mavenplugin.util;
+package org.apache.isis.mavenplugin;
 
-import java.util.function.Function;
+interface MetaModelProcessor {
 
-import org.codehaus.plexus.util.xml.Xpp3Dom;
+    public interface Context {
 
-public final class Xpp3Doms {
+//        MavenProject getMavenProject();
+//
+//        Log getLog();
+//
+//        void logErrors(final String... logMessages);
+//
+//        void throwFailureException(final String errorMessage, final Set<String> logMessages) throws MojoFailureException;
+//
+//        void throwFailureException(final String errorMessage, final String... logMessages) throws MojoFailureException;
+//
+//        void throwExecutionException(final String errorMessage, final Exception e) throws MojoExecutionException;
+    }
 
-    private Xpp3Doms(){}
-
-    public static Function<Xpp3Dom, String> GET_VALUE = Xpp3Dom::getValue;
-
+//    void process(final Context context, final SpecificationLoader specificationLoader) throws MojoFailureException;
 
 }

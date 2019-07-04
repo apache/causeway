@@ -33,12 +33,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
+import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import org.apache.isis.commons.internal.collections._Arrays;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Creates a Spring Context from scratch, adding the
@@ -48,13 +49,14 @@ import org.apache.isis.commons.internal.collections._Arrays;
  * @since 2.0
  *
  */
+@Log4j2
 public class IsisMavenPlugin_SpringContextLauncher {
 
     private final static String exclude_from_scan = "org.apache.isis.core";
     
-    public static ConfigurableApplicationContext getContext(MavenProject project, Log log) {
+    public static ConfigurableApplicationContext getContext(/*MavenProject project, Log log*/) {
         
-        Set<String> packages = scanForPackages(project);
+        Set<String> packages = scanForPackages(/*project*/);
         
         log.info("packages from package-scan: " + packages);
         
@@ -73,36 +75,37 @@ public class IsisMavenPlugin_SpringContextLauncher {
     
     // -- COLLECT PACKAGE NAMES
     
-    private static Set<String> scanForPackages(MavenProject topProject) {
+    private static Set<String> scanForPackages(/*MavenProject topProject*/) {
         Set<String> packageNames = new HashSet<String>();
         
-        Stream.concat(Stream.of(topProject), topProject.getCollectedProjects().stream())
-        .forEach(project->{
-            
-            for(String className : scanForClassNames(project)) {
-                if(className.contains(".")) {
-                    int endIndex = className.lastIndexOf('.');
-                    String packageName = className.substring(0, endIndex);
-                    if(
-                            !packageName.equals(exclude_from_scan) && 
-                            !packageName.startsWith(exclude_from_scan + ".") ) {
-                    
-                        packageNames.add(packageName);
-                    }
-                     
-                }
-            }
-            
-        });
+//        Stream.concat(Stream.of(topProject), topProject.getCollectedProjects().stream())
+//        .forEach(project->{
+//            
+//            for(String className : scanForClassNames(project)) {
+//                if(className.contains(".")) {
+//                    int endIndex = className.lastIndexOf('.');
+//                    String packageName = className.substring(0, endIndex);
+//                    if(
+//                            !packageName.equals(exclude_from_scan) && 
+//                            !packageName.startsWith(exclude_from_scan + ".") ) {
+//                    
+//                        packageNames.add(packageName);
+//                    }
+//                     
+//                }
+//            }
+//            
+//        });
         return packageNames;
     }
     
     // -- COLLECT ALL CLASSNAMES
     
-    private static Set<String> scanForClassNames(MavenProject project) {
+    private static Set<String> scanForClassNames(/*MavenProject project*/) {
         Set<String> classNames = new HashSet<String>();
         
-        List<String> roots = (List<String>)(project.getCompileSourceRoots());
+        List<String> roots = _Lists.newArrayList();
+        		//(List<String>)(project.getCompileSourceRoots()); 
         for (String root : roots) {
 
             toPath(root).ifPresent(rootPath->{
