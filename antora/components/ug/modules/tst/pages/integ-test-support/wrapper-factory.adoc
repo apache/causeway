@@ -130,32 +130,34 @@ A test might therefore look like:
 
 [source,java]
 ----
-@Inject
-private EventBusService eventBusService;                                          // <1>
+public class SomeIntegratTest /* ... */ {
+    @Inject
+    private EventBusService eventBusService;                                       // <1>
 
-@Test
-public void subscriberReceivesEvents() throws Exception {
+    @Test
+    public void subscriberReceivesEvents() {
 
-    // given
-    final ToDoItem.CompletedEvent[] evHolder = new ToDoItem.CompletedEvent[1];    // <2>
-    eventBusService.register(new Object() {
-        @Subscribe
-        public void on(final ToDoItem.CompletedEvent ev) {                        // <3>
-            evHolder[0] = ev;
-        }
-    });
+        // given
+        final ToDoItem.CompletedEvent[] evHolder = new ToDoItem.CompletedEvent[1]; // <2>
+        eventBusService.register(new Object() {
+            @org.springframework.context.event.EventListener(ToDoItem.CompletedEvent.class)
+            public void on(final ToDoItem.CompletedEvent ev) {                     // <3>
+                evHolder[0] = ev;
+            }
+        });
 
-    // when
-    toDoItem.completed();                                                         // <4>
+        // when
+        toDoItem.completed();                                                      // <4>
 
-    // then
-    then(evHolder[0].getSource()).isEqualTo(unwrap(toDoItem));                    // <5>
-    then(evHolder[0].getIdentifier().getMemberName()).isEqualTo("completed");
+        // then
+        then(evHolder[0].getSource()).isEqualTo(unwrap(toDoItem));                 // <5>
+        then(evHolder[0].getIdentifier().getMemberName()).isEqualTo("completed");
+    }
 }
 ----
 <1> inject xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] into this test
 <2> holder for subscriber to capture event to
-<3> subscriber's callback, using the guava subscriber syntax
+<3> subscriber's callback, using Spring events
 <4> invoking the domain object using the wrapper
 <5> assert that the event was populated
 

@@ -31,11 +31,13 @@ Next, we define the domain service to act as the subscriber:
 [source,java]
 .HomePageViewModel.java
 ----
-public class HomePageViewModel ... {
+import org.springframework.context.event.EventListener;
+
+public class HomePageViewModel {
+
     @DomainService(nature = NatureOfService.DOMAIN)
     public static class CssHighlighter extends AbstractSubscriber {
-        @org.axonframework.eventhandling.EventHandler       // if using axon
-        @com.google.common.eventbus.Subscribe               // if using guava
+        @EventListener(DemoObject.CssClassUiEvent.class)
         public void on(DemoObject.CssClassUiEvent ev) {
             if(getContext() == null) { return; }
             if(ev.getSource() == getContext().getSelected()) {      // <1>
@@ -51,6 +53,7 @@ public class HomePageViewModel ... {
         @Inject
         Scratchpad scratchpad;                                      // <3>
     }
+
 }
 ----
 <1> If the domain object is the currently selected then set the CSS class

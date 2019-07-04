@@ -73,12 +73,13 @@ or can be fine-grained (by subscribing to specific event subtypes):
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @org.axonframework.eventhandling.EventHandler       // if using axon
-    @com.google.common.eventbus.Subscribe               // if using guava
+    @EventListener(ToDoItem.DueByChangedEvent.class)
     public void on(ToDoItem.DueByChangedEvent ev) {
-        ...
+        // ...
     }
 }
 ----
@@ -96,24 +97,28 @@ Thus the general form is:
 
 [source,java]
 ----
-@Programmatic
-@com.google.common.eventbus.Subscribe
-public void on(PropertyDomainEvent ev) {
-    switch(ev.getEventPhase()) {
-        case HIDE:
-            // call ev.hide() or ev.veto("") to hide the property
-            break;
-        case DISABLE:
-            // call ev.disable("...") or ev.veto("...") to disable the property
-            break;
-        case VALIDATE:
-            // call ev.invalidate("...") or ev.veto("...")
-            // if proposed property value is invalid
-            break;
-        case EXECUTING:
-            break;
-        case EXECUTED:
-            break;
+import org.springframework.context.event.EventListener;
+
+@DomainService(nature=NatureOfService.DOMAIN)
+public class SomeSubscriber extends AbstractSubscriber {
+
+    public void on(PropertyDomainEvent ev) {
+        switch(ev.getEventPhase()) {
+            case HIDE:
+                // call ev.hide() or ev.veto("") to hide the property
+                break;
+            case DISABLE:
+                // call ev.disable("...") or ev.veto("...") to disable the property
+                break;
+            case VALIDATE:
+                // call ev.invalidate("...") or ev.veto("...")
+                // if proposed property value is invalid
+                break;
+            case EXECUTING:
+                break;
+            case EXECUTED:
+                break;
+        }
     }
 }
 ----

@@ -49,12 +49,15 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @org.axonframework.eventhandling.EventHandler       // if using axon
-    @com.google.common.eventbus.Subscribe               // if using guava
+    @EventListener(ObjectLoadedEvent.class)
     public void on(ObjectLoadedEvent ev) {
-        if(ev.getSource() instanceof ToDoItem) { ... }
+        if(ev.getSource() instanceof ToDoItem) {
+            // ...
+         }
     }
 }
 ----
@@ -63,12 +66,13 @@ or can be fine-grained (by subscribing to specific event subtypes):
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @org.axonframework.eventhandling.EventHandler       // if using axon
-    @com.google.common.eventbus.Subscribe               // if using guava
+    @EventListener(ToDoItem.ObjectLoadedEvent.class)
     public void on(ToDoItem.ObjectLoadedEvent ev) {
-        ...
+        // ...
     }
 }
 ----

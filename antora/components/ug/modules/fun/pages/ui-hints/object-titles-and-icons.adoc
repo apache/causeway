@@ -15,9 +15,12 @@ In conjunction with xref:ug:vw:customisation/tweaking-css-classes.adoc[customize
 
 == Object Title
 
-The object title is a label to identify an object to the end-user.  Generally the object title is a label to identify an object to the end-user.  There is no requirement for it to be absolutely unique, but it should be "unique enough" to distinguish the object from other object's likely to be rendered on the same page.
+The object title is a label to identify an object to the end-user.
+Generally the object title is a label to identify an object to the end-user.
+There is no requirement for it to be absolutely unique, but it should be "unique enough" to distinguish the object from other object's likely to be rendered on the same page.
 
-The title is always shown with an icon, so there is generally no need for the title to include information about the object's type.  For example the title of a customer object shouldn't include the literal string "Customer"; it can just have the customer's name, reference or some other meaningful business identifier.
+The title is always shown with an icon, so there is generally no need for the title to include information about the object's type.
+For example the title of a customer object shouldn't include the literal string "Customer"; it can just have the customer's name, reference or some other meaningful business identifier.
 
 
 === Declarative style
@@ -29,11 +32,16 @@ For example:
 [source,java]
 ----
 public class Customer {
+
     @Title(sequence="1", append=" ")
-    public String getFirstName() { ... }
+    @lombok.Getter
+    private String firstName;
+
     @Title(sequence="2")
-    public Product getLastName() { ... }
-    ...
+    @lombok.Getter
+    private String lastName;
+
+    // ...
 }
 ----
 
@@ -42,36 +50,39 @@ might return "Arthur Clarke", while:
 [source,java]
 ----
 public class CustomerAlt {
+
     @Title(sequence="2", prepend=", ")
-    public String getFirstName() { ... }
+    @lombok.Getter
+    private String firstName;
 
     @Title(sequence="1")
-    public Product getLastName() { ... }
-    ...
+    @lombok.Getter
+    private String lastName;
+
+    // ...
 }
 ----
 
 could return "Clarke, Arthur".
 
-Note that the sequence is in Dewey Decimal Format.  This allows a subclass to intersperse information within the title.  For example (please forgive this horrible domain modelling (!)):
+Note that the sequence is in Dewey Decimal Format, which allows a subclass to intersperse information within the title.
+For example:
 
 
 [source,java]
 ----
 public class Author extends Customer {
+
     @Title(sequence="1.5", append=". ")
-    public String getMiddleInitial() { ... }
-    ...
+    @lombok.Getter
+    private String middleInitial;
+
+    // ...
 }
 ----
 
 could return "Arthur C. Clarke".
 
-
-[TIP]
-====
-Titles can sometimes get be long and therefore rather cumbersome in "parented" tables.  If `@Title` has been used then the Wicket viewer will automatically exclude portions of the title belonging to the owning object.
-====
 
 
 === Imperative style
@@ -85,7 +96,7 @@ For example:
 public class Author extends Customer {
 
     public String title() {
-        StringBuilder buf = new StringBuilder();
+        final StringBuilder buf = new StringBuilder();
         buf.append(getFirstName());
         if(getMiddleInitial() != null) {
             buf.append(getMiddleInitial()).append(". ");
@@ -93,7 +104,8 @@ public class Author extends Customer {
         buf.append(getLastName();
         return buf.toString();
     }
-    ...
+
+    // ...
 }
 ----
 
@@ -114,7 +126,8 @@ In the target object, we define an appropriate event type and use the xref:rg:an
 public class Author extends Customer {
     public static class TitleUiEvent
             extends org.apache.isis.applib.events.ui.TitleUiEvent<Author> {}
-    ...
+
+    //...
 }
 ----
 
@@ -122,14 +135,15 @@ The subscriber can then populate this event:
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
 public class AuthorSubscriptions extends AbstractSubscriber {
 
-    @org.axonframework.eventhandling.EventHandler       // if using axon
-    @com.google.common.eventbus.Subscribe               // if using guava
+    @EventListener(Author.TitleUiEvent.class)
     public void on(Author.TitleUiEvent ev) {
         Author author = ev.getSource();
-        ev.setTitle(titleOf(author);
+        ev.setTitle(titleOf(author));
     }
 
     private String titleOf(Author author) {
@@ -138,7 +152,7 @@ public class AuthorSubscriptions extends AbstractSubscriber {
         if(author.getMiddleInitial() != null) {
             buf.append(author.getMiddleInitial()).append(". ");
         }
-        buf.append(author.getLastName();
+        buf.append(author.getLastName());
         return buf.toString();
     }
 }
@@ -149,7 +163,7 @@ public class AuthorSubscriptions extends AbstractSubscriber {
 
 The icon is often the same for all instances of a particular class, and is picked up by convention.
 
-It's is also possible for an individual instance to return a custom icon, typically so that some significant state of that domain object is represented.
+It's also possible for an individual instance to return a custom icon, typically so that some significant state of that domain object is represented.
 For example, a custom icon could be used to represent a shipped order, say, or an overdue library loan.
 
 
@@ -158,18 +172,16 @@ For example, a custom icon could be used to represent a shipped order, say, or a
 If there is no requirement to customize the icon (the normal case), then the icon is usually picked up as the `.png` file in the same package as the class.
 For example, the icon for a class `org.mydomain.myapp.Customer` will be `org/mydomain/myapp/Customer.png` (if it exists).
 
-Alternatively, font-awesome icon can be used.
-This is specified using the xref:rg:ant:DomainObjectLayout/cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute.
+Alternatively, a font-awesome icon can be used.
+This is specified using the xref:rg:ant:DomainObjectLayout/cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute or in the xref:ug:vw:layout/file-based.adoc[layout.xml] file.
 
 For example:
 
 [source,java]
 ----
-@DomainObjectLayout(
-    cssClassFa="play"               // <1>
-)
+@DomainObjectLayout( cssClassFa="play" )    // <1>
 public class InvoiceRun {
-    ...
+    // ...
 }
 ----
 <1> will use the "fa-play" icon.
@@ -188,7 +200,7 @@ public class Order {
     public String iconName() {
         return isShipped() ? "shipped": null;
     }
-    ...
+    // ..
 }
 ----
 
@@ -203,7 +215,7 @@ As for title, the determination of which image file to use for the icon can be e
 
 In the target object, we define an appropriate event type and use the xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
 
-For example
+For example:
 
 [source,java]
 ----
@@ -213,18 +225,20 @@ For example
 public class Order {
     public static class IconUiEvent
             extends org.apache.isis.applib.events.ui.IconUiEvent<Order> {}
-    ...
+    // ..
 }
 ----
 
 The subscriber can then populate this event:
+
+*TODO: v2: *what annotation is required for SpringBoot event subscribers?
 
 [source,java]
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class OrderSubscriptions extends AbstractSubscriber {
 
-    @org.axonframework.eventhandling.EventHandler       // if using axon
+    @org.axonframework.eventhandling.EventHandler       p
     @com.google.common.eventbus.Subscribe               // if using guava
     public void on(Order.IconUiEvent ev) {
         Order order = ev.getSource();
@@ -250,7 +264,7 @@ In conjunction with xref:ug:vw:customisation/tweaking-css-classes.adoc[customize
 === Declarative style
 
 To render an object with a particular CSS, use
-xref:rg:ant:DomainObjectLayout/cssClass.adoc[`@DomainObjectLayout#cssClass()`].
+xref:rg:ant:DomainObjectLayout/cssClass.adoc[`@DomainObjectLayout#cssClass()`] or in the xref:ug:vw:layout/file-based.adoc[layout.xml] file.
 
 When the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.
 Or, when the domain object is rendered as a row in a collection, then the CSS class will appear in a `<div>` wrapped by the `<tr>` of the row.
@@ -272,7 +286,7 @@ public class Order {
     public String cssClass() {
         return isShipped() ? "shipped": null;       <1>
     }
-    ...
+    // ...
 }
 ----
 <1> the implementation might well be the same as the `iconName()`.
@@ -291,13 +305,11 @@ For example
 
 [source,java]
 ----
-@DomainObjectLayout(
-    cssClassUiEvent = Author.CssClassUiEvent.class
-)
+@DomainObjectLayout( cssClassUiEvent = Author.CssClassUiEvent.class )
 public class Order {
     public static class CssClassUiEvent
             extends org.apache.isis.applib.events.ui.CssClassUiEvent<Order> {}
-    ...
+    // ..
 }
 ----
 
@@ -305,18 +317,18 @@ The subscriber can then populate this event:
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
 public class OrderSubscriptions extends AbstractSubscriber {
 
-    @org.axonframework.eventhandling.EventHandler       // if using axon
-    @com.google.common.eventbus.Subscribe               // if using guava
+    @EventListener(Order.CssClassUiEvent.class)
     public void on(Order.CssClassUiEvent ev) {
         Order order = ev.getSource();
-        ev.setIconName(iconNameOf(order);
+        ev.setIconName(cssClassOf(order));
     }
 
-    private String cssClassOf(Order order) {
-        StringBuilder buf = new StringBuilder();
+    private static String cssClassOf(Order order) {
         return order.isShipped() ? "shipped": null;
     }
 }

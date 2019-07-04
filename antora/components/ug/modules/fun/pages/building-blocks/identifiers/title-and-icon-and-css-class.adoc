@@ -8,7 +8,7 @@ The icon informally identifies the type of the domain object, while the title id
 
 == Title
 
-The title of a domain object is shown in several places: as the main heading for an object; as a link text for an object referencing another object, and also in tables representing collections of objects.
+The title of a domain object is shown in several places: as the main heading for an object; as a link text or tooltip for an object referencing another object, and also in tables representing collections of objects.
 
 The title is not formally required to be a unique identify the object within its type, but it needs to be "unique enough" that a human user is able to distinguish one instance from another.
 

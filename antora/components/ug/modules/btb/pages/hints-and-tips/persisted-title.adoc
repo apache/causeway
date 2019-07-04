@@ -22,16 +22,21 @@ We can then define a subscribing domain service that leverage this.
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature = NatureOfService.DOMAIN)
 public class TitlingService extends AbstractSubscriber {
-    @Subscribe
-    public void on(final ObjectPersistingEvent ev) {
+
+    @EventListener(ObjectPersistingEvent.class)
+    public void on(ObjectPersistingEvent ev) {
         handle(ev.getSource());
     }
-    @Subscribe
-    public void on(final ObjectUpdatingEvent ev) {
+
+    @EventListener(ObjectUpdatingEvent.class)
+    public void on(ObjectUpdatingEvent ev) {
         handle(ev.getSource());
     }
+
     private void handle(final Object persistentInstance) {
         if(persistentInstance instanceof ObjectWithPersistedTitle) {
             final ObjectWithPersistedTitle objectWithPersistedTitle =
@@ -39,6 +44,7 @@ public class TitlingService extends AbstractSubscriber {
             objectWithPersistedTitle.setTitle(titleService.titleOf(objectWithPersistedTitle));
         }
     }
+
     @Inject
     TitleService titleService;
 }

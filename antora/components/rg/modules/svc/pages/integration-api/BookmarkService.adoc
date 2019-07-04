@@ -83,9 +83,12 @@ Either of these can be suppressed, if required, using a vetoing subscriber.  For
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
-public class AlwaysHideBookmarkHolderAssociationsObjectProperty {
-    @Subscribe
+public class AlwaysHideBookmarkHolderAssociationsObjectProperty
+                                            extends AbstractSubscriber{
+    @EventListener(BookmarkHolderAssociationContributions.ObjectDomainEvent.class)
     public void on(BookmarkHolderAssociationContributions.ObjectDomainEvent ev) {
         ev.hide();
     }

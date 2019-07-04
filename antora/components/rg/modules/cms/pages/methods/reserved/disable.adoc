@@ -67,13 +67,14 @@ Then, each property/collection/action emits either these base domain events or t
 
 [source,java]
 ----
-public class ToDoItem ... {
+public class ToDoItem  {
     public static class DescriptionDomainEvent extends PropertyDomainEvent<String> { }
-    @Property(
-        domainEvent = DescriptionDomainEvent.class
-    )
-    public String getDescription() { ... }
-    ...
+    @Property( domainEvent = DescriptionDomainEvent.class )
+    public String getDescription() {
+        // ...
+     }
+
+    // ...
 }
 ----
 
@@ -81,15 +82,16 @@ A vetoing subscriber can then subscribe to the domain events and veto access, eg
 
 [source,java]
 ----
-@DomainObject
+import org.springframework.context.event.EventListener;
+
+@DomainService(nature=NatureOfService.DOMAIN)
 public class VetoOutOfOfficeHours {
-    @Subscribe
+    @EventListener(ToDoItem.PropertyDomainEvent.class)
     public void on(ToDoItem.PropertyDomainEvent ev) {
-        if(!calendarService.isOfficeHours(clock.today()) {
+        if(!calendarService.isOfficeHours(clock.today())) {
             ev.veto("Cannot modify objects outside of office hours");
         }
     }
-    ...
 }
 ----
 

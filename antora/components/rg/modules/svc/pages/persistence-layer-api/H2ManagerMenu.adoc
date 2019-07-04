@@ -76,10 +76,12 @@ The menu can be hidden or disabled by subscribing to its domain event, eg:
 
 [source,java]
 ----
-@DomainService(nature=DOMAIN)
-public void HideH2ManagerMenu extends AbstractSubscriber {
+import org.springframework.context.event.EventListener;
 
-    @EventHandler @Subscribe
+@DomainService(nature=DOMAIN)
+public class HideH2ManagerMenu extends AbstractSubscriber {
+
+    @EventListener(H2ManagerMenu.ActionDomainEvent.class)
     public void on(H2ManagerMenu.ActionDomainEvent ev) {
         ev.hide();
     }

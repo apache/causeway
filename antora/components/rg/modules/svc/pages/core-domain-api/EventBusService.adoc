@@ -6,7 +6,8 @@ include::_attributes.adoc[]
 
 The `EventBusService` allows domain objects to emit events to subscribing domain services using an in-memory event bus.
 
-The primary user of the service is the framework itself, which automatically emit events for xref:rg:ant:Action/domainEvent.adoc[actions], xref:rg:ant:Property/domainEvent.adoc[properties] and xref:rg:ant:Collection/domainEvent.adoc[collections].  Multiple events are generated:
+The primary user of the service is the framework itself, which automatically emit events for xref:rg:ant:Action/domainEvent.adoc[actions], xref:rg:ant:Property/domainEvent.adoc[properties] and xref:rg:ant:Collection/domainEvent.adoc[collections].
+Multiple events are generated:
 
 * when an object member is to be viewed, an event is fired; subscribers can veto (meaning that the member is hidden)
 * when an object member is to be enabled, the same event instance is fired; subscribers can veto (meaning that the member is disabled, ie cannot be edited/invoked)
@@ -14,9 +15,12 @@ The primary user of the service is the framework itself, which automatically emi
 * when an object member is about to be changed, then the same event instance is fired; subscribers can perform pre-execution operations
 * when an object member has been changed, then the same event instance is fired; subscribers can perform post-execution operations
 
-If a subscriber throws an exception in the first three steps, then the interaction is vetoed. If a subscriber throws an exception in the last two steps, then the transaction is aborted.  For more on this topic, see xref:rg:ant:Action/domainEvent.adoc[`@Action#domainEvent()`], xref:rg:ant:Property/domainEvent.adoc[`@Property#domainEvent()`] and xref:rg:ant:Collection/domainEvent.adoc[`@Collection#domainEvent()`].
+If a subscriber throws an exception in the first three steps, then the interaction is vetoed.
+If a subscriber throws an exception in the last two steps, then the transaction is aborted.
+For more on this topic, see xref:rg:ant:Action/domainEvent.adoc[`@Action#domainEvent()`], xref:rg:ant:Property/domainEvent.adoc[`@Property#domainEvent()`] and xref:rg:ant:Collection/domainEvent.adoc[`@Collection#domainEvent()`].
 
-It is also possible for domain objects to programmatically generate domain events.  However the events are published, the primary use case is to decoupling interactions from one module/package/namespace and another.
+It is also possible for domain objects to programmatically generate domain events.
+However the events are published, the primary use case is to decoupling interactions from one module/package/namespace and another.
 
 Two implementations are available, using either link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`], or alternatively using the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus].  It is also possible to plug in a custom implementation.
 
@@ -29,16 +33,14 @@ The API defined by `EventBusService` is:
 [source,java]
 ----
 public abstract class EventBusService {
-    @Programmatic
-    public void post(Object event) { ... }                          // <1>
-    @Programmatic
-    public void register(final Object domainService) { ... }        // <2>
-    @Programmatic
-    public void unregister(final Object domainService) { ... }      // <3>
+    public void post(Object event) { /*...*/ }                          // <1>
+    public void register(final Object domainService) { /*...*/ }        // <2>
+    public void unregister(final Object domainService) { /*...*/ }      // <3>
 }
 ----
 <1> posts the event onto event bus
-<2> allows domain services to register themselves.  This should be done in their xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] initialization method (for both singleton and xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] domain services.
+<2> allows domain services to register themselves.
+This should be done in their xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] initialization method (for both singleton and xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] domain services.
 <3> exists for symmetry, but need never be called (it is in fact deliberately a no-op).
 
 
@@ -51,7 +53,8 @@ To use an alternative implementation, implement the `EventBusService` domain ser
 
 == Registering Subscribers
 
-The `register()` method should be called in the xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] lifecycle method.  It is valid and probably the least confusing to readers to also "unregister" in the xref:rg:ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:rg:svc:core-domain-api/EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
+The `register()` method should be called in the xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] lifecycle method.
+It is valid and probably the least confusing to readers to also "unregister" in the xref:rg:ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:rg:svc:core-domain-api/EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
 
 For example:
 
@@ -60,15 +63,19 @@ For example:
 @DomainService(nature=NatureOfService.DOMAIN)   // <1>
 @DomainServiceLayout( menuOrder="1")            // <2>
 public class MySubscribingDomainService {
+
     @PostConstruct
     public void postConstruct() {
         eventBusService.register(this);         // <3>
     }
+
     @PreDestroy
     public void preDestroy() {
         eventBusService.unregister(this);       // <4>
     }
-    ...
+
+    // ...
+
     @javax.inject.Inject
     EventBusService eventBusService;
 }
@@ -86,9 +93,8 @@ This works for both singleton (application-scoped) and also xref:rg:ant:RequestS
 
 [TIP]
 ====
-The xref:rg:cms:classes/super/AbstractSubscriber.adoc[`AbstractSubscriber`] class automatically performs this
-registration.  As a convenience, it is also annotated with the
-xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] attribute.
+The xref:rg:cms:classes/super/AbstractSubscriber.adoc[`AbstractSubscriber`] class automatically performs this registration.
+As a convenience, it is also annotated with the xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] attribute.
 ====
 
 
@@ -102,9 +108,11 @@ For example:
 [source,java]
 ----
 public class Customer {
-    @Action
-    public Customer placeOrder(Product product, @ParameterLayout(named="Quantity") int qty) { ... }
-    ...
+    @Action()
+    public Customer placeOrder( Product product, int quantity) {
+        // ...
+    }
+    // ...
 }
 ----
 
@@ -112,17 +120,22 @@ will propagate an instance of the default `o.a.i.applib.services.eventbus.Action
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
-public class MySubscribingDomainService
-    @org.axonframework.eventhandling.EventHandler       // if using axon
-    @com.google.common.eventbus.Subscribe               // if using guava
-    public void on(ActionDomainEvent ev) { ... }
-    ...
+public class MySubscribingDomainService extends AbstractSubscriber {
+    @EventListener(ActionDomainEvent.class)
+    public void on(ActionDomainEvent ev) {
+        // ...
+    }
+    // ...
 }
 ----
 
 
-More commonly though you will probably want to emit domain events of a specific subtype.  As a slightly more interesting example, suppose in a library domain that a `LibraryMember` wants to leave the library. A letter should be sent out detailing any books that they still have out on loan:
+More commonly though you will probably want to emit domain events of a specific subtype.
+As a slightly more interesting example, suppose in a library domain that a `LibraryMember` wants to leave the library.
+A letter should be sent out detailing any books that they still have out on loan:
 
 In the `LibraryMember` class, we publish the event by way of an annotation:
 
@@ -130,19 +143,25 @@ In the `LibraryMember` class, we publish the event by way of an annotation:
 ----
 public class LibraryMember {
     @Action(domainEvent=LibraryMemberLeaveEvent.class)  // <1>
-    public void leave() { ... }
-    ...
+    public void leave() {
+        // ...
+    }
+    // ...
 }
 ----
 <1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.  The topic of subclassing is discussed in more detail xref:rg:svc:core-domain-api/EventBusService.adoc#event-hierarchy[below].
 
-Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.  For example:
+Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.
+For example:
 
 [source,java]
 ----
-public class BookRepository {
-    @Programmatic
-    @com.google.common.eventbus.Subscribe
+import org.springframework.context.event.EventListener;
+
+@DomainService(nature = NatureOfService.DOMAIN)
+public class BookRepository extends AbstractSubscriber {
+
+    @EventListener(LbraryMemberLeaveEvent.class)
     public void onLibraryMemberLeaving(LibraryMemberLeaveEvent e) {
         LibraryMember lm = e.getLibraryMember();
         List<Book> lentBooks = findBooksOnLoanFor(lm);
@@ -150,7 +169,7 @@ public class BookRepository {
             sendLetter(lm, lentBooks);
         }
     }
-    ...
+
 }
 ----
 
@@ -207,8 +226,10 @@ and finally at the action level we can define:
 public class LibraryMember {
     public static class LeaveEvent extends LibraryMember.ActionDomainEvent { }
     @Action(domainEvent=LeaveEvent.class)
-    public void leave() { ... }
-    ...
+    public void leave() {
+        //...
+    }
+    // ...
 }
 ----
 
@@ -224,7 +245,7 @@ A slight variation on this is to not fix the generic parameter at the class leve
 public static class LibraryMember {
     public abstract static class ActionDomainEvent<S>
             extends LibMemModule.ActionDomainEvent<S> { }
-    ...
+    // ...
 }
 ----
 
@@ -235,10 +256,13 @@ and instead parameterize down at the action level:
 public class LibraryMember {
     public static class LeaveEvent
             extends LibraryMember.ActionDomainEvent<LibraryMember> { } // <1>
-    }
+
     @Action(domainEvent=LeaveEvent.class)
-    public void leave() { ... }
-    ...
+    public void leave() {
+        // ...
+    }
+
+    // ...
 }
 ----
 
@@ -256,12 +280,12 @@ The `LibraryMember` example described above could for example be rewritten into:
 [source,java]
 ----
 public class LibraryMember {
-    ...
+    @Action()
     public void leave() {
-        ...
-        eventBusService.post(new LibraryMember.LeaveEvent(...));    // <1>
+        // ...
+        eventBusService.post(new LibraryMember.LeaveEvent(/*...*/));    // <1>
     }
-    ...
+    // ...
 }
 ----
 <1> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.i.applib.event.ActionDomainEvent`.
@@ -272,23 +296,28 @@ In practice we suspect there will be few cases where the programmatic approach i
 
 == Using `WrapperFactory`
 
-An alternative way to cause events to be posted is through the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`].  This is useful when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
+An alternative way to cause events to be posted is through the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`].
+This is useful when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
 
-For example, suppose that `Customer#placeOrder(...)` emits a `PlaceOrderEvent`, which is subscribed to by a `ReserveStockSubscriber`.  This subscriber in turn calls `StockManagementService#reserveStock(...)`.  Any business rules on `#reserveStock(...)` should be enforced.
+For example, suppose that `Customer#placeOrder(...)` emits a `PlaceOrderEvent`, which is subscribed to by a `ReserveStockSubscriber`.
+This subscriber in turn calls `StockManagementService#reserveStock(...)`.
+Any business rules on `#reserveStock(...)` should be enforced.
 
 In the `ReserveStockSubscriber`, we therefore use the `WrapperFactory`:
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
+
 @DomainService(nature=NatureOfService.DOMAIN)
-public class ReserveStockSubscriber {
-    @Programmatic
-    @Subscribe
+public class ReserveStockSubscriber extends AbstractSubscriber{
+
+    @EventListener(Customer.PlaceOrderEvent.class)
     public void on(Customer.PlaceOrderEvent ev) {
         wrapperFactory.wrap(stockManagementService)
                       .reserveStock(ev.getProduct(), ev.getQuantity());
     }
-    ...
+
     @Inject
     StockManagementService stockManagementService;
     @Inject
