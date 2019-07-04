@@ -28,9 +28,10 @@ public final class AsciiDocConverter {
 
 	/**
 	 * For syntax highlighting to work, the client/browser needs to load specific 
-	 * java-script. To enable load it with your {@code application.js}
+	 * java-script and css. 
 	 * <p>
-	 * eg. like the one bundled with {@code src/main/resources/prism1.14.js}.
+	 * 1) In your web-app's {@code scripts/application.js} include the bundled 
+	 * {@code src/main/resources/prism1.14.js}.
 	 * <pre>
 	 * function includeJs(jsFilePath) {
 	 *     var js = document.createElement("script");
@@ -41,8 +42,14 @@ public final class AsciiDocConverter {
 	 * 
 	 * includeJs("/scripts/prism1.14.js");
 	 * </pre>
+	 * <p>
+	 * 2) In your web-app's {@code css/application.css} include the bundled
+	 * {@code src/main/resources/prism.css}.
+	 * <pre>
+	 * {@code @import "prism.css"}.
+	 * </pre>
 	 *  
-	 * @param adoc - asciidoc formated input to be converted to HTML
+	 * @param adoc - formated input to be converted to HTML
 	 */
 	public static String adocToHtml(String adoc) {
         if(asciidoctor==null) {

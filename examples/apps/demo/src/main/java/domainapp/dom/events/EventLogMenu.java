@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
-@DomainService(nature=NatureOfService.VIEW_MENU_ONLY)
+@DomainService(nature=NatureOfService.VIEW)
 @DomainObjectLayout(named="Event Demo")
 public class EventLogMenu {
 

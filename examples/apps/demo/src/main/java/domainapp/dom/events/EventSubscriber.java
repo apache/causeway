@@ -50,7 +50,7 @@ public class EventSubscriber {
 	
 	@PostConstruct
 	public void init() {
-		log.info(emphasize("init"));
+		log.info(emphasize("EventSubscriber - PostConstruct"));
 		eventBusService.post(new EventSubscriberEvent());
 	}
 

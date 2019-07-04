@@ -30,7 +30,7 @@
 
 	<properties>
 
-		<packaging.type>war</packaging.type>
+		<packaging.type>jar</packaging.type>
 
 		<compiler-plugin.source>1.8</compiler-plugin.source>
 		<compiler-plugin.target>1.8</compiler-plugin.target>
@@ -52,7 +52,7 @@
 	<dependencies>
 
 		<!-- ISIS WEB-APP BUNDLE -->
-		
+
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-webapp</artifactId>
@@ -80,15 +80,15 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 		</dependency>
-		
+
 		<!-- ISIS EXTENSIONS -->
-		
+
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-viewer-wicket-excel</artifactId>
 			<version>${isis.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-asciidoc</artifactId>
@@ -155,6 +155,10 @@
 					<value>tomcat</value>
 				</property>
 			</activation>
+			<properties>
+				<packaging.type>war</packaging.type>
+				<skip.spring>true</skip.spring>
+			</properties>
 			<dependencies>
 				<!-- add flavor specific here -->
 			</dependencies>
@@ -168,18 +172,21 @@
 					<value>payara</value>
 				</property>
 			</activation>
+			<properties>
+				<packaging.type>war</packaging.type>
+				<skip.spring>true</skip.spring>
+			</properties>
 			<dependencies>
 				<!-- add flavor specific here -->
 			</dependencies>
 		</profile>
 
-		<!-- building: mvn clean install -Dspring -->
-		<!-- running: mvn spring-boot:run -Dspring -->
+		<!-- running: mvn spring-boot:run -->
 		<profile>
 			<id>spring</id>
 			<activation>
 				<property>
-					<name>spring</name>
+					<name>!skip.spring</name>
 				</property>
 			</activation>
 			<properties>
