@@ -24,10 +24,6 @@
 	<name>Apache Isis App - SimpleApp Simple Module</name>
 
 	<properties>
-		<isis-maven-plugin.validate.appManifest>
-			domainapp.modules.simple.SimpleModuleManifest
-		</isis-maven-plugin.validate.appManifest>
-
 		<maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
 		<maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
 	</properties>
@@ -88,55 +84,5 @@
 		</dependency>
 	</dependencies>
 
-
-	<profiles>
-		<profile>
-			<id>isis-validate</id>
-			<activation>
-				<property>
-					<name>!skip.isis-validate</name>
-				</property>
-			</activation>
-
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.isis.tool</groupId>
-						<artifactId>isis-maven-plugin</artifactId>
-						<!-- <version>${isis.version}</version> -->
-						<executions>
-							<execution>
-								<phase>test</phase>
-								<goals>
-									<goal>validate</goal>
-								</goals>
-								<configuration>
-									<appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>${project.groupId}</groupId>
-								<artifactId>${project.artifactId}</artifactId>
-								<version>${project.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>org.hsqldb</groupId>
-								<artifactId>hsqldb</artifactId>
-								<!-- workaround to avoid conflict with plexus-default -->
-								<version>2.3.1</version>
-							</dependency>
-							<dependency>
-								<groupId>com.h2database</groupId>
-								<artifactId>h2</artifactId>
-								<version>${h2.version}</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>

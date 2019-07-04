@@ -34,10 +34,6 @@
     <packaging>war</packaging>
 
     <properties>
-        <isis-maven-plugin.appManifest>
-            domainapp.application.manifest.DomainAppAppManifest
-        </isis-maven-plugin.appManifest>
-
         <jetty-console-maven-plugin.backgroundImage>
             ${basedir}/src/main/jettyconsole/isis-banner.png
         </jetty-console-maven-plugin.backgroundImage>
@@ -91,59 +87,6 @@
     </dependencies>
 
     <profiles>
-        <profile>
-            <id>isis-swagger</id>
-            <activation>
-                <property>
-                    <name>!skip.isis-swagger</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.isis.tool</groupId>
-                        <artifactId>isis-maven-plugin</artifactId>
-<!--                         <version>${isis.version}</version> -->
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>swagger</goal>
-                                </goals>
-                                <configuration>
-                                    <appManifest>${isis-maven-plugin.appManifest}</appManifest>
-                                    <visibilities>
-                                        <visibility>PUBLIC</visibility>
-                                        <visibility>PRIVATE</visibility>
-                                    </visibilities>
-                                    <format>JSON</format>
-                                    <fileNamePrefix>swagger</fileNamePrefix>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>${project.parent.artifactId}-application</artifactId>
-                                <version>${project.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.hsqldb</groupId>
-                                <artifactId>hsqldb</artifactId>
-                                <!-- workaround to avoid conflict with plexus-default -->
-                                <version>2.3.1</version>
-                            </dependency>
-                            <dependency>
-					            <groupId>com.h2database</groupId>
-					            <artifactId>h2</artifactId>
-					            <version>${h2.version}</version>
-					        </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <profile>
             <id>jdbc-logging</id>
             <activation>
