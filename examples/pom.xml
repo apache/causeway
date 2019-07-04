@@ -331,9 +331,9 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>application/helloworld</module>
-		<module>application/simpleapp</module>
-		<module>application/demo</module>
+		<module>apps/helloworld</module>
+		<module>apps/simpleapp</module>
+		<module>apps/demo</module>
 		<module>smoketest</module>
 	</modules>
 
