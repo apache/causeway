@@ -22,23 +22,61 @@
     <modelVersion>4.0.0</modelVersion>
 
 	<parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis</artifactId>
-        <version>${revision}</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+		<groupId>org.apache.isis.mavendeps</groupId>
+		<artifactId>isis-mavendeps</artifactId>
+		<version>${revision}</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
-    <groupId>org.apache.isis.mavendeps</groupId>
-    <artifactId>isis-mavendeps-intellij</artifactId>
+    <artifactId>isis-mavendeps-testing</artifactId>
 
     <packaging>pom</packaging>
-
-    <name>Apache Isis Maven Dependencies for IntelliJ</name>
+    
+    <name>Apache Isis Maven Dependencies for Testing</name>
     <description>
-        Deprecated - profile moved to isis-mavendeps-webapp
+        Defines a module that can be used as a single dependency for a set of common testing libraries.
     </description>
-
+    
     <profiles>
+        <profile>
+            <id>isis-mavendeps-testing</id>
+            <activation>
+                <property>
+                    <name>!skip.isis-mavendeps-testing</name>
+                </property>
+            </activation>
+        
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-unittestsupport</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-integtestsupport</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-library</artifactId>
+                </dependency>
+                
+                <dependency>
+                    <groupId>org.assertj</groupId>
+                    <artifactId>assertj-core</artifactId>
+                </dependency>
+                
+                <dependency>
+					<groupId>org.picocontainer</groupId>
+					<artifactId>picocontainer</artifactId>
+				</dependency>
+
+                <dependency>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                </dependency>
+
+            </dependencies>
+        </profile>
         <profile>
             <id>flatten</id>
             <activation>
@@ -62,6 +100,10 @@
                                 <configuration>
                                     <flattenMode>bom</flattenMode>
                                     <updatePomFile>true</updatePomFile>
+                                    <pomElements>
+                                        <parent>resolve</parent>
+                                        <profiles>resolve</profiles>
+                                    </pomElements>
                                 </configuration>
                             </execution>
                             <execution>

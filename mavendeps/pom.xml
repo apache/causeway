@@ -21,22 +21,21 @@
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>isis-extensions</artifactId>
+	<groupId>org.apache.isis.mavendeps</groupId>
+	<artifactId>isis-mavendeps</artifactId>
 
-	<name>Apache Isis Extensions</name>
+	<name>Apache Isis Maven Dependency Bundles</name>
 	<description>
-        Collection of Apache Isis extensions.
+        Collection of Apache Isis Maven Dependency Bundles.
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.mavendeps</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/mavendeps</git-plugin.propertiesDir>
 
 		<lombok.version>[1.18,)</lombok.version>
-		<poi.version>[4,5)</poi.version>
 
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
@@ -96,54 +95,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<plugin>
-				<!-- This is a duplicate of core's pom.xml entry -->
-				<artifactId>maven-remote-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>process-remote-resources</id>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<configuration>
-
-							<!-- Reference the supplemental-model artifact from module supplemental-model -->
-							<supplementalModelArtifacts>
-								<supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
-							</supplementalModelArtifacts>
-
-							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-
-							<!-- Specify the path, relative to the JAR root, where the supplemental 
-								model file is located -->
-							<supplementalModels>
-								<supplementalModel>supplemental-models.xml</supplementalModel>
-							</supplementalModels>
-							<resourceBundles>
-								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
-							</resourceBundles>
-							<properties>
-								<projectTimespan>2010~2019</projectTimespan>
-								<postDepListText>
-									The above (auto-generated) list aggregates the
-									dependencies
-									(either directly
-									or transitively) of all the modules
-									that make up ${project.name}.
-									You can use
-									mvn dependency:list or
-									mvn dependency:tree to view dependencies by
-									submodule.
-
-									${license.additional-notes}
-								</postDepListText>
-							</properties>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 
@@ -192,29 +143,13 @@
 				<scope>provided</scope>
 			</dependency>
 
-			<!-- POI -->
-			<dependency>
-				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml</artifactId>
-				<version>${poi.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml-schemas</artifactId>
-				<version>${poi.version}</version>
-			</dependency>
-
-
 		</dependencies>
 	</dependencyManagement>
 
 	<modules>
-		<module>asciidoc</module>
-		<module>markdown</module>
-		<module>fixtures</module>
-		<module>specsupport</module>
-		<module>viewer-wicket-excel</module>
+		<module>intellij</module>
+		<module>testing</module>
+		<module>webapp</module>
 	</modules>
 
 </project>

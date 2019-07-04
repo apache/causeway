@@ -27,7 +27,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis</name>
+	<name>Apache Isis Core</name>
 
 	<description>
         Core framework, providing metamodel, runtime and core APIs.
@@ -482,7 +482,7 @@
 
 							<exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
 
-							<exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
+							<exclude>**/src/main/resources/supplemental-models.xml</exclude>
 							<exclude>**/datanucleus.log</exclude>
 							<exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
 							<exclude>**/gradlew</exclude>
@@ -582,6 +582,9 @@
 						<showWarnings>false</showWarnings>
 						<source>${compileSource}</source>
 						<target>${compileTarget}</target>
+						<compilerArgs>
+					        <arg>${compiler-plugin.compilerArgument}</arg>
+					    </compilerArgs>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -1044,8 +1047,15 @@
 							<goal>process</goal>
 						</goals>
 						<configuration>
+						
+						    <!-- Reference the supplemental-model artifact from module supplemental-model -->
+				            <supplementalModelArtifacts>
+				            	<supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
+				            </supplementalModelArtifacts>
+						
 							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-							<appendedResourcesDirectory>${basedir}/src/main/appended-resources</appendedResourcesDirectory>
+							
+							 <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
 							<supplementalModels>
 								<supplementalModel>supplemental-models.xml</supplementalModel>
 							</supplementalModels>
@@ -2472,6 +2482,9 @@
 	</profiles>
 
 	<modules>
+	
+		<module>../supplemental-model</module>
+	
 		<module>schema</module>
 		<module>commons</module>
 		<module>config</module>
@@ -2496,12 +2509,6 @@
 		<module>viewer-wicket-ui</module>
 		<module>viewer-wicket-impl</module>
 
-		<module>maven-plugin</module>
-
-		<module>mavendeps/intellij</module>
-		<module>mavendeps/webapp</module>
-		<module>mavendeps/testing</module>
-
 		<module>plugins/codegen-bytebuddy</module>
 		<module>plugins/jaxrs-resteasy-4</module>
 		<module>plugins/jdo-common</module>
@@ -2513,6 +2520,8 @@
 		<module>detached-tests</module>
 
 		<module>webdocker</module>
+		
+		<module>../mavendeps</module>
 	</modules>
 
 </project>

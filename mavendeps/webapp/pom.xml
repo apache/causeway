@@ -16,13 +16,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
+		<groupId>org.apache.isis.mavendeps</groupId>
+		<artifactId>isis-mavendeps</artifactId>
 		<version>${revision}</version>
-		<relativePath>../../pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.mavendeps</groupId>
 	<artifactId>isis-mavendeps-webapp</artifactId>
 
 	<packaging>pom</packaging>

@@ -36,7 +36,6 @@
 		<compiler-plugin.target>1.8</compiler-plugin.target>
 		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
-
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 

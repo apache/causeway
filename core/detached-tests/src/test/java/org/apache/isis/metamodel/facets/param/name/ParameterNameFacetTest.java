@@ -34,7 +34,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-
+/**
+ * Detached from its module because we need the javac -parameter flag set when compiling this test 
+ */
 public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
 	ProgrammingModelFacetsJava8 programmingModel;

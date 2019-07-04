@@ -18,6 +18,7 @@
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
 		<version>${revision}</version>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.isis.tool</groupId>

@@ -200,43 +200,50 @@
 			</plugin>
 			
 			<plugin>
-				<!-- This is a duplicate of core's pom.xml entry,
-					while valid, we don't let child modules inherit from this.
-					If for any reason this plugin causes any issues, we could
-					migrate to using a shared SupplementalModelArtifact.
-					see https://maven.apache.org/plugins/maven-remote-resources-plugin/supplemental-models.html
-					-->
-                <artifactId>maven-remote-resources-plugin</artifactId>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>process-remote-resources</id>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <configuration>
-                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                            <appendedResourcesDirectory>${basedir}/../core/src/main/appended-resources</appendedResourcesDirectory>
-                            <supplementalModels>
-                                <supplementalModel>supplemental-models.xml</supplementalModel>
-                            </supplementalModels>
-                            <resourceBundles>
-                                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
-                            </resourceBundles>
-                            <properties>
-                                <projectTimespan>2010~2019</projectTimespan>
-                                <postDepListText>
-The above (auto-generated) list aggregates the dependencies (either directly
-or transitively) of all the modules that make up ${project.name}. You can use 
-mvn dependency:list or mvn dependency:tree to view dependencies by submodule.
+				<!-- This is a duplicate of core's pom.xml entry -->
+				<artifactId>maven-remote-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-remote-resources</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+						
+						    <!-- Reference the supplemental-model artifact from module supplemental-model -->
+				            <supplementalModelArtifacts>
+				            	<supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
+				            </supplementalModelArtifacts>
+						
+							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+							
+							 <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
+							<supplementalModels>
+								<supplementalModel>supplemental-models.xml</supplementalModel>
+							</supplementalModels>
+							<resourceBundles>
+								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+							</resourceBundles>
+							<properties>
+								<projectTimespan>2010~2019</projectTimespan>
+								<postDepListText>
+									The above (auto-generated) list aggregates the
+									dependencies
+									(either directly
+									or transitively) of all the modules
+									that make up ${project.name}.
+									You can use
+									mvn dependency:list or
+									mvn dependency:tree to view dependencies by
+									submodule.
 
-${license.additional-notes}
-                        </postDepListText>
-                            </properties>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+									${license.additional-notes}
+								</postDepListText>
+							</properties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 	</build>
