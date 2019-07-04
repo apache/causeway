@@ -55,9 +55,9 @@
 				</property>
 			</activation>
 			<modules>
-				<module>example/application/demo</module>
-				<module>example/application/helloworld</module>
-				<module>example/application/simpleapp</module>
+				<module>examples/apps/demo</module>
+				<module>examples/apps/helloworld</module>
+				<module>examples/apps/simpleapp</module>
 			</modules>
 		</profile>
 
@@ -81,8 +81,8 @@
 				</property>
 			</activation>
 			<modules>
-				<!-- <module>example/archetype/helloworld</module> -->
-				<module>example/archetype/simpleapp</module>
+				<!-- <module>examples/archetype/helloworld</module> -->
+				<module>examples/archetype/simpleapp</module>
 			</modules>
 		</profile>
 
