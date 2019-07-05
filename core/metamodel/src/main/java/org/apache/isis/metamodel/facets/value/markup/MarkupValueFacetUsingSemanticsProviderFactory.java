@@ -30,7 +30,7 @@ public class MarkupValueFacetUsingSemanticsProviderFactory extends ValueFacetUsi
         final Class<?> type = processClassContext.getCls();
         final FacetHolder holder = processClassContext.getFacetHolder();
 
-        if (type != Markup.class) {
+        if (!(Markup.class.isAssignableFrom(type))) {
             return;
         }
         addFacets(new MarkupValueSemanticsProvider(holder));

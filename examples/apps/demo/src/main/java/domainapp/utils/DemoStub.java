@@ -28,10 +28,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.extensions.asciidoc.AsciiDoc;
 
 import lombok.val;
-
 
 public abstract class DemoStub {
 
@@ -42,8 +41,8 @@ public abstract class DemoStub {
 	public abstract void initDefaults();
 	
 	@PropertyLayout(cssClass = "adoc")
-	public Markup getDescription() {
-		return new Markup(descriptionAsHtml());
+	public AsciiDoc getDescription() {
+		return new AsciiDoc(readAsciiDocDescription());
 	}
 
 	protected final static Map<String, String> constants = createConstants();
@@ -67,14 +66,14 @@ public abstract class DemoStub {
 		return String.format("${%s}", name);
 	}
 
-	protected String descriptionAsHtml() {
+	protected String readAsciiDocDescription() {
 		val adocResourceName = getClass().getSimpleName()+".adoc";
 		val adocResource = this.getClass().getResourceAsStream(adocResourceName);
 		if(adocResource==null) {
 			return String.format("Markdown resource '%s' not found.", adocResourceName);
 		}
 		try {
-			return DemoUtils.asciidocToHtml(read(adocResource));
+			return read(adocResource);
 		} catch (IOException e) {
 			return String.format("Failed to read from adoc resource '%s': ", e.getMessage());
 		}

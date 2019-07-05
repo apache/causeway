@@ -29,6 +29,8 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
+import lombok.val;
+
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +44,7 @@ public class MarkupComponent extends WebComponent {
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        final CharSequence htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(
                 markupStream, 
                 openTag, 
@@ -62,7 +64,7 @@ public class MarkupComponent extends WebComponent {
 
     // -- HELPER
 
-    private CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
+    protected static CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
 
         if(modelObject==null) {
             return fallback;

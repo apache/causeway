@@ -30,6 +30,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
+import lombok.val;
+
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
  */
@@ -69,19 +71,25 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
         return formGroup;
     }
-
+    
     @Override
     protected Component createComponentForCompact() {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);
     }
 
-    // -- HELPER
-
-    private MarkupComponent createMarkupComponent(String id) {
-        MarkupComponent markupComponent = new MarkupComponent(id, getModel(), getEventStreamResource());
+    /**
+     * Allows for sub classes to create customized MarkupComponents. 
+     * eg. add java-script
+     * @param id
+     * @return
+     */
+    protected MarkupComponent createMarkupComponent(String id) {
+        val markupComponent = new MarkupComponent(id, getModel(), getEventStreamResource());
         markupComponent.setEnabled(false);
         return markupComponent;
     }
+    
+    // -- HELPER
     
     private LocalResourcePath getEventStreamResource() {
         final ObserveFacet observeFacet  = super.scalarModel.getFacet(ObserveFacet.class);

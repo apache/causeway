@@ -16,33 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.asciidoc;
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 import lombok.val;
 
-public class StandaloneMarkupPanel extends PanelAbstract<ValueModel> {
+public class AsciiDocComponent extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_STANDALONE_VALUE = "standaloneValue";
 
-    public StandaloneMarkupPanel(final String id, final ValueModel valueModel) {
-        super(id, valueModel);
-        val markupComponent = createMarkupComponent(ID_STANDALONE_VALUE);
-        add(markupComponent);
-    }
-
-    /**
-     * Allows for sub classes to create customized MarkupComponents. 
-     * eg. add java-script
-     * @param id
-     */
-    protected MarkupComponent createMarkupComponent(String id) {
-        val markupComponent = new MarkupComponent(id, getModel(), null /*observing*/);
-        return markupComponent;
+    public AsciiDocComponent(String id, IModel<?> model) {
+        super(id, model, /*observing*/ null);
     }
     
+    @Override
+    public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        replaceComponentTagBody(
+                markupStream, 
+                openTag, 
+                AsciiDocComponent_highlightSyntax.decorate(htmlContent)
+                );
+    }
+
 }

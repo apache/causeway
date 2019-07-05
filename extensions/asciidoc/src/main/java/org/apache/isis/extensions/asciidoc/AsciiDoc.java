@@ -16,17 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.asciidoc;
 
-package domainapp.utils;
+import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.value.Markup;
 
-public class DemoUtils {
+/**
+ * Immutable value type holding pre-rendered HTML.
+ *
+ */
+@Value(semanticsProviderName = 
+        "org.apache.isis.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
+public class AsciiDoc extends Markup {
 
-    public static String emphasize(String string) {
-        return new StringBuilder()
-                .append("\n====================================================\n")
-                .append(string)
-                .append("\n====================================================\n")
-                .toString();
+    private static final long serialVersionUID = 1L;
+    
+    public AsciiDoc(String asciiDoc) {
+        super(AsciiDocConverter.adocToHtml(asciiDoc));
     }
-
 }
