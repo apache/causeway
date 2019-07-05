@@ -19,6 +19,7 @@
 package domainapp.application;
 
 import org.apache.isis.config.Presets;
+import org.apache.isis.webapp.modules.resources.ResourceServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -43,6 +44,7 @@ public class DemoApp extends SpringBootServletInitializer {
 	    Presets.prototyping();
 	    //Presets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
 	    //Presets.logging(IsisBeanTypeRegistry.class, "DEBUG");
+	    Presets.logging(ResourceServlet.class, "DEBUG");
 		SpringApplication.run(new Class[] { DemoApp.class }, args);
 	}
 }
