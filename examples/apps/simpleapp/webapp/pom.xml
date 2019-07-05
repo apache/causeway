@@ -84,6 +84,37 @@
     </dependencies>
 
     <profiles>
+    
+    	<!-- running: mvn spring-boot:run -->
+		<profile>
+			<id>package-as-jar</id>
+			<activation>
+				<property>
+					<name>!package-as-war</name>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<version>2.1.6.RELEASE</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+    
         <profile>
             <id>jdbc-logging</id>
             <activation>

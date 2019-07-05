@@ -107,6 +107,36 @@
 	</dependencies>
 
 	<profiles>
+	
+		<!-- running: mvn spring-boot:run -->
+		<profile>
+			<id>package-as-jar</id>
+			<activation>
+				<property>
+					<name>!package-as-war</name>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<version>2.1.6.RELEASE</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 		<!-- for each docker image flavor we provide a profile that corresponds 
 			to its specific docker-file -->
@@ -146,5 +176,38 @@
 		</profile>
 
 	</profiles>
+	
+	<build>
+		<plugins>
+		
+			<plugin>
+				<groupId>com.github.odavid.maven.plugins</groupId>
+				<artifactId>mixin-maven-plugin</artifactId>
+				<version>0.1-alpha-40</version>
+				<extensions>true</extensions>
+				<configuration>
+					<mixins>
+						<mixin>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-standard</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-datanucleus-enhance</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-surefire</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-docker</artifactId>
+						</mixin>
+					</mixins>
+				</configuration>
+			</plugin>
+		
+		</plugins>
+	</build>
 
 </project>

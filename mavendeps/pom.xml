@@ -150,6 +150,10 @@
 		<module>intellij</module>
 		<module>testing</module>
 		<module>webapp</module>
+		<module>mixin-standard</module>
+		<module>mixin-surefire</module>
+		<module>mixin-datanucleus-enhance</module>
+		<module>mixin-docker</module>
 	</modules>
 
 </project>

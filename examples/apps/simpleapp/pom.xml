@@ -38,7 +38,7 @@
     <properties>
 		<isis.version>${revision}</isis.version>
     </properties>
-
+    
     <dependencyManagement>
         <dependencies>
 

@@ -49,26 +49,19 @@
 
 		<!-- MIXINS -->
 
-		<mavenmixin-standard.version>0.0.4</mavenmixin-standard.version>
-		<mavenmixin-datanucleusenhance.version>0.0.5</mavenmixin-datanucleusenhance.version>
-		<mavenmixin-surefire.version>0.0.6</mavenmixin-surefire.version>
-		<mavenmixin-docker.version>0.0.4</mavenmixin-docker.version>
-		<mavenmixin-enforcerrelaxed.version>0.0.2</mavenmixin-enforcerrelaxed.version>
-		<mavenmixin-sourceandjavadoc.version>0.0.2</mavenmixin-sourceandjavadoc.version>
-		<mavenmixin-staticanalysis.version>0.0.2</mavenmixin-staticanalysis.version>
-		<mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version>
-
-		<!-- MIXIN OVERRIDES -->
-
-		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
-		<datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
-		<datanucleus-core.version>5.2.1</datanucleus-core.version>
-		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
+		<!-- <mavenmixin-standard.version>0.0.4</mavenmixin-standard.version> -->
+		<!-- <mavenmixin-datanucleusenhance.version>0.0.5</mavenmixin-datanucleusenhance.version> -->
+		<!-- <mavenmixin-surefire.version>0.0.6</mavenmixin-surefire.version> -->
+		<!-- <mavenmixin-docker.version>0.0.4</mavenmixin-docker.version> -->
+		<!-- <mavenmixin-enforcerrelaxed.version>0.0.2</mavenmixin-enforcerrelaxed.version> -->
+		<!-- <mavenmixin-sourceandjavadoc.version>0.0.2</mavenmixin-sourceandjavadoc.version> -->
+		<!-- <mavenmixin-staticanalysis.version>0.0.2</mavenmixin-staticanalysis.version> -->
+		<!-- <mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version> -->
 
 	</properties>
 
 	<profiles>
-	
+
 		<profile>
 			<id>jdk11</id>
 			<activation>
@@ -96,84 +89,7 @@
 			</dependencies>
 
 		</profile>
-	
-		<profile>
-			<id>dn-enhance</id>
-			<activation>
-				<file>
-					<exists>${basedir}/logging-dn-enhance.properties</exists>
-				</file>
-			</activation>
-			<properties>
-				<!-- because this does not affect the activation of the 'mavenmixin-datanucleusenhance' 
-					profile, we redeclare the entire build section below -->
-				<skip.mavenmixin-datanucleusenhance>false</skip.mavenmixin-datanucleusenhance>
-			</properties>
-			<build>
 
-				<plugins>
-
-					<plugin>
-						<groupId>com.github.odavid.maven.plugins</groupId>
-						<artifactId>mixin-maven-plugin</artifactId>
-						<version>0.1-alpha-39</version>
-						<extensions>true</extensions>
-						<configuration>
-							<mixins>
-								<mixin>
-									<groupId>com.danhaywood.mavenmixin</groupId>
-									<artifactId>standard</artifactId>
-								</mixin>
-								<mixin>
-									<groupId>com.danhaywood.mavenmixin</groupId>
-									<artifactId>datanucleusenhance</artifactId>
-								</mixin>
-								<mixin>
-									<groupId>com.danhaywood.mavenmixin</groupId>
-									<artifactId>surefire</artifactId>
-								</mixin>
-								<mixin>
-									<groupId>com.danhaywood.mavenmixin</groupId>
-									<artifactId>docker</artifactId>
-								</mixin>
-							</mixins>
-						</configuration>
-					</plugin>
-
-				</plugins>
-			</build>
-		</profile>
-
-		<!-- running: mvn spring-boot:run -->
-		<profile>
-			<id>package-as-jar</id>
-			<activation>
-				<property>
-					<name>!package-as-war</name>
-				</property>
-			</activation>
-			<properties>
-				<packaging.type>jar</packaging.type>
-			</properties>
-
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-						<version>2.1.6.RELEASE</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>repackage</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		
 		<!-- ECLIPSE SPECIFIC -->
 
 		<profile>
@@ -193,9 +109,9 @@
 						<configuration>
 							<source>${compiler-plugin.source}</source>
 							<target>${compiler-plugin.target}</target>
-							<compilerArgument>
-								
-							</compilerArgument>
+							<compilerArgs>
+								<arg>${compiler-plugin.compilerArgument}</arg>
+							</compilerArgs>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -229,26 +145,25 @@
 			<plugin>
 				<groupId>com.github.odavid.maven.plugins</groupId>
 				<artifactId>mixin-maven-plugin</artifactId>
-				<version>0.1-alpha-39</version>
+				<version>0.1-alpha-40</version>
 				<extensions>true</extensions>
 				<configuration>
 					<mixins>
 						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>standard</artifactId>
-						</mixin>
-						<!-- activated only with profile 'dn-enhance' above -->
-						<!-- <mixin> -->
-						<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
-						<!-- <artifactId>datanucleusenhance</artifactId> -->
-						<!-- </mixin> -->
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>surefire</artifactId>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-standard</artifactId>
 						</mixin>
 						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>docker</artifactId>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-datanucleus-enhance</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-surefire</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>org.apache.isis.mavendeps</groupId>
+							<artifactId>isis-mavendeps-mixin-docker</artifactId>
 						</mixin>
 					</mixins>
 				</configuration>
@@ -373,53 +288,78 @@
 			<!-- MIXINS -->
 
 			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>datanucleusenhance</artifactId>
-				<version>${mavenmixin-datanucleusenhance.version}</version>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-mixin-standard</artifactId>
+				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>docker</artifactId>
-				<version>${mavenmixin-docker.version}</version>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-mixin-datanucleus-enhance</artifactId>
+				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>standard</artifactId>
-				<version>${mavenmixin-standard.version}</version>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-mixin-surefire</artifactId>
+				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>surefire</artifactId>
-				<version>${mavenmixin-surefire.version}</version>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-mixin-docker</artifactId>
+				<version>${isis.version}</version>
 				<type>pom</type>
 			</dependency>
-			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>enforcerrelaxed</artifactId>
-				<version>${mavenmixin-enforcerrelaxed.version}</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>sourceandjavadoc</artifactId>
-				<version>${mavenmixin-sourceandjavadoc.version}</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>staticanalysis</artifactId>
-				<version>${mavenmixin-staticanalysis.version}</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>com.danhaywood.mavenmixin</groupId>
-				<artifactId>cucumberreporting</artifactId>
-				<version>${mavenmixin-cucumberreporting.version}</version>
-				<type>pom</type>
-			</dependency>
+
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>datanucleusenhance</artifactId> -->
+			<!-- <version>${mavenmixin-datanucleusenhance.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>docker</artifactId> -->
+			<!-- <version>${mavenmixin-docker.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>standard</artifactId> -->
+			<!-- <version>${mavenmixin-standard.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>surefire</artifactId> -->
+			<!-- <version>${mavenmixin-surefire.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>enforcerrelaxed</artifactId> -->
+			<!-- <version>${mavenmixin-enforcerrelaxed.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>sourceandjavadoc</artifactId> -->
+			<!-- <version>${mavenmixin-sourceandjavadoc.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>staticanalysis</artifactId> -->
+			<!-- <version>${mavenmixin-staticanalysis.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>com.danhaywood.mavenmixin</groupId> -->
+			<!-- <artifactId>cucumberreporting</artifactId> -->
+			<!-- <version>${mavenmixin-cucumberreporting.version}</version> -->
+			<!-- <type>pom</type> -->
+			<!-- </dependency> -->
 
 		</dependencies>
 	</dependencyManagement>
