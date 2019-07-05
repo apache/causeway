@@ -22,7 +22,7 @@
 	</parent>
 
 	<artifactId>isis-extensions-specsupport</artifactId>
-	<name>Apache Isis Extensions - Spec Support</name>
+	<name>Apache Isis Extensions - Spec/Cucumber Support</name>
 	<description></description>
 
 	<properties>
