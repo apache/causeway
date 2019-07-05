@@ -21,22 +21,11 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.example.misc</groupId>
 	<artifactId>smoketest</artifactId>
 
 	<name>Apache Isis - Smoketest</name>
 
 	<properties>
-
-		<compiler-plugin.source>1.8</compiler-plugin.source>
-		<compiler-plugin.target>1.8</compiler-plugin.target>
-		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
-
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 	</properties>
 
@@ -120,6 +109,7 @@
 
 
 		<!-- TEST DEPENDENCIES -->
+		
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-testing</artifactId>
@@ -134,31 +124,5 @@
 		</dependency>
 
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>m2e</id>
-			<activation>
-				<property>
-					<name>m2e.version</name>
-				</property>
-			</activation>
-			<build>
-				<directory>target-ide</directory>
-				<plugins>
-					<!-- eclipse doesn't seem to support maven mixins config, so repeat 
-						here -->
-					<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<source>${compiler-plugin.source}</source>
-							<target>${compiler-plugin.target}</target>
-							<compilerArgument />
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>

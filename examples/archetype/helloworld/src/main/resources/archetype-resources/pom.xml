@@ -233,7 +233,9 @@
                         <configuration>
                             <source>${compiler-plugin.source}</source>
                             <target>${compiler-plugin.target}</target>
-                            <compilerArgument />
+                            <compilerArgs>
+						        <arg>${compiler-plugin.compilerArgument}</arg>
+						    </compilerArgs>
                         </configuration>
                     </plugin>
                 </plugins>

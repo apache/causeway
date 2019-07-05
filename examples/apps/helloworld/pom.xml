@@ -21,7 +21,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.example.application</groupId>
+	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>helloworld</artifactId>
 
 	<name>Apache Isis App - HelloWorld</name>
@@ -29,16 +29,6 @@
 	<packaging>${packaging.type}</packaging>
 
 	<properties>
-		<packaging.type>war</packaging.type>
-		<compiler-plugin.source>1.8</compiler-plugin.source>
-		<compiler-plugin.target>1.8</compiler-plugin.target>
-		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
-
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 	</properties>
 
@@ -75,6 +65,7 @@
 		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
+		
 		<!-- <dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 
 			</dependency> -->
 		<dependency>
@@ -84,6 +75,7 @@
 
 
 		<!-- TEST DEPENDENCIES -->
+		
 		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-testing</artifactId>
@@ -94,59 +86,6 @@
 	</dependencies>
 
 	<profiles>
-
-		<profile>
-			<id>jdk11</id>
-			<activation>
-				<jdk>[11,)</jdk>
-			</activation>
-
-			<dependencies>
-				<dependency>
-					<groupId>com.sun.xml.ws</groupId>
-					<artifactId>jaxws-ri</artifactId>
-					<type>pom</type>
-				</dependency>
-				<dependency>
-					<groupId>javax.xml.bind</groupId>
-					<artifactId>jaxb-api</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-core</artifactId>
-				</dependency>
-				<dependency>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-impl</artifactId>
-				</dependency>
-			</dependencies>
-
-		</profile>
-
-
-		<profile>
-			<id>m2e</id>
-			<activation>
-				<property>
-					<name>m2e.version</name>
-				</property>
-			</activation>
-			<build>
-				<directory>target-ide</directory>
-				<plugins>
-					<!-- eclipse doesn't seem to support maven mixins config, so repeat 
-						here -->
-					<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<source>${compiler-plugin.source}</source>
-							<target>${compiler-plugin.target}</target>
-							<compilerArgument />
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 
 		<profile>
 			<id>skinny-war</id>
@@ -185,37 +124,6 @@
 			</build>
 		</profile>
 
-		<!-- building: mvn clean install -Dspring -->
-		<!-- running: mvn spring-boot:run -Dspring -->
-		<profile>
-			<id>spring</id>
-			<activation>
-				<property>
-					<name>spring</name>
-				</property>
-			</activation>
-			<properties>
-				<packaging.type>jar</packaging.type>
-			</properties>
-
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-						<version>2.1.6.RELEASE</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>repackage</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
 		<!-- using: mvn -s .m2/settings.xml -D deploy-to-tomcat tomcat7:deploy-only -->
 		<profile>
 			<id>deploy-to-tomcat</id>
@@ -224,7 +132,10 @@
 					<name>deploy-to-tomcat</name>
 				</property>
 			</activation>
-
+			<properties>
+				<packaging.type>war</packaging.type>
+				<package-as-war>true</package-as-war>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>

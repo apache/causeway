@@ -28,7 +28,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.example.application</groupId>
+    <groupId>org.apache.isis.examples.apps</groupId>
     <artifactId>simpleapp</artifactId>
 
     <name>Apache Isis App - SimpleApp Parent</name>
@@ -36,13 +36,7 @@
     <packaging>pom</packaging>
 
     <properties>
-
 		<isis.version>${revision}</isis.version>
-
-        <compiler-plugin.source>1.8</compiler-plugin.source>
-        <compiler-plugin.target>1.8</compiler-plugin.target>
-        <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
-        
     </properties>
 
     <dependencyManagement>
@@ -50,23 +44,23 @@
 
             <!-- this project's own modules -->
             <dependency>
-                <groupId>org.apache.isis.example.application</groupId>
+                <groupId>org.apache.isis.examples.apps</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.example.application</groupId>
+                <groupId>org.apache.isis.examples.apps</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
                 <version>${project.version}</version>
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.example.application</groupId>
+                <groupId>org.apache.isis.examples.apps</groupId>
                 <artifactId>simpleapp-application</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.example.application</groupId>
+                <groupId>org.apache.isis.examples.apps</groupId>
                 <artifactId>simpleapp-webapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -87,30 +81,5 @@
         <module>application</module>
         <module>webapp</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>m2e</id>
-            <activation>
-                <property>
-                    <name>m2e.version</name>
-                </property>
-            </activation>
-            <build>
-                <directory>target-ide</directory>
-                <plugins>
-                    <!-- eclipse doesn't seem to support maven mixins config, so repeat here -->
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <source>${compiler-plugin.source}</source>
-                            <target>${compiler-plugin.target}</target>
-                            <compilerArgument>${compiler-plugin.compilerArgument}</compilerArgument>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>

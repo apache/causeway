@@ -21,7 +21,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Metamodel Examples: JSR303 Validation</name>
-    <groupId>org.apache.isis.example.misc</groupId>
+    <groupId>org.apache.isis.examples.misc</groupId>
 	<artifactId>metamodel-jsr303</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 

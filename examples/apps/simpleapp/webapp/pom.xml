@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.example.application</groupId>
+        <groupId>org.apache.isis.examples.apps</groupId>
         <artifactId>simpleapp</artifactId>
         <version>${revision}</version>
     </parent>
@@ -31,12 +31,9 @@
 
     <description>This assemblies and runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 
-    <packaging>war</packaging>
+    <packaging>${packaging.type}</packaging>
 
     <properties>
-        <jetty-console-maven-plugin.backgroundImage>
-            ${basedir}/src/main/jettyconsole/isis-banner.png
-        </jetty-console-maven-plugin.backgroundImage>
 
         <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
 
@@ -156,6 +153,10 @@
                     <name>deploy-to-tomcat</name>
                 </property>
             </activation>
+            <properties>
+				<packaging.type>war</packaging.type>
+				<package-as-war>true</package-as-war>
+			</properties>
             <build>
                 <plugins>
                     <plugin>
