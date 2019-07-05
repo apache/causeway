@@ -1,7 +1,7 @@
 package org.ro.handler
 
 
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
 import org.ro.core.Utils
 import org.ro.core.event.LogEntry
 
@@ -25,7 +25,7 @@ abstract class BaseHandler : IResponseHandler {
             Utils.debug("jsonStr == null : " + logEntry.url)
         } else {
             if (canHandle(jsonStr)) {
-                Utils.debug(this::class)
+//                Utils.debug(this::class)
                 doHandle()
             } else {
                 successor!!.handle(logEntry)
@@ -64,7 +64,7 @@ abstract class BaseHandler : IResponseHandler {
     override fun parse(jsonStr: String): TransferObject? {
         throw Exception("Subclass Responsibility")
     }
-    
+
     protected fun update() {
         logEntry.observer!!.update(logEntry)
     }

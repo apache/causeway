@@ -2,7 +2,7 @@ package org.ro.layout
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
 import org.ro.view.uicomp.VBox
 
 /**

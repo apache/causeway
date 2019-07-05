@@ -1,7 +1,7 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.JSON
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
 import org.ro.to.Property
 
 class PropertyHandler : BaseHandler(), IResponseHandler {

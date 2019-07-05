@@ -1,7 +1,7 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.Json
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
 import org.ro.core.event.ListObserver
 import org.ro.to.ResultList
 

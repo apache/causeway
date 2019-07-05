@@ -12,6 +12,7 @@ import kotlin.js.Date
  *
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
  */
+@ExperimentalUnsignedTypes
 object EventStore {
     var log = observableListOf<LogEntry>()
 
@@ -39,7 +40,7 @@ object EventStore {
 
     fun update(description: String): LogEntry? {
         val entry = find(description)
-        entry!!.updatedAt = Date()
+        entry!!.setSuccess()
         return entry
     }
 
@@ -56,7 +57,8 @@ object EventStore {
     fun end(url: String, response: String): LogEntry? {
         val entry: LogEntry? = find(url)
         if (entry != null) {
-            entry.setSuccess(response)
+            entry.response = response
+            entry.setSuccess()
             updateStatus(entry)
         }
         return entry
@@ -143,7 +145,7 @@ object EventStore {
 
     fun getLogStartTime(): Int? {
         val first = this.log[0]
-        return first.start
+        return first.start.toInt()
     }
 
     //TODO function has a side effect - refactor

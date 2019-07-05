@@ -1,7 +1,6 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.core.TransferObject
 
 @Serializable
 data class Service(val links: List<Link> = emptyList(),
@@ -9,4 +8,4 @@ data class Service(val links: List<Link> = emptyList(),
                    val title: String = "",
                    val serviceId: String = "",
                    val members: Map<String, Member> = emptyMap()
-) : TransferObject 
+) : TransferObject

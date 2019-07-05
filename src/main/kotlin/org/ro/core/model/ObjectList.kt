@@ -23,6 +23,7 @@ class ObjectList : Visible {
         return it
     }
 
+    //TODO move
     fun initPropertyDescription() {
         if (arePropertyLabelsToBeSet()) {
             val pls = layout!!.properties

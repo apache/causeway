@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
 import kotlin.js.Date
 
 enum class EventState(val id: String, val iconName: String) {
@@ -14,13 +14,14 @@ enum class EventState(val id: String, val iconName: String) {
     CLOSED("CLOSED", "fa-times-circle") //TODO should be different from ERROR?
 }
 
+@ExperimentalUnsignedTypes
 @Serializable
 data class LogEntry(
         val url: String,
         val method: String? = "",
         val request: String = "") {
     var state = EventState.INITIAL
-    var iconName: String? = "/resources/img/crow.gif"//"fa-ellipsis-h"
+    var iconName: String? = "/resources/img/crow.gif"//TODO "fa-ellipsis-h"
     var title: String = ""
     var requestLength: Int = 0
     var response = ""
@@ -30,21 +31,29 @@ data class LogEntry(
         state = EventState.RUNNING
         title = stripHostPort(url)
         requestLength = request.length
-        responseLength = response.length
     }
 
     @ContextualSerialization
     var createdAt = Date()
-    var start: Int = createdAt.getMilliseconds()
+
+    @ContextualSerialization
+    var start: ULong = createdAt.getMilliseconds().toULong()
+
     @ContextualSerialization
     var updatedAt: Date? = null
+
     @ContextualSerialization
     private var lastAccessedAt: Date? = null
 
     private var fault: String? = null
-    var offset = 0
-    var duration = 0
-    var cacheHits = 0
+
+    @ContextualSerialization
+    var offset: ULong = 0u        //FIXME  sometimes is nagtive
+
+    @ContextualSerialization
+    var duration: ULong = 0u      //FIXME  sometimes is nagtive
+
+    var cacheHits = 0             // FIXME always 0
     var observer: IObserver? = null
     var obj: TransferObject? = null
 
@@ -55,8 +64,8 @@ data class LogEntry(
     }
 
     private fun calculate() {
-        duration = updatedAt!!.getMilliseconds() - start
-        val logStartTime: Int? = EventStore.getLogStartTime()
+        duration = updatedAt!!.getMilliseconds().toULong() - start
+        val logStartTime = EventStore.getLogStartTime()?.toULong()
         if (logStartTime != null) {
             offset = start - logStartTime
         }
@@ -74,10 +83,10 @@ data class LogEntry(
         state = EventState.CLOSED
     }
 
-    fun setSuccess(response: String) {
+    fun setSuccess() {
         updatedAt = Date()
         calculate()
-        this.response = response //TODO pretty print json
+        this.responseLength = response.length
         state = EventState.SUCCESS
     }
 
@@ -167,15 +176,6 @@ data class LogEntry(
 
     fun isError(): Boolean {
         return fault != null
-    }
-
-    fun match(search: String?): Boolean {
-        // TODO  dismantle train.wreck
-        return search?.let {
-            url.contains(it, true) ?: false ||
-                    response.contains(it, true) ?: false ||
-                    method?.contains(it, true) ?: false
-        } ?: true
     }
 
 }

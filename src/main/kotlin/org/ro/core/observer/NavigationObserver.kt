@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import kotlinx.serialization.Serializable
 import org.ro.core.Menu
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
 import org.ro.core.UiManager
 import org.ro.core.observer.BaseObserver
 import org.ro.to.Result
@@ -23,7 +23,7 @@ class NavigationObserver : BaseObserver() {
 
         if (Menu.isFull()) {
             if (isRendered) {
-                //FIXME there is an excess of 3/4 items. Why  
+                //FIXME there is an excess of 3/4 items. Why
                 console.log("[NavigationObserver.update] Menu.isFull: ${logEntry.url}")
             } else {
                 UiManager.amendMenu()
@@ -31,13 +31,13 @@ class NavigationObserver : BaseObserver() {
             }
         }
     }
-    
+
     private fun handleResult(obj: TransferObject) {
         val result = obj as Result
         val values = result.value
         Menu.limit = values.size
         for (l in values) {
-            l.invoke(this)
+            invoke(l)
         }
     }
 

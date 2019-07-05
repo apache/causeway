@@ -1,15 +1,15 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.Json
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
+import org.ro.org.ro.core.observer.ErrorObserver
 import org.ro.to.HttpError
-import org.ro.view.ErrorAlert
 
 class HttpErrorHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
-        val e = logEntry.getObj() as HttpError
-        ErrorAlert(e).open()
+        logEntry.observer = ErrorObserver()
+        update()
     }
 
     //@UseExperimental(kotlinx.serialization.UnstableDefault::class)

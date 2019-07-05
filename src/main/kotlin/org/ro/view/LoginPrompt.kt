@@ -28,11 +28,11 @@ class LoginPrompt() : Command {
         extractUserInput()
         Session.login(url, username, password)
         val link = Link(href = "http://localhost:8080/restful/services/")
-        link.invoke()
+        invoke(link)
     }
 
     fun extractUserInput() {
-        //TODO function has a sideeffect, ie. changes variable values 
+        //TODO function has a sideeffect, ie. changes variable values
         var key: String? = null
         val formPanel = form.panel
         val kids = formPanel!!.getChildren()

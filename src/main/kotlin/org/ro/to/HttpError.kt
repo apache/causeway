@@ -1,7 +1,6 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.core.TransferObject
 
 @Serializable
 data class HttpError(

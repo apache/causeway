@@ -15,11 +15,13 @@ import pl.treksoft.kvision.navbar.NavbarType
 
 object RoMenuBar {
     val leftMargin = CssSize(-12, UNIT.px)
-    val navbar = Navbar(type = NavbarType.FIXEDTOP)
-    val nav = Nav()
+    var navbar: Navbar
+    var nav: Nav
 
     init {
+        navbar = Navbar(type = NavbarType.FIXEDTOP)
         navbar.marginLeft = leftMargin
+        nav = Nav()
         navbar.add(nav)
         val mainEntry = buildMainEntry()
         nav.add(mainEntry)

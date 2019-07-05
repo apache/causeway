@@ -2,7 +2,6 @@ package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import org.ro.core.TransferObject
 import org.ro.core.event.IObserver
 import org.ro.core.event.RoXmlHttpRequest
 
@@ -16,6 +15,7 @@ data class Link(val rel: String = "",
                 @Optional val title: String = "") : TransferObject {
 
     //TODO move to observer
+    @Deprecated("use IObserver.invoke(Link)")
     fun invoke(obs: IObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
     }
@@ -45,5 +45,22 @@ data class Link(val rel: String = "",
         val arg1 = args.get("script")!!
         val arg2 = args.get("parameters")!!
         return "{" + arg1.asBody() + "," + arg2.asBody() + "}"
+    }
+
+    fun isInvokeAction(): Boolean {
+        var answer = false
+        if (rel.contains("invokeaction")) answer = true
+        if (rel.contains("invoke;action")) answer = true
+        return answer;
+    }
+
+    fun resultKey():String {
+        val parts = title.split(":")
+        return parts[0]
+    }
+
+    fun resultTitle():String  {
+        val start = title.indexOf(":")
+        return title.substring(start + 1, title.length)
     }
 }

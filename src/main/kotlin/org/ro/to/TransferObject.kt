@@ -1,4 +1,4 @@
-package org.ro.core
+package org.ro.to
 
 
 interface TransferObject {

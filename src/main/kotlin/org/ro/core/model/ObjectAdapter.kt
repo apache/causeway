@@ -6,20 +6,41 @@ import org.ro.to.TObject
 @Serializable
 class ObjectAdapter(private val delegate: TObject) {
 
+    var iconName = "fa-cube"  //TODO fixed value for FixtureResult only
+
     var result: String
+        set(arg: String) {}  // tabulator requires setter
         get() {
-            return delegate.domainType
-        }
-        set(arg:String) {
-            // is ignored
+            var answer = "dummy result"
+            val link = delegate.selfLink()
+            if (link != null) {
+                answer = link.resultTitle()
+            }
+            return answer
         }
 
     var resultClass: String
+        set(arg: String) {} // tabulator requires setter
         get() {
-            return "resultClass" //TODO where can this be taken from?
+            var answer = ""
+            val member = delegate.getProperty("className")
+            if (member != null) {
+                val value = member.value
+                if (value != null)
+                    answer = value.content.toString()
+            }
+            return answer
         }
-        set(arg:String) {
-            // is ignored
+
+    var resultKey: String
+        set(arg: String) {} // tabulator requires setter
+        get() {
+            var answer = "dummy resultKey"
+            val link = delegate.selfLink()
+            if (link != null) {
+                answer = link.resultKey()
+            }
+            return answer
         }
 
     fun get(propertyName: String): Any? {
@@ -33,13 +54,6 @@ class ObjectAdapter(private val delegate: TObject) {
             }
             return null
         }
-    }
-
-    fun match(search: String?): Boolean {
-        val result = search?.let {
-            resultClass.contains(it, true)
-        } ?: true
-        return result;
     }
 
 }

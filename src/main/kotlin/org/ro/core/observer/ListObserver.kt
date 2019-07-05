@@ -7,7 +7,10 @@ import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.core.observer.BaseObserver
 import org.ro.layout.Layout
-import org.ro.to.*
+import org.ro.to.Link
+import org.ro.to.Property
+import org.ro.to.ResultList
+import org.ro.to.TObject
 import org.ro.view.table.fr.FixtureResultTable
 
 /** sequence of operations:
@@ -43,13 +46,12 @@ class ListObserver : BaseObserver() {
         val result = resultList.result!!
         val members = result.value
         for (l: Link in members) {
-            l.invoke(this)
+            invoke(l)
         }
     }
 
     private fun handleView() {
         val title: String = this::class.simpleName.toString()
-        console.log("[ListObserver.handleView] about to open: $title")
         val model = list.list
         val panel = FixtureResultTable(model)
         UiManager.addView(title, panel)
@@ -67,7 +69,7 @@ class ListObserver : BaseObserver() {
             } else {
                 console.log("[ListObserver.handleProperty]")
                 val descLink = p.descriptionLink()!!
-                descLink.invoke(this)
+                invoke(descLink)
                 list.addProperty(p)
             }
         }
@@ -75,20 +77,12 @@ class ListObserver : BaseObserver() {
 
     private fun handleObject(obj: TObject) {
         list.list.add(ObjectAdapter(obj))
-        console.log("[ListObserver.handleObject] number of objects: ${list.list.size}")
         if (!list.hasLayout()) {
             val link = obj.getLayoutLink()
             if (link != null) {
-                link.invoke(this)
+                invoke(link)
             }
         }
     }
 
-}
-
-fun Property.descriptionLink(): Link? {
-    val answer = links.find {
-        it.rel == RelType.DESCRIBEDBY.type
-    }
-    return answer
 }

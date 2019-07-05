@@ -1,6 +1,7 @@
 package org.ro.view.table.fr
 
 import org.ro.core.model.ObjectAdapter
+import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel
@@ -15,7 +16,12 @@ import pl.treksoft.kvision.utils.px
 class FixtureResultTable(val model: List<ObjectAdapter>) : VPanel() {
 
     private val columns = listOf(
-            ColumnDefinition<ObjectAdapter>("", field = "icon", width = "40"),
+            ColumnDefinition<ObjectAdapter>("", field = "iconName", width = "40",
+                    formatterComponentFunction = { cell, onRendered, data ->
+                        Button(text = "", icon = data.iconName).onClick {
+                            console.log(data.result)
+                        }
+                    }),
             ColumnDefinition("Result Class", "resultClass"),
             ColumnDefinition("Fixture Script", "fixtureScript"),
             ColumnDefinition("Result Key", field = "resultKey"),

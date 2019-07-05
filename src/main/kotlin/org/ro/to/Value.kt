@@ -4,7 +4,6 @@ import kotlinext.js.asJsObject
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.StringDescriptor
 import kotlinx.serialization.json.JsonParsingException
-import org.ro.core.TransferObject
 
 /**
  *  Custom data structure to handle 'untyped' value in Property (and Member).
@@ -83,7 +82,6 @@ data class Value(
             try {
                 result = decoder.decodeString()
             } catch (jpe: JsonParsingException) {
-                console.log("[Value.asString] Decoder.decodeString didn't find String")
                 result = decodeStringMayBeWrong(decoder)
             }
             return result
@@ -111,7 +109,6 @@ data class Value(
                     source = l
                 }
             }
-//            console.log("[${this::class}.decodeStringMayBeWrong] source $source")
 
             val elements = source.split(nl)
             var keyValue: String = ""
@@ -120,7 +117,6 @@ data class Value(
                     keyValue = e
                 }
             }
-//            console.log("[${this::class}.decodeStringMayBeWrong] keyValue $keyValue")
 
             val unEscaped = keyValue.replace("\\", "")
             val keywordRemoved = unEscaped.replaceFirst(keyword, "")

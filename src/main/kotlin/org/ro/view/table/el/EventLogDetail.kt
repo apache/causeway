@@ -2,8 +2,8 @@ package org.ro.view.table.el
 
 import org.ro.core.event.LogEntry
 import org.ro.view.Command
-import org.ro.view.uicomp.FormItem
 import org.ro.view.RoDialog
+import org.ro.view.uicomp.FormItem
 
 class EventLogDetail(val logEntry: LogEntry) : Command {
 
@@ -12,7 +12,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
         formItems.add(FormItem("Url", "Text", logEntry.url))
         val jsonStr = logEntry.response
         formItems.add(FormItem("Text", "TextArea", toString(jsonStr), 20))
-        val label = logEntry.title 
+        val label = logEntry.title
         RoDialog(label = label, items = formItems, command = this).show()
     }
 
@@ -20,10 +20,9 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
         //do nothing
     }
 
-    //TODO how to pretty print?
     private fun toString(jsonStr: String): String {
         val s1 = JSON.parse<String>(jsonStr)
-        val answer = JSON.stringify(s1)
+        val answer = JSON.stringify(s1, null, 2)
         return answer
     }
 }

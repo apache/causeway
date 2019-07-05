@@ -1,7 +1,7 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.Json
-import org.ro.core.TransferObject
+import org.ro.to.TransferObject
 import org.ro.to.Service
 
 class ServiceHandler : BaseHandler(), IResponseHandler {

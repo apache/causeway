@@ -11,17 +11,18 @@ import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.modal.Modal
+import pl.treksoft.kvision.modal.ModalSize
 import pl.treksoft.kvision.utils.ENTER_KEY
 
 class RoDialog(
         val label: String,
         val items: List<FormItem>,
         val command: Command) :
-        Modal(
+        Modal(  caption = label,
                 closeButton = true,
                 animation = true,
-                escape = true
-        ) { //TODO have it draggable&resizeable, cf. Window
+                size = ModalSize.LARGE
+        ) { //TODO  in order to have it draggable&resizeable use Window
 
     var panel: FormPanel<String>? = null
     private val loginButton = Button("OK", "fa-check", ButtonStyle.SUCCESS).onClick {
@@ -32,7 +33,6 @@ class RoDialog(
     }
 
     init {
-        caption = label
         panel = formPanel {
             for (fi: FormItem in items) {
                 when (fi.type) {
@@ -43,11 +43,16 @@ class RoDialog(
                         add(Password(label = fi.label, value = fi.content as String))
                     }
                     "TextArea" -> {
-                        var rowCnt = 5
+                        var rowCnt = 3
                         if (fi.size > rowCnt) rowCnt = fi.size
                         add(TextArea(label = fi.label, value = fi.content as String, rows = rowCnt))
                     }
                     "Select" -> {
+                        //val list = fi.content as List<StringPair>
+                        //val preSelectedValue = list.first().first
+                        //val select = Select(label = fi.label, options = list, value = preSelectedValue)
+                        //TODO how can the first entry be selected by default?
+                        //val select =
                         add(Select(label = fi.label, options = fi.content as List<StringPair>))
                     }
                 }

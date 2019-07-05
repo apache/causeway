@@ -24,7 +24,7 @@ class ActionPrompt(val action: Action) : Command {
 
     override fun execute() {
         val l = extractUserInput()
-        l.invoke()
+        invoke(l)
     }
 
     private fun buildLabel(): String {
@@ -60,7 +60,7 @@ class ActionPrompt(val action: Action) : Command {
     }
 
     fun extractUserInput(): Link {
-        //TODO function has a sideeffect, ie. amends link with arguments 
+        //TODO function has a sideeffect, ie. amends link with arguments
         val link = action.getInvokeLink()!!
         var value: String? = null
         var key: String? = null
