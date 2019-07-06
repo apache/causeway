@@ -42,7 +42,7 @@ public abstract class DemoStub {
 	
 	@PropertyLayout(cssClass = "adoc")
 	public AsciiDoc getDescription() {
-		return new AsciiDoc(readAsciiDocDescription());
+		return AsciiDoc.valueOfAdoc(readAsciiDocDescription());
 	}
 
 	protected final static Map<String, String> constants = createConstants();

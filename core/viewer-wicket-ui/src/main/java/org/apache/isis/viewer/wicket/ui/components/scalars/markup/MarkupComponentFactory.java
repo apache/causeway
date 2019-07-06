@@ -16,32 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.asciidoc;
+package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
-import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.value.Markup;
+import org.apache.wicket.model.IModel;
 
-/**
- * Immutable value type holding pre-rendered HTML.
- *
- */
-@Value(semanticsProviderName = 
-        "org.apache.isis.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
-public class AsciiDoc extends Markup {
+@FunctionalInterface
+public interface MarkupComponentFactory {
 
-    private static final long serialVersionUID = 1L;
-    
-    public static AsciiDoc valueOfAdoc(String asciiDoc) {
-        return valueOfHtml(AsciiDocConverter.adocToHtml(asciiDoc));
-    }
-    
-    public static AsciiDoc valueOfHtml(String html) {
-        return new AsciiDoc(html);
-    }
-    
-    private AsciiDoc(String html) {
-        super(html);
-    }
-     
-    
+    MarkupComponent newMarkupComponent(String id, IModel<?> model);
+
 }

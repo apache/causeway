@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.asciidoc;
+package org.apache.isis.extensions.markdown;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -33,11 +33,11 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponen
 
 import lombok.val;
 
-public class AsciiDocComponent extends MarkupComponent {
+public class MarkdownComponent extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public AsciiDocComponent(String id, IModel<?> model) {
+    public MarkdownComponent(String id, IModel<?> model) {
         super(id, model, /*observing*/ null);
     }
     
@@ -53,13 +53,15 @@ public class AsciiDocComponent extends MarkupComponent {
         super.renderHead(response);
         
         response.render(CssHeaderItem.forReference(
-                new CssResourceReference(AsciiDocComponent.class, "css/prism.css")));
+                new CssResourceReference(MarkdownComponent.class, "css/prism.css")));
 
         response.render(JavaScriptHeaderItem.forReference(jsRef.get()));
 
     }
-
+    
+    // -- HELPER
+    
     private final static _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
-        new JavaScriptResourceReference(AsciiDocComponent.class, "js/prism1.14.js"));
+        new JavaScriptResourceReference(MarkdownComponent.class, "js/prism1.14.js"));
 
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.asciidoc;
+package org.apache.isis.extensions.markdown;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.value.Markup;
@@ -27,19 +27,19 @@ import org.apache.isis.applib.value.Markup;
  */
 @Value(semanticsProviderName = 
         "org.apache.isis.metamodel.facets.value.markup.MarkupValueSemanticsProvider")
-public class AsciiDoc extends Markup {
+public class Markdown extends Markup {
 
     private static final long serialVersionUID = 1L;
     
-    public static AsciiDoc valueOfAdoc(String asciiDoc) {
-        return valueOfHtml(AsciiDocConverter.adocToHtml(asciiDoc));
+    public static Markdown valueOfMarkdown(String asciiDoc) {
+        return valueOfHtml(MarkdownConverter.mdToHtml(asciiDoc));
     }
     
-    public static AsciiDoc valueOfHtml(String html) {
-        return new AsciiDoc(html);
+    public static Markdown valueOfHtml(String html) {
+        return new Markdown(html);
     }
     
-    private AsciiDoc(String html) {
+    private Markdown(String html) {
         super(html);
     }
      

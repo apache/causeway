@@ -24,13 +24,9 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.metamodel.facets.objectvalue.observe.ObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-
-import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -38,11 +34,17 @@ import lombok.val;
 public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
+    private final transient MarkupComponentFactory markupComponentFactory;
 
-    public MarkupPanel(final String id, final ScalarModel scalarModel) {
+    public MarkupPanel(
+            String id, 
+            ScalarModel scalarModel, 
+            MarkupComponentFactory markupComponentFactory) {
+        
         super(id, scalarModel);
+        this.markupComponentFactory = markupComponentFactory;
     }
-
+    
     @Override
     protected String getScalarPanelType() {
         return "markupPanel";
@@ -77,28 +79,8 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);
     }
 
-    /**
-     * Allows for sub classes to create customized MarkupComponents. 
-     * eg. add java-script
-     * @param id
-     * @return
-     */
     protected MarkupComponent createMarkupComponent(String id) {
-        val markupComponent = new MarkupComponent(id, getModel(), getEventStreamResource());
-        markupComponent.setEnabled(false);
-        return markupComponent;
-    }
-    
-    // -- HELPER
-    
-    private LocalResourcePath getEventStreamResource() {
-        final ObserveFacet observeFacet  = super.scalarModel.getFacet(ObserveFacet.class);
-        if(observeFacet==null) {
-            return null;
-        }
-        final String eventStreamId = observeFacet.getEventStreamType().getName();
-        final LocalResourcePath ssePath = new LocalResourcePath("/sse?eventStream=" + eventStreamId);
-        return ssePath;
+        return markupComponentFactory.newMarkupComponent(id, getModel());
     }
     
 

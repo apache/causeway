@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.extensions.asciidoc;
+package org.apache.isis.extensions.markdown;
 
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
@@ -27,10 +27,10 @@ import lombok.val;
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in 
  * {@link MarkupPanelFactories}, but specific to 
- * the {@link AsciiDoc} value-type which requires client-side java-script to be
+ * the {@link Markdown} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
-public class AsciiDocPanelFactoriesForWicket {
+public class MarkdownPanelFactoriesForWicket {
 
     // -- PARENTED
 
@@ -38,13 +38,13 @@ public class AsciiDocPanelFactoriesForWicket {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
-            super(AsciiDoc.class);
+            super(Markdown.class);
         }
 
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new AsciiDocComponent(id, model);
+                val markupComponent = new MarkdownComponent(id, model);
                 markupComponent.setEnabled(false);
                 return markupComponent;    
             };
@@ -59,13 +59,13 @@ public class AsciiDocPanelFactoriesForWicket {
         private static final long serialVersionUID = 1L;
 
         public Standalone() {
-            super(AsciiDoc.class);
+            super(Markdown.class);
         }
 
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new AsciiDocComponent(id, model);
+                val markupComponent = new MarkdownComponent(id, model);
                 return markupComponent;    
             };
         }

@@ -19,78 +19,27 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
+import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.facets.objectvalue.observe.ObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
+
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link MarkupPanel}.
  */
 public class MarkupPanelFactories {
-
-    // -- PARENTED
-
-    static class Parented extends ComponentFactoryAbstract {
-        private static final long serialVersionUID = 1L;
-
-        public Parented() {
-            super(ComponentType.SCALAR_NAME_AND_VALUE, MarkupPanel.class);
-        }
-
-        @Override
-        public ApplicationAdvice appliesTo(final IModel<?> model) {
-            if (!(model instanceof ScalarModel))
-                return ApplicationAdvice.DOES_NOT_APPLY;
-
-            final ScalarModel scalarModel = (ScalarModel) model;
-
-            if(!scalarModel.isScalarTypeAnyOf(org.apache.isis.applib.value.Markup.class))
-                return ApplicationAdvice.DOES_NOT_APPLY;
-
-            return appliesIf( !scalarModel.hasChoices() );
-        }
-
-        @Override
-        public final Component createComponent(final String id, final IModel<?> model) {
-            return new MarkupPanel(id, (ScalarModel) model);
-        }
-    }
-
-    // -- STANDALONE
-
-    static class Standalone extends ComponentFactoryAbstract {
-        private static final long serialVersionUID = 1L;
-
-        public Standalone() {
-            super(ComponentType.VALUE, StandaloneMarkupPanel.class);
-        }
-
-        @Override
-        public ApplicationAdvice appliesTo(final IModel<?> model) {
-            if (!(model instanceof ValueModel))
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            final ValueModel valueModel = (ValueModel) model;
-            final ObjectAdapter adapter = valueModel.getObject();
-            if(adapter==null || adapter.getPojo()==null)
-                return ApplicationAdvice.DOES_NOT_APPLY;
-
-            return appliesIf( adapter.getPojo() instanceof Markup );
-        }
-
-        @Override
-        public final Component createComponent(final String id, final IModel<?> model) {
-            return new StandaloneMarkupPanel(id, (ValueModel) model);
-        }
-    }
-
-    // -- CONSTRUCTION
-
+    
+    // -- PUBLIC FACTORIES (FOR REGISTRATION)
+    
     public static ComponentFactory parented() {
         return new Parented();
     }
@@ -98,5 +47,128 @@ public class MarkupPanelFactories {
     public static ComponentFactory standalone() {
         return new Standalone();
     }
+
+    // -- PARENTED (ABSTRACT)
+    
+    public static abstract class ParentedAbstract extends ComponentFactoryAbstract {
+        private static final long serialVersionUID = 1L;
+
+        private final Class<?> valueType;
+        
+        public ParentedAbstract(Class<?> valueType) {
+            super(ComponentType.SCALAR_NAME_AND_VALUE, MarkupPanel.class);
+            this.valueType = valueType;
+        }
+
+        @Override
+        public ApplicationAdvice appliesTo(final IModel<?> model) {
+            if (!(model instanceof ScalarModel)) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
+
+            val scalarModel = (ScalarModel) model;
+
+            if(!scalarModel.isScalarTypeAnyOf(valueType)) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
+
+            return appliesIf( !scalarModel.hasChoices() );
+        }
+
+        @Override
+        public final Component createComponent(final String id, final IModel<?> model) {
+            return new MarkupPanel(id, (ScalarModel) model, getMarkupComponentFactory());        
+        }
+        
+        protected abstract MarkupComponentFactory getMarkupComponentFactory();
+        
+    }
+    
+    // -- STANDALONE (ABSTRACT)
+
+    public static abstract class StandaloneAbstract extends ComponentFactoryAbstract {
+        private static final long serialVersionUID = 1L;
+        
+        private final Class<?> valueType;
+
+        public StandaloneAbstract(Class<?> valueType) {
+            super(ComponentType.VALUE, StandaloneMarkupPanel.class);
+            this.valueType = valueType;
+        }
+
+        @Override
+        public ApplicationAdvice appliesTo(final IModel<?> model) {
+            if (!(model instanceof ValueModel))
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            val valueModel = (ValueModel) model;
+            val objectAdapter = valueModel.getObject();
+            if(objectAdapter==null || objectAdapter.getPojo()==null) {
+                return ApplicationAdvice.DOES_NOT_APPLY;
+            }
+
+            return appliesIf( valueType.isAssignableFrom(objectAdapter.getPojo().getClass()) );
+        }
+
+        @Override
+        public final Component createComponent(final String id, final IModel<?> model) {
+            return new StandaloneMarkupPanel(id, (ValueModel) model, getMarkupComponentFactory());
+        }
+        
+        protected abstract MarkupComponentFactory getMarkupComponentFactory();
+    }
+
+    // -- CONCRETE COMPONENT FACTORY - PARENTED
+    
+    static class Parented extends ParentedAbstract {
+        private static final long serialVersionUID = 1L;
+
+        public Parented() {
+            super(Markup.class);
+        }
+
+        @Override
+        protected MarkupComponentFactory getMarkupComponentFactory() {
+            return (id, model) -> {
+                val markupComponent = new MarkupComponent(
+                        id, model, getEventStreamResource((ScalarModel)model));
+                markupComponent.setEnabled(false);
+                return markupComponent;    
+            };
+        }
+        
+        // -- HELPER
+        
+        private LocalResourcePath getEventStreamResource(ScalarModel scalarModel) {
+            final ObserveFacet observeFacet  = scalarModel.getFacet(ObserveFacet.class);
+            if(observeFacet==null) {
+                return null;
+            }
+            final String eventStreamId = observeFacet.getEventStreamType().getName();
+            final LocalResourcePath ssePath = new LocalResourcePath("/sse?eventStream=" + eventStreamId);
+            return ssePath;
+        }
+
+    }
+    
+    // -- CONCRETE COMPONENT FACTORY - STANDALONE
+    
+    static class Standalone extends StandaloneAbstract {
+        private static final long serialVersionUID = 1L;
+
+        public Standalone() {
+            super(Markup.class);
+        }
+
+        @Override
+        protected MarkupComponentFactory getMarkupComponentFactory() {
+            return (id, model) -> {
+                val markupComponent = new MarkupComponent(
+                        id, model, /*observing not supported*/ null);
+                return markupComponent;    
+            };
+        }
+    }
+    
+    
 
 }
