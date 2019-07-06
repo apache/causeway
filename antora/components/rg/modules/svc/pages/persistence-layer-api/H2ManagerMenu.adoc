@@ -16,7 +16,7 @@ The API of the service is:
 [source,java]
 ----
 public class H2ManagerMenu {
-    public void openH2Console() { ... }
+    public void openH2Console() { /* ... */ }
 }
 ----
 

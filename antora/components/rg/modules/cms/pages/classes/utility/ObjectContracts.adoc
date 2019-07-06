@@ -16,10 +16,10 @@ For example:
 ----
 public class ToDoItem implements Comparable<ToDoItem> {
 
-    public boolean isComplete() { ... }
-    public LocalDate getDueBy() { ... }
-    public String getDescription() { ... }
-    public String getOwnedBy() { ... }
+    public boolean isComplete() { /* ... */ }
+    public LocalDate getDueBy() { /* ... */ }
+    public String getDescription() { /* ... */ }
+    public String getOwnedBy() { /* ... */ }
 
     public int compareTo(final ToDoItem other) {
         return ObjectContracts2.compare(this, other, "complete","dueBy","description");

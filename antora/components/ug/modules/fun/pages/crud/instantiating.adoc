@@ -19,22 +19,22 @@ or
 Dashboard dashboardVM = factoryService.instantiate(Dashboard.class);
 ----
 
+For this to work the target class _must_ have a no-arg constructor.
 When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle event] will also be emitted.
 
 
-For this to work the target class _must_ have a no-arg constructor.
-
 However, you may prefer for your domain objects to have regular constructor defining their minimum set of mandatory properties.
-
 For example:
 
 [source,java]
 ----
 public class Customer {
 
-    public Customer(String reference, String firstName, String lastName) { ... }
+    public Customer(String reference, String firstName, String lastName) {
+        // ...
+    }
 
-    ...
+    // ...
 }
 ----
 
@@ -47,10 +47,9 @@ Customer customer = new Customer(reference, firstName, lastName);
 serviceRegister.injectServicesInto(customer);
 ----
 
-Note that this does _not_ raise any lifecycle event.
+Note though that this does _not_ raise any lifecycle event.
 
-
-To instantiate a mixin, a different API of `FactoryService` is used:
+To instantiate a xref:building-blocks/types-of-domain-objects/mixins.adoc[mixin], a different API of `FactoryService` is used:
 
 [source,java]
 ----

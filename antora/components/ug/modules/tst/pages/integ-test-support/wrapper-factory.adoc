@@ -120,7 +120,7 @@ public class ToDoItem ... {
     @Action(
             domainEvent =CompletedEvent.class
     )
-    public ToDoItem completed() { ... }
+    public ToDoItem completed() { /* ... */ }
     ...
 }
 ----

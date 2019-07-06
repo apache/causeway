@@ -19,9 +19,9 @@ public class Customer {
         Customer customer;
         public placeOrder(Customer customer) { this.customer = customer; }
 
-        public Customer execute(Product p, int quantity) { ... }
-        public String disableExecute() { ... }
-        public String validate0Execute() { ... }
+        public Customer execute(Product p, int quantity) { /* ... */ }
+        public String disableExecute() { /* ... */ }
+        public String validate0Execute() { /* ... */ }
     }
     ...
 )

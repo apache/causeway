@@ -89,14 +89,14 @@ In all cases, returning `null` will result in the regular RO spec representation
 ----
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
     ...
-    protected Object objectOf(final ObjectAdapter objectAdapter) { ... }
-    protected Object returnedObjectOf(ObjectAndActionInvocation objectAndActionInvocation) { ... }
+    protected Object objectOf(final ObjectAdapter objectAdapter) { /* ... */ }
+    protected Object returnedObjectOf(ObjectAndActionInvocation objectAndActionInvocation) { /* ... */ }
 
-    protected Class<?> loadClass(String cls) { ... }
+    protected Class<?> loadClass(String cls) { /* ... */ }
 
-    protected void ensureJaxbAnnotated(Class<?> domainType) { ... }
+    protected void ensureJaxbAnnotated(Class<?> domainType) { /* ... */ }
     protected void ensureDomainObjectAssignable(
-        String xRoDomainType, Class<?> domainType, Object domainObject) { ... }
+        String xRoDomainType, Class<?> domainType, Object domainObject) { /* ... */ }
 }
 ----
 

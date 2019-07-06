@@ -32,8 +32,8 @@ For example:
 ----
 public class Order {
     @Property(publishing=Publishing.ENABLED)        // <1>
-    public int getQuantity() { ... }
-    public void setQuantity(int quantity) { ... }
+    public int getQuantity() { /* ... */ }
+    public void setQuantity(int quantity) { /* ... */ }
 }
 ----
 <1> because set to enabled, will be published irrespective of the configured value.

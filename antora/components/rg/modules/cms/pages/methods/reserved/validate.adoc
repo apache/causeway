@@ -18,7 +18,7 @@ The signature of the method is:
 
 [source,java]
 ----
-public String validate() { ... }
+public String validate() { /* ... */ }
 ----
 
 where the returned string is the reason that the invocation is vetoed.

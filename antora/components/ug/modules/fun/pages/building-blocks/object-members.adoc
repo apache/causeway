@@ -67,7 +67,7 @@ For example:
 [source,java]
 ----
 public class Customer
-    public Customer placeOrder(Product p, int quantity) { ... }
+    public Customer placeOrder(Product p, int quantity) { /* ... */ }
     ...
 }
 ----

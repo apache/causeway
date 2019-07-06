@@ -34,7 +34,7 @@ One of these is the todoapp's `DemoDomainEventSubscriptions` service:
 public class DemoDomainEventSubscriptions {
     @ActionLayout(named="Set subscriber behaviour")
     @MemberOrder(sequence = "500.20.1")          // <3>
-    public void subscriberBehaviour(...) { ... }
+    public void subscriberBehaviour(...) { /* ... */ }
     ...
 }
 ----
@@ -54,7 +54,7 @@ while others come from services provided by Apache Isis itself, eg:
 )
 public class MetaModelServicesMenu {
     @MemberOrder(sequence="500.500.1")      // <3>
-    public Clob downloadMetaModel( ... ) { ... }
+    public Clob downloadMetaModel( ... ) { /* ... */ }
     ...
 }
 ----

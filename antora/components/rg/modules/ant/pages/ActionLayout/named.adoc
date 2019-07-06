@@ -20,7 +20,7 @@ For example:
 ----
 public class Customer {
     @ActionLayout(named="Get credit rating")
-    public CreditRating obtainCreditRating() { ... }
+    public CreditRating obtainCreditRating() { /* ... */ }
 }
 ----
 

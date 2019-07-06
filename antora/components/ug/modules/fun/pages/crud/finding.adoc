@@ -18,7 +18,7 @@ For example:
                 + "WHERE name.indexOf(:name) >= 0 ")    // <5>
 })
 ...
-public class Customer { ... }
+public class Customer { /* ... */ }
 ----
 <1> There may be several `@Query` annotations, nested within a `@Queries` annotation) defines queries using JDOQL.
 <2> Defines the name of the query.

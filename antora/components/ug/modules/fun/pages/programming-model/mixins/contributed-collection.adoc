@@ -21,7 +21,7 @@ public class DocumentHolder_documents {
     public List<Document> coll() {                              // <4>
         ...
     }
-    public boolean hideColl() { ... }                           // <5>
+    public boolean hideColl() { /* ... */ }                           // <5>
 }
 ----
 <1> indicates this is a mixin, and in this case nominates the method name.

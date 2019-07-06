@@ -109,7 +109,7 @@ public class ToDoItem {
         labelPosition=LabelPosition.LEFT,
         typicalLength=80
     )
-    public String getDescription() { ... }
+    public String getDescription() { /* ... */ }
     ...
 }
 ----

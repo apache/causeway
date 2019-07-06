@@ -31,8 +31,8 @@ For example:
 ----
 public class Customer {
 
-    public int getNotes(){ ... }
-    public void setNotes(String notes) { ... }
+    public int getNotes(){ /* ... */ }
+    public void setNotes(String notes) { /* ... */ }
 
     @MemberOrder(
             named="notes",                          // <1>
@@ -40,8 +40,8 @@ public class Customer {
     @ActionLayout(
         promptStyle=PromptStyle.INLINE              // <2>
     )
-    public int getNotes(){ ... }
-    public void setNotes(String notes) { ... }
+    public int getNotes(){ /* ... */ }
+    public void setNotes(String notes) { /* ... */ }
 }
 ----
 <1> associate this action with the "notes" property

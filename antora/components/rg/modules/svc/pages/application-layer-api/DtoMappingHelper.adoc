@@ -14,7 +14,7 @@ The API of `DtoMappingHelper` is:
 ----
 public class DtoMappingHelper {
 
-    public OidDto oidDtoFor(final Object object) { ... }    // <1>
+    public OidDto oidDtoFor(final Object object) { /* ... */ }    // <1>
 }
 ----
 <1> Uses the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`] to convert the domain object's internal identifier into a serializable `OidDto`.

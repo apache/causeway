@@ -18,11 +18,11 @@ The API of `Scratchpad` service is:
 @RequestScoped
 public class Scratchpad {
     @Programmatic
-    public Object get(Object key) { ... }
+    public Object get(Object key) { /* ... */ }
     @Programmatic
-    public void put(Object key, Object value) { ... }
+    public void put(Object key, Object value) { /* ... */ }
     @Programmatic
-    public void clear() { ... }
+    public void clear() { /* ... */ }
 }
 ----
 

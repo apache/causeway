@@ -11,7 +11,7 @@ Its signature is:
 [source,java]
 ----
 public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemplate {
-    protected void doExecute(Object context) { ... }
+    protected void doExecute(Object context) { /* ... */ }
     protected abstract List<? extends Command> findBackgroundCommandsToExecute(); // <1>
 }
 ----

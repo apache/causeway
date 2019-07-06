@@ -22,8 +22,8 @@ public class ToDoItem {
     @PropertyLayout(
         labelPosition=LabelPosition.TOP
     )
-    public String getDescription() { ... }
-    public void setDescription(String description) { ... }
+    public String getDescription() { /* ... */ }
+    public void setDescription(String description) { /* ... */ }
     ...
 }
 ----

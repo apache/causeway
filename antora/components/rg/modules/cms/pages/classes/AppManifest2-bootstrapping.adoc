@@ -63,11 +63,11 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
     ...
     public static class Builder extends AppManifestAbstract.BuilderAbstract<Builder> {
 
-        private Builder(Module module) { ... }
-        public Module getModule() { ... }
+        private Builder(Module module) { /* ... */ }
+        public Module getModule() { /* ... */ }
 
-        public Builder withAdditionalDependency(final Module dependency) { ... }
-        public Builder withAdditionalDependencies(final Set<Module> dependencies) { ... }
+        public Builder withAdditionalDependency(final Module dependency) { /* ... */ }
+        public Builder withAdditionalDependencies(final Set<Module> dependencies) { /* ... */ }
 
         ...
     }
@@ -140,25 +140,25 @@ Rather than implementing directly it's generally easiest for applications to inh
 public abstract class ModuleAbstract                                        // <1>
         implements Module {
 
-    public ModuleAbstract withAdditionalModules(...) { ... }                // <2>
-    public ModuleAbstract withAdditionalServices(...) { ... }               // <3>
+    public ModuleAbstract withAdditionalModules(...) { /* ... */ }                // <2>
+    public ModuleAbstract withAdditionalServices(...) { /* ... */ }               // <3>
 
-    public ModuleAbstract withConfigurationProperties(...) { ... }          // <4>
-    public ModuleAbstract withConfigurationPropertiesFile(...) { ... }
-    public ModuleAbstract withConfigurationPropertyResources(...) { ... }
-    public ModuleAbstract withConfigurationPropertyResource(...) { ... }
-    public ModuleAbstract withConfigurationProperty(...) { ... }
+    public ModuleAbstract withConfigurationProperties(...) { /* ... */ }          // <4>
+    public ModuleAbstract withConfigurationPropertiesFile(...) { /* ... */ }
+    public ModuleAbstract withConfigurationPropertyResources(...) { /* ... */ }
+    public ModuleAbstract withConfigurationPropertyResource(...) { /* ... */ }
+    public ModuleAbstract withConfigurationProperty(...) { /* ... */ }
 
     public Set<Module> getDependencies() { return Collections.emptySet(); } // <5>
 
-    public Set<Class<?>> getAdditionalModules() { ... }                     // <2>
-    public Set<Class<?>> getAdditionalServices() { ... }                    // <3>
+    public Set<Class<?>> getAdditionalModules() { /* ... */ }                     // <2>
+    public Set<Class<?>> getAdditionalServices() { /* ... */ }                    // <3>
 
-    public FixtureScript getRefDataSetupFixture() { ... }                   // <6>
-    public FixtureScript getTeardownFixture() { ... }
+    public FixtureScript getRefDataSetupFixture() { /* ... */ }                   // <6>
+    public FixtureScript getTeardownFixture() { /* ... */ }
 
-    public Map<String,String> getIndividualConfigProps() { ... }            // <4>
-    public List<PropertyResource> getPropertyResources() { ... }
+    public Map<String,String> getIndividualConfigProps() { /* ... */ }            // <4>
+    public List<PropertyResource> getPropertyResources() { /* ... */ }
 }
 ----
 <1> This is slightly simplified; in fact `ModuleAbstract` inherits from an internal class (`ModuleOrBuilderAbstract`).

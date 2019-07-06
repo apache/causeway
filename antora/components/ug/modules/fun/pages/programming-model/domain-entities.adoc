@@ -30,7 +30,7 @@ To start with, entities are flagged as being "persistence capable", indicating h
 @DomainObject(                                                                  // <6>
         objectType = "simple.SimpleObject"
 )
-public class SimpleObject { ... }
+public class SimpleObject { /* ... */ }
 ----
 <1> The `@PersistenceCapable` annotation indicates that this is an entity to DataNucleus.
 The DataNucleus enhancer acts on the bytecode of compiled entities, injecting lazy loading and dirty object tracking functionality.
@@ -103,7 +103,7 @@ These are used by repository domain services to query for instances of the entit
                 + "WHERE name.indexOf(:name) >= 0 ")                        // <5>
 })
 ...
-public class SimpleObject { ... }
+public class SimpleObject { /* ... */ }
 ----
 <1> There may be several `@Query` annotations, nested within a `@Queries` annotation) defines queries using JDOQL.
 <2> Defines the name of the query.

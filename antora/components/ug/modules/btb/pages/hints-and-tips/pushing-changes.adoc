@@ -18,7 +18,7 @@ If you want to invoke functionality whenever a property is changed by the user, 
 
 [source,java]
 --
-public void modifyPropertyName(PropertyType param) { ... }
+public void modifyPropertyName(PropertyType param) { /* ... */ }
 --
 
 Why not just put this functionality in the setter? Well, the setter is used by the object store to recreate the state of an already persisted object. Putting additional behaviour in the setter would cause it to be triggered incorrectly.
@@ -28,8 +28,8 @@ For example:
 [source,java]
 --
 public class Order() {
-    public Integer getAmount() { ... }
-    public void setAmount(Integer amount) { ... }
+    public Integer getAmount() { /* ... */ }
+    public void setAmount(Integer amount) { /* ... */ }
     public void modifyAmount(Integer amount) { // <1>
         setAmount(amount);  // <3>
         addToTotal(amount); // <2>
@@ -46,7 +46,7 @@ You may optionally also specify a `clearXxx()` which works the same way as modif
 
 [source,java]
 --
-public void clearPropertyName() { ... }
+public void clearPropertyName() { /* ... */ }
 --
 
 To extend the above example:
@@ -54,9 +54,9 @@ To extend the above example:
 [source,java]
 --
 public class Order() {
-    public Integer getAmount() { ... }
-    public void setAmount(Integer amount) { ... }
-    public void modifyAmount(Integer amount) { ... }
+    public Integer getAmount() { /* ... */ }
+    public void setAmount(Integer amount) { /* ... */ }
+    public void modifyAmount(Integer amount) { /* ... */ }
     public void clearAmount() {
         removeFromTotal(this.amount);
         setAmount(null);
@@ -84,14 +84,14 @@ The syntax is:
 
 [source,java]
 --
-public void addTo<CollectionName>(EntityType param) { ... }
+public void addTo<CollectionName>(EntityType param) { /* ... */ }
 --
 
 and
 
 [source,java]
 --
-public void removeFromCollectionName(EntityType param) { ... }
+public void removeFromCollectionName(EntityType param) { /* ... */ }
 --
 
 where `EntityType` is the same type as the generic collection type.
@@ -100,7 +100,7 @@ For example:
 
 [source,java]
 --
-public class Employee { ... }
+public class Employee { /* ... */ }
 
 public class Department {
 

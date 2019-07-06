@@ -16,8 +16,8 @@ public class Customer {
     @PropertyLayout(
         promptStyle=PromptStyle.INLINE          // <1>
     )
-    public int getNotes(){ ... }
-    public void setNotes(String notes) { ... }
+    public int getNotes(){ /* ... */ }
+    public void setNotes(String notes) { /* ... */ }
 }
 ----
 <1> prompt for the new value for the property using an inline panel

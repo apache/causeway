@@ -33,12 +33,12 @@ where `FixtureScriptsSpecification` exposes these values:
 [source,java]
 ----
 public class FixtureScriptsSpecification {
-    public String getPackagePrefix() { ... }
-    public FixtureScripts.NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() { ... }
-    public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() { ... }
-    public Class<? extends FixtureScript> getRunScriptDefaultScriptClass() { ... }
-    public DropDownPolicy getRunScriptDropDownPolicy() { ... }
-    public Class<? extends FixtureScript> getRecreateScriptClass() { ... }
+    public String getPackagePrefix() { /* ... */ }
+    public FixtureScripts.NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() { /* ... */ }
+    public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() { /* ... */ }
+    public Class<? extends FixtureScript> getRunScriptDefaultScriptClass() { /* ... */ }
+    public DropDownPolicy getRunScriptDropDownPolicy() { /* ... */ }
+    public Class<? extends FixtureScript> getRecreateScriptClass() { /* ... */ }
     ...
 }
 ----

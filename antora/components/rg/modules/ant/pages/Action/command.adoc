@@ -260,7 +260,7 @@ public class Order {
         command=CommandReification.ENABLED,
         commandPersistence=CommandPersistence.PERSISTED
     )
-    public Invoice generateInvoice(...) { ... }
+    public Invoice generateInvoice( /* ... */ ) { /* ... */ }
 }
 ----
 
@@ -289,7 +289,7 @@ public class Order {
         command=CommandReification.ENABLED,
         commandExecuteIn=CommandExecuteIn.BACKGROUND
     )
-    public Invoice generateInvoice(...) { ... }
+    public Invoice generateInvoice(...) { /* ... */ }
 }
 ----
 

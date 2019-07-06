@@ -40,7 +40,7 @@ Apache Isis also supports setter-based injection:
 ----
 public class Customer {
     ...
-    public void setOrderRepository(OrderRepository orderRepository) { ... }
+    public void setOrderRepository(OrderRepository orderRepository) { /* ... */ }
 }
 ----
 
@@ -50,7 +50,7 @@ and also supports an additional syntax of using `inject...` as the prefix:
 ----
 public class Customer {
     ...
-    public void injectOrderRepository(OrderRepository orderRepository) { ... }
+    public void injectOrderRepository(OrderRepository orderRepository) { /* ... */ }
 }
 ----
 
@@ -78,7 +78,7 @@ We could then inject a collection of these services:
 [source,java]
 ----
 public class Customer {
-    public Order placeOrder(Product p, int quantity) { ... }
+    public Order placeOrder(Product p, int quantity) { /* ... */ }
     public String disablePlaceOrder(Product p, int quantity) {
         for(CustomerOrderAdvisorService advisor: advisors) {
             String reason = advisor.vetoPlaceOrder(this);

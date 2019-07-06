@@ -43,19 +43,19 @@ For example:
 ----
 public class ToDoItem {
     @MemberOrder(sequence="1")
-    public String getDescription() { ... }
+    public String getDescription() { /* ... */ }
     @MemberOrder(sequence="2")
-    public String getCategory() { ... }
+    public String getCategory() { /* ... */ }
     @MemberOrder(sequence="3")
-    public boolean isComplete() { ... }
+    public boolean isComplete() { /* ... */ }
     @MemberOrder(name="Detail", sequence="1")
-    public LocalDate getDueBy() { ... }
+    public LocalDate getDueBy() { /* ... */ }
     @MemberOrder(name="Detail", sequence="2")
-    public BigDecimal getCost() { ... }
+    public BigDecimal getCost() { /* ... */ }
     @MemberOrder(name="Detail", sequence="4")
-    public String getNotes() { ... }
+    public String getNotes() { /* ... */ }
     @MemberOrder(name="Misc", sequence="99")
-    public Long getVersionSequence() { ... }
+    public Long getVersionSequence() { /* ... */ }
     ...
 }
 ----
@@ -70,18 +70,18 @@ For example:
 ----
 public class ToDoItem {
     @MemberOrder(sequence="3")
-    public boolean isComplete() { ... }
+    public boolean isComplete() { /* ... */ }
     @MemberOrder(name="complete", sequence="1")
-    public ToDoItem completed() { ...}
+    public ToDoItem completed() { /* ... */ }
     @MemberOrder(name="complete", sequence="2")
-    public ToDoItem notYetCompleted() { ...}
+    public ToDoItem notYetCompleted() { /* ... */ }
 
     @MemberOrder(sequence="1")
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     @MemberOrder(name="dependencies", sequence="1")
-    public ToDoItem add(ToDoItem t) { ...}
+    public ToDoItem add(ToDoItem t) { /* ... */ }
     @MemberOrder(name="dependencies", sequence="2")
-    public ToDoItem remove(ToDoItem t) { ...}
+    public ToDoItem remove(ToDoItem t) { /* ... */ }
     ...
 }
 ----

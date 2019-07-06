@@ -28,15 +28,15 @@ The API defined by `ClockService` is:
 @DomainService(nature = NatureOfService.DOMAIN)
 public class ClockService {
     @Programmatic
-    public LocalDate now() { ... }
+    public LocalDate now() { /* ... */ }
     @Programmatic
-    public LocalDateTime nowAsLocalDateTime() { ... }
+    public LocalDateTime nowAsLocalDateTime() { /* ... */ }
     @Programmatic
-    public DateTime nowAsDateTime() { ... }
+    public DateTime nowAsDateTime() { /* ... */ }
     @Programmatic
-    public Timestamp nowAsJavaSqlTimestamp() { ... }
+    public Timestamp nowAsJavaSqlTimestamp() { /* ... */ }
     @Programmatic
-    public long nowAsMillis() { ... }
+    public long nowAsMillis() { /* ... */ }
 }
 ----
 
@@ -87,8 +87,8 @@ public class NntpClockServiceInitializer  {
         new NntpClock(properties);                       // <1>
     }
     private static class NntpClock extends Clock {
-        NntpClock(Map<String,String> properties) { ... } // <2>
-        protected long time() { ... }                    // <3>
+        NntpClock(Map<String,String> properties) { /* ... */ } // <2>
+        protected long time() { /* ... */ }                    // <3>
             ... NNTP stuff here ...
         }
     }

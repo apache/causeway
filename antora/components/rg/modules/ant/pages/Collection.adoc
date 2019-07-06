@@ -72,7 +72,7 @@ public class ToDoItem {
         notPersisted = false,                                     // <3>
         typeOf = ToDoItem.class                                   // <4>
     )
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     ...
 }
 ----

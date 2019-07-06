@@ -19,8 +19,8 @@ public class Customer {
     @Property(
         editing=Editing.DISABLED                 // <1>
     )
-    public CustomerStatus getStatus() { ... }
-    public void setStatus(CustomerStatus customerStatus) { ... }
+    public CustomerStatus getStatus() { /* ... */ }
+    public void setStatus(CustomerStatus customerStatus) { /* ... */ }
 
     @MemberOrder(
         named="status",                          // <2>
@@ -30,7 +30,7 @@ public class Customer {
         named="Update",                          // <3>
         position=Position.BELOW
     )
-    public CreditRating updateStatus(Customer ) { ... }
+    public CreditRating updateStatus(Customer ) { /* ... */ }
 }
 ----
 <1> indicate the property as read-only, such that it can only be updated using an action

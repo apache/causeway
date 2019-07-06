@@ -37,7 +37,7 @@ public class ToDoItem {
         editing=Editing.DISABLED,
         editingDisabledReason="Use the add and remove actions to modify"
     )
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
 }
 ----
 

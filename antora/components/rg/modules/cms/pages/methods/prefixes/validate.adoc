@@ -19,7 +19,7 @@ For an action parameter in (0-based) position _N_, and of type `T`, the signatur
 
 [source,java]
 ----
-public String validateNXxx(T proposed) { ... }
+public String validateNXxx(T proposed) { /* ... */ }
 ----
 
 where the returned string is the reason why the argument is rejected (or `null` if not vetoed).
@@ -29,7 +29,7 @@ For i18n, the supporting method returns a `TranslatableString`:
 
 [source,java]
 ----
-public TranslatableString validateNXxx(T proposed) { ... }
+public TranslatableString validateNXxx(T proposed) { /* ... */ }
 ----
 
 The returned string is then automatically translated to the locale of the current user.
@@ -64,7 +64,7 @@ The signature is:
 
 [source,java]
 ----
-public String validateXxx(...) { ... }
+public String validateXxx(...) { /* ... */ }
 ----
 
 where the returned string is the reason why the argument is rejected (or `null` if not vetoed), and the supporting method takes the same parameter types as the action itself.
@@ -74,7 +74,7 @@ For i18n, the supporting method returns a `TranslatableString`:
 
 [source,java]
 ----
-public TranslatableString validateXxx(...) { ... }
+public TranslatableString validateXxx(...) { /* ... */ }
 ----
 
 
@@ -108,7 +108,7 @@ For properties of type `T` the signature of the supporting method is:
 
 [source,java]
 ----
-public String validateXxx(T proposed) { ... }
+public String validateXxx(T proposed) { /* ... */ }
 ----
 
 where the returned string is the reason the modification is vetoed (or `null` if not vetoed).
@@ -117,7 +117,7 @@ For i18n, the supporting method returns a `TranslatableString`:
 
 [source,java]
 ----
-public TranslatableString validateXxx(T proposed) { ... }
+public TranslatableString validateXxx(T proposed) { /* ... */ }
 ----
 
 For example:
@@ -125,8 +125,8 @@ For example:
 [source,java]
 ----
 public class Customer {
-    public BigDecimal getCreditLimit() { ... }
-    public void setCreditLimit(BigDecimal creditLimit) { ... }
+    public BigDecimal getCreditLimit() { /* ... */ }
+    public void setCreditLimit(BigDecimal creditLimit) { /* ... */ }
     public validateCreditLimit(BigDecimal creditLimit) {
         return creditLimit.compareTo(BigDecimal.ZERO) < 0
                     ? "Credit limit cannot be negative"

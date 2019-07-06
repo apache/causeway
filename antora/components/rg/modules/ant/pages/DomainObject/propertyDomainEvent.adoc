@@ -38,7 +38,7 @@ public class ToDoItem_priority {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
     @Property
-    public Integer act() { ... }
+    public Integer act() { /* ... */ }
 }
 ----
 

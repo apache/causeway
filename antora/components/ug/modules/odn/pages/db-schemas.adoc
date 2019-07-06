@@ -14,7 +14,7 @@ For example:
 @javax.jdo.annotations.PersistenceCapable( ...
         schema = "isissecurity",
         table = "ApplicationUser")
-public class ApplicationUser ... { ... }
+public class ApplicationUser ... { /* ... */ }
 ----
 
 results in a `CREATE TABLE` statement of:
@@ -34,7 +34,7 @@ while:
 @javax.jdo.annotations.PersistenceCapable( ...
         schema = "isisaudit",
         table="AuditEntry")
-public class AuditEntry ... { ... }
+public class AuditEntry ... { /* ... */ }
 ----
 
 similarly results in:
@@ -72,7 +72,7 @@ public class CreateSchemaObjectFromClassMetadata
         implements MetaDataListener,
                    DataNucleusPropertiesAware {
     @Override
-    public void loaded(final AbstractClassMetaData cmd) { ... }
+    public void loaded(final AbstractClassMetaData cmd) { /* ... */ }
 
     protected String buildSqlToCheck(final AbstractClassMetaData cmd) {
         final String schemaName = schemaNameFor(cmd);

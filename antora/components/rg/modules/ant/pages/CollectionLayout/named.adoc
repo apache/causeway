@@ -27,7 +27,7 @@ public class ToDoItem {
         named="Todo items that are <i>dependencies</i> of this item",
         namedEscaped=false
     )
-    public SortedSet<ToDoItem getDependencies() { ... }
+    public SortedSet<ToDoItem getDependencies() { /* ... */ }
     ...
 }
 ----

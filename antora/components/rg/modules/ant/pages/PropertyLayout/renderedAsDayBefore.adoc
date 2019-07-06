@@ -20,13 +20,13 @@ For example:
 [source,java]
 ----
 public class Tenancy {
-    public LocalDate getStartDate() { ... }
-    public void setStartDate(LocalDate startDate) { ... }
+    public LocalDate getStartDate() { /* ... */ }
+    public void setStartDate(LocalDate startDate) { /* ... */ }
     @PropertyLayout(
         renderedAsDayBefore=true
     )
-    public LocalDate getEndDate() { ... }
-    public void setEndDate(LocalDate EndDate) { ... }
+    public LocalDate getEndDate() { /* ... */ }
+    public void setEndDate(LocalDate EndDate) { /* ... */ }
     ...
 }
 ----

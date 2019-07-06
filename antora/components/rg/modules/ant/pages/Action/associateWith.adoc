@@ -15,13 +15,13 @@ For example, an `Order` could have a collection of ``OrderItem``s, and might pro
 public class Order {
 
     @Collection
-    SortedSet<OrderItem> getItems() { ... }
+    SortedSet<OrderItem> getItems() { /* ... */ }
 
     @Action(associateWith="items", associateWithSequence="1")
-    public Order addItem(Product p, int quantity) { ... }
+    public Order addItem(Product p, int quantity) { /* ... */ }
 
     @Action(associateWith="items", associateWithSequence="2")
-    public Order removeItem(OrderItem item) { ... }
+    public Order removeItem(OrderItem item) { /* ... */ }
     ...
 }
 ----
@@ -53,12 +53,12 @@ For example, suppose we have a "removeItems(...)" action:
 public class Order {
 
     @Collection
-    SortedSet<OrderItem> getItems() { ... }
+    SortedSet<OrderItem> getItems() { /* ... */ }
 
     ...
 
     @Action(associateWith="items", associateWithSequence="2")
-    public Order removeItems(SortedSet<OrderItem> items) { ... }
+    public Order removeItems(SortedSet<OrderItem> items) { /* ... */ }
 }
 ----
 

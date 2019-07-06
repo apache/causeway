@@ -35,9 +35,9 @@ public class ObjectChangedListenerService
         return jdoSupport.getPersistenceManager();               // <3>
     }
     @Programmatic
-    public void preStore (InstanceLifecycleEvent event) { ... }
+    public void preStore (InstanceLifecycleEvent event) { /* ... */ }
     @Programmatic
-    public void postStore (InstanceLifecycleEvent event) { ... }
+    public void postStore (InstanceLifecycleEvent event) { /* ... */ }
     @Inject
     IsisJdoSupport jdoSupport;
 }

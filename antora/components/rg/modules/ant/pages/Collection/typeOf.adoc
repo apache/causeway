@@ -12,7 +12,7 @@ For example:
 ----
 public void Customer {
     @Collection(typeOf=Order.class)
-    public SortedSet getOutstandingOrders() { ... }
+    public SortedSet getOutstandingOrders() { /* ... */ }
     ...
 }
 ----

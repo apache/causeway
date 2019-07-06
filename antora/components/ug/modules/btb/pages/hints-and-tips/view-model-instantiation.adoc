@@ -38,7 +38,7 @@ To explain further, here's an implementation using `FactoryService` that fails:
 [source,java]
 ----
 @XmlRootElement(name = "yearSummary")
-@XmlType( propOrder = { ... } )
+@XmlType( propOrder = { /* ... */ } )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class YearSummary {                                                  // <1>
     ...
@@ -81,7 +81,7 @@ The following implementation, on the other hand, succeeds:
 [source,java]
 ----
 @XmlRootElement(name = "yearSummary")
-@XmlType( propOrder = { ... } )
+@XmlType( propOrder = { /* ... */ } )
 @XmlAccessorType(XmlAccessType.FIELD)
 public class YearSummary {
     ...

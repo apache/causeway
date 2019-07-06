@@ -16,13 +16,13 @@ public class ToDoItem {
     @ActionLayout(
         cssClassFa="fa-step-backward"
     )
-    public ToDoItem previous() { ... }
+    public ToDoItem previous() { /* ... */ }
 
     @ActionLayout(
         cssClassFa="fa-step-forward",
         cssClassFaPosition=ActionLayout.CssClassFaPosition.RIGHT
     )
-    public ToDoItem next() { ... }
+    public ToDoItem next() { /* ... */ }
 }
 ----
 

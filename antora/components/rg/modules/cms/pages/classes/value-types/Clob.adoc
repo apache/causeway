@@ -18,16 +18,16 @@ This is reflected in the class' constructors and properties:
 ----
 public final class Clob ... {
     ...
-    public Clob(String name, String primaryType, String subType, char[] chars) { ... }
-    public Clob(String name, String mimeTypeBase, char[] chars) { ... }
-    public Clob(String name, MimeType mimeType, char[] chars) { ... }
-    public Clob(String name, String primaryType, String subType, CharSequence chars) { ... }
-    public Clob(String name, String mimeTypeBase, CharSequence chars) { ... }
-    public Clob(String name, MimeType mimeType, CharSequence chars) { ... }
+    public Clob(String name, String primaryType, String subType, char[] chars) { /* ... */ }
+    public Clob(String name, String mimeTypeBase, char[] chars) { /* ... */ }
+    public Clob(String name, MimeType mimeType, char[] chars) { /* ... */ }
+    public Clob(String name, String primaryType, String subType, CharSequence chars) { /* ... */ }
+    public Clob(String name, String mimeTypeBase, CharSequence chars) { /* ... */ }
+    public Clob(String name, MimeType mimeType, CharSequence chars) { /* ... */ }
     ...
-    public String getName() { ... }
-    public MimeType getMimeType() { ... }
-    public CharSequence getChars() { ... }
+    public String getName() { /* ... */ }
+    public MimeType getMimeType() { /* ... */ }
+    public CharSequence getChars() { /* ... */ }
     ...
 }
 ----

@@ -8,12 +8,12 @@ NOTE: FIXME
 [source,java]
 ----
 public final class Enums {
-    public static String getFriendlyNameOf(Enum<?> anEnum) { ... }
-    public static String getFriendlyNameOf(String anEnumName) { ... }
-    public static String getEnumNameFromFriendly(String anEnumFriendlyName) { ... }
-    public static String enumToHttpHeader(final Enum<?> anEnum) { ... }
-    public static String enumNameToHttpHeader(final String name) { ... }
-    public static String enumToCamelCase(final Enum<?> anEnum) { ... }
+    public static String getFriendlyNameOf(Enum<?> anEnum) { /* ... */ }
+    public static String getFriendlyNameOf(String anEnumName) { /* ... */ }
+    public static String getEnumNameFromFriendly(String anEnumFriendlyName) { /* ... */ }
+    public static String enumToHttpHeader(final Enum<?> anEnum) { /* ... */ }
+    public static String enumNameToHttpHeader(final String name) { /* ... */ }
+    public static String enumToCamelCase(final Enum<?> anEnum) { /* ... */ }
 }
 ----
 

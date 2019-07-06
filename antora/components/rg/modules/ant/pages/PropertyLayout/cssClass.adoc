@@ -12,7 +12,7 @@ For example:
 ----
 public class ToDoItem {
     @PropertyLayout(cssClass="x-key")
-    public LocalDate getDueBy() { ... }
+    public LocalDate getDueBy() { /* ... */ }
 }
 ----
 

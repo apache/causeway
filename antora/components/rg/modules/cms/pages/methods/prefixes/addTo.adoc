@@ -18,13 +18,13 @@ For example:
 [source,java]
 ----
 public class LibraryMember {
-    public SortedSet<Book> getBorrowed() { ... }
-    public void setBorrowed(SortedSet<Book> borrowed) { ... }
+    public SortedSet<Book> getBorrowed() { /* ... */ }
+    public void setBorrowed(SortedSet<Book> borrowed) { /* ... */ }
     public void addToBorrowed(Book book) {
         getBorrowed().add(book);                                              // <1>
         reminderService.addReminder(this, book, clock.today().plusDays(21));  // <2>
     }
-    public void removeFromBorrowed(Book book) { ... }
+    public void removeFromBorrowed(Book book) { /* ... */ }
     ...
 }
 ----

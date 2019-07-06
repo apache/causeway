@@ -26,9 +26,9 @@ where `ErrorDetails` provided to the service is:
 [source,java]
 ----
 public class ErrorDetails {
-    public String getMainMessage() { ... }          // <1>
-    public boolean isRecognized() { ... }           // <2>
-    public boolean isAuthorizationCause() { ... }   // <3>
+    public String getMainMessage() { /* ... */ }          // <1>
+    public boolean isRecognized() { /* ... */ }           // <2>
+    public boolean isAuthorizationCause() { /* ... */ }   // <3>
     public List<String> getStackTraceDetailList() { // <4>
 }
 ----

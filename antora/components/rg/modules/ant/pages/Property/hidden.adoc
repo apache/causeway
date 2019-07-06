@@ -19,9 +19,9 @@ For example:
 ----
 public class Customer {
     @Property(hidden=Where.EVERYWHERE)
-    public int getInternalId() { ... }
+    public int getInternalId() { /* ... */ }
     @Property(hidden=Where.ALL_TABLES)
-    public void updateStatus() { ... }
+    public void updateStatus() { /* ... */ }
     ...
 }
 ----

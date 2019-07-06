@@ -20,7 +20,7 @@ For example:
 public class ToDoItem {
     @CollectionLayout(
         hidden=Where.EVERYWHERE
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     ...
 }
 ----

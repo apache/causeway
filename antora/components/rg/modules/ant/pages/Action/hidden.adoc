@@ -19,7 +19,7 @@ For example:
 ----
 public class Customer {
     @Action(hidden=Where.EVERYWHERE)
-    public void updateStatus() { ... }
+    public void updateStatus() { /* ... */ }
     ...
 }
 ----

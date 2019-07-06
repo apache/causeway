@@ -13,7 +13,7 @@ For example:
 ----
 public class Customer {
     @ActionLayout(describedAs="Place a repeat order of the last (most recently placed) order")
-    public Order placeRepeatOrder(...) { ... }
+    public Order placeRepeatOrder(...) { /* ... */ }
 }
 ----
 

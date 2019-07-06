@@ -16,7 +16,7 @@ public class ToDoItem {
     @CollectionLayout(
         describedAs="Other todo items that must be completed before this one"
     )
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     ...
 }
 ----

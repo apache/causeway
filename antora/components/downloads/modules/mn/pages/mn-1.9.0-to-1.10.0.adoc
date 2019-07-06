@@ -108,7 +108,7 @@ public class ToDoItem {
         }
     }
     @Action(domainEvent=CompletedEvent.class)
-    public ToDoItem completed() { ... }
+    public ToDoItem completed() { /* ... */ }
 }
 ----
 
@@ -119,7 +119,7 @@ to just this:
 public class ToDoItem {
     public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }  // <1>
     @Action(domainEvent=CompletedEvent.class)
-    public ToDoItem completed() { ... }
+    public ToDoItem completed() { /* ... */ }
 }
 ----
 

@@ -13,7 +13,7 @@ In these cases there is (usually) no default implementation; it is up to the app
 General purpose:
 
 * xref:rg:svc:core-domain-api/ClockService.adoc[`ClockService`]
-* xref:rg:svc:core-domain-api/ConfigurationService.adoc[`ConfigurationService`]
+* xref:rg:svc:presentation-layer-api/ConfigurationViewService.adoc[`ConfigurationViewService`]
 * xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
 * xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`]
 * xref:rg:svc:core-domain-api/UserService.adoc[`UserService`]
@@ -50,7 +50,7 @@ Bookmarks and Mementos:
 
 * xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`]
 * xref:rg:svc:integration-api/MementoService.adoc[`MementoService`]
-* xref:rg:svc:presentation-api/DeepLinkService.adoc[`DeepLinkService`]
+* xref:rg:svc:presentation-layer-api/DeepLinkService.adoc[`DeepLinkService`]
 * xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`]
 * xref:rg:svc:integration-api/XmlSnapshotService.adoc[`XmlSnapshotService`]
 
@@ -62,7 +62,6 @@ Layout and UI Management:
 * xref:rg:svc:application-layer-spi/HomePageProviderService.adoc[`HomePageProviderService`]
 * xref:rg:svc:presentation-layer-spi/HintStore.adoc[`HintStore`] (SPI)
 * xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`]
-* xref:rg:svc:application-layer-api/MessageService.adoc[`MessageService`]
 * xref:rg:svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`] (SPI)
 * xref:rg:svc:application-layer-api/TitleService.adoc[`TitleService`]
 * xref:rg:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`] (SPI)
@@ -78,24 +77,31 @@ Metamodel:
 * xref:rg:svc:metadata-api/ApplicationFeatureRepository.adoc[`ApplicationFeatureRepository`]
 * xref:rg:svc:metadata-api/MetamodelService.adoc[`MetamodelService`]
 
+Error handling:
+
+* xref:rg:svc:presentation-layer-spi/ErrorReportingService.adoc[`ErrorReportingService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`] (SPI)
+* xref:rg:svc:application-layer-api/MessageService.adoc[`MessageService`]
+
+i18n:
+
+* xref:rg:svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`] (SPI)
+* xref:rg:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`] (SPI)
+* xref:rg:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] (SPI)
+
 Other API:
 
-* xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`]
-* xref:rg:svc:presentation-api/GuiceBeanProvider.adoc[`GuiceBeanProvider`]
 * xref:rg:svc:testing/SudoService.adoc[`SudoService`]
 * xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`]
 
 Other SPI:
 
 * xref:rg:svc:bootstrapping-spi/ClassDiscoveryService.adoc[`ClassDiscoveryService`] (SPI)
-* xref:rg:svc:presentation-layer-spi/ErrorReportingService.adoc[`ErrorReportingService`] (SPI)
-* xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`] (SPI)
-* xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] (SPI)
-* xref:rg:svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`] (SPI)
-* xref:rg:svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`] (SPI)
-* xref:rg:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] (SPI)
-* xref:rg:svc:presentation-layer-spi/TranslationsResolver.adoc[`TranslationsResolver`] (SPI)
 
+Extensions:
+
+* xref:rg:svc:testing/FixtureScripts.adoc[`FixtureScripts`]
+* xref:rg:svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] (SPI)
 
 A full list of services can be found in the xref:rg:svc:about.adoc[Domain Services] reference guide.
 

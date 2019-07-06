@@ -24,11 +24,11 @@ The API of the class is:
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     public static class Default                                 // <1>
-        extends PropertyDomainEvent<Object, Object> { ... }
+        extends PropertyDomainEvent<Object, Object> { /* ... */ }
     public static class Noop                                    // <2>
-        extends PropertyDomainEvent<Object, Object> { ... }
+        extends PropertyDomainEvent<Object, Object> { /* ... */ }
     public static class Doop                                    // <3>
-        extends PropertyDomainEvent<Object, Object> { ... }
+        extends PropertyDomainEvent<Object, Object> { /* ... */ }
 
     public T getOldValue();                                     // <4>
     public T getNewValue();                                     // <5>

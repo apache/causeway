@@ -48,7 +48,7 @@ The `CommandContext` request-scoped service defines the following very simple AP
 @RequestScoped
 public class CommandContext {
     @Programmatic
-    public Command getCommand() { ... }
+    public Command getCommand() { /* ... */ }
 }
 ----
 
@@ -122,7 +122,7 @@ For example:
 ----
 public class ToDoItem ... {
     @Action(command=CommandReification.ENABLED)
-    public ToDoItem completed() { ... }
+    public ToDoItem completed() { /* ... */ }
 }
 ----
 

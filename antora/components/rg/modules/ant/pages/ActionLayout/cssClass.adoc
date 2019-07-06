@@ -13,7 +13,7 @@ For example:
 ----
 public class ToDoItem {
     @ActionLayout(cssClass="x-key")
-    public ToDoItem postpone(LocalDate until) { ... }
+    public ToDoItem postpone(LocalDate until) { /* ... */ }
     ...
 }
 ----

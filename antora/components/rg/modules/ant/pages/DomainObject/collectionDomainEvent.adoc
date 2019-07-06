@@ -38,7 +38,7 @@ public class ToDoItem_related {
     @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
     @Collection
     @CollectionLayout(defaultView = "table")
-    public List<ToDoItem> coll() { ... }
+    public List<ToDoItem> coll() { /* ... */ }
 }
 ----
 

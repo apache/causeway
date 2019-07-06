@@ -116,6 +116,11 @@ p*** xref:programming-model/properties-vs-parameters.adoc[Properties vs Paramete
 
 
 ** xref:business-rules.adoc[Business Rules]
+*** xref:business-rules/visibility.adoc[Visibility]
+*** xref:business-rules/usability.adoc[Usability]
+*** xref:business-rules/validity.adoc[Validity]
+*** xref:business-rules/actions.adoc[Actions]
+*** xref:business-rules/side-effects.adoc[Side effects]
 
 
 ** xref:drop-downs-and-defaults.adoc[Drop downs and Defaults]

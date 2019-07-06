@@ -38,7 +38,7 @@ public class StartWithCapitalLetterSpecification implements Specification {
 }
 public class Customer {
     @Property(mustSatisfy=StartWithCapitalLetterSpecification.class)
-    public String getFirstName() { ... }
+    public String getFirstName() { /* ... */ }
     ...
 }
 ----
@@ -85,7 +85,7 @@ public class StartWithCapitalLetterSpecification extends AbstractSpecification<S
 }
 public class Customer {
     @Property(mustSatisfy=StartWithCapitalLetterSpecification.class)
-    public String getFirstName() { ... }
+    public String getFirstName() { /* ... */ }
     ...
 }
 ----

@@ -21,7 +21,7 @@ For example:
 ----
 public class ToDoItem {
     @Action()
-    public ToDoItem completed() { ... }
+    public ToDoItem completed() { /* ... */ }
     ...
 }
 ----
@@ -38,7 +38,7 @@ For example:
 public class ToDoItem {
     public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }  // <1>
     @Action(domainEvent=CompletedEvent.class)
-    public ToDoItem completed() { ... }
+    public ToDoItem completed() { /* ... */ }
 }
 ----
 

@@ -27,8 +27,8 @@ For example:
 ----
 public class Customer {
     @javax.jdo.annotations.Column(allowsNull="true")
-    public String getMiddleInitial() { ... }
-    public void setMiddleInitial(String middleInitial) { ... }
+    public String getMiddleInitial() { /* ... */ }
+    public void setMiddleInitial(String middleInitial) { /* ... */ }
 ----
 
 Isis also provides xref:rg:ant:Property/optionality.adoc[`@Property#optionality()`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
@@ -48,14 +48,14 @@ For example:
 ----
 public class Customer {
     @javax.jdo.annotations.Column(length=20)
-    public String getFirstName() { ... }
-    public void setFirstName(String firstName) { ... }
+    public String getFirstName() { /* ... */ }
+    public void setFirstName(String firstName) { /* ... */ }
     @javax.jdo.annotations.Column(allowsNull="true", length=1)
-    public String getMiddleInitial() { ... }
-    public void setMiddleInitial(String middleInitial) { ... }
+    public String getMiddleInitial() { /* ... */ }
+    public void setMiddleInitial(String middleInitial) { /* ... */ }
     @javax.jdo.annotations.Column(length=30)
-    public String getLastName() { ... }
-    public void setLastName(String lastName) { ... }
+    public String getLastName() { /* ... */ }
+    public void setLastName(String lastName) { /* ... */ }
 ----
 
 Isis also provides xref:rg:ant:Property/maxLength.adoc[`@Property#maxLength()`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
@@ -73,8 +73,8 @@ For example:
 ----
 public class Customer {
     @javax.jdo.annotations.Column(length=10, scale=2)
-    public BigDecimal getTotalOrdersToDate() { ... }
-    public void setTotalOrdersToDate(BigDecimal totalOrdersToDate) { ... }
+    public BigDecimal getTotalOrdersToDate() { /* ... */ }
+    public void setTotalOrdersToDate(BigDecimal totalOrdersToDate) { /* ... */ }
 ----
 
 For ``BigDecimal``s it is also possible to specify the xref:rg:ant:Digits.adoc[`@Digits`] annotation, whose form is `@Digits(integer, fraction)`.
@@ -100,11 +100,11 @@ For example (taken from link:http://github.com/estatio/estatio[estatio] app):
 ----
 public class PartyRelationship {
     @Column(name = "fromPartyId", allowsNull = "false")
-    public Party getFrom() { ... }
-    public void setFrom(Party from) { ... }
+    public Party getFrom() { /* ... */ }
+    public void setFrom(Party from) { /* ... */ }
     @Column(name = "toPartyId", allowsNull = "false")
-    public Party getTo() { ... }
-    public void setTo(Party to) { ... }
+    public Party getTo() { /* ... */ }
+    public void setTo(Party to) { /* ... */ }
     ...
 }
 ----
@@ -129,8 +129,8 @@ private Blob attachment;
         domainEvent = AttachmentDomainEvent.class,
         optionality = Optionality.OPTIONAL
 )
-public Blob getAttachment() { ... }
-public void setAttachment(Blob attachment) { ... }
+public Blob getAttachment() { /* ... */ }
+public void setAttachment(Blob attachment) { /* ... */ }
 ----
 
 And here's how to map a `Clob` (also taken from the todoapp):
@@ -146,6 +146,6 @@ private Clob doc;
 @Property(
         optionality = Optionality.OPTIONAL
 )
-public Clob getDoc() { ... }
-public void setDoc(final Clob doc) { ... }
+public Clob getDoc() { /* ... */ }
+public void setDoc(final Clob doc) { /* ... */ }
 ----

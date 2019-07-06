@@ -20,7 +20,7 @@ public class DocumentHolder_mostRecentDocument {
     public Document prop() {                                    // <4>
         ...
     }
-    public boolean hiderProp() { ... }                          // <5>
+    public boolean hiderProp() { /* ... */ }                          // <5>
 }
 ----
 <1> indicates this is a mixin, and in this case nominates the method name.

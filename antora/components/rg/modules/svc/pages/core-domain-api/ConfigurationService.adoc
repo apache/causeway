@@ -3,6 +3,10 @@
 include::_attributes.adoc[]
 
 
+// TODO: v2: this has been replaced, probably need to describe or x-ref Spring properties.  We might also support type-safe @ConfigurationProperties, which (presumably) can be injected.
+
+
+
 The `ConfigurationService` allows domain objects to read the configuration properties aggregated from the various xref:rg:cfg:configuration-files.adoc[configuration files].
 
 

@@ -18,8 +18,8 @@ For example:
 [source,java]
 ----
 public class LibraryMember {
-    public Title getFavoriteTitle() { ... }
-    public void setFavoriteTitle(Title title) { ... }
+    public Title getFavoriteTitle() { /* ... */ }
+    public void setFavoriteTitle(Title title) { /* ... */ }
     public void modifyFavoriteTitle(Title title) {
         if(getTitle() != null) {
             titleFavoritesService.decrement(getTitle());    // <1>
@@ -27,7 +27,7 @@ public class LibraryMember {
         setFavoriteTitle(title);                            // <2>
         titleFavoritesService.decrement(title);             // <3>
     }
-    public void clearFavoriteTitle() { ... }
+    public void clearFavoriteTitle() { /* ... */ }
     ...
 }
 ----

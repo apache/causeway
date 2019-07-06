@@ -27,8 +27,8 @@ public class Customer {
         editing=Editing.DISABLED,
         editingDisabledReason="The credit rating is derived from multiple factors"
     )
-    public int getInitialCreditRating(){ ... }
-    public void setInitialCreditRating(int initialCreditRating) { ... }
+    public int getInitialCreditRating(){ /* ... */ }
+    public void setInitialCreditRating(int initialCreditRating) { /* ... */ }
 }
 ----
 

@@ -17,7 +17,7 @@ For example:
 @DomainObjectLayout(
     cssClassFa="fa-check-circle"
 )
-public class ToDoItem { ... }
+public class ToDoItem { /* ... */ }
 ----
 
 There can be multiple "fa-" classes, eg to mirror or rotate the icon.

@@ -14,7 +14,7 @@ The signature of the method is:
 [source,java]
 ----
 @PreDestroy                         <1>
-public void deinit() { ... }    <2>
+public void deinit() { /* ... */ }    <2>
 ----
 <1> It is not necessary to annotate the method with xref:rg:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility, and accept no arguments.

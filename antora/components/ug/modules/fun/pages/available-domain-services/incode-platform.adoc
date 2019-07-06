@@ -7,12 +7,6 @@ The (non-ASF) link:http://platform.incode.org[Incode Platform^] provides a numbe
 Some of these modules implement SPIs defined by the framework.
 
 
-[WARNING]
-====
-Note that the Incode Platform, although maintained by Apache Isis committers, are not part of the ASF.
-====
-
-
 The modules themselves fall into a number of broader groups:
 
 * technical libraries, such as excel, word and freemarker
@@ -23,6 +17,11 @@ The modules themselves fall into a number of broader groups:
 
 * wicket components, such as maps, calendars and PDF viewer
 
-* business modules, such as documents, notes and communications.
-
 Each module can be used independently or combined, and the Incode Platform also provides a quickstart application to get you started quickly.
+
+
+[WARNING]
+====
+Note that the Incode Platform, although maintained by Apache Isis committers, are not part of the ASF.
+====
+

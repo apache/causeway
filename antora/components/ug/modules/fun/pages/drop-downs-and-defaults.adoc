@@ -32,7 +32,7 @@ public List<String> choicesPaymentMethod() {
 }
 ----
 
-Note the "choices" prefix, while the suffix matches up with the getter.
+Note the "choices" prefix and the suffix matching up with the getter.
 
 Or, for an action the _choices_ and a suitable _default_ method would be:
 
@@ -106,7 +106,7 @@ For example:
 @DomainObject(
     bounded = true
 )
-public class Product { ... }
+public class Product { /* ... */ }
 ----
 
 For more on this, see xref:rg:ant:DomainObject/bounding.adoc[`@DomainObject#bounding()`].
@@ -132,7 +132,7 @@ For example:
     autoCompleteRepository = Customers.class,
     autoCompleteAction = "findByReferenceOrName"
 )
-public class Customer { ... }
+public class Customer { /* ... */ }
 ----
 
 with:

@@ -14,7 +14,7 @@ public abstract class LeaseTerm {
 }
 
 public class LeaseTermForIndexableTerm extends LeaseTerm {
-    public BigDecimal getEffectveValue() { ... }
+    public BigDecimal getEffectveValue() { /* ... */ }
     ...
 }
 ----

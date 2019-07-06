@@ -32,7 +32,7 @@ For example:
 ----
 public class Order {
     @Action(publishing=Publishing.ENABLED)        // <1>
-    public Invoice generateInvoice(...) { ... }
+    public Invoice generateInvoice(...) { /* ... */ }
 }
 ----
 <1> because set to enabled, will be published irrespective of the configured value.

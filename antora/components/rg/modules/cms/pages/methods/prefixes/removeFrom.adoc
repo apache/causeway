@@ -18,9 +18,9 @@ For example:
 [source,java]
 ----
 public class LibraryMember {
-    public SortedSet<Book> getBorrowed() { ... }
-    public void setBorrowed(SortedSet<Book> borrowed) { ... }
-    public void addToBorrowed(Book book) { ... }
+    public SortedSet<Book> getBorrowed() { /* ... */ }
+    public void setBorrowed(SortedSet<Book> borrowed) { /* ... */ }
+    public void addToBorrowed(Book book) { /* ... */ }
     public void removeFromBorrowed(Book book) {
         getBorrowed().remove(book);                         // <1>
         reminderService.removeReminder(this, book);         // <2>

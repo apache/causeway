@@ -147,8 +147,8 @@ public class Customer {
         regexPattern = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+",
         regexPatternFlags=Pattern.CASE_INSENSITIVE
     )
-    public String getEmailAddress() { ... }
-    public void setEmailAddress(String emailAddress) { ... }
+    public String getEmailAddress() { /* ... */ }
+    public void setEmailAddress(String emailAddress) { /* ... */ }
     ...
 }
 ----

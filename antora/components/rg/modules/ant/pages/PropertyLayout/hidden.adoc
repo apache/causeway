@@ -21,7 +21,7 @@ public class Customer {
     @PropertyLayout(
         hidden=Where.ALL_TABLES
     )
-    public int getInternalId() { ... }
+    public int getInternalId() { /* ... */ }
     ...
 }
 ----

@@ -11,15 +11,15 @@ The class itself is intended to be subclassed:
 ----
 public abstract class AbstractIsisSessionTemplate {
 
-    public void execute(final AuthenticationSession authSession, final Object context) { ... } //<1>
+    public void execute(final AuthenticationSession authSession, final Object context) { /* ... */ } //<1>
     protected abstract void doExecute(Object context); // <2>
 
-    protected ObjectAdapter adapterFor(final Object targetObject) { ... }
-    protected ObjectAdapter adapterFor(final RootOid rootOid) { ... }
+    protected ObjectAdapter adapterFor(final Object targetObject) { /* ... */ }
+    protected ObjectAdapter adapterFor(final RootOid rootOid) { /* ... */ }
 
-    protected PersistenceSession getPersistenceSession() { ... }
-    protected IsisTransactionManager getTransactionManager() { ... }
-    protected AdapterManager getAdapterManager() { ... }
+    protected PersistenceSession getPersistenceSession() { /* ... */ }
+    protected IsisTransactionManager getTransactionManager() { /* ... */ }
+    protected AdapterManager getAdapterManager() { /* ... */ }
 }
 ----
 <1> `execute(...)` sets up the `IsisSession` and delegates to ...

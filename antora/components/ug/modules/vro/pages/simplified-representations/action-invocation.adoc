@@ -41,7 +41,7 @@ returns the following representation:
   ...
   "similarTo" : [ ... ]
   ...
-  "$$ro" : { ... }
+  "$$ro" : { /* ... */ }
 }
 ----
 
@@ -99,7 +99,7 @@ returns the following representation:
   "$$ro" : {
     "links" : [ ... ]
     "resulttype" : "list",
-    "result" : { ... }
+    "result" : { /* ... */ }
       "value" : [ ... ],
       "links" : [ ... ],
       "extensions" : { }

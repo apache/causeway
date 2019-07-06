@@ -21,7 +21,7 @@ For example:
 ----
 public class ToDoItem {
     @Property()
-    public LocalDate getDueBy() { ... }
+    public LocalDate getDueBy() { /* ... */ }
     ...
 }
 ----
@@ -36,7 +36,7 @@ For example:
 public class ToDoItem {
     public static class DueByChangedEvent extends PropertyDomainEvent<ToDoItem, LocalDate> { }  // <1>
     @Property(domainEvent=ToDoItem.DueByChangedEvent)
-    public LocalDate getDueBy() { ... }
+    public LocalDate getDueBy() { /* ... */ }
     ...
 }
 ----

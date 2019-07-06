@@ -22,8 +22,8 @@ For example:
 ----
 public class Customer {
     @javax.jdo.annotations.Column(allowsNull="true")
-    public String getMiddleInitial() { ... }
-    public void setMiddleInitial(String middleInitial) { ... }
+    public String getMiddleInitial() { /* ... */ }
+    public void setMiddleInitial(String middleInitial) { /* ... */ }
     ...
 }
 ----
@@ -98,8 +98,8 @@ For example:
 public class Customer {
     @javax.jdo.annotation.NotPersistent                    // <1>
     @Property(optionality=Optionality.OPTIONAL)
-    public String getFullName() { ... }                    // <2>
-    public void setFullName(String fullName) { ... }       // <3>
+    public String getFullName() { /* ... */ }                    // <2>
+    public void setFullName(String fullName) { /* ... */ }       // <3>
     ...
 }
 ----

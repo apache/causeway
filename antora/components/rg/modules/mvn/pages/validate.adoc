@@ -112,15 +112,15 @@ This has a supporting method:
 
 [source,java]
 ----
-public SimpleObject updateName( ... ) { ... }
-public String default0UpdateName() { ... }
+public SimpleObject updateName( ... ) { /* ... */ }
+public String default0UpdateName() { /* ... */ }
 ----
 
 We can introduce an error by misspelling the supporting method, for example:
 
 [source,java]
 ----
-public String default0XUpdateName() { ... }
+public String default0XUpdateName() { /* ... */ }
 ----
 
 Running `mvn test` then generates this output:

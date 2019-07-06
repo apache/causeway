@@ -16,7 +16,7 @@ For example:
 @DomainObjectLayout(
     cssClass="x-core-entity"
 )
-public class ToDoItem { ... }
+public class ToDoItem { /* ... */ }
 ----
 
 

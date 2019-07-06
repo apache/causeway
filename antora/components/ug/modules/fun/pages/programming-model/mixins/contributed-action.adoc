@@ -19,7 +19,7 @@ public class DocumentHolder_addDocument {
     public Document> act(Document doc) {                        // <3>
         ...
     }
-    public boolean hideAct() { ... }                            // <4>
+    public boolean hideAct() { /* ... */ }                            // <4>
 }
 ----
 <1> indicates this is a mixin, and in this case nominates the method name.

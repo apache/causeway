@@ -26,12 +26,12 @@ The API defined by `QueryResultsCache` is:
 public class QueryResultsCache {
     public static class Key {
         public Key(Class<?> callingClass, String methodName, Object... keys) {...}
-        public Class<?> getCallingClass() { ... }
-        public String getMethodName() { ... }
-        public Object[] getKeys() { ... }
+        public Class<?> getCallingClass() { /* ... */ }
+        public String getMethodName() { /* ... */ }
+        public Object[] getKeys() { /* ... */ }
     }
     public static class Value<T> {
-        public Value(T result) { ... }
+        public Value(T result) { /* ... */ }
         private T result;
         public T getResult() {
             return result;
@@ -40,16 +40,16 @@ public class QueryResultsCache {
     @Programmatic
     public <T> T execute(
         final Callable<T> callable,
-        final Class<?> callingClass, final String methodName, final Object... keys) { ... }
+        final Class<?> callingClass, final String methodName, final Object... keys) { /* ... */ }
     @Programmatic
-    public <T> T execute(final Callable<T> callable, final Key cacheKey) { ... }
+    public <T> T execute(final Callable<T> callable, final Key cacheKey) { /* ... */ }
     @Programmatic
     public <T> Value<T> get(
-        final Class<?> callingClass, final String methodName, final Object... keys) { ... }
+        final Class<?> callingClass, final String methodName, final Object... keys) { /* ... */ }
     @Programmatic
-    public <T> Value<T> get(final Key cacheKey) { ... }
+    public <T> Value<T> get(final Key cacheKey) { /* ... */ }
     @Programmatic
-    public <T> void put(final Key cacheKey, final T result) { ... }
+    public <T> void put(final Key cacheKey, final T result) { /* ... */ }
 }
 ----
 

@@ -60,10 +60,10 @@ To support the writing of custom implementations of this interface, the framewor
 ----
 public static class Util {
     public static String determineDomainType(
-        final List<MediaType> acceptableMediaTypes) { ... }
+        final List<MediaType> acceptableMediaTypes) { /* ... */ }
     public static boolean isSupported(
             final Class<?> clazz,
-            final List<MediaType> acceptableMediaTypes) { ... }
+            final List<MediaType> acceptableMediaTypes) { /* ... */ }
 }
 ----
 

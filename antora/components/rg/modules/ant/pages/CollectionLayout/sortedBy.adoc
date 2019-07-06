@@ -20,7 +20,7 @@ public class ToDoItem implements Comparable<ToDoItem> {      // <1>
         }
     }
     @CollectionLayout(sortedBy=DependenciesComparator.class) // <4>
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     ...
 }
 ----

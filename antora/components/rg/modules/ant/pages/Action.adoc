@@ -117,7 +117,7 @@ public class ToDoItem {
         publishing = Publishing.ENABLED,
         semantics = SemanticsOf.IDEMPOTENT
     )
-    public ToDoItem completed() { ... }
+    public ToDoItem completed() { /* ... */ }
 }
 ----
 <1> default value, so could be omitted

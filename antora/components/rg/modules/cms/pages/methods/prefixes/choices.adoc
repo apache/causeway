@@ -15,7 +15,7 @@ For an action parameter in (0-based) position _N_, and of type `T`, the signatur
 
 [source,java]
 ----
-public Collection<T> choicesNXxx() { ... }
+public Collection<T> choicesNXxx() { /* ... */ }
 ----
 
 
@@ -25,12 +25,12 @@ For example:
 ----
 public class ShoppingCartItem {
     @Property(editing=Editing.DISABLED)
-    public Product getProduct() { ... }
-    public void setProduct(Product product) { ... }
+    public Product getProduct() { /* ... */ }
+    public void setProduct(Product product) { /* ... */ }
 
     @Property(editing=Editing.DISABLED)
-    public int getQuantity() { ... }
-    public void setQuantity(int quantity) { ... }
+    public int getQuantity() { /* ... */ }
+    public void setQuantity(int quantity) { /* ... */ }
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
     public ShoppingCartItem updateProduct(
@@ -121,7 +121,7 @@ For a property of type `T`, the signature is:
 
 [source,java]
 ----
-public Collection<T> choicesXxx() { ... }
+public Collection<T> choicesXxx() { /* ... */ }
 ----
 
 
@@ -130,8 +130,8 @@ For example:
 [source,java]
 ----
 public class ShoppingCartItem {
-    public Product getProduct() { ... }
-    public void setProduct(Product product) { ... }
+    public Product getProduct() { /* ... */ }
+    public void setProduct(Product product) { /* ... */ }
 
     public Collection<Product> choicesProduct() {
         ...

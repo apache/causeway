@@ -92,7 +92,7 @@ For example:
     cssClassFa="fa-piechart",
     describedAs="Analysis of todo items by category"
 )
-public class CategoryPieChart { ... }
+public class CategoryPieChart { /* ... */ }
 ----
 <1> this annotation is intended for use with `@ViewModel`.
 If a view model has been specified using the equivalent xref:rg:ant:DomainObject/nature.adoc[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] instead.

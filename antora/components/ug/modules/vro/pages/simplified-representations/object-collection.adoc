@@ -57,7 +57,7 @@ returns the following representation:
     "id" : "similarTo",
     "memberType" : "collection",
     "links" : [ ... ],
-    "extensions" : { ... },
+    "extensions" : { /* ... */ },
     "value" : [ ... ]
   }
 }

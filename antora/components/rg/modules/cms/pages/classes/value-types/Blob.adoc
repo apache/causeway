@@ -17,13 +17,13 @@ This is reflected in the class' constructors and properties:
 ----
 public final class Blob ... {
     ...
-    public Blob(String name, String primaryType, String subtype, byte[] bytes) { ... }
-    public Blob(String name, String mimeTypeBase, byte[] bytes) { ... }
-    public Blob(String name, MimeType mimeType, byte[] bytes) { ... }
+    public Blob(String name, String primaryType, String subtype, byte[] bytes) { /* ... */ }
+    public Blob(String name, String mimeTypeBase, byte[] bytes) { /* ... */ }
+    public Blob(String name, MimeType mimeType, byte[] bytes) { /* ... */ }
     ...
-    public String getName() { ... }
-    public MimeType getMimeType() { ... }
-    public byte[] getBytes() { ... }
+    public String getName() { /* ... */ }
+    public MimeType getMimeType() { /* ... */ }
+    public byte[] getBytes() { /* ... */ }
     ...
 }
 ----

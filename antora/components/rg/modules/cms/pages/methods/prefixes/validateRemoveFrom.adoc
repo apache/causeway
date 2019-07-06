@@ -18,7 +18,7 @@ The signature of the supporting method for a collection with element type `E` is
 
 [source,java]
 ----
-public String validateRemoveFromXxx(E element) { ... }
+public String validateRemoveFromXxx(E element) { /* ... */ }
 ----
 
 where the returned string is the reason the collection modification invocation is vetoed (or `null` if not vetoed).  Apache Isis' xref:ug:btb:i18n.adoc[i18n support] extends this so that reasons can be internationalized if required.
@@ -29,9 +29,9 @@ For example:
 [source,java]
 ----
 public class LibraryMember {
-    public SortedSet<Book> getBorrowed() { ... }
-    public void setBorrowed(SortedSet<Book> borrowed) { ... }
-    public String validateAddToBorrowed(Book book) { ... }
+    public SortedSet<Book> getBorrowed() { /* ... */ }
+    public void setBorrowed(SortedSet<Book> borrowed) { /* ... */ }
+    public String validateAddToBorrowed(Book book) { /* ... */ }
     public void validateRemoveFromBorrowed(Book book) {
         return !book.hasBeenReadBy(this)? "You didn't read this book yet": null;
     }

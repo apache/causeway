@@ -37,10 +37,10 @@ where `ToDoAppDashboard` is:
 public class ToDoAppDashboard {
     public String title() { return "Dashboard"; }
 
-    public List<ToDoItem> getNotYetComplete() { ... }
-    public List<ToDoItem> getComplete() { ... }
+    public List<ToDoItem> getNotYetComplete() { /* ... */ }
+    public List<ToDoItem> getComplete() { /* ... */ }
 
-    public Blob exportToWordDoc() { ... }  // <1>
+    public Blob exportToWordDoc() { /* ... */ }  // <1>
 }
 ----
 <1> associated using xref:ug:vw:layout/file-based.adoc[file-based layout] with the `notYetComplete` collection.

@@ -79,14 +79,14 @@ Isis does also support a couple of other syntaxes:
 
 [source,java]
 ----
-public void setCustomerRepository(CustomerRepository customers) { ... }
+public void setCustomerRepository(CustomerRepository customers) { /* ... */ }
 ----
 
 or
 
 [source,java]
 ----
-public void injectCustomerRepository(CustomerRepository customers) { ... }
+public void injectCustomerRepository(CustomerRepository customers) { /* ... */ }
 ----
 
 

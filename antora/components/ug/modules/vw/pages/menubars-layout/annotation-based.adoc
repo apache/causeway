@@ -18,7 +18,7 @@ The `Properties` service is annotated:
         menuBar = DomainServiceLayout.MenuBar.PRIMARY,
         menuOrder = "10.1"
 )
-public class Properties ... { ... }
+public class Properties ... { /* ... */ }
 ----
 
 while the `Units` service is annotated:
@@ -30,7 +30,7 @@ while the `Units` service is annotated:
         menuBar = DomainServiceLayout.MenuBar.PRIMARY,
         menuOrder = "10.2"
 )
-public class Units ... { ... }
+public class Units ... { /* ... */ }
 ----
 
 and similarly `FixedAssetRegistrations` is annotated:
@@ -42,7 +42,7 @@ and similarly `FixedAssetRegistrations` is annotated:
         menuBar = DomainServiceLayout.MenuBar.PRIMARY,
         menuOrder = "10.3"
 )
-public class FixedAssetRegistrations ... { ... }
+public class FixedAssetRegistrations ... { /* ... */ }
 ----
 
 Note that in all three cases the value of the `named` attribute and the `menuBar` attribute is the same: "Fixed Assets" and PRIMARY.
@@ -63,7 +63,7 @@ To illustrate this latter point, the next top-level menu on the menu bar, "Parti
         menuBar = DomainServiceLayout.MenuBar.PRIMARY,
         menuOrder = "20.1"
 )
-public class Parties ... { ... }
+public class Parties ... { /* ... */ }
 ----
 
 Note that only the `menuOrder` of the _first_ domain service is significant in placing the menus along the menu bar; thereafter the purpose of the `menuOrder` is to order the menu services sections on the menu itself.
@@ -80,14 +80,14 @@ Thus, for the `Units` domain service, its actions are annotated:
 public class Units extends EstatioDomainService<Unit> {
 
     @MemberOrder(sequence = "1")
-    public Unit newUnit( ... ) { ... }
+    public Unit newUnit( ... ) { /* ... */ }
 
     @MemberOrder(sequence = "2")
-    public List<Unit> findUnits( ... ) { ... }
+    public List<Unit> findUnits( ... ) { /* ... */ }
 
     @ActionLayout( prototype = true )
     @MemberOrder(sequence = "99")
-    public List<Unit> allUnits() { ... }
+    public List<Unit> allUnits() { /* ... */ }
     ...
 }
 ----
@@ -113,10 +113,10 @@ For example, the `updateEpochDate(...)` and `listAllSettings(...)` actions come 
 public class EstatioAdministrationService ... {
 
     @MemberOrder(sequence = "1")
-    public void updateEpochDate( ... ) { ... }
+    public void updateEpochDate( ... ) { /* ... */ }
 
     @MemberOrder(sequence = "2")
-    public List<ApplicationSetting> listAllSettings() { ... }
+    public List<ApplicationSetting> listAllSettings() { /* ... */ }
     ...
 }
 ----

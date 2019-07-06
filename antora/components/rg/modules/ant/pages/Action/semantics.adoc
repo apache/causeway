@@ -53,13 +53,13 @@ For example:
 ----
 public class Customer {
     @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE)
-    public CreditRating checkCredit() { ... }
+    public CreditRating checkCredit() { /* ... */ }
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public void changeOfAddress(Address address) { ... }
+    public void changeOfAddress(Address address) { /* ... */ }
 
     @Action(semantics=SemanticsOf.NON_IDEMPOTENT)
-    public Order placeNewOrder() { ... }
+    public Order placeNewOrder() { /* ... */ }
     ...
 }
 ----

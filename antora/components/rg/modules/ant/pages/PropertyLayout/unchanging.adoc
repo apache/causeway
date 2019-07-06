@@ -25,8 +25,8 @@ public class Document {
     @PropertyLayout(
         unchanging=true
     )
-    public Blob getBlob(){ ... }
-    public void setBlob(Blob blob) { ... }
+    public Blob getBlob(){ /* ... */ }
+    public void setBlob(Blob blob) { /* ... */ }
 }
 ----
 

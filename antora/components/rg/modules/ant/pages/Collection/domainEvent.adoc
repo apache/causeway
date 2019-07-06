@@ -29,7 +29,7 @@ By default the event raised is `CollectionDomainEvent.Default`. For example:
 ----
 public class ToDoItem {
     @Collection()
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     ...
 }
 ----
@@ -47,7 +47,7 @@ public class ToDoItem {
     @Collection(
         domainEvent=DependenciesChangedEvent.class
     )
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     ...
 }
 ----

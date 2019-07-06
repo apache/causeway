@@ -10,7 +10,7 @@ For example:
 [source,java]
 ----
 @DomainObject
-public class Company { ... }
+public class Company { /* ... */ }
 
 @DomainObject
 public class Employee {

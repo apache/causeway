@@ -26,11 +26,11 @@ The API of the class is:
 public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     public static class Default                                 // <1>
-        extends CollectionDomainEvent<Object, Object> { ... }
+        extends CollectionDomainEvent<Object, Object> { /* ... */ }
     public static class Noop                                    // <2>
-        extends CollectionDomainEvent<Object, Object> { ... }
+        extends CollectionDomainEvent<Object, Object> { /* ... */ }
     public static class Doop                                    // <3>
-        extends CollectionDomainEvent<Object, Object> { ... }
+        extends CollectionDomainEvent<Object, Object> { /* ... */ }
 
     public T getValue();                                        // <4>
     public Of getOf();                                          // <5>

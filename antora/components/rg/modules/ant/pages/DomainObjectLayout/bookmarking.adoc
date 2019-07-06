@@ -48,7 +48,7 @@ This is accomplished with the following annotations:
 [source,java]
 ----
 @DomainObject(bookmarking=BookmarkPolicy.AS_ROOT)
-public class Property { ... }
+public class Property { /* ... */ }
 ----
 
 and
@@ -56,7 +56,7 @@ and
 [source,java]
 ----
 @DomainObject(bookmarking=BookmarkPolicy.AS_CHILD)
-public abstract class Unit { ... }
+public abstract class Unit { /* ... */ }
 ----
 
 The nesting can be done to any level; the Estatio screenshot also shows a bookmark nesting `Lease` > `LeaseItem` >  `LeaseTerm` (3 levels deep).

@@ -12,11 +12,11 @@ For example:
 [source,java]
 ----
 public class Customer {
-    public Order placeNewOrder() { ... }
-    public List<Order> listRecentOrders() { ... }
+    public Order placeNewOrder() { /* ... */ }
+    public List<Order> listRecentOrders() { /* ... */ }
 
     @Action(restrictTo=RestrictTo.PROTOTYPING)
-    public List<Order> listAllOrders() { ... }
+    public List<Order> listAllOrders() { /* ... */ }
     ...
 }
 ----

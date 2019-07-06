@@ -1,0 +1,83 @@
+= Usability ("use it")
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+== Property
+
+To disable a property (so that it cannot be edited):
+
+[source,java]
+----
+@Getter @Setter
+private String notes;
+
+public String disableNotes() {
+    return isArchived() ? "The notes of archived objects cannot be modified" : null;
+}
+----
+
+To make _all_ of the properties of a domain object unmodifiable, use:
+
+[source,java]
+----
+@DomainObject(
+    editing=Editing.DISABLED
+)
+public class Customer { /* ... */ }
+----
+
+This can be made a global policy using a xref:rg:cfg:configuring-core.adoc#isis-objects-editing[configuration setting]:
+
+.isis.properties
+[source,ini]
+----
+isis.objects.editing=false
+----
+
+
+== Collections
+
+Collections are always read-only; there is no notion of adding or removing from a collection implicitly.
+To add to or remove from a collection, an action should be defined.
+
+
+
+== Actions
+
+To disable an object action:
+
+[source,java]
+----
+public Customer placeOrder(Product p, int quantity) { /* ... */ }
+public String disablePlaceOrder() { /* ... */ }
+----
+
+Here a non-`null` value is used as the reason why the action is disabled.
+A localized string can be returned using `TranslatableString`.
+
+
+== Action Parameters
+
+It is also possible to disable an action parameter, so that it is disabled (greyed out) based on the value of earlier parameters.
+For example:
+
+[source,java]
+----
+public Product categorize(Category category, Subcategory subcategory) { /* ... */}
+public String disable1Categorize(Category category) {
+    return category == null category.hasSubcategories() ? null : "The selected category has no subcategories"
+}
+----
+
+
+== For more information
+
+For more information, see  xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`] section in the appropriate reference guide.
+
+
+It is also possible to hide an action parameter, based on the value of some other earlier parameter:
+Each `hideNXxx()` method can declare parameters for the previous N-1 parameters, though it need not declare them all.
+
+
+

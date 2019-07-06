@@ -21,7 +21,7 @@ public abstract class FixtureScripts ... {
     @Programmatic
     public List<FixtureResult> runFixtureScript(
         FixtureScript fixtureScript,
-        String parameters) { ... }
+        String parameters) { /* ... */ }
 }
 ----
 

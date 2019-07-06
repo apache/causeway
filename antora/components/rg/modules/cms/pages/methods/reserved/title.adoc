@@ -16,7 +16,7 @@ The signature of this method is usually:
 
 [source,java]
 ----
-public String title() { ... }
+public String title() { /* ... */ }
 ----
 
 Note that Apache Isis' xref:ug:btb:i18n.adoc[i18n support] extends this so that titles can also be internationalized.

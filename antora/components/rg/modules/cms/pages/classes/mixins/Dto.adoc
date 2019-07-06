@@ -20,8 +20,8 @@ The `Dto_downloadXml` mixin defines the following action:
 ----
 @Mixin(method="act")
 public class Dto_downloadXml {
-    public Dto_downloadXml(final Dto dto) { ... }     // <1>
-    public Object act(final String fileName) { ... }   // <2>
+    public Dto_downloadXml(final Dto dto) { /* ... */ }     // <1>
+    public Object act(final String fileName) { /* ... */ }   // <2>
     ...
 }
 ----
@@ -36,8 +36,8 @@ The `Dto_downloadXsd` mixin is similar:
 ----
 @Mixin(method="act")
 public class Dto_downloadXsd {
-    public Dto_downloadXsd(final Dto dto) { ... }                                             // <1>
-    public Object act(final String fileName, final IsisSchemes isisSchemas) { ... }   // <2>
+    public Dto_downloadXsd(final Dto dto) { /* ... */ }                                             // <1>
+    public Object act(final String fileName, final IsisSchemes isisSchemas) { /* ... */ }   // <2>
 }
 ----
 <1> provided as an action to any class that (trivially) implements the `Dto` interface

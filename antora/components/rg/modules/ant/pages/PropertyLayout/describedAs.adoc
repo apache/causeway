@@ -13,7 +13,7 @@ For example:
 public class Customer {
     @PropertyLayout(describedAs="The name that the customer has indicated that they wish to be " +
                  "addressed as (e.g. Johnny rather than Jonathan)")
-    public String getFirstName() { ... }
+    public String getFirstName() { /* ... */ }
 }
 ----
 

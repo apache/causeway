@@ -24,7 +24,7 @@ public class Customer {
         regexPatternFlags=Pattern.CASE_INSENSITIVE,
         regexPatternReplacement = "Must be valid email address (containing a '@') symbol"   // <1>
     )
-    public String getEmail() { ... }
+    public String getEmail() { /* ... */ }
 }
 ----
 <1> Note that there is currently no i18n support for this phrase.

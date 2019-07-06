@@ -113,7 +113,7 @@ It has the following signature:
 
 [source,java]
 ----
-public URL openRestApi() { ... }
+public URL openRestApi() { /* ... */ }
 ----
 
 

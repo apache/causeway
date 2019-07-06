@@ -64,11 +64,11 @@ returns the following representation:
   "dependencies" : [ ],
   "$$ro" : {                                                        // <6>
     "links" : [ ... ],
-    "extensions" : { ... },
+    "extensions" : { /* ... */ },
     "title" : "Buy bread due by 2015-12-04",
     "domainType" : "TODO",
     "instanceId" : "45",
-    "members" : { ... }
+    "members" : { /* ... */ }
   }
 }
 ----

@@ -19,7 +19,7 @@ public class ToDoItem {
                 cssClass="x-key"
             )
             LocalDate until
-        ) { ... }
+        ) { /* ... */ }
     ...
 }
 ----

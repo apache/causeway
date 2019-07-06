@@ -3,13 +3,12 @@
 include::_attributes.adoc[]
 
 
-The `AcceptHeaderService` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service that
-simply exposes the HTTP `Accept` header to the domain.  Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by logic in the domain objects themselves.
+The `AcceptHeaderService` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service that simply exposes the HTTP `Accept` header to the domain.
+Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by logic in the domain objects themselves.
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and
-xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
 == API & Implementation
@@ -36,34 +35,28 @@ The default implementation is provided by `o.a.i.v.ro.rendering.service.accepthe
 Note that the service will only return a list when the request is initiated through the xref:ug:vro:about.adoc[Restful Objects viewer].  Otherwise the service will return `null`.
 ====
 
-To use an alternative implementation, use
-xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage
 
-The intended use of this service is where there are multiple concurrent versions of a REST API, for backward
-compatibility of existing clients.  The `AcceptHeaderService` allows the responsibility for content negotiation
-(determining which version of the REST API is to be used) to be performed by logic in the domain objects themselves.
+The intended use of this service is where there are multiple concurrent versions of a REST API, for backward compatibility of existing clients.
+The `AcceptHeaderService` allows the responsibility for content negotiation (determining which version of the REST API is to be used) to be performed by logic in the domain objects themselves.
 
 The diagram below illustrated this:
 
 image::reference-services-api/acceptheaderservice.png[width="700px",link="{imagesdir}/reference-services-api/acceptheaderservice.png"]
 
-The REST request is submitted to a domain service with a xref:rg:ant:DomainService/nature.adoc[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
-HTTP `Accept` header.  Based on this it delegates to the appropriate underlying domain service (with a nature of
-`DOMAIN` so that they are not exposed in the REST API at all).
+The REST request is submitted to a domain service with a xref:rg:ant:DomainService/nature.adoc[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
+This uses the `AcceptHeaderService` to obtain the values of the HTTP `Accept` header.
+Based on this it delegates to the appropriate underlying domain service (with a nature of `DOMAIN` so that they are not exposed in the REST API at all).
 
 [TIP]
 ====
-The service does not define any conventions as to the format of the media types.  The option is to use the media type's
-type/subtype, eg `application/vnd.myrestapi-v1+json`; an alternative is to use a media type parameter as a hint, eg
-`application/json;x-my-rest-api-version=1` (where `x-my-rest-api-version` is the media type parameter).
+The service does not define any conventions as to the format of the media types.
+The option is to use the media type's type/subtype, eg `application/vnd.myrestapi-v1+json`; an alternative is to use a media type parameter as a hint, eg `application/json;x-my-rest-api-version=1` (where `x-my-rest-api-version` is the media type parameter).
 
-The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter;
-this is used by the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] to determine how to
-map domain objects to view models/DTOs.
+The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter; this is used by the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
 ====
 
 

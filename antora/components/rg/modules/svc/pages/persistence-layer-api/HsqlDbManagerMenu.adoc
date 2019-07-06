@@ -16,7 +16,7 @@ The API of the service is:
 [source,java]
 ----
 public class HsqlDbManagerMenu {
-    public void hsqlDbManager() { ... }
+    public void hsqlDbManager() { /* ... */ }
 }
 ----
 

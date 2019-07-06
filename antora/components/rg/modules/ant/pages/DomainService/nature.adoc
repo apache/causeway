@@ -46,8 +46,8 @@ For example:
 public class LoanContributions {                                  // <1>
     @Action(semantics=SemanticsOf.SAFE)                           // <2>
     @ActionLayout(contributed=Contributed.AS_ASSOCIATION )
-    public List<Loan> currentLoans(Borrower borrower) { ... }
-    public Borrower newLoan(Borrower borrower, Book book) { ... }
+    public List<Loan> currentLoans(Borrower borrower) { /* ... */ }
+    public Borrower newLoan(Borrower borrower, Book book) { /* ... */ }
 }
 ----
 <1> `Contributions` as a suffix for a domain service that contributes a number of actions to ``Borrower``s.
@@ -64,7 +64,7 @@ Another example:
 )
 public class LoanRepository {                                  // <1>
     @Programmatic                                              // <2>
-    public List<Loan> findLoansFor(Borrower borrower) { ... }
+    public List<Loan> findLoansFor(Borrower borrower) { /* ... */ }
 }
 ----
 <1> `Repository` as a suffix for a domain-layer service
@@ -81,7 +81,7 @@ A final example:
 )
 public class Loans {                               // <1>
     @Action(semantics=SemanticsOf.SAFE)
-    public List<Loan> findOverdueLoans() { ... }
+    public List<Loan> findOverdueLoans() { /* ... */ }
     @Inject
     LoanRepository loanRepository;                 // <2>
 }

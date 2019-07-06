@@ -53,7 +53,7 @@ var findCustomerArgs = {
       "value": "Fred"
     }
 };
-findCustomer.get({queryString: JSON.stringify(findCustomerArgs)}, function(data) { ... } )
+findCustomer.get({queryString: JSON.stringify(findCustomerArgs)}, function(data) { /* ... */ } )
 ----
 
 Here the `:queryString` placeholder in the initial `$resource` constructor is expanded with a stringified version of the JSON object representing the args. Note how the `findCustomerArgs` is the same as the `&quot;arguments&quot;` attribute in the original link (with a value provided instead of `null`).

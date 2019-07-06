@@ -13,7 +13,7 @@ The signature of the method is:
 
 [source,java]
 ----
-public boolean hide(Identifier.Type identifierType) { ... }
+public boolean hide(Identifier.Type identifierType) { /* ... */ }
 ----
 
 where `Identifier.Type` is part of the Isis applib (nested static class of `o.a.i.applib.Identifier`) to distinguish between an interaction with an action, a property or an action.

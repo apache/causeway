@@ -15,7 +15,7 @@ For example:
 )
 public class LoanRepository {
     @Programmatic
-    public List<Loan> findLoansFor(Borrower borrower) { ... }
+    public List<Loan> findLoansFor(Borrower borrower) { /* ... */ }
 }
 ----
 

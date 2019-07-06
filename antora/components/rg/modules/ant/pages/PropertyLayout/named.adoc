@@ -24,7 +24,7 @@ public class ToDoItem {
         named="Description of this <i>item</i>",
         namedEscaped=false
     )
-    public String getDescription() { ... }
+    public String getDescription() { /* ... */ }
     ...
 }
 ----

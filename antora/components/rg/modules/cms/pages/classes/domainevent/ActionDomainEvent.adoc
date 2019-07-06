@@ -22,9 +22,9 @@ The API of the class is:
 ----
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
-    public static class Default extends ActionDomainEvent<Object> { ... }   // <1>
-    public static class Noop extends ActionDomainEvent<Object> { ... }      // <2>
-    public static class Doop extends ActionDomainEvent<Object> { ... }      // <3>
+    public static class Default extends ActionDomainEvent<Object> { /* ... */ }   // <1>
+    public static class Noop extends ActionDomainEvent<Object> { /* ... */ }      // <2>
+    public static class Doop extends ActionDomainEvent<Object> { /* ... */ }      // <3>
 
     @Deprecated
     public Command getCommand();                                            // <4>

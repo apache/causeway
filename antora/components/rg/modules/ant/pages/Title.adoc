@@ -11,13 +11,13 @@ For example:
 ----
 public void Customer {
     @Title(sequence="1.0")
-    public String getLastName() { ... }     // <1>
+    public String getLastName() { /* ... */ }     // <1>
     ...
     @Title(sequence="1.5", prepend=", ")
-    public String getFirstName() { ... }
+    public String getFirstName() { /* ... */ }
     ...
     @Title(sequence="1.7", append=".")
-    public String getMidInitial() { ... }
+    public String getMidInitial() { /* ... */ }
     ...
 }
 ----

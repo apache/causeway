@@ -177,8 +177,8 @@ public class Order {
         command=CommandReification.ENABLED,
         commandPersistence=CommandPersistence.PERSISTED
     )
-    public Product getProduct() { ... }
-    public void setProduct(Product p) { ... }
+    public Product getProduct() { /* ... */ }
+    public void setProduct(Product p) { /* ... */ }
 }
 ----
 
@@ -203,8 +203,8 @@ public class Order {
         command=CommandReification.ENABLED,
         commandExecuteIn=CommandExecuteIn.BACKGROUND
     )
-    public Product getProduct() { ... }
-    public void setProduct(Product p) { ... }
+    public Product getProduct() { /* ... */ }
+    public void setProduct(Product p) { /* ... */ }
 }
 ----
 

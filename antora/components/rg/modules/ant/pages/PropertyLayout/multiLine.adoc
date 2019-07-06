@@ -13,8 +13,8 @@ public class BugReport {
     @PropertyLayout(
         numberOfLines=10
     )
-    public String getStepsToReproduce() { ... }
-    public void setStepsToReproduce(String stepsToReproduce) { ... }
+    public String getStepsToReproduce() { /* ... */ }
+    public void setStepsToReproduce(String stepsToReproduce) { /* ... */ }
     ...
 }
 ----

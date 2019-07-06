@@ -152,15 +152,15 @@ The full API of `TranslatableString` is modelled on the design of GNU gettext (i
 public final class TranslatableString {
     public static TranslatableString tr(       // <1>
             final String pattern,
-            final Object... paramArgs) { ... }
+            final Object... paramArgs) { /* ... */ }
     public static TranslatableString trn(      // <2>
             final String singularPattern,
             final String pluralPattern,
             final int number,
-            final Object... paramArgs) { ... }
+            final Object... paramArgs) { /* ... */ }
     public String translate(                   // <3>
             final TranslationService translationService,
-            final String context) { ... }
+            final String context) { /* ... */ }
 }
 ----
 <1> returns a translatable string with a single pattern for both singular and plural forms.
@@ -249,7 +249,7 @@ public String getString(
         final Locale locale,
         final String style,
         final String defaultValue)
-    throws MissingResourceException { ... }
+    throws MissingResourceException { /* ... */ }
 ----
 <1> The key to obtain the resource for
 <2> The component to get the resource for (if any)
@@ -560,7 +560,7 @@ For example:
     named="<i>Quantity</i>",      // <1>
     namedEscaped=false
 )
-public Integer getQuantity() { ... }
+public Integer getQuantity() { /* ... */ }
 ----
 <1> required (even though it won't be used when a translation is read; otherwise the escaped flag is ignored)
 

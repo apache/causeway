@@ -69,10 +69,10 @@ The link classes reside in the `org.apache.isis.applib.layout.links` package, an
 [source,java]
 ----
 public class Link  {
-    public String getRel() { ... }      // <1>
-    public String getMethod() { ... }   // <2>
-    public String getHref() { ... }     // <3>
-    public String getType() { ... }     // <4>
+    public String getRel() { /* ... */ }      // <1>
+    public String getMethod() { /* ... */ }   // <2>
+    public String getHref() { /* ... */ }     // <3>
+    public String getType() { /* ... */ }     // <4>
     ...
 }
 ----

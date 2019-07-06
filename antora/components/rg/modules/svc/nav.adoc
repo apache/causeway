@@ -8,6 +8,7 @@
 ** xref:presentation-layer-api.adoc[Presentation Layer API]
 *** xref:presentation-layer-api/AcceptHeaderService.adoc[AcceptHeaderService]
 *** xref:presentation-layer-api/BookmarkUiService.adoc[BookmarkUiService]
+*** xref:presentation-layer-api/ConfigurationViewService.adoc[ConfigurationViewService]
 *** xref:presentation-layer-api/DeepLinkService.adoc[DeepLinkService]
 *** xref:presentation-layer-api/GuiceBeanProvider.adoc[GuiceBeanProvider]
 

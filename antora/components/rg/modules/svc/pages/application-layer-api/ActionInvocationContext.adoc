@@ -3,6 +3,8 @@
 include::_attributes.adoc[]
 
 
+// TODO: v2: remove this domain service
+
 The `ActionInvocationContext` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`].
 This allows the user to select multiple objects in a table and then invoke the same action against all of them.
 
@@ -25,12 +27,12 @@ The API defined by the service is:
 @DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped                                        // <1>
 public static class ActionInvocationContext {
-    public InvokedOn getInvokedOn() { ... }           // <2>
-    public List<Object> getDomainObjects() { ... }    // <3>
-    public int getSize() { ... }
-    public int getIndex() { ... }                     // <4>
-    public boolean isFirst() { ... }
-    public boolean isLast() { ... }
+    public InvokedOn getInvokedOn() { /* ... */ }           // <2>
+    public List<Object> getDomainObjects() { /* ... */ }    // <3>
+    public int getSize() { /* ... */ }
+    public int getIndex() { /* ... */ }                     // <4>
+    public boolean isFirst() { /* ... */ }
+    public boolean isLast() { /* ... */ }
 }
 ----
 <1> is xref:rg:ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed

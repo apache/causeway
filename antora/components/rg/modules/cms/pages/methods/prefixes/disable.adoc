@@ -5,13 +5,9 @@ include::_attributes.adoc[]
 
 
 
-The `disable...()` supporting method is called for properties, collections and actions.
-It allows the modification of the property/collection to be vetoed (ie made read-only) and to prevent the invocation of the action ("grey it out").
-
-[NOTE]
-====
-Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer]; they are always implicitly disabled.
-====
+The `disable...()` supporting method is called for properties, actions and action parameters.
+It allows the modification of the property to be vetoed (ie made read-only) and to prevent the invocation of the action ("grey it out").
+For parameters, it disables the entry into the parameter; this is for actions with dependencies between the parameters.
 
 Typically modification/invocation is vetoed based on the state of the domain object being interacted with, though it could be any reason at all (eg the current date/time of the interaction, or the state of some other related data such as stock levels, or the identity of the calling user).
 
@@ -21,11 +17,11 @@ However, Apache Isis' xref:ug:btb:i18n.adoc[i18n support] extends this so that r
 
 
 
-The signature of the supporting method is simply:
+The signature of the supporting method is generally:
 
 [source,java]
 ----
-public String disableXxx() { ... }
+public String disableXxx() { /* ... */ }
 ----
 
 where the returned string is the reason the property cannot be edited, or the action invoked.
@@ -35,58 +31,76 @@ For i18n, the supporting method returns a `TranslatableString`:
 
 [source,java]
 ----
-public TranslatableString disableXxx() { ... }
+public TranslatableString disableXxx() { /* ... */ }
 ----
 
 The returned string is then automatically translated to the locale of the current user.
 
 
-For example, to disable an action:
+To disable a property:
 
 [source,java]
 ----
 public class Customer {
-    public boolean isBlacklisted() { ... }
+    public boolean isBlacklisted() { /* ... */ }
+
+    public BigDecimal getCreditLimit() { /* ... */ }
+    public void setCreditLimit(BigDecimal creditLimit) { /* ... */ }
+    public String disableCreditLimit() {
+        return isBlacklisted()
+                    ? "Cannot change credit limit for blacklisted customers"
+                    : null;
+    }
+    // ...
+}
+----
+
+
+Or, to disable an action:
+
+[source,java]
+----
+public class Customer {
+    public boolean isBlacklisted() { /* ... */ }
 
     public Order placeOrder(
             final Product product,
             @ParameterLayout(named="Quantity")
             final int quantity) {
-        ...
+        // ...
     }
     public String disablePlaceOrder() {
         return isBlacklisted()
                     ? "Blacklisted customers cannot place orders"
                     : null;
     }
-    ...
+    // ...
 }
 ----
 
-
-Or, to disable a property:
-
-[source,java]
-----
-public class Customer {
-    public boolean isBlacklisted() { ... }
-
-    public BigDecimal getCreditLimit() { ... }
-    public void setCreditLimit(BigDecimal creditLimit) { ... }
-    public String disableCreditLimit() {
-        return isBlacklisted()
-                    ? "Cannot change credit limit for blacklisted customers"
-                    : null;
-    }
-    ...
-}
-----
 
 [NOTE]
 ====
+TODO: v2: remove this feature, instead should fail-fast if there's a disableXxx() method with parameters.
+Ditto for hideXxx().
+
 In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
 Enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
 
 Note that enabling this configuration property in effect means that xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] must be used instead of xref:ug:fun:programming-model/domain-services/contributions.adoc[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
 ====
+
+
+It is also possible to disable an action parameter, so that it is disabled (greyed out) based on the value of earlier parameters.
+For example:
+
+[source,java]
+----
+public Product categorize(Category category, Subcategory subcategory) { /* ... */}
+public String disable1Categorize(Category category) {
+    return category == null category.hasSubcategories() ? null : "The selected category has no subcategories"
+}
+----
+
+
 

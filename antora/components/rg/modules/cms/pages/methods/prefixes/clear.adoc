@@ -17,9 +17,9 @@ For example:
 [source,java]
 ----
 public class LibraryMember {
-    public Title getFavoriteTitle() { ... }
-    public void setFavoriteTitle(Title title) { ... }
-    public void modifyFavoriteTitle(Title title) { ... }
+    public Title getFavoriteTitle() { /* ... */ }
+    public void setFavoriteTitle(Title title) { /* ... */ }
+    public void modifyFavoriteTitle(Title title) { /* ... */ }
     public void clearFavoriteTitle() {
         if(getTitle() == null) { return; }
         setFavoriteTitle(null);                         // <1>

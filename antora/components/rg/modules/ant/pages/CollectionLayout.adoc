@@ -79,7 +79,7 @@ public class ToDoItem {
         describedAs="Other todo items that must be completed before this one",
         labelPosition=LabelPosition.LEFT,
         render=EAGERLY)
-    public SortedSet<ToDoItem> getDependencies() { ... }
+    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
     ...
 }
 ----

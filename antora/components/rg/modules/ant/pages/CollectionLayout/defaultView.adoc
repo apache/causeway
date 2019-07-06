@@ -17,7 +17,7 @@ public class BusRoute {
     @CollectionLayout(
         defaultView="map"
     )
-    public SortedSet<BusStop> getStops() { ... }
+    public SortedSet<BusStop> getStops() { /* ... */ }
     ...
 }
 ----

@@ -29,7 +29,7 @@ To declare a domain object's (or view's) navigable parent, add a `@PropertyLayou
 ----
 
 @DomainObject
-public class Company { ... }
+public class Company { /* ... */ }
 
 @DomainObject
 public class Employee {

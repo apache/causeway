@@ -27,7 +27,7 @@ public class Customer {
         public List<Order> act(Product p, int quantity) {                        // <3>
             ...
         }
-        public boolean hideAct() { ... }                                         // <4>
+        public boolean hideAct() { /* ... */ }                                         // <4>
         public String validate0Act(Product p) { ...  }
     }
 }

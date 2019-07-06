@@ -44,7 +44,7 @@ To indicate a class is bookmarkable, use the xref:rg:ant:DomainObjectLayout.adoc
 @DomainObjectLayout(
     bookmarking=BookmarkPolicy.AS_ROOT
 )
-public class Lease { ... }
+public class Lease { /* ... */ }
 ----
 
 To indicate a class is bookmarkable but only as a child of some parent bookmark, specify the bookmark policy:
@@ -54,7 +54,7 @@ To indicate a class is bookmarkable but only as a child of some parent bookmark,
 @DomainObjectLayout(
     bookmarking=BookmarkPolicy.AS_CHILD
 )
-public class LeaseItem { ... }
+public class LeaseItem { /* ... */ }
 ----
 
 To indicate that a safe (query only) action is bookmarkable, use the xref:rg:ant:ActionLayout.adoc[@ActionLayout] annotation:
@@ -68,7 +68,7 @@ public class ToDoItem ... {
     @ActionLayout(
          bookmarking=BookmarkPolicy.AS_ROOT
      )
-    public List<ToDoItem> notYetComplete() { ... }
+    public List<ToDoItem> notYetComplete() { /* ... */ }
     ...
 }
 ----

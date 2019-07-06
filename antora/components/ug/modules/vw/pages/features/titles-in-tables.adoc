@@ -16,7 +16,7 @@ so that `Customer` has a collection of `Order`s:
 [source,java]
 ----
 public class Customer {
-    public Set<Order> getOrders() { ... }
+    public Set<Order> getOrders() { /* ... */ }
     ...
 }
 ----
@@ -26,7 +26,7 @@ and `Product` also has a collection of `Order`s (please forgive the suspect doma
 [source,java]
 ----
 public class Product {
-    public Set<Order> getOrders() { ... }
+    public Set<Order> getOrders() { /* ... */ }
     ...
 }
 ----
@@ -39,11 +39,11 @@ The `Order`'s might involve each of these:
 ----
 public class Order {
     @Title(sequence="1")
-    public Customer getCustomer() { ... }
+    public Customer getCustomer() { /* ... */ }
     @Title(sequence="2")
-    public Product getProduct() { ... }
+    public Product getProduct() { /* ... */ }
     @Title(sequence="3")
-    public String getOtherInfo() { ... }
+    public String getOtherInfo() { /* ... */ }
     ...
 }
 ----
@@ -59,7 +59,7 @@ This feature is a close cousin of the `@PropertyLayout(hidden=Where.REFERENCES_P
 public class Order {
     @Title(sequence="1")
     @PropertyLayout(hidden=Where.REFERENCES_PARENT)
-    public Customer getCustomer() { ... }
+    public Customer getCustomer() { /* ... */ }
     ...
 }
 ----

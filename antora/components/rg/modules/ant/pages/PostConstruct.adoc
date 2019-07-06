@@ -14,7 +14,7 @@ The signature of the method is:
 [source,java]
 ----
 @PostConstruct                 <1>
-public void init() { ... }     <2>
+public void init() { /* ... */ }     <2>
 ----
 <1> It is not necessary to annotate the method with xref:rg:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility.
@@ -26,7 +26,7 @@ Alternatively - for domain services only, not view models - the method can accep
 ----
 @PostConstruct
 @Programmatic
-public void init(Map<String,String> properties) { ... }
+public void init(Map<String,String> properties) { /* ... */ }
 ----
 Apache Isis uses argument to pass in the configuration properties read from all xref:rg:cfg:configuration-files.adoc[configuration files]:
 

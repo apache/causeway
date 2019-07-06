@@ -22,7 +22,7 @@ For example, here's a JDOQL query:
 				+ "   && (approvalState != 'NEW' && approvalState != 'DISCARDED') "
 				+ "VARIABLES org.estatio.capex.dom.invoice.IncomingInvoiceItem ii "
 ),
-public class IncomingInvoice ... { ... }
+public class IncomingInvoice ... { /* ... */ }
 ----
 
 which normally would be used from a repository:
@@ -77,7 +77,7 @@ This can be specified by defining a named fetch group:
                 @Persistent(name="property"),
                 @Persistent(name="bankAccount")
         })
-public class IncomingInvoice ... { ... }
+public class IncomingInvoice ... { /* ... */ }
 ----
 
 
