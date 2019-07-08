@@ -123,7 +123,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
     private final String tns;
     private final String schemaLocation;
 
-    public GridSystemServiceAbstract(
+    protected GridSystemServiceAbstract(
             final Class<G> gridImplementation,
             final String tns,
             final String schemaLocation) {
@@ -134,28 +134,22 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
 
     // //////////////////////////////////////
 
-    @Programmatic
     @Override
     public Class<G> gridImplementation() {
         return gridImplementation;
     }
 
-    @Programmatic
     @Override
     public String tns() {
         return tns;
     }
 
-    @Programmatic
     @Override
     public String schemaLocation() {
         return schemaLocation;
     }
 
 
-    // //////////////////////////////////////
-
-    @Programmatic
     @Override
     public void normalize(final G grid, final Class<?> domainClass) {
 
@@ -199,7 +193,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
      *     This code uses {@link FacetUtil#addOrReplaceFacet(Facet)} because the layout might be changed multiple times.
      * </p>
      */
-    protected void overwriteFacets(
+    private void overwriteFacets(
             final G fcGrid,
             final Class<?> domainClass) {
 

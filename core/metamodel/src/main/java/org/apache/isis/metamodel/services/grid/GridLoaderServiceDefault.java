@@ -65,9 +65,9 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
             final DomainClassAndLayout that = (DomainClassAndLayout) o;
 
-            if (domainClass != null ? !domainClass.equals(that.domainClass) : that.domainClass != null)
+            if (!Objects.equals(domainClass, that.domainClass))
                 return false;
-            return layoutIfAny != null ? layoutIfAny.equals(that.layoutIfAny) : that.layoutIfAny == null;
+            return Objects.equals(layoutIfAny, that.layoutIfAny);
         }
 
         @Override public int hashCode() {
@@ -194,7 +194,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
                 return null;
             }
 
-            final Grid grid = (Grid) jaxbService.fromXml(jaxbContext, xml);
+            final Grid grid = loadGrid(xml);
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {
                 gridByDomainClassAndLayoutAndXml.put(dcalax, grid);
@@ -218,6 +218,13 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
             return null;
         }
+    }
+
+    /**
+     * Not API
+     */
+    public Grid loadGrid(String xml) {
+        return (Grid) jaxbService.fromXml(jaxbContext, xml);
     }
 
     @Override

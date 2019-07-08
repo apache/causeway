@@ -18,14 +18,11 @@ package org.apache.isis.metamodel.services.grid.bootstrap3;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -48,9 +45,11 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
+import org.apache.isis.metamodel.services.grid.GridLoaderServiceDefault;
 import org.apache.isis.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
@@ -70,14 +69,33 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         super(BS3Grid.class, TNS, SCHEMA_LOCATION);
     }
 
+    @Inject
+    GridLoaderServiceDefault gridLoaderService;
 
     @Programmatic
     @Override
     public BS3Grid defaultGrid(final Class<?> domainClass) {
-        final BS3Grid bs3Grid = new BS3Grid();
 
-//        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
-        bs3Grid.setDomainClass(domainClass);
+        try {
+            final String content = _Resources.loadAsString(getClass(), "DefaultGrid.layout.xml", Charset.forName("UTF-8"));
+            return Optional.ofNullable(content)
+                    .map(xml -> gridLoaderService.loadGrid(xml))
+                    .filter(BS3Grid.class::isInstance)
+                    .map(BS3Grid.class::cast)
+                    .map(bs3Grid -> withDomainClass(bs3Grid, domainClass))
+                    .orElseGet(() -> fallback(domainClass))
+                    ;
+        } catch (final Exception e) {
+            return fallback(domainClass);
+        }
+    }
+
+    //
+    // only ever called if fail to load DefaultGrid.layout.xml,
+    // which *really* shouldn't happen
+    //
+    private BS3Grid fallback(Class<?> domainClass) {
+        final BS3Grid bs3Grid = withDomainClass(new BS3Grid(), domainClass);
 
         final BS3Row headerRow = new BS3Row();
         bs3Grid.getRows().add(headerRow);
@@ -97,7 +115,12 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         col.setUnreferencedCollections(true);
         col.setSpan(12);
         propsRow.getCols().add(col);
-            
+
+        return bs3Grid;
+    }
+
+    private static BS3Grid withDomainClass(BS3Grid bs3Grid, Class<?> domainClass) {
+        bs3Grid.setDomainClass(domainClass);
         return bs3Grid;
     }
 
@@ -125,7 +148,6 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
     }
 
-    // //////////////////////////////////////
 
     private static final class GridVisitorResult {
         BS3Col colForUnreferencedActionsRef;
@@ -136,7 +158,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     }
     
     /**
-     * Mandatory hook method defined in {@link GridSystemServiceAbstract superclass}, called by {@link #normalize(Grid, Class)}.
+     * Mandatory hook method defined in {@link GridSystemServiceAbstract superclass}, called by {@link GridSystemServiceAbstract#normalize(Grid, Class)} }.
      */
     @Override
     protected boolean validateAndNormalize(
@@ -337,11 +359,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             if(memberOrderFacet != null) {
                 final String id = asId(memberOrderFacet.name());
                 if(fieldSetIds.containsKey(id)) {
-                    Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
-                    if(boundAssociationIds == null) {
-                        boundAssociationIds = _Sets.newLinkedHashSet();
-                        boundAssociationIdsByFieldSetId.put(id, boundAssociationIds);
-                    }
+                    Set<String> boundAssociationIds =
+                            boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                     boundAssociationIds.add(otoa.getId());
                 }
             }
@@ -361,13 +380,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 final Set<String> associationIds =
                         boundAssociationIdsByFieldSetId.get(fieldSetId);
 
-                final List<OneToOneAssociation> associations = 
+                final List<OneToOneAssociation> associations =
                         associationIds.stream()
-                        .map(propertyId->oneToOneAssociationById.get(propertyId))
-                        .filter(_NullSafe::isPresent)
-                        .collect(Collectors.toList());
+                                .map(oneToOneAssociationById::get)
+                                .filter(_NullSafe::isPresent)
+                                .sorted(ObjectMember.Comparators.byMemberOrderSequence())
+                                .collect(Collectors.toList());
 
-                Collections.sort(associations, ObjectMember.Comparators.byMemberOrderSequence());
                 addPropertiesTo(fieldSet,
                         _Lists.map(associations, ObjectAssociation::getId),
                         propertyLayoutDataById);
@@ -495,7 +514,6 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
                 final FieldSet fieldSet = fieldSetIds.get(id);
                 addActionTo(fieldSet, actionLayoutData);
-                continue;
             }
         }
 
@@ -523,7 +541,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         return true;
     }
 
-    protected void addPropertiesTo(
+    private void addPropertiesTo(
             final FieldSet fieldSet,
             final List<String> propertyIds,
             final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById) {
@@ -543,7 +561,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
     }
 
-    protected void addCollectionsTo(
+    private void addCollectionsTo(
             final BS3Col tabRowCol,
             final List<String> collectionIds,
             final LinkedHashMap<String, CollectionLayoutData> collectionLayoutDataById) {
@@ -555,7 +573,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
     }
 
-    protected void addCollectionsTo(
+    private void addCollectionsTo(
             final BS3TabGroup tabGroup,
             final List<String> collectionIds,
             final ObjectSpecification objectSpec) {
@@ -592,7 +610,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
     }
 
-    protected void addActionsTo(
+    private void addActionsTo(
             final FieldSet fieldSet,
             final List<String> actionIds,
             final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
@@ -603,7 +621,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
     }
 
-    protected void addActionTo(
+    private void addActionTo(
             final ActionLayoutDataOwner owner,
             final ActionLayoutData actionLayoutData) {
         List<ActionLayoutData> actions = owner.getActions();
