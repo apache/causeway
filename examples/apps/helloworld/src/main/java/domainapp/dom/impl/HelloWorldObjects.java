@@ -41,17 +41,15 @@ import domainapp.dom.types.Name;
 public class HelloWorldObjects {
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    public HelloWorldObject createHelloWorld() {
-        return repositoryService.persist(new HelloWorldObject("Hello World!"));
-    }
-	
-	
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public HelloWorldObject create(
             @Name final String name) {
         return repositoryService.persist(new HelloWorldObject(name));
     }
+    public String default0Create() {
+        return "Hello World!";
+    }
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
