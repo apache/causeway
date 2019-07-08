@@ -759,6 +759,10 @@ div.referencePanel.scalarNameAndValueComponentType {
 .navbar-header a.navbar-brand {
     margin-top: 0px;
 }
+.navbar-header a.navbar-brand img {
+    height: 48px;
+    margin-top: -13px;
+}
 
 .valueChoicesSelect2Panel .scalarValueWrapper .choicesPlaceholder {
     height: 33px;
