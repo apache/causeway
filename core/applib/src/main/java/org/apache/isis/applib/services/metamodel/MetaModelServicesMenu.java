@@ -96,7 +96,7 @@ public class MetaModelServicesMenu {
         final StringBuilder buf = asBuf(list);
 
         return new Clob(
-                Util.withSuffix(csvFileName, "csv"),
+                withSuffix(csvFileName, "csv"),
                 mimeTypeTextCsv, buf.toString().toCharArray());
     }
 
@@ -238,9 +238,20 @@ public class MetaModelServicesMenu {
     }
 
 
+    private static String withSuffix(String fileName, String suffix) {
+        if(!suffix.startsWith(".")) {
+            suffix = "." + suffix;
+        }
+        if(!fileName.endsWith(suffix)) {
+            fileName += suffix;
+        }
+        return fileName;
+    }
+
+
     @javax.inject.Inject
     MetaModelService metaModelService;
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 
 }

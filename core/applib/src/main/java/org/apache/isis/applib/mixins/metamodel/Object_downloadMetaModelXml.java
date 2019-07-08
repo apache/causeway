@@ -14,12 +14,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.metamodel;
+package org.apache.isis.applib.mixins.metamodel;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -31,6 +33,8 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.metamodel.MetaModelServicesMenu;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
@@ -38,10 +42,18 @@ import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 @Mixin(method="act")
 public class Object_downloadMetaModelXml {
 
+    final MimeType mimeTypeTextXml;
+
     private final Object object;
 
     public Object_downloadMetaModelXml(final Object object) {
         this.object = object;
+
+        try {
+            mimeTypeTextXml = new MimeType("application", "xml");
+        } catch (final MimeTypeParseException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadMetaModelXml> {
@@ -85,12 +97,12 @@ public class Object_downloadMetaModelXml {
         final String asXml = jaxbService.toXml(metamodelDto);
 
         return new Clob(
-                Util.withSuffix(fileName, "xml"),
-                metaModelServicesMenu.mimeTypeTextXml, asXml);
+                withSuffix(fileName, "xml"),
+                mimeTypeTextXml, asXml);
     }
 
     public String default0Act() {
-        return Util.withSuffix(object.getClass().getSimpleName(), "xml");
+        return withSuffix(object.getClass().getSimpleName(), "xml");
     }
 
 
@@ -100,4 +112,16 @@ public class Object_downloadMetaModelXml {
     JaxbService jaxbService;
     @Inject
     MetaModelServicesMenu metaModelServicesMenu;
+
+    private static String withSuffix(String fileName, String suffix) {
+        if(!suffix.startsWith(".")) {
+            suffix = "." + suffix;
+        }
+        if(!fileName.endsWith(suffix)) {
+            fileName += suffix;
+        }
+        return fileName;
+    }
+
+
 }
