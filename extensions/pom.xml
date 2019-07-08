@@ -156,6 +156,11 @@
 
 			<dependencies>
 				<dependency>
+					<groupId>com.sun.xml.ws</groupId>
+					<artifactId>jaxws-ri</artifactId>
+					<type>pom</type>
+				</dependency>
+				<dependency>
 					<groupId>javax.xml.bind</groupId>
 					<artifactId>jaxb-api</artifactId>
 				</dependency>
