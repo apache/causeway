@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-This section discusses features of the wicket viewer from the perspective of an end-user actually using your Apache Isis application.
+This chapter highlights a number of features of the wicket viewer from the perspective of an end-user actually using your Apache Isis application.
 
 
 
