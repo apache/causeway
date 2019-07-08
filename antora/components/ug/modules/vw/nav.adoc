@@ -1,17 +1,5 @@
 * xref:about.adoc[Wicket Viewer]
 
-** xref:features.adoc[Features]
-*** xref:features/recent-pages.adoc[Recent Pages]
-*** xref:features/bookmarked-pages.adoc[Bookmarked Pages]
-*** xref:features/sidebar-vs-modal-dialogs.adoc[Sidebar vs Modal Dialogs]
-*** xref:features/hints-and-copy-url.adoc[Hints-and-copy URL]
-*** xref:features/where-am-i.adoc[Where am I]
-*** xref:features/titles-in-tables.adoc[Titles in Tables]
-*** xref:features/blob-attachments.adoc[Blob Attachments]
-*** xref:features/user-registration.adoc[User Registration]
-
-
-
 ** xref:layout.adoc[Layout]
 *** xref:layout/annotation-based.adoc[Annotation based]
 *** xref:layout/file-based.adoc[File based]
@@ -26,6 +14,18 @@
 
 
 ** xref:configuration-properties.adoc[Configuration Properties]
+
+
+
+** xref:features.adoc[End-user Features]
+*** xref:features/sidebar-vs-modal-dialogs.adoc[Sidebar vs Modal Dialogs]
+*** xref:features/recent-pages.adoc[Recent Pages]
+*** xref:features/bookmarked-pages.adoc[Bookmarked Pages]
+*** xref:features/hints-and-copy-url.adoc[Hints-and-copy URL]
+*** xref:features/where-am-i.adoc[Where am I]
+*** xref:features/titles-in-tables.adoc[Titles in Tables]
+*** xref:features/blob-attachments.adoc[Blob Attachments]
+*** xref:features/user-registration.adoc[User Registration]
 
 
 
