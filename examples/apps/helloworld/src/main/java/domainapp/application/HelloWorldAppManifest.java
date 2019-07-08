@@ -24,6 +24,7 @@ import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.jdo.IsisBootDataNucleus;
+import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
@@ -71,10 +72,10 @@ public class HelloWorldAppManifest {
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()
                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-               .brandLogoHeader("/images/gift_48.png")
+               .brandLogoHeader("/images/apache-isis/logo-48x48.png")
                .applicationCss("css/application.css")
                .applicationJs("scripts/application.js")
-               .applicationName("Isis Hello World App")
+               .applicationName("Apache Isis Hello World App")
                .faviconUrl("/images/favicon.png")
                .build();
    }

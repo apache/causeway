@@ -67,7 +67,7 @@ public class DomainAppAppManifest {
                .brandLogoHeader("/images/gift_48.png")
                .applicationCss("css/application.css")
                .applicationJs("scripts/application.js")
-               .applicationName("Isis Hello World App")
+               .applicationName("Apache Isis Simple App")
                .faviconUrl("/images/favicon.png")
                .build();
    }
