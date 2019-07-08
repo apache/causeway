@@ -24,19 +24,19 @@ import javax.jdo.annotations.VersionStrategy;
 
 import com.google.common.collect.ComparisonChain;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
 import domainapp.dom.types.Name;
 import domainapp.dom.types.Notes;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Comparator;
+import java.util.function.Function;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "helloworld" )
 @javax.jdo.annotations.DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
@@ -54,16 +54,31 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
         return "Object: " + getName();
     }
 
-    @Name private String name;
-    public String getName() { return name; }
-    public void setName(final String name) { this.name = name; }
+    @Name
+    @MemberOrder(name = "identity", sequence = "1")
+    private String name;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    @Notes private String notes;
-    public String getNotes() { return notes; }
-    public void setNotes(final String notes) { this.notes = notes; }
+    @Notes
+    @MemberOrder(name = "details", sequence = "1")
+    private String notes;
+    public String getNotes() {
+        return notes;
+    }
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
-
-    @Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED)
+    @Action(
+            semantics = SemanticsOf.IDEMPOTENT,
+            command = CommandReification.ENABLED, publishing = Publishing.ENABLED,
+            associateWith = "name"
+    )
     public HelloWorldObject updateName(
             @Name final String name) {
         setName(name);
@@ -74,7 +89,8 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
     }
 
 
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE, associateWith = "name")
+    @ActionLayout(position = ActionLayout.Position.PANEL)
     public void delete() {
         final String title = titleService.titleOf(this);
         messageService.informUser(String.format("'%s' deleted", title));
@@ -88,9 +104,7 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
 
     @Override
     public int compareTo(final HelloWorldObject other) {
-        return ComparisonChain.start()
-                .compare(this.getName(), other.getName())
-                .result();
+        return Comparator.comparing(HelloWorldObject::getName).compare(this, other);
     }
 
 
