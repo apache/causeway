@@ -13,13 +13,10 @@ Using it, the user can quickly open a recently accessed domain object.
 
 The following screenshot, taken from the https://github.com/estatio/estatio[Estatio] application, shows the recent pages drop-down after a number of pages have been accessed.
 
-image::recent-pages/recent-pages.png[width="800px",link="{imagesdir}/recent-pages/recent-pages.png"]
+image::features/recent-pages/recent-pages.png[width="800px",link="{imagesdir}/features/recent-pages/recent-pages.png"]
 
 
-[NOTE]
-====
-Note that this screenshot show an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
-====
+This screenshot is based on v1.17.x of the xref:ug:vw:about.adoc[Wicket viewer] UI.
 
 
 
