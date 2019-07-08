@@ -18,81 +18,90 @@
  */
 package domainapp.application.integtests.smoke;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.Test;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import domainapp.application.integtests.DomainAppIntegTestAbstract;
+import domainapp.application.manifest.SimpleAppManifest;
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
-import static org.assertj.core.api.Assertions.assertThat;
 
-public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
+@SpringBootTest(classes = SimpleAppManifest.class)
+class Smoke_IntegTest {
 
-  //FIXME[2112] needs migration
-//    @Inject
-//    SimpleObjects menu;
-//
-//    @Test
-//    public void create() {
-//
-//        // when
-//        List<SimpleObject> all = wrap(menu).listAll();
-//
-//        // then
-//        assertThat(all).isEmpty();
-//
-//
-//
-//        // when
-//        final SimpleObject fred = wrap(menu).create("Fred");
-//        transactionService.flushTransaction();
-//
-//        // then
-//        all = wrap(menu).listAll();
-//        assertThat(all).hasSize(1);
-//        assertThat(all).contains(fred);
-//
-//
-//
-//        // when
-//        final SimpleObject bill = wrap(menu).create("Bill");
-//        transactionService.flushTransaction();
-//
-//        // then
-//        all = wrap(menu).listAll();
-//        assertThat(all).hasSize(2);
-//        assertThat(all).contains(fred, bill);
-//
-//
-//
-//        // when
-//        wrap(fred).updateName("Freddy");
-//        transactionService.flushTransaction();
-//
-//        // then
-//        assertThat(wrap(fred).getName()).isEqualTo("Freddy");
-//
-//
-//        // when
-//        wrap(fred).setNotes("These are some notes");
-//        transactionService.flushTransaction();
-//
-//        // then
-//        assertThat(wrap(fred).getNotes()).isEqualTo("These are some notes");
-//
-//
-//        // when
-//        wrap(fred).delete();
-//        transactionService.flushTransaction();
-//
-//
-//        all = wrap(menu).listAll();
-//        assertThat(all).hasSize(1);
-//
-//    }
+    @Inject SimpleObjects menu;
+    @Inject TransactionService transactionService;
+    @Inject WrapperFactory wrapperFactory;
+
+    @Test
+    void create() {
+
+        // when
+        List<SimpleObject> all = wrap(menu).listAll();
+
+        // then
+        assertThat(all).isEmpty();
+
+
+
+        // when
+        final SimpleObject fred = wrap(menu).create("Fred");
+        transactionService.flushTransaction();
+
+        // then
+        all = wrap(menu).listAll();
+        assertThat(all).hasSize(1);
+        assertThat(all).contains(fred);
+
+
+
+        // when
+        final SimpleObject bill = wrap(menu).create("Bill");
+        transactionService.flushTransaction();
+
+        // then
+        all = wrap(menu).listAll();
+        assertThat(all).hasSize(2);
+        assertThat(all).contains(fred, bill);
+
+
+
+        // when
+        wrap(fred).updateName("Freddy");
+        transactionService.flushTransaction();
+
+        // then
+        assertThat(wrap(fred).getName()).isEqualTo("Freddy");
+
+
+        // when
+        wrap(fred).setNotes("These are some notes");
+        transactionService.flushTransaction();
+
+        // then
+        assertThat(wrap(fred).getNotes()).isEqualTo("These are some notes");
+
+
+        // when
+        wrap(fred).delete();
+        transactionService.flushTransaction();
+
+
+        all = wrap(menu).listAll();
+        assertThat(all).hasSize(1);
+
+    }
+
+    private <T> T wrap(T domainObject) {
+		return wrapperFactory.wrap(domainObject);
+	}
 
 }
 

@@ -58,7 +58,7 @@ import domainapp.modules.simple.SimpleModule;
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
-public class DomainAppAppManifest {
+public class SimpleAppManifest {
     
    @Bean @Singleton
    public WebAppConfigBean webAppConfigBean() {

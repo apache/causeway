@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.headless.auth;
+package domainapp.application.integtests;
 
-import org.apache.isis.security.authentication.AuthenticationRequestAbstract;
+import org.springframework.boot.test.context.SpringBootTest;
 
-public class AuthenticationRequestNameOnly extends AuthenticationRequestAbstract {
+import domainapp.application.manifest.SimpleAppManifest;
 
-    public AuthenticationRequestNameOnly(String name) {
-        super(name);
-    }
+@SpringBootTest(classes = SimpleAppManifest.class)
+public class SpringIntegrationTest {
+
 
 }

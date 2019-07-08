@@ -28,6 +28,8 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.extensions.specsupport</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/extensions/specsupport</git-plugin.propertiesDir>
+		
+		<cucumber.version>4.2.6</cucumber.version>
 	</properties>
 
 	<dependencies>
@@ -78,20 +80,29 @@
            <artifactId>jmock</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>cucumber-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+		<!-- CUCUMBER -->
+
+		<dependency>
+		    <groupId>io.cucumber</groupId>
+		    <artifactId>cucumber-java</artifactId>
+		    <version>${cucumber.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.cucumber</groupId>
+		    <artifactId>cucumber-spring</artifactId>
+		    <version>${cucumber.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.cucumber</groupId>
+		    <artifactId>cucumber-junit</artifactId>
+		    <version>${cucumber.version}</version>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>junit</groupId>
+		            <artifactId>junit</artifactId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>
 
         <dependency>
             <groupId>junit</groupId>

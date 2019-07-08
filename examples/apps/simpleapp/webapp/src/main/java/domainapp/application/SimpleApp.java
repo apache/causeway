@@ -27,14 +27,14 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
-import domainapp.application.manifest.DomainAppAppManifest;
+import domainapp.application.manifest.SimpleAppManifest;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    DomainAppAppManifest.class,
+    SimpleAppManifest.class,
     IsisBootWebWicket.class,
     IsisBootSecurityShiro.class
 })

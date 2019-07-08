@@ -16,8 +16,6 @@
  */
 package org.apache.isis.specsupport.specs;
 
-import cucumber.api.Transformer;
-
 import org.joda.time.format.DateTimeFormat;
 
 /**
@@ -26,6 +24,16 @@ import org.joda.time.format.DateTimeFormat;
 public class V {
 
     private V() {
+    }
+    
+    /**
+     * @deprecated this is just a dummy, it seems the former cucumber.api.Transformer was removed; 
+     * what's the replacement?
+     *
+     * @param <T>
+     */
+    public static abstract class Transformer<T> {
+    	public abstract T transform(java.lang.String value);
     }
 
     /**

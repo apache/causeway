@@ -27,7 +27,8 @@ import cucumber.api.junit.Cucumber;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        format = {
+		
+        plugin = {
                 "html:target/cucumber-html-report"
                 ,"json:target/cucumber.json"
         },

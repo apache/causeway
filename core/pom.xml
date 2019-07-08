@@ -175,7 +175,6 @@
 
 		<jmock.version>2.11.0</jmock.version>
 		<easymock.version>2.5.2</easymock.version>
-		<cucumber.version>1.2.4</cucumber.version>
 
 		<validation-api.version>1.1.0.Final</validation-api.version>
 		<transaction-api.version>1.2</transaction-api.version>
@@ -2036,19 +2035,6 @@
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-core</artifactId>
 				<version>${assertj.version}</version>
-			</dependency>
-
-
-			<!-- BDD testing -->
-			<dependency>
-				<groupId>info.cukes</groupId>
-				<artifactId>cucumber-java</artifactId>
-				<version>${cucumber.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>info.cukes</groupId>
-				<artifactId>cucumber-junit</artifactId>
-				<version>${cucumber.version}</version>
 			</dependency>
 
 			<!-- Testing libraries (scope=test) -->
