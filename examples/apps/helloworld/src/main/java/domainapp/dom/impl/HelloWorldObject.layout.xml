@@ -26,41 +26,47 @@
     </bs3:row>
     <bs3:row>
         <bs3:col span="6">
-            <bs3:tabGroup>
-                <bs3:tab name="General">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <c:fieldSet name="Name">
-                                <c:action id="delete">
-                                    <c:describedAs>Deletes this object from the persistent datastore</c:describedAs>
-                                </c:action>
-                                <c:property id="name" namedEscaped="true">
-                                    <c:action id="updateName">
-                                        <c:describedAs>Updates the object's name</c:describedAs>
-                                    </c:action>
-                                </c:property>
-                                <c:property id="notes" namedEscaped="true" multiLine="10" hidden="ALL_TABLES"/>
-                            </c:fieldSet>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-                <bs3:tab name="Other">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <c:fieldSet name="Other" unreferencedProperties="true"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-                <bs3:tab name="Metadata">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <c:fieldSet name="Metadata"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-            </bs3:tabGroup>
-            <bs3:tabGroup>
-            </bs3:tabGroup>
+            <bs3:row>
+                <bs3:col span="12">
+                    <bs3:tabGroup>
+                        <bs3:tab name="Identity">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <c:fieldSet name="Identity" id="identity">
+                                        <c:action id="delete">
+                                            <c:describedAs>Deletes this object from the persistent datastore</c:describedAs>
+                                        </c:action>
+                                        <c:property id="name" namedEscaped="true">
+                                            <c:action id="updateName">
+                                                <c:describedAs>Updates the object's name</c:describedAs>
+                                            </c:action>
+                                        </c:property>
+                                    </c:fieldSet>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Other">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <c:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Metadata">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <c:fieldSet name="Metadata" id="metadata"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                    </bs3:tabGroup>
+                </bs3:col>
+                <bs3:col span="12">
+                    <c:fieldSet name="" id="details">
+                        <c:property id="notes" namedEscaped="true" multiLine="10" hidden="ALL_TABLES"/>
+                    </c:fieldSet>
+                </bs3:col>
+            </bs3:row>
         </bs3:col>
         <bs3:col span="6">
             <bs3:tabGroup  unreferencedCollections="true">
