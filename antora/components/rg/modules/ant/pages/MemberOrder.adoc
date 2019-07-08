@@ -2,20 +2,12 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
 
+TODO: v2: replace @MemberOrder#name() with @PropertyLayout#group(); replace @MemberOrder#sequence() with @PropertyLayout#sequence().
 
 The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation.
 
-The annotation defines four attributes:
 
-* `columnSpans()` -- of type `int[]` -- which specifies the relative column sizes of the three columns that render properties as well as a fourth column that renders only collections
-
-* `left()` -- of type `String[]` - that specifies the order of the property groups (inferred from `@MemberOrder#name()`) as applied to properties) in the left-most column
-
-* `middle()` -- of type `String[]` - that specifies the order of the property groups (if any) as applied to properties) in the middle column
-
-* `right()` -- of type `String[]` - that specifies the order of the property groups (if any) as applied to properties) in the right-most column
-
-Collections are always rendered in the "last" column.  This can appear either below the columns holding properties (if their column spans = 12), or can be rendered to the right of the property columns (if the spans of the property columns come to <12 leaving enough room for the span of the collection column).
+The annotation defines two attributes, `name()` and `sequence()`.  Broadly speaking the `name()` attribute is used to group or associate members together, while the `sequence()` attribute orders members once they have been grouped.
 
 [IMPORTANT]
 ====
@@ -25,9 +17,8 @@ As this is an important topic, there is a xref:ug:vw:layout.adoc[separate chapte
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`], xref:rg:ant:Property.adoc[`@Property`])
- and xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.  This is specifically
-so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
+The annotation is one of a handful (others including xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`], xref:rg:ant:Property.adoc[`@Property`]) and xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.
+ This is specifically so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 
 
