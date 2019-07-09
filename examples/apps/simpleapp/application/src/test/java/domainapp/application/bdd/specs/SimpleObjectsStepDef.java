@@ -26,7 +26,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.junit.Ignore;
@@ -42,51 +41,50 @@ import lombok.val;
 @Ignore("not a JUnit test")
 public class SimpleObjectsStepDef extends SpringIntegrationTest {
 
-    
-	@Given("^there are.* (\\d+) simple objects$")
-    public void there_are_N_simple_objects(int n) throws Throwable {
-        final List<SimpleObject> list = wrap(simpleObjects).listAll();
-        assertThat(list.size(), is(n));
-    }
-    
-    @When("^.*create a .*simple object$")
-    public void create_a_simple_object() throws Throwable {
-        wrap(simpleObjects).create(UUID.randomUUID().toString());
-    }
-    
-    // -- TRANSACTION ASPECT
 
-    private Runnable afterScenario;
-    
-    @cucumber.api.java.Before //TODO is there another way to make scenarios transactional?
-    public void beforeScenario(){
-    	val txTemplate = IsisContext.createTransactionTemplate();
-    	val status = txTemplate.getTransactionManager().getTransaction(null);
-    	afterScenario = () -> {
-    		txTemplate.getTransactionManager().rollback(status);
-    	};
-    	
-    	fixtureScripts.runBuilderScript(SimpleObject_persona.BANG.builder());
-    	fixtureScripts.runBuilderScript(SimpleObject_persona.BAR.builder());
-    	fixtureScripts.runBuilderScript(SimpleObject_persona.BAZ.builder());
-    	
-    	status.flush();
-    } 
- 
-    @cucumber.api.java.After //TODO is there another way to make scenarios transactional?
-    public void afterScenario(){
-    	if(afterScenario==null) {
-    		return;
-    	}
-    	afterScenario.run();
-    	afterScenario = null;
-    }
-    
-    // -- DEPENDENCIES
-    
-    @Inject protected SimpleObjects simpleObjects;
-    @Inject protected TransactionService txService;
-    @Inject private FixtureScripts fixtureScripts;
-    
+	@Given("^there are.* (\\d+) simple objects$")
+	public void there_are_N_simple_objects(int n) throws Throwable {
+		final List<SimpleObject> list = wrap(simpleObjects).listAll();
+		assertThat(list.size(), is(n));
+	}
+
+	@When("^.*create a .*simple object$")
+	public void create_a_simple_object() throws Throwable {
+		wrap(simpleObjects).create(UUID.randomUUID().toString());
+	}
+
+	// -- TRANSACTION ASPECT
+
+	private Runnable afterScenario;
+
+	@cucumber.api.java.Before //TODO is there another way to make scenarios transactional?
+	public void beforeScenario(){
+		val txTemplate = IsisContext.createTransactionTemplate();
+		val status = txTemplate.getTransactionManager().getTransaction(null);
+		afterScenario = () -> {
+			txTemplate.getTransactionManager().rollback(status);
+		};
+
+		fixtureScripts.runBuilderScript(SimpleObject_persona.BANG.builder());
+		fixtureScripts.runBuilderScript(SimpleObject_persona.BAR.builder());
+		fixtureScripts.runBuilderScript(SimpleObject_persona.BAZ.builder());
+
+		status.flush();
+	} 
+
+	@cucumber.api.java.After //TODO is there another way to make scenarios transactional?
+	public void afterScenario(){
+		if(afterScenario==null) {
+			return;
+		}
+		afterScenario.run();
+		afterScenario = null;
+	}
+
+	// -- DEPENDENCIES
+
+	@Inject protected SimpleObjects simpleObjects;
+	@Inject private FixtureScripts fixtureScripts;
+
 
 }
