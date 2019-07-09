@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -45,13 +44,12 @@ import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
 
-    @Override @Programmatic
+    @Override
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
             final ObjectAdapter targetAdapter,
@@ -81,7 +79,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 );
     }
 
-    @Override @Programmatic
+    @Override
     public ActionInvocationDto updateResult(
             final ActionInvocationDto actionInvocationDto,
             final ObjectAction objectAction,
@@ -96,7 +94,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         return actionInvocationDto;
     }
 
-    @Override @Programmatic
+    @Override
     public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,
             final ObjectAdapter targetAdapter,

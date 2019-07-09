@@ -50,7 +50,7 @@ public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactor
     public void testAggregatedAnnotationPickedUpOnClass() {
         class Customer {
         }
-        @DomainService(menuOrder = "123", repositoryFor = Customer.class)
+        @DomainService(repositoryFor = Customer.class)
         class Customers {
         }
 

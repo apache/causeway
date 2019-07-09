@@ -24,17 +24,14 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 public class SudoServiceDefault implements SudoService {
 
-    @Programmatic
     @Override
     public void sudo(final String username, final Runnable runnable) {
         try {
@@ -45,7 +42,6 @@ public class SudoServiceDefault implements SudoService {
         }
     }
 
-    @Programmatic
     @Override
     public <T> T sudo(final String username, final Callable<T> callable) {
         try {
@@ -58,7 +54,6 @@ public class SudoServiceDefault implements SudoService {
         }
     }
 
-    @Programmatic
     @Override
     public void sudo(final String username, final List<String> roles, final Runnable runnable) {
         try {
@@ -69,7 +64,6 @@ public class SudoServiceDefault implements SudoService {
         }
     }
 
-    @Programmatic
     @Override
     public <T> T sudo(final String username, final List<String> roles, final Callable<T> callable) {
         try {

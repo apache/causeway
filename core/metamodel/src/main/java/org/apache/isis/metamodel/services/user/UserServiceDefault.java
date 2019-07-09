@@ -143,8 +143,7 @@ public class UserServiceDefault implements UserService {
 
 
     @DomainService(
-            nature = NatureOfService.DOMAIN,
-            menuOrder = "" + Integer.MAX_VALUE
+            nature = NatureOfService.DOMAIN
             )
     public static class SudoServiceSpi implements SudoService.Spi {
 

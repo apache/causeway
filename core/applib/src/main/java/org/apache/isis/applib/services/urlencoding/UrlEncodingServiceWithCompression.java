@@ -23,10 +23,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {
 
     @Override

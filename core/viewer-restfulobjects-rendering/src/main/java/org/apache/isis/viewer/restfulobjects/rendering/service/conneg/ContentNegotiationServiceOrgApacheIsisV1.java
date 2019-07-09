@@ -27,7 +27,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -47,11 +46,10 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.springframework.core.annotation.Order;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + (Integer.MAX_VALUE - 10)
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
+@Order(200) //in effect, is the relative priority (lower numbers have higher priority)
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
     
     /**
@@ -135,7 +133,6 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * Individual property of an object is not supported.
      */
     @Override
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context rendererContext,
             final ObjectAndProperty objectAndProperty)  {
@@ -148,7 +145,6 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * as an object in the list with a single property named '$$ro'
      */
     @Override
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context rendererContext,
             final ObjectAndCollection objectAndCollection) {
@@ -191,7 +187,6 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * Action prompt is not supported.
      */
     @Override
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context rendererContext,
             final ObjectAndAction objectAndAction)  {
@@ -208,7 +203,6 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * with a single '$$ro' property (similar to {@link #buildResponse(RepresentationService.Context2, ObjectAndCollection)})
      */
     @Override
-    @Programmatic
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context rendererContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {

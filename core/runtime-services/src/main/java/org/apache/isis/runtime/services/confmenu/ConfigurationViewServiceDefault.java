@@ -37,8 +37,7 @@ import org.apache.isis.config.internal._Config;
  * @since 2.0
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 public class ConfigurationViewServiceDefault implements ConfigurationViewService {
     

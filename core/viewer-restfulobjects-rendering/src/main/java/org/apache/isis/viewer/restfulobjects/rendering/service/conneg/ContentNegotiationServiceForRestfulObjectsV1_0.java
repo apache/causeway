@@ -61,8 +61,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPrope
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 

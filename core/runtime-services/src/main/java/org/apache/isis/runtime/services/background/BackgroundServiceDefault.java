@@ -47,8 +47,7 @@ import lombok.val;
  * be configured.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 public class BackgroundServiceDefault implements BackgroundService {
 

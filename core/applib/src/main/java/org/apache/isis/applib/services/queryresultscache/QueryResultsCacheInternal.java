@@ -23,7 +23,6 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -42,16 +41,12 @@ import lombok.extern.log4j.Log4j2;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped @Log4j2
 public class QueryResultsCacheInternal implements QueryResultsCache, WithTransactionScope {
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 
-    @Programmatic
     @Override
     public <T> T execute(
             final Callable<T> callable,
@@ -69,7 +64,6 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         return executeWithCaching(callable, cacheKey);
     }
 
-    @Programmatic
     private <T> T execute(final Callable<T> callable, final Key cacheKey) {
         if(isIgnoreCache()) {
             try {
@@ -106,12 +100,10 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         }
     }
 
-    @Programmatic
     private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
         return get(new Key(callingClass, methodName, keys));
     }
 
-    @Programmatic
     @SuppressWarnings("unchecked")
     private <T> Value<T> get(final Key cacheKey) {
         Value<T> value = (Value<T>) cache.get(cacheKey);
@@ -119,7 +111,6 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         return value;
     }
 
-    @Programmatic
     private <T> void put(final Key cacheKey, final T result) {
         log.debug("PUT: {}", cacheKey);
         cache.put(cacheKey, new Value<T>(result));
@@ -140,7 +131,6 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
      * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
      * </p>
      */
-    @Programmatic
     @Override
     public void resetForNextTransaction() {
         cache.clear();

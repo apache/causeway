@@ -31,7 +31,6 @@ import org.apache.commons.mail.ImageHtmlEmail;
 import org.apache.commons.mail.resolver.DataSourceClassPathResolver;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
@@ -42,8 +41,7 @@ import lombok.extern.log4j.Log4j2;
  * A service that sends email notifications when specific events occur
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 @Log4j2
 public class EmailServiceDefault implements EmailService {
@@ -56,7 +54,8 @@ public class EmailServiceDefault implements EmailService {
         }
     }
 
-    // region > constants
+    // -- CONSTANTS
+    
     private static final String ISIS_SERVICE_EMAIL_SENDER_USERNAME = "isis.service.email.sender.username";
     private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
     private static final String ISIS_SERVICE_EMAIL_SENDER_PASSWORD = "isis.service.email.sender.password";
@@ -83,9 +82,8 @@ public class EmailServiceDefault implements EmailService {
     private static final String ISIS_SERVICE_EMAIL_OVERRIDE_CC = "isis.service.email.override.cc";
     private static final String ISIS_SERVICE_EMAIL_OVERRIDE_BCC = "isis.service.email.override.bcc";
 
-    // endregion
-
-    // region > init
+    // -- INIT
+    
     private boolean initialized;
 
     /**
@@ -93,7 +91,6 @@ public class EmailServiceDefault implements EmailService {
      */
     @Override
     @PostConstruct
-    @Programmatic
     public void init() {
 
         if (initialized) {
@@ -157,19 +154,12 @@ public class EmailServiceDefault implements EmailService {
         return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_BCC);
     }
 
-    // endregion
-
-    // region > isConfigured
-
     @Override
     public boolean isConfigured() {
         final String senderEmailAddress = getSenderEmailAddress();
         final String senderEmailPassword = getSenderEmailPassword();
         return !_Strings.isNullOrEmpty(senderEmailAddress) && !_Strings.isNullOrEmpty(senderEmailPassword);
     }
-    // endregion
-
-    // region > send
 
     @Override
     public boolean send(final List<String> toList, final List<String> ccList, final List<String> bccList, final String subject, final String body,
@@ -252,10 +242,8 @@ public class EmailServiceDefault implements EmailService {
 
         return true;
     }
-    // endregion
 
-
-    // region > helper methods
+    // -- HELPER
 
     static String[] actually(final List<String> original, final String overrideIfAny) {
         final List<String> addresses = _Strings.isNullOrEmpty(overrideIfAny)
@@ -269,7 +257,6 @@ public class EmailServiceDefault implements EmailService {
     static boolean notEmpty(final String[] addresses) {
         return addresses != null && addresses.length > 0;
     }
-    // endregion
 
     @javax.inject.Inject
     IsisConfiguration configuration;

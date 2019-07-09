@@ -33,6 +33,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.springframework.core.annotation.Order;
 
 /**
  * Handles content negotiation for accept headers requiring <code>application/json</code> or <code>application/xml</code>and specifying an x-ro-domain-type; will delegate to
@@ -48,11 +49,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
  *     unambiguously serialize it.
  * </p>
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        // in effect, is the relative priority (lower numbers have higher priority)
-        menuOrder = "" + (Integer.MAX_VALUE - 20)
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
+@Order(100) //in effect, is the relative priority (lower numbers have higher priority)
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 
     public static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";

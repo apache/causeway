@@ -20,7 +20,6 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
@@ -29,10 +28,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  * {@link DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped
 public class InteractionContext {
 
@@ -42,7 +38,6 @@ public class InteractionContext {
      * Returns the currently active {@link Interaction} for this thread.
      * @return
      */
-    @Programmatic
     public Interaction getInteraction() {
         return interaction;
     }
@@ -50,7 +45,6 @@ public class InteractionContext {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    @Programmatic
     public void setInteraction(final Interaction interaction) {
         this.interaction = interaction;
     }

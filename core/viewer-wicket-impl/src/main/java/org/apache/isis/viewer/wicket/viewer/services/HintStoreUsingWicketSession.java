@@ -33,8 +33,7 @@ import com.google.common.collect.Maps;
 import lombok.extern.log4j.Log4j2;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         ) 
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {

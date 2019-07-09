@@ -24,7 +24,6 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Maps;
 
 /**
@@ -38,8 +37,7 @@ import org.apache.isis.commons.internal.collections._Maps;
  * available for use; no further configuration is required.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 @RequestScoped
 public class Scratchpad {
@@ -53,14 +51,12 @@ public class Scratchpad {
     /**
      * Obtain user-data, as set by a previous object being acted upon.
      */
-    @Programmatic
     public Object get(Object key) {
         return userData.get(key);
     }
     /**
      * Set user-data, for the use of a subsequent object being acted upon.
      */
-    @Programmatic
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
@@ -68,7 +64,6 @@ public class Scratchpad {
     /**
      * Clear any user data.
      */
-    @Programmatic
     public void clear() {
         userData.clear();
     }

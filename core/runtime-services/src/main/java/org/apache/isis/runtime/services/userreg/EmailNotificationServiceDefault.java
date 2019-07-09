@@ -32,7 +32,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
@@ -44,14 +43,13 @@ import org.apache.isis.commons.internal.resources._Resources;
  * A service that sends email notifications when specific events occur
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 public class EmailNotificationServiceDefault implements EmailNotificationService {
     
     private static final long serialVersionUID = 1L;
 
-    // -- constants
+    // -- CONSTANTS
 
     private static final Pattern EMAIL_PATTERN = compile(quote("${email}"));
     private static final Pattern CONFIRMATION_URL_PATTERN = compile(quote("${confirmationUrl}"));
@@ -61,7 +59,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     private String emailVerificationTemplate;
 
 
-    // -- init
+    // -- INIT
 
     private boolean initialized;
 
@@ -70,7 +68,6 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
      */
     @Override
     @PostConstruct
-    @Programmatic
     public void init() {
 
         if(initialized) {
@@ -94,18 +91,13 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     // -- isConfigured
 
-    @Programmatic
     @Override
     public boolean isConfigured() {
         return emailService != null && emailService.isConfigured();
     }
 
+    // -- SEND
 
-
-    // -- send
-
-
-    @Programmatic
     @Override
     public boolean send(final EmailRegistrationEvent emailRegistrationEvent) {
         ensureConfigured();
@@ -113,15 +105,12 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return sendEmail(emailRegistrationEvent, body);
     }
 
-    @Programmatic
     @Override
     public boolean send(final PasswordResetEvent passwordResetEvent) {
         ensureConfigured();
         final String body = replace(passwordResetTemplate, passwordResetEvent);
         return sendEmail(passwordResetEvent, body);
     }
-
-
 
     // -- helper methods for send(...)
 
@@ -165,9 +154,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return message;
     }
 
-
-
-    // -- dependencies
+    // -- DEPENDENCIES
 
     @javax.inject.Inject
     private EmailService emailService;

@@ -32,13 +32,11 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 @RequestScoped
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
@@ -59,7 +57,6 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
     }
 
 
-    @Programmatic
     @Override
     public List<MediaType> getAcceptableMediaTypes() {
         return mediaTypesByThread.get();

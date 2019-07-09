@@ -22,7 +22,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.config.internal._Config;
@@ -38,17 +37,13 @@ import org.apache.isis.config.internal._Config;
  *     the first one found).
  * </p>
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 
     public static final String KEY_DISABLE = 
             "isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable";
 
     @Override
-    @Programmatic
     @PostConstruct
     public void init() {
         

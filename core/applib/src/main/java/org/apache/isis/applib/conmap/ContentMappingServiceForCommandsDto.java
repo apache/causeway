@@ -25,19 +25,14 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.CommandsDto;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 
     @Override
-    @Programmatic
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = Util.isSupported(CommandsDto.class, acceptableMediaTypes);
         if(!supported) {
@@ -50,7 +45,6 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
     /**
      * Not part of the {@link ContentMappingService} API.
      */
-    @Programmatic
     public CommandsDto map(final Object object) {
         if(object instanceof CommandsDto) {
             return ((CommandsDto) object);

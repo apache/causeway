@@ -57,8 +57,7 @@ import lombok.val;
  *
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 public class EventStreamServiceDefault implements EventStreamService {
 

@@ -30,7 +30,6 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -51,15 +50,13 @@ import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 @RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
 
     @Override
-    @Programmatic
     public void publishObjects() {
 
         if(suppress) {
@@ -113,7 +110,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
 
     @Override
-    @Programmatic
     public void publishAction(final Interaction.Execution<?,?> execution) {
 
         if(suppress) {
@@ -149,7 +145,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     boolean suppress;
 
-    @Programmatic
     @Override
     public <T> T withPublishingSuppressed(final Block<T> block) {
         try {

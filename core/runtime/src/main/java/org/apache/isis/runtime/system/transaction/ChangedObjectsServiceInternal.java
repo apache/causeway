@@ -29,7 +29,6 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.WithTransactionScope;
@@ -42,8 +41,7 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        nature = NatureOfService.DOMAIN
         )
 @RequestScoped
 public class ChangedObjectsServiceInternal implements WithTransactionScope {
@@ -71,7 +69,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     // used for publishing
     private final Map<ObjectAdapter,PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
-    @Programmatic
     public boolean isEnlisted(ObjectAdapter adapter) {
         return changeKindByEnlistedAdapter.containsKey(adapter);
     }
@@ -87,7 +84,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    @Programmatic
     public void enlistCreated(final ObjectAdapter adapter) {
 
         if(shouldIgnore(adapter)) {
@@ -114,7 +110,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    @Programmatic
     public void enlistUpdating(final ObjectAdapter adapter) {
 
         if(shouldIgnore(adapter)) {
@@ -141,7 +136,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    @Programmatic
     public void enlistDeleting(final ObjectAdapter adapter) {
 
         if(shouldIgnore(adapter)) {
@@ -200,7 +194,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     /**
      * Intended to be called at the end of the transaction.  Use {@link #resetForNextTransaction()} once fully read.
      */
-    @Programmatic
     public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
         return changedObjectProperties != null
                 ? changedObjectProperties
@@ -246,17 +239,14 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     }
 
 
-    @Programmatic
     public Map<ObjectAdapter, PublishingChangeKind> getChangeKindByEnlistedAdapter() {
         return changeKindByEnlistedAdapter;
     }
 
-    @Programmatic
     public int numberObjectsDirtied() {
         return changeKindByEnlistedAdapter.size();
     }
 
-    @Programmatic
     public int numberObjectPropertiesModified() {
         if(changedObjectProperties == null) {
             // normally done during auditing, but in case none of the objects in this xactn are audited...
@@ -270,7 +260,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
      * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
      */
     @Override
-    @Programmatic
     public void resetForNextTransaction() {
         enlistedObjectProperties.clear();
         changedObjectProperties = null;

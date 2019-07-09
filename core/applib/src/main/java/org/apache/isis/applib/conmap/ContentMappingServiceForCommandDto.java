@@ -26,7 +26,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.conmap.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
@@ -38,15 +37,12 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
+import org.springframework.core.annotation.Order;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
     @Override
-    @Programmatic
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = Util.isSupported(CommandDto.class, acceptableMediaTypes);
         if(!supported) {
@@ -59,7 +55,6 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     /**
      * Not part of the {@link ContentMappingService} API.
      */
-    @Programmatic
     public CommandDto map(final CommandWithDto commandWithDto) {
         return asProcessedDto(commandWithDto);
     }
@@ -100,12 +95,10 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     /**
      * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
      */
-    @DomainService(
-            nature = NatureOfService.DOMAIN,
-            // specify quite a high priority since custom processors will probably want to run after this one
-            // (but can choose to run before if they wish)
-            menuOrder = "1000"
-            )
+    @DomainService(nature = NatureOfService.DOMAIN) 
+    // specify quite a high priority since custom processors will probably want to run after this one
+    // (but can choose to run before if they wish)
+    @Order(-1000)
     public static class CopyOverFromCommand implements CommandDtoProcessorService {
 
         @Override

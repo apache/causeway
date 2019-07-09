@@ -20,18 +20,15 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 
 public interface TableColumnOrderService {
 
-    @Programmatic
     List<String> orderParented(
             final Object parent,
             final String collectionId,
             final Class<?> collectionType,
             final List<String> propertyIds);
 
-    @Programmatic
     List<String> orderStandalone(
             final Class<?> collectionType,
             final List<String> propertyIds);
@@ -40,8 +37,7 @@ public interface TableColumnOrderService {
      * Used as a fallback.
      */
     @DomainService(
-            nature = NatureOfService.DOMAIN,
-            menuOrder = "" + Integer.MAX_VALUE
+            nature = NatureOfService.DOMAIN
             )
     public static class Default implements TableColumnOrderService {
 

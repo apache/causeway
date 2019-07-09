@@ -20,7 +20,6 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Command}.
@@ -29,16 +28,12 @@ import org.apache.isis.applib.annotation.Programmatic;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped 
 public class CommandContext {
 
     private Command command;
 
-    @Programmatic
     public Command getCommand() {
         return command;
     }
@@ -46,7 +41,6 @@ public class CommandContext {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    @Programmatic
     public void setCommand(final Command command) {
         this.command = command;
     }

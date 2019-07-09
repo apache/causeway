@@ -24,7 +24,6 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedAt;
 import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedBy;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -33,10 +32,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 
 @RequestScoped
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@DomainService(nature = NatureOfService.DOMAIN)
 @Vetoed @Deprecated //FIXME[2128] does initialize too early 
 public class TimestampService implements
 javax.jdo.listener.StoreLifecycleListener {
@@ -52,7 +48,6 @@ javax.jdo.listener.StoreLifecycleListener {
     }
 
     @Override
-    @Programmatic
     public void preStore (InstanceLifecycleEvent event) {
 
         final Object pi = event.getPersistentInstance();
@@ -69,7 +64,6 @@ javax.jdo.listener.StoreLifecycleListener {
     }
 
     @Override
-    @Programmatic
     public void postStore (InstanceLifecycleEvent event) {
         // no-op
     }
