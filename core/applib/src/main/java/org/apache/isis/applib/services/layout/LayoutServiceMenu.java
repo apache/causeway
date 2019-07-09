@@ -40,8 +40,7 @@ import org.apache.isis.commons.internal.base._Strings;
         )
 @DomainServiceLayout(
         named = "Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500.400"
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
 public class LayoutServiceMenu {
 

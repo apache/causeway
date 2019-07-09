@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -38,7 +39,6 @@ import org.apache.isis.applib.value.LocalResourcePath;
         )
 @DomainServiceLayout(
         named = "Prototyping",
-        menuOrder = "500.800",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
 public class H2ManagerMenu {
@@ -67,6 +67,7 @@ public class H2ManagerMenu {
             named = "H2 Console",
             cssClassFa = "database"
             )
+    @MemberOrder(sequence = "500.800")
     public LocalResourcePath openH2Console() {
         if(webModule==null) {
     		return null;

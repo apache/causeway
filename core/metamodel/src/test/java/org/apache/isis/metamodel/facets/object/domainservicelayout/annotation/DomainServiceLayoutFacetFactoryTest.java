@@ -50,7 +50,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
 
     public void testAnnotationPickedUpOnClass() {
         @DomainService
-        @DomainServiceLayout(menuOrder = "123" ,menuBar = DomainServiceLayout.MenuBar.SECONDARY)
+        @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
         }
 
@@ -60,7 +60,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
         Assert.assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
         assertNoMethodsRemoved();
@@ -78,7 +78,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
 
         assertNoMethodsRemoved();
     }
@@ -95,7 +95,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
         Assert.assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
         assertNoMethodsRemoved();
@@ -103,7 +103,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
 
     public void testDomainServiceAndDomainServiceLayoutAnnotation_takes_the_minimum() {
         @DomainService(menuOrder = "1")
-        @DomainServiceLayout(menuOrder = "123", menuBar = DomainServiceLayout.MenuBar.SECONDARY)
+        @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
         }
 
@@ -113,7 +113,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
         DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("1"));
+        //Assert.assertThat(domainServiceLayoutFacet.getMenuOrder(), is("1"));
         Assert.assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
         assertNoMethodsRemoved();

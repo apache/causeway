@@ -33,13 +33,4 @@ public interface DomainServiceLayoutFacet extends Facet {
      */
     public DomainServiceLayout.MenuBar getMenuBar();
 
-    /**
-     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#menuOrder()}.
-     *
-     * <p>
-     * May be null.
-     * </p>
-     */
-    public String getMenuOrder();
-
 }

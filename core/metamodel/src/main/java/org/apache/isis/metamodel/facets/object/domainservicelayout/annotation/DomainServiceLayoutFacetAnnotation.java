@@ -28,8 +28,7 @@ public class DomainServiceLayoutFacetAnnotation extends DomainServiceLayoutFacet
 
     public DomainServiceLayoutFacetAnnotation(
             final FacetHolder facetHolder,
-            final DomainServiceLayout.MenuBar menubar,
-            final String menuOrder) {
-        super(facetHolder, menubar, menuOrder);
+            final DomainServiceLayout.MenuBar menubar) {
+        super(facetHolder, menubar);
     }
 }

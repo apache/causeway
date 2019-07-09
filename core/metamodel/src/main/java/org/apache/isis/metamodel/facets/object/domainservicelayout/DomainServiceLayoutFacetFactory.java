@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
 
 public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
@@ -52,18 +51,6 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        final String domainServiceMenuOrder =
-                domainService != null && !domainService.menuOrder().equals("" + (Integer.MAX_VALUE - 100))
-                ? domainService.menuOrder()
-                        : null;
-        final String domainServiceLayoutMenuOrder =domainServiceLayouts.stream()
-                .map(DomainServiceLayout::menuOrder)
-                .filter(menuOrder -> !menuOrder.equals("" + (Integer.MAX_VALUE - 100)))
-                .findFirst()
-                .orElse(null);
-
-        final String menuOrder = DomainServiceMenuOrder.minimumOf(domainServiceLayoutMenuOrder, domainServiceMenuOrder);
-
         final DomainServiceLayout.MenuBar menuBar =
                 domainServiceLayouts.stream()
                 .map(DomainServiceLayout::menuBar)
@@ -74,7 +61,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
         FacetUtil.addFacet(
                 new DomainServiceLayoutFacetAnnotation(
                         facetHolder,
-                        menuBar, menuOrder));
+                        menuBar));
 
         final String named =
                 domainServiceLayouts.stream()

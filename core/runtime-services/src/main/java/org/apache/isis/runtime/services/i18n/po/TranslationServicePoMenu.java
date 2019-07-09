@@ -36,8 +36,7 @@ import org.apache.isis.applib.value.Clob;
         )
 @DomainServiceLayout(
         named = "Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500.700"
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
 public class TranslationServicePoMenu {
 

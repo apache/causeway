@@ -53,8 +53,7 @@ import org.apache.isis.schema.metamodel.v1.MetamodelDto;
         )
 @DomainServiceLayout(
         named = "Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500.500"
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
 public class MetaModelServicesMenu {
 

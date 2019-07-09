@@ -54,27 +54,28 @@ public @interface DomainServiceLayout {
      */
     MenuBar menuBar() default MenuBar.NOT_SPECIFIED;
 
-    /**
-     * Number in Dewey Decimal format representing the order.
-     *
-     * <p>
-     * Same convention as {@link org.apache.isis.applib.annotation.MemberOrder#sequence()}.  If not specified, placed after any named.
-     * </p>
-     *
-     * <p>
-     *     Either this attribute or {@link DomainService#menuOrder()} can be used; they are equivalent.
-     *     Typically this attribute is used for services with a {@link DomainService#nature() nature} of
-     *     {@link NatureOfService#VIEW_MENU_ONLY} (these are visible in the UI) whereas
-     *     {@link DomainService#menuOrder()} is used for services with a nature of
-     *     {@link NatureOfService#DOMAIN domain} (which do not appear in the UI).
-     * </p>
-     *
-     * <p>
-     *     The default value is set to "Integer.MAX_VALUE - 100" so that any domain services intended to override the
-     *     default implementations provided by the framework itself will do so without having to specify the
-     *     menuOrder (with the exception of <tt>EventBusServiceJdo</tt>, all framework implementations have a
-     *     default order greater than Integer.MAX_VALUE - 50).
-     * </p>
-     */
-    String menuOrder() default Constants.MENU_ORDER_DEFAULT;
+//TODO[2140] DomainServiceLayout 
+//    /**
+//     * Number in Dewey Decimal format representing the order.
+//     *
+//     * <p>
+//     * Same convention as {@link org.apache.isis.applib.annotation.MemberOrder#sequence()}.  If not specified, placed after any named.
+//     * </p>
+//     *
+//     * <p>
+//     *     Either this attribute or {@link DomainService#menuOrder()} can be used; they are equivalent.
+//     *     Typically this attribute is used for services with a {@link DomainService#nature() nature} of
+//     *     {@link NatureOfService#VIEW_MENU_ONLY} (these are visible in the UI) whereas
+//     *     {@link DomainService#menuOrder()} is used for services with a nature of
+//     *     {@link NatureOfService#DOMAIN domain} (which do not appear in the UI).
+//     * </p>
+//     *
+//     * <p>
+//     *     The default value is set to "Integer.MAX_VALUE - 100" so that any domain services intended to override the
+//     *     default implementations provided by the framework itself will do so without having to specify the
+//     *     menuOrder (with the exception of <tt>EventBusServiceJdo</tt>, all framework implementations have a
+//     *     default order greater than Integer.MAX_VALUE - 50).
+//     * </p>
+//     */
+//    String menuOrder() default Constants.MENU_ORDER_DEFAULT;
 }

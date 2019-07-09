@@ -36,12 +36,10 @@ implements DomainServiceLayoutFacet {
     }
 
     private final DomainServiceLayout.MenuBar menuBar;
-    private final String menuOrder;
-
-    public DomainServiceLayoutFacetAbstract(final FacetHolder facetHolder, final DomainServiceLayout.MenuBar menuBar, final String menuOrder) {
+    
+    public DomainServiceLayoutFacetAbstract(final FacetHolder facetHolder, final DomainServiceLayout.MenuBar menuBar) {
         super(DomainServiceLayoutFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
         this.menuBar = menuBar;
-        this.menuOrder = menuOrder;
     }
 
     @Override
@@ -49,14 +47,8 @@ implements DomainServiceLayoutFacet {
         return menuBar;
     }
 
-    @Override
-    public String getMenuOrder() {
-        return menuOrder;
-    }
-
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("menuBar", menuBar);
-        attributeMap.put("menuOrder", menuOrder);
     }
 }

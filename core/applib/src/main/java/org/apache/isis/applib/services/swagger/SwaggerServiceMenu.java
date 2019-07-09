@@ -37,8 +37,7 @@ import org.apache.isis.commons.internal.resources._Resources;
         )
 @DomainServiceLayout(
         named = "Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500.600"
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
 public class SwaggerServiceMenu {
 

@@ -35,8 +35,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
         objectType = "isisApplib.ConfigurationMenu"
         )
 @DomainServiceLayout(
-        menuBar = DomainServiceLayout.MenuBar.TERTIARY,
-        menuOrder = "500.900"
+        menuBar = DomainServiceLayout.MenuBar.TERTIARY
         )
 public class ConfigurationMenu {
 

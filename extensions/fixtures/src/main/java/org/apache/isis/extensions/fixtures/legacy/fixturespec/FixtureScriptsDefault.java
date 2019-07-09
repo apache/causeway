@@ -69,8 +69,7 @@ import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
         )
 @DomainServiceLayout(
         named="Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500.10"
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY
         )
 public class FixtureScriptsDefault extends FixtureScripts {
 
