@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.SwaggerServiceMenu"
         )
 @DomainServiceLayout(

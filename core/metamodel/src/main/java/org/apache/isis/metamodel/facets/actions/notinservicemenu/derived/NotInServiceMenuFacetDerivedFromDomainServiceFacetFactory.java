@@ -48,8 +48,8 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends F
         }
 
         final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-        if(natureOfService == NatureOfService.VIEW_MENU_ONLY || natureOfService == NatureOfService.VIEW) {
-            return;
+        if(natureOfService.isView()) {
+        	return;
         }
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();

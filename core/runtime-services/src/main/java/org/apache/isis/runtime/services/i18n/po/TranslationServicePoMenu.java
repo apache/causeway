@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.TranslationServicePoMenu"
         )
 @DomainServiceLayout(

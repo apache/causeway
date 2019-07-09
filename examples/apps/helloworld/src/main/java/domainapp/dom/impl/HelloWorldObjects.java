@@ -35,7 +35,7 @@ import org.apache.isis.jdo.jdosupport.IsisJdoSupport_v3_2;
 import domainapp.dom.types.Name;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "helloworld.HelloWorldObjects"
 )
 public class HelloWorldObjects {

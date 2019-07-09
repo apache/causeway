@@ -160,7 +160,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     public void whenMenu() throws Exception {
 
         // given
-        @DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
+        @DomainService(nature = NatureOfService.VIEW)
         class CustomerService {
 
             public String name() {
@@ -173,7 +173,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) {
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
             }));
         }});
 

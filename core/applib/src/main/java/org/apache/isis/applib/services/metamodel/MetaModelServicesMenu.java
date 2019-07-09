@@ -48,7 +48,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.MetaModelServicesMenu"
         )
 @DomainServiceLayout(

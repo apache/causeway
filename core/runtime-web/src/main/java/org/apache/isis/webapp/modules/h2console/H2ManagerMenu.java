@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.value.LocalResourcePath;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.H2ManagerMenu"
         )
 @DomainServiceLayout(

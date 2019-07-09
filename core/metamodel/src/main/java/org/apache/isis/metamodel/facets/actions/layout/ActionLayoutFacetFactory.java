@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.actions.layout;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -129,20 +128,14 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
     private static boolean isContributingService(final ObjectSpecification spec) {
         final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-        return domainServiceFacet != null && !domainServiceFacet.isNoop() &&
-                domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_MENU_ONLY &&
-                domainServiceFacet.getNatureOfService() != NatureOfService.DOMAIN;
+        return domainServiceFacet != null && !domainServiceFacet.isNoop() && 
+        		domainServiceFacet.getNatureOfService().isContributingToViewer();
     }
 
     private static boolean isMixinObject(final ObjectSpecification spec) {
         final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
         final boolean b = mixinFacet != null && !mixinFacet.isNoop();
         return b;
-    }
-
-    // UNUSED
-    protected boolean skipContributing(final DomainServiceFacet domainServiceFacet) {
-        return domainServiceFacet == null || domainServiceFacet.isNoop() || domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_MENU_ONLY || domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
     }
 
     @Override

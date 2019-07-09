@@ -36,7 +36,7 @@ import org.apache.isis.jdo.jdosupport.IsisJdoSupport_v3_2;
 import domainapp.modules.simple.dom.types.Name;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "simple.SimpleObjects"
 )
 public class SimpleObjects {

@@ -32,7 +32,7 @@ import domainapp.dom.types.text.TextDemo;
 import domainapp.dom.types.time.TemporalDemo;
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW_MENU_ONLY)
+@DomainService(nature=NatureOfService.VIEW)
 @DomainObjectLayout(named="Featured Types")
 public class FeaturedTypesMenu {
     

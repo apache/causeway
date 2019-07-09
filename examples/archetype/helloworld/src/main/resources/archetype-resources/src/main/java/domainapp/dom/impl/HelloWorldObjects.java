@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import domainapp.dom.types.Name;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "${artifactId}.HelloWorldObjects"
 )
 public class HelloWorldObjects {

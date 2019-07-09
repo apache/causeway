@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW_MENU_ONLY)
+@DomainService(nature=NatureOfService.VIEW)
 public class JeeMenu {
     
     @Inject private FactoryService factoryService;

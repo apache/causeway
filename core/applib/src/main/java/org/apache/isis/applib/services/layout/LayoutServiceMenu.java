@@ -35,7 +35,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.LayoutServiceMenu"
         )
 @DomainServiceLayout(

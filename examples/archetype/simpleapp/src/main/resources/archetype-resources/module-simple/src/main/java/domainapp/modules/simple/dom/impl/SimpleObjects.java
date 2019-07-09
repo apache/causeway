@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import domainapp.modules.simple.dom.types.Name;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "simple.SimpleObjects"
 )
 public class SimpleObjects {

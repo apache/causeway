@@ -64,7 +64,7 @@ import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
  * </p>
  */
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.FixtureScriptsDefault"
         )
 @DomainServiceLayout(

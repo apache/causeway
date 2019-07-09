@@ -23,54 +23,70 @@ package org.apache.isis.applib.annotation;
  */
 public enum NatureOfService {
 
-    /**
-     * The service's actions appear in the viewer, for example in the menu bar.
-     */
-    VIEW,
-    /**
-     * TODO: v2: remove for v2
-     *
-     * @deprecated - use {@link #VIEW} instead
-     */
-    @Deprecated
-    VIEW_MENU_ONLY,
-    /**
-     * TODO: v2: remove for v2
-     *
-     * @deprecated - use mixins instead
-     */
-    @Deprecated
-    VIEW_CONTRIBUTIONS_ONLY,
-    /**
-     * The services actions should only be visible in the REST API exposed by the Restful Objects viewer.
-     */
-    VIEW_REST_ONLY,
-    /**
-     * The service's actions do not appear on menus and are not contributed.
-     */
-    DOMAIN;
+	/**
+	 * The service's actions appear in the viewer, for example in the menu bar.
+	 */
+	VIEW,
 
-    boolean isViewRestOnly() {
-        return this == VIEW_REST_ONLY;
-    }
-    boolean isView() {
-        return this == VIEW;
-    }
-    @Deprecated
-    boolean isViewMenuOnly() {
-        return this == VIEW_MENU_ONLY;
-    }
-    @Deprecated
-    boolean isViewContributionsOnly() {
-        return this == VIEW_CONTRIBUTIONS_ONLY;
-    }
-    boolean isDomain() {
-        return this == DOMAIN;
-    }
+	/**
+	 * The services actions should only be visible in the REST API exposed by the Restful Objects viewer.
+	 */
+	VIEW_REST_ONLY,
 
-    @Deprecated
-    boolean isViewOrViewMenuOnly() {
-        return isView() || isViewMenuOnly();
-    }
+	/**
+	 * The service's actions do not appear on menus and are not contributed.
+	 */
+	DOMAIN,
+
+
+	//    /**
+	//     * TODO: v2: remove for v2
+	//     *
+	//     * @deprecated - use {@link #VIEW} instead
+	//     */
+	//    @Deprecated
+	//    VIEW_MENU_ONLY,
+
+	/**
+	 * TODO: v2: remove for v2
+	 *
+	 * @deprecated - use mixins instead
+	 */
+	@Deprecated
+	VIEW_CONTRIBUTIONS_ONLY,
+
+	;
+
+	// -- BASIC PREDICATES
+
+	public boolean isViewRestOnly() {
+		return this == VIEW_REST_ONLY;
+	}
+
+	public boolean isView() {
+		return this == VIEW;
+	}
+
+	public boolean isDomain() {
+		return this == DOMAIN;
+	}
+
+	// -- ADVANCED PREDICATES
+
+	// -- DEPRECATIONS
+
+	@Deprecated
+	boolean isViewContributionsOnly() {
+		return this == VIEW_CONTRIBUTIONS_ONLY;
+	}
+
+	/**
+	 * @implNote introduced as a refactoring step, should be removed if no longer required
+	 */
+	public boolean isContributingToViewer() {
+		return
+			//this != NatureOfService.VIEW_MENU_ONLY &&
+	        this != NatureOfService.DOMAIN;
+	}
 
 }
