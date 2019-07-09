@@ -82,11 +82,14 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
                     "%s: menu/contributed services (nature == VIEW) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
                     cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
             break;
-        case VIEW_CONTRIBUTIONS_ONLY:
-            mixinOnlyValidator.addFailure(
-                    "%s: contributed services (nature == VIEW_CONTRIBUTIONS_ONLY) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
-                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
-            break;
+//TODO[2142] remove deprecated case          
+//        case VIEW_CONTRIBUTIONS_ONLY:
+//            mixinOnlyValidator.addFailure(
+//                    "%s: contributed services (nature == VIEW_CONTRIBUTIONS_ONLY) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
+//                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
+//            break;
+            default:
+            	// no op
         }
     }
 

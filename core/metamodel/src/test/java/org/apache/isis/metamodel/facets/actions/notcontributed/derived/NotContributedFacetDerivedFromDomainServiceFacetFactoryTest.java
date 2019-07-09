@@ -155,38 +155,39 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         assertThat(facet, is(nullValue()));
     }
 
-    @Test
-    public void whenContributions() throws Exception {
-
-        // given
-        @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
-        class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
-        }
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-            }));
-        }});
-
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
-
-        // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-        assertThat(facet, is(nullValue()));
-    }
+//TODO[2142] NatureOfService.VIEW_CONTRIBUTIONS_ONLY was deprecated, remove ?    
+//    @Test
+//    public void whenContributions() throws Exception {
+//
+//        // given
+//        @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
+//        class CustomerService {
+//
+//            public String name() {
+//                return "Joe";
+//            }
+//        }
+//
+//        context.checking(new Expectations() {{
+//            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
+//            will(returnValue(mockObjSpec));
+//
+//            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+//            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
+//            }));
+//        }});
+//
+//        expectNoMethodsRemoved();
+//
+//        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+//
+//        // when
+//        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+//
+//        // then
+//        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
+//        assertThat(facet, is(nullValue()));
+//    }
 
     @Test
     public void whenNone() throws Exception {

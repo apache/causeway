@@ -20,6 +20,14 @@ package org.apache.isis.applib.annotation;
 
 /**
  * The different sorts of domain services recognized by Isis, as specified in {@link DomainService#nature()}
+ * 
+ * <p>
+ * Deprecation Notes (1.x):
+ * <ul>
+ * <li>instead of {@code VIEW_MENU_ONLY} use {@code VIEW}</li> 
+ * <li>instead of {@code VIEW_CONTRIBUTIONS_ONLY} use Mixins</li>
+ * </ul>
+ * 
  */
 public enum NatureOfService {
 
@@ -38,23 +46,6 @@ public enum NatureOfService {
 	 */
 	DOMAIN,
 
-
-	//    /**
-	//     * TODO: v2: remove for v2
-	//     *
-	//     * @deprecated - use {@link #VIEW} instead
-	//     */
-	//    @Deprecated
-	//    VIEW_MENU_ONLY,
-
-	/**
-	 * TODO: v2: remove for v2
-	 *
-	 * @deprecated - use mixins instead
-	 */
-	@Deprecated
-	VIEW_CONTRIBUTIONS_ONLY,
-
 	;
 
 	// -- BASIC PREDICATES
@@ -72,13 +63,6 @@ public enum NatureOfService {
 	}
 
 	// -- ADVANCED PREDICATES
-
-	// -- DEPRECATIONS
-
-	@Deprecated
-	boolean isViewContributionsOnly() {
-		return this == VIEW_CONTRIBUTIONS_ONLY;
-	}
 
 	/**
 	 * @implNote introduced as a refactoring step, should be removed if no longer required
