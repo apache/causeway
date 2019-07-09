@@ -28,8 +28,14 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.extensions.specsupport</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/extensions/specsupport</git-plugin.propertiesDir>
+
+<!-- provides the most recent versions, but e.g. eclipse cucumber plugin lags behind -->		
+<!-- 		<cucumber.impl>io.cucumber</cucumber.impl> -->
+<!-- 		<cucumber.version>4.2.6</cucumber.version> -->
 		
-		<cucumber.version>4.2.6</cucumber.version>
+		<cucumber.impl>info.cukes</cucumber.impl>
+		<cucumber.version>1.2.5</cucumber.version>
+    
 	</properties>
 
 	<dependencies>
@@ -83,17 +89,17 @@
 		<!-- CUCUMBER -->
 
 		<dependency>
-		    <groupId>io.cucumber</groupId>
+		    <groupId>${cucumber.impl}</groupId>
 		    <artifactId>cucumber-java</artifactId>
 		    <version>${cucumber.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>io.cucumber</groupId>
+		    <groupId>${cucumber.impl}</groupId>
 		    <artifactId>cucumber-spring</artifactId>
 		    <version>${cucumber.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>io.cucumber</groupId>
+		    <groupId>${cucumber.impl}</groupId>
 		    <artifactId>cucumber-junit</artifactId>
 		    <version>${cucumber.version}</version>
 		    <exclusions>

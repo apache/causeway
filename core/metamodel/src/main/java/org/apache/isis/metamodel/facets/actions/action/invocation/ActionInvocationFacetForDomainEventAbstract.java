@@ -138,7 +138,7 @@ implements ImperativeFacet {
         		getTransactionService().executeWithinTransaction(()->
                     doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
         
-        PersistableTypeGuard.instate(executionResult);
+        //PersistableTypeGuard.instate(executionResult);
         
         return executionResult;
     }

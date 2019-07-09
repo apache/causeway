@@ -27,14 +27,9 @@ import cucumber.api.junit.Cucumber;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-		
         plugin = {
                 "html:target/cucumber-html-report"
                 ,"json:target/cucumber.json"
-        },
-        glue={
-                "classpath:domainapp.application.bdd.specglue",
-                "classpath:domainapp.modules.simple.specglue"
         },
         strict = true,
         tags = { "~@backlog", "~@ignore" }

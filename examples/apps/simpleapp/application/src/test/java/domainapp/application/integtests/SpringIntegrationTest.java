@@ -18,12 +18,25 @@
  */
 package domainapp.application.integtests;
 
+import javax.inject.Inject;
+
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import domainapp.application.manifest.SimpleAppManifest;
 
 @SpringBootTest(classes = SimpleAppManifest.class)
-public class SpringIntegrationTest {
+@ContextConfiguration
+public abstract class SpringIntegrationTest {
 
-
+	@Inject protected WrapperFactory wrapperFactory;
+	
+	 /**
+     * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}
+     */
+    protected <T> T wrap(final T obj) {
+        return wrapperFactory.wrap(obj);
+    }
+	
 }

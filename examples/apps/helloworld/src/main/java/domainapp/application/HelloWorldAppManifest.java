@@ -24,7 +24,6 @@ import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;

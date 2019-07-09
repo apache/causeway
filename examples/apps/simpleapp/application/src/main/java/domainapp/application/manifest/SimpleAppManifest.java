@@ -23,9 +23,12 @@ import javax.inject.Singleton;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
+import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -39,16 +42,23 @@ import org.springframework.core.io.ClassPathResource;
 import domainapp.application.DomainAppApplicationModule;
 import domainapp.modules.simple.SimpleModule;
 
+/**
+ * Makes the integral parts of the 'hello world' web application.
+ */
 @Configuration
 @PropertySources({
-    @PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
+	@PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(name=Presets.DataNucleusAutoCreate, factory = Presets.Factory.class, value = { "" }),
 })
 @Import({
     IsisBoot.class,
+    IsisBootSecurityShiro.class,
     IsisBootDataNucleus.class,
-    FixtureScriptsDefault.class,
+    IsisBootWebRestfulObjects.class,
+    IsisBootWebWicket.class,
+    IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {
