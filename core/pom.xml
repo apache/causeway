@@ -2472,7 +2472,6 @@
 		<module>commons</module>
 		<module>config</module>
 		<module>applib</module>
-		<module>log4j</module>
 		<module>metamodel</module>
 		<module>runtime</module>
 		<module>runtime-services</module>
