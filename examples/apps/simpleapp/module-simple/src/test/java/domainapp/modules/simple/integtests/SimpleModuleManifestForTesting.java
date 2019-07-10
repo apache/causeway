@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.manifest;
+package domainapp.modules.simple.integtests;
 
 import javax.inject.Singleton;
 
@@ -26,9 +26,7 @@ import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
-import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
+import org.apache.isis.security.IsisBootSecurityBypass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -37,48 +35,37 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.io.ClassPathResource;
 
-import domainapp.application.DomainAppApplicationModule;
 import domainapp.modules.simple.SimpleModule;
 
+
 /**
- * Makes the integral parts of the 'simple app' web application.
+ * Makes the integral parts of the 'module-simple' integration tests.
  */
 @Configuration
 @PropertySources({
-	@PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
-    @PropertySource(name=Presets.HsqlDbInMemory, factory = Presets.Factory.class, value = { "" }),
-    @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
+	//@PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
+	@PropertySource(name=Presets.HsqlDbInMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.DataNucleusAutoCreate, factory = Presets.Factory.class, value = { "" }),
 })
 @Import({
     IsisBoot.class,
-    IsisBootSecurityShiro.class,
+    IsisBootSecurityBypass.class,
     IsisBootDataNucleus.class,
-    IsisBootWebRestfulObjects.class,
-    IsisBootWebWicket.class,
     IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {
-                DomainAppApplicationModule.class,
                 SimpleModule.class
         },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
-public class SimpleAppManifest {
+public class SimpleModuleManifestForTesting {
     
    @Bean @Singleton
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()
-               .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-               .brandLogoHeader("/images/gift_48.png")
-               .applicationCss("css/application.css")
-               .applicationJs("scripts/application.js")
-               .applicationName("Apache Isis Simple App")
-               .faviconUrl("/images/favicon.png")
                .build();
    }
    

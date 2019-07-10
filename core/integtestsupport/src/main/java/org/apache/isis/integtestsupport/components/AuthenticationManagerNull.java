@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.integtestsupport.components;
 
 import org.apache.isis.commons.internal.components.Noop;

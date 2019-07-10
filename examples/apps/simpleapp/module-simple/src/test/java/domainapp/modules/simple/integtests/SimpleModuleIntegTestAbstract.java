@@ -18,12 +18,16 @@
  */
 package domainapp.modules.simple.integtests;
 
-public abstract class SimpleModuleIntegTestAbstract /*extends IntegrationTestJupiter*/ {
+import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstactWithFixtures;
+import org.springframework.boot.test.context.SpringBootTest;
 
-  //FIXME[2112] needs migration
-//    public SimpleModuleIntegTestAbstract() {
-//        super(new SimpleModule().withConfigurationProperty("isis.objects.editing", "false"));
-//    }
+@SpringBootTest(
+		classes = SimpleModuleManifestForTesting.class, 
+		properties = {
+				"isis.objects.editing=false"
+		})
+public abstract class SimpleModuleIntegTestAbstract extends IsisIntegrationTestAbstactWithFixtures {
 
 
 }
+
