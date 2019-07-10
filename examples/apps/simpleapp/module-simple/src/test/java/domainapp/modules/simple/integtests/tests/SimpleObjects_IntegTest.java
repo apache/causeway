@@ -26,11 +26,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
+import org.apache.isis.integtestsupport.ThrowableMatchers;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,29 +99,10 @@ public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
         	
         	// also expect
         	MatcherAssert.assertThat(cause, 
-        			causalChainContains(SQLIntegrityConstraintViolationException.class));
+        			ThrowableMatchers.causedBy(SQLIntegrityConstraintViolationException.class));
 
         }
-
-        private static Matcher<Throwable> causalChainContains(final Class<?> cls) {
-            return new TypeSafeMatcher<Throwable>() {
-                @Override
-                protected boolean matchesSafely(Throwable item) {
-                    final List<Throwable> causalChain = _Exceptions.getCausalChain(item);
-                    for (Throwable throwable : causalChain) {
-                        if(cls.isAssignableFrom(throwable.getClass())){
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                //@Override
-                public void describeTo(Description description) {
-                    description.appendText("exception with causal chain containing " + cls.getSimpleName());
-                }
-            };
-        }
+        
     }
 
 
