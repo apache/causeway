@@ -86,8 +86,32 @@
 			<version>${isis.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-api</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-realm-shiro</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
 		<!-- OTHER DEPENDENCIES -->
-		
+
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -107,7 +131,7 @@
 	</dependencies>
 
 	<profiles>
-	
+
 		<!-- running: mvn spring-boot:run -->
 		<profile>
 			<id>package-as-jar</id>
@@ -176,10 +200,10 @@
 		</profile>
 
 	</profiles>
-	
+
 	<build>
 		<plugins>
-		
+
 			<plugin>
 				<groupId>com.github.odavid.maven.plugins</groupId>
 				<artifactId>mixin-maven-plugin</artifactId>
@@ -206,7 +230,7 @@
 					</mixins>
 				</configuration>
 			</plugin>
-		
+
 		</plugins>
 	</build>
 

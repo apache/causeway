@@ -135,7 +135,7 @@ public interface WrapperFactory {
 
         @Override
         public <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
-            return wrap(factoryService.m(mixinClass, mixedIn));
+            return wrap(factoryService.mixin(mixinClass, mixedIn));
         }
 
         @Override

@@ -19,22 +19,28 @@
 
 package org.apache.isis.runtime.services.factory;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
+
+import lombok.val;
 
 @Singleton 
 public class FactoryServiceInternalDefault implements FactoryService {
@@ -52,12 +58,6 @@ public class FactoryServiceInternalDefault implements FactoryService {
      */
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
         return persistenceSessionServiceInternal.createTransientInstance(spec);
-    }
-
-
-    @Override
-    public <T> T m(final Class<T> mixinClass, final Object mixedIn) {
-        return mixin(mixinClass, mixedIn);
     }
 
 
@@ -88,6 +88,31 @@ public class FactoryServiceInternalDefault implements FactoryService {
         throw new NonRecoverableException( String.format(
                 "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
+    
+    @Override
+	public <T> T viewModel(Class<T> viewModelClass, String mementoStr) {
+    	requires(viewModelClass, "viewModelClass");
+    	
+    	val spec = specificationLoader.loadSpecification(viewModelClass);
+		if (!spec.containsFacet(ViewModelFacet.class)) {
+			val msg = String.format("Type '%s' must be recogniced as a ViewModel, that is the type's meta-model "
+					+ "must have an associated ViewModelFacet: ", viewModelClass.getName());
+			throw new IllegalArgumentException(msg);
+		}
+		
+		if(ViewModel.class.isAssignableFrom(viewModelClass)) {
+			//FIXME[2152] is this required, or does the below code suffice for all cases?
+			val viewModel = (ViewModel) instantiate(viewModelClass);
+			viewModel.viewModelInit(mementoStr);
+			return _Casts.uncheckedCast(viewModel);
+		}
+		
+		val viewModelFacet = spec.getFacet(ViewModelFacet.class);
+		val viewModel = viewModelFacet.createViewModelPojo(spec, mementoStr, __->instantiate(viewModelClass));
+
+		return _Casts.uncheckedCast(viewModel);
+    }
+    
 
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory; // dependsOn
@@ -103,5 +128,7 @@ public class FactoryServiceInternalDefault implements FactoryService {
     
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
+	
 
 }

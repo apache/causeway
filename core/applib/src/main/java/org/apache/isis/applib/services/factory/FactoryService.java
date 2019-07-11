@@ -19,13 +19,14 @@
 
 package org.apache.isis.applib.services.factory;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 public interface FactoryService {
 
     /**
-     * Create a new instance of the specified class, but do not persist it.
+     * Creates a new instance of the specified class, but does not persist it.
      *
      * <p>
      * It is recommended that the object be initially instantiated using
@@ -52,14 +53,26 @@ public interface FactoryService {
      * method.
      * </p>
      */
-    @Programmatic
     <T> T instantiate(Class<T> domainClass);
 
-
-    @Programmatic
+    /**
+     * Creates a new Mixin instance.
+     * @param <T>
+     * @param mixinClass
+     * @param mixedIn
+     * @return
+     */
     <T> T mixin(Class<T> mixinClass, Object mixedIn);
 
-    @Programmatic
-    <T> T m(Class<T> mixinClass, Object mixedIn);
-
+    /**
+     * Creates a new ViewModel instance, and initializes according to the given {@code mementoStr} 
+     * @param viewModelClass
+     * @param mementoStr
+     * @since 2.0
+     * @apiNote EXPERIMENTAL
+     */
+    <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);
+    
+    
+    
 }

@@ -37,6 +37,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -141,8 +142,7 @@ public class UserPermissionViewModel implements ViewModel {
         final ApplicationPermissionValue changingEvaluationCause = changingEvaluation.getCause();
         final ApplicationFeatureId changingEvaluationCauseFeatureId = changingEvaluationCause != null? changingEvaluationCause.getFeatureId(): null;
         
-
-        return TransitionHelper.join(
+        return join(
                 username, 
 
                 viewingEvaluationGranted,
@@ -157,9 +157,16 @@ public class UserPermissionViewModel implements ViewModel {
                 changingEvaluationCause != null? changingEvaluationCause.getRule(): "",
                 changingEvaluationCause != null? changingEvaluationCause.getMode(): "",
 
-                featureId.getType(), featureId.getFullyQualifiedName()
+                featureId.getType(), 
+                featureId.getFullyQualifiedName()
         		);
     }
+    
+    private static String join(Object ... args) {
+		return _NullSafe.stream(args)
+		.map(arg->""+arg)
+		.collect(Collectors.joining(":"));
+	}
 
     private void parseEncoded(final String encodedString) {
         parse(base64UrlDecode(encodedString));

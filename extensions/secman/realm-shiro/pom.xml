@@ -27,7 +27,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-secman-realm</artifactId>
+    <artifactId>isis-extensions-secman-realm-shiro</artifactId>
     <name>Apache Isis Extensions - Security Manager Realm (Using Shiro)</name>
     <description></description>
 

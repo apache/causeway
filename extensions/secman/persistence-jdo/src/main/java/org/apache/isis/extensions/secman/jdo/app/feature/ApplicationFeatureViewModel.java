@@ -181,7 +181,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 
 	// -- packageName
-	public static class PackageNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+	public static class PackageNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
+		private static final long serialVersionUID = 1L;}
 
 	@Property(
 			domainEvent = PackageNameDomainEvent.class
@@ -198,7 +199,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 	// -- className
 
-	public static class ClassNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+	public static class ClassNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
+		private static final long serialVersionUID = 1L;}
 
 	/**
 	 * For packages, will be null. Is in this class (rather than subclasses) so is shown in
@@ -222,7 +224,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 	// -- memberName
 
-	public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+	public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
+		private static final long serialVersionUID = 1L;}
 
 	/**
 	 * For packages and class names, will be null.
@@ -247,7 +250,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 	// -- parent (property)
 
-	public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, ApplicationFeatureViewModel> {}
+	public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, ApplicationFeatureViewModel> {
+		private static final long serialVersionUID = 1L;}
 
 	@Property(
 			domainEvent = ParentDomainEvent.class
@@ -278,7 +282,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 	// -- contributed (property)
 
-	public static class ContributedDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, Boolean> {}
+	public static class ContributedDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, Boolean> {
+		private static final long serialVersionUID = 1L;}
 
 	/**
 	 * For packages and class names, will be null.
@@ -299,7 +304,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 
 	// -- permissions (collection)
-	public static class PermissionsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {}
+	public static class PermissionsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {
+		private static final long serialVersionUID = 1L;}
 
 	@Collection(
 			domainEvent = PermissionsDomainEvent.class

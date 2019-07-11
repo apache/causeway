@@ -988,7 +988,7 @@ implements InstallableFixture {
      * Convenience method, synonym for {@link #mixin(Class, Object)}.
      */
     protected <T> T m(final Class<T> mixinClass, final Object mixedIn) {
-        return factoryService.m(mixinClass, mixedIn);
+        return factoryService.mixin(mixinClass, mixedIn);
     }
 
     /**
