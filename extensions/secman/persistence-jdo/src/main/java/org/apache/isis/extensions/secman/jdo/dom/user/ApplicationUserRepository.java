@@ -26,20 +26,18 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-
-import com.google.common.collect.Lists;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -57,7 +55,6 @@ public class ApplicationUserRepository {
      * If the user does not exist, it will be automatically created.
      * </p>
      */
-    @Programmatic
     public ApplicationUser findOrCreateUserByUsername(
             final String username) {
         // slightly unusual to cache a function that modifies state, but safe because this is idempotent
@@ -73,11 +70,8 @@ public class ApplicationUserRepository {
         }, ApplicationUserRepository.class, "findOrCreateUserByUsername", username);
     }
 
-    
-
     // -- findByUsername
 
-    @Programmatic
     public ApplicationUser findByUsernameCached(final String username) {
         return queryResultsCache.execute(new Callable<ApplicationUser>() {
             @Override public ApplicationUser call() throws Exception {
@@ -86,18 +80,14 @@ public class ApplicationUserRepository {
         }, ApplicationUserRepository.class, "findByUsernameCached", username);
     }
 
-    @Programmatic
     public ApplicationUser findByUsername(final String username) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
                 "findByUsername", "username", username));
     }
 
-    
-
     // -- findByEmailAddress (programmatic)
 
-    @Programmatic
     public ApplicationUser findByEmailAddressCached(final String emailAddress) {
         return queryResultsCache.execute(new Callable<ApplicationUser>() {
             @Override public ApplicationUser call() throws Exception {
@@ -106,28 +96,23 @@ public class ApplicationUserRepository {
         }, ApplicationUserRepository.class, "findByEmailAddressCached", emailAddress);
     }
 
-    @Programmatic
     public ApplicationUser findByEmailAddress(final String emailAddress) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
                 "findByEmailAddress", "emailAddress", emailAddress));
     }
-    
 
     // -- findByName
 
-    @Programmatic
     public List<ApplicationUser> find(final String search) {
         final String regex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
                 "find", "regex", regex));
     }
-    
 
     // -- newDelegateUser (action)
 
-    @Programmatic
     public ApplicationUser newDelegateUser(
             final String username,
             final ApplicationRole initialRole,
@@ -142,11 +127,9 @@ public class ApplicationUserRepository {
         repository.persist(user);
         return user;
     }
-    
 
     // -- newLocalUser (action)
 
-    @Programmatic
     public ApplicationUser newLocalUser(
             final String username,
             final Password password,
@@ -174,7 +157,6 @@ public class ApplicationUserRepository {
         return user;
     }
 
-    @Programmatic
     public String validateNewLocalUser(
             final String username,
             final Password password,
@@ -185,8 +167,6 @@ public class ApplicationUserRepository {
         final ApplicationUser user = getApplicationUserFactory().newApplicationUser();
         return user.validateResetPassword(password, passwordRepeat);
     }
-
-    
 
     // -- newLocalUserBasedOn (action)
 
@@ -203,36 +183,27 @@ public class ApplicationUserRepository {
         }
         return user;
     }
-    
-
 
     // -- allUsers
 
-    @Programmatic
     public List<ApplicationUser> findByAtPath(final String atPath) {
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
                 "findByAtPath", "atPath", atPath));
     }
 
-    
-
-
     // -- allUsers
 
-    @Programmatic
     public List<ApplicationUser> allUsers() {
         return repository.allInstances(ApplicationUser.class);
     }
-
-    
 
     @Action(semantics = SemanticsOf.SAFE)
     public List<ApplicationUser> findMatching(final String search) {
         if (search != null && search.length() > 0) {
             return find(search);
         }
-        return Lists.newArrayList();
+        return _Lists.newArrayList();
     }
     
 

@@ -19,14 +19,13 @@
 package org.apache.isis.extensions.secman.jdo.dom.permission;
 
 import java.util.Comparator;
+import java.util.Objects;
+import java.util.function.Function;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.VersionStrategy;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Ordering;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -479,7 +478,7 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     public static class DefaultComparator implements Comparator<ApplicationPermission> {
         @Override
         public int compare(final ApplicationPermission o1, final ApplicationPermission o2) {
-            return Ordering.natural().compare(o1, o2);
+            return Objects.compare(o1, o2, (a, b) -> a.compareTo(b) );
         }
     }
     
@@ -490,20 +489,11 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
         private Functions(){}
 
-        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = new Function<ApplicationPermission, ApplicationPermissionValue>() {
-            @Override
-            public ApplicationPermissionValue apply(final ApplicationPermission input) {
-                return new ApplicationPermissionValue(input.getFeatureId(), input.getRule(), input.getMode());
-            }
-        };
+        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
+        		(ApplicationPermission input) ->
+                	new ApplicationPermissionValue(input.getFeatureId(), input.getRule(), input.getMode());
 
-
-        public static final Function<ApplicationPermission, String> GET_FQN = new Function<ApplicationPermission, String>() {
-            @Override
-            public String apply(final ApplicationPermission input) {
-                return input.getFeatureFqn();
-            }
-        };
+        public static final Function<ApplicationPermission, String> GET_FQN = ApplicationPermission::getFeatureFqn;
 
     }
     

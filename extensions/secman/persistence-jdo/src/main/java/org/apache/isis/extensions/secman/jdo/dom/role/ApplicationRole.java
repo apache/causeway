@@ -19,18 +19,12 @@
 package org.apache.isis.extensions.secman.jdo.dom.role;
 
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -54,6 +48,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -564,10 +559,9 @@ public class ApplicationRole implements Comparable<ApplicationRole> {
             final ApplicationFeatureType type) {
         final List<ApplicationPermission> permissions = applicationPermissionRepository.findByRoleAndRuleAndFeatureTypeCached(
                 this, rule, type);
-        return Lists.newArrayList(
-                Iterables.transform(
+        return _Lists.map(
                         permissions,
-                        ApplicationPermission.Functions.GET_FQN));
+                        ApplicationPermission.Functions.GET_FQN);
     }
 
     
@@ -620,7 +614,7 @@ public class ApplicationRole implements Comparable<ApplicationRole> {
 
     public List<ApplicationUser> autoComplete0AddUser(final String search) {
         final List<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = Lists.newArrayList(matchingSearch);
+        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
         list.removeAll(getUsers());
         return list;
     }
@@ -688,20 +682,6 @@ public class ApplicationRole implements Comparable<ApplicationRole> {
         final ApplicationRole adminRole = applicationRoleRepository.findByNameCached(
                 IsisModuleSecurityAdminRoleAndPermissions.ROLE_NAME);
         return this == adminRole;
-    }
-    
-
-    // -- Functions
-
-    public static class Functions {
-        private Functions(){}
-
-        public static Function<ApplicationRole, String> GET_NAME = new Function<ApplicationRole, String>() {
-            @Override
-            public String apply(final ApplicationRole input) {
-                return input.getName();
-            }
-        };
     }
     
 

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.app.user;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
@@ -29,20 +30,20 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import lombok.val;
 
 @Mixin
 public class ApplicationUser_permissions {
 
-
-    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_permissions> {}
+    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_permissions> {
+		private static final long serialVersionUID = 1L;}
 
     // -- constructor
     private final ApplicationUser user;
@@ -65,16 +66,14 @@ public class ApplicationUser_permissions {
     )
     @MemberOrder(sequence = "30")
     public List<UserPermissionViewModel> $$() {
-        final java.util.Collection<ApplicationFeature> allMembers = applicationFeatureRepository.allMembers();
+        val allMembers = applicationFeatureRepository.allMembers();
         return asViewModels(allMembers);
     }
 
-    List<UserPermissionViewModel> asViewModels(final Iterable<ApplicationFeature> features) {
-        return Lists.newArrayList(
-                Iterables.transform(
+    List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
+        return _Lists.map(
                         features,
-                        UserPermissionViewModel.Functions.asViewModel(user, transitionHelper))
-        );
+                        UserPermissionViewModel.Functions.asViewModel(user, transitionHelper));
     }
 
     @javax.inject.Inject

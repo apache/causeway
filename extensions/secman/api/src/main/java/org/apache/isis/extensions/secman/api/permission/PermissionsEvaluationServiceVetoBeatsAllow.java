@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).
@@ -44,7 +44,7 @@ public class PermissionsEvaluationServiceVetoBeatsAllow extends PermissionsEvalu
      */
     @Override
     protected Iterable<ApplicationPermissionValue> ordered(final Collection<ApplicationPermissionValue> permissionValues) {
-        final ArrayList<ApplicationPermissionValue> reversed = Lists.newArrayList(permissionValues);
+        final ArrayList<ApplicationPermissionValue> reversed = _Lists.newArrayList(permissionValues);
         Collections.reverse(reversed);
         return reversed;
     }

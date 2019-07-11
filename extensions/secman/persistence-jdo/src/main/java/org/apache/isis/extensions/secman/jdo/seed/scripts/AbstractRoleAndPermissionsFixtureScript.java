@@ -19,9 +19,12 @@
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -30,8 +33,7 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
+import lombok.val;
 
 public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScript {
 
@@ -120,27 +122,23 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         }
     }
 
-    private static Iterable<String> asFeatureFqns(Class<?>[] classes) {
-        return Iterables.transform(Arrays.asList(classes), new Function<Class<?>, String>(){
-            @Override
-            public String apply(Class<?> input) {
-                return input.getName();
-            }
-        });
+    private static List<String> asFeatureFqns(Class<?>[] classes) {
+        return _NullSafe.stream(classes)
+        		.map(Class::getName)
+        		.collect(Collectors.toList());
     }
 
     private static Iterable<String> asFeatureFqns(final Class<?> cls, final String[] members) {
-        return Iterables.transform(Arrays.asList(members), new Function<String,String>(){
-            @Override
-            public String apply(String memberName) {
-                final StringBuilder buf = new StringBuilder(cls.getName());
-                if(!memberName.startsWith("#")) {
-                    buf.append("#");
-                }
-                buf.append(memberName);
-                return buf.toString();
-            }
-        });
+    	return _NullSafe.stream(members)
+        		.map(memberName->{
+        			val buf = new StringBuilder(cls.getName());
+                    if(!memberName.startsWith("#")) {
+                        buf.append("#");
+                    }
+                    buf.append(memberName);
+                    return buf.toString();
+        		})
+        		.collect(Collectors.toList());
     }
 
     //region  >  (injected)

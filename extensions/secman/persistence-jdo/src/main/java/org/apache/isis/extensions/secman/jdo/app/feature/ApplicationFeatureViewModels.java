@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.app.feature;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,13 +33,11 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 @DomainService(
         nature = NatureOfService.VIEW,
@@ -158,12 +157,15 @@ public class ApplicationFeatureViewModels  {
 
     // -- HELPERS
     
-    private <T extends ApplicationFeatureViewModel> List<T> asViewModels(final Iterable<ApplicationFeature> features, final Class<T> cls) {
-        return Lists.newArrayList(
-                Iterables.transform(
+    private <T extends ApplicationFeatureViewModel> List<T> asViewModels(
+    		final Collection<ApplicationFeature> features, 
+    		final Class<T> cls) {
+    	
+        return _Lists.map(
                         features,
-                        ApplicationFeatureViewModel.Functions.<T>asViewModel(applicationFeatureRepository, transitionHelper)
-                ));
+                        ApplicationFeatureViewModel.Functions
+                        	.<T>asViewModel(applicationFeatureRepository, transitionHelper)
+                );
     }
 
     // -- DEPENDENCIES

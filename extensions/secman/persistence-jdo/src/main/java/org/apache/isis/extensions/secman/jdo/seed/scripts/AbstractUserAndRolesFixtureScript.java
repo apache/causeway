@@ -24,6 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.user.AccountType;
@@ -31,8 +32,6 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
-
-import com.google.common.collect.Lists;
 
 public class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
@@ -63,7 +62,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
         this.emailAddress = emailAddress;
         this.tenancyPath = tenancyPath;
         this.accountType = accountType;
-        this.roleNames = Collections.unmodifiableList(Lists.newArrayList(roleNames));
+        this.roleNames = Collections.unmodifiableList(_Lists.newArrayList(roleNames));
     }
 
     @Override

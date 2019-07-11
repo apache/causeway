@@ -20,12 +20,8 @@ package org.apache.isis.extensions.secman.jdo.app.user;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -36,12 +32,15 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+
+import lombok.val;
 
 @Mixin
 public class ApplicationUser_filterPermissions {
@@ -56,12 +55,8 @@ public class ApplicationUser_filterPermissions {
     public ApplicationUser_filterPermissions(final ApplicationUser user) {
         this.user = user;
     }
-    
-
-
 
     // -- filterPermissions (action)
-
 
     @Action(
             domainEvent = ActionDomainEvent.class,
@@ -74,8 +69,8 @@ public class ApplicationUser_filterPermissions {
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Class",  typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
             final String className) {
-        final java.util.Collection<ApplicationFeature> allMembers = applicationFeatureRepository.allMembers();
-        final Iterable<ApplicationFeature> filtered = Iterables.filter(allMembers, within(packageFqn, className));
+        val allMembers = applicationFeatureRepository.allMembers();
+        val filtered = _Lists.filter(allMembers, within(packageFqn, className));
         return asViewModels(filtered);
     }
 
@@ -96,9 +91,7 @@ public class ApplicationUser_filterPermissions {
 
 
     static Predicate<ApplicationFeature> within(final String packageFqn, final String className) {
-        return new Predicate<ApplicationFeature>() {
-            @Override
-            public boolean apply(final ApplicationFeature input) {
+        return (ApplicationFeature input) -> {
                 final ApplicationFeatureId inputFeatureId = input.getFeatureId();
 
                 // recursive match on package
@@ -109,17 +102,14 @@ public class ApplicationUser_filterPermissions {
                 }
 
                 // match on class (if specified)
-                return className == null || Objects.equal(inputFeatureId.getClassName(), className);
-            }
+                return className == null || Objects.equals(inputFeatureId.getClassName(), className);
         };
     }
 
-    List<UserPermissionViewModel> asViewModels(final Iterable<ApplicationFeature> features) {
-        return Lists.newArrayList(
-                Iterables.transform(
+    List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
+        return _Lists.map(
                         features,
-                        UserPermissionViewModel.Functions.asViewModel(user, transitionHelper))
-        );
+                        UserPermissionViewModel.Functions.asViewModel(user, transitionHelper));
     }
 
     @javax.inject.Inject

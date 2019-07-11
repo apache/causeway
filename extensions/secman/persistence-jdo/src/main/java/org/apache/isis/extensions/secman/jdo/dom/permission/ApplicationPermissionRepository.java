@@ -23,13 +23,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimaps;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -40,15 +49,8 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.repository.RepositoryService;
+
+import lombok.val;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -58,7 +60,6 @@ public class ApplicationPermissionRepository {
 
 
     // -- findByRole (programmatic)
-    @Programmatic
     public List<ApplicationPermission> findByRoleCached(final ApplicationRole role) {
         return queryResultsCache.execute(new Callable<List<ApplicationPermission>>() {
             @Override
@@ -68,7 +69,6 @@ public class ApplicationPermissionRepository {
         }, ApplicationPermissionRepository.class, "findByRoleCached", role);
     }
 
-    @Programmatic
     public List<ApplicationPermission> findByRole(final ApplicationRole role) {
         return repository.allMatches(
                 new QueryDefault<>(
@@ -78,7 +78,6 @@ public class ApplicationPermissionRepository {
     
 
     // -- findByUser (programmatic)
-    @Programmatic
     public List<ApplicationPermission> findByUserCached(final ApplicationUser user) {
         return queryResultsCache.execute(new Callable<List<ApplicationPermission>>() {
             @Override public List<ApplicationPermission> call() throws Exception {
@@ -87,7 +86,6 @@ public class ApplicationPermissionRepository {
         }, ApplicationPermissionRepository.class, "findByUserCached", user);
     }
 
-    @Programmatic
     public List<ApplicationPermission> findByUser(final ApplicationUser user) {
         final String username = user.getUsername();
         return findByUser(username);
@@ -106,10 +104,7 @@ public class ApplicationPermissionRepository {
      * Uses the {@link QueryResultsCache} in order to support
      * multiple lookups from <code>org.apache.isis.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
      */
-    @Programmatic
     public ApplicationPermission findByUserAndPermissionValue(final String username, final ApplicationPermissionValue permissionValue) {
-
-
 
         // obtain all permissions for this user, map by its value, and
         // put into query cache (so that this method can be safely called in a tight loop)
@@ -118,11 +113,18 @@ public class ApplicationPermissionRepository {
                 @Override
                 public Map<ApplicationPermissionValue, List<ApplicationPermission>> call() throws Exception {
 
-                    final List<ApplicationPermission> applicationPermissions = findByUser(username);
-                    final ImmutableListMultimap<ApplicationPermissionValue, ApplicationPermission> index = Multimaps
-                            .index(applicationPermissions, ApplicationPermission.Functions.AS_VALUE);
-
-                    return Multimaps.asMap(index);
+                    val permissions = findByUser(username);
+                    
+                    val permissionsByPermissionValue = 
+                    		_Multimaps.<ApplicationPermissionValue, ApplicationPermission>newListMultimap();
+                    
+                    _NullSafe.stream(permissions)
+                    .forEach(permission->{
+                    	val permissionValue = ApplicationPermission.Functions.AS_VALUE.apply(permission);
+                    	permissionsByPermissionValue.putElement(permissionValue, permission);
+                    });
+                    
+                    return permissionsByPermissionValue;
                 }
                 // note: it is correct that only username (and not permissionValue) is the key
                 // (we are obtaining all the perms for this user)
@@ -137,7 +139,6 @@ public class ApplicationPermissionRepository {
     
 
     // -- findByRoleAndRuleAndFeatureType (programmatic)
-    @Programmatic
     public List<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
             final ApplicationRole role, final ApplicationPermissionRule rule,
             final ApplicationFeatureType type) {
@@ -148,7 +149,6 @@ public class ApplicationPermissionRepository {
         }, ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureTypeCached", role, rule, type);
     }
 
-    @Programmatic
     public List<ApplicationPermission> findByRoleAndRuleAndFeatureType(
             final ApplicationRole role, final ApplicationPermissionRule rule,
             final ApplicationFeatureType type) {
@@ -162,7 +162,6 @@ public class ApplicationPermissionRepository {
     
 
     // -- findByRoleAndRuleAndFeature (programmatic)
-    @Programmatic
     public ApplicationPermission findByRoleAndRuleAndFeatureCached(
             final ApplicationRole role,
             final ApplicationPermissionRule rule,
@@ -175,7 +174,6 @@ public class ApplicationPermissionRepository {
         }, ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureCached", role, rule, type, featureFqn);
     }
 
-    @Programmatic
     public ApplicationPermission findByRoleAndRuleAndFeature(
             final ApplicationRole role,
             final ApplicationPermissionRule rule, final ApplicationFeatureType type, final String featureFqn) {
@@ -191,7 +189,6 @@ public class ApplicationPermissionRepository {
     
 
     // -- findByFeature (programmatic)
-    @Programmatic
     public List<ApplicationPermission> findByFeatureCached(final ApplicationFeatureId featureId) {
         return queryResultsCache.execute(new Callable<List<ApplicationPermission>>() {
             @Override public List<ApplicationPermission> call() throws Exception {
@@ -200,7 +197,6 @@ public class ApplicationPermissionRepository {
         }, ApplicationPermissionRepository.class, "findByFeatureCached", featureId);
     }
 
-    @Programmatic
     public List<ApplicationPermission> findByFeature(final ApplicationFeatureId featureId) {
         return repository.allMatches(
                 new QueryDefault<>(
@@ -212,7 +208,6 @@ public class ApplicationPermissionRepository {
 
     // -- newPermission (programmatic)
 
-    @Programmatic
     public ApplicationPermission newPermission(
             final ApplicationRole role,
             final ApplicationPermissionRule rule,
@@ -228,7 +223,6 @@ public class ApplicationPermissionRepository {
         return newPermissionNoCheck(role, rule, mode, featureType, featureFqn);
     }
 
-    @Programmatic
     public ApplicationPermission newPermissionNoCheck(
             final ApplicationRole role,
             final ApplicationPermissionRule rule,
@@ -249,7 +243,6 @@ public class ApplicationPermissionRepository {
         return permission;
     }
 
-    @Programmatic
     public ApplicationPermission newPermission(
             final ApplicationRole role,
             final ApplicationPermissionRule rule,
@@ -280,7 +273,6 @@ public class ApplicationPermissionRepository {
     
 
     // -- allPermission (programmatic)
-    @Programmatic
     public List<ApplicationPermission> allPermissions() {
         return repository.allInstances(ApplicationPermission.class);
     }
@@ -288,7 +280,6 @@ public class ApplicationPermissionRepository {
 
     // -- findOrphaned (programmatic)
 
-    @Programmatic
     public List<ApplicationPermission> findOrphaned() {
 
         final Collection<String> packageNames = applicationFeatureRepository.packageNames();
@@ -299,7 +290,7 @@ public class ApplicationPermissionRepository {
             appendClasses(packageName, ApplicationMemberType.ACTION, availableClasses);
         }
 
-        final List<ApplicationPermission> orphaned = Lists.newArrayList();
+        final List<ApplicationPermission> orphaned = _Lists.newArrayList();
 
         final List<ApplicationPermission> permissions = allPermissions();
         for (ApplicationPermission permission : permissions) {
@@ -320,7 +311,9 @@ public class ApplicationPermissionRepository {
                 break;
             case MEMBER:
 
-                final List<String> split = Splitter.on('#').splitToList(featureFqn);
+                final List<String> split = _Strings.splitThenStream(featureFqn, "#")
+                	.collect(Collectors.toList());
+                
                 final String fqClassName = split.get(0);
                 final String memberName = split.get(1);
 
@@ -349,7 +342,7 @@ public class ApplicationPermissionRepository {
     }
 
     private List<String> memberNamesOf(final String packageName, final String className) {
-        final List<String> memberNames = Lists.newArrayList();
+        final List<String> memberNames = _Lists.newArrayList();
         appendMembers(packageName, className, ApplicationMemberType.PROPERTY, memberNames);
         appendMembers(packageName, className, ApplicationMemberType.COLLECTION, memberNames);
         appendMembers(packageName, className, ApplicationMemberType.ACTION, memberNames);

@@ -22,8 +22,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -33,6 +31,7 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -77,7 +76,7 @@ public class ApplicationRoleRepository  {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
             return repository.allMatches(new QueryDefault<>(ApplicationRole.class, "findByNameContaining", "nameRegex", nameRegex));
         }
-        return Lists.newArrayList();
+        return _Lists.newArrayList();
     }
 
     @Programmatic
@@ -104,7 +103,7 @@ public class ApplicationRoleRepository  {
         if (search != null && search.length() > 0 ) {
             return findNameContaining(search);
         }
-        return Lists.newArrayList();
+        return _Lists.newArrayList();
     }
 
 }

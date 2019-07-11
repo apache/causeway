@@ -28,24 +28,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.VersionStrategy;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.SecurityModule;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jdo.dom.tenancy.HasAtPath;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -71,9 +53,28 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.api.user.AccountType;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
+import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.jdo.dom.tenancy.HasAtPath;
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
+import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -676,7 +677,7 @@ public class ApplicationUser implements Comparable<ApplicationUser>, HasUsername
     )
     @MemberOrder(name="Status", sequence = "4")
     public boolean isHasPassword() {
-        return !Strings.isNullOrEmpty(getEncryptedPassword());
+        return !_Strings.isNullOrEmpty(getEncryptedPassword());
     }
 
     public boolean hideHasPassword() {
@@ -929,10 +930,10 @@ public class ApplicationUser implements Comparable<ApplicationUser>, HasUsername
         if(cachedPermissionSet != null) {
             return cachedPermissionSet;
         }
-        final List<ApplicationPermission> permissions = applicationPermissionRepository.findByUser(this);
+        val permissions = applicationPermissionRepository.findByUser(this);
         return cachedPermissionSet =
                 new ApplicationPermissionValueSet(
-                        Iterables.transform(permissions, ApplicationPermission.Functions.AS_VALUE),
+                        _Lists.map(permissions, ApplicationPermission.Functions.AS_VALUE),
                         permissionsEvaluationService);
     }
     

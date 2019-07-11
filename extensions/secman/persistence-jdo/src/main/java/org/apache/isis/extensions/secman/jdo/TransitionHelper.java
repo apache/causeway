@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.jdo;
 
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.ViewModel;
@@ -25,14 +27,13 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
-
-import com.google.common.base.Joiner;
 
 @DomainService(nature=NatureOfService.DOMAIN)
 public class TransitionHelper {
@@ -50,7 +51,9 @@ public class TransitionHelper {
 	
 	public static String join(Object ... args) {
 		try {
-			return Joiner.on(":").join(args);			
+			return _NullSafe.stream(args)
+			.map(arg->""+arg)
+			.collect(Collectors.joining(":"));
 		} catch (Exception e) {
 			debug(args);
 			throw e;

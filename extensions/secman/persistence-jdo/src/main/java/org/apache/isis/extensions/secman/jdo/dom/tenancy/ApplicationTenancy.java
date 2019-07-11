@@ -47,11 +47,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
-
-import com.google.common.collect.Lists;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -98,24 +97,12 @@ import lombok.Setter;
 public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancy, T> {
-
-        /**
-         * 
-         */
         private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationTenancy, T> {
-
-        /**
-         * 
-         */
         private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancy> {
-
-        /**
-         * 
-         */
         private static final long serialVersionUID = 1L;}
 
     
@@ -126,7 +113,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- name (property, title)
 
-    public static class NameDomainEvent extends PropertyDomainEvent<String> {}
+    public static class NameDomainEvent extends PropertyDomainEvent<String> {
+		private static final long serialVersionUID = 1L;}
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
     @Title
@@ -146,7 +134,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- updateName (action)
 
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
+    public static class UpdateNameDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent =UpdateNameDomainEvent.class,
@@ -168,7 +157,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- path
 
-    public static class PathDomainEvent extends PropertyDomainEvent<String> {}
+    public static class PathDomainEvent extends PropertyDomainEvent<String> {
+		private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.PrimaryKey
@@ -184,7 +174,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- users (collection)
 
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
+    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {
+		private static final long serialVersionUID = 1L;}
 
     @Collection(
             domainEvent = UsersDomainEvent.class,
@@ -210,7 +201,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- addUser (action)
 
-    public static class AddUserDomainEvent extends ActionDomainEvent {}
+    public static class AddUserDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
            domainEvent = AddUserDomainEvent.class,
@@ -228,18 +220,16 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     public List<ApplicationUser> autoComplete0AddUser(final String search) {
         final List<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = Lists.newArrayList(matchingSearch);
+        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
         list.removeAll(getUsers());
         return list;
     }
 
 
-
-    
-
     // -- removeUser (action)
 
-    public static class RemoveUserDomainEvent extends ActionDomainEvent {}
+    public static class RemoveUserDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = RemoveUserDomainEvent.class,
@@ -265,7 +255,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- parent (property)
 
-    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
+    public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {
+		private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(name = "parentPath", allowsNull = "true")
@@ -283,7 +274,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- updateParent (action)
 
-    public static class UpdateParentDomainEvent extends ActionDomainEvent {}
+    public static class UpdateParentDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = UpdateParentDomainEvent.class,
@@ -307,7 +299,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- children
 
-    public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
+    public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {
+		private static final long serialVersionUID = 1L;}
 
     @javax.jdo.annotations.Persistent(mappedBy = "parent")
     @Collection(
@@ -333,7 +326,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- addChild (action)
 
-    public static class AddChildDomainEvent extends ActionDomainEvent {}
+    public static class AddChildDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AddChildDomainEvent.class,
@@ -349,7 +343,6 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
         return this;
     }
 
-    
 
     // -- removeChild (action)
 
@@ -372,11 +365,10 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
         return choices0RemoveChild().isEmpty()? "No children to remove": null;
     }
 
-    
-
 
     // -- delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
+    public static class DeleteDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = DeleteDomainEvent.class,

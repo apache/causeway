@@ -18,16 +18,12 @@
  */
 package org.apache.isis.extensions.secman.jdo.facets;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyEvaluator;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -35,6 +31,8 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.runtime.system.context.IsisContext;
+
+import lombok.val;
 
 public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
 
@@ -65,35 +63,34 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
     }
 
     private TenantedAuthorizationFacetDefault createFacet(
-            final Class<?> cls, final FacetHolder holder) {
+            final Class<?> cls, 
+            final FacetHolder holder) {
 
-        ServiceRegistry serviceRegistry = IsisContext.getServiceRegistry();
+        val serviceRegistry = IsisContext.getServiceRegistry();
         
-        List<ApplicationTenancyEvaluator> evaluators = serviceRegistry
+        val evaluators = serviceRegistry
                 .select(ApplicationTenancyEvaluator.class)
                 .stream()
-                .collect(Collectors.toList());
+                .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
-        final ImmutableList<ApplicationTenancyEvaluator> evaluatorsForCls =
-                FluentIterable.from(evaluators).filter(new Predicate<ApplicationTenancyEvaluator>() {
-            @Override
-            public boolean apply(ApplicationTenancyEvaluator applicationTenancyEvaluator) {
-                return applicationTenancyEvaluator.handles(cls);
-            }
-        }).toList();
+        val evaluatorsForCls = Collections.unmodifiableList(
+        		_NullSafe.stream(evaluators)
+        		.filter(applicationTenancyEvaluator->applicationTenancyEvaluator.handles(cls))
+        		.collect(Collectors.<ApplicationTenancyEvaluator>toList()));
 
         if(evaluatorsForCls.isEmpty()) {
             return null;
         }
 
-        final ApplicationUserRepository applicationUserRepository =
+        val applicationUserRepository =
                 serviceRegistry.lookupService(ApplicationUserRepository.class).orElse(null);
-        final QueryResultsCache queryResultsCache = 
+        val queryResultsCache = 
                 serviceRegistry.lookupService(QueryResultsCache.class).orElse(null);
-        final UserService userService = 
+        val userService = 
                 serviceRegistry.lookupService(UserService.class).orElse(null);
 
-        return new TenantedAuthorizationFacetDefault(evaluatorsForCls, applicationUserRepository, queryResultsCache, userService, holder);
+        return new TenantedAuthorizationFacetDefault(
+        		evaluatorsForCls, applicationUserRepository, queryResultsCache, userService, holder);
     }
 
 

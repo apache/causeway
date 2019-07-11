@@ -25,12 +25,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.TreeMultimap;
 
 /**
  * A serializable value object representing a set of (anonymized) 
@@ -90,17 +88,17 @@ public class ApplicationPermissionValueSet implements Serializable {
      *     meaning that it is checked first and therefore also takes precedence.
      * </p>
      */
-    private final Multimap<ApplicationFeatureId, ApplicationPermissionValue> permissionsByFeature = TreeMultimap.create(
-            Collections.reverseOrder(ApplicationFeatureId.Comparators.natural()),
-            ApplicationPermissionValue.Comparators.natural());
+    private final _Multimaps.SetMultimap<ApplicationFeatureId, ApplicationPermissionValue> permissionsByFeature = 
+    		_Multimaps.newSortedSetMultimap(
+    				Collections.reverseOrder(ApplicationFeatureId.Comparators.natural()),
+    				null // natural element order
+    				);
 
     /**
      * Note that we require PermissionsEvaluationService to be serializable.
      */
     private final PermissionsEvaluationService permissionsEvaluationService;
 
-
-    
 
     // -- constructor
     ApplicationPermissionValueSet(final ApplicationPermissionValue... permissionValues) {
@@ -110,10 +108,10 @@ public class ApplicationPermissionValueSet implements Serializable {
         this(permissionValues, null);
     }
     public ApplicationPermissionValueSet(final Iterable<ApplicationPermissionValue> permissionValues, final PermissionsEvaluationService permissionsEvaluationService) {
-        this.values = Collections.unmodifiableList(Lists.newArrayList(permissionValues));
+        this.values = Collections.unmodifiableList(_Lists.newArrayList(permissionValues));
         for (final ApplicationPermissionValue permissionValue : permissionValues) {
             final ApplicationFeatureId featureId = permissionValue.getFeatureId();
-            permissionsByFeature.put(featureId, permissionValue);
+            permissionsByFeature.putElement(featureId, permissionValue);
         }
         this.permissionsEvaluationService =
                 permissionsEvaluationService != null

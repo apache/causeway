@@ -18,12 +18,11 @@
  */
 package org.apache.isis.extensions.secman.jdo.app.user;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Iterator;
-
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.io.BaseEncoding;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -38,6 +37,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -53,6 +53,8 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
+
+import lombok.val;
 
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an
@@ -164,7 +166,9 @@ public class UserPermissionViewModel implements ViewModel {
     }
 
     private void parse(final String asString) {
-        final Iterator<String> iterator = Splitter.on(":").split(asString).iterator();
+        final Iterator<String> iterator = _Strings.splitThenStream(asString, ":")
+        		.collect(Collectors.toList())
+        		.listIterator();
 
         this.username = iterator.next();
 
@@ -215,17 +219,14 @@ public class UserPermissionViewModel implements ViewModel {
     }
 
     private static String base64UrlDecode(final String str) {
-        final byte[] bytes = BaseEncoding.base64Url().decode(str);
-        return new String(bytes, Charset.forName("UTF-8"));
+    	val bytes = Base64.getUrlDecoder().decode(str);
+    	return _Strings.ofBytes(bytes, StandardCharsets.UTF_8);
     }
 
     private static String base64UrlEncode(final String str) {
-        final byte[] bytes = str.getBytes(Charset.forName("UTF-8"));
-        return BaseEncoding.base64Url().encode(bytes);
+        val bytes = str.getBytes(StandardCharsets.UTF_8);
+        return Base64.getUrlEncoder().encodeToString(bytes);
     }
-
-    
-
     
 
     // -- user (derived property, hidden in parented tables)
@@ -389,27 +390,21 @@ public class UserPermissionViewModel implements ViewModel {
     }
     
 
-    
-
     // -- Functions
 
-    public static class Functions {
+    public static final class Functions {
+    	
         private Functions(){}
+        
         public static Function<ApplicationFeature, UserPermissionViewModel> asViewModel(final ApplicationUser user, final TransitionHelper transitionHelper) {
-            return new Function<ApplicationFeature, UserPermissionViewModel>(){
-                @Override
-                public UserPermissionViewModel apply(final ApplicationFeature input) {
+            return (final ApplicationFeature input) -> {
                     final ApplicationPermissionValueSet permissionSet = user.getPermissionSet();
                     final ApplicationPermissionValueSet.Evaluation changingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.CHANGING);
                     final ApplicationPermissionValueSet.Evaluation viewingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.VIEWING);
                     return UserPermissionViewModel.newViewModel(input.getFeatureId(), user, viewingEvaluation, changingEvaluation, transitionHelper);
-                }
             };
         }
     }
-    
-
-    
 
     // -- injected services
     @javax.inject.Inject

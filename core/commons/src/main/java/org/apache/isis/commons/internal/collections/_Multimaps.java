@@ -23,13 +23,22 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal.base._Casts;
 
 /**
  * <h1>- internal use only -</h1>
@@ -133,15 +142,15 @@ public class _Multimaps {
         };
     }
 
-    public static <K, V> SetMultimap<K, V> newSetMultimap(
-            final Supplier<Map<K, Set<V>>> mapFactory,
-            final Supplier<Set<V>> elementCollectionFactory){
+    public static <K, V, S extends Set<V>> SetMultimap<K, V> newSetMultimap(
+            final Supplier<? extends Map<K, S>> mapFactory,
+            final Supplier<S> elementCollectionFactory){
         requires(mapFactory, "mapFactory");
         requires(elementCollectionFactory, "elementCollectionFactory");
 
         return new SetMultimap<K, V>() {
 
-            final Map<K, Set<V>> delegate = mapFactory.get();
+            final Map<K, Set<V>> delegate = _Casts.uncheckedCast(mapFactory.get());
 
             @Override public int size() { return delegate.size(); }
             @Override public boolean isEmpty() { return delegate.isEmpty();	}
@@ -219,6 +228,20 @@ public class _Multimaps {
         return newSetMultimap(HashMap<K, Set<V>>::new, HashSet::new);
     }
 
+    /**
+     * @param keyComparator - if {@code null} uses natural ordering
+     * @param elementComparator - if {@code null} uses natural ordering
+     * @return TreeMap of TreeSets
+     */
+    public static <K, V> SetMultimap<K, V> newSortedSetMultimap(
+    		@Nullable Comparator<K> keyComparator, 
+    		@Nullable Comparator<V> elementComparator){
+    	
+        final Supplier<SortedMap<K, SortedSet<V>>> mapFactory = ()->new TreeMap<K, SortedSet<V>>(keyComparator);
+        final Supplier<SortedSet<V>> elementSetFactory = ()->new TreeSet<V>(elementComparator);
+		return newSetMultimap(mapFactory, elementSetFactory);
+    }
+    
     /**
      * @return HashMap of HashMaps
      */
