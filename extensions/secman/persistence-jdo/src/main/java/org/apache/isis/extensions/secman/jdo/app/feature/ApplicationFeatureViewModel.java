@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.function.Function;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -30,12 +32,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
-import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
@@ -70,9 +72,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	public static ApplicationFeatureViewModel newViewModel(
 			final ApplicationFeatureId featureId,
 			final ApplicationFeatureRepositoryDefault applicationFeatureRepository,
-			final TransitionHelper transitionHelper) {
+			final FactoryService factoryService) {
 		final Class<? extends ApplicationFeatureViewModel> cls = viewModelClassFor(featureId, applicationFeatureRepository);
-		return transitionHelper.newViewModelInstance(cls, featureId.asEncodedString());
+		return factoryService.viewModel(cls, featureId.asEncodedString());
 	}
 
 	private static Class<? extends ApplicationFeatureViewModel> viewModelClassFor(
@@ -103,7 +105,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	}
 
 	public ApplicationFeatureViewModel() {
-		this(TransitionHelper.defaultFeatureId());
+		this(ApplicationFeatureId.PACKAGE_DEFAULT);
 	}
 
 	ApplicationFeatureViewModel(final ApplicationFeatureId featureId) {
@@ -123,9 +125,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 		return "applicationFeature";
 	}
 
-
-
-
 	// -- ViewModel impl
 	@Override
 	public String viewModelMemento() {
@@ -137,9 +136,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 		final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.parseEncoded(encodedMemento);
 		setFeatureId(applicationFeatureId);
 	}
-
-
-
 
 
 	// -- featureId (property, programmatic)
@@ -169,16 +165,11 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	}
 
 
-
-
 	// -- type (programmatic)
 	@Programmatic
 	public ApplicationFeatureType getType() {
 		return getFeatureId().getType();
 	}
-
-
-
 
 	// -- packageName
 	public static class PackageNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
@@ -192,10 +183,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	public String getPackageName() {
 		return getFeatureId().getPackageName();
 	}
-
-
-
-
 
 	// -- className
 
@@ -218,10 +205,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 		return getType().hideClassName();
 	}
 
-
-
-
-
 	// -- memberName
 
 	public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {
@@ -242,10 +225,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	public boolean hideMemberName() {
 		return getType().hideMember();
 	}
-
-
-
-
 
 
 	// -- parent (property)
@@ -272,9 +251,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 				}
 				final Class<? extends ApplicationFeatureViewModel> cls = 
 						viewModelClassFor(parentId, applicationFeatureRepository);
-				return transitionHelper
-						.newViewModelInstance(cls, parentId.asEncodedString());
-
+				return factory.viewModel(cls, parentId.asEncodedString());
 	}
 
 
@@ -301,8 +278,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	}
 
 
-
-
 	// -- permissions (collection)
 	public static class PermissionsDomainEvent extends CollectionDomainEvent<ApplicationFeatureViewModel, ApplicationPermission> {
 		private static final long serialVersionUID = 1L;}
@@ -319,8 +294,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	}
 
 
-
-
 	// -- parentPackage (property, programmatic, for packages & classes only)
 
 	/**
@@ -328,12 +301,11 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 	 */
 	@Programmatic
 	public ApplicationFeatureViewModel getParentPackage() {
-		return Functions.asViewModelForId(applicationFeatureRepository, transitionHelper).apply(getFeatureId().getParentPackageId());
+		return Functions.asViewModelForId(applicationFeatureRepository, factory)
+				.apply(getFeatureId().getParentPackageId());
 	}
 
-
-
-
+	
 	// -- equals, hashCode, toString
 
 	private final static String propertyNames = "featureId";
@@ -356,7 +328,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 	// -- helpers
 	<T extends ApplicationFeatureViewModel> List<T> asViewModels(final SortedSet<ApplicationFeatureId> members) {
-		val viewModelForId = Functions.<T>asViewModelForId(applicationFeatureRepository, transitionHelper);
+		val viewModelForId = Functions.<T>asViewModelForId(applicationFeatureRepository, factory);
 		return _Lists.map(members, viewModelForId);
 	}
 
@@ -368,37 +340,29 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
 		public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> asViewModelForId(
 				final ApplicationFeatureRepositoryDefault applicationFeatureRepository, 
-				final TransitionHelper transitionHelper) {
+				final FactoryService factoryService) {
 			
 			return (ApplicationFeatureId input) -> 
 				_Casts.uncheckedCast(ApplicationFeatureViewModel
-						.newViewModel(input, applicationFeatureRepository, transitionHelper));
+						.newViewModel(input, applicationFeatureRepository, factoryService));
 
 		}
 		public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeature, T> asViewModel(
 				final ApplicationFeatureRepositoryDefault applicationFeatureRepository, 
-				final TransitionHelper transitionHelper) {
+				final FactoryService factoryService) {
 
 			return (ApplicationFeature input) ->
 				_Casts.uncheckedCast(ApplicationFeatureViewModel
-						.newViewModel(input.getFeatureId(), applicationFeatureRepository, transitionHelper));
+						.newViewModel(input.getFeatureId(), applicationFeatureRepository, factoryService));
 		}
 	}
 
-
-	// -- injected services
-	@javax.inject.Inject
-	RepositoryService repository;
-
-	@javax.inject.Inject
-	ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-
-	@javax.inject.Inject
-	ApplicationPermissionRepository applicationPermissionRepository;
-
-	@javax.inject.Inject
-	TransitionHelper transitionHelper;
-
+	// -- DEPENDENCIES
+	
+	@Inject RepositoryService repository;
+	@Inject FactoryService factory;
+	@Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+	@Inject ApplicationPermissionRepository applicationPermissionRepository;
 
 
 }

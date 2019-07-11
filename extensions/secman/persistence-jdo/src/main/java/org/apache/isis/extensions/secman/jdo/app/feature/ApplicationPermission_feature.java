@@ -30,17 +30,15 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.SecurityModule;
-import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 @Mixin
 public class ApplicationPermission_feature {
 
-    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission_feature> {}
+    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission_feature> {
+		private static final long serialVersionUID = 1L;}
 
 
     // -- constructor
@@ -68,7 +66,7 @@ public class ApplicationPermission_feature {
             return null;
         }
         final ApplicationFeatureId featureId = getFeatureId(permission);
-        return ApplicationFeatureViewModel.newViewModel(featureId, applicationFeatureRepository, transitionHelper);
+        return ApplicationFeatureViewModel.newViewModel(featureId, applicationFeatureRepository, factory);
     }
 
     private static ApplicationFeatureId getFeatureId(final ApplicationPermission permission) {
@@ -84,8 +82,7 @@ public class ApplicationPermission_feature {
     @javax.inject.Inject
     ApplicationFeatureRepositoryDefault applicationFeatureRepository;
     
-    @javax.inject.Inject
-    TransitionHelper transitionHelper;
+    
 
 
 }

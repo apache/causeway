@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
-import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 
@@ -164,15 +163,15 @@ public class ApplicationFeatureViewModels  {
         return _Lists.map(
                         features,
                         ApplicationFeatureViewModel.Functions
-                        	.<T>asViewModel(applicationFeatureRepository, transitionHelper)
+                        	.<T>asViewModel(applicationFeatureRepository, factory)
                 );
     }
 
     // -- DEPENDENCIES
+    
     @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
-    @Inject TransitionHelper transitionHelper;
     
 
 }

@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
@@ -34,15 +36,15 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
-import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin
+@Mixin @RequiredArgsConstructor
 public class ApplicationUser_filterPermissions {
 
 
@@ -50,11 +52,8 @@ public class ApplicationUser_filterPermissions {
         private static final long serialVersionUID = 1L;
     }
 
-    // -- constructor
-    private final ApplicationUser user;
-    public ApplicationUser_filterPermissions(final ApplicationUser user) {
-        this.user = user;
-    }
+    private final ApplicationUser user; // holder
+    
 
     // -- filterPermissions (action)
 
@@ -109,16 +108,11 @@ public class ApplicationUser_filterPermissions {
     List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
         return _Lists.map(
                         features,
-                        UserPermissionViewModel.Functions.asViewModel(user, transitionHelper));
+                        UserPermissionViewModel.Functions.asViewModel(user, factory));
     }
 
-    @javax.inject.Inject
-    RepositoryService repository;
-    @javax.inject.Inject
-    FactoryService factory;
-    @javax.inject.Inject
-    ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    @javax.inject.Inject
-    TransitionHelper transitionHelper;
+    @Inject RepositoryService repository;
+    @Inject FactoryService factory;
+    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
 }

@@ -60,7 +60,13 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     private static final long serialVersionUID = 1L;
 
+    // -- CONSTANTS
+    
+    public static final ApplicationFeatureId PACKAGE_DEFAULT = 
+    		new ApplicationFeatureId(ApplicationFeatureType.PACKAGE, "default");
+    
     // -- factory methods
+    
     public static ApplicationFeatureId newFeature(final ApplicationFeatureType featureType, final String fullyQualifiedName) {
         switch (featureType) {
         case PACKAGE:

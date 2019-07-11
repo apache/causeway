@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -44,7 +46,6 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMod
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
-import org.apache.isis.extensions.secman.jdo.TransitionHelper;
 import org.apache.isis.extensions.secman.jdo.app.feature.ApplicationFeatureViewModel;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
@@ -85,16 +86,21 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- constructors, factory methods
     public static UserPermissionViewModel newViewModel(
-            final ApplicationFeatureId featureId, final ApplicationUser user, final ApplicationPermissionValueSet.Evaluation viewingEvaluation, final ApplicationPermissionValueSet.Evaluation changingEvaluation, final TransitionHelper transitionHelper) {
-        return transitionHelper
-        		.newViewModelInstance(UserPermissionViewModel.class, asEncodedString(featureId, user.getUsername(), viewingEvaluation, changingEvaluation));
+            final ApplicationFeatureId featureId, 
+            final ApplicationUser user, 
+            final ApplicationPermissionValueSet.Evaluation viewingEvaluation, 
+            final ApplicationPermissionValueSet.Evaluation changingEvaluation, 
+            final FactoryService factory) {
+    	
+        return factory
+        		.viewModel(
+        				UserPermissionViewModel.class, 
+        				asEncodedString(featureId, user.getUsername(), viewingEvaluation, changingEvaluation));
     }
 
     public UserPermissionViewModel() {
-    	setFeatureId(TransitionHelper.defaultFeatureId());
+    	setFeatureId(ApplicationFeatureId.PACKAGE_DEFAULT);
     }
-    
-
     
 
     // -- identification
@@ -105,9 +111,6 @@ public class UserPermissionViewModel implements ViewModel {
     public String iconName() {
         return "userPermission";
     }
-    
-
-    
 
     // -- ViewModel impl
     @Override
@@ -278,9 +281,7 @@ public class UserPermissionViewModel implements ViewModel {
                 ? "Can view"
                 : "No access to";
     }
-    
-
-    
+      
 
     // -- feature (derived property)
 
@@ -298,9 +299,8 @@ public class UserPermissionViewModel implements ViewModel {
         if(getFeatureId() == null) {
             return null;
         }
-        return ApplicationFeatureViewModel.newViewModel(getFeatureId(), applicationFeatureRepository, transitionHelper);
+        return ApplicationFeatureViewModel.newViewModel(getFeatureId(), applicationFeatureRepository, factory);
     }
-
     
 
     private ApplicationFeatureId featureId;
@@ -313,9 +313,6 @@ public class UserPermissionViewModel implements ViewModel {
     public void setFeatureId(final ApplicationFeatureId applicationFeatureId) {
         this.featureId = applicationFeatureId;
     }
-
-    
-
     
 
     // -- viewingPermission (derived property)
@@ -347,9 +344,6 @@ public class UserPermissionViewModel implements ViewModel {
         }
         return new ApplicationPermissionValue(viewingFeatureId, viewingRule, viewingMode);
     }
-
-    
-
     
 
     // -- changingPermission (derived property)
@@ -382,9 +376,6 @@ public class UserPermissionViewModel implements ViewModel {
         }
         return new ApplicationPermissionValue(changingFeatureId, changingRule, changingMode);
     }
-
-    
-
     
 
     // -- toString
@@ -403,35 +394,32 @@ public class UserPermissionViewModel implements ViewModel {
     	
         private Functions(){}
         
-        public static Function<ApplicationFeature, UserPermissionViewModel> asViewModel(final ApplicationUser user, final TransitionHelper transitionHelper) {
+        public static Function<ApplicationFeature, UserPermissionViewModel> asViewModel(
+        		final ApplicationUser user, 
+        		final FactoryService factoryService) {
+        	
             return (final ApplicationFeature input) -> {
-                    final ApplicationPermissionValueSet permissionSet = user.getPermissionSet();
-                    final ApplicationPermissionValueSet.Evaluation changingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.CHANGING);
-                    final ApplicationPermissionValueSet.Evaluation viewingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.VIEWING);
-                    return UserPermissionViewModel.newViewModel(input.getFeatureId(), user, viewingEvaluation, changingEvaluation, transitionHelper);
+                val permissionSet = user.getPermissionSet();
+                val changingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.CHANGING);
+                val viewingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.VIEWING);
+                return UserPermissionViewModel
+                		.newViewModel(
+                				input.getFeatureId(), 
+                				user, 
+                				viewingEvaluation, 
+                				changingEvaluation, 
+                				factoryService);
             };
         }
     }
 
-    // -- injected services
-    @javax.inject.Inject
-    RepositoryService repository;
-
-    @javax.inject.Inject
-    FactoryService factory;
+    // -- DEPENDENCIES
     
-    @javax.inject.Inject
-    ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-
-    @javax.inject.Inject
-    ApplicationPermissionRepository applicationPermissionRepository;
-
-    @javax.inject.Inject
-    ApplicationUserRepository applicationUserRepository;
-    
-    @javax.inject.Inject
-    TransitionHelper transitionHelper;
-
+    @Inject RepositoryService repository;
+    @Inject FactoryService factory;
+    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject ApplicationUserRepository applicationUserRepository;
     
 
 }
