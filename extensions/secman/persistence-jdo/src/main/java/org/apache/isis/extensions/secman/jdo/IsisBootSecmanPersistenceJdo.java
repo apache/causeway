@@ -16,29 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.property;
+package org.apache.isis.extensions.secman.jdo;
 
-import java.util.AbstractMap;
-import java.util.Map;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 
-import org.apache.isis.config.IsisConfiguration;
-
-public class ConfigPropertyBoolean extends ConfigPropertyAbstract<Boolean> {
-    
-	public ConfigPropertyBoolean(final String key, final boolean defaultValue) {
-        super(key, defaultValue);
-    }
-    
-	/**
-	 * @returns not-null
-	 */
-    public Boolean from(final IsisConfiguration configuration) {
-        return configuration.getBoolean(key, defaultValue);
-    }
-
-    @Override
-    public Map.Entry<String, String> of(final Boolean value) {
-        return new AbstractMap.SimpleImmutableEntry<>(key, value.toString());
-    }
+@Configuration
+@ComponentScan(
+        basePackageClasses= {
+        		IsisBootSecmanPersistenceJdo.class
+        },
+        includeFilters= {
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
+public class IsisBootSecmanPersistenceJdo {
 
 }

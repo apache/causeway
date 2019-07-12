@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -37,32 +36,18 @@ import org.apache.isis.commons.internal.collections._Lists;
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationRole.class
 )
-public class ApplicationRoleRepository  {
+public class ApplicationRoleRepository {
     
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
     @Inject QueryResultsCache queryResultsCache;
-    
-    /**
-     * Will only be injected to if the programmer has supplied an implementation.  Otherwise
-     * this class will install a default implementation in {@link #getApplicationRoleFactory()}.
-     */
     @Inject ApplicationRoleFactory applicationRoleFactory;
 
-    private ApplicationRoleFactory getApplicationRoleFactory() {
-        return applicationRoleFactory != null
-                ? applicationRoleFactory
-                : (applicationRoleFactory = new ApplicationRoleFactory.Default(factory));
-    }
-
-
-    @Programmatic
     public ApplicationRole findByNameCached(final String name) {
         return queryResultsCache.execute(()->findByName(name),
                 ApplicationRoleRepository.class, "findByNameCached", name);
     }
 
-    @Programmatic
     public ApplicationRole findByName(final String name) {
         if(name == null) {
             return null;
@@ -70,7 +55,6 @@ public class ApplicationRoleRepository  {
         return repository.uniqueMatch(new QueryDefault<>(ApplicationRole.class, "findByName", "name", name));
     }
 
-    @Programmatic
     public List<ApplicationRole> findNameContaining(final String search) {
         if(search != null && search.length() > 0) {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
@@ -79,13 +63,12 @@ public class ApplicationRoleRepository  {
         return _Lists.newArrayList();
     }
 
-    @Programmatic
     public ApplicationRole newRole(
             final String name,
             final String description) {
         ApplicationRole role = findByName(name);
         if (role == null){
-            role = getApplicationRoleFactory().newApplicationRole();
+            role = applicationRoleFactory.newApplicationRole();
             role.setName(name);
             role.setDescription(description);
             repository.persist(role);
@@ -93,7 +76,6 @@ public class ApplicationRoleRepository  {
         return role;
     }
 
-    @Programmatic
     public List<ApplicationRole> allRoles() {
         return repository.allInstances(ApplicationRole.class);
     }

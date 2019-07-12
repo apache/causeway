@@ -21,6 +21,9 @@ package org.apache.isis.extensions.secman.jdo.dom.role;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 /**
  * Optional hook so that alternative implementations of {@link org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole}.
@@ -51,20 +54,14 @@ public interface ApplicationRoleFactory {
 
     public ApplicationRole newApplicationRole();
 
+    @Service @Order(Ordered.LOWEST_PRECEDENCE)
     public static class Default implements ApplicationRoleFactory {
 
-        public Default() {
-            this(null);
-        }
-        Default(final FactoryService factory) {
-            this.factory = factory;
-        }
         public ApplicationRole newApplicationRole() {
             return factory.instantiate(ApplicationRole.class);
         }
 
-        @Inject
-        FactoryService factory;
+        @Inject FactoryService factory;
 
     }
 

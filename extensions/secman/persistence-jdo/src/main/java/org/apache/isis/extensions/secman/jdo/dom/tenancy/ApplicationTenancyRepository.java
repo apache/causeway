@@ -110,7 +110,7 @@ public class ApplicationTenancyRepository {
             final ApplicationTenancy parent) {
         ApplicationTenancy tenancy = findByPath(path);
         if (tenancy == null) {
-            tenancy = getApplicationTenancyFactory().newApplicationTenancy();
+            tenancy = applicationTenancyFactory.newApplicationTenancy();
             tenancy.setName(name);
             tenancy.setPath(path);
             tenancy.setParent(parent);
@@ -134,29 +134,11 @@ public class ApplicationTenancyRepository {
         return repository.allInstances(ApplicationTenancy.class);
     }
 
-    // -- injected
-    /**
-     * Will only be injected to if the programmer has supplied an implementation.  Otherwise
-     * this class will install a default implementation in the {@link #getApplicationTenancyFactory() accessor}.
-     */
-    @Inject
-    ApplicationTenancyFactory applicationTenancyFactory;
-
-    private ApplicationTenancyFactory getApplicationTenancyFactory() {
-        return applicationTenancyFactory != null
-                ? applicationTenancyFactory
-                : (applicationTenancyFactory = new ApplicationTenancyFactory.Default(factory));
-    }
-
-    @Inject
-    RepositoryService repository;
-
-    @Inject
-    FactoryService factory;
+    // -- DEPENDENCIES
     
-    @Inject
-    QueryResultsCache queryResultsCache;
-
-    
+    @Inject ApplicationTenancyFactory applicationTenancyFactory;
+    @Inject RepositoryService repository;
+    @Inject FactoryService factory;
+    @Inject QueryResultsCache queryResultsCache;
 
 }

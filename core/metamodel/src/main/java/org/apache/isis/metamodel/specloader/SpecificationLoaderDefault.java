@@ -1,5 +1,7 @@
 package org.apache.isis.metamodel.specloader;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,8 +14,6 @@ import javax.inject.Singleton;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.concurrent._Tasks;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.threadpool.ThreadPoolExecutionMode;
-import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -37,8 +37,6 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorService;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.schema.utils.CommonDtoUtils;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -417,20 +415,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		                    specification.getFullIdentifier(), upTo));
 		}
 
-		invokeAndWait(tasks);
-	}
-
-	private void invokeAndWait(final _Tasks tasks) {
+		val isConcurrent = (boolean) CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
 		
-		val isParallelize = CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
-		val executionModeFromConfig = isParallelize
-				? ThreadPoolExecutionMode.PARALLEL
-						: ThreadPoolExecutionMode.SEQUENTIAL;
-
-		val threadPoolSupport = ThreadPoolSupport.getInstance();
-		val futures = threadPoolSupport.invokeAll(executionModeFromConfig, tasks.getCallables());
-		threadPoolSupport.joinGatherFailures(futures);
+		tasks.invokeAndWait(isConcurrent && false); //FIXME concurrent init is broken
 	}
+
 
 //	private List<ObjectSpecification> loadSpecificationsFor(
 //			final Stream<Class<?>> domainTypes,

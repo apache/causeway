@@ -21,6 +21,9 @@ package org.apache.isis.extensions.secman.jdo.dom.user;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 /**
  * Optional hook so that alternative implementations of {@link org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser}.
@@ -51,20 +54,14 @@ public interface ApplicationUserFactory {
 
     public ApplicationUser newApplicationUser();
 
+    @Service @Order(Ordered.LOWEST_PRECEDENCE)
     public static class Default implements ApplicationUserFactory {
 
-        public Default() {
-            this(null);
-        }
-        Default(final FactoryService factory) {
-            this.factory = factory;
-        }
         public ApplicationUser newApplicationUser() {
             return factory.instantiate(ApplicationUser.class);
         }
 
-        @Inject
-        FactoryService factory;
+        @Inject FactoryService factory;
 
     }
 

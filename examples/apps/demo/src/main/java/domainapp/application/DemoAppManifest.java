@@ -23,6 +23,10 @@ import javax.inject.Singleton;
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.extensions.fixtures.IsisBootFixtures;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
@@ -53,7 +57,14 @@ import domainapp.dom.DemoModule;
     IsisBootSecurityShiro.class,
     IsisBootDataNucleus.class,
     IsisBootWebWicket.class,
-    //FixtureScriptsDefault.class,
+    
+    // Security Manager Extension (secman)
+    IsisBootSecmanRealmShiro.class,
+    IsisBootSecmanPersistenceJdo.class,
+    IsisBootSecmanEncryptionJbcrypt.class,
+    
+    IsisBootFixtures.class
+
 })
 @ComponentScan(
         basePackageClasses= {

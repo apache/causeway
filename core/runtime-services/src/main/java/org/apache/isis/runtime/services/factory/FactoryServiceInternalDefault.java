@@ -101,7 +101,7 @@ public class FactoryServiceInternalDefault implements FactoryService {
 		}
 		
 		if(ViewModel.class.isAssignableFrom(viewModelClass)) {
-			//FIXME[2152] is this required, or does the below code suffice for all cases?
+			//FIXME[2152] is this execution branch required, or does the below code suffice for all cases?
 			val viewModel = (ViewModel) instantiate(viewModelClass);
 			viewModel.viewModelInit(mementoStr);
 			return _Casts.uncheckedCast(viewModel);

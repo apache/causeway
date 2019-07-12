@@ -117,7 +117,7 @@ public class ApplicationUserRepository {
             final String username,
             final ApplicationRole initialRole,
             final Boolean enabled) {
-        final ApplicationUser user = getApplicationUserFactory().newApplicationUser();
+        final ApplicationUser user = applicationUserFactory.newApplicationUser();
         user.setUsername(username);
         user.setStatus(ApplicationUserStatus.parse(enabled));
         user.setAccountType(AccountType.DELEGATED);
@@ -139,7 +139,7 @@ public class ApplicationUserRepository {
             final String emailAddress) {
         ApplicationUser user = findByUsername(username);
         if (user == null) {
-            user = getApplicationUserFactory().newApplicationUser();
+            user = applicationUserFactory.newApplicationUser();
             user.setUsername(username);
             user.setStatus(ApplicationUserStatus.parse(enabled));
             user.setAccountType(AccountType.LOCAL);
@@ -164,7 +164,7 @@ public class ApplicationUserRepository {
             final ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
-        final ApplicationUser user = getApplicationUserFactory().newApplicationUser();
+        final ApplicationUser user = applicationUserFactory.newApplicationUser();
         return user.validateResetPassword(password, passwordRepeat);
     }
 
@@ -205,34 +205,15 @@ public class ApplicationUserRepository {
         }
         return _Lists.newArrayList();
     }
+
+    // -- DEPENDENCIES
     
-
-    //region  > injected
-    @Inject
-    QueryResultsCache queryResultsCache;
-    @Inject
-    PasswordEncryptionService passwordEncryptionService;
-    @Inject
-    ApplicationRoleRepository applicationRoleRepository;
-
-    /**
-     * Will only be injected to if the programmer has supplied an implementation.  Otherwise
-     * this class will install a default implementation in the {@link #getApplicationUserFactory() accessor}.
-     */
-    @Inject
-    ApplicationUserFactory applicationUserFactory;
-
-    private ApplicationUserFactory getApplicationUserFactory() {
-        return applicationUserFactory != null
-                ? applicationUserFactory
-                : (applicationUserFactory = new ApplicationUserFactory.Default(factory));
-    }
-
-    @javax.inject.Inject
-    RepositoryService repository;
-    
-    @javax.inject.Inject
-    FactoryService factory;
+    @Inject QueryResultsCache queryResultsCache;
+    @Inject PasswordEncryptionService passwordEncryptionService;
+    @Inject ApplicationRoleRepository applicationRoleRepository;
+    @Inject ApplicationUserFactory applicationUserFactory;
+    @Inject RepositoryService repository;
+    @Inject FactoryService factory;
 
     
 

@@ -21,6 +21,9 @@ package org.apache.isis.extensions.secman.jdo.dom.tenancy;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 /**
  * Optional hook so that alternative implementations of {@link org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy}.
@@ -51,20 +54,14 @@ public interface ApplicationTenancyFactory {
 
     public ApplicationTenancy newApplicationTenancy();
 
+    @Service @Order(Ordered.LOWEST_PRECEDENCE)
     public static class Default implements ApplicationTenancyFactory {
 
-        public Default() {
-            this(null);
-        }
-        Default(final FactoryService factory) {
-            this.factory = factory;
-        }
         public ApplicationTenancy newApplicationTenancy() {
             return factory.instantiate(ApplicationTenancy.class);
         }
 
-        @Inject
-        FactoryService factory;
+        @Inject FactoryService factory;
 
     }
 

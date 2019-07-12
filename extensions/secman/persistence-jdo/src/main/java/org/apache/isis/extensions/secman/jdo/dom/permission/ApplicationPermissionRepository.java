@@ -233,7 +233,7 @@ public class ApplicationPermissionRepository {
         if (permission != null) {
             return permission;
         }
-        permission = getApplicationPermissionFactory().newApplicationPermission();
+        permission = applicationPermissionFactory.newApplicationPermission();
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
@@ -359,36 +359,13 @@ public class ApplicationPermissionRepository {
         memberNames.addAll(memberNamesOf);
     }
     
-
-
-    //region  >  (injected)
-    @Inject
-    RepositoryService repository;
-    @Inject
-    ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-
-    /**
-     * Will only be injected to if the programmer has supplied an implementation.  Otherwise
-     * this class will install a default implementation in the {@link #getApplicationPermissionFactory() accessor}.
-     */
-    @Inject
-    ApplicationPermissionFactory applicationPermissionFactory;
-
-    private ApplicationPermissionFactory getApplicationPermissionFactory() {
-        return applicationPermissionFactory != null
-                ? applicationPermissionFactory
-                : (applicationPermissionFactory = new ApplicationPermissionFactory.Default(factory));
-    }
-
-    @Inject
-    QueryResultsCache queryResultsCache;
+    // -- DEPENDENCIES
     
-    @javax.inject.Inject
-    FactoryService factory;
-    
-    @javax.inject.Inject
-    MessageService messages;
-    
-    
+    @Inject RepositoryService repository;
+    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject ApplicationPermissionFactory applicationPermissionFactory;
+    @Inject QueryResultsCache queryResultsCache;
+    @Inject FactoryService factory;
+    @Inject MessageService messages;
 
 }

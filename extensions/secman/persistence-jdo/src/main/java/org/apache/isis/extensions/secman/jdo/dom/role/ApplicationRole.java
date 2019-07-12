@@ -63,7 +63,6 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 import lombok.Getter;
 import lombok.Setter;
 
-@SuppressWarnings("UnusedDeclaration")
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
         schema = "isissecurity",
@@ -98,7 +97,8 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
 )
-public class ApplicationRole implements Comparable<ApplicationRole> {
+public class ApplicationRole 
+implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
 
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationRole, T> {
 		private static final long serialVersionUID = 1L;}

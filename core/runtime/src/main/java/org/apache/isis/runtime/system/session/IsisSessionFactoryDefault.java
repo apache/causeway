@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.concurrent._Tasks;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
@@ -115,42 +116,40 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         runtimeEventService.fireAppPreMetamodel();
 
-        val tasks = Arrays.asList(
-                callableOf("SpecificationLoader.init()", ()->{
-                    // time to initialize...
-                    specificationLoader.init();
+        val tasks = _Tasks.create();
+        
+        tasks.addRunnable("SpecificationLoader.init()", ()->{
+            // time to initialize...
+            specificationLoader.init();
 
-                    // we need to do this before checking if the metamodel is valid.
-                    //
-                    // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
-                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
-                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
-                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
-                    // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
-                    // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
-                    // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
-                    //
-                    // also, required so that can still call isisSessionFactory#doInSession
-                    //
-                    // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
-                    // (including the metamodel invalid page)
-                    // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
-                    // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
+            // we need to do this before checking if the metamodel is valid.
+            //
+            // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
+            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
+            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
+            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
+            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
+            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
+            // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
+            //
+            // also, required so that can still call isisSessionFactory#doInSession
+            //
+            // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
+            // (including the metamodel invalid page)
+            // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+            // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
 
-                    authenticationManager.init();
-                    authorizationManager.init();
-                }),
-                //callableOf("PersistenceSessionFactory.init()", persistenceSessionFactory::init),
-                callableOf("ChangesDtoUtils.init()", ChangesDtoUtils::init),
-                callableOf("InteractionDtoUtils.init()", InteractionDtoUtils::init),
-                callableOf("CommandDtoUtils.init()", CommandDtoUtils::init)
-                );
-
-        // execute tasks using a thread-pool
-        final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(tasks); 
-        // wait on this thread for tasks to complete
-        ThreadPoolSupport.getInstance().joinGatherFailures(futures);
-
+            authenticationManager.init();
+            authorizationManager.init();
+        });
+        
+        tasks.addRunnable("ChangesDtoUtils.init()", ChangesDtoUtils::init);
+        tasks.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
+        tasks.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
+        
+        val concurrentInit = false; // otherwise deadlocks
+        tasks.invokeAndWait(concurrentInit);
+        
         runtimeEventService.fireAppPostMetamodel();
 
         //initServicesAndRunFixtures();
