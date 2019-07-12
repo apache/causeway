@@ -92,7 +92,7 @@ public final class _Exceptions {
         return new IllegalStateException("internal error: code was reached, that is not implemented yet");
     }
     
-    public static RuntimeException unrecoverable(Exception cause) {
+    public static RuntimeException unrecoverable(Throwable cause) {
         return new RuntimeException("unrecoverable error: with cause ...", cause);
     }
     
@@ -100,7 +100,7 @@ public final class _Exceptions {
         return new RuntimeException(String.format("unrecoverable error: '%s'", msg));
     }
     
-    public static RuntimeException unrecoverable(String msg, Exception cause) {
+    public static RuntimeException unrecoverable(String msg, Throwable cause) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
     

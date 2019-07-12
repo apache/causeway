@@ -18,18 +18,25 @@
  */
 package org.apache.isis.commons.internal.concurrent;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Lists;
-
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.isis.commons.internal.base._With.requires;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.logging.log4j.Level;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <h1>- internal use only -</h1>
@@ -41,6 +48,7 @@ import lombok.RequiredArgsConstructor;
  *
  * @since 2.0
  */
+@Log4j2
 public final class _Tasks {
     
     public static _Tasks create() {
@@ -65,11 +73,103 @@ public final class _Tasks {
         });
     }
     
+    public void addRunnable(String name, Runnable runnable) {
+        requires(runnable, "runnable");
+        addRunnable(runnable, ()->name);
+    }
+    
     public List<Callable<Object>> getCallables() {
-        return callables;
+        return Collections.unmodifiableList(callables);
+    }
+    
+    public void invokeAndWait(boolean concurrent) {
+    	
+    	val t0 = System.nanoTime();
+    	val tasksExecuted = new LongAdder();
+    	
+    	try {
+    	
+			if(concurrent) {
+				
+//				val forkJoinPool = new ForkJoinPool();
+//				val anyErrorRef = new AtomicReference<RuntimeException>();
+//				
+//				forkJoinPool.submit(()->{
+					val anyError = callables.parallelStream()
+							.map(_Tasks::call)
+							.peek(__->tasksExecuted.increment())
+							.filter(_Either::isRight)
+							.findAny()
+							.map(_Either::rightIfAny)
+							.orElse(null);
+					
+//					anyErrorRef.set(anyError);
+//				});
+//				
+//				forkJoinPool.shutdown();
+//				
+//				try {
+//					System.err.println("wait for ForkJoinPool " + forkJoinPool);
+//					forkJoinPool.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+//					System.err.println("done waiting for ForkJoinPool " + forkJoinPool);
+//				} catch (InterruptedException e) {
+//					throw _Exceptions.unrecoverable("exception while waiting on the ForkJoinPool to terminate", e);
+//				}
+//				
+//				val anyError = anyErrorRef.get();
+				if(anyError!=null) {
+					throw anyError;
+				}
+				
+			} else {
+				
+				for(Callable<?> callable : getCallables()) {
+					val eitherResultOrError = call(callable);
+					tasksExecuted.increment();
+					
+					if(eitherResultOrError.isRight()) {
+						throw eitherResultOrError.rightIfAny();	
+					}
+				}
+				
+			}
+			
+    	} finally {
+    		
+    		if(log.isDebugEnabled()) {
+    			val t1 = System.nanoTime();
+    			log.printf(Level.DEBUG, 
+    					"running %d/%d tasks %s, took %.3f milliseconds ",
+    					tasksExecuted.longValue(),
+                		callables.size(),
+                		concurrent ? "concurrent" : "sequential",
+                		0.000_001 * (t1-t0));	
+    		}
+            
+    		callables.clear();
+		}
+    	
     }
     
     // -- IMPLEMENTATION DETAILS
+
+    private static <T> _Either<T, RuntimeException> call(Callable<T> callable) {
+    	
+		try {
+			val result = callable.call();
+			return _Either.leftNullable(result);
+		} catch (Throwable cause) {
+			
+			val name = callable instanceof NamedCallable
+					? callable.toString()
+							: "unnamend";
+			
+			val msg = String.format("failure while executing callable '%s'", name);
+			log.error(msg, cause);
+			return _Either.right(_Exceptions.unrecoverable(msg, cause));
+		}
+			
+    }
     
     private final List<Callable<Object>> callables = _Lists.newArrayList();
     
@@ -84,6 +184,6 @@ public final class _Tasks {
         }
         
     }
-
+    
 
 }
