@@ -73,13 +73,6 @@
         	<scope>provided</scope>
         </dependency>
         
-        <!-- [2039] only to configure log4j from servlet context resources -->
-		<dependency>
-        	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-log4j</artifactId>
-        	<scope>provided</scope>
-        </dependency>
-    
         <!-- TESTS -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>

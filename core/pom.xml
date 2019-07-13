@@ -1241,15 +1241,6 @@
 				<scope>test</scope>
 			</dependency>
 
-			<!-- log4j -->
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-log4j</artifactId>
-				<version>${isis.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-
 			<!-- metamodel -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>

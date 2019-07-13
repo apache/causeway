@@ -96,10 +96,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-        	<groupId>org.apache.isis.core</groupId>
-        	<artifactId>isis-log4j</artifactId>
-        </dependency>
     </dependencies>
 
     <profiles>
