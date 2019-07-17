@@ -30,17 +30,15 @@ import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 
-@Mixin(method = "exec")
+import lombok.RequiredArgsConstructor;
+
+@Mixin(method = "exec") @RequiredArgsConstructor
 public class HasUsername_open {
 
-    private final HasUsername hasUsername;
+    private final HasUsername holder;
 
-    public HasUsername_open(final HasUsername hasUsername) {
-        this.hasUsername = hasUsername;
-    }
-
-
-    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<HasUsername_open> {}
+    public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<HasUsername_open> {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -51,17 +49,17 @@ public class HasUsername_open {
     )
     @MemberOrder(name = "User", sequence = "1") // associate with a 'User' property (if any)
     public ApplicationUser exec() {
-        if (hasUsername == null || hasUsername.getUsername() == null) {
+        if (holder == null || holder.getUsername() == null) {
             return null;
         }
-        return applicationUserRepository.findByUsername(hasUsername.getUsername());
+        return applicationUserRepository.findByUsername(holder.getUsername());
     }
     public boolean hideExec() {
-        return hasUsername instanceof ApplicationUser;
+        return holder instanceof ApplicationUser;
     }
 
     public TranslatableString disableExec() {
-        if (hasUsername == null || hasUsername.getUsername() == null) {
+        if (holder == null || holder.getUsername() == null) {
             return TranslatableString.tr("No username");
         }
         return null;

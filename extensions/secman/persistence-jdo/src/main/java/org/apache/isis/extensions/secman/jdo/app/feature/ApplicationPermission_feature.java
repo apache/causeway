@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.jdo.app.feature;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -34,19 +36,15 @@ import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissio
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 
-@Mixin
+import lombok.RequiredArgsConstructor;
+
+@Mixin @RequiredArgsConstructor
 public class ApplicationPermission_feature {
 
     public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission_feature> {
 		private static final long serialVersionUID = 1L;}
 
-
-    // -- constructor
-    private final ApplicationPermission permission;
-    public ApplicationPermission_feature(final ApplicationPermission permission) {
-        this.permission = permission;
-    }
-    
+    final ApplicationPermission holder;
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -73,16 +71,8 @@ public class ApplicationPermission_feature {
         return ApplicationFeatureId.newFeature(permission.getFeatureType(), permission.getFeatureFqn());
     }
 
-    @javax.inject.Inject
-    RepositoryService repository;
-    
-    @javax.inject.Inject
-    FactoryService factory;
-
-    @javax.inject.Inject
-    ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    
-    
-
+    @Inject RepositoryService repository;
+    @Inject FactoryService factory;
+    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
 }

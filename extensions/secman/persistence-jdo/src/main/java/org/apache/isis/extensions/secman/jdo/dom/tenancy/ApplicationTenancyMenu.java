@@ -46,13 +46,13 @@ import org.apache.isis.extensions.secman.api.SecurityModule;
 public class ApplicationTenancyMenu {
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancies, T> {
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancyMenu, T> {
 		private static final long serialVersionUID = 1L;}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationTenancies, T> {
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationTenancyMenu, T> {
 		private static final long serialVersionUID = 1L;}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancies> {
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancyMenu> {
 		private static final long serialVersionUID = 1L;}
     
 

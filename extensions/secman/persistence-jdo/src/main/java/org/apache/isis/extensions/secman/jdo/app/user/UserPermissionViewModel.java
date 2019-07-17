@@ -39,6 +39,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.extensions.secman.api.SecurityModule;
@@ -380,13 +381,15 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- toString
 
-    private final static String propertyNames = "user, featureId";
-
+    private final static ToString<UserPermissionViewModel> toString = 
+    		ObjectContracts
+    		.toString("user", UserPermissionViewModel::getUser)
+    		.thenToString("featureId", UserPermissionViewModel::getFeatureId);
+    
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, propertyNames);
+        return toString.toString(this);
     }
-    
 
     // -- Functions
 

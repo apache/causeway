@@ -52,7 +52,7 @@ public class ApplicationUser_filterPermissions {
         private static final long serialVersionUID = 1L;
     }
 
-    private final ApplicationUser user; // holder
+    private final ApplicationUser holder;
     
 
     // -- filterPermissions (action)
@@ -108,7 +108,7 @@ public class ApplicationUser_filterPermissions {
     List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
         return _Lists.map(
                         features,
-                        UserPermissionViewModel.Functions.asViewModel(user, factory));
+                        UserPermissionViewModel.Functions.asViewModel(holder, factory));
     }
 
     @Inject RepositoryService repository;

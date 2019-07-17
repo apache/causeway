@@ -33,11 +33,14 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 )
 public abstract class ApplicationClassMember extends ApplicationFeatureViewModel {
 
-    public static abstract class PropertyDomainEvent<S extends ApplicationClassMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClassMember, T> {}
+    public static abstract class PropertyDomainEvent<S extends ApplicationClassMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClassMember, T> {
+		private static final long serialVersionUID = 1L;}
 
-    public static abstract class CollectionDomainEvent<S extends ApplicationClassMember, T> extends ApplicationFeatureViewModel.CollectionDomainEvent<S, T> {}
+    public static abstract class CollectionDomainEvent<S extends ApplicationClassMember, T> extends ApplicationFeatureViewModel.CollectionDomainEvent<S, T> {
+		private static final long serialVersionUID = 1L;}
 
-    public static abstract class ActionDomainEvent<S extends ApplicationClassMember> extends ApplicationFeatureViewModel.ActionDomainEvent<S> {}
+    public static abstract class ActionDomainEvent<S extends ApplicationClassMember> extends ApplicationFeatureViewModel.ActionDomainEvent<S> {
+		private static final long serialVersionUID = 1L;}
 
     
 
@@ -52,7 +55,8 @@ public abstract class ApplicationClassMember extends ApplicationFeatureViewModel
 
     // -- memberName (properties)
 
-    public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationClassMember, String> {}
+    public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationClassMember, String> {
+		private static final long serialVersionUID = 1L;}
 
     @Property(
             domainEvent = MemberNameDomainEvent.class

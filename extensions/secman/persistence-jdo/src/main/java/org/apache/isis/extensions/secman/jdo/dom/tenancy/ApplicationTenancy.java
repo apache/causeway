@@ -18,10 +18,12 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.tenancy;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
@@ -46,7 +48,10 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.util.Equality;
+import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
@@ -346,7 +351,8 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     // -- removeChild (action)
 
-    public static class RemoveChildDomainEvent extends ActionDomainEvent {}
+    public static class RemoveChildDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = RemoveChildDomainEvent.class,
@@ -384,28 +390,45 @@ public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
     }
     
 
-    // -- compareTo
+    // -- CONTRACT
+    
+	private final static Equality<ApplicationTenancy> equality =
+			ObjectContracts.checkEquals(ApplicationTenancy::getPath);
+
+	private final static Hashing<ApplicationTenancy> hashing =
+			ObjectContracts.hashing(ApplicationTenancy::getPath);
+
+	private final static ToString<ApplicationTenancy> toString =
+			ObjectContracts.toString("path", ApplicationTenancy::getPath)
+			.thenToString("name", ApplicationTenancy::getName);
+	
+	 private final static Comparator<ApplicationTenancy> comparator =
+		 		Comparator.comparing(ApplicationTenancy::getPath);
 
 
     @Override
+    public boolean equals(final Object other) {
+        return equality.equals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+    	return hashing.hashCode(this);
+    }
+
+    @Override
     public String toString() {
-        return ObjectContracts.toString(this, "path,name");
+        return toString.toString(this);
     }
 
     @Override
     public int compareTo(final ApplicationTenancy o) {
-        return ObjectContracts.compare(this, o, "path");
+        return comparator.compare(this, o);
     }
     
-
-    //region  >  (injected)
-    @javax.inject.Inject
-    ApplicationUserRepository applicationUserRepository;
-    @javax.inject.Inject
-    ApplicationTenancyRepository applicationTenancyRepository;
-    @javax.inject.Inject
-    FactoryService factoryService;
-    @javax.inject.Inject
-    RepositoryService repository;
+    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject FactoryService factoryService;
+    @Inject RepositoryService repository;
     
 }

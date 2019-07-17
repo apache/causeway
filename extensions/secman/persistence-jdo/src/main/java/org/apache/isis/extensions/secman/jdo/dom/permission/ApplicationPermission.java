@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Function;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
@@ -150,11 +151,14 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
     // -- domain events
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermission, T> {}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermission, T> {
+		private static final long serialVersionUID = 1L;}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermission, T> {}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermission, T> {
+		private static final long serialVersionUID = 1L;}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission> {}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission> {
+		private static final long serialVersionUID = 1L;}
 
     
 
@@ -195,7 +199,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
     // -- role (property)
 
-    public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
+    public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {
+		private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(name = "roleId", allowsNull="false")
@@ -213,7 +218,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     
 
     // -- updateRole (action)
-    public static class UpdateRoleDomainEvent extends ActionDomainEvent {}
+    public static class UpdateRoleDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = UpdateRoleDomainEvent.class,
@@ -232,7 +238,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     
 
     // -- rule (property)
-    public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
+    public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {
+		private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -247,7 +254,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     
 
     // -- allow (action)
-    public static class AllowDomainEvent extends ActionDomainEvent {}
+    public static class AllowDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllowDomainEvent.class,
@@ -265,7 +273,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     
 
     // -- veto (action)
-    public static class VetoDomainEvent extends ActionDomainEvent {}
+    public static class VetoDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = VetoDomainEvent.class,
@@ -283,7 +292,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     
 
     // -- mode (property)
-    public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
+    public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {
+		private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -299,7 +309,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
     // -- viewing(action)
 
-    public static class ViewingDomainEvent extends ActionDomainEvent {}
+    public static class ViewingDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = ViewingDomainEvent.class,
@@ -318,7 +329,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
     // -- changing (action)
 
-    public static class ChangingDomainEvent extends ActionDomainEvent {}
+    public static class ChangingDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = ChangingDomainEvent.class,
@@ -353,7 +365,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
     // region > type (derived, memberType of associated feature)
 
-    public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
+    public static class TypeDomainEvent extends PropertyDomainEvent<String> {
+		private static final long serialVersionUID = 1L;}
 
     /**
      * Combines {@link #getFeatureType() feature type} and member type.
@@ -402,7 +415,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
     // -- featureFqn
 
-    public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {}
+    public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {
+		private static final long serialVersionUID = 1L;}
 
     /**
      * The {@link ApplicationFeatureId#getFullyQualifiedName() fully qualified name}
@@ -429,7 +443,8 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     
 
     // -- delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
+    public static class DeleteDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
 
     @Action(
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE,
@@ -443,8 +458,6 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
     }
 
     // -- CONTRACT
-    
-    private final static String propertyNames = "role, featureType, featureFqn, mode";
     
     private final static ObjectContract<ApplicationPermission> contract	= 
     		ObjectContracts.contract(ApplicationPermission.class)
@@ -497,14 +510,7 @@ public class ApplicationPermission implements Comparable<ApplicationPermission> 
 
     }
     
-
-    //region  > services (injected)
-    @javax.inject.Inject
-    RepositoryService repository;
-    
-    @javax.inject.Inject
-    ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-
-    
+    @Inject RepositoryService repository;
+    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
 }

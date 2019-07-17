@@ -34,7 +34,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.util.Equality;
+import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
@@ -305,24 +308,33 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 				.apply(getFeatureId().getParentPackageId());
 	}
 
-	
+
 	// -- equals, hashCode, toString
 
-	private final static String propertyNames = "featureId";
+
+	private final static Equality<ApplicationFeatureViewModel> equality =
+			ObjectContracts.checkEquals(ApplicationFeatureViewModel::getFeatureId);
+
+	private final static Hashing<ApplicationFeatureViewModel> hashing =
+			ObjectContracts.hashing(ApplicationFeatureViewModel::getFeatureId);
+
+	private final static ToString<ApplicationFeatureViewModel> toString =
+			ObjectContracts.toString("featureId", ApplicationFeatureViewModel::getFeatureId);
+
 
 	@Override
 	public boolean equals(final Object obj) {
-		return ObjectContracts.equals(this, obj, propertyNames);
+		return equality.equals(this, obj);
 	}
 
 	@Override
 	public int hashCode() {
-		return ObjectContracts.hashCode(this, propertyNames);
+		return hashing.hashCode(this);
 	}
 
 	@Override
 	public String toString() {
-		return ObjectContracts.toString(this, propertyNames);
+		return toString.toString(this);
 	}
 
 
@@ -341,10 +353,10 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 		public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> asViewModelForId(
 				final ApplicationFeatureRepositoryDefault applicationFeatureRepository, 
 				final FactoryService factoryService) {
-			
+
 			return (ApplicationFeatureId input) -> 
-				_Casts.uncheckedCast(ApplicationFeatureViewModel
-						.newViewModel(input, applicationFeatureRepository, factoryService));
+			_Casts.uncheckedCast(ApplicationFeatureViewModel
+					.newViewModel(input, applicationFeatureRepository, factoryService));
 
 		}
 		public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeature, T> asViewModel(
@@ -352,13 +364,13 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 				final FactoryService factoryService) {
 
 			return (ApplicationFeature input) ->
-				_Casts.uncheckedCast(ApplicationFeatureViewModel
-						.newViewModel(input.getFeatureId(), applicationFeatureRepository, factoryService));
+			_Casts.uncheckedCast(ApplicationFeatureViewModel
+					.newViewModel(input.getFeatureId(), applicationFeatureRepository, factoryService));
 		}
 	}
 
 	// -- DEPENDENCIES
-	
+
 	@Inject RepositoryService repository;
 	@Inject FactoryService factory;
 	@Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;

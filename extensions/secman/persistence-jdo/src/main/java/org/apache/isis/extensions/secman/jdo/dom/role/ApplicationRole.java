@@ -18,10 +18,12 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.role;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
@@ -47,7 +49,10 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.types.DescriptionType;
+import org.apache.isis.applib.util.Equality;
+import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -686,41 +691,45 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     
 
     // -- equals, hashCode, compareTo, toString
-    private final static String propertyNames = "name";
+    
+    private final static Comparator<ApplicationRole> comparator =
+     		Comparator.comparing(ApplicationRole::getName);
+    
+	private final static Equality<ApplicationRole> equality =
+			ObjectContracts.checkEquals(ApplicationRole::getName);
+
+	private final static Hashing<ApplicationRole> hashing =
+			ObjectContracts.hashing(ApplicationRole::getName);
+
+	private final static ToString<ApplicationRole> toString =
+			ObjectContracts.toString("name", ApplicationRole::getName);
+	
 
     @Override
     public int compareTo(final ApplicationRole o) {
-        return ObjectContracts.compare(this, o, propertyNames);
+    	return comparator.compare(this, o);
     }
 
     @Override
     public boolean equals(final Object obj) {
-        return ObjectContracts.equals(this, obj, propertyNames);
+    	return equality.equals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return ObjectContracts.hashCode(this, propertyNames);
+        return hashing.hashCode(this);
     }
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, propertyNames);
+        return toString.toString(this);
     }
-
     
-
-    //region  >  (injected)
-    @javax.inject.Inject
-    RepositoryService repository;
-    @javax.inject.Inject
-    ApplicationFeatureRepository applicationFeatureRepository;
-    @javax.inject.Inject
-    ApplicationPermissionRepository applicationPermissionRepository;
-    @javax.inject.Inject
-    ApplicationUserRepository applicationUserRepository;
-    @javax.inject.Inject
-    ApplicationRoleRepository applicationRoleRepository;
+    @Inject RepositoryService repository;
+    @Inject ApplicationFeatureRepository applicationFeatureRepository;
+    @Inject ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject ApplicationRoleRepository applicationRoleRepository;
     
 
 }

@@ -47,7 +47,7 @@ public class ApplicationUser_permissions {
     public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_permissions> {
 		private static final long serialVersionUID = 1L;}
 
-    private final ApplicationUser user; // holder
+    private final ApplicationUser holder;
 
     @Action(
         semantics = SemanticsOf.SAFE,
@@ -69,7 +69,7 @@ public class ApplicationUser_permissions {
     List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
         return _Lists.map(
                         features,
-                        UserPermissionViewModel.Functions.asViewModel(user, factory));
+                        UserPermissionViewModel.Functions.asViewModel(holder, factory));
     }
 
     @Inject RepositoryService repository;

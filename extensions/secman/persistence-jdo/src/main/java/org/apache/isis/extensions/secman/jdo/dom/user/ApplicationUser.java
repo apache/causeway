@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
@@ -998,28 +999,18 @@ public class ApplicationUser implements Comparable<ApplicationUser>, HasUsername
         return contract.toString(this);
     }
 
-    
-
-    //region  >  (injected)
-    @javax.inject.Inject
-    ApplicationRoleRepository applicationRoleRepository;
-    @javax.inject.Inject
-    ApplicationUserRepository applicationUserRepository;
-    @javax.inject.Inject
-    ApplicationPermissionRepository applicationPermissionRepository;
-    @javax.inject.Inject
-    PasswordEncryptionService passwordEncryptionService;
-    @javax.inject.Inject
-    RepositoryService repository;
-    @javax.inject.Inject
-    UserService userService;
+    @Inject ApplicationRoleRepository applicationRoleRepository;
+    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject PasswordEncryptionService passwordEncryptionService;
+    @Inject RepositoryService repository;
+    @Inject UserService userService;
     /**
      * Optional service, if configured then is used to evaluate permissions within
      * {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
      * else will fallback to a {@link org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService#DEFAULT default}
      * implementation.
      */
-    @javax.inject.Inject
-    PermissionsEvaluationService permissionsEvaluationService;
+    @Inject PermissionsEvaluationService permissionsEvaluationService;
     
 }
