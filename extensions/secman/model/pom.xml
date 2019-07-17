@@ -27,24 +27,17 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-    <name>Apache Isis Extensions - Security Manager Persistence (Using JDO)</name>
+    <artifactId>isis-extensions-secman-model</artifactId>
+    <name>Apache Isis Extensions - Security Manager Model</name>
     <description></description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman-persistence-jdo</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/secman-persistence-jdo</git-plugin.propertiesDir>
-        
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman-model</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman-model</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 	
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime</artifactId>
@@ -54,20 +47,6 @@
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-api</artifactId>
-			<version>${isis.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-model</artifactId>
-			<version>${isis.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-fixtures</artifactId>
 			<version>${isis.version}</version>
 		</dependency>
 

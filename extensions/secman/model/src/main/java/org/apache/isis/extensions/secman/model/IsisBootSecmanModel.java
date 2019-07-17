@@ -16,14 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.role;
+package org.apache.isis.extensions.secman.model;
 
-public interface ApplicationRole {
-	
-	public static final int MAX_LENGTH_NAME = 50;
-    public static final int TYPICAL_LENGTH_NAME = 30;
-    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 
-	String getName();
-	
+@Configuration
+@ComponentScan(
+        basePackageClasses= {
+        		IsisBootSecmanModel.class
+        },
+        includeFilters= {
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
+public class IsisBootSecmanModel {
+
 }

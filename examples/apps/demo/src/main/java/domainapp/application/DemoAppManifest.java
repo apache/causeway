@@ -24,8 +24,10 @@ import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
@@ -59,6 +61,7 @@ import domainapp.dom.DemoModule;
     IsisBootWebWicket.class,
     
     // Security Manager Extension (secman)
+    IsisBootSecmanModel.class,
     IsisBootSecmanRealmShiro.class,
     IsisBootSecmanPersistenceJdo.class,
     IsisBootSecmanEncryptionJbcrypt.class,
@@ -85,6 +88,12 @@ public class DemoAppManifest {
                .applicationName("Isis Demo App")
                .faviconUrl("/images/favicon.png")
                .build();
+   }
+   
+   @Bean @Singleton
+   public SecurityModuleConfig securityModuleConfigBean() {
+	   return SecurityModuleConfig.builder()
+			   .build();
    }
 
 }

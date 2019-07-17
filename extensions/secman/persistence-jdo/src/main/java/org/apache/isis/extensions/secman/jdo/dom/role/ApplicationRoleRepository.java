@@ -36,7 +36,8 @@ import org.apache.isis.commons.internal.collections._Lists;
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationRole.class
 )
-public class ApplicationRoleRepository {
+public class ApplicationRoleRepository 
+implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository {
     
     @Inject RepositoryService repository;
     @Inject FactoryService factory;

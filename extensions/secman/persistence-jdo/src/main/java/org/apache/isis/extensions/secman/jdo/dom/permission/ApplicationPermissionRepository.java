@@ -56,7 +56,8 @@ import lombok.val;
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationPermission.class
 )
-public class ApplicationPermissionRepository {
+public class ApplicationPermissionRepository 
+implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository {
 
 
     // -- findByRole (programmatic)
@@ -189,6 +190,8 @@ public class ApplicationPermissionRepository {
     
 
     // -- findByFeature (programmatic)
+    
+    @Override
     public List<ApplicationPermission> findByFeatureCached(final ApplicationFeatureId featureId) {
         return queryResultsCache.execute(new Callable<List<ApplicationPermission>>() {
             @Override public List<ApplicationPermission> call() throws Exception {
@@ -229,6 +232,7 @@ public class ApplicationPermissionRepository {
             final ApplicationPermissionMode mode,
             final ApplicationFeatureType featureType,
             final String featureFqn) {
+    	
         ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureType, featureFqn);
         if (permission != null) {
             return permission;
@@ -250,17 +254,18 @@ public class ApplicationPermissionRepository {
             final String featurePackage,
             final String featureClassName,
             final String featureMemberName) {
-        final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
-        final ApplicationFeatureType featureType = featureId.getType();
-        final String featureFqn = featureId.getFullyQualifiedName();
+    	
+        val featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
+        val featureType = featureId.getType();
+        val featureFqn = featureId.getFullyQualifiedName();
 
-        final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
+        val feature = applicationFeatureRepository.findFeature(featureId);
         if(feature == null) {
         	messages.warnUser("No such " + featureType.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
 
-        final ApplicationPermission permission = factory.instantiate(ApplicationPermission.class);
+        val permission = factory.instantiate(ApplicationPermission.class);
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);

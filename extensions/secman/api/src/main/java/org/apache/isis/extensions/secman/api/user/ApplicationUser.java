@@ -20,11 +20,22 @@ package org.apache.isis.extensions.secman.api.user;
 
 import java.util.SortedSet;
 
+import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.tenancy.HasAtPath;
 
 
-public interface ApplicationUser {
+public interface ApplicationUser extends HasUsername, HasAtPath {
+	
+    // -- constants
+    public static final int MAX_LENGTH_USERNAME = 30;
+    public static final int MAX_LENGTH_FAMILY_NAME = 50;
+    public static final int MAX_LENGTH_GIVEN_NAME = 50;
+    public static final int MAX_LENGTH_KNOWN_AS = 20;
+    public static final int MAX_LENGTH_EMAIL_ADDRESS = 50;
+    public static final int MAX_LENGTH_PHONE_NUMBER = 25;
+
 
 	String getName();
 
@@ -34,8 +45,10 @@ public interface ApplicationUser {
 
 	ApplicationPermissionValueSet getPermissionSet();
 
-	SortedSet<ApplicationRole> getRoles();
+	SortedSet<? extends ApplicationRole> getRoles();
 
 	ApplicationUserStatus getStatus();
+
+	String getUsername();
 
 }

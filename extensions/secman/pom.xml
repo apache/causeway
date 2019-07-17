@@ -99,6 +99,7 @@
 
     <modules>
     	<module>api</module>
+    	<module>model</module>
     	<module>encryption-jbcrypt</module>
     	<module>persistence-jdo</module>
     	<module>realm-shiro</module>

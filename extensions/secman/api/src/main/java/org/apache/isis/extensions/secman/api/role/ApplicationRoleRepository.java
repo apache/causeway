@@ -18,12 +18,18 @@
  */
 package org.apache.isis.extensions.secman.api.role;
 
-public interface ApplicationRole {
-	
-	public static final int MAX_LENGTH_NAME = 50;
-    public static final int TYPICAL_LENGTH_NAME = 30;
-    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
+import java.util.List;
 
-	String getName();
-	
+public interface ApplicationRoleRepository {
+
+	List<? extends ApplicationRole> allRoles();
+
+	ApplicationRole newRole(String name, String description);
+
+	List<? extends ApplicationRole> findNameContaining(String search);
+
+	ApplicationRole findByName(String roleName);
+
+	ApplicationRole findByNameCached(String roleName);
+
 }

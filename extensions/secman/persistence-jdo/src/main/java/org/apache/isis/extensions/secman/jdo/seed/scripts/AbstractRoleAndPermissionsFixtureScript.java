@@ -27,10 +27,10 @@ import javax.inject.Inject;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 
 import lombok.val;
@@ -114,8 +114,11 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         for (String featureFqn : featureFqns) {
             // can't use role#addPackage because that does a check for existence of the package, which is
             // not guaranteed to exist yet (the SecurityFeatures#init() may not have run).
-            applicationPermissionRepository.newPermissionNoCheck(
-                    securityRole,
+        	
+        	((org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository)
+            applicationPermissionRepository)
+        	.newPermissionNoCheck(
+                    (org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole)securityRole,
                     rule,
                     mode,
                     featureType, featureFqn);
@@ -141,10 +144,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         		.collect(Collectors.toList());
     }
 
-    //region  >  (injected)
-    @Inject
-    ApplicationRoleRepository applicationRoleRepository;
-    @Inject
-    ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject ApplicationRoleRepository applicationRoleRepository;
+    @Inject ApplicationPermissionRepository applicationPermissionRepository;
     
 }

@@ -115,12 +115,11 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 		private static final long serialVersionUID = 1L;}
 
     
+    // -- constants, moved to interface
 
-    // -- constants
-
-    public static final int MAX_LENGTH_NAME = 50;
-    public static final int TYPICAL_LENGTH_NAME = 30;
-    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
+//    public static final int MAX_LENGTH_NAME = 50;
+//    public static final int TYPICAL_LENGTH_NAME = 30;
+//    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
     
 
     // -- identification

@@ -53,7 +53,6 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.SecurityModule;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 
@@ -99,22 +98,8 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
 )
-public class ApplicationTenancy implements Comparable<ApplicationTenancy> {
-
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancy, T> {
-        private static final long serialVersionUID = 1L;}
-
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationTenancy, T> {
-        private static final long serialVersionUID = 1L;}
-
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancy> {
-        private static final long serialVersionUID = 1L;}
-
-    
-
-    public static final int MAX_LENGTH_PATH = 255;
-    public static final int MAX_LENGTH_NAME = 40;
-    public static final int TYPICAL_LENGTH_NAME = 20;
+public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
+org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- name (property, title)
 

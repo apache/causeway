@@ -16,14 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.role;
+package org.apache.isis.extensions.secman.api.permission;
 
-public interface ApplicationRole {
-	
-	public static final int MAX_LENGTH_NAME = 50;
-    public static final int TYPICAL_LENGTH_NAME = 30;
-    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
+import java.util.List;
 
-	String getName();
-	
+import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
+
+public interface ApplicationPermissionRepository {
+
+	ApplicationPermission findByUserAndPermissionValue(String username,
+			ApplicationPermissionValue changingPermissionValue);
+
+	List<? extends ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId);
+
+	List<? extends ApplicationPermission> findOrphaned();
+
+	List<? extends ApplicationPermission> allPermissions();
+
 }

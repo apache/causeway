@@ -18,10 +18,27 @@
  */
 package org.apache.isis.extensions.secman.api.user;
 
+import java.util.List;
+
+import org.apache.isis.applib.value.Password;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+
 public interface ApplicationUserRepository {
 
 	ApplicationUser findByUsername(String username);
 
 	ApplicationUser findOrCreateUserByUsername(String username);
+
+	List<? extends ApplicationUser> allUsers();
+
+	List<? extends ApplicationUser> find(String search);
+
+	String validateNewLocalUser(String username, Password password, Password passwordRepeat,
+			ApplicationRole initialRole, Boolean enabled, String emailAddress);
+
+	ApplicationUser newLocalUser(String username, Password password, Password passwordRepeat,
+			ApplicationRole initialRole, Boolean enabled, String emailAddress);
+
+	ApplicationUser newDelegateUser(String username, ApplicationRole initialRole, Boolean enabled);
 
 }

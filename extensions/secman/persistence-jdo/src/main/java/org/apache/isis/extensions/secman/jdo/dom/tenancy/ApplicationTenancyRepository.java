@@ -37,7 +37,8 @@ import org.apache.isis.commons.internal.collections._Lists;
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationTenancy.class
 )
-public class ApplicationTenancyRepository {
+public class ApplicationTenancyRepository 
+implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository {
 
     // -- findByNameOrPathMatching
 
@@ -104,16 +105,17 @@ public class ApplicationTenancyRepository {
 
     // -- newTenancy
 
+    @Override
     public ApplicationTenancy newTenancy(
             final String name,
             final String path,
-            final ApplicationTenancy parent) {
+            final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy parent) {
         ApplicationTenancy tenancy = findByPath(path);
         if (tenancy == null) {
             tenancy = applicationTenancyFactory.newApplicationTenancy();
             tenancy.setName(name);
             tenancy.setPath(path);
-            tenancy.setParent(parent);
+            tenancy.setParent((ApplicationTenancy) parent);
             repository.persist(tenancy);
         }
         return tenancy;

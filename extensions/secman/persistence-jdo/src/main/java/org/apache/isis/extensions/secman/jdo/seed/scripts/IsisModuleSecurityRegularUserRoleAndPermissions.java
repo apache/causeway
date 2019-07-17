@@ -18,22 +18,23 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.jdo.app.user.MeService;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.model.app.user.MeService;
 
 /**
  * Role for regular users of the security module, providing the ability to lookup their user account using the
- * {@link org.apache.isis.extensions.secman.jdo.app.user.MeService}, and for viewing and maintaining their user details.
+ * {@link org.apache.isis.extensions.secman.model.app.user.MeService}, and for viewing and maintaining their user details.
  */
 public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = "isis-module-security-regular-user";
+    //public static final String ROLE_NAME = "isis-module-security-regular-user";
 
-    public IsisModuleSecurityRegularUserRoleAndPermissions() {
-        super(ROLE_NAME, "Regular user of the security module");
+    public IsisModuleSecurityRegularUserRoleAndPermissions(SecurityModuleConfig configBean) {
+        super(configBean.getRegularUserRoleName(), "Regular user of the security module");
     }
 
     @Override
@@ -49,6 +50,7 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,
                 ApplicationUser.class);
+        
         newMemberPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
@@ -58,6 +60,7 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 "updateEmailAddress",
                 "updatePhoneNumber",
                 "updateFaxNumber");
+        
         newMemberPermissions(
                 ApplicationPermissionRule.VETO,
                 ApplicationPermissionMode.VIEWING,
@@ -69,6 +72,7 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 "unlock", // renamed as 'disable' in the UI
                 "addRole",
                 "removeRole");
+        
         newMemberPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,

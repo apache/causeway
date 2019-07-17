@@ -145,7 +145,7 @@ import lombok.Setter;
 //        middle = {"Permissions"},
 //        right={"Feature"}
 //)
-public class ApplicationPermission implements Comparable<ApplicationPermission> {
+public class ApplicationPermission implements org.apache.isis.extensions.secman.api.permission.ApplicationPermission, Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
 

@@ -16,14 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.api.role;
+package org.apache.isis.extensions.secman.model.facets;
 
-public interface ApplicationRole {
-	
-	public static final int MAX_LENGTH_NAME = 50;
-    public static final int TYPICAL_LENGTH_NAME = 30;
-    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
+import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.metamodel.interactions.HidingInteractionAdvisor;
 
-	String getName();
-	
+/**
+ * Optionally hide or disable an object, property, collection or action
+ * depending on the tenancy.
+ */
+public interface TenantedAuthorizationFacet extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+
 }

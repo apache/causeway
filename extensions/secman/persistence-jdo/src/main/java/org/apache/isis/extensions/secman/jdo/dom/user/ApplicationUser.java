@@ -48,7 +48,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -68,7 +67,6 @@ import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissio
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jdo.dom.tenancy.HasAtPath;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
@@ -139,7 +137,8 @@ import lombok.val;
 //    middle= {"Contact Details"},
 //    right= {"Status", "AtPath"}
 //)
-public class ApplicationUser implements Comparable<ApplicationUser>, HasUsername, HasAtPath {
+public class ApplicationUser implements Comparable<ApplicationUser>, 
+org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     public static abstract class PropertyDomainEvent<T>
     extends SecurityModule.PropertyDomainEvent<ApplicationUser, T> {
@@ -153,16 +152,6 @@ public class ApplicationUser implements Comparable<ApplicationUser>, HasUsername
     extends SecurityModule.ActionDomainEvent<ApplicationUser> {
         private static final long serialVersionUID = 1L;}
 
-    
-
-    // -- constants
-    public static final int MAX_LENGTH_USERNAME = 30;
-    public static final int MAX_LENGTH_FAMILY_NAME = 50;
-    public static final int MAX_LENGTH_GIVEN_NAME = 50;
-    public static final int MAX_LENGTH_KNOWN_AS = 20;
-    public static final int MAX_LENGTH_EMAIL_ADDRESS = 50;
-    public static final int MAX_LENGTH_PHONE_NUMBER = 25;
-    
 
     // -- identification
 
