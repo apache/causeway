@@ -20,79 +20,31 @@ package org.apache.isis.extensions.secman.jdo.seed;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.springframework.core.annotation.Order;
+import org.springframework.transaction.TransactionStatus;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-)
-@Order(-1000)
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@Singleton @Log4j2
 public class SeedSecurityModuleService {
 
     @Inject FixtureScripts fixtureScripts;
     
     @PostConstruct
     public void init() {
+    	
+    	log.info("SEED");
        
-     // fixtureScripts.runFixtureScript(new SeedUsersAndRolesFixtureScript(), null);
-        
-        IsisContext.getAuthenticationSession()
-        .ifPresent(authenticationSession->{
-        	System.out.println("!!! authenticationSession " + authenticationSession);
-        	
-        	IsisContext.compute(()->run(authenticationSession));
-        	
-        });
-        
-    }
-    
-    private String run(AuthenticationSession authenticationSession) {
-        
-        System.out.println("!!! wait for SeedSecurityModule to start");
-        
-        try {
-            
-            Thread.sleep(5000);
-            
-            System.out.println("!!! SeedSecurityModule starting");
-            
-            final IsisSessionFactory sf = IsisContext.getSessionFactory();
-            IsisSession session = sf.openSession(authenticationSession);
-            
+    	val txTemplate = IsisContext.createTransactionTemplate();
+    	
+    	txTemplate.execute((TransactionStatus status) -> {
             fixtureScripts.runFixtureScript(new SeedUsersAndRolesFixtureScript(), null);
-            
-            session.getCurrentTransaction().flush();
-            
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            
-            return "FAILED";
-        }
-
-        //verify
-        
-        final ApplicationUserRepository applicationUserRepository = 
-                IsisContext.getServiceRegistry()
-                .lookupServiceElseFail(ApplicationUserRepository.class);
-        
-        _NullSafe.stream(applicationUserRepository.allUsers())
-        .forEach(user->{
-            System.out.println("!!! user: " + user + " : " + user.getEncryptedPassword());    
+            return null;
         });
-        
-        System.out.println("!!! SeedSecurityModule done");
-        
-        return "OK";
         
     }
     

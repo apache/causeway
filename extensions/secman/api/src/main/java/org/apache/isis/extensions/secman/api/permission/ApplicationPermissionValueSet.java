@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.api.permission;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -97,26 +96,21 @@ public class ApplicationPermissionValueSet implements Serializable {
     /**
      * Note that we require PermissionsEvaluationService to be serializable.
      */
-    private final PermissionsEvaluationService permissionsEvaluationService;
+    private PermissionsEvaluationService permissionsEvaluationService;
 
 
     // -- constructor
-    ApplicationPermissionValueSet(final ApplicationPermissionValue... permissionValues) {
-        this(Arrays.asList(permissionValues));
-    }
-    public ApplicationPermissionValueSet(final Iterable<ApplicationPermissionValue> permissionValues) {
-        this(permissionValues, null);
-    }
-    public ApplicationPermissionValueSet(final Iterable<ApplicationPermissionValue> permissionValues, final PermissionsEvaluationService permissionsEvaluationService) {
+    
+    public ApplicationPermissionValueSet(
+    		final List<ApplicationPermissionValue> permissionValues, 
+    		final PermissionsEvaluationService permissionsEvaluationService) {
+    	
         this.values = Collections.unmodifiableList(_Lists.newArrayList(permissionValues));
         for (final ApplicationPermissionValue permissionValue : permissionValues) {
             final ApplicationFeatureId featureId = permissionValue.getFeatureId();
             permissionsByFeature.putElement(featureId, permissionValue);
         }
-        this.permissionsEvaluationService =
-                permissionsEvaluationService != null
-                        ? permissionsEvaluationService
-                        : PermissionsEvaluationService.DEFAULT;
+        this.permissionsEvaluationService = permissionsEvaluationService;
     }
     
 

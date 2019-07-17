@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.api.permission;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 /**
@@ -35,14 +34,11 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
  */
 public interface PermissionsEvaluationService extends Serializable {
 
-    PermissionsEvaluationService DEFAULT = new PermissionsEvaluationServiceAllowBeatsVeto ();
-
     /**
      * @param targetMemberId - the target (member) feature to be evaluated
      * @param mode - the mode required, ie {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode#VIEWING viewing} or {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode#CHANGING changing}.
      * @param permissionValues - permissions to evaluate, guaranteed to passed through in natural order, as per {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue.Comparators#natural()}.
      */
-    @Programmatic
     ApplicationPermissionValueSet.Evaluation evaluate(
             final ApplicationFeatureId targetMemberId,
             final ApplicationPermissionMode mode,

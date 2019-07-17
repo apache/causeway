@@ -20,22 +20,25 @@ package org.apache.isis.extensions.secman.api.permission;
 
 import java.util.Collection;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 public abstract class PermissionsEvaluationServiceAbstract implements PermissionsEvaluationService {
 
 	private static final long serialVersionUID = 1L;
 
-	@Programmatic
     @Override
     public ApplicationPermissionValueSet.Evaluation evaluate(
             final ApplicationFeatureId targetMemberId,
             final ApplicationPermissionMode mode,
             final Collection<ApplicationPermissionValue> permissionValues) {
 
-        final Iterable<ApplicationPermissionValue> ordered = ordered(permissionValues);
-
+    	if(_NullSafe.isEmpty(permissionValues)) {
+        	return null;
+        }
+    	
+        final Collection<ApplicationPermissionValue> ordered = ordered(permissionValues);
+        
         for (final ApplicationPermissionValue permissionValue : ordered) {
             if(permissionValue.implies(targetMemberId, mode)) {
                 return new ApplicationPermissionValueSet.Evaluation(permissionValue, true);
@@ -46,6 +49,7 @@ public abstract class PermissionsEvaluationServiceAbstract implements Permission
         return null;
     }
 
-    protected abstract Iterable<ApplicationPermissionValue> ordered(Collection<ApplicationPermissionValue> permissionValues);
+    protected abstract Collection<ApplicationPermissionValue> ordered(
+    		Collection<ApplicationPermissionValue> permissionValues);
 
 }

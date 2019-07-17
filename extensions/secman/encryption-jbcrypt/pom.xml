@@ -57,7 +57,6 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>${jbcrypt.version}</version>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>

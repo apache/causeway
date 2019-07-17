@@ -18,11 +18,12 @@
  */
 package org.apache.isis.extensions.secman.api.permission;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.isis.commons.internal.collections._Lists;
+
+import lombok.val;
 
 /**
  * An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).
@@ -43,8 +44,10 @@ public class PermissionsEvaluationServiceVetoBeatsAllow extends PermissionsEvalu
      * </p>
      */
     @Override
-    protected Iterable<ApplicationPermissionValue> ordered(final Collection<ApplicationPermissionValue> permissionValues) {
-        final ArrayList<ApplicationPermissionValue> reversed = _Lists.newArrayList(permissionValues);
+    protected Collection<ApplicationPermissionValue> ordered(
+    		final Collection<ApplicationPermissionValue> permissionValues) {
+    	
+        val reversed = _Lists.<ApplicationPermissionValue>newArrayList(permissionValues);
         Collections.reverse(reversed);
         return reversed;
     }

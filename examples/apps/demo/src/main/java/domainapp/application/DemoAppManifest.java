@@ -25,6 +25,8 @@ import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
@@ -95,5 +97,11 @@ public class DemoAppManifest {
 	   return SecurityModuleConfig.builder()
 			   .build();
    }
+   
+   @Bean @Singleton
+   public PermissionsEvaluationService permissionsEvaluationService() {
+	   return new PermissionsEvaluationServiceAllowBeatsVeto();
+   }
+   
 
 }

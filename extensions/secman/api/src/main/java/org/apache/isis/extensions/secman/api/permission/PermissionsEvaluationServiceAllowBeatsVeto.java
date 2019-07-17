@@ -39,8 +39,9 @@ public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvalu
      * </p>
      */
     @Override
-    protected Iterable<ApplicationPermissionValue> ordered(
+    protected Collection<ApplicationPermissionValue> ordered(
             final Collection<ApplicationPermissionValue> permissionValues) {
+    	
         return permissionValues;
     }
 
