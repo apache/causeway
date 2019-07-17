@@ -43,7 +43,8 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationUser.class
 )
-public class ApplicationUserRepository {
+public class ApplicationUserRepository
+implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository {
 
     // -- findOrCreateUserByUsername (programmatic)
 
@@ -113,16 +114,17 @@ public class ApplicationUserRepository {
 
     // -- newDelegateUser (action)
 
+    @Override
     public ApplicationUser newDelegateUser(
             final String username,
-            final ApplicationRole initialRole,
+            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
             final Boolean enabled) {
         final ApplicationUser user = applicationUserFactory.newApplicationUser();
         user.setUsername(username);
         user.setStatus(ApplicationUserStatus.parse(enabled));
         user.setAccountType(AccountType.DELEGATED);
         if (initialRole != null) {
-            user.addRole(initialRole);
+            user.addRole((ApplicationRole)initialRole);
         }
         repository.persist(user);
         return user;
@@ -134,7 +136,7 @@ public class ApplicationUserRepository {
             final String username,
             final Password password,
             final Password passwordRepeat,
-            final ApplicationRole initialRole,
+            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
         ApplicationUser user = findByUsername(username);
@@ -145,7 +147,7 @@ public class ApplicationUserRepository {
             user.setAccountType(AccountType.LOCAL);
         }
         if (initialRole != null) {
-            user.addRole(initialRole);
+            user.addRole((ApplicationRole)initialRole);
         }
         if (password != null) {
             user.updatePassword(password.getPassword());
@@ -157,11 +159,12 @@ public class ApplicationUserRepository {
         return user;
     }
 
+    @Override
     public String validateNewLocalUser(
             final String username,
             final Password password,
             final Password passwordRepeat,
-            final ApplicationRole initialRole,
+            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
         final ApplicationUser user = applicationUserFactory.newApplicationUser();
