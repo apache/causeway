@@ -170,7 +170,8 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public static class NameDomainEvent extends PropertyDomainEvent<String> {
         private static final long serialVersionUID = 1L;}
 
-    @javax.jdo.annotations.NotPersistent
+    @Override
+	@javax.jdo.annotations.NotPersistent
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
@@ -915,7 +916,8 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     // short-term caching
     private transient ApplicationPermissionValueSet cachedPermissionSet;
-    @Programmatic
+    @Override
+	@Programmatic
     public ApplicationPermissionValueSet getPermissionSet() {
         if(cachedPermissionSet != null) {
             return cachedPermissionSet;

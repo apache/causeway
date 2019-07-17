@@ -57,7 +57,8 @@ public interface ApplicationTenancyFactory {
     @Service @Order(Ordered.LOWEST_PRECEDENCE)
     public static class Default implements ApplicationTenancyFactory {
 
-        public ApplicationTenancy newApplicationTenancy() {
+        @Override
+		public ApplicationTenancy newApplicationTenancy() {
             return factory.instantiate(ApplicationTenancy.class);
         }
 

@@ -42,7 +42,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     // -- findByNameOrPathMatching
 
-    public List<ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
+    @Override
+	public List<ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
         return queryResultsCache.execute(new Callable<List<ApplicationTenancy>>() {
             @Override public List<ApplicationTenancy> call() throws Exception {
                 return findByNameOrPathMatching(search);
@@ -123,7 +124,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     // -- allTenancies
 
-    public List<ApplicationTenancy> allTenancies() {
+    @Override
+	public List<ApplicationTenancy> allTenancies() {
         return queryResultsCache.execute(new Callable<List<ApplicationTenancy>>() {
             @Override
             public List<ApplicationTenancy> call() throws Exception {

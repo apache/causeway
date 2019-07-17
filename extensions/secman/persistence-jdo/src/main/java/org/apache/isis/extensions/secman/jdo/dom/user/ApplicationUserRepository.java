@@ -56,7 +56,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
      * If the user does not exist, it will be automatically created.
      * </p>
      */
-    public ApplicationUser findOrCreateUserByUsername(
+    @Override
+	public ApplicationUser findOrCreateUserByUsername(
             final String username) {
         // slightly unusual to cache a function that modifies state, but safe because this is idempotent
         return queryResultsCache.execute(new Callable<ApplicationUser>() {
@@ -81,7 +82,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
         }, ApplicationUserRepository.class, "findByUsernameCached", username);
     }
 
-    public ApplicationUser findByUsername(final String username) {
+    @Override
+	public ApplicationUser findByUsername(final String username) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
                 "findByUsername", "username", username));
@@ -105,7 +107,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
 
     // -- findByName
 
-    public List<ApplicationUser> find(final String search) {
+    @Override
+	public List<ApplicationUser> find(final String search) {
         final String regex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
@@ -132,7 +135,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
 
     // -- newLocalUser (action)
 
-    public ApplicationUser newLocalUser(
+    @Override
+	public ApplicationUser newLocalUser(
             final String username,
             final Password password,
             final Password passwordRepeat,
@@ -197,7 +201,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
 
     // -- allUsers
 
-    public List<ApplicationUser> allUsers() {
+    @Override
+	public List<ApplicationUser> allUsers() {
         return repository.allInstances(ApplicationUser.class);
     }
 

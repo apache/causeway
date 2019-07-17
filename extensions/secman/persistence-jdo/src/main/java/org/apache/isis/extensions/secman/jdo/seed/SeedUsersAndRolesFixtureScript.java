@@ -45,7 +45,8 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
     @Inject ApplicationUserRepository applicationUserRepository;
     
     //@Override
-    protected void execute(ExecutionContext executionContext) {
+    @Override
+	protected void execute(ExecutionContext executionContext) {
 
         // global tenancy
         executionContext.executeChild(this, new GlobalTenancy());

@@ -406,7 +406,8 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     @Setter
     private ApplicationFeatureType featureType;
 
-    @Programmatic
+    @Override
+	@Programmatic
     public ApplicationFeatureType getFeatureType() {
         return featureType;
     }

@@ -57,7 +57,8 @@ public interface ApplicationUserFactory {
     @Service @Order(Ordered.LOWEST_PRECEDENCE)
     public static class Default implements ApplicationUserFactory {
 
-        public ApplicationUser newApplicationUser() {
+        @Override
+		public ApplicationUser newApplicationUser() {
             return factory.instantiate(ApplicationUser.class);
         }
 

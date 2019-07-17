@@ -57,7 +57,8 @@ public interface ApplicationRoleFactory {
     @Service @Order(Ordered.LOWEST_PRECEDENCE)
     public static class Default implements ApplicationRoleFactory {
 
-        public ApplicationRole newApplicationRole() {
+        @Override
+		public ApplicationRole newApplicationRole() {
             return factory.instantiate(ApplicationRole.class);
         }
 

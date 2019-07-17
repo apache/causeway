@@ -105,7 +105,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
      * Uses the {@link QueryResultsCache} in order to support
      * multiple lookups from <code>org.apache.isis.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
      */
-    public ApplicationPermission findByUserAndPermissionValue(final String username, final ApplicationPermissionValue permissionValue) {
+    @Override
+	public ApplicationPermission findByUserAndPermissionValue(final String username, final ApplicationPermissionValue permissionValue) {
 
         // obtain all permissions for this user, map by its value, and
         // put into query cache (so that this method can be safely called in a tight loop)
@@ -278,14 +279,16 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     
 
     // -- allPermission (programmatic)
-    public List<ApplicationPermission> allPermissions() {
+    @Override
+	public List<ApplicationPermission> allPermissions() {
         return repository.allInstances(ApplicationPermission.class);
     }
     
 
     // -- findOrphaned (programmatic)
 
-    public List<ApplicationPermission> findOrphaned() {
+    @Override
+	public List<ApplicationPermission> findOrphaned() {
 
         final Collection<String> packageNames = applicationFeatureRepository.packageNames();
         final Set<String> availableClasses = _Sets.newTreeSet();

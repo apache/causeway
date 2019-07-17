@@ -58,7 +58,8 @@ public interface ApplicationPermissionFactory {
     @Service @Order(Ordered.LOWEST_PRECEDENCE)
     public static class Default implements ApplicationPermissionFactory {
 
-        public ApplicationPermission newApplicationPermission() {
+        @Override
+		public ApplicationPermission newApplicationPermission() {
             return factory.instantiate(ApplicationPermission.class);
         }
 

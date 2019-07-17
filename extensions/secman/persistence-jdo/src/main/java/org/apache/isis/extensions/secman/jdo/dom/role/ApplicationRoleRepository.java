@@ -44,19 +44,22 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     @Inject QueryResultsCache queryResultsCache;
     @Inject ApplicationRoleFactory applicationRoleFactory;
 
-    public ApplicationRole findByNameCached(final String name) {
+    @Override
+	public ApplicationRole findByNameCached(final String name) {
         return queryResultsCache.execute(()->findByName(name),
                 ApplicationRoleRepository.class, "findByNameCached", name);
     }
 
-    public ApplicationRole findByName(final String name) {
+    @Override
+	public ApplicationRole findByName(final String name) {
         if(name == null) {
             return null;
         }
         return repository.uniqueMatch(new QueryDefault<>(ApplicationRole.class, "findByName", "name", name));
     }
 
-    public List<ApplicationRole> findNameContaining(final String search) {
+    @Override
+	public List<ApplicationRole> findNameContaining(final String search) {
         if(search != null && search.length() > 0) {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
             return repository.allMatches(new QueryDefault<>(ApplicationRole.class, "findByNameContaining", "nameRegex", nameRegex));
@@ -64,7 +67,8 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
         return _Lists.newArrayList();
     }
 
-    public ApplicationRole newRole(
+    @Override
+	public ApplicationRole newRole(
             final String name,
             final String description) {
         ApplicationRole role = findByName(name);
@@ -77,7 +81,8 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
         return role;
     }
 
-    public List<ApplicationRole> allRoles() {
+    @Override
+	public List<ApplicationRole> allRoles() {
         return repository.allInstances(ApplicationRole.class);
     }
 
