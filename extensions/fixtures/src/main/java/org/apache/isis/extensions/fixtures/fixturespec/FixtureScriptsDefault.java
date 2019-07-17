@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturespec;
+package org.apache.isis.extensions.fixtures.fixturespec;
 
 import java.util.List;
 
@@ -38,9 +38,9 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
 import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
 /**
  * Default instance of {@link FixtureScripts}, instantiated automatically by the framework if no custom user-defined instance was

@@ -16,25 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.fixtures.fixturespec;
 
-package org.apache.isis.extensions.fixtures.legacy;
-
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
 /**
- * 
- * @deprecated replace with {@link FixtureScripts}
- * <a href="https://issues.apache.org/jira/browse/ISIS-1684">ISIS-1684</a>
+ * Rather than subclassing {@link FixtureScripts} class, you can instead implement this interface as a service.
  *
+ * <p>
+ *     The framework will automatically instantiate {@link FixtureScriptsDefault} as a fallback, and use the
+ *     {@link FixtureScriptsSpecification} obtained from <i>this</i> service to configure itself.
+ * </p>
  */
-public interface InstallableFixture {
+public interface FixtureScriptsSpecificationProvider {
 
-    /**
-     * Determines whether the fixture will be {@link #install() install}ed,
-     * dependent on the state of the object (data) store and the user profile
-     * store.
-     */
-    FixtureType getType();
+    @Programmatic
+    FixtureScriptsSpecification getSpecification();
 
-    public void install();
 }

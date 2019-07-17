@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
 /**
- * A convenience subclass of {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript} that is
- * {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.Discoverability#DISCOVERABLE discoverable}
+ * A convenience subclass of {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript} that is
+ * {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.Discoverability#DISCOVERABLE discoverable}
  * by default.
  */
 public abstract class DiscoverableFixtureScript extends FixtureScript {

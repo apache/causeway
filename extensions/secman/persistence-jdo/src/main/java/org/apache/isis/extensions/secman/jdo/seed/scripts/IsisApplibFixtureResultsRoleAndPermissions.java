@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 

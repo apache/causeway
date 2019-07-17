@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
@@ -53,15 +53,15 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsDefault;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecification;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecification;
 
 import lombok.val;
 
 
 /**
  * Rather than sub-classing, instead implement
- * {@link org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecificationProvider}.  
+ * {@link org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificationProvider}.  
  * The framework will
  * automatically provide a default implementation configured using that provider service.
  */
@@ -72,7 +72,7 @@ public abstract class FixtureScripts extends AbstractService {
     /**
      * How to handle objects that are to be
      * {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added}
-     * into a {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult} but which are not yet persisted.
+     * into a {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult} but which are not yet persisted.
      */
     public enum NonPersistedObjectsStrategy {
         PERSIST,

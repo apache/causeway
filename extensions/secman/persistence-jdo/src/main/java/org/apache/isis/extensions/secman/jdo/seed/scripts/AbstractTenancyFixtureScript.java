@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancyRepository;
 

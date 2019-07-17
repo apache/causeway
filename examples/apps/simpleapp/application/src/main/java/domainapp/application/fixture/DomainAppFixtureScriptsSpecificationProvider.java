@@ -20,9 +20,9 @@ package domainapp.application.fixture;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecification;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecificationProvider;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecification;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificationProvider;
 
 import domainapp.application.fixture.scenarios.DomainAppDemo;
 

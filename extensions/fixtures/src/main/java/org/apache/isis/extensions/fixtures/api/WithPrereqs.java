@@ -18,8 +18,8 @@
  */
 package org.apache.isis.extensions.fixtures.api;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 public interface WithPrereqs<T> {
 

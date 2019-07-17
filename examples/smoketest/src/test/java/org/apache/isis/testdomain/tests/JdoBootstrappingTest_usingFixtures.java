@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;

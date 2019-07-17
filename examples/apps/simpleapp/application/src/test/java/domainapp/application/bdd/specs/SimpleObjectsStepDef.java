@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.junit.Ignore;
 

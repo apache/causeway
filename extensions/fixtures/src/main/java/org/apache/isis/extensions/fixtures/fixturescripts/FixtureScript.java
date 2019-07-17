@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -49,15 +49,12 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.api.WithPrereqs;
-import org.apache.isis.extensions.fixtures.legacy.FixtureType;
-import org.apache.isis.extensions.fixtures.legacy.InstallableFixture;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript
-extends AbstractViewModel
-implements InstallableFixture {
+extends AbstractViewModel {
 
     protected static final String PATH_SEPARATOR = "/";
 
@@ -93,7 +90,7 @@ implements InstallableFixture {
     /**
      * @param friendlyName - if null, will be derived from class name
      * @param localName - if null, will be derived from class name
-     * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
+     * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
      */
     public FixtureScript(
             final String friendlyName,
@@ -104,7 +101,7 @@ implements InstallableFixture {
     /**
      * @param friendlyName - if null, will be derived from class name
      * @param localName - if null, will be derived from class name
-     * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
+     * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
      */
     public FixtureScript(
             final String friendlyName,
@@ -256,7 +253,7 @@ implements InstallableFixture {
      * <p>
      * By default {@link DiscoverableFixtureScript}s are {@link Discoverability#DISCOVERABLE discoverable}, all other
      * {@link FixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
-     * constructor, however or by calling the {@link #withDiscoverability(org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.Discoverability) setter}.
+     * constructor, however or by calling the {@link #withDiscoverability(org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.Discoverability) setter}.
      */
     @Programmatic
     public boolean isDiscoverable() {
@@ -276,7 +273,7 @@ implements InstallableFixture {
     public static class ExecutionContext {
 
         /**
-         * Null implementation, to assist with unit testing of {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript}s.
+         * Null implementation, to assist with unit testing of {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript}s.
          */
         public static final ExecutionContext NOOP = new ExecutionContext((String)null, null) {
             @Override
@@ -530,7 +527,7 @@ implements InstallableFixture {
 
         /**
          * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
-         * that are {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * that are {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that is derived from the fixture's class name.
          */
         @Programmatic
@@ -566,7 +563,7 @@ implements InstallableFixture {
 
         /**
          * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
-         * that are {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * that are {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that is derived from the fixture's class name.
          *
          * @return the child fixture script.
@@ -578,7 +575,7 @@ implements InstallableFixture {
 
         /**
          * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
-         * that are {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * that are {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
          */
         @Programmatic
@@ -595,7 +592,7 @@ implements InstallableFixture {
 
         /**
          * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
-         * that are {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * that are {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
          *
          * @return the child fixture script.
@@ -881,7 +878,7 @@ implements InstallableFixture {
     private ExecutionContext executionContext;
 
     /**
-     * Entry point for {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts} service to call.
+     * Entry point for {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts} service to call.
      *
      * <p>
      *     Package-visibility only, not public API.
@@ -912,28 +909,11 @@ implements InstallableFixture {
      * Subclasses should <b>implement this</b> but SHOULD <i>NOT</i> CALL DIRECTLY.
      *
      * <p>
-     *  Instead call sub fixture scripts using {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript, org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript)} or {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript, String, org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript)}.
+     *  Instead call sub fixture scripts using {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript)} or {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript, String, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript)}.
      * </p>
      */
     @Programmatic
     protected abstract void execute(final ExecutionContext executionContext);
-
-
-
-    // -- (legacy) InstallableFixture impl
-
-    @Override
-    @Programmatic
-    public FixtureType getType() {
-        return FixtureType.DOMAIN_OBJECTS;
-    }
-
-    @Override
-    @Programmatic
-    public final void install() {
-        run(null);
-    }
-
 
 
     // -- helpers (for subclasses)

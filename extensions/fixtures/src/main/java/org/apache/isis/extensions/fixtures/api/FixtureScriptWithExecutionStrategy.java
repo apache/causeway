@@ -19,8 +19,8 @@
 package org.apache.isis.extensions.fixtures.api;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsSpecification;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecification;
 
 /**
  * Overrides the {@link FixtureScriptsSpecification#getMultipleExecutionStrategy() globally-defined}

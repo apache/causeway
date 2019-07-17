@@ -23,11 +23,11 @@ import javax.inject.Inject;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.extensions.fixtures.legacy.TickingFixtureClock;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
 import org.apache.isis.integtestsupport.IsisIntegrationTestAbstact;
 import org.joda.time.LocalDate;
 

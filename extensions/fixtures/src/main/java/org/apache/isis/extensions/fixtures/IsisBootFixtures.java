@@ -18,8 +18,8 @@
  */
 package org.apache.isis.extensions.fixtures;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.ExecutionParametersService;
-import org.apache.isis.extensions.fixtures.legacy.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService;
+import org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.extensions.fixtures.legacy.queryresultscache.QueryResultsCacheControlInternal;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

@@ -21,7 +21,7 @@ import java.util.Set;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 public enum JdoTestDomainPersona 

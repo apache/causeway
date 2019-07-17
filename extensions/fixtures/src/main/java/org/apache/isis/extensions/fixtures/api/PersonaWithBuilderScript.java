@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.fixtures.api;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
 
 public interface PersonaWithBuilderScript<T extends BuilderScriptAbstract<?>>  {
 

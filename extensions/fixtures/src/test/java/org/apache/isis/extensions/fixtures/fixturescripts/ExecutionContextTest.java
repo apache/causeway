@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.util.Map;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;

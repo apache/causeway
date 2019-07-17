@@ -16,22 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturespec;
-
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
 
 /**
- * Rather than subclassing {@link FixtureScripts} class, you can instead implement this interface as a service.
+ * The {@link org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsSpecificationProvider} SPI service is an
+ * alternative to subclassing the {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts} domain service.
+ * The logic that would normally be in the subclass moves to the provider service instead, and the framework
+ * instantiates a fallback default instance, {@link org.apache.isis.extensions.fixtures.fixturespec.FixtureScriptsDefault}.
  *
- * <p>
- *     The framework will automatically instantiate {@link FixtureScriptsDefault} as a fallback, and use the
- *     {@link FixtureScriptsSpecification} obtained from <i>this</i> service to configure itself.
- * </p>
+ * @see <a href="http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_1.8.0-to-1.9.0_fixture-scripts-specification-provider">Reference guide</a>
  */
-public interface FixtureScriptsSpecificationProvider {
-
-    @Programmatic
-    FixtureScriptsSpecification getSpecification();
-
-}
+package org.apache.isis.extensions.fixtures.fixturespec;

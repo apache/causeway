@@ -29,7 +29,7 @@ import javax.inject.Singleton;
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;

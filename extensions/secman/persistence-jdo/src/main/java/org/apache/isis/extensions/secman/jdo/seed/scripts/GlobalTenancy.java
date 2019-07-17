@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 
 public class GlobalTenancy extends AbstractTenancyFixtureScript {
 

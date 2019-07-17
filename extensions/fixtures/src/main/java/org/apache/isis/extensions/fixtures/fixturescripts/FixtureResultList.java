@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.util.Collections;
 import java.util.List;
@@ -56,17 +56,17 @@ public class FixtureResultList {
      * that any given fixture script instance is only executed once.
      *
      * <p>
-     *     (The {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts.MultipleExecutionStrategy} in contrast
+     *     (The {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts.MultipleExecutionStrategy} in contrast
      *     controls whether two instances of the same class can be executed).
      * </p>
      *
      * <p>
      *     REVIEW: I think this should probably be removed; it certainly does nothing if
-     *     {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts.MultipleExecutionStrategy#IGNORE} is set,
+     *     {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts.MultipleExecutionStrategy#IGNORE} is set,
      *     and is arguably counter to the spirit of
-     *     {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE} being set.
+     *     {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE} being set.
      * </p>
-     * {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript}s used to generate this result list.
+     * {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript}s used to generate this result list.
      */
     private final List<FixtureScript> fixtureScriptList = _Lists.newArrayList();
 
@@ -77,12 +77,12 @@ public class FixtureResultList {
     }
 
     /**
-     * Wraps the object within a {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult} and add to this list.
+     * Wraps the object within a {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult} and add to this list.
      *
      * <P>
      *     If the object is not yet persisted, then the {@link FixtureScripts#getNonPersistedObjectsStrategy() FixtureScripts}'
-     *     configuration will determine whether it is {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#PERSIST eagerly persisted}
-     *     or simply {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#IGNORE ignored}.
+     *     configuration will determine whether it is {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#PERSIST eagerly persisted}
+     *     or simply {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#IGNORE ignored}.
      * </P>
      */
     public <T> T add(final FixtureScript fixtureScript, final String key, final T object) {
@@ -143,11 +143,11 @@ public class FixtureResultList {
     // -- injected services
 
     /**
-     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext) constructor}.
+     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext) constructor}.
      */
     private final FixtureScripts fixtureScripts;
     /**
-     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript.ExecutionContext) constructor}.
+     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext) constructor}.
      */
     private final FixtureScript.ExecutionContext executionContext;
 

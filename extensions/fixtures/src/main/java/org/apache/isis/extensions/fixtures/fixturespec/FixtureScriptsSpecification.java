@@ -14,13 +14,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturespec;
+package org.apache.isis.extensions.fixtures.fixturespec;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResultList;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScripts;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResultList;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
 /**
  * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.

@@ -14,11 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.extensions.fixtures.legacy.fixturescripts;
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
 import java.util.Map;
 
-import org.apache.isis.extensions.fixtures.legacy.fixturescripts.ExecutionParameters;
+import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParameters;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

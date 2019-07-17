@@ -22,7 +22,7 @@
  * interface and supporting classes.
  *
  * <p>
- *     <b>NOTE THAT</b> {@link org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript} interface provides a more complete
+ *     <b>NOTE THAT</b> {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript} interface provides a more complete
  *     approach to handling fixtures, and should generally be used in preference to
  *     {@link org.apache.isis.extensions.fixtures.legacy.InstallableFixture}.
  * </p>
