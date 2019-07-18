@@ -214,32 +214,6 @@ public final class PojoAdapter implements ObjectAdapter {
         }
     }
 
-
-    @Override
-    public void checkLock(final Version otherVersion) {
-        if(isParentedCollection()) {
-            getAggregateRoot().checkLock(otherVersion);
-            return;
-        }
-
-        Oid thisOid = getOid();
-        final Version thisVersion = thisOid.getVersion();
-
-        // check for exception, but don't throw if suppressed through thread-local
-        if(thisVersion != null &&
-                otherVersion != null &&
-                thisVersion.different(otherVersion)) {
-
-//            if(ConcurrencyChecking.isCurrentlyEnabled()) {
-//                log.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
-//                final String currentUser = authenticationSession.getUserName();
-//                throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
-//            } else {
-                log.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion );
-//            }
-        }
-    }
-
     @Override
     public void setVersion(final Version version) {
         if(isParentedCollection()) {

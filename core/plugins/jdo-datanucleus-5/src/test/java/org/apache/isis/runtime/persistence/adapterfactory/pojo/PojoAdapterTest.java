@@ -112,37 +112,38 @@ public class PojoAdapterTest {
         assertSame(mockVersion, adapter.getVersion());
     }
 
-    @Test
-    public void checkLock_whenVersionsSame() throws Exception {
-
-        context.checking(new Expectations() {
-            {
-                oneOf(mockVersion).different(mockVersion2);
-                will(returnValue(false));
-            }
-        });
-        
-        adapter.checkLock(mockVersion2);
-    }
-
-    @Test(expected=ConcurrencyException.class)
-    public void checkLock_whenVersionsDifferent() throws Exception {
-
-        adapter = PojoAdapterBuilder.create()
-                .with(mockSpecificationLoader)
-                .withTitleString("some pojo")
-                .with(mockVersion)
-                .with(mockAuthenticationSession)
-                .build();
-        
-        context.checking(new Expectations() {
-            {
-                oneOf(mockVersion).different(mockVersion2);
-                will(returnValue(true));
-            }
-        });
-        
-        adapter.checkLock(mockVersion2);
-    }
+//TODO[2154] remove    
+//    @Test
+//    public void checkLock_whenVersionsSame() throws Exception {
+//
+//        context.checking(new Expectations() {
+//            {
+//                oneOf(mockVersion).different(mockVersion2);
+//                will(returnValue(false));
+//            }
+//        });
+//        
+//        adapter.checkLock(mockVersion2);
+//    }
+//
+//    @Test(expected=ConcurrencyException.class)
+//    public void checkLock_whenVersionsDifferent() throws Exception {
+//
+//        adapter = PojoAdapterBuilder.create()
+//                .with(mockSpecificationLoader)
+//                .withTitleString("some pojo")
+//                .with(mockVersion)
+//                .with(mockAuthenticationSession)
+//                .build();
+//        
+//        context.checking(new Expectations() {
+//            {
+//                oneOf(mockVersion).different(mockVersion2);
+//                will(returnValue(true));
+//            }
+//        });
+//        
+//        adapter.checkLock(mockVersion2);
+//    }
 
 }

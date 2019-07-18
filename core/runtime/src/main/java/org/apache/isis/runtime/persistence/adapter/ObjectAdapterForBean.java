@@ -32,10 +32,6 @@ public class ObjectAdapterForBean implements ObjectAdapter {
     }
 
     @Override
-    public void checkLock(Version version) {
-    }
-
-    @Override
     public Oid getOid() {
         val spec = getSpecification();
         return Oid.Factory.persistentOf(spec.getSpecId(), bean.getId());
