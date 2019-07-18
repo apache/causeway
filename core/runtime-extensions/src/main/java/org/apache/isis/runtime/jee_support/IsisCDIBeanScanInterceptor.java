@@ -31,7 +31,6 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.commons.internal.debug._Probe;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -56,9 +55,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class IsisCDIBeanScanInterceptor implements Extension {
 
-    private final static _Probe probe = 
-    		_Probe.unlimited().label("IsisCDIBeanScanInterceptor");
-
     /**
      * Declaration of Beans that are managed by Isis and should be ignored by CDI.
      * (in addition to those that have the @DomainService annotation)
@@ -80,21 +76,26 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
         final Class<?> clazz = event.getAnnotatedType().getJavaClass();
         final String className = clazz.getName();
 
-        val logScope = className.startsWith("org.apache.isis.") ||
-        		className.startsWith("domainapp.");
-        
         val isTabu = isVetoed(clazz, event);
-
-        if(logScope) {
-        	probe.println("processAnnotatedType(%s)", className);
-        } 
-        
         if(isTabu) {
-            log.debug("veto type: " + className);
             event.veto();
-        } else {
-            log.debug("allowing type: " + className);
         }
+
+        if(log.isDebugEnabled()) {
+        	val logScope = className.startsWith("org.apache.isis.") ||
+            		className.startsWith("domainapp.");
+        	if(logScope) {
+            	log.debug("processing annotated type %s", className);
+            }	
+        	
+            if(isTabu) {
+                log.debug("veto type: " + className);
+                event.veto();
+            } else {
+                log.debug("allowing type: " + className);
+            }
+        }
+        
     }
 
     void afterBeanDiscovery(@Observes AfterBeanDiscovery event) {

@@ -28,17 +28,14 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-@Singleton
+@Singleton 
 public class SwaggerServiceDefault implements SwaggerService {
 
 	@Inject SpecificationLoader specificationLoader;
 
-	private final static _Probe probe = _Probe.unlimited().label("SwaggerServiceDefault"); 
-	
     @Override
     public String generateSwaggerSpec(
             final Visibility visibility,
@@ -46,12 +43,6 @@ public class SwaggerServiceDefault implements SwaggerService {
 
         final SwaggerSpecGenerator swaggerSpecGenerator = new SwaggerSpecGenerator(specificationLoader);
         final String swaggerSpec = swaggerSpecGenerator.generate(basePath.get(), visibility, format);
-        
-        System.out.println("----------------------------------------------------------------------------");
-        probe.println("spec contains ConfigurationMenu=" + swaggerSpec.contains("ConfigurationMenu"));
-        probe.println("spec contains HelloWorldObjects=" + swaggerSpec.contains("HelloWorldObjects"));
-        System.out.println("----------------------------------------------------------------------------");
-        
         return swaggerSpec;
     }
 

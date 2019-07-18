@@ -31,15 +31,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.function.Predicate;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.sse.EventStream;
 import org.apache.isis.applib.events.sse.EventStreamService;
 import org.apache.isis.applib.events.sse.EventStreamSource;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.runtime.system.context.IsisContext;
 
@@ -47,6 +45,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Server-sent events.
@@ -56,9 +55,7 @@ import lombok.val;
  * @since 2.0
  *
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
+@Singleton @Log4j2
 public class EventStreamServiceDefault implements EventStreamService {
 
     @Inject TransactionService transactionService;
@@ -118,8 +115,7 @@ public class EventStreamServiceDefault implements EventStreamService {
         val eventStreamLifecycle = eventStreamPool.acquireLifecycleForType(sourceType);
         val eventStream = eventStreamLifecycle.getEventStream();
 
-        probe.println("submitting task type='%s' -> stream='%s'", sourceType, eventStream.getId());
-
+        log.debug("submitting task type='{}' -> stream='{}'", sourceType, eventStream.getId());
 
         try {
 
@@ -198,12 +194,9 @@ public class EventStreamServiceDefault implements EventStreamService {
 
     // -- EVENT STREAM DEFAULT IMPLEMENTATION
 
-    private final static _Probe probe = _Probe.unlimited().label("BackgroundExecutionService"); 
-
-    @Value
+    @Value @Log4j2
     private static class EventStreamDefault implements EventStream {
 
-        private final static _Probe probe = _Probe.unlimited().label("EventStreamDefault");
         private static final Object $LOCK = new Object[0]; //see https://projectlombok.org/features/Synchronized
 
         @Getter final UUID id;
@@ -225,7 +218,7 @@ public class EventStreamServiceDefault implements EventStreamService {
 
             }
 
-            probe.println("fire listeners=%d", defensiveCopyOfListeners.size());
+            log.debug("about to fire events to {} listeners", ()->defensiveCopyOfListeners.size());
 
             final List<Predicate<EventStreamSource>> markedForRemoval = _Lists.newArrayList();
 
@@ -257,7 +250,6 @@ public class EventStreamServiceDefault implements EventStreamService {
 
         @Override
         public void close() {
-            probe.println("close");
             synchronized ($LOCK) {
                 listeners.clear();
                 latch.countDown();
