@@ -58,10 +58,9 @@ public interface MetaModelService {
      * </p>
      *
      * <p>
-     *     Note that {@link MetaModelService6#exportMetaModel(MetaModelService6.Config)} provides a superset of the functionality provided by this method.
+     *     Note that {@link MetaModelService#exportMetaModel(Config)} provides a superset of the functionality provided by this method.
      * </p>
      *
-     * @see MetaModelService6
      */
     DomainModel getDomainModel();
 

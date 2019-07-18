@@ -22,16 +22,15 @@ import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
-@Mixin(method="prop")
+import lombok.RequiredArgsConstructor;
+
+@Mixin(method="prop") @RequiredArgsConstructor
 public class Object_objectIdentifier {
 
-    private final Object object;
+    private final Object holder;
 
-    public Object_objectIdentifier(final Object object) {
-        this.object = object;
-    }
-
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectIdentifier> {
+    public static class ActionDomainEvent 
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectIdentifier> {
         private static final long serialVersionUID = 1L;
     }
 
@@ -43,12 +42,11 @@ public class Object_objectIdentifier {
     @Property()
     @MemberOrder(name = "metadata", sequence = "700.2")
     public String prop() {
-        final Bookmark bookmark = bookmarkService.bookmarkFor(this.object);
+        final Bookmark bookmark = bookmarkService.bookmarkFor(this.holder);
         return bookmark.getIdentifier();
     }
 
 
-    @Inject
-    BookmarkService bookmarkService;
+    @Inject BookmarkService bookmarkService;
 
 }

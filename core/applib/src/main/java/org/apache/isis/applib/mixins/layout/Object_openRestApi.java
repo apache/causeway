@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.mixins.layout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -29,14 +31,12 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
 
-@Mixin(method="act")
+import lombok.RequiredArgsConstructor;
+
+@Mixin(method="act") @RequiredArgsConstructor
 public class Object_openRestApi {
 
-    private final Object object;
-
-    public Object_openRestApi(final Object object) {
-        this.object = object;
-    }
+    private final Object holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_openRestApi> {
@@ -55,7 +55,7 @@ public class Object_openRestApi {
             )
     @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
     public LocalResourcePath act() {
-        Bookmark bookmark = bookmarkService.bookmarkFor(object);
+        Bookmark bookmark = bookmarkService.bookmarkFor(holder);
 
         return new LocalResourcePath(String.format(
                 "/%s/objects/%s/%s",
@@ -64,10 +64,7 @@ public class Object_openRestApi {
                 bookmark.getIdentifier()));
     }
 
-    @javax.inject.Inject
-    BookmarkService bookmarkService;
-
-    @javax.inject.Inject
-    SwaggerService swaggerService;
+    @Inject BookmarkService bookmarkService;
+    @Inject SwaggerService swaggerService;
 
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.mixins.layout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -28,14 +30,12 @@ import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
-@Mixin(method="act")
+import lombok.RequiredArgsConstructor;
+
+@Mixin(method="act") @RequiredArgsConstructor
 public class Object_downloadLayoutXml {
 
-    private final Object object;
-
-    public Object_downloadLayoutXml(final Object object) {
-        this.object = object;
-    }
+    private final Object holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {
@@ -58,7 +58,7 @@ public class Object_downloadLayoutXml {
             final String fileName,
             final LayoutService.Style style) {
 
-        final String xml = layoutService.toXml(object.getClass(), style);
+        final String xml = layoutService.toXml(holder.getClass(), style);
 
         return new Clob(
                 _Strings.asFileNameWithExtension(fileName, style.name().toLowerCase() + ".xml"),
@@ -67,13 +67,12 @@ public class Object_downloadLayoutXml {
     }
 
     public String default0Act() {
-        return _Strings.asFileNameWithExtension(object.getClass().getSimpleName(), "layout");
+        return _Strings.asFileNameWithExtension(holder.getClass().getSimpleName(), "layout");
     }
     public LayoutService.Style default1Act() {
         return LayoutService.Style.NORMALIZED;
     }
 
-    @javax.inject.Inject
-    LayoutService layoutService;
+    @Inject LayoutService layoutService;
 
 }

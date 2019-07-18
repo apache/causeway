@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.mixins.layout;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CommandPersistence;
@@ -26,14 +28,12 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
-@Mixin(method="act")
+import lombok.RequiredArgsConstructor;
+
+@Mixin(method="act") @RequiredArgsConstructor
 public class Object_rebuildMetamodel {
 
-    private final Object object;
-
-    public Object_rebuildMetamodel(final Object object) {
-        this.object = object;
-    }
+    private final Object holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {
@@ -53,12 +53,11 @@ public class Object_rebuildMetamodel {
             )
     @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
     public Object act() {
-        metaModelService.rebuild(object.getClass());
-        return object;
+        metaModelService.rebuild(holder.getClass());
+        return holder;
     }
 
-    @javax.inject.Inject
-    MetaModelService metaModelService;
+    @Inject MetaModelService metaModelService;
 
 
 }

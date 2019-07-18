@@ -16,34 +16,27 @@
  */
 package org.apache.isis.applib.mixins.metamodel;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.services.metamodel.MetaModelServicesMenu;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.schema.metamodel.v1.DomainClassDto;
-import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
-@Mixin(method="prop")
+import lombok.RequiredArgsConstructor;
+
+@Mixin(method="prop") @RequiredArgsConstructor
 public class Object_objectType {
 
-    private final Object object;
+    private final Object holder;
 
-    public Object_objectType(final Object object) {
-        this.object = object;
-    }
-
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectType> {
+    public static class ActionDomainEvent 
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectType> {
         private static final long serialVersionUID = 1L;
     }
 
@@ -55,12 +48,11 @@ public class Object_objectType {
     @Property()
     @MemberOrder(name = "metadata", sequence = "700.1")
     public String prop() {
-        final Bookmark bookmark = bookmarkService.bookmarkFor(this.object);
+        final Bookmark bookmark = bookmarkService.bookmarkFor(this.holder);
         return bookmark.getObjectType();
     }
 
 
-    @Inject
-    BookmarkService bookmarkService;
+    @Inject BookmarkService bookmarkService;
 
 }
