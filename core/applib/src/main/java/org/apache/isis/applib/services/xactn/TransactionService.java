@@ -22,12 +22,16 @@ package org.apache.isis.applib.services.xactn;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 
 public interface TransactionService {
 
+	public enum Policy {
+        UNLESS_MARKED_FOR_ABORT,
+        ALWAYS
+    }
+	
 	TransactionId currentTransactionId();
 	
     /**
@@ -42,36 +46,33 @@ public interface TransactionService {
      *     Equivalent to {@link Transaction#flush()} (with {@link Transaction} obtained using {@link #currentTransaction()}).
      * </p>
      */
-    @Programmatic
     void flushTransaction();
-
-    /**
-     * See also {@link TransactionService#nextTransaction(TransactionService.Policy)} with a {@link TransactionService.Policy} of {@link TransactionService.Policy#UNLESS_MARKED_FOR_ABORT}.
-     */
-    @Programmatic
-    default void nextTransaction() {
-        nextTransaction((Command)null);
-    }
-
-//    /**
-//     * Returns a representation of the current transaction.
-//     */
-//    @Programmatic
-//    Transaction currentTransaction();
 
     /**
      * Generally this is equivalent to using {@link #currentTransaction()} and {@link Transaction#getTransactionState()}.
      * However, if there is no current transaction, then this will return {@link TransactionState#NONE}.
      */
-    @Programmatic
     TransactionState currentTransactionState();
 
     /**
      * Return a latch, that allows threads to wait on the current transaction to complete.
      */
-    @Programmatic
     CountDownLatch currentTransactionLatch();
+    
+    void executeWithinTransaction(Runnable task);
+    <T> T executeWithinTransaction(Supplier<T> task);
 
+    // -- DEPRECATIONS
+    
+    /**
+     * See also {@link TransactionService#nextTransaction(TransactionService.Policy)} with a {@link TransactionService.Policy} of {@link TransactionService.Policy#UNLESS_MARKED_FOR_ABORT}.
+     * @deprecated to be replaced by Spring's Transaction API
+     */
+    @Deprecated
+    default void nextTransaction() {
+        nextTransaction((Command)null);
+    }
+    
     /**
      * Intended only for use by fixture scripts and integration tests.
      *
@@ -105,8 +106,9 @@ public interface TransactionService {
      *     order to improve the error handling of that method in the case of an already must-abort transaction, and
      *     also to allow the caller to have more control on how to continue.
      * </p>
+     * @deprecated to be replaced by Spring's Transaction API
      */
-    @Programmatic
+    @Deprecated
     default void nextTransaction(Policy policy) {
         nextTransaction(policy, null);
     }
@@ -115,26 +117,19 @@ public interface TransactionService {
      * If the current transaction does not use the specified {@link Command} as its
      * {@link CommandContext#getCommand() command context}, then commit and start a new one.
      * @param command
+     * @deprecated to be replaced by Spring's Transaction API
      */
+    @Deprecated
     default void nextTransaction(Command command) {
         nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT, command);
     }
 
     /**
      * As per {@link #nextTransaction(Policy)} and {@link #nextTransaction(Command)}.
+     * @deprecated to be replaced by Spring's Transaction API
      */
+    @Deprecated
     void nextTransaction(Policy policy, Command command);
-
-    void executeWithinTransaction(Runnable task);
-    <T> T executeWithinTransaction(Supplier<T> task);
-
-    public enum Policy {
-        UNLESS_MARKED_FOR_ABORT,
-        ALWAYS
-    }
-
-
-
 
 
 }

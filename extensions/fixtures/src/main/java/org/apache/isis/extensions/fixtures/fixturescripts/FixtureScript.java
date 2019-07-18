@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -49,8 +51,10 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.api.WithPrereqs;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript
@@ -986,13 +990,11 @@ extends AbstractViewModel {
     }
 
     /**
-     * Convenience method, simply delegates to {@link TransactionService#nextTransaction()}.
+     * Convenience method, simply delegates to {@link IsisContext#createTransactionTemplate}.
      */
-    protected void nextTransaction() {
-        transactionService.nextTransaction();
+    protected TransactionTemplate transactionTemplate() {
+        return IsisContext.createTransactionTemplate();
     }
-
-
 
 
     // -- helpers (local)
@@ -1002,35 +1004,17 @@ extends AbstractViewModel {
         return (getQualifiedName() != null? getQualifiedName() + PATH_SEPARATOR: "") +  subkey;
     }
 
+    // -- DEPENDENCIES
 
-    // -- injected services
-
-    @javax.inject.Inject
-    protected FixtureScripts fixtureScripts;
-
-    @javax.inject.Inject
-    protected FactoryService factoryService;
-
-    @javax.inject.Inject
-    protected ServiceRegistry serviceRegistry;
-    
-    @javax.inject.Inject
-    protected ServiceInjector serviceInjector;
-
-    @javax.inject.Inject
-    protected RepositoryService repositoryService;
-
-    @javax.inject.Inject
-    protected UserService userService;
-
-    @javax.inject.Inject
-    protected WrapperFactory wrapperFactory;
-
-    @javax.inject.Inject
-    protected TransactionService transactionService;
-
-    @javax.inject.Inject
-    protected SessionManagementService sessionManagementService;
+    @Inject protected FixtureScripts fixtureScripts;
+    @Inject protected FactoryService factoryService;
+    @Inject protected ServiceRegistry serviceRegistry;
+    @Inject protected ServiceInjector serviceInjector;
+    @Inject protected RepositoryService repositoryService;
+    @Inject protected UserService userService;
+    @Inject protected WrapperFactory wrapperFactory;
+    @Inject protected TransactionService transactionService;
+    @Inject protected SessionManagementService sessionManagementService;
 
 
 

@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.AbstractService;
@@ -350,23 +351,16 @@ public abstract class FixtureScripts extends AbstractService {
 
     @Programmatic
     public void runFixtureScript(final FixtureScript... fixtureScriptList) {
-        if (fixtureScriptList.length == 1) {
-            runFixtureScript(fixtureScriptList[0], null);
-        } else {
-            runFixtureScript(new FixtureScript() {
-                @Override
-                protected void execute(ExecutionContext executionContext) {
-                    FixtureScript[] fixtureScripts = fixtureScriptList;
-                    for (FixtureScript fixtureScript : fixtureScripts) {
-                        executionContext.executeChild(this, fixtureScript);
-                    }
-                }
-            }, null);
-        }
+    	
+    	val singleScript = toSingleScript(fixtureScriptList);
+    	val parameters = (String)null;
+    	
+    	transactionService.executeWithinTransaction(()->{
+    		runFixtureScript(singleScript, parameters);	
+    	});
 
-        transactionService.nextTransaction();
     }
-
+    
     @Programmatic
     public <T> T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
         final BuilderScriptAbstract<T> fixtureScript = persona.builder();
@@ -374,16 +368,18 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     @Programmatic
-    public <T> T runBuilderScript(final BuilderScriptAbstract<T> fixtureScript) {
+    public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
 
-        serviceInjector.injectServicesInto(fixtureScript);
+        serviceInjector.injectServicesInto(builderScript);
 
-        fixtureScript.run(null);
-
-        final T object = fixtureScript.getObject();
-        transactionService.nextTransaction();
-
-        return object;
+        return transactionService.executeWithinTransaction(()->{
+        
+        	builderScript.run(null);
+        	final T object = builderScript.getObject();
+        	return object;
+        	
+        });
+        
     }
 
     @Programmatic
@@ -475,34 +471,36 @@ public abstract class FixtureScripts extends AbstractService {
         final Object object = fixtureResult.getObject();
         return object != null? titleService.titleOf(object): "(null)";
     }
-
-    // -- injected services
-
-    @javax.inject.Inject
-    FactoryService factoryService;
-
-    @javax.inject.Inject
-    TitleService titleService;
-
-    @javax.inject.Inject
-    JaxbService jaxbService;
-
-    @javax.inject.Inject
-    BookmarkService bookmarkService;
-
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
     
-    @javax.inject.Inject
-    ServiceInjector serviceInjector;
+    // -- HELPERS - LOCAL
     
-    @javax.inject.Inject
-    RepositoryService repositoryService;
+    private static FixtureScript toSingleScript(FixtureScript[] fixtureScriptList) {
+    	
+    	if (fixtureScriptList.length == 1) {
+            return fixtureScriptList[0];
+        }
+    	
+        return new FixtureScript() {
+            @Override
+            protected void execute(ExecutionContext executionContext) {
+                for (FixtureScript fixtureScript : fixtureScriptList) {
+                    executionContext.executeChild(this, fixtureScript);
+                }
+            }
+        };
+        
+    }
 
-    @javax.inject.Inject
-    TransactionService transactionService;
+    // -- DEPENDENCIES
 
-    @javax.inject.Inject
-    ExecutionParametersService executionParametersService;
+    @Inject FactoryService factoryService;
+    @Inject TitleService titleService;
+    @Inject JaxbService jaxbService;
+    @Inject BookmarkService bookmarkService;
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject ServiceInjector serviceInjector;
+    @Inject RepositoryService repositoryService;
+    @Inject TransactionService transactionService;
+    @Inject ExecutionParametersService executionParametersService;
 
 }

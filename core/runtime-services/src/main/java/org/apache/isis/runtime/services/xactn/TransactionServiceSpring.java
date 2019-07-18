@@ -68,7 +68,7 @@ public class TransactionServiceSpring implements TransactionService {
 	@Override
 	public void flushTransaction() {
 		
-		val txObject = currentTransactionObject();
+		val txObject = currentTransactionObject(false);
 		
 		if(txObject==null) {
 			return;
@@ -81,7 +81,7 @@ public class TransactionServiceSpring implements TransactionService {
 	@Override
 	public TransactionId currentTransactionId() {
 		
-		val txObject = currentTransactionObject();
+		val txObject = currentTransactionObject(false);
 		
 		if(txObject==null) {
 			return null;
@@ -94,7 +94,7 @@ public class TransactionServiceSpring implements TransactionService {
 	@Override
 	public TransactionState currentTransactionState() {
 		
-		val txObject = currentTransactionObject();
+		val txObject = currentTransactionObject(false);
 		
 		if(txObject==null || txObject.getCurrentTransaction()==null) {
 			return null;
@@ -161,13 +161,15 @@ public class TransactionServiceSpring implements TransactionService {
 
 	// -- HELPER
 
-	private IsisTransactionObject currentTransactionObject() {
+	private IsisTransactionObject currentTransactionObject(boolean warnIfNone) {
 
 		val txObject = IsisTransactionAspectSupport.currentTransactionObject();
 		
 		if(txObject==null) {
-			log.warn("no current txStatus present");
-			_Exceptions.dumpStackTrace(System.out, 0, 1000);
+			if(warnIfNone) {
+				log.warn("no current txStatus present");
+				_Exceptions.dumpStackTrace(System.out, 0, 1000);
+			}
 			return null;
 		}
 		
