@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.config.IsisConfiguration;
 
-@Deprecated 
+@Deprecated //TODO[2154] remove
 enum ConcurrencyChecking {
     NO_CHECK,
     CHECK;
