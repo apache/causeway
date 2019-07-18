@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.PojoRecreationException;
@@ -37,7 +36,6 @@ import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -58,8 +56,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
     private final PersistenceSession persistenceSession;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
-    private final boolean concurrencyCheckingGloballyEnabled;
-    
     
     ObjectAdapterContext_ObjectAdapterByIdProvider(
             ObjectAdapterContext objectAdapterContext,
@@ -70,9 +66,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         this.persistenceSession = persistenceSession;
         this.specificationLoader = runtimeContext.getSpecificationLoader();
         this.authenticationSession = runtimeContext.getAuthenticationSession();
-        
-        this.concurrencyCheckingGloballyEnabled = 
-                !ConcurrencyChecking.isGloballyDisabled(persistenceSession.getConfiguration());
+
     }
     
     /**
@@ -103,9 +97,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
      * @throws {@link org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException} if the object does not exist.
      */
     @Override
-    public ObjectAdapter adapterFor(
-            final RootOid rootOid,
-            final ConcurrencyChecking concurrencyChecking) {
+    public ObjectAdapter adapterFor(final RootOid rootOid) {
                 
         /* FIXME[ISIS-1976] SPI for adapterFor(RootOid)
          * https://github.com/apache/isis/pull/121#discussion_r215889748
@@ -151,16 +143,14 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         }
 
         // sync versions of original, with concurrency checking if required
-        syncVersion(concurrencyChecking, adapter, rootOid);
+        syncVersion(adapter, rootOid);
 
         return adapter;
         
     }
     
     @Override
-    public Map<RootOid,ObjectAdapter> adaptersFor(
-            final Stream<RootOid> rootOids,
-            final ConcurrencyChecking concurrencyChecking) {
+    public Map<RootOid,ObjectAdapter> adaptersFor(final Stream<RootOid> rootOids) {
 
         final Map<RootOid, ObjectAdapter> adapterByOid = _Maps.newLinkedHashMap();
 
@@ -173,7 +163,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             if (rootOid.isTransient() || rootOid.isViewModel()) {
                 final Object pojo = recreatePojoTransientOrViewModel(rootOid);
                 adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
-                syncVersion(concurrencyChecking, adapter, rootOid);
+                syncVersion(adapter, rootOid);
             }
             if (adapter != null) {
                 adapterByOid.put(rootOid, adapter);
@@ -198,7 +188,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
                 } catch(RuntimeException ex) {
                     throw new PojoRecreationException(rootOid, ex);
                 }
-                syncVersion(concurrencyChecking, adapter, rootOid);
+                syncVersion(adapter, rootOid);
             } else {
                 // null indicates it couldn't be loaded
                 // do nothing here...
@@ -242,9 +232,8 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         return viewModelPojo;
     }
     
-    private void syncVersion(
-            final ConcurrencyChecking concurrencyChecking,
-            final ObjectAdapter adapter, final RootOid rootOid) {
+    @Deprecated // no-op
+    private void syncVersion(final ObjectAdapter adapter, final RootOid rootOid) {
         // sync versions of original, with concurrency checking if required
         Oid adapterOid = adapter.getOid();
         if(adapterOid instanceof RootOid) {
@@ -252,24 +241,24 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             final RootOid originalOid = rootOid;
 
             try {
-                if(concurrencyChecking.isChecking()) {
-
-                    // check for exception, but don't throw if suppressed through thread-local
-                    final Version otherVersion = originalOid.getVersion();
-                    final Version thisVersion = recreatedOid.getVersion();
-                    if( thisVersion != null &&
-                            otherVersion != null &&
-                            thisVersion.different(otherVersion)) {
-
-                        if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
-                            log.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
-                            final String currentUser = authenticationSession.getUserName();
-                            throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
-                        } else {
-                            log.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
-                        }
-                    }
-                }
+//                if(concurrencyChecking.isChecking()) {
+//
+//                    // check for exception, but don't throw if suppressed through thread-local
+//                    final Version otherVersion = originalOid.getVersion();
+//                    final Version thisVersion = recreatedOid.getVersion();
+//                    if( thisVersion != null &&
+//                            otherVersion != null &&
+//                            thisVersion.different(otherVersion)) {
+//
+//                        if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
+//                            log.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
+//                            final String currentUser = authenticationSession.getUserName();
+//                            throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
+//                        } else {
+//                            log.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
+//                        }
+//                    }
+//                }
             } finally {
                 final Version originalVersion = originalOid.getVersion();
                 final Version recreatedVersion = recreatedOid.getVersion();

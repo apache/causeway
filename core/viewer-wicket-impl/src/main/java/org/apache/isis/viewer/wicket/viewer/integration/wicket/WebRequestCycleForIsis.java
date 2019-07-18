@@ -36,7 +36,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.plugins.ioc.RequestContextHandle;
 import org.apache.isis.commons.internal.plugins.ioc.RequestContextService;
 import org.apache.isis.commons.internal.plugins.ioc.RequestContextServiceDefault;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -135,7 +134,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         	log.debug("onRequestHandlerResolved in");
 
             if(handler instanceof RenderPageRequestHandler) {
-                ConcurrencyChecking.disable();
 
                 val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
 
@@ -162,10 +160,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         @Override
         public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
             log.debug("onRequestHandlerExecuted: handler: {}", handler);
-
-            if(handler instanceof RenderPageRequestHandler) {
-                ConcurrencyChecking.reset(ConcurrencyChecking.CHECK);
-            }
 
             try {
 

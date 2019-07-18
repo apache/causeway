@@ -19,6 +19,8 @@
 
 package org.apache.isis.jdo.jdosupport;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -26,7 +28,6 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
@@ -41,13 +42,10 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 
 /**
@@ -147,12 +145,8 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
             final Extent<?> extent = getJdoPersistenceManager().getExtent(pcClass);
             final List<Object> instances = stream(extent).collect(Collectors.toList());
 
-            // temporarily disable concurrency checking while this method is performed
             try {
-                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled((Callable<Void>) () -> {
-                    getJdoPersistenceManager().deletePersistentAll(instances);
-                    return null;
-                });
+            	getJdoPersistenceManager().deletePersistentAll(instances);
             } catch (final Exception ex) {
                 throw new FatalException(ex);
             }

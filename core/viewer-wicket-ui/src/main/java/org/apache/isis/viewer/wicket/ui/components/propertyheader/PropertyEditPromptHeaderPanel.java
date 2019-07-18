@@ -18,30 +18,32 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.propertyheader;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
 
 public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
 
-    private static final String ID_PROPERTY_NAME = "propertyName";
+	private static final long serialVersionUID = 1L;
+	private static final String ID_PROPERTY_NAME = "propertyName";
 
     public PropertyEditPromptHeaderPanel(String id, final ScalarModel model) {
         super(id, model);
 
-        ObjectAdapter targetAdapter = model.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+        ObjectAdapter targetAdapter = model.getParentEntityModel().load();
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
-        final Label label = new Label(ID_PROPERTY_NAME, new AbstractReadOnlyModel<String>() {
-            @Override
+        final Label label = new Label(ID_PROPERTY_NAME, new IModel<String>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public String getObject() {
                 final OneToOneAssociation property = model.getPropertyMemento().getProperty(getSpecificationLoader());
                 return property.getName();

@@ -19,15 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
+import org.apache.wicket.markup.html.link.AbstractLink;
 
 public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
@@ -45,7 +44,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
             final String linkId,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        final ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter objectAdapter = this.targetEntityModel.load();
 
         final boolean persistent = objectAdapter.isRepresentingPersistent();
         if (!persistent) {

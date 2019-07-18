@@ -42,7 +42,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.Consent;
@@ -116,27 +115,30 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      * see {@link #ActionModel(PageParameters, SpecificationLoader)}
      */
     public static PageParameters createPageParameters(
-            final ObjectAdapter adapter, final ObjectAction objectAction, final ConcurrencyChecking concurrencyChecking) {
+            final ObjectAdapter adapter, final ObjectAction objectAction) {
 
         final PageParameters pageParameters = PageParametersUtils.newPageParameters();
 
-        final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
-                adapter.getOid().enString():
-                    adapter.getOid().enStringNoVersion();
-                PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
+//        final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
+//                adapter.getOid().enString():
+//                    adapter.getOid().enStringNoVersion();
+        
+        val oidStr = adapter.getOid().enStringNoVersion();
+                
+        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
-                final ActionType actionType = objectAction.getType();
-                PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
+        final ActionType actionType = objectAction.getType();
+        PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
 
-                final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
-                if (actionOnTypeSpec != null) {
-                    PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
-                }
+        final ObjectSpecification actionOnTypeSpec = objectAction.getOnType();
+        if (actionOnTypeSpec != null) {
+            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
+        }
 
-                final String actionId = determineActionId(objectAction);
-                PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
+        final String actionId = determineActionId(objectAction);
+        PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
 
-                return pageParameters;
+        return pageParameters;
     }
 
 
@@ -189,7 +191,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getAction();
         final PageParameters pageParameters = createPageParameters(
-                adapter, objectAction, ConcurrencyChecking.NO_CHECK);
+                adapter, objectAction);
 
         // capture argument values
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
@@ -421,11 +423,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     public ObjectAdapter getTargetAdapter() {
-        return entityModel.load(getConcurrencyChecking());
-    }
-
-    protected ConcurrencyChecking getConcurrencyChecking() {
-        return actionMemento.getConcurrencyChecking();
+        return entityModel.load();
     }
 
     public ActionMemento getActionMemento() {

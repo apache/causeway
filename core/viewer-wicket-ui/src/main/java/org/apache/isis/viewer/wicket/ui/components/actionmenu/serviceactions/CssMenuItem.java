@@ -23,17 +23,7 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.model.Model;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -43,7 +33,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -54,6 +43,14 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.Model;
 
 class CssMenuItem implements Serializable {
 
@@ -356,7 +353,7 @@ class CssMenuItem implements Serializable {
         final boolean separator = serviceAndAction.separator;
         final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
 
-        final ObjectAdapter serviceAdapter = targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter serviceAdapter = targetEntityModel.load();
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
         if (serviceSpec.isHidden()) {
             return null;

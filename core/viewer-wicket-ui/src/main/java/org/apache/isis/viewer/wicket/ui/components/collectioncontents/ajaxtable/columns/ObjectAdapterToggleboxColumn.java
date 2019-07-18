@@ -20,21 +20,21 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import java.util.List;
+
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
+import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
-import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAdapter> {
 
@@ -116,14 +116,14 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
                 final EntityModel entityModel = (EntityModel) rowModel;
                 ObjectAdapter selectedAdapter = null;
                 try {
-                    selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
+                    selectedAdapter = entityModel.loadWithConcurrencyChecking();
                     if(onSelectionHandler != null) {
                         onSelectionHandler.onSelected(this, selectedAdapter, target);
                     }
                 } catch(ConcurrencyException ex) {
 
                     // should work second time, because the previous attempt will have updated the OAM's OIDs version.
-                    selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
+                    selectedAdapter = entityModel.loadWithConcurrencyChecking();
                     if(onConcurrencyExceptionHandler != null) {
                         onConcurrencyExceptionHandler.onConcurrencyException(this, selectedAdapter, ex, target);
                     }

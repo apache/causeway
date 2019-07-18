@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtime.persistence.adapter;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,11 +28,9 @@ import java.util.UUID;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -39,8 +39,6 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -232,13 +230,13 @@ public final class PojoAdapter implements ObjectAdapter {
                 otherVersion != null &&
                 thisVersion.different(otherVersion)) {
 
-            if(ConcurrencyChecking.isCurrentlyEnabled()) {
-                log.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
-                final String currentUser = authenticationSession.getUserName();
-                throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
-            } else {
+//            if(ConcurrencyChecking.isCurrentlyEnabled()) {
+//                log.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
+//                final String currentUser = authenticationSession.getUserName();
+//                throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
+//            } else {
                 log.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion );
-            }
+//            }
         }
     }
 

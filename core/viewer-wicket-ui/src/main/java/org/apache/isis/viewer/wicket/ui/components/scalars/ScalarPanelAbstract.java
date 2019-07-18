@@ -21,21 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -45,6 +34,15 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
+import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -269,7 +267,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+            final ObjectAdapter parentAdapter = model.getParentEntityModel().load();
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }
@@ -335,6 +333,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                 return "label-none";
             case TOP:
                 return "label-top";
+			default:
+				break;
             }
         }
         return "label-left";

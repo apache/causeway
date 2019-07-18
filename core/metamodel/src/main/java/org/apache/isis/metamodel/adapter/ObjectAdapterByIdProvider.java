@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 
 /**
@@ -34,25 +33,13 @@ public interface ObjectAdapterByIdProvider {
     
     // -- INTERFACE
 
-    ObjectAdapter adapterFor(RootOid rootOid, ConcurrencyChecking concurrencyChecking);
-    Map<RootOid, ObjectAdapter> adaptersFor(Stream<RootOid> rootOids, ConcurrencyChecking concurrencyChecking);
-    
-    /**
-     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
-     * {@link ConcurrencyChecking#NO_CHECK no checking}.
-     *
-     * <p>
+	/**
      * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
      * know that the oid does indeed represent an object you know exists.
-     * </p>
      */
-    default ObjectAdapter adapterFor(final RootOid rootOid) {
-        return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
-    }
+    ObjectAdapter adapterFor(RootOid rootOid);
     
-    default Map<RootOid, ObjectAdapter> adaptersFor(Stream<RootOid> rootOids) {
-        return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
-    }
+    Map<RootOid, ObjectAdapter> adaptersFor(Stream<RootOid> rootOids);
     
     
     // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
@@ -63,24 +50,17 @@ public interface ObjectAdapterByIdProvider {
         ObjectAdapterByIdProvider getObjectAdapterByIdProvider();
         
         @Programmatic
-        default ObjectAdapter adapterFor(RootOid rootOid, ConcurrencyChecking concurrencyChecking) {
-            return getObjectAdapterByIdProvider().adapterFor(rootOid, concurrencyChecking);
+        default ObjectAdapter adapterFor(RootOid rootOid) {
+            return getObjectAdapterByIdProvider().adapterFor(rootOid);
         }
         
-        
         @Programmatic
-        default Map<RootOid, ObjectAdapter> adaptersFor(Stream<RootOid> rootOids, ConcurrencyChecking concurrencyChecking) {
-            return getObjectAdapterByIdProvider().adaptersFor(rootOids, concurrencyChecking);
+        default Map<RootOid, ObjectAdapter> adaptersFor(Stream<RootOid> rootOids) {
+            return getObjectAdapterByIdProvider().adaptersFor(rootOids);
         }
 
         
     }
-
-
-   
-
-
-    
     
 
 }

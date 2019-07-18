@@ -19,14 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
+import org.apache.wicket.markup.html.link.AbstractLink;
 
 class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
@@ -42,7 +41,7 @@ class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
             final String linkId,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
+        ObjectAdapter objectAdapter = this.targetEntityModel.load();
 
         final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
 

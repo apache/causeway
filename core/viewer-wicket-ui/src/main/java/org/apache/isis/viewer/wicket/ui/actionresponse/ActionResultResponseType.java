@@ -19,21 +19,15 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -42,6 +36,8 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.IRequestHandler;
 
 import lombok.val;
 
@@ -154,19 +150,7 @@ public enum ActionResultResponseType {
     	
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage =
-
-                // disabling concurrency checking after the layout XML (grid) feature
-                // was throwing an exception when rebuild grid after invoking action
-                // not certain why that would be the case, but think it should be
-                // safe to simply disable while recreating the page to re-render back to user.
-                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                        new Callable<EntityPage>() {
-                            @Override public EntityPage call() throws Exception {
-                                return new EntityPage(actualAdapter, exIfAny);
-                            }
-                        }
-                        );
+        final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
 
         return ActionResultResponse.toPage(entityPage);
     }

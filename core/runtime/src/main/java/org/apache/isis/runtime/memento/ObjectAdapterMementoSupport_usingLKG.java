@@ -23,7 +23,6 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -112,9 +111,7 @@ implements ObjectAdapterMementoSupport {
 
         @Override
         public ObjectAdapter getObjectAdapter() {
-            return delegate.getObjectAdapter(ConcurrencyChecking.NO_CHECK, 
-                    persistenceSession(), 
-                    specificationLoader());
+            return delegate.getObjectAdapter(persistenceSession(), specificationLoader());
         }
 
         @Override

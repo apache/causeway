@@ -18,18 +18,8 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import javax.annotation.Nullable;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.grid.Grid;
@@ -40,7 +30,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -73,6 +62,14 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.Application;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import lombok.val;
 
@@ -260,19 +257,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     // an error page, but is probably 'good enough').
                     final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
 
-                    final EntityPage entityPage =
-
-                            // disabling concurrency checking after the layout XML (grid) feature
-                            // was throwing an exception when rebuild grid after invoking action
-                            // not certain why that would be the case, but think it should be
-                            // safe to simply disable while recreating the page to re-render back to user.
-                            ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                                    new Callable<EntityPage>() {
-                                        @Override public EntityPage call() throws Exception {
-                                            return new EntityPage(targetAdapter, null);
-                                        }
-                                    }
-                                    );
+                    final EntityPage entityPage = new EntityPage(targetAdapter, null);
 
                     val txManager = IsisContext.getTransactionManagerJdo().get();
                     txManager.flushTransaction();

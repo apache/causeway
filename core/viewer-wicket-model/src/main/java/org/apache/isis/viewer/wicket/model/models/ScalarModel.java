@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -191,7 +190,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
-                ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                 return property.getDefault(parentAdapter);
             }
 
@@ -210,7 +209,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
-                ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                 final ObjectAdapter[] choices = property.getChoices(
                         parentAdapter,
                         InteractionInitiatedBy.USER);
@@ -234,7 +233,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                        scalarModel.getParentEntityModel().load();
                 final ObjectAdapter[] choices =
                         property.getAutoComplete(
                                 parentAdapter, searchArg,
@@ -469,7 +468,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
                 final ObjectAdapter parentAdapter =
-                        scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                        scalarModel.getParentEntityModel().load();
                 final ObjectAdapter[] choices = actionParameter.getAutoComplete(
                         parentAdapter, searchArg,
                         InteractionInitiatedBy.USER);
@@ -542,7 +541,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final ObjectActionParameter actionParameter = scalarModel.parameterMemento.getActionParameter(
                         scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                        scalarModel.getParentEntityModel().load();
                 final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter, null, null);
                 scalarModel.setObject(defaultAdapter);
             }
@@ -1206,7 +1205,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
         }
 
         final EntityModel parentEntityModel1 = this.getParentEntityModel();
-        final ObjectAdapter parentAdapter = parentEntityModel1.load(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter parentAdapter = parentEntityModel1.load();
 
         final OneToOneAssociation oneToOneAssociation =
                 this.getPropertyMemento().getProperty(this.getSpecificationLoader());

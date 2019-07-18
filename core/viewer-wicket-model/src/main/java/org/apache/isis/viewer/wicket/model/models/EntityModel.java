@@ -22,17 +22,11 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
@@ -42,14 +36,14 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
-
-import lombok.val;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -323,35 +317,9 @@ implements ObjectAdapterModel, UiHintContainer {
     // //////////////////////////////////////////////////////////
     // loadObject, load, setObject
     // //////////////////////////////////////////////////////////
-
-    private final static _Probe probe = _Probe.unlimited().label("EntityModel");
     
     /**
-     * Not Wicket API, but used by <tt>EntityPage</tt> to do eager loading
-     * when rendering after post-and-redirect.
-     * @return
-     */
-    @Deprecated //TODO [2033] remove ?
-    public ObjectAdapter load(ConcurrencyChecking concurrencyChecking) {
-        
-        if(concurrencyChecking==ConcurrencyChecking.CHECK && adapterMemento!=null) {
-            val spec = IsisContext.getSpecificationLoader().lookupBySpecIdElseLoad(adapterMemento.getObjectSpecId());
-            if(spec.isEntity()) {
-                val info = "adapterMemento '"+adapterMemento+"'";
-                probe.warnNotImplementedYet("[2033] ConcurrencyChecking no longer supported!? "+info);              
-            }
-        }
-        
-        return load();
-    }
-
-    /**
-     * Callback from {@link #getObject()}, defaults to loading the object
-     * using {@link ConcurrencyChecking#CHECK strict} checking.
-     *
-     * <p>
-     * If non-strict checking is required, then just call {@link #load(ConcurrencyChecking)} with an
-     * argument of {@link ConcurrencyChecking#NO_CHECK} first.
+     * Callback from {@link #getObject()}.
      */
     @Override
     public ObjectAdapter load() {
@@ -361,7 +329,11 @@ implements ObjectAdapterModel, UiHintContainer {
         final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter();
         return objectAdapter;
     }
-
+    
+    @Deprecated //removed with ISIS-2154
+	public ObjectAdapter loadWithConcurrencyChecking() {
+		return load();
+	}
 
     @Override
     public void setObject(final ObjectAdapter adapter) {
@@ -647,6 +619,8 @@ implements ObjectAdapterModel, UiHintContainer {
         return true;
 
     }
+
+
 
 
 

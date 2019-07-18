@@ -33,11 +33,10 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -115,10 +114,9 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             @Override
             public ObjectAdapter asAdapter(
                     final ObjectAdapterMemento_LastKnownGood oam,
-                    final ConcurrencyChecking concurrencyChecking,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
-                return oam.type.getAdapter(oam, concurrencyChecking, persistenceSession, specificationLoader);
+                return oam.type.getAdapter(oam, persistenceSession, specificationLoader);
             }
 
             @Override
@@ -151,7 +149,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             @Override
             public ObjectAdapter asAdapter(
                     final ObjectAdapterMemento_LastKnownGood oam,
-                    final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
+                    final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 final List<Object> listOfPojos =
                         _Lists.map(oam.list, Functions.toPojo(persistenceSession, specificationLoader));
@@ -191,7 +189,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
         public abstract ObjectAdapter asAdapter(
                 final ObjectAdapterMemento_LastKnownGood oam,
-                final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
+                final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader);
 
         public abstract int hashCode(final ObjectAdapterMemento_LastKnownGood oam);
@@ -211,7 +209,6 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             @Override
             ObjectAdapter recreateAdapter(
                     final ObjectAdapterMemento_LastKnownGood oam,
-                    final ConcurrencyChecking concurrencyChecking,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 ObjectSpecId objectSpecId = oam.objectSpecId;
@@ -249,11 +246,11 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             @Override
             ObjectAdapter recreateAdapter(
                     final ObjectAdapterMemento_LastKnownGood oam,
-                    ConcurrencyChecking concurrencyChecking,
-                    final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
+                    final PersistenceSession persistenceSession, 
+                    final SpecificationLoader specificationLoader) {
                 RootOid oid = Oid.unmarshaller().unmarshal(oam.persistentOidStr, RootOid.class);
                 try {
-                    final ObjectAdapter adapter = persistenceSession.adapterFor(oid, concurrencyChecking);
+                    final ObjectAdapter adapter = persistenceSession.adapterFor(oid);
                     return adapter;
 
                 } finally {
@@ -273,7 +270,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
                     final SpecificationLoader specificationLoader) {
                 // REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
                 final ObjectAdapter adapter = recreateAdapter(
-                        oam, ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
+                        oam, persistenceSession, specificationLoader);
                 Oid oid = adapter.getOid();
                 oam.persistentOidStr = oid.enString();
             }
@@ -305,8 +302,8 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             @Override
             ObjectAdapter recreateAdapter(
                     final ObjectAdapterMemento_LastKnownGood oam,
-                    final ConcurrencyChecking concurrencyChecking,
-                    final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
+                    final PersistenceSession persistenceSession, 
+                    final SpecificationLoader specificationLoader) {
                 return oam.transientMemento.recreateObject();
             }
 
@@ -334,16 +331,15 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
         public ObjectAdapter getAdapter(
                 final ObjectAdapterMemento_LastKnownGood nom,
-                final ConcurrencyChecking concurrencyChecking,
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
-            return recreateAdapter(nom, concurrencyChecking, persistenceSession, specificationLoader);
+            return recreateAdapter(nom, persistenceSession, specificationLoader);
         }
 
         abstract ObjectAdapter recreateAdapter(
                 final ObjectAdapterMemento_LastKnownGood nom,
-                final ConcurrencyChecking concurrencyChecking,
-                final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader);
+                final PersistenceSession persistenceSession, 
+                final SpecificationLoader specificationLoader);
 
         public abstract boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other);
         public abstract int hashCode(ObjectAdapterMemento_LastKnownGood ObjectAdapterMemento_LastKnownGood);
@@ -531,10 +527,9 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
      * can call {@link #setAdapter(ObjectAdapter)} to keep this memento in sync.
      */
     public ObjectAdapter getObjectAdapter(
-            final ConcurrencyChecking concurrencyChecking,
             final PersistenceSession persistenceSession,
             final SpecificationLoader specificationLoader) {
-        return sort.asAdapter(this, concurrencyChecking, persistenceSession, specificationLoader);
+        return sort.asAdapter(this, persistenceSession, specificationLoader);
     }
 
     /**
@@ -564,14 +559,13 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
         // REVIEW: heavy handed, ought to be possible to just compare the OIDs
         // ignoring the concurrency checking
-        final ObjectAdapter currAdapter = getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession,
+        final ObjectAdapter currAdapter = getObjectAdapter(persistenceSession,
                 specificationLoader);
         for (ObjectAdapterMemento_LastKnownGood each : list) {
             if(each == null) {
                 continue;
             }
-            final ObjectAdapter otherAdapter = each.getObjectAdapter(
-                    ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
+            final ObjectAdapter otherAdapter = each.getObjectAdapter(persistenceSession, specificationLoader);
             if(currAdapter == otherAdapter) {
                 return true;
             }
@@ -627,13 +621,12 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         }
 
         public static Function<ObjectAdapterMemento_LastKnownGood, ObjectAdapter> fromMemento(
-                final ConcurrencyChecking concurrencyChecking,
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
 
             return memento->{
                 try {
-                    return memento.getObjectAdapter(concurrencyChecking, persistenceSession, specificationLoader);
+                    return memento.getObjectAdapter(persistenceSession, specificationLoader);
                 } catch (ObjectNotFoundException e) {
                     // this can happen if for example the object is not visible (due to the security tenanted facet)
                     return null;
@@ -654,7 +647,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
                     return null;
                 }
                 final ObjectAdapter objectAdapter = input
-                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
+                        .getObjectAdapter(persistenceSession, specificationLoader);
                 if(objectAdapter == null) {
                     return null;
                 }

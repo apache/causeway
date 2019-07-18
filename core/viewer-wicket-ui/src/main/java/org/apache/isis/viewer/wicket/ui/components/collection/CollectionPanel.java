@@ -23,13 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
@@ -46,6 +40,10 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
+import org.apache.wicket.markup.html.basic.Label;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -75,7 +73,7 @@ BulkActionsProvider {
 
         final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection(collectionModel.getSpecificationLoader());
         final EntityModel entityModel = collectionModel.getEntityModel();
-        final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter adapter = entityModel.load();
 
         final List<ObjectAction> associatedActions =
                 ObjectAction.Util.findForAssociation(adapter, otma);

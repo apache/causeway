@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -87,7 +86,7 @@ implements PersistenceSessionServiceInternal {
         final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
                         
         if(rootOid.isViewModel()) {
-            final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+            final ObjectAdapter adapter = ps.adapterFor(rootOid);
             final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
             
             return pojo;
@@ -98,7 +97,7 @@ implements PersistenceSessionServiceInternal {
             return pojo;            
             
         } else {
-            final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+            final ObjectAdapter adapter = ps.adapterFor(rootOid);
             
             final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
             acceptIfPresent(pojo, ps::refreshRootInTransaction);

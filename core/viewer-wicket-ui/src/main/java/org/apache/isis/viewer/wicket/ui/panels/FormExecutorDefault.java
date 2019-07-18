@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.metamodel.facets.properties.renderunchanged.UnchangingFacet;
@@ -345,19 +344,7 @@ implements FormExecutor {
 
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage =
-
-                // disabling concurrency checking after the layout XML (grid) feature
-                // was throwing an exception when rebuild grid after invoking action
-                // not certain why that would be the case, but think it should be
-                // safe to simply disable while recreating the page to re-render back to user.
-                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                        new Callable<EntityPage>() {
-                            @Override public EntityPage call() throws Exception {
-                                return new EntityPage(targetAdapter, ex);
-                            }
-                        }
-                        );
+        final EntityPage entityPage =new EntityPage(targetAdapter, ex);
 
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
