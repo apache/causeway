@@ -121,6 +121,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
         
         _Spring.streamAllBeans(beanSortClassifier)
         .filter(_NullSafe::isPresent)
+        .filter(x->!x.getManagedObjectSort().isUnknown()) // do not register unknown sort
         .forEach(bean->{
             val id = extractObjectType(bean.getBeanClass()).orElse(bean.getId());
             map.put(id, bean);

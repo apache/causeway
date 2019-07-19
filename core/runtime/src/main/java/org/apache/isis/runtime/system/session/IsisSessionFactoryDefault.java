@@ -43,6 +43,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.concurrent._Tasks;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
@@ -181,8 +182,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             //
             val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
             
-            final Stream<Object> domainServices = serviceRegistry.streamRegisteredBeans()
-                    .filter(beanAdapter->beanAdapter.getManagedObjectSort().isManagedBean())
+            final Stream<Object> domainServices = serviceRegistry
+            		.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
                     .map(BeanAdapter::getInstance)
                     .filter(Bin::isCardinalityOne)
                     .map(Bin::getSingleton)

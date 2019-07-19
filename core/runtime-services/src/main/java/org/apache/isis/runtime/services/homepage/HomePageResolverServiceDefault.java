@@ -83,8 +83,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         // -- 2) lookup managed beans that have actions annotated with @HomePage
         
         homePageAction = 
-                serviceRegistry.streamRegisteredBeans()
-                .filter(bean->bean.getManagedObjectSort()==BeanSort.MANAGED_BEAN)
+                serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
                 .map(bean->bean.getBeanClass())
                 .map(managedBeanType->specLoader.loadSpecification(managedBeanType))
                 .filter(_NullSafe::isPresent)

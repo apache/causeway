@@ -30,6 +30,7 @@ import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -37,9 +38,11 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
@@ -55,6 +58,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
+
+import lombok.val;
 
 @Singleton
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
@@ -328,22 +333,19 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     }
 
     /**
-     * Ignore the (strict) superclasses of any services.
-     * <p/>
+     * Ignore the (strict) super-classes of any services.
      * <p>
-     * For example, we want to ignore <code>ExceptionRecognizerComposite</code> because there is no service
-     * of that type (only of subtypes of that).
+     * For example, we want to ignore <code>ExceptionRecognizerComposite</code> 
+     * because there is no service of that type (only of subtypes of that).
      * </p>
      */
     private boolean isSuperClassOfService(final ObjectSpecification spec) {
-        final List<BeanAdapter> registeredServices = serviceRegistry.streamRegisteredBeans()
-                .collect(Collectors.toList());
-
-        final Class<?> specClass = spec.getCorrespondingClass();
+    	
+        val specClass = spec.getCorrespondingClass();
 
         // is this class a supertype or the actual type of one of the services?
         boolean serviceCls = false;
-        for (final BeanAdapter bean : registeredServices) {
+        for (final BeanAdapter bean : registeredServices.get()) {
             final Class<?> serviceClass = bean.getBeanClass();
             if (specClass.isAssignableFrom(serviceClass)) {
                 serviceCls = true;
@@ -354,7 +356,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
 
         // yes it is.  In which case, is it the actual concrete class of one of those services?
-        for (final Object registeredService : registeredServices) {
+        for (final Object registeredService : registeredServices.get()) {
             final Class<?> serviceClass = registeredService.getClass();
             if (serviceClass.isAssignableFrom(specClass)) {
                 return false;
@@ -534,20 +536,18 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(Collectors.toSet());
     }
 
-
-
     //region  > services (injected)
 
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject SpecificationLoader specificationLoader;
+    @Inject ApplicationFeatureFactory applicationFeatureFactory;
 
-    @javax.inject.Inject
-    SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    ApplicationFeatureFactory applicationFeatureFactory;
-
-
+    private _Lazy<List<BeanAdapter>> registeredServices = _Lazy.threadSafe(()->{
+    	val registeredServices = 
+        		serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
+                .collect(Collectors.toList());
+    	return registeredServices;
+    });
 
 
 }

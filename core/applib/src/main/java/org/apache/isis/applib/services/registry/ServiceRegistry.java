@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
@@ -77,6 +78,14 @@ public interface ServiceRegistry {
     default Stream<BeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
         return streamRegisteredBeans()
                 .filter(beanAdapter->beanAdapter.isCandidateFor(requiredType));
+    }
+
+    /**
+     * Streams all bean adapters of given BeanSort.
+     */
+    default Stream<BeanAdapter> streamRegisteredBeansOfSort(BeanSort sort) {
+    	return streamRegisteredBeans()
+    			.filter(beanAdapter->beanAdapter.getManagedObjectSort()==sort);
     }
 
     /**
@@ -187,10 +196,6 @@ public interface ServiceRegistry {
         }
 
     }
-
-
-
-    
 
 
 }

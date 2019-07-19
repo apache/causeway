@@ -26,6 +26,7 @@ import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.base._Timing.StopWatch;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 
@@ -92,7 +93,7 @@ class ObjectAdapterContext_ServiceLookup {
         val servicesByIdResource = new ServicesByIdResource();
         val adapterProvider = objectAdapterContext.getObjectAdapterProvider();
         
-        serviceRegistry.streamRegisteredBeans()
+        serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
         .map(adapterProvider::adapterForBean)
         .forEach(serviceAdapter->{
             _Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());

@@ -779,7 +779,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private Stream<BeanAdapter> streamServiceBeans() {
-        return context.getServiceRegistry().streamRegisteredBeans();
+        return context.getServiceRegistry().streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN);
     }
 
     // -- contributee associations (properties and collections)
