@@ -34,12 +34,12 @@ import lombok.RequiredArgsConstructor;
 
 @Mixin(method="prop") 
 @RequiredArgsConstructor
-public class HoldsMetadata_objectType {
+public class Object_objectType {
 
-    private final HoldsMetadata holder;
+    private final Object holder;
 
     public static class ActionDomainEvent 
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<HoldsMetadata_objectType> {
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectType> {
         private static final long serialVersionUID = 1L;
     }
 

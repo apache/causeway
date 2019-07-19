@@ -18,7 +18,14 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -27,12 +34,12 @@ import lombok.RequiredArgsConstructor;
 
 @Mixin(method="prop") 
 @RequiredArgsConstructor
-public class HoldsMetadata_objectIdentifier {
+public class Object_objectIdentifier {
 
-    private final HoldsMetadata holder;
+    private final Object holder;
 
     public static class ActionDomainEvent 
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<HoldsMetadata_objectIdentifier> {
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectIdentifier> {
         private static final long serialVersionUID = 1L;
     }
 

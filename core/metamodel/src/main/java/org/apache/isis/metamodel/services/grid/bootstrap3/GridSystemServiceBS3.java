@@ -43,6 +43,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap3.Size;
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -61,6 +62,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+
+import lombok.val;
 
 @Singleton
 public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
@@ -289,7 +292,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 }
                 if(isSet(fieldSet.isUnreferencedProperties())) {
                     if(result.fieldSetForUnreferencedPropertiesRef != null) {
-                        fieldSet.setMetadataError("More than one col with 'unreferencedProperties' attribute set");
+                        fieldSet.setMetadataError("More than one column with 'unreferencedProperties' attribute set");
                     } else {
                         result.fieldSetForUnreferencedPropertiesRef = fieldSet;
                     }
@@ -352,34 +355,41 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 boundAssociationIdsByFieldSetId.put(fieldSetId, boundAssociationIds);
             }
         }
+        
+        // 1-to-1-association Ids, that want to contribute to the 'metadata' FieldSet
+        // but are unbound, because such a FieldSet is not defined by the given layout.
+        val unboundMetadataContributingIds = _Sets.<String>newHashSet();
+        
         // along with any specified by existing metadata
         for (OneToOneAssociation otoa : oneToOneAssociationById.values()) {
             final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
             if(memberOrderFacet != null) {
-                final String id = asId(memberOrderFacet.name());
+                val id = asId(memberOrderFacet.name());
                 if(fieldSetIds.containsKey(id)) {
                     Set<String> boundAssociationIds =
                             boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                     boundAssociationIds.add(otoa.getId());
+                } else if(id.equals(MixinConstants.METADATA_LAYOUT_GROUPNAME)) {
+                	unboundMetadataContributingIds.add(otoa.getId());
                 }
             }
         }
 
         if(!missingPropertyIds.isEmpty()) {
 
-            final List<String> unboundPropertyIds = _Lists.newArrayList(missingPropertyIds);
+            val unboundPropertyIds = _Lists.newArrayList(missingPropertyIds);
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
-                final Set<String> boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
+                val boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
                 unboundPropertyIds.removeAll(boundPropertyIds);
             }
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
-                final FieldSet fieldSet = fieldSetIds.get(fieldSetId);
-                final Set<String> associationIds =
+                val fieldSet = fieldSetIds.get(fieldSetId);
+                val associationIds =
                         boundAssociationIdsByFieldSetId.get(fieldSetId);
 
-                final List<OneToOneAssociation> associations =
+                val associations1To1 =
                         associationIds.stream()
                                 .map(oneToOneAssociationById::get)
                                 .filter(_NullSafe::isPresent)
@@ -387,13 +397,14 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                                 .collect(Collectors.toList());
 
                 addPropertiesTo(fieldSet,
-                        _Lists.map(associations, ObjectAssociation::getId),
+                        _Lists.map(associations1To1, ObjectAssociation::getId),
                         propertyLayoutDataById);
             }
 
             if(!unboundPropertyIds.isEmpty()) {
-                final FieldSet fieldSet = result.fieldSetForUnreferencedPropertiesRef;
+                val fieldSet = result.fieldSetForUnreferencedPropertiesRef;
                 if(fieldSet != null) {
+                	unboundPropertyIds.removeAll(unboundMetadataContributingIds);
                     addPropertiesTo(fieldSet, unboundPropertyIds, propertyLayoutDataById);
                 }
             }
@@ -540,7 +551,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         return true;
     }
 
-    private void addPropertiesTo(
+	private void addPropertiesTo(
             final FieldSet fieldSet,
             final List<String> propertyIds,
             final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById) {
