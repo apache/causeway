@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.mixins.dto;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -24,17 +26,18 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.BlobClobFactory;
 
-@Mixin(method="act")
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+@Mixin(method="act") 
+@RequiredArgsConstructor
 public class Dto_downloadXml {
 
-    private final Dto dto;
-
-    public Dto_downloadXml(final Dto dto) {
-        this.dto = dto;
-    }
+    private final Dto holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXml> {
@@ -52,19 +55,25 @@ public class Dto_downloadXml {
             )
     @MemberOrder(sequence = "500.1")
     public Object act(
-            @ParameterLayout(named = "File name")
+    		
+    		// PARAM 0
+    		@ParameterLayout(
+            		named = MixinConstants.FILENAME_PROPERTY_NAME,
+            		describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
-        final String xml = jaxbService.toXml(dto);
-        return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
+        val xmlString = jaxbService.toXml(holder);
+        return BlobClobFactory.clobXml(fileName, xmlString);
     }
 
+    // -- PARAM 0
+    
     public String default0Act() {
-        return Util.withSuffix(dto.getClass().getName(), "xml");
+        return holder.getClass().getName();
     }
 
+    // -- DEPENDENCIES
 
-    @javax.inject.Inject
-    JaxbService jaxbService;
+    @Inject JaxbService jaxbService;
 
 }

@@ -19,18 +19,20 @@ package org.apache.isis.applib.mixins.metamodel;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin(method="prop") @RequiredArgsConstructor
-public class Object_objectIdentifier {
+@Mixin(method="prop") 
+@RequiredArgsConstructor
+public class HoldsMetamodel_objectIdentifier {
 
-    private final Object holder;
+    private final HoldsMetamodel holder;
 
     public static class ActionDomainEvent 
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectIdentifier> {
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<HoldsMetamodel_objectIdentifier> {
         private static final long serialVersionUID = 1L;
     }
 
@@ -38,9 +40,11 @@ public class Object_objectIdentifier {
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
     )
-    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
+    @ActionLayout(
+    		contributed = Contributed.AS_ASSOCIATION,
+    		hidden = Where.ALL_TABLES)
     @Property()
-    @MemberOrder(name = "metadata", sequence = "700.2")
+    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public String prop() {
         final Bookmark bookmark = bookmarkService.bookmarkFor(this.holder);
         return bookmark.getIdentifier();

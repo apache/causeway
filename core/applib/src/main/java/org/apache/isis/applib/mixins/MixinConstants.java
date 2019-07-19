@@ -16,7 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.mixins.timestamp;
+package org.apache.isis.applib.mixins;
 
-public interface Timestampable extends HoldsUpdatedBy, HoldsUpdatedAt {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class MixinConstants {
+
+	public static final String METADATA_LAYOUT_GROUPNAME = "metadata";
+	public static final String FILENAME_PROPERTY_NAME = "File name";
+	public static final String FILENAME_PROPERTY_DESCRIPTION = "File name extension can be omitted.";
+	
+	
 }

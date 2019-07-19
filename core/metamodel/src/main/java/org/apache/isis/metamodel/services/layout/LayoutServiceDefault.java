@@ -16,31 +16,28 @@
  */
 package org.apache.isis.metamodel.services.layout;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.xml.bind.Marshaller;
 
-import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.commons.ZipWriter;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+
+import lombok.val;
 
 @Singleton
 public class LayoutServiceDefault implements LayoutService {
@@ -90,32 +87,27 @@ public class LayoutServiceDefault implements LayoutService {
                         !spec.isAbstract() &&
                                 (spec.isEntity() || spec.isViewModel())
                     );
-        final byte[] bytes;
-        try {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final ZipOutputStream zos = new ZipOutputStream(baos);
-            final OutputStreamWriter writer = new OutputStreamWriter(zos);
-            for (final ObjectSpecification objectSpec : domainObjectSpecs) {
-                final Class<?> domainClass = objectSpec.getCorrespondingClass();
-                final Grid grid = toGrid(domainClass, style);
-                if(grid != null) {
-                    zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
-                    final String xml = jaxbService.toXml(grid,
+        
+        
+        val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");
+        
+        for (final ObjectSpecification objectSpec : domainObjectSpecs) {
+            val domainClass = objectSpec.getCorrespondingClass();
+            val grid = toGrid(domainClass, style);
+            if(grid != null) {
+            	zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->{
+            		
+            		val xmlString = jaxbService.toXml(grid,
                             _Maps.unmodifiable(
                                     Marshaller.JAXB_SCHEMA_LOCATION,
                                     grid.getTnsAndSchemaLocation()
                                     ));
-                    writer.write(xml);
-                    writer.flush();
-                    zos.closeEntry();
-                }
+            		writer.write(xmlString);
+            	});
             }
-            writer.close();
-            bytes = baos.toByteArray();
-        } catch (final IOException ex) {
-            throw new FatalException("Unable to create zip of layouts", ex);
         }
-        return bytes;
+        
+        return zipWriter.toBytes();
     }
 
     private static String zipEntryNameFor(final ObjectSpecification objectSpec) {

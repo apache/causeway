@@ -16,7 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.mixins.timestamp;
+package org.apache.isis.applib.mixins.metamodel;
 
-public interface Timestampable extends HoldsUpdatedBy, HoldsUpdatedAt {
+/**
+ * If a domain object implements this Interface, the object's metamodel is
+ * extended by all the {@code Mixins} that contribute to this Interface.   
+ * 
+ * @since 2.0
+ *
+ */
+public interface HoldsMetamodel {
+
 }

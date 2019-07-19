@@ -16,12 +16,8 @@
  */
 package org.apache.isis.applib.mixins.metamodel;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -32,29 +28,20 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelServicesMenu;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.schema.metamodel.v1.DomainClassDto;
-import org.apache.isis.schema.metamodel.v1.MetamodelDto;
+import org.apache.isis.applib.value.BlobClobFactory;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Mixin(method="act")
+@RequiredArgsConstructor
 public class Object_downloadMetaModelXml {
 
-    final MimeType mimeTypeTextXml;
-
-    private final Object object;
-
-    public Object_downloadMetaModelXml(final Object object) {
-        this.object = object;
-
-        try {
-            mimeTypeTextXml = new MimeType("application", "xml");
-        } catch (final MimeTypeParseException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+    private final Object holder;
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadMetaModelXml> {
         private static final long serialVersionUID = 1L;}
@@ -69,59 +56,50 @@ public class Object_downloadMetaModelXml {
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "datanucleusIdLong", sequence = "700.2")
+    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public Object act(
-            @ParameterLayout(named = "File name")
+    		
+    		// PARAM 0
+    		@ParameterLayout(
+            		named = MixinConstants.FILENAME_PROPERTY_NAME,
+            		describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
-        MetaModelService.Config config =
+    	val pkg = holder.getClass().getPackage().getName();
+    	
+        val config =
                 new MetaModelService.Config()
                         .withIgnoreNoop()
                         .withIgnoreAbstractClasses()
                         .withIgnoreInterfaces()
-                        .withIgnoreBuiltInValueTypes();
-        final String pkg = object.getClass().getPackage().getName();
-        config = config.withPackagePrefix(pkg);
-        final MetamodelDto metamodelDto = metaModelService.exportMetaModel(config);
+                        .withIgnoreBuiltInValueTypes()
+                        .withPackagePrefix(pkg);
+        
+        val metamodelDto = metaModelService.exportMetaModel(config);
 
-        final List<DomainClassDto> domainClassDtos = metamodelDto.getDomainClassDto();
+        val className = holder.getClass().getName();
+        
+        val domainClassDtos = metamodelDto.getDomainClassDto();
+        domainClassDtos.removeIf(classDto->!Objects.equals(classDto.getId(), className));
+        
+        val xmlString = jaxbService.toXml(metamodelDto);
 
-        final String className = object.getClass().getName();
-        for (Iterator<DomainClassDto> iterator = domainClassDtos.iterator(); iterator.hasNext(); ) {
-            final DomainClassDto classDto = iterator.next();
-            final String id = classDto.getId();
-            if(!Objects.equals(id, className)) {
-                iterator.remove();
-            }
-        }
-        final String asXml = jaxbService.toXml(metamodelDto);
-
-        return new Clob(
-                withSuffix(fileName, "xml"),
-                mimeTypeTextXml, asXml);
+        return BlobClobFactory.clobXml(fileName, xmlString);
+        		
     }
+    
+    // -- PARAM 0
 
     public String default0Act() {
-        return withSuffix(object.getClass().getSimpleName(), "xml");
+        return holder.getClass().getSimpleName();
     }
 
+    // -- DEPENDENCIES
+    
+    @Inject MetaModelService metaModelService;
+    @Inject JaxbService jaxbService;
+    @Inject MetaModelServicesMenu metaModelServicesMenu;
 
-    @javax.inject.Inject
-    MetaModelService metaModelService;
-    @Inject
-    JaxbService jaxbService;
-    @Inject
-    MetaModelServicesMenu metaModelServicesMenu;
-
-    private static String withSuffix(String fileName, String suffix) {
-        if(!suffix.startsWith(".")) {
-            suffix = "." + suffix;
-        }
-        if(!fileName.endsWith(suffix)) {
-            fileName += suffix;
-        }
-        return fileName;
-    }
-
+    
 
 }

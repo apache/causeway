@@ -38,7 +38,7 @@ public final class Blob implements NamedWithMimeType {
      * </pre>
      */
     private static final long serialVersionUID = 5659679806709601263L;
-
+    
     private final MimeType mimeType;
     private final byte[] bytes;
     private final String name;

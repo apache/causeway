@@ -16,17 +16,10 @@
  */
 package org.apache.isis.applib.mixins.dto;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
+import javax.inject.Inject;
 
-import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -35,26 +28,20 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.BlobClobFactory;
+import org.apache.isis.commons.ZipWriter;
 
-@Mixin(method="act")
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+@Mixin(method="act") 
+@RequiredArgsConstructor
 public class Dto_downloadXsd {
 
-    private final Dto dto;
-
-    private final MimeType mimeTypeApplicationZip;
-
-    public Dto_downloadXsd(final Dto dto) {
-        this.dto = dto;
-        try {
-            mimeTypeApplicationZip = new MimeType("application", "zip");
-        } catch (final MimeTypeParseException ex) {
-            throw new FatalException(ex);
-        }
-    }
+    private final Dto holder;
 
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXsd> {
@@ -72,61 +59,66 @@ public class Dto_downloadXsd {
             )
     @MemberOrder(sequence = "500.2")
     public Object act(
-            @ParameterLayout(named = "File name")
+    		
+    		// PARAM 0
+    		@ParameterLayout(
+            		named = MixinConstants.FILENAME_PROPERTY_NAME,
+            		describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
+            
+            // PARAM 1
             final JaxbService.IsisSchemas isisSchemas) {
 
-        final Map<String, String> map = jaxbService.toXsd(dto, isisSchemas);
+        val schemaMap = jaxbService.toXsd(holder, isisSchemas);
 
-        if(map.isEmpty()) {
-            messageService.warnUser(String.format(
-                    "No schemas were generated for %s; programming error?", dto.getClass().getName()));
+        if(schemaMap.isEmpty()) {
+        	val msg = String.format(
+                    "No schemas were generated for %s; programming error?", 
+                    holder.getClass().getName());
+            messageService.warnUser(msg);
             return null;
         }
 
-        if(map.size() == 1) {
-            final Map.Entry<String, String> entry = map.entrySet().iterator().next();
-            return new Clob(Util.withSuffix(fileName, "xsd"), "text/xml", entry.getValue());
+        if(schemaMap.size() == 1) {
+            val xmlString = schemaMap.values().iterator().next();
+            return BlobClobFactory.clob(BlobClobFactory.Type.xml, fileName, "xsd", xmlString);
         }
 
-        try {
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final ZipOutputStream zos = new ZipOutputStream(baos);
-            final OutputStreamWriter writer = new OutputStreamWriter(zos);
-
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                final String namespaceUri = entry.getKey();
-                final String schemaText = entry.getValue();
-                zos.putNextEntry(new ZipEntry(zipEntryNameFor(namespaceUri)));
-                writer.write(schemaText);
-                writer.flush();
-                zos.closeEntry();
-            }
-
-            writer.close();
-            return new Blob(Util.withSuffix(fileName, "zip"), mimeTypeApplicationZip, baos.toByteArray());
-        } catch (final IOException ex) {
-            throw new FatalException("Unable to create zip", ex);
+        val zipWriter = ZipWriter.newInstance();
+        
+        for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
+            val namespaceUri = entry.getKey();
+            val schemaText = entry.getValue();
+            zipWriter.nextEntry(zipEntryNameFor(namespaceUri), writer->{
+            	writer.write(schemaText);
+            });
         }
+            
+        return BlobClobFactory.blobZip(fileName, zipWriter.toBytes());
+
     }
 
+    // -- PARAM 0
+    
     public String default0Act() {
-        return Util.withSuffix(dto.getClass().getName(), "xsd");
+        return holder.getClass().getName();
     }
 
+    // -- PARAM 1
+    
     public JaxbService.IsisSchemas default1Act() {
         return JaxbService.IsisSchemas.IGNORE;
     }
 
+    // -- HELPER
+    
     private static String zipEntryNameFor(final String namespaceUri) {
-        return Util.withSuffix(namespaceUri, "xsd");
+        return namespaceUri + ".xsd";
     }
 
-
-    @javax.inject.Inject
-    MessageService messageService;
-
-    @javax.inject.Inject
-    JaxbService jaxbService;
+    // -- DEPENDENCIES
+    
+    @Inject MessageService messageService;
+    @Inject JaxbService jaxbService;
 }
 

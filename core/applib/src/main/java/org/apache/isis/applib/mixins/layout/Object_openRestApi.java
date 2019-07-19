@@ -25,15 +25,17 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-@Mixin(method="act") @RequiredArgsConstructor
+@Mixin(method="act")
+@RequiredArgsConstructor
 public class Object_openRestApi {
 
     private final Object holder;
@@ -53,15 +55,18 @@ public class Object_openRestApi {
             cssClassFa = "fa-external-link",
             position = ActionLayout.Position.PANEL_DROPDOWN
             )
-    @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
+    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "750.1")
     public LocalResourcePath act() {
-        Bookmark bookmark = bookmarkService.bookmarkFor(holder);
-
-        return new LocalResourcePath(String.format(
-                "/%s/objects/%s/%s",
-                _Resources.getRestfulPathIfAny(),
-                bookmark.getObjectType(),
-                bookmark.getIdentifier()));
+        val bookmark = bookmarkService.bookmarkFor(holder);
+        val objType = bookmark.getObjectType();
+        val objId = bookmark.getIdentifier();
+        val restfulPathIfAny = _Resources.getRestfulPathIfAny();
+        
+        return restfulPathIfAny!=null
+        		? new LocalResourcePath(String.format(
+        				"/%s/objects/%s/%s", restfulPathIfAny, objType, objId))
+        				: new LocalResourcePath(String.format(
+                				"/objects/%s/%s", objType, objId));
     }
 
     @Inject BookmarkService bookmarkService;
