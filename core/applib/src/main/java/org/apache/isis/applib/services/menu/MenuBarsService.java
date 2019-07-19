@@ -18,17 +18,19 @@
  */
 package org.apache.isis.applib.services.menu;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 
 public interface MenuBarsService {
 
     enum Type {
-        /**
-         * Either derived from annotations or as obtained elsewhere (eg using the {@link MenuBarsLoaderService} if the
+        
+    	/**
+         * Either derived from annotations or as obtained elsewhere 
+         * (eg using the {@link MenuBarsLoaderService} if the
          * default implementation of this service is in use).
          */
         DEFAULT,
+        
         /**
          * As derived from annotations.
          */
@@ -39,9 +41,9 @@ public interface MenuBarsService {
      * Returns {@link #menuBars()} with a type of {@link Type#DEFAULT}.
      * @return
      */
-    @Programmatic
-    MenuBars menuBars();
+    default MenuBars menuBars() {
+        return menuBars(Type.DEFAULT);
+    }
 
-    @Programmatic
     MenuBars menuBars(final Type type);
 }

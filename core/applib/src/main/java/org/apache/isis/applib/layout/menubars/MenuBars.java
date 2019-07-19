@@ -18,31 +18,26 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
 public interface MenuBars {
 
-    @Programmatic
-    String getTnsAndSchemaLocation();
-
-    @Programmatic
-    void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);
-
-    @Programmatic
-    MenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar);
-
+	@FunctionalInterface
     interface Visitor {
         void visit(final ServiceActionLayoutData serviceActionLayoutData);
     }
+	
+    String getTnsAndSchemaLocation();
 
-    @Programmatic
-    void visit(final MenuBars.Visitor visitor);
+    void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);
 
-    @Programmatic
-    LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId();
+    MenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar);
+
+    void visit(Visitor visitor);
+
+    Map<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId();
 
 }

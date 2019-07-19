@@ -18,7 +18,6 @@
  */
 package org.apache.isis.runtime.services.menubars.bootstrap3;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +45,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -78,14 +76,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     BS3MenuBars menuBars;
 
     @Override
-    public BS3MenuBars menuBars() {
-        return menuBars(Type.DEFAULT);
-    }
-
-    @Override
     public BS3MenuBars menuBars(final Type type) {
 
-        final BS3MenuBars fallbackMenuBars = deriveMenuBarsFromMetaModelFacets();
+        val fallbackMenuBars = deriveMenuBarsFromMetaModelFacets();
 
         if(type == Type.FALLBACK) {
             return fallbackMenuBars;
@@ -101,32 +94,36 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
             menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
 
-            final BS3Menu unreferencedActionsMenu = validate(menuBars);
+            val unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
 
             if (unreferencedActionsMenu != null) {
                 // add in any missing actions from the fallback
-                final LinkedHashMap<String, ServiceActionLayoutData> referencedActionsByObjectTypeAndId =
+                val referencedActionsByObjectTypeAndId =
                         menuBars.getAllServiceActionsByObjectTypeAndId();
 
-                fallbackMenuBars.visit(new BS3MenuBars.VisitorAdapter(){
-
-                    @Override
-                    public void visit(final BS3MenuSection menuSection) {
-                        BS3MenuSection section = null;
-                        for (ServiceActionLayoutData serviceAction : menuSection.getServiceActions()) {
-                            final String objectTypeAndId = serviceAction.getObjectTypeAndId();
-                            if (!referencedActionsByObjectTypeAndId.containsKey(objectTypeAndId)) {
-                                if(section == null) {
-                                    section = new BS3MenuSection();
-                                    unreferencedActionsMenu.getSections().add(section);
-                                }
-                                // detach from fallback, attach to this
-                                serviceAction.setOwner(section);
-                                section.getServiceActions().add(serviceAction);
-                            }
+                fallbackMenuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
+                	
+                	// created only if required to collect unreferenced actions
+                	// for this menuSection into a new section within the designated
+                	// unreferencedActionsMenu
+                	BS3MenuSection section = null;   
+                	
+                    for (ServiceActionLayoutData serviceAction : menuSection.getServiceActions()) {
+                        val objectTypeAndId = serviceAction.getObjectTypeAndId();
+                        val isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(objectTypeAndId);
+                        
+                        if (isReferencedAction) {
+                        	continue; // check next
                         }
+                 
+                        if(section == null) {
+                            section = addSectionToMenu(unreferencedActionsMenu);
+                        }
+                        
+                        bindActionToSection(serviceAction, section);
                     }
-                });
+                    
+                }));
 
             } else {
                 // just use fallback
@@ -138,27 +135,38 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         return menuBars;
     }
+    
+    // -- HELPER
+    
+    private static BS3MenuSection addSectionToMenu(BS3Menu menu) {
+    	val section = new BS3MenuSection();
+    	menu.getSections().add(section);
+    	return section;
+    }
+    
+    private static void bindActionToSection(
+    		ServiceActionLayoutData serviceAction, 
+    		BS3MenuSection section) {
+    	
+    	// detach from fallback, attach to this section
+        serviceAction.setOwner(section);
+        section.getServiceActions().add(serviceAction);
+    }
 
-    BS3Menu validate(final BS3MenuBars menuBars) {
+    private BS3Menu validateAndGetUnreferencedActionMenu(final BS3MenuBars menuBars) {
 
         if (menuBars == null) {
             return null;
         }
 
-        final List<BS3Menu> menusWithUnreferencedActionsFlagSet = _Lists.newArrayList();
-        menuBars.visit(new BS3MenuBars.VisitorAdapter(){
-            @Override public void visit(final BS3Menu menu) {
-                if(isSet(menu.isUnreferencedActions())) {
-                    menusWithUnreferencedActionsFlagSet.add(menu);
-                }
+        val menusWithUnreferencedActionsFlagSet = _Lists.<BS3Menu>newArrayList();
+        menuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenus(menu->{
+        	if(Boolean.TRUE.equals(menu.isUnreferencedActions())) {
+                menusWithUnreferencedActionsFlagSet.add(menu);
             }
-            private Boolean isSet(final Boolean flag) {
-                return flag != null && flag;
-            }
+        }));
 
-        });
-
-        final int size = menusWithUnreferencedActionsFlagSet.size();
+        val size = menusWithUnreferencedActionsFlagSet.size();
         if (size == 1) {
             return menusWithUnreferencedActionsFlagSet.get(0);
         }
@@ -186,11 +194,11 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 // services that have an imperative hidden() method.
                 return false;
             }
-            final DomainServiceFacet facet = spec.getFacet(DomainServiceFacet.class);
-            if (facet == null) {
+            val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
+            if (domainServiceFacet == null) {
                 return true;
             }
-            final NatureOfService natureOfService = facet.getNatureOfService();
+            val natureOfService = domainServiceFacet.getNatureOfService();
             return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
         })
         .collect(Collectors.toList());

@@ -29,6 +29,8 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.Menu;
 import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.ToString;
+
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
  */
@@ -40,6 +42,7 @@ import org.apache.isis.commons.internal.collections._Lists;
                 "sections"
         }
         )
+@ToString(of = "named")
 public class BS3Menu implements Menu, Serializable {
 
     private static final long serialVersionUID = 1L;

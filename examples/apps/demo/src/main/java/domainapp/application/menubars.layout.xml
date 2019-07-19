@@ -143,8 +143,82 @@
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
+        
+        <mb3:menu>
+            <mb3:named>Security</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="isissecurity.ApplicationPermissionMenu" id="findOrphanedPermissions">
+                    <cpt:named>Find Orphaned Permissions</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationPermissionMenu" id="allPermissions">
+                    <cpt:named>All Permissions</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="findUsers">
+                    <cpt:named>Find Users</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="newDelegateUser">
+                    <cpt:named>New Delegate User</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="newLocalUser">
+                    <cpt:named>New Local User</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="allUsers">
+                    <cpt:named>All Users</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="findTenancies">
+                    <cpt:named>Find Tenancies</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="newTenancy">
+                    <cpt:named>New Tenancy</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="allTenancies">
+                    <cpt:named>All Tenancies</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allPackages">
+                    <cpt:named>All Packages</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allClasses">
+                    <cpt:named>All Classes</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allActions">
+                    <cpt:named>All Actions</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allProperties">
+                    <cpt:named>All Properties</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allCollections">
+                    <cpt:named>All Collections</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="findRoles">
+                    <cpt:named>Find Roles</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="newRole">
+                    <cpt:named>New Role</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="allRoles">
+                    <cpt:named>All Roles</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+        
     </mb3:secondary>
     <mb3:tertiary>
+        <mb3:menu>
+            <mb3:named>Security</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="isissecurity.MeService" id="me">
+                    <cpt:named>Me</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
         <mb3:menu>
             <mb3:named>Configuration Menu</mb3:named>
             <mb3:section>
