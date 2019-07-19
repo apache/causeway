@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -32,6 +31,8 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.resources._Resources;
+
+import lombok.val;
 
 
 /**
@@ -64,10 +65,9 @@ public class JaxbUtil {
     public static <T> T fromXml(
             final Class<?> contextClass,
             final String resourceName,
-            final Charset charset,
             final Class<T> dtoClass) throws IOException {
 
-        final String s = _Resources.loadAsString(contextClass, resourceName, charset);
+        val s = _Resources.loadAsStringUtf8(contextClass, resourceName);
         return fromXml(new StringReader(s), dtoClass);
     }
     

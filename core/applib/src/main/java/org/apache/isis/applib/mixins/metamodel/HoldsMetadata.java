@@ -25,6 +25,6 @@ package org.apache.isis.applib.mixins.metamodel;
  * @since 2.0
  *
  */
-public interface HoldsMetamodel {
+public interface HoldsMetadata {
 
 }

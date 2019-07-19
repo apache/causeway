@@ -1,18 +1,20 @@
-/**
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
  */
 package org.apache.isis.metamodel.services.grid;
 
@@ -22,7 +24,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
@@ -53,19 +54,16 @@ public class GridServiceDefault implements GridService {
     }
 
     @Override
-    @Programmatic
     public boolean existsFor(final Class<?> domainClass) {
         return gridLoaderService.existsFor(domainClass);
     }
 
     @Override
-    @Programmatic
     public Grid load(final Class<?> domainClass) {
         return gridLoaderService.load(domainClass);
     }
 
     @Override
-    @Programmatic
     public Grid load(final Class<?> domainClass, final String layout) {
         return gridLoaderService.load(domainClass, layout);
     }
@@ -73,7 +71,6 @@ public class GridServiceDefault implements GridService {
     // //////////////////////////////////////
 
     @Override
-    @Programmatic
     public Grid defaultGridFor(Class<?> domainClass) {
 
         for (GridSystemService<?> gridSystemService : gridSystemServices()) {
@@ -107,7 +104,6 @@ public class GridServiceDefault implements GridService {
     }
 
     @Override
-    @Programmatic
     public Grid complete(final Grid grid) {
 
         final Class<?> domainClass = grid.getDomainClass();
@@ -119,7 +115,6 @@ public class GridServiceDefault implements GridService {
     }
 
     @Override
-    @Programmatic
     public Grid minimal(final Grid grid) {
 
         final Class<?> domainClass = grid.getDomainClass();
@@ -134,7 +129,6 @@ public class GridServiceDefault implements GridService {
     /**
      * Not public API, exposed only for testing.
      */
-    @Programmatic
     public String tnsAndSchemaLocation(final Grid grid) {
         final List<String> parts = _Lists.newArrayList();
 
@@ -168,7 +162,6 @@ public class GridServiceDefault implements GridService {
      *   general idea of multiple implementations.
      * </p>
      */
-    @Programmatic
     protected List<GridSystemService<?>> gridSystemServices() {
 
         if (filteredGridSystemServices == null) {
@@ -199,7 +192,7 @@ public class GridServiceDefault implements GridService {
                         : gridSystemServicesForTest;
     }
     
-    ////////////////////////////////////////////////////////
+    // -- DEPENDENCIES
 
     @Inject GridLoaderService gridLoaderService;
     @Inject private List<GridSystemService<?>> gridSystemServices;

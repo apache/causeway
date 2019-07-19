@@ -22,10 +22,14 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 
 /**
- * Generalizes {@link org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition}, {@link org.apache.isis.applib.annotation.DomainObjectLayout.CssClassFaPosition} and {@link org.apache.isis.applib.annotation.ViewModelLayout.CssClassFaPosition}.
+ * Generalizes {@link org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition}, 
+ * {@link org.apache.isis.applib.annotation.DomainObjectLayout.CssClassFaPosition} and 
+ * {@link org.apache.isis.applib.annotation.ViewModelLayout.CssClassFaPosition}.
  *
  * <p>
- *     This isn't part of the applib only because didn't want to break backward compatibility of the existing {@link org.apache.isis.applib.annotation.ActionLayout} annotation.
+ *     This isn't part of the applib only because didn't want to break backward 
+ *     compatibility of the existing {@link org.apache.isis.applib.annotation.ActionLayout} 
+ *     annotation.
  * </p>
  */
 public enum CssClassFaPosition {

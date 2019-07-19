@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -78,6 +79,13 @@ public final class _Resources {
     public static String loadAsString(Class<?> contextClass, String resourceName, Charset charset) throws IOException {
         final InputStream is = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(is), charset);
+    }
+    
+    /**
+     * Shortcut using Charset UTF-8, see {@link #loadAsString(Class, String, Charset)} 
+     */
+    public static String loadAsStringUtf8(Class<?> contextClass, String resourceName) throws IOException {
+        return loadAsString(contextClass, resourceName, StandardCharsets.UTF_8);
     }
 
     /**

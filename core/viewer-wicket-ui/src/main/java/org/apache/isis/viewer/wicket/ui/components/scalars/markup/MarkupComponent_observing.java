@@ -19,14 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
-
-import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
 
 final class MarkupComponent_observing  {
 
@@ -38,8 +37,8 @@ final class MarkupComponent_observing  {
         }
         final String jScriptTemplate;
         try {
-            jScriptTemplate = _Resources.loadAsString(
-                    MarkupComponent_observing.class, jScriptTemplateResource, StandardCharsets.UTF_8);
+            jScriptTemplate = _Resources.loadAsStringUtf8(
+                    MarkupComponent_observing.class, jScriptTemplateResource);
             
         } catch (IOException e) {
             e.printStackTrace();

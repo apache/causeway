@@ -18,15 +18,18 @@ package org.apache.isis.metamodel.services.grid.bootstrap3;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -69,15 +72,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         super(BS3Grid.class, TNS, SCHEMA_LOCATION);
     }
 
-    @Inject
-    GridLoaderServiceDefault gridLoaderService;
-
-    @Programmatic
     @Override
     public BS3Grid defaultGrid(final Class<?> domainClass) {
 
         try {
-            final String content = _Resources.loadAsString(getClass(), "DefaultGrid.layout.xml", Charset.forName("UTF-8"));
+            final String content = _Resources.loadAsStringUtf8(getClass(), "DefaultGrid.layout.xml");
             return Optional.ofNullable(content)
                     .map(xml -> gridLoaderService.loadGrid(xml))
                     .filter(BS3Grid.class::isInstance)
@@ -644,5 +643,9 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
     }
 
+    // -- DEPENDENCIES
+    
+    @Inject GridLoaderServiceDefault gridLoaderService;
+    
 
 }

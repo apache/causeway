@@ -23,7 +23,6 @@ import static java.util.regex.Pattern.quote;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -82,7 +81,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     protected String loadResource(final String resourceName) {
         try {
-            return _Resources.loadAsString(EmailNotificationServiceDefault.class, resourceName, StandardCharsets.UTF_8);
+            return _Resources.loadAsStringUtf8(EmailNotificationServiceDefault.class, resourceName);
         } catch (IOException e) {
             final URL templateUrl = _Resources.getResourceUrl(EmailNotificationServiceDefault.class, resourceName);
             throw new IllegalStateException(String.format("Unable to read resource URL '%s'", templateUrl));
