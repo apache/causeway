@@ -52,7 +52,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
-import org.apache.isis.metamodel.services.grid.GridLoaderServiceDefault;
+import org.apache.isis.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.isis.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
@@ -78,7 +78,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         try {
             final String content = _Resources.loadAsStringUtf8(getClass(), "DefaultGrid.layout.xml");
             return Optional.ofNullable(content)
-                    .map(xml -> gridLoaderService.loadGrid(xml))
+                    .map(xml -> gridReader.loadGrid(xml))
                     .filter(BS3Grid.class::isInstance)
                     .map(BS3Grid.class::cast)
                     .map(bs3Grid -> withDomainClass(bs3Grid, domainClass))
@@ -645,7 +645,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     // -- DEPENDENCIES
     
-    @Inject GridLoaderServiceDefault gridLoaderService;
+    @Inject GridReaderUsingJaxb gridReader;
     
 
 }

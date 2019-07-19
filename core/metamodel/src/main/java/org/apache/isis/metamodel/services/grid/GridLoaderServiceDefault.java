@@ -24,20 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
-import org.apache.isis.applib.services.grid.GridSystemService;
-import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
@@ -120,21 +112,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     // cache (used only in prototyping mode)
     private final Map<DomainClassAndLayoutAndXml, Grid> gridByDomainClassAndLayoutAndXml = _Maps.newHashMap();
 
-    private JAXBContext jaxbContext;
-
-    @PostConstruct
-    public void init(){
-        final Class<?>[] pageImplementations =
-                _NullSafe.stream(gridSystemServices)
-                .map(GridSystemService::gridImplementation)
-                .collect(_Arrays.toArray(Class.class));
-        try {
-            jaxbContext = JAXBContext.newInstance(pageImplementations);
-        } catch (JAXBException e) {
-            // leave as null
-        }
-    }
-
     @Override
     public boolean supportsReloading() {
         return _Context.isPrototyping();
@@ -156,7 +133,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     }
 
     @Override
-    @Programmatic
     public boolean existsFor(final Class<?> domainClass) {
         return resourceNameFor(new DomainClassAndLayout(domainClass, null)) != null;
     }
@@ -188,14 +164,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             }
         }
 
-
         try {
-            if(jaxbContext == null) {
-                // shouldn't occur, indicates that initialization failed to locate any GridSystemService implementations.
-                return null;
-            }
-
-            final Grid grid = loadGrid(xml);
+            final Grid grid = gridReader.loadGrid(xml);
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {
                 gridByDomainClassAndLayoutAndXml.put(dcalax, grid);
@@ -221,15 +191,9 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         }
     }
 
-    /**
-     * Not API
-     */
-    public Grid loadGrid(String xml) {
-        return (Grid) jaxbService.fromXml(jaxbContext, xml);
-    }
+
 
     @Override
-    @Programmatic
     public Grid load(final Class<?> domainClass) {
         return load(domainClass, null);
     }
@@ -273,11 +237,9 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         return null;
     }
 
-
-    // -- injected dependencies
+    // -- DEPENDENCIES
 
     @Inject MessageService messageService;
-    @Inject JaxbService jaxbService;
-    @Inject List<GridSystemService<?>> gridSystemServices;
+    @Inject GridReaderUsingJaxb gridReader;
 
 }
