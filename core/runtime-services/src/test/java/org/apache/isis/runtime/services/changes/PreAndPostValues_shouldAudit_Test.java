@@ -18,19 +18,19 @@
  */
 package org.apache.isis.runtime.services.changes;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.runtime.system.transaction.IsisTransaction;
+import org.junit.Test;
+
+import org.apache.isis.runtime.system.transaction.IsisTransactionPlaceholder;
 import org.apache.isis.runtime.system.transaction.PreAndPostValues;
 
 public class PreAndPostValues_shouldAudit_Test {
 
     @Test
     public void just_created() {
-        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransaction.Placeholder.NEW);
+        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
         papv.setPost("Foo");
 
         assertTrue(papv.shouldAudit());
@@ -38,7 +38,7 @@ public class PreAndPostValues_shouldAudit_Test {
     @Test
     public void just_deleted() {
         final PreAndPostValues papv = PreAndPostValues.pre("Foo");
-        papv.setPost(IsisTransaction.Placeholder.DELETED);
+        papv.setPost(IsisTransactionPlaceholder.DELETED);
 
         assertTrue(papv.shouldAudit());
     }
@@ -58,8 +58,8 @@ public class PreAndPostValues_shouldAudit_Test {
     }
     @Test
     public void created_and_then_deleted() {
-        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransaction.Placeholder.NEW);
-        papv.setPost(IsisTransaction.Placeholder.DELETED);
+        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
+        papv.setPost(IsisTransactionPlaceholder.DELETED);
 
         assertFalse(papv.shouldAudit());
     }

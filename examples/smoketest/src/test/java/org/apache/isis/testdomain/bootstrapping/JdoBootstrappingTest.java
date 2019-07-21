@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.tests;
+package org.apache.isis.testdomain.bootstrapping;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,6 +51,7 @@ import lombok.val;
 	properties = {
 		"logging.config=log4j2-test.xml",
 		"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
+		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
 		// "isis.reflector.introspector.parallelize=false",
 		 //"logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 })

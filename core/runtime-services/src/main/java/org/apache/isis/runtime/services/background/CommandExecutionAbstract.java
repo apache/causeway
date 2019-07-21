@@ -18,10 +18,12 @@
  */
 package org.apache.isis.runtime.services.background;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.runtime.sessiontemplate.AbstractIsisSessionTemplate;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 /**
  */
@@ -33,8 +35,6 @@ public abstract class CommandExecutionAbstract extends AbstractIsisSessionTempla
         this.sudoPolicy = sudoPolicy;
     }
 
-
-
     /**
      * Executes the command within a transaction, and with respect to the {@link CommandExecutorService.SudoPolicy}
      * specified in the constructor.
@@ -43,24 +43,16 @@ public abstract class CommandExecutionAbstract extends AbstractIsisSessionTempla
      *     Uses {@link CommandExecutorService} to actually execute the command.
      * </p>
      */
-    protected final void execute(
-            final IsisTransactionManagerJdoInternal transactionManager,
-            final CommandWithDto commandWithDto) {
+    protected final void execute(final CommandWithDto commandWithDto, TransactionService transactionService) {
+        transactionService.executeWithinTransaction(()->{
 
-        transactionManager.startTransaction(commandWithDto);
-
-        // the executor service will handle any exceptions thrown.
-        commandExecutorService.executeCommand(sudoPolicy, commandWithDto);
-
-        transactionManager.endTransaction();
-
+            // the executor service will handle any exceptions thrown.
+            commandExecutorService.executeCommand(sudoPolicy, commandWithDto);
+            
+        });
     }
-
-
-
 
     // //////////////////////////////////////
 
-    @javax.inject.Inject
-    CommandExecutorService commandExecutorService;
+    @Inject CommandExecutorService commandExecutorService;
 }

@@ -31,8 +31,8 @@ import org.apache.isis.metamodel.commons.MethodExtensions;
 
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2
-public class ServiceInitializer {
+@Log4j2 @Deprecated //TODO[2125] remove
+class ServiceInitializer {
 
     private final List<Object> services;
 

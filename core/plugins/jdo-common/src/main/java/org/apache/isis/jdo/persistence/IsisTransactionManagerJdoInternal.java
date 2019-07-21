@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.system.transaction;
+package org.apache.isis.jdo.persistence;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -31,15 +31,17 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
+import org.apache.isis.jdo.persistence.IsisTransactionJdo.State;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
 
 import lombok.extern.log4j.Log4j2;
 
 @Vetoed @Log4j2
-public class IsisTransactionManagerJdoInternal implements SessionScopedComponent {
+class IsisTransactionManagerJdoInternal implements SessionScopedComponent {
 
     private int transactionLevel;
 
@@ -48,7 +50,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
     /**
      * Holds the current or most recently completed transaction.
      */
-    private IsisTransaction currentTransaction;
+    private IsisTransactionJdo currentTransaction;
 
     // -- constructor, fields
 
@@ -58,8 +60,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
     private final CommandContext commandContext;
     private final InteractionContext interactionContext;
 
-    public IsisTransactionManagerJdoInternal(
-            final PersistenceSession persistenceSession) {
+    public IsisTransactionManagerJdoInternal(PersistenceSession persistenceSession) {
 
         this.persistenceSession = persistenceSession;
         this.serviceRegistry = IsisContext.getServiceRegistry();
@@ -94,7 +95,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
     /**
      * The current transaction, if any.
      */
-    public IsisTransaction getCurrentTransaction() {
+    public IsisTransactionJdo getCurrentTransaction() {
         return currentTransaction;
     }
 
@@ -108,7 +109,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
     // -- Transactional Execution
     /**
      * Run the supplied {@link Runnable block of code (closure)} in a
-     * {@link IsisTransaction transaction}.
+     * {@link IsisTransactionJdo transaction}.
      *
      * <p>
      * If a transaction is in progress, then
@@ -156,7 +157,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
 
     /**
      * Run the supplied {@link Runnable block of code (closure)} in a
-     * {@link IsisTransaction transaction}.
+     * {@link IsisTransactionJdo transaction}.
      *
      * <p>
      * If a transaction is in progress, then uses that. Otherwise will {@link #startTransaction() start} a transaction
@@ -205,8 +206,9 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
 
     // -- startTransaction
 
-    public void startTransaction() {
+    public IsisTransactionJdo startTransaction() {
         startTransaction(null);
+        return getCurrentTransaction();
     }
 
     /**
@@ -234,7 +236,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
             command = commandContext.getCommand();
             final UUID transactionId = command.getUniqueId();
 
-            this.currentTransaction = new IsisTransaction(transactionId,
+            this.currentTransaction = new IsisTransactionJdo(transactionId,
                     interaction.next(Interaction.Sequence.TRANSACTION.id()));
             transactionLevel = 0;
 
@@ -268,8 +270,8 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
     // -- endTransaction, abortTransaction
     /**
      * Ends the transaction if nesting level is 0 (but will abort the transaction instead,
-     * even if nesting level is not 0, if an {@link IsisTransaction#getAbortCause() abort cause}
-     * has been {@link IsisTransaction#setAbortCause(IsisException) set}.
+     * even if nesting level is not 0, if an {@link IsisTransactionJdo#getAbortCause() abort cause}
+     * has been {@link IsisTransactionJdo#setAbortCause(IsisException) set}.
      *
      * <p>
      * If in the process of committing the transaction an exception is thrown, then this will
@@ -281,7 +283,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
      */
     public void endTransaction() {
 
-        final IsisTransaction transaction = getCurrentTransaction();
+        final IsisTransactionJdo transaction = getCurrentTransaction();
         if (transaction == null) {
             // allow this method to be called >1 with no adverse affects
 
@@ -308,7 +310,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
         try {
             endTransactionInternal();
         } finally {
-            final IsisTransaction.State state = getCurrentTransaction().getState();
+            final IsisTransactionJdo.State state = getCurrentTransaction().getState();
             int transactionLevel = this.transactionLevel;
             if(transactionLevel == 0 && !state.isComplete()) {
                 log.error("endTransaction: inconsistency detected between transactionLevel {} and transactionState '{}'", transactionLevel, state);
@@ -318,7 +320,7 @@ public class IsisTransactionManagerJdoInternal implements SessionScopedComponent
 
     private void endTransactionInternal() {
 
-        final IsisTransaction transaction = getCurrentTransaction();
+        final IsisTransactionJdo transaction = getCurrentTransaction();
 
         // terminate the transaction early if an abort cause was already set.
         RuntimeException abortCause = this.getCurrentTransaction().getAbortCause();

@@ -23,17 +23,17 @@ import static domainapp.utils.DemoUtils.emphasize;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 import domainapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @DomainService(nature=NatureOfService.DOMAIN)
@@ -43,6 +43,7 @@ public class EventSubscriber {
     @Inject private BackgroundService backgroundService;
 	@Inject private EventBusService eventBusService;
 	@Inject private EventLogRepository eventLogRepository;
+	@Inject private TransactionService transactionService;
 
 	public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {
 		private static final long serialVersionUID = 1L;
@@ -57,31 +58,20 @@ public class EventSubscriber {
 	@EventListener(EventTestProgrammaticEvent.class)
 	public void on(EventTestProgrammaticEvent ev) {
 	    
-	    
-	    
 		if(ev.getEventPhase() != null && !ev.getEventPhase().isExecuted()) {
 			return;
 		}
 		
 		log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
 		
-		
 		//backgroundService.execute(this).storeEvent(EventLogEntry.of(ev));
 		
 		// store in event log
 		//eventLog.add(EventLogEntry.of(ev));
-
-//	    val ps = IsisContext.getPersistenceSession().orElse(null);
-//		ps.flush();
 		
-		val ps = IsisContext.getPersistenceSession().orElse(null);
-        val txMan = ps.getTransactionManager();
-        
-        storeEvent(ev);
-        
-        txMan.endTransaction();
-        ps.endTransaction();
-        
+		transactionService.executeWithinTransaction(()->{
+		    storeEvent(ev);
+		});
 		
 	}
 	

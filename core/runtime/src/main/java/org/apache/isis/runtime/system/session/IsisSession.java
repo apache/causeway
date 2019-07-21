@@ -21,6 +21,8 @@ package org.apache.isis.runtime.system.session;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.services.xactn.TransactionId;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.services.homepage.HomePageResolverService;
@@ -28,8 +30,6 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.MessageBroker;
 
@@ -69,6 +69,7 @@ public class IsisSession extends RuntimeContextBase {
 				IsisContext.getSpecificationLoader(),
 				authenticationSession,
 				IsisContext.getObjectAdapterProvider(),
+				IsisContext.getTransactionService(),
 				()->IsisContext.getServiceRegistry()
 				    .lookupServiceElseFail(HomePageResolverService.class)
 				    .getHomePageAction()
@@ -105,11 +106,6 @@ public class IsisSession extends RuntimeContextBase {
 				.map(AuthenticationSession::getMessageBroker);
 	}
 	
-	public static Optional<IsisTransactionManagerJdoInternal> transactionManager() {
-		return current()
-				.map(IsisSession::getTransactionManager);
-	}
-	
 	// -- OPEN
 	
 	private Runnable cleanupHandle;  
@@ -139,17 +135,14 @@ public class IsisSession extends RuntimeContextBase {
     
     // -- TRANSACTION
 
-    /**
-     * Convenience method that returns the {@link IsisTransaction} of the
-     * session, if any.
-     */
-    public IsisTransaction getCurrentTransaction() {
-        return getTransactionManager().getCurrentTransaction();
+    public TransactionId getCurrentTransactionId() {
+        return transactionService.currentTransactionId();
     }
 
+    public TransactionState getCurrentTransactionState() {
+        return transactionService.currentTransactionState();
+    }
     
-    
-
 
     // -- toString
     @Override
@@ -157,18 +150,9 @@ public class IsisSession extends RuntimeContextBase {
         final ToString asString = new ToString(this);
         asString.append("authenticationSession", getAuthenticationSession());
         asString.append("persistenceSession", PersistenceSession.current(PersistenceSession.class));
-        asString.append("transaction", getCurrentTransaction());
+        asString.append("transaction", getCurrentTransactionId());
         return asString.toString();
     }
-
-
-    // -- Dependencies (from constructor)
-
-    private IsisTransactionManagerJdoInternal getTransactionManager() {
-        return IsisContext.getTransactionManagerJdo().get();
-    }
-
-	
 
 
 }

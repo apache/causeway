@@ -18,20 +18,21 @@
  */
 package org.apache.isis.runtime.services.background;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -72,15 +73,18 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
             domainObject = mixedInIfAny;
         }
 
-        final Optional<IsisSession> currentSession = IsisSession.current();
-
-        final AuthenticationSession authSession = currentSession
+        val authenticationSession = 
+                IsisSession.current()
                 .map(IsisSession::getAuthenticationSession)
                 .orElse(new InitialisationSession());
+        
+        val isisTransaction = (Transaction)IsisTransactionAspectSupport
+                .currentTransactionObject()
+                .map(x->x.getCurrentTransaction())
+                .orElse(null);
 
-        final CountDownLatch countDownLatch = currentSession
-                .map(IsisSession::getCurrentTransaction)
-                .map(IsisTransaction::countDownLatch)
+        val countDownLatch = Optional.ofNullable(isisTransaction)
+                .map(Transaction::getCountDownLatch)
                 .orElse(new CountDownLatch(0));
 
         backgroundExecutorService.submit(()->{
@@ -90,7 +94,7 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
 
                 IsisContext.getSessionFactory().doInSession(
                         ()->proxyMethod.invoke(domainObject, args),
-                        authSession	);
+                        authenticationSession);
 
             } catch (Exception e) {
 

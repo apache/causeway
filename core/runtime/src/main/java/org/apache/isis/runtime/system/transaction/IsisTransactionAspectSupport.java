@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.system.transaction;
 
+import java.util.Optional;
+
 import org.apache.isis.commons.internal.context._Context;
 
 public final class IsisTransactionAspectSupport {
@@ -30,10 +32,9 @@ public final class IsisTransactionAspectSupport {
 		_Context.threadLocalPut(IsisTransactionObject.class, txStatus);
 	}
 	
-	public static IsisTransactionObject currentTransactionObject() {
+	public static Optional<IsisTransactionObject> currentTransactionObject() {
 		return _Context.threadLocalGet(IsisTransactionObject.class)
-		.getFirst()
-		.orElse(null);
+		.getFirst();
 	}
 
 }

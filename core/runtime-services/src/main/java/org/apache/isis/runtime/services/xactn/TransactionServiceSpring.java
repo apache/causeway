@@ -22,24 +22,22 @@ package org.apache.isis.runtime.services.xactn;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import javax.annotation.Nonnull;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.xactn.TransactionId;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
-import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionId;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
+import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -48,11 +46,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TransactionServiceSpring implements TransactionService {
 	
-	@Inject private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-	
 	 // single TransactionTemplate shared amongst all methods in this instance
     private final TransactionTemplate transactionTemplate;
-    private TransactionServiceLegacy legacyTransactionService;
 
     // use constructor-injection to supply the PlatformTransactionManager
     public TransactionServiceSpring(PlatformTransactionManager transactionManager) {
@@ -60,11 +55,6 @@ public class TransactionServiceSpring implements TransactionService {
         
     }
     
-    @PostConstruct
-    public void init() {
-    	this.legacyTransactionService = TransactionServiceLegacy.of(persistenceSessionServiceInternal);
-    }
-
 	@Override
 	public void flushTransaction() {
 		
@@ -91,36 +81,30 @@ public class TransactionServiceSpring implements TransactionService {
 		return txObject.getTransactionId();
 	}
 	
-	@Override
+	@Override @Nonnull
 	public TransactionState currentTransactionState() {
 		
 		val txObject = currentTransactionObject(false);
 		
 		if(txObject==null || txObject.getCurrentTransaction()==null) {
-			return null;
+			return TransactionState.NONE;
 		}
 		
-		return txObject.getCurrentTransaction().getTransactionState();
+		val state = txObject.getCurrentTransaction().getTransactionState();
+		return state != null
+		        ? state
+		                : TransactionState.NONE;
 	}
 
 	@Override
-	public void nextTransaction(Policy policy, Command command) {
-		
-		log.warn("deprecated");
-		//_Exceptions.throwNotImplemented();
-		
-		legacyTransactionService.nextTransaction(policy, command);
-	}
-	
-	@Override
 	public CountDownLatch currentTransactionLatch() {
 		
-		val txObject = IsisTransactionAspectSupport.currentTransactionObject();
+		val txObject = IsisTransactionAspectSupport.currentTransactionObject().orElse(null);
 		if(txObject==null || txObject.getCurrentTransaction()==null) {
 			return new CountDownLatch(0);
 		}
 		
-        return ((IsisTransaction)txObject.getCurrentTransaction()).countDownLatch();
+        return ((Transaction)txObject.getCurrentTransaction()).getCountDownLatch();
 	}
 
 	@Override
@@ -147,7 +131,7 @@ public class TransactionServiceSpring implements TransactionService {
 
 	private IsisTransactionObject currentTransactionObject(boolean warnIfNone) {
 
-		val txObject = IsisTransactionAspectSupport.currentTransactionObject();
+		val txObject = IsisTransactionAspectSupport.currentTransactionObject().orElse(null);
 		
 		if(txObject==null) {
 			if(warnIfNone) {

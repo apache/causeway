@@ -18,12 +18,12 @@
  */
 package org.apache.isis.runtime.sessiontemplate;
 
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 public abstract class AbstractIsisSessionTemplate {
@@ -51,14 +51,12 @@ public abstract class AbstractIsisSessionTemplate {
      * <p>
      * This method is called within a current {@link org.apache.isis.runtime.system.session.IsisSession session},
      * but with no current transaction.  The default implementation sets up a
-     * {@link org.apache.isis.runtime.system.transaction.IsisTransaction transaction}
+     * {@link org.apache.isis.jdo.persistence.IsisTransactionJdo transaction}
      * and then calls {@link #doExecuteWithTransaction(Object)}.  Override if you require more sophisticated
      * transaction handling.
      */
     protected void doExecute(final Object context) {
-        final PersistenceSession persistenceSession = getPersistenceSession();
-        final IsisTransactionManagerJdoInternal transactionManager = getTransactionManager(persistenceSession);
-        transactionManager.executeWithinTransaction(()->{
+        getTransactionService().executeWithinTransaction(()->{
             doExecuteWithTransaction(context);
         });
     }
@@ -69,57 +67,16 @@ public abstract class AbstractIsisSessionTemplate {
      *
      * <p>
      * This method is called within a current
-     * {@link org.apache.isis.runtime.system.transaction.IsisTransaction transaction}, by the default
+     * {@link org.apache.isis.jdo.persistence.IsisTransactionJdo transaction}, by the default
      * implementation of {@link #doExecute(Object)}.
      */
     protected void doExecuteWithTransaction(final Object context) {}
 
     // //////////////////////////////////////
 
-//FIXME[ISIS-1976] not used !?
-//    protected final ObjectAdapter adapterFor(final Object targetObject) {
-//        if(targetObject instanceof OidDto) {
-//            final OidDto oidDto = (OidDto) targetObject;
-//            return adapterFor(oidDto);
-//        }
-//        if(targetObject instanceof CollectionDto) {
-//            final CollectionDto collectionDto = (CollectionDto) targetObject;
-//            final List<ValueDto> valueDtoList = collectionDto.getValue();
-//            final List<Object> pojoList = _Lists.newArrayList();
-//            for (final ValueDto valueDto : valueDtoList) {
-//                ValueType valueType = collectionDto.getType();
-//                final Object valueOrOidDto = CommonDtoUtils.getValue(valueDto, valueType);
-//                // converting from adapter and back means we handle both
-//                // collections of references and of values
-//                final ObjectAdapter objectAdapter = adapterFor(valueOrOidDto);
-//                Object pojo = objectAdapter != null ? objectAdapter.getObject() : null;
-//                pojoList.add(pojo);
-//            }
-//            return adapterFor(pojoList);
-//        }
-//        if(targetObject instanceof Bookmark) {
-//            final Bookmark bookmark = (Bookmark) targetObject;
-//            return adapterFor(bookmark);
-//        }
-//        return getPersistenceSession().adapterFor(targetObject);
-//    }
-//
-//    protected final ObjectAdapter adapterFor(final OidDto oidDto) {
-//        final Bookmark bookmark = Bookmark.from(oidDto);
-//        return adapterFor(bookmark);
-//    }
-//
-//    protected final ObjectAdapter adapterFor(final Bookmark bookmark) {
-//        final RootOid rootOid = RootOid.create(bookmark);
-//        return adapterFor(rootOid);
-//    }
-//
-//    protected final ObjectAdapter adapterFor(final RootOid rootOid) {
-//        return getPersistenceSession().adapterFor(rootOid);
-//    }
-
-    // //////////////////////////////////////
-
+    protected TransactionService getTransactionService() {
+        return IsisContext.getTransactionService();
+    }    
 
     protected IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
@@ -129,12 +86,8 @@ public abstract class AbstractIsisSessionTemplate {
         return IsisContext.getPersistenceSession().orElse(null);
     }
 
-    protected IsisTransactionManagerJdoInternal getTransactionManager(PersistenceSession persistenceSession) {
-        return persistenceSession.getTransactionManager();
-    }
-
     protected SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
+        return IsisContext.getSpecificationLoader();
     }
 
 

@@ -26,30 +26,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.plugins.ioc.RequestContextHandle;
-import org.apache.isis.commons.internal.plugins.ioc.RequestContextService;
-import org.apache.isis.commons.internal.plugins.ioc.RequestContextServiceDefault;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisRequestCycle;
-import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.MessageBroker;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
-import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
+import com.google.common.base.Throwables;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
@@ -70,7 +48,26 @@ import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.google.common.base.Throwables;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisRequestCycle;
+import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.security.authentication.MessageBroker;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
+import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -87,329 +84,322 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     private PageClassRegistry pageClassRegistry;
 
-    private _Lazy<RequestContextService> requestContextService = _Lazy.of(()->new RequestContextServiceDefault());
-        //IsisContext.getServiceRegistry().lookupServiceElseFail(RequestContextService.class));
+    public final static MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY = 
+            new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
+            
+    @Override
+    public synchronized void onBeginRequest(RequestCycle requestCycle) {
 
-    public final static MetaDataKey<RequestContextHandle> REQUEST_CONTEXT_HANDLE_KEY 
-    = new MetaDataKey<RequestContextHandle>() {
-        private static final long serialVersionUID = 1L; };
+        log.debug("onBeginRequest in");
 
-        @Override
-        public synchronized void onBeginRequest(RequestCycle requestCycle) {
+        if (!Session.exists()) {
 
-            log.debug("onBeginRequest in");
-
-            // this handle needs to be closed when the request-scope's life-cycle ends
-            // so we store it onto the requestCycle as meta-data entry, to be 
-            // retrieved later at 'onEndRequest'
-            val requestContextHandle = requestContextService.get().startRequest();
-            if(requestContextHandle!=null) {
-                requestCycle.setMetaData(REQUEST_CONTEXT_HANDLE_KEY, requestContextHandle);
-                log.debug("request context created");
-            } else {
-            	log.debug("no request context created");
-            }
-
-            if (!Session.exists()) {
-
-            	log.debug("onBeginRequest out - session was not opened (because no Session)");
-                return;
-            }
-
-            final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
-            final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();
-            if (authenticationSession == null) {
-            	log.debug("onBeginRequest out - session was not opened (because no authenticationSession)");
-                return;
-            }
-
-            IsisRequestCycle.onBeginRequest(authenticationSession);
-
-            log.debug("onBeginRequest out - session was opened");
+        	log.debug("onBeginRequest out - session was not opened (because no Session)");
+            return;
         }
 
-        @Override
-        public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
-
-        	log.debug("onRequestHandlerResolved in");
-
-            if(handler instanceof RenderPageRequestHandler) {
-
-                val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-
-                if(metaModelDeficiencies != null) {
-                    RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
-                    final IRequestablePage nextPage = requestHandler.getPage();
-                    if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage) {
-                        // do nothing
-                        return;
-                    }
-                    throw new MetaModelInvalidException(metaModelDeficiencies);
-                }
-            }
-
-            log.debug("onRequestHandlerResolved out");
-
+        final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
+        final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();
+        if (authenticationSession == null) {
+        	log.debug("onBeginRequest out - session was not opened (because no authenticationSession)");
+            return;
         }
+        
+        val isisRequestCycle = IsisRequestCycle.next(IsisContext.createTransactionTemplate()); 
+        requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, isisRequestCycle);
 
+        isisRequestCycle.onBeginRequest(authenticationSession);
 
-        /**
-         * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
-         * throw an exception.
-         */
-        @Override
-        public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
-            log.debug("onRequestHandlerExecuted: handler: {}", handler);
+        log.debug("onBeginRequest out - session was opened");
+    }
 
-            try {
+    @Override
+    public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
 
-                IsisRequestCycle.onRequestHandlerExecuted();
+    	log.debug("onRequestHandlerResolved in");
 
-            } catch(Exception ex) {
-
-                if(handler instanceof RenderPageRequestHandler) {
-                    RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
-                    if(requestHandler.getPage() instanceof ErrorPage) {
-                        // do nothing
-                        return;
-                    }
-                }
-
-                // shouldn't return null given that we're in a session ...
-                PageProvider errorPageProvider = errorPageProviderFor(ex);
-                throw new RestartResponseException(errorPageProvider, RedirectPolicy.ALWAYS_REDIRECT);
-            }
-        }
-
-        /**
-         * It is not possible to throw exceptions here, hence use of {@link #onRequestHandlerExecuted(RequestCycle, IRequestHandler)}.
-         */
-        @Override
-        public synchronized void onEndRequest(RequestCycle requestCycle) {
-
-        	log.debug("onEndRequest");
-
-            IsisRequestCycle.onEndRequest();
-
-        }
-
-        @Override
-        public void onDetach(RequestCycle requestCycle) {
-            // detach the current @RequestScope, if any
-            //XXX lombok issue, cannot use val when super is referenced in same method 
-            RequestContextHandle handle = requestCycle.getMetaData(REQUEST_CONTEXT_HANDLE_KEY);
-            requestCycle.setMetaData(REQUEST_CONTEXT_HANDLE_KEY, null);
-            RequestContextService.closeHandle(handle);
-            IRequestCycleListener.super.onDetach(requestCycle);
-        }
-
-
-        @Override
-        public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-
-        	log.debug("onException");
+        if(handler instanceof RenderPageRequestHandler) {
 
             val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
+
             if(metaModelDeficiencies != null) {
-                final Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
-                final MmvErrorPage mmvErrorPage = new MmvErrorPage(validationErrors);
-                return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
+                RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
+                final IRequestablePage nextPage = requestHandler.getPage();
+                if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage) {
+                    // do nothing
+                    return;
+                }
+                throw new MetaModelInvalidException(metaModelDeficiencies);
+            }
+        }
+
+        log.debug("onRequestHandlerResolved out");
+
+    }
+
+
+    /**
+     * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
+     * throw an exception.
+     */
+    @Override
+    public void onRequestHandlerExecuted(RequestCycle requestCycle, IRequestHandler handler) {
+        log.debug("onRequestHandlerExecuted: handler: {}", handler);
+
+        try {
+
+            val isisRequestCycle = requestCycle.getMetaData(REQ_CYCLE_HANDLE_KEY);
+            
+            if(isisRequestCycle!=null) {
+                isisRequestCycle.onRequestHandlerExecuted();
             }
 
-            try {
+        } catch(Exception ex) {
 
-                // adapted from http://markmail.org/message/un7phzjbtmrrperc
-                if(ex instanceof ListenerInvocationNotAllowedException) {
-                    final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
-                    if(linaex.getComponent() != null && PromptFormAbstract.ID_CANCEL_BUTTON.equals(linaex.getComponent().getId())) {
-                        // no message.
-                        // this seems to occur when press ESC twice in rapid succession on a modal dialog.
-                    } else {
-                        addMessage(null);
-
-                    }
-                    return respondGracefully(cycle);
+            if(handler instanceof RenderPageRequestHandler) {
+                RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
+                if(requestHandler.getPage() instanceof ErrorPage) {
+                    // do nothing
+                    return;
                 }
-
-
-                // handle recognized exceptions gracefully also
-                final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()
-                        .select(ExceptionRecognizer.class)
-                        .stream();
-
-                String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-                if(recognizedMessageIfAny != null) {
-                    return respondGracefully(cycle);
-                }
-
-                final List<Throwable> causalChain = Throwables.getCausalChain(ex);
-                final Optional<Throwable> hiddenIfAny = causalChain.stream()
-                        .filter(ObjectMember.HiddenException.isInstanceOf()).findFirst();
-                if(hiddenIfAny.isPresent()) {
-                    addMessage("hidden");
-                    return respondGracefully(cycle);
-                }
-                final Optional<Throwable> disabledIfAny = causalChain.stream()
-                        .filter(ObjectMember.DisabledException.isInstanceOf()).findFirst();
-                if(disabledIfAny.isPresent()) {
-                    addTranslatedMessage(disabledIfAny.get().getMessage());
-                    return respondGracefully(cycle);
-                }
-
-            } catch(Exception ignoreFailedAttemptToGracefullyHandle) {
-                // if any of this graceful responding fails, then fall back to original handling
             }
 
+            // shouldn't return null given that we're in a session ...
             PageProvider errorPageProvider = errorPageProviderFor(ex);
-            // avoid infinite redirect loops
-            RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
-                    ? RedirectPolicy.NEVER_REDIRECT
-                            : RedirectPolicy.ALWAYS_REDIRECT;
-            return errorPageProvider != null
-                    ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
-                            : null;
+            throw new RestartResponseException(errorPageProvider, RedirectPolicy.ALWAYS_REDIRECT);
+        }
+    }
+
+    /**
+     * It is not possible to throw exceptions here, hence use of {@link #onRequestHandlerExecuted(RequestCycle, IRequestHandler)}.
+     */
+    @Override
+    public synchronized void onEndRequest(RequestCycle requestCycle) {
+
+    	log.debug("onEndRequest");
+
+    	val isisRequestCycle = requestCycle.getMetaData(REQ_CYCLE_HANDLE_KEY);
+        requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, null);
+    	
+        if(isisRequestCycle!=null) {
+            isisRequestCycle.onEndRequest();
         }
 
-        private IRequestHandler respondGracefully(final RequestCycle cycle) {
-            final IRequestablePage page = PageRequestHandlerTracker.getFirstHandler(cycle).getPage();
-            final PageProvider pageProvider = new PageProvider(page);
-            return new RenderPageRequestHandler(pageProvider);
+    }
+
+    @Override
+    public void onDetach(RequestCycle requestCycle) {
+        // detach the current @RequestScope, if any
+        IRequestCycleListener.super.onDetach(requestCycle);
+    }
+
+
+    @Override
+    public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+
+    	log.debug("onException");
+
+        val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
+        if(metaModelDeficiencies != null) {
+            final Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
+            final MmvErrorPage mmvErrorPage = new MmvErrorPage(validationErrors);
+            return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
-        private void addMessage(final String message) {
-            final String translatedMessage = translate(message);
-            addTranslatedMessage(translatedMessage);
-        }
+        try {
 
-        private void addTranslatedMessage(final String translatedSuffixIfAny) {
-            final String translatedPrefix = translate("Action no longer available");
-            final String message = translatedSuffixIfAny != null
-                    ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
-                            : translatedPrefix;
-                    getMessageBroker().addMessage(message);
-        }
+            // adapted from http://markmail.org/message/un7phzjbtmrrperc
+            if(ex instanceof ListenerInvocationNotAllowedException) {
+                final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
+                if(linaex.getComponent() != null && PromptFormAbstract.ID_CANCEL_BUTTON.equals(linaex.getComponent().getId())) {
+                    // no message.
+                    // this seems to occur when press ESC twice in rapid succession on a modal dialog.
+                } else {
+                    addMessage(null);
 
-        private String translate(final String text) {
-            if(text == null) {
-                return null;
-            }
-            return getTranslationService().translate(WebRequestCycleForIsis.class.getName(), text);
-        }
-
-        protected PageProvider errorPageProviderFor(Exception ex) {
-            IRequestablePage errorPage = errorPageFor(ex);
-            return errorPage != null? new PageProvider(errorPage): null;
-        }
-
-        // special case handling for PageExpiredException, otherwise infinite loop
-        private final static ExceptionRecognizerForType pageExpiredExceptionRecognizer =
-                new ExceptionRecognizerForType(PageExpiredException.class, new Function<String,String>(){
-                    @Override
-                    public String apply(String input) {
-                        return "Requested page is no longer available.";
-                    }
-                });
-
-        protected IRequestablePage errorPageFor(Exception ex) {
-            List<ExceptionRecognizer> exceptionRecognizers = _Lists.newArrayList();
-            exceptionRecognizers.add(pageExpiredExceptionRecognizer);
-
-            if(inIsisSession()) {
-                getServiceRegistry()
-                .select(ExceptionRecognizer.class)
-                .forEach(exceptionRecognizers::add);
-            } else {
-                val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-                if(metaModelDeficiencies != null) {
-                    Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
-                    return new MmvErrorPage(validationErrors);
                 }
-                // not sure whether this can ever happen now...
-                log.warn("Unable to obtain exceptionRecognizers (no session), "
-                        + "will be treated as unrecognized exception", ex);
+                return respondGracefully(cycle);
             }
+
+
+            // handle recognized exceptions gracefully also
+            final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()
+                    .select(ExceptionRecognizer.class)
+                    .stream();
+
             String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-            ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
+            if(recognizedMessageIfAny != null) {
+                return respondGracefully(cycle);
+            }
 
-            return isSignedIn() ? new ErrorPage(exceptionModel) : newSignInPage(exceptionModel);
+            final List<Throwable> causalChain = Throwables.getCausalChain(ex);
+            final Optional<Throwable> hiddenIfAny = causalChain.stream()
+                    .filter(ObjectMember.HiddenException.isInstanceOf()).findFirst();
+            if(hiddenIfAny.isPresent()) {
+                addMessage("hidden");
+                return respondGracefully(cycle);
+            }
+            final Optional<Throwable> disabledIfAny = causalChain.stream()
+                    .filter(ObjectMember.DisabledException.isInstanceOf()).findFirst();
+            if(disabledIfAny.isPresent()) {
+                addTranslatedMessage(disabledIfAny.get().getMessage());
+                return respondGracefully(cycle);
+            }
+
+        } catch(Exception ignoreFailedAttemptToGracefullyHandle) {
+            // if any of this graceful responding fails, then fall back to original handling
         }
 
-        /**
-         * Tries to instantiate the configured {@link PageType#SIGN_IN signin page} with the given exception model
-         *
-         * @param exceptionModel A model bringing the information about the occurred problem
-         * @return An instance of the configured signin page
-         */
-        private IRequestablePage newSignInPage(final ExceptionModel exceptionModel) {
-            Class<? extends Page> signInPageClass = null;
-            if (pageClassRegistry != null) {
-                signInPageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
-            }
-            if (signInPageClass == null) {
-                signInPageClass = WicketSignInPage.class;
-            }
-            final PageParameters parameters = new PageParameters();
-            Page signInPage;
-            try {
-                Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
-                signInPage = constructor.newInstance(parameters, exceptionModel);
-            } catch (Exception ex) {
-                try {
-                    IPageFactory pageFactory = Application.get().getPageFactory();
-                    signInPage = pageFactory.newPage(signInPageClass, parameters);
-                } catch (Exception x) {
-                    throw new WicketRuntimeException("Cannot instantiate the configured sign in page", x);
+        PageProvider errorPageProvider = errorPageProviderFor(ex);
+        // avoid infinite redirect loops
+        RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
+                ? RedirectPolicy.NEVER_REDIRECT
+                        : RedirectPolicy.ALWAYS_REDIRECT;
+        return errorPageProvider != null
+                ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
+                        : null;
+    }
+
+    private IRequestHandler respondGracefully(final RequestCycle cycle) {
+        final IRequestablePage page = PageRequestHandlerTracker.getFirstHandler(cycle).getPage();
+        final PageProvider pageProvider = new PageProvider(page);
+        return new RenderPageRequestHandler(pageProvider);
+    }
+
+    private void addMessage(final String message) {
+        final String translatedMessage = translate(message);
+        addTranslatedMessage(translatedMessage);
+    }
+
+    private void addTranslatedMessage(final String translatedSuffixIfAny) {
+        final String translatedPrefix = translate("Action no longer available");
+        final String message = translatedSuffixIfAny != null
+                ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
+                        : translatedPrefix;
+                getMessageBroker().addMessage(message);
+    }
+
+    private String translate(final String text) {
+        if(text == null) {
+            return null;
+        }
+        return getTranslationService().translate(WebRequestCycleForIsis.class.getName(), text);
+    }
+
+    protected PageProvider errorPageProviderFor(Exception ex) {
+        IRequestablePage errorPage = errorPageFor(ex);
+        return errorPage != null? new PageProvider(errorPage): null;
+    }
+
+    // special case handling for PageExpiredException, otherwise infinite loop
+    private final static ExceptionRecognizerForType pageExpiredExceptionRecognizer =
+            new ExceptionRecognizerForType(PageExpiredException.class, new Function<String,String>(){
+                @Override
+                public String apply(String input) {
+                    return "Requested page is no longer available.";
                 }
+            });
+
+    protected IRequestablePage errorPageFor(Exception ex) {
+        List<ExceptionRecognizer> exceptionRecognizers = _Lists.newArrayList();
+        exceptionRecognizers.add(pageExpiredExceptionRecognizer);
+
+        if(inIsisSession()) {
+            getServiceRegistry()
+            .select(ExceptionRecognizer.class)
+            .forEach(exceptionRecognizers::add);
+        } else {
+            val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
+            if(metaModelDeficiencies != null) {
+                Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
+                return new MmvErrorPage(validationErrors);
             }
-            return signInPage;
+            // not sure whether this can ever happen now...
+            log.warn("Unable to obtain exceptionRecognizers (no session), "
+                    + "will be treated as unrecognized exception", ex);
         }
+        String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
+        ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
 
-        /**
-         * TODO: this is very hacky...
-         *
-         * <p>
-         * Matters should improve once ISIS-299 gets implemented...
-         */
-        protected boolean isSignedIn() {
-            if(!inIsisSession()) {
-                return false;
+        return isSignedIn() ? new ErrorPage(exceptionModel) : newSignInPage(exceptionModel);
+    }
+
+    /**
+     * Tries to instantiate the configured {@link PageType#SIGN_IN signin page} with the given exception model
+     *
+     * @param exceptionModel A model bringing the information about the occurred problem
+     * @return An instance of the configured signin page
+     */
+    private IRequestablePage newSignInPage(final ExceptionModel exceptionModel) {
+        Class<? extends Page> signInPageClass = null;
+        if (pageClassRegistry != null) {
+            signInPageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        }
+        if (signInPageClass == null) {
+            signInPageClass = WicketSignInPage.class;
+        }
+        final PageParameters parameters = new PageParameters();
+        Page signInPage;
+        try {
+            Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
+            signInPage = constructor.newInstance(parameters, exceptionModel);
+        } catch (Exception ex) {
+            try {
+                IPageFactory pageFactory = Application.get().getPageFactory();
+                signInPage = pageFactory.newPage(signInPageClass, parameters);
+            } catch (Exception x) {
+                throw new WicketRuntimeException("Cannot instantiate the configured sign in page", x);
             }
-            if(getAuthenticationSession() == null) {
-                return false;
-            }
-            return getWicketAuthenticationSession().isSignedIn();
         }
+        return signInPage;
+    }
 
-
-        public void setPageClassRegistry(PageClassRegistry pageClassRegistry) {
-            this.pageClassRegistry = pageClassRegistry;
+    /**
+     * TODO: this is very hacky...
+     *
+     * <p>
+     * Matters should improve once ISIS-299 gets implemented...
+     */
+    protected boolean isSignedIn() {
+        if(!inIsisSession()) {
+            return false;
         }
-
-        // -- DEPENDENCIES
-
-        private boolean inIsisSession() {
-            return IsisSession.currentOrElseNull()!=null;
+        if(getAuthenticationSession() == null) {
+            return false;
         }
+        return getWicketAuthenticationSession().isSignedIn();
+    }
 
-        private AuthenticationSession getAuthenticationSession() {
-            return IsisContext.getAuthenticationSession().orElse(null);
-        }
 
-        private MessageBroker getMessageBroker() {
-            return getAuthenticationSession().getMessageBroker();
-        }
+    public void setPageClassRegistry(PageClassRegistry pageClassRegistry) {
+        this.pageClassRegistry = pageClassRegistry;
+    }
 
-        private ServiceRegistry getServiceRegistry() {
-            return IsisContext.getServiceRegistry();
-        }
+    // -- DEPENDENCIES
 
-        private TranslationService getTranslationService() {
-            return getServiceRegistry().lookupServiceElseFail(TranslationService.class);
-        }
+    private boolean inIsisSession() {
+        return IsisSession.currentOrElseNull()!=null;
+    }
 
-        private AuthenticatedWebSession getWicketAuthenticationSession() {
-            return AuthenticatedWebSession.get();
-        }
+    private AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession().orElse(null);
+    }
+
+    private MessageBroker getMessageBroker() {
+        return getAuthenticationSession().getMessageBroker();
+    }
+
+    private ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
+    }
+
+    private TranslationService getTranslationService() {
+        return getServiceRegistry().lookupServiceElseFail(TranslationService.class);
+    }
+
+    private AuthenticatedWebSession getWicketAuthenticationSession() {
+        return AuthenticatedWebSession.get();
+    }
 
 
 

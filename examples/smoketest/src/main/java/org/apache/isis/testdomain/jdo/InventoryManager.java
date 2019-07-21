@@ -16,13 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins.ioc;
+package org.apache.isis.testdomain.jdo;
 
-public interface RequestContextHandle extends AutoCloseable {
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ViewModel;
 
-	/**
-	 * Refined to not throw a catched exception
-	 */
-	@Override void close();
-	
+@ViewModel
+public class InventoryManager {
+
+    @Action
+    public Product updateProductPrice(Product product, double newPrice) {
+        product.setPrice(newPrice);
+        return product;
+    }
+    
 }

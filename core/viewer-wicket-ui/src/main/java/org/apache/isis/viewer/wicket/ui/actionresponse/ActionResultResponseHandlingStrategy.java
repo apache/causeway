@@ -30,12 +30,11 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
+
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-
-import lombok.val;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
@@ -56,8 +55,7 @@ public enum ActionResultResponseHandlingStrategy {
             // in the case of an object being returned, this should cause our page mementos
             // (eg EntityModel) to hold the correct state.  I hope.
 
-        	val txManager = IsisContext.getTransactionManagerJdo().get();
-        	txManager.flushTransaction();
+        	IsisContext.getTransactionService().flushTransaction();
 
             // "redirect-after-post"
             final RequestCycle requestCycle = RequestCycle.get();

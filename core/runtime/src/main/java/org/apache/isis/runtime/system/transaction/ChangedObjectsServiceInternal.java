@@ -95,7 +95,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
                 .streamAssociations(Contributed.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
         
-        enlist(adapter, properties, aap->PreAndPostValues.pre(IsisTransaction.Placeholder.NEW));
+        enlist(adapter, properties, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
 
@@ -214,7 +214,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     			if(adapter.isDestroyed()) {
     				// don't touch the object!!!
     				// JDO, for example, will complain otherwise...
-    				papv.setPost(IsisTransaction.Placeholder.DELETED);
+    				papv.setPost(IsisTransactionPlaceholder.DELETED);
     			} else {
     				papv.setPost(aap.getPropertyValue());
     			}

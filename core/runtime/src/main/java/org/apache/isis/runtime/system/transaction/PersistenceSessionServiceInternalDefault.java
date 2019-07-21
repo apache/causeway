@@ -18,23 +18,20 @@
  */
 package org.apache.isis.runtime.system.transaction;
 
-import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.xactn.Transaction;
-import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -124,7 +121,7 @@ implements PersistenceSessionServiceInternal {
 
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(cls);
+        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(cls);
         String objectType = objectSpec.getSpecId().asString();
         return new Bookmark(objectType, identifier);
     }
@@ -132,36 +129,6 @@ implements PersistenceSessionServiceInternal {
     @Override
     public void resolve(final Object parent) {
         getPersistenceSession().refreshRootInTransaction(parent);
-    }
-
-    @Override
-    public void beginTran() {
-        beginTran(null);
-    }
-
-    @Override
-    public void beginTran(final Command commandIfAny) {
-        getTransactionManager().startTransaction(commandIfAny);
-    }
-
-    @Override
-    public boolean flush() {
-        return getTransactionManager().flushTransaction();
-    }
-
-    @Override
-    public void commit() {
-        getTransactionManager().endTransaction();
-    }
-
-    @Override
-    public void abortTransaction() {
-        getTransactionManager().abortTransaction();
-    }
-
-    @Override
-    public Transaction currentTransaction() {
-        return getTransactionManager().getCurrentTransaction();
     }
 
     @Override
@@ -176,22 +143,12 @@ implements PersistenceSessionServiceInternal {
 
     @Override
     public void executeWithinTransaction(Runnable task) {
-        getTransactionManager().executeWithinTransaction(task);
+        transactionService.executeWithinTransaction(task);
     }
     
     @Override
     public <T> T executeWithinTransaction(Supplier<T> task) {
-        return getTransactionManager().executeWithinTransaction(task);
-    }
-
-    @Override
-    public TransactionState getTransactionState() {
-        final IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
-        if (transaction == null) {
-            return TransactionState.NONE;
-        }
-        IsisTransaction.State state = transaction.getState();
-        return state.getTransactionState();
+        return transactionService.executeWithinTransaction(task);
     }
 
     protected PersistenceSession getPersistenceSession() {
@@ -199,24 +156,8 @@ implements PersistenceSessionServiceInternal {
                 .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 
-    private IsisSessionFactory getIsisSessionFactory() {
-        return requireNonNull(isisSessionFactory, "IsisSessionFactory was not injected.");
-    }
-
-    @Programmatic
-    public IsisTransactionManagerJdoInternal getTransactionManager() {
-        return getPersistenceSession().getTransactionManager();
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-
-    @javax.inject.Inject
-    IsisSessionFactory isisSessionFactory;
-
-
-
+    @Inject TransactionService transactionService;
+    @Inject IsisSessionFactory isisSessionFactory;
+    @Inject SpecificationLoader specificationLoader;
 
 }

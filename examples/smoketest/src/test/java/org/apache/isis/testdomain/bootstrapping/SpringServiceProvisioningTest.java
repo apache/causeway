@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.tests;
+package org.apache.isis.testdomain.bootstrapping;
 
 import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
 import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;

@@ -19,12 +19,14 @@
 
 package org.apache.isis.runtime.services.sessmgmt;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
+
+import lombok.val;
 
 @Singleton
 public class SessionManagementServiceDefault implements SessionManagementService {
@@ -32,20 +34,16 @@ public class SessionManagementServiceDefault implements SessionManagementService
     @Override
     public void nextSession() {
 
-        final AuthenticationSession authenticationSession =
-                isisSessionFactory.getCurrentSession().getAuthenticationSession();
+        val authenticationSession =
+                IsisSession.current()
+                .map(IsisSession::getAuthenticationSession)
+                .orElse(null);
 
-        persistenceSessionServiceInternal.commit();
         isisSessionFactory.closeSession();
-
         isisSessionFactory.openSession(authenticationSession);
-        persistenceSessionServiceInternal.beginTran();
+
     }
 
-
-    @javax.inject.Inject
-    IsisSessionFactory isisSessionFactory;
-    @javax.inject.Inject
-    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    @Inject IsisSessionFactory isisSessionFactory;
 
 }

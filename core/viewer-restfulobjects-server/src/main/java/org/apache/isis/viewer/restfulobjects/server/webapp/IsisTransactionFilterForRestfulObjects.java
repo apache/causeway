@@ -26,27 +26,36 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.transaction.TransactionalException;
 
-import org.apache.isis.runtime.system.session.IsisRequestCycle;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 //@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"}) //[ahuber] to support 
 //Servlet 3.0 annotations @WebFilter, @WebListener or others 
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
+    private TransactionService transactionService;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        transactionService = IsisContext.getTransactionService();
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
     		throws IOException, ServletException {
 
-		try(final IsisRequestCycle cycle = IsisRequestCycle.next()) {
-			cycle.beforeServletFilter();
-			chain.doFilter(request, response);
-			cycle.afterServletFilter();
-		}
+        transactionService.executeWithinTransaction(()->{
+        
+            try {
+                chain.doFilter(request, response);
+            } catch (IOException | ServletException e) {
+                throw new TransactionalException("", e);
+            }
+            
+        });
 		
     }
 

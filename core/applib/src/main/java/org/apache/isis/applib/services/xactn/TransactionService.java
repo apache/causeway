@@ -22,9 +22,6 @@ package org.apache.isis.applib.services.xactn;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
-
 public interface TransactionService {
 
 	public enum Policy {
@@ -61,75 +58,5 @@ public interface TransactionService {
     
     void executeWithinTransaction(Runnable task);
     <T> T executeWithinTransaction(Supplier<T> task);
-
-    // -- DEPRECATIONS
-    
-    /**
-     * See also {@link TransactionService#nextTransaction(TransactionService.Policy)} with a {@link TransactionService.Policy} of {@link TransactionService.Policy#UNLESS_MARKED_FOR_ABORT}.
-     * @deprecated to be replaced by Spring's Transaction API
-     */
-    @Deprecated
-    default void nextTransaction() {
-        nextTransaction((Command)null);
-    }
-    
-    /**
-     * Intended only for use by fixture scripts and integration tests.
-     *
-     * <p>
-     *     The behaviour depends on the current state of the transaction, and the specified policy.
-     *     <ul>
-     *         <li>
-     *              If the current transaction is in that it is still in progress, then commits and starts a new one.
-     *         </li>
-     *         <li>
-     *              If the current transaction is complete, in that it is already committed or was rolled back, then simply starts a new one.
-     *         </li>
-     *         <li>
-     *              If the current transaction is marked for abort, then depends on the provided policy:
-     *              <ul>
-     *                  <li>
-     *                      If set to {@link Policy#ALWAYS always}, then rolls back and starts a new transaction
-     *                  </li>
-     *                  <li>
-     *                      But if set to {@link Policy#UNLESS_MARKED_FOR_ABORT marked for abort}, then fails fast by throwing a runtime exception.
-     *                  </li>
-     *              </ul>
-     *         </li>
-     *
-     *     </ul>
-     *     If the current transaction has been marked for abort only, then depends on the provided rolls it back, and (again) starts a new one.
-     * </p>
-     *
-     * <p>
-     *     This is a refinement of the {@link TransactionService#nextTransaction()}, introduced in
-     *     order to improve the error handling of that method in the case of an already must-abort transaction, and
-     *     also to allow the caller to have more control on how to continue.
-     * </p>
-     * @deprecated to be replaced by Spring's Transaction API
-     */
-    @Deprecated
-    default void nextTransaction(Policy policy) {
-        nextTransaction(policy, null);
-    }
-    
-    /**
-     * If the current transaction does not use the specified {@link Command} as its
-     * {@link CommandContext#getCommand() command context}, then commit and start a new one.
-     * @param command
-     * @deprecated to be replaced by Spring's Transaction API
-     */
-    @Deprecated
-    default void nextTransaction(Command command) {
-        nextTransaction(TransactionService.Policy.UNLESS_MARKED_FOR_ABORT, command);
-    }
-
-    /**
-     * As per {@link #nextTransaction(Policy)} and {@link #nextTransaction(Command)}.
-     * @deprecated to be replaced by Spring's Transaction API
-     */
-    @Deprecated
-    void nextTransaction(Policy policy, Command command);
-
 
 }

@@ -92,11 +92,11 @@ public class PreAndPostValues {
 
     public boolean shouldAudit() {
         // don't audit objects that were created and then immediately deleted within the same xactn
-        if (getPre() == IsisTransaction.Placeholder.NEW && getPost() == IsisTransaction.Placeholder.DELETED) {
+        if (getPre() == IsisTransactionPlaceholder.NEW && getPost() == IsisTransactionPlaceholder.DELETED) {
             return false;
         }
         // but do always audit objects that have just been created or deleted
-        if (getPre() == IsisTransaction.Placeholder.NEW || getPost() == IsisTransaction.Placeholder.DELETED) {
+        if (getPre() == IsisTransactionPlaceholder.NEW || getPost() == IsisTransactionPlaceholder.DELETED) {
             return true;
         }
         // else - for updated objects - audit only if the property value has changed

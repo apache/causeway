@@ -24,9 +24,6 @@ import java.util.function.Supplier;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.xactn.Transaction;
-import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -67,34 +64,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
     Bookmark bookmarkFor(Object domainObject);
 
     Bookmark bookmarkFor(Class<?> cls, String identifier);
-
-    // -- beginTran, flush, commit, currentTransaction
-
-    void beginTran();
-
-    void beginTran(final Command commandIfAny);
-
-    /**
-     * Provided by <tt>TransactionManager</tt> when used by framework.
-     *
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
-    boolean flush();
-
-    /**
-     * Provided by <tt>TransactionManager</tt> when used by framework.
-     *
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
-    void commit();
-
-    void abortTransaction();
-
-    Transaction currentTransaction();
-
-    TransactionState getTransactionState();
 
     // -- makePersistent, remove
 

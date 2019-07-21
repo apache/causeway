@@ -25,6 +25,7 @@ import javax.jdo.PersistenceManager;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
@@ -41,7 +42,6 @@ import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.TransactionalResource;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 
 public interface PersistenceSession 
 extends 
@@ -55,14 +55,14 @@ extends
     // -------------------------------------------------------------------------------------------------
     
     IsisConfiguration getConfiguration();
-    IsisTransactionManagerJdoInternal getTransactionManager();
     ServiceInjector getServiceInjector();
+    TransactionService getTransactionService();
     
     void open();
     void close();
     
-    default boolean flush() {
-        return getTransactionManager().flushTransaction();
+    default void flush() {
+        getTransactionService().flushTransaction();
     }
 
     /**
@@ -78,7 +78,7 @@ extends
      * @since 2.0
      */
     default void refreshRootInTransaction(final Object domainObject) {
-        getTransactionManager().executeWithinTransaction(()->refreshRoot(domainObject));
+        getTransactionService().executeWithinTransaction(()->refreshRoot(domainObject));
     }
     
     /**
@@ -102,7 +102,7 @@ extends
 
     /**@since 2.0*/
     default Object fetchPersistentPojoInTransaction(final RootOid oid) {
-        return getTransactionManager().executeWithinTransaction(()->fetchPersistentPojo(oid));
+        return getTransactionService().executeWithinTransaction(()->fetchPersistentPojo(oid));
     }
 
     /**@since 2.0*/

@@ -21,8 +21,18 @@ package org.apache.isis.viewer.wicket.ui.panels;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.stream.Stream;
+
+import com.google.common.base.Throwables;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -56,16 +66,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
-
-import com.google.common.base.Throwables;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -351,8 +351,7 @@ implements FormExecutor {
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
         // (eg EntityModel) to hold the correct state.  I hope.
-        val txManager = IsisContext.getTransactionManagerJdo().get();
-        txManager.flushTransaction();
+        IsisContext.getTransactionService().flushTransaction();
 
         // "redirect-after-post"
         val requestCycle = RequestCycle.get();
@@ -465,8 +464,10 @@ implements FormExecutor {
             // recognized
             raiseWarning(target, feedbackForm, recognizedErrorIfAny);
 
-            val txManager = IsisContext.getTransactionManagerJdo().get();
-            txManager.getCurrentTransaction().clearAbortCause();
+            val txState = IsisContext.getTransactionService().currentTransactionState();
+            
+            //FIXME[2125] what's the replacement for this?
+            //txManager.getCurrentTransaction().clearAbortCause();
 
             // there's no need to abort the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).

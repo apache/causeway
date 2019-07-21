@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.persistence.objectstore.transaction;
 
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
-
 /**
  * Interface for the {@link IsisTransactionManagerJdoInternal} to interact with some
  * transactional resource.

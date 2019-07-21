@@ -16,12 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.tests;
+package org.apache.isis.testdomain.publishing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
@@ -32,9 +36,6 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.val;
 

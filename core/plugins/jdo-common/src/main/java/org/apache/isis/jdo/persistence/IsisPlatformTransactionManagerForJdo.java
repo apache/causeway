@@ -16,24 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.jdo.transaction;
+package org.apache.isis.jdo.persistence;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
+
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.xactn.Transaction;
-import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
-import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -44,7 +44,6 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 	private static final long serialVersionUID = 1L;
 	
 	@Inject private IsisSessionFactory isisSessionFactory;
-	@Inject private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 	@Inject private ServiceRegistry serviceRegistry;
 
 	@Override
@@ -54,21 +53,24 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 		log.debug("doGetTransaction isInSession={}", isInSession);
 		
 		if(!isInSession) {
-
-			// get authenticationSession from IoC, or fallback to InitialisationSession 
-			val authenticationSession = serviceRegistry.select(AuthenticationSession.class)
-					.getFirst()
-					.orElseGet(InitialisationSession::new);
-					
-			log.debug("open new session authenticationSession={}", authenticationSession);
-			
-			isisSessionFactory.openSession(authenticationSession);
-			val transactionBeforeBegin = (Transaction)null;
-			return IsisTransactionObject.of(transactionBeforeBegin);
-		} else {
-			val transactionBeforeBegin = persistenceSessionServiceInternal.currentTransaction(); 
-			return IsisTransactionObject.of(transactionBeforeBegin);
+		    
+            // get authenticationSession from IoC, or fallback to InitialisationSession 
+            val authenticationSession = serviceRegistry.select(AuthenticationSession.class)
+                    .getFirst()
+                    .orElseGet(InitialisationSession::new);
+                    
+            log.debug("open new session authenticationSession={}", authenticationSession);
+            
+            isisSessionFactory.openSession(authenticationSession);
 		}
+		
+		val transactionBeforeBegin = 
+                IsisTransactionAspectSupport
+                .currentTransactionObject()
+                .map(x->x.getCurrentTransaction())
+                .orElse(null);
+		
+        return IsisTransactionObject.of(transactionBeforeBegin);
 		
 	}
 	
@@ -78,8 +80,8 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 		
 		log.debug("doBegin {}", definition);
 		
-		persistenceSessionServiceInternal.beginTran();
-		txObject.setCurrentTransaction(persistenceSessionServiceInternal.currentTransaction());
+		val tx = transactionManagerJdo().startTransaction();
+		txObject.setCurrentTransaction(tx);
 		IsisTransactionAspectSupport.putTransactionObject(txObject);
 	}
 
@@ -89,7 +91,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
 		log.debug("doCommit {}", status);
 		
-		persistenceSessionServiceInternal.commit();
+		transactionManagerJdo().endTransaction();
 		txObject.setCurrentTransaction(null);
 		IsisTransactionAspectSupport.clearTransactionObject();
 	}
@@ -100,10 +102,14 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 		
 		log.debug("doRollback {}", status);
 		
-		persistenceSessionServiceInternal.abortTransaction();
+		transactionManagerJdo().abortTransaction();
 		txObject.setCurrentTransaction(null);
 		IsisTransactionAspectSupport.clearTransactionObject();
 	}
 
+	private IsisTransactionManagerJdoInternal transactionManagerJdo() {
+	    val persistenceSessionBase = (PersistenceSessionBase)IsisContext.getPersistenceSession().get();
+	    return persistenceSessionBase.transactionManager;
+	}
 	
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtime.system.transaction;
+package org.apache.isis.jdo.persistence;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -26,7 +26,6 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
@@ -40,6 +39,9 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectC
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.transaction.AuditingServiceInternal;
+import org.apache.isis.runtime.system.transaction.IsisTransactionFlushException;
+import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
 
 import lombok.Getter;
 import lombok.val;
@@ -58,20 +60,7 @@ import lombok.extern.log4j.Log4j2;
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
 @Vetoed @Log4j2
-public class IsisTransaction implements TransactionScopedComponent, Transaction {
-
-    public static class Placeholder {
-        public static Placeholder NEW = new Placeholder("[NEW]");
-        public static Placeholder DELETED = new Placeholder("[DELETED]");
-        private final String str;
-        public Placeholder(String str) {
-            this.str = str;
-        }
-        @Override
-        public String toString() {
-            return str;
-        }
-    }
+public class IsisTransactionJdo implements TransactionScopedComponent, Transaction {
 
     public enum State {
         /**
@@ -125,23 +114,23 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
 
         /**
-         * Whether it is valid to {@link IsisTransaction#commit() commit} this
-         * {@link IsisTransaction transaction}.
+         * Whether it is valid to {@link IsisTransactionJdo#commit() commit} this
+         * {@link IsisTransactionJdo transaction}.
          */
         public boolean canCommit() {
             return this == IN_PROGRESS;
         }
 
         /**
-         * Whether it is valid to {@link IsisTransaction#markAsAborted() abort} this
-         * {@link IsisTransaction transaction}.
+         * Whether it is valid to {@link IsisTransactionJdo#markAsAborted() abort} this
+         * {@link IsisTransactionJdo transaction}.
          */
         public boolean canAbort() {
             return this == IN_PROGRESS || this == MUST_ABORT;
         }
 
         /**
-         * Whether the {@link IsisTransaction transaction} is complete (and so a
+         * Whether the {@link IsisTransactionJdo transaction} is complete (and so a
          * new one can be started).
          */
         public boolean isComplete() {
@@ -161,11 +150,9 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     @Getter @Programmatic
     private final TransactionId id;
-    //    private final AuthenticationSession authenticationSession;
 
     private final _Inbox<PersistenceCommand> persistenceCommands = new _Inbox<>();
-    private final IsisTransactionManagerJdoInternal transactionManager;
-    //    private final MessageBroker messageBroker;
+
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
 
@@ -173,17 +160,14 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     private IsisException abortCause;
 
-    public IsisTransaction(
+    public IsisTransactionJdo(
             final UUID interactionId,
             final int sequence) {
 
     	id = TransactionId.of(interactionId, sequence);
         //        this.authenticationSession = authenticationSession;
 
-        ServiceRegistry serviceRegistry = IsisContext.getServiceRegistry();
-        final PersistenceSessionServiceInternalDefault persistenceSessionService = serviceRegistry
-                .lookupServiceElseFail(PersistenceSessionServiceInternalDefault.class);
-        this.transactionManager = persistenceSessionService.getTransactionManager();
+        val serviceRegistry = IsisContext.getServiceRegistry();
 
         //        this.messageBroker = authenticationSession.getMessageBroker();
         this.publishingServiceInternal = serviceRegistry.lookupServiceElseFail(PublishingServiceInternal.class);
@@ -354,7 +338,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
             if(!pc_snapshot.isEmpty()) {
                 try {
-                    this.transactionManager.getPersistenceSession().execute(pc_snapshot);
+                    IsisContext.getPersistenceSession().get().execute(pc_snapshot);
                     for (PersistenceCommand persistenceCommand : pc_snapshot) {
                         if (persistenceCommand instanceof DestroyObjectCommand) {
                             final ObjectAdapter adapter = persistenceCommand.onAdapter();
@@ -500,11 +484,8 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     // -- countDownLatch
 
-    /**
-     * Returns a latch that allows threads to wait on. The latch count drops to zero once this transaction completes.
-     *
-     */
-    public CountDownLatch countDownLatch() {
+    @Override
+    public CountDownLatch getCountDownLatch() {
         return countDownLatch;
     }
 

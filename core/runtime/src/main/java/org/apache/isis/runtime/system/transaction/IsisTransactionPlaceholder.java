@@ -16,14 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.tests;
+package org.apache.isis.runtime.system.transaction;
 
-import java.sql.SQLException;
+/**
+ * 
+ * @since 2.0
+ *
+ */
+public enum IsisTransactionPlaceholder {
 
-public class Util_H2Console {
-
-	public static void main(String[] args) throws SQLException {
-		org.h2.tools.Console.main(args);
-	}
-
+    NEW,
+    DELETED
+    ;
+    
+    @Override
+    public String toString() {
+        return "[" + name() + "]";
+    }
+    
 }

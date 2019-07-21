@@ -16,23 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins.ioc;
+package org.apache.isis.testdomain;
 
-/**
- * Acts as a no-op implementation, that is used as lowest priority default, whenever
- * service-provisioning can not find any alternative with higher priority.  
- * <p>
- * Introduced for CDI, no longer used since Spring.
- * 
- * @since 2.0
- *
- */
-//@Singleton @Alternative @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
-public class RequestContextServiceDefault implements RequestContextService {
+import java.sql.SQLException;
 
-    @Override
-    public RequestContextHandle startRequest() {
-        return null; // don't return a handle
-    }
+public class Util_H2Console {
+
+	public static void main(String[] args) throws SQLException {
+		org.h2.tools.Console.main(args);
+	}
 
 }

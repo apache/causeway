@@ -20,13 +20,10 @@
 package org.apache.isis.runtime.system.session;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
@@ -44,11 +41,9 @@ import org.apache.isis.commons.internal.concurrent._Tasks;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.runtime.system.MessageRegistry;
@@ -57,8 +52,6 @@ import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.runtime.system.internal.IsisTimeZoneInitializer;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerException;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
@@ -89,7 +82,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
-    private ServiceInitializer serviceInitializer;
 
     @PostConstruct
     public void init() {
@@ -159,23 +151,14 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Override
     public void initServices() {
 
-        // do postConstruct.  We store the initializer to do preDestroy on shutdown
-        serviceInitializer = new ServiceInitializer(configuration, 
-                Collections.emptyList()
-//TODO [2033] remove initializer? ... Spring/CDI takes over 
-//                serviceRegistry.streamServices().collect(Collectors.toList())
-                );
-        
-        serviceInitializer.validate();
-        
         doInSession(()->{
             
             //
             // postConstructInSession
             //
 
-            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
-            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
+//            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
+//            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
 
             //
             // translateServicesAndEnumConstants
@@ -240,7 +223,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Override
     public void destroyServicesAndShutdown() {
     	// call might originate from a different thread than main
-        destroyServices();
         shutdown();
     }
 
@@ -278,8 +260,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Override
     public boolean isInTransaction() {
         if (isInSession()) {
-            if (getCurrentSession().getCurrentTransaction() != null) {
-                if (!getCurrentSession().getCurrentTransaction().getState().isComplete()) {
+            if (getCurrentSession().getCurrentTransactionId() != null) {
+                if (!getCurrentSession().getCurrentTransactionState().isComplete()) {
                     return true;
                 }
             }
@@ -320,38 +302,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
 
     // -- HELPER
-    
-    private IsisTransactionManagerJdoInternal getTransactionManagerElseFail() {
-        return IsisContext.getTransactionManagerJdo()
-                .orElseThrow(()->new IllegalStateException("there is no TransactionManager currently accessible"));
-    }
-    
-    private void destroyServices() {
-        // may not be set if the metamodel validation failed during initialization
-        if (serviceInitializer == null) {
-            return;
-        }
-
-        // call @PreDestroy (in a session)
-        openSession(new InitialisationSession());
-        IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
-        try {
-            transactionManager.startTransaction();
-            try {
-
-                serviceInitializer.preDestroy();
-
-            } catch (RuntimeException ex) {
-                transactionManager.getCurrentTransaction().setAbortCause(
-                        new IsisTransactionManagerException(ex));
-            } finally {
-                // will commit or abort
-                transactionManager.endTransaction();
-            }
-        } finally {
-            closeSession();
-        }
-    }
 
     private void shutdown() {
     	
@@ -363,19 +313,5 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         authenticationManager.shutdown();
         //specificationLoader.shutdown(); //[2112] lifecycle is managed by IoC
     }
-
-    
-    private static Callable<Object> callableOf(String label, Runnable action) {
-        return new Callable<Object>() {
-            @Override public Object call() throws Exception {
-                action.run();
-                return null;
-            }
-            public String toString() {
-                return label;
-            }
-        };
-    }
-
 
 }

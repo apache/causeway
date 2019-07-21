@@ -24,8 +24,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.IsisConfiguration;
@@ -42,12 +46,9 @@ import org.apache.isis.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import lombok.val;
 
@@ -150,6 +151,14 @@ public interface IsisContext {
     public static IsisSessionFactory getSessionFactory() {
         return _Spring.getSingletonElseFail(IsisSessionFactory.class);
     }
+
+    /**
+     * @return framework's TransactionService 
+     * @throws NoSuchElementException - if TransactionService not resolvable
+     */
+    public static TransactionService getTransactionService() {
+        return _Spring.getSingletonElseFail(TransactionService.class);
+    }
     
     /**
      * @return framework's current IsisSession (if any)
@@ -166,17 +175,6 @@ public interface IsisContext {
     public static Optional<PersistenceSession> getPersistenceSession() {
     	return PersistenceSession.current(PersistenceSession.class)
     	.getFirst();
-    }
-    
-    /**
-     * @return framework's current IsisTransactionManager (if any)
-     * @throws IllegalStateException - if IsisSessionFactory not resolvable
-     * @deprecated use {@link #createTransactionTemplate()} instead
-     */
-    @Deprecated //TODO[2112] use spring-tx API instead
-    public static Optional<IsisTransactionManagerJdoInternal> getTransactionManagerJdo() {
-    	return getPersistenceSession()
-    			.map(PersistenceSession::getTransactionManager);
     }
     
     // likely to be extended to support multiple PlatformTransactionManagers, by selecting one by its name

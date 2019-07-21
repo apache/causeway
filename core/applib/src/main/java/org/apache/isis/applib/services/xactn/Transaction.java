@@ -19,13 +19,15 @@
 
 package org.apache.isis.applib.services.xactn;
 
+import java.util.concurrent.CountDownLatch;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Representation of the current transaction, which conceptually wraps the underlying transaction context's transaction.
  */
 public interface Transaction {
-
+    
 	@Programmatic
 	TransactionId getId();
 
@@ -47,25 +49,12 @@ public interface Transaction {
     @Programmatic
     TransactionState getTransactionState();
     
-    // -- FACTORIES
-    
-    public static Transaction noop() {
-    	return new Transaction() {
-			
-			@Override
-			public TransactionState getTransactionState() {
-				return TransactionState.NONE;
-			}
-			
-			@Override
-			public TransactionId getId() {
-				return null;
-			}
-			
-			@Override
-			public void flush() {
-			}
-		};
-    }
+    /**
+     * Returns a latch that allows threads to wait on. The latch count drops to zero once this transaction completes.
+     *
+     */
+    @Programmatic
+    CountDownLatch getCountDownLatch();
+
 
 }

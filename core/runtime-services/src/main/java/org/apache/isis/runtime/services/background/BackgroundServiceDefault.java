@@ -24,9 +24,10 @@ import java.lang.reflect.InvocationHandler;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -48,9 +49,7 @@ import lombok.val;
  * {@link org.apache.isis.applib.services.background.BackgroundCommandService} to
  * be configured.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN
-        )
+@Service
 public class BackgroundServiceDefault implements BackgroundService {
 
     private InvocationHandlerFactory invocationHandlerFactory;  
@@ -132,23 +131,12 @@ public class BackgroundServiceDefault implements BackgroundService {
 
     // //////////////////////////////////////
 
-    @javax.inject.Inject
-    private ServiceRegistry serviceRegistry;
-
-    @javax.inject.Inject
-    private CommandDtoServiceInternal commandDtoServiceInternal;
-
-    @javax.inject.Inject
-    private CommandContext commandContext;
-
-    @javax.inject.Inject
-    private FactoryService factoryService;
-
-    @javax.inject.Inject
-    private SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    private ObjectAdapterProvider objectAdapterProvider;
+    @Inject private ServiceRegistry serviceRegistry;
+    @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
+    @Inject private CommandContext commandContext;
+    @Inject private FactoryService factoryService;
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private ObjectAdapterProvider objectAdapterProvider;
    
 
 }

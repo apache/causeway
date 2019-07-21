@@ -18,6 +18,9 @@
  */
 package org.apache.isis.jdo.persistence;
 
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -53,7 +57,6 @@ import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindA
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
-import org.apache.isis.jdo.persistence.PersistenceSessionBase;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -92,16 +95,13 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCo
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtime.services.RequestScopedService;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
-import org.apache.isis.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
-import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -115,6 +115,7 @@ public class PersistenceSession5 extends PersistenceSessionBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private ObjectAdapterContext objectAdapterContext;
+    @Getter private final TransactionService transactionService;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -126,6 +127,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             final FixturesInstalledStateHolder stateHolder) {
 
         super(authenticationSession, jdoPersistenceManagerFactory, stateHolder);
+        transactionService = IsisContext.getTransactionService();
     }
 
     // -- open
@@ -212,7 +214,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      *
      * <p>
      * Automatically {@link IsisTransactionManagerJdoInternal#endTransaction() ends
-     * (commits)} the current (Isis) {@link IsisTransaction}. This in turn commits the underlying
+     * (commits)} the current (Isis) {@link IsisTransactionJdo}. This in turn commits the underlying
      * JDO transaction.
      *
      * <p>
@@ -230,7 +232,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         transactionManager.flushTransaction();
 
         try {
-            final IsisTransaction currentTransaction = transactionManager.getCurrentTransaction();
+            final IsisTransactionJdo currentTransaction = transactionManager.getCurrentTransaction();
             if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
                 if(currentTransaction.getState().canCommit()) {
                     transactionManager.endTransaction();
@@ -608,10 +610,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             throw new NotPersistableException("Cannot persist beans: " + adapter);
         }
 
-        getTransactionManager().executeWithinTransaction(()->{
+        transactionService.executeWithinTransaction(()->{
                 makePersistentTransactionAssumed(adapter);
-                // clear out the map of transient -> persistent
-                // already empty // PersistenceSession5.this.persistentByTransient.clear();
         });
     }
 

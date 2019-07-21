@@ -54,7 +54,6 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.MemberDto;
@@ -326,10 +325,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession().orElse(null);
-    }
-
-    protected IsisTransactionManagerJdoInternal getTransactionManager(PersistenceSession persistenceSession) {
-        return persistenceSession.getTransactionManager();
     }
 
     protected SpecificationLoader getSpecificationLoader() {

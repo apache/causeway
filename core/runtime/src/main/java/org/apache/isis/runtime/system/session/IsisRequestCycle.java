@@ -18,133 +18,84 @@
  */
 package org.apache.isis.runtime.system.session;
 
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionTemplate;
+
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * TODO [2033] intent is to remove direct dependencies upon Persistence/Transaction for the viewer-modules.   
+ * TODO [2125] intent is to remove direct dependencies upon Persistence/Transaction for the viewer-modules.   
  * 
  * @since 2.0
  */
-public class IsisRequestCycle implements AutoCloseable {
+@RequiredArgsConstructor(staticName = "next")
+public class IsisRequestCycle {
 
-	// -- SUPPORTING ISIS TRANSACTION FILTER FOR RESTFUL OBJECTS ...
-	
-	public static IsisRequestCycle next() {
-		return new IsisRequestCycle();
-	}
-	
-	private IsisRequestCycle() {
-    	
-	}
-	
-	public void beforeServletFilter() {
-		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
-        // no-op if no session or transaction manager available.
-        if(isisTransactionManager==null) {
+    // -- SUPPORTING ISIS TRANSACTION FILTER FOR RESTFUL OBJECTS ...
+
+    private final TransactionTemplate transactionTemplate;
+    private TransactionStatus txStatus;
+
+    // -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
+
+    public void onBeginRequest(AuthenticationSession authenticationSession) {
+
+        val isisSessionFactory = IsisContext.getSessionFactory();
+        isisSessionFactory.openSession(authenticationSession);
+
+        txStatus = transactionTemplate.getTransactionManager().getTransaction(null);
+
+        //		IsisContext.getTransactionManagerJdo()
+        //				.ifPresent(txMan->txMan.startTransaction());
+    }
+
+    public void onRequestHandlerExecuted() {
+
+        if(txStatus==null) {
+            return;    
+        }
+
+        txStatus.flush();
+    }
+
+    public void onEndRequest() {
+
+        if(txStatus==null) {
+            return;    
+        }
+
+        try {
+            
+            transactionTemplate.getTransactionManager().commit(txStatus);
+            
+        } finally {
+            val isisSessionFactory = IsisContext.getSessionFactory();
+            isisSessionFactory.closeSession();
+        }
+
+    }
+
+    // -- SUPPORTING FORM EXECUTOR DEFAULT ...
+
+    public static void onResultAdapterObtained() {
+        val isisSession = IsisSession.currentOrElseNull();
+        if (isisSession==null) {
             return;
         }
-        isisTransactionManager.startTransaction();
-		
-	}
 
-	public void afterServletFilter() {
-		// relying on the caller to close this cycle in a finally block
-	}
-	
-	@Override
-	public void close() {
-		
-		val isisSessionFactory = IsisContext.getSessionFactory();
-		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
-		val inTransaction =
-				isisSessionFactory !=null && 
-				isisTransactionManager!=null &&
-				isisSessionFactory.isInTransaction(); 
-		
-        if(inTransaction) {
-            // user/logout will have invalidated the current transaction and also persistence session.
-            try {
-                isisTransactionManager.endTransaction();
-            } catch (Exception ex) {
-                // ignore.  Any exceptions will have been mapped into a suitable response already.
-            }
-        }
-		
-	}
-	
-	// -- SUPPORTING WEB REQUEST CYCLE FOR ISIS ...
+        PersistenceSession.current(PersistenceSession.class)
+        .stream()
+        .forEach(ps->ps.flush());
 
-	public static void onBeginRequest(AuthenticationSession authenticationSession) {
-		
-		val isisSessionFactory = IsisContext.getSessionFactory();
-		isisSessionFactory.openSession(authenticationSession);
-		
-		IsisContext.getTransactionManagerJdo()
-				.ifPresent(txMan->txMan.startTransaction());
-	}
+        //isisSession.flush();
+    }
 
-	public static void onRequestHandlerExecuted() {
-		
-		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
-		if (isisTransactionManager==null) {
-			return;
-		}
-		
-        try {
-            // will commit (or abort) the transaction;
-            // an abort will cause the exception to be thrown.
-        	isisTransactionManager.endTransaction();
-        	
-        } catch(Exception ex) {
+    // --
 
-        	// will redirect to error page after this,
-            // so make sure there is a new transaction ready to go.
-            if(isisTransactionManager.getCurrentTransaction().getState().isComplete()) {
-            	isisTransactionManager.startTransaction();
-            }
-            
-            throw ex;
-        }
-		
-	}
-
-	public static void onEndRequest() {
-		
-		val isisTransactionManager = IsisContext.getTransactionManagerJdo().orElse(null);
-		if (isisTransactionManager==null) {
-			return;
-		}
-		
-        try {
-        	isisTransactionManager.endTransaction();
-        } finally {
-        	val isisSessionFactory = IsisContext.getSessionFactory();
-        	isisSessionFactory.closeSession();
-        }
-        
-	}
-	
-	// -- SUPPORTING FORM EXECUTOR DEFAULT ...
-
-	public static void onResultAdapterObtained() {
-		val isisSession = IsisSession.currentOrElseNull();
-		if (isisSession==null) {
-			return;
-		}
-		
-		PersistenceSession.current(PersistenceSession.class)
-		.stream()
-		.forEach(ps->ps.flush());
-		
-		//isisSession.flush();
-	}
-
-
-	
-	// -- 
 
 }

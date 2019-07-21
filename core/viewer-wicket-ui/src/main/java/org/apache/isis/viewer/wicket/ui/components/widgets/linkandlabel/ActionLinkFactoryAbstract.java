@@ -21,6 +21,15 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
@@ -62,16 +71,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.Application;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.request.cycle.RequestCycle;
-
-import lombok.val;
 
 public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
@@ -259,8 +258,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                     final EntityPage entityPage = new EntityPage(targetAdapter, null);
 
-                    val txManager = IsisContext.getTransactionManagerJdo().get();
-                    txManager.flushTransaction();
+                    IsisContext.getTransactionService().flushTransaction();
 
                     // "redirect-after-post"
                     final RequestCycle requestCycle = RequestCycle.get();

@@ -43,7 +43,6 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
-import org.apache.isis.runtime.system.transaction.IsisTransactionManagerJdoInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
@@ -85,9 +84,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
      */
     protected final PersistenceManagerFactory jdoPersistenceManagerFactory;
 
-    // not final only for testing purposes
-    protected IsisTransactionManagerJdoInternal transactionManager;
-
+    IsisTransactionManagerJdoInternal transactionManager;
 
     /**
      * populated only when {@link #open()}ed.
@@ -149,14 +146,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     }
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
-    }
-
-    /**
-     * The configured {@link IsisTransactionManagerJdoInternal}.
-     */
-    @Override
-    public IsisTransactionManagerJdoInternal getTransactionManager() {
-        return transactionManager;
     }
 
     /**

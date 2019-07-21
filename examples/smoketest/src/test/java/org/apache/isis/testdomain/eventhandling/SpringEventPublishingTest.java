@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.tests;
+package org.apache.isis.testdomain.eventhandling;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
@@ -59,6 +60,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter protected final SpecificationLoader specificationLoader;
     @Getter protected final AuthenticationSession authenticationSession;
     @Getter protected final ObjectAdapterProvider objectAdapterProvider;
+    @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<HomePageAction> homePageActionResolver;
     
     // -- NO ARG CONSTRUCTOR
@@ -71,6 +73,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         specificationLoader = mmc.getSpecificationLoader();
         authenticationSession = mmc.getAuthenticationSession();
         objectAdapterProvider = mmc.getObjectAdapterProvider();
+        transactionService = mmc.getTransactionService();
         homePageActionResolver = mmc::getHomePageAction;
     }
     
