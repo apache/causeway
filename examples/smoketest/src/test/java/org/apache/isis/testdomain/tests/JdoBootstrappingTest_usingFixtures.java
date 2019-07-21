@@ -28,6 +28,8 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -50,6 +52,7 @@ class JdoBootstrappingTest_usingFixtures {
 	@Inject private FixtureScripts fixtureScripts;
 	@Inject private RepositoryService repository;
 
+	@BeforeEach
 	void setUp() {
 		// cleanup
 		fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
@@ -60,8 +63,6 @@ class JdoBootstrappingTest_usingFixtures {
 
 	@Test @Rollback(false)
 	void sampleInventoryShouldBeSetUp() {
-
-		setUp();
 
 		val inventories = repository.allInstances(Inventory.class);
 		assertEquals(1, inventories.size());

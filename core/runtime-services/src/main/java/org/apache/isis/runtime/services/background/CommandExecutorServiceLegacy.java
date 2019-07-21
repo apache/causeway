@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -71,136 +72,169 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
-public class CommandExecutorServiceDefault implements CommandExecutorService {
+@Vetoed @Log4j2 //TODO[2125] intended to be replaced, remove ...
+public class CommandExecutorServiceLegacy implements CommandExecutorService {
 
     @Override
     public void executeCommand(
             final CommandExecutorService.SudoPolicy sudoPolicy,
             final CommandWithDto commandWithDto) {
 
-        final Runnable commandRunnable = ()->executeCommand(commandWithDto);
-        final Runnable topLevelRunnable;
+        ensureTransactionInProgressWithContext(commandWithDto);
 
         switch (sudoPolicy) {
         case NO_SWITCH:
-            topLevelRunnable = commandRunnable;
+            executeCommand(commandWithDto);
             break;
         case SWITCH:
-            val user = commandWithDto.getUser();
-            topLevelRunnable = ()->sudoService.sudo(user, commandRunnable);
+            final String user = commandWithDto.getUser();
+            sudoService.sudo(user, new Runnable() {
+                @Override
+                public void run() {
+                    executeCommand(commandWithDto);
+                }
+            });
             break;
         default:
             throw new IllegalStateException("Probable framework error, unrecognized sudoPolicy: " + sudoPolicy);
         }
 
-        try {
+        // double check that we've ended up in the same state
+        ensureTransactionInProgress();
+    }
 
-            transactionService.executeWithinTransaction(topLevelRunnable);
+    private void ensureTransactionInProgressWithContext(final Command command) {
 
-            afterCommit(commandWithDto, /*exception*/null);
+        ensureTransactionInProgress();
 
-        } catch (Exception e) {
-
-            val executeIn = commandWithDto.getExecuteIn();
-            
-            log.warn("Exception when executing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), e);
-            afterCommit(commandWithDto, e);
+        // check the required command is used as the context.
+        // this will ensure that any audit entries also inherit from this existing command.
+        if(commandContext.getCommand() != command) {
+            transactionService.nextTransaction(command);
         }
+    }
 
+    private void ensureTransactionInProgress() {
+        val transactionState = transactionService.currentTransactionState();
+        if(transactionState == null || transactionState == TransactionState.NONE) {
+        	throw new IllegalStateException("No current transaction");
+        }
+        if(!transactionState.canCommit()) {
+            throw new IllegalStateException("Current transaction is not in a state to be committed, is: " + transactionState);
+        }
     }
 
     protected void executeCommand(final CommandWithDto commandWithDto) {
 
         // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
-        val interaction = interactionContext.getInteraction();
-        val executeIn = commandWithDto.getExecuteIn();
+        final Interaction interaction = interactionContext.getInteraction();
+
+        org.apache.isis.applib.annotation.CommandExecuteIn executeIn = commandWithDto.getExecuteIn();
 
         log.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getUniqueId());
 
-        commandWithDto.internal().setExecutor(Command.Executor.BACKGROUND);
+        RuntimeException exceptionIfAny = null;
 
-        // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
-        // PropertySetterFacet, but this is run if the domain object was found.  If the domain object is
-        // thrown then we would have a command with only completedAt, which is inconsistent.
-        // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
-        // completedAt at the end)
-        val currentExecution = interaction.getCurrentExecution();
+        try {
+            commandWithDto.internal().setExecutor(Command.Executor.BACKGROUND);
 
-        val startedAt = currentExecution != null
-                ? currentExecution.getStartedAt()
-                        : clockService.nowAsJavaSqlTimestamp();
+            // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
+            // PropertySetterFacet, but this is run if the domain object was found.  If the domain object is
+            // thrown then we would have a command with only completedAt, which is inconsistent.
+            // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
+            // completedAt at the end)
+            final Interaction.Execution<?, ?> currentExecution = interaction.getCurrentExecution();
 
-        commandWithDto.internal().setStartedAt(startedAt);
+            final Timestamp startedAt = currentExecution != null
+                    ? currentExecution.getStartedAt()
+                            : clockService.nowAsJavaSqlTimestamp();
 
-        final CommandDto dto = commandWithDto.asDto();
+                    commandWithDto.internal().setStartedAt(startedAt);
 
-        final MemberDto memberDto = dto.getMember();
-        final String memberId = memberDto.getMemberIdentifier();
+                    final CommandDto dto = commandWithDto.asDto();
 
-        final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
-        final List<OidDto> targetOidDtos = oidsDto.getOid();
+                    final MemberDto memberDto = dto.getMember();
+                    final String memberId = memberDto.getMemberIdentifier();
 
-        final InteractionType interactionType = memberDto.getInteractionType();
-        if(interactionType == InteractionType.ACTION_INVOCATION) {
+                    final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
+                    final List<OidDto> targetOidDtos = oidsDto.getOid();
 
-            final ActionDto actionDto = (ActionDto) memberDto;
+                    final InteractionType interactionType = memberDto.getInteractionType();
+                    if(interactionType == InteractionType.ACTION_INVOCATION) {
 
-            for (OidDto targetOidDto : targetOidDtos) {
+                        final ActionDto actionDto = (ActionDto) memberDto;
 
-                final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
-                final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
+                        for (OidDto targetOidDto : targetOidDtos) {
 
-                // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
-                // it will switch the targetAdapter to be the mixedInAdapter transparently
-                final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
-                final ObjectAdapter resultAdapter = objectAction.execute(
-                        targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                            final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
+                            final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
-                // flush any Isis PersistenceCommands pending
-                // (else might get transient objects for the return value)
-                transactionService.flushTransaction();
+                            // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
+                            // it will switch the targetAdapter to be the mixedInAdapter transparently
+                            final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
+                            final ObjectAdapter resultAdapter = objectAction.execute(
+                                    targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                //
-                // for the result adapter, we could alternatively have used...
-                // (priorExecution populated by the push/pop within the interaction object)
-                //
-                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                // Object unused = priorExecution.getReturned();
-                //
+                            // flush any Isis PersistenceCommands pending
+                            // (else might get transient objects for the return value)
+                            transactionService.flushTransaction();
 
-                // REVIEW: this doesn't really make sense if >1 action
-                if(resultAdapter != null) {
-                    Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                    commandWithDto.internal().setResult(resultBookmark);
-                }
-            }
-        } else {
+                            //
+                            // for the result adapter, we could alternatively have used...
+                            // (priorExecution populated by the push/pop within the interaction object)
+                            //
+                            // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                            // Object unused = priorExecution.getReturned();
+                            //
 
-            final PropertyDto propertyDto = (PropertyDto) memberDto;
+                            // REVIEW: this doesn't really make sense if >1 action
+                            if(resultAdapter != null) {
+                                Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                                commandWithDto.internal().setResult(resultBookmark);
+                            }
+                        }
+                    } else {
 
-            for (OidDto targetOidDto : targetOidDtos) {
+                        final PropertyDto propertyDto = (PropertyDto) memberDto;
 
-                final Bookmark bookmark = Bookmark.from(targetOidDto);
-                final Object targetObject = bookmarkService.lookup(bookmark, FieldResetPolicy.RESET);
+                        for (OidDto targetOidDto : targetOidDtos) {
 
-                final ObjectAdapter targetAdapter = adapterFor(targetObject);
+                            final Bookmark bookmark = Bookmark.from(targetOidDto);
+                            final Object targetObject = bookmarkService.lookup(bookmark, FieldResetPolicy.RESET);
 
-                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+                            final ObjectAdapter targetAdapter = adapterFor(targetObject);
 
-                final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
+                            final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
 
-                property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+                            final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
 
-                // there is no return value for property modifications.
-            }
+                            property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+
+                            // there is no return value for property modifications.
+                        }
+                    }
+
+        } catch (RuntimeException ex) {
+
+            log.warn("Exception when executing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
+
+            exceptionIfAny = ex;
         }
 
-    }
-    
-    protected void afterCommit(CommandWithDto commandWithDto, Exception exceptionIfAny) {
+        // committing the xactn might also trigger an exception
+        try {
+            transactionService.nextTransaction(TransactionService.Policy.ALWAYS);
+        } catch(RuntimeException ex) {
 
-        val interaction = interactionContext.getInteraction();
+            log.warn("Exception when committing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), ex);
+
+            if(exceptionIfAny == null) {
+                exceptionIfAny = ex;
+            }
+
+            // this will set up a new transaction
+            transactionService.nextTransaction();
+        }
 
         // it's possible that there is no priorExecution, specifically if there was an exception
         // when performing the action invocation/property edit.  We therefore need to guard that case.
@@ -225,7 +259,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                             streamStacktraceLines(exceptionIfAny, 500)
                             .collect(Collectors.joining("\n")));
                 }
-
     }
 
     // //////////////////////////////////////
@@ -266,28 +299,28 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final ObjectSpecification specification,
             final String actionId) {
         final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
-
+        
         return objectActions
-                .filter(objectAction->objectAction.getIdentifier().toClassAndNameIdentityString().equals(actionId))
-                .findAny()
-                .orElse(null);
+            .filter(objectAction->objectAction.getIdentifier().toClassAndNameIdentityString().equals(actionId))
+            .findAny()
+            .orElse(null);
     }
 
     private static OneToOneAssociation findOneToOneAssociationElseNull(
             final ObjectSpecification specification,
             final String propertyId) {
-
+        
         final Stream<ObjectAssociation> associations = specification.streamAssociations(Contributed.INCLUDED);
-
+        
         return associations
-                .filter(association->
+            .filter(association->
                 association.getIdentifier().toClassAndNameIdentityString().equals(propertyId) &&
-                association instanceof OneToOneAssociation
-                        )
-                .findAny()
-                .map(association->(OneToOneAssociation) association)
-                .orElse(null);
-
+                        association instanceof OneToOneAssociation
+            )
+            .findAny()
+            .map(association->(OneToOneAssociation) association)
+            .orElse(null);
+        
     }
 
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {

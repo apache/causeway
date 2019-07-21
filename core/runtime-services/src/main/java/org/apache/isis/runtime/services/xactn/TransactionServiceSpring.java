@@ -101,22 +101,6 @@ public class TransactionServiceSpring implements TransactionService {
 		}
 		
 		return txObject.getCurrentTransaction().getTransactionState();
-		
-		
-//		val txStatus = currentTransactionStatus();
-//		
-//		if(txStatus==null) {
-//			return TransactionState.NONE;
-//		}
-//		if(txStatus.isCompleted()) {
-//			return txStatus.isRollbackOnly()
-//					? TransactionState.ABORTED
-//							: TransactionState.COMMITTED;
-//		}
-//		if(txStatus.isRollbackOnly()) {
-//			return TransactionState.MUST_ABORT;
-//		}
-//		return TransactionState.IN_PROGRESS;
 	}
 
 	@Override
