@@ -248,9 +248,9 @@ public class MetaModelServicesMenu {
     }
 
 
-    @javax.inject.Inject
+    @Inject
     MetaModelService metaModelService;
-    @javax.inject.Inject
+    @Inject
     JaxbService jaxbService;
 
 }

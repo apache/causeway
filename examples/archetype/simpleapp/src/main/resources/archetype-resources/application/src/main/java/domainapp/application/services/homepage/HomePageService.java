@@ -41,6 +41,6 @@ public class HomePageService {
     }
 
 
-    @javax.inject.Inject
+    @Inject
     FactoryService factoryService;
 }

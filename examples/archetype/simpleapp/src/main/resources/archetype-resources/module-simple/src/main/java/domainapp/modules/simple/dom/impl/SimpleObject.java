@@ -96,15 +96,15 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
-    @javax.inject.Inject
+    @Inject
     @javax.jdo.annotations.NotPersistent
     RepositoryService repositoryService;
 
-    @javax.inject.Inject
+    @Inject
     @javax.jdo.annotations.NotPersistent
     TitleService titleService;
 
-    @javax.inject.Inject
+    @Inject
     @javax.jdo.annotations.NotPersistent
     MessageService messageService;
 

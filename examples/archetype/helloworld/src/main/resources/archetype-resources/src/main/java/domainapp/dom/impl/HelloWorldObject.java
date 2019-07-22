@@ -97,15 +97,15 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
     }
 
 
-    @javax.inject.Inject
+    @Inject
     @javax.jdo.annotations.NotPersistent
     RepositoryService repositoryService;
 
-    @javax.inject.Inject
+    @Inject
     @javax.jdo.annotations.NotPersistent
     TitleService titleService;
 
-    @javax.inject.Inject
+    @Inject
     @javax.jdo.annotations.NotPersistent
     MessageService messageService;
 

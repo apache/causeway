@@ -22,7 +22,6 @@ package org.apache.isis.applib.services.repository;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 
 public interface RepositoryService {
@@ -49,7 +48,6 @@ public interface RepositoryService {
      * Same as {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)}; provided as a
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
      */
-    @Programmatic
     <T> T instantiate(final Class<T> ofType);
 
     /**
@@ -61,13 +59,11 @@ public interface RepositoryService {
      *     from the object store.
      * </p>
      */
-    @Programmatic
     boolean isPersistent(Object domainObject);
 
     /**
      * Determines if the specified object has been deleted from the object store.
      */
-    @Programmatic
     boolean isDeleted(Object domainObject);
 
     /**
@@ -81,7 +77,6 @@ public interface RepositoryService {
      * @see org.apache.isis.applib.DomainObjectContainer#newTransientInstance(Class)
      * @see #isPersistent(Object)
      */
-    @Programmatic
     <T> T persist(T domainObject);
 
     /**
@@ -89,7 +84,6 @@ public interface RepositoryService {
      *
      * @see #persist(Object)
      */
-    @Programmatic
     <T> T persistAndFlush(T domainObject);
 
     /**
@@ -97,7 +91,6 @@ public interface RepositoryService {
      *
      * @param domainObject
      */
-    @Programmatic
     void remove(Object domainObject);
 
     /**
@@ -105,7 +98,6 @@ public interface RepositoryService {
      *
      * @param domainObject
      */
-    @Programmatic
     void removeAndFlush(Object domainObject);
 
     /**
@@ -128,7 +120,6 @@ public interface RepositoryService {
      *
      * @param range 2 longs, specifying 0-based start and count.
      */
-    @Programmatic
     <T> List<T> allInstances(Class<T> ofType, long... range);
 
     /**
@@ -154,7 +145,6 @@ public interface RepositoryService {
      *
      * @param range 2 longs, specifying 0-based start and count.
      */
-    @Programmatic
     <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
 
     /**
@@ -171,7 +161,6 @@ public interface RepositoryService {
      *     This method is the recommended way of querying for multiple instances.
      * </p>
      */
-    @Programmatic
     <T> List<T> allMatches(Query<T> query);
 
     /**
@@ -188,7 +177,6 @@ public interface RepositoryService {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      */
-    @Programmatic
     <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
@@ -205,7 +193,6 @@ public interface RepositoryService {
      *
      * @see #firstMatch(Query)
      */
-    @Programmatic
     <T> T uniqueMatch(Query<T> query);
 
 

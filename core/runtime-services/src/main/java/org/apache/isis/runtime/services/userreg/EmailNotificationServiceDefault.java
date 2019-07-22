@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -155,8 +156,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     // -- DEPENDENCIES
 
-    @javax.inject.Inject
-    private EmailService emailService;
+    @Inject private EmailService emailService;
 
 
 }

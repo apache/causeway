@@ -18,6 +18,7 @@
  */
 package domainapp.application.services.homepage;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
@@ -36,6 +37,5 @@ public class HomePageService {
     }
 
 
-    @javax.inject.Inject
-    FactoryService factoryService;
+    @Inject FactoryService factoryService;
 }

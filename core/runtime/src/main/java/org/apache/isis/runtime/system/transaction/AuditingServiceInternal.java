@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.audit.AuditerService;
@@ -112,22 +113,11 @@ public class AuditingServiceInternal {
         }
     }
 
-    @javax.inject.Inject
-    List<AuditerService> auditerServices;
-
-    @javax.inject.Inject
-    ChangedObjectsServiceInternal changedObjectsServiceInternal;
-
-    @javax.inject.Inject
-    UserService userService;
-
-    @javax.inject.Inject
-    ClockService clockService;
-
-    @javax.inject.Inject
-    InteractionContext interactionContext;
-
-    @javax.inject.Inject
-    TransactionService transactionService;
+    @Inject List<AuditerService> auditerServices;
+    @Inject ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    @Inject UserService userService;
+    @Inject ClockService clockService;
+    @Inject InteractionContext interactionContext;
+    @Inject TransactionService transactionService;
 
 }

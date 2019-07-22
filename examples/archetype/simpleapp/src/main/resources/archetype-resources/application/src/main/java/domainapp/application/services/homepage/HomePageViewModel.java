@@ -44,6 +44,6 @@ public class HomePageViewModel {
         return simpleObjects.listAll();
     }
 
-    @javax.inject.Inject
+    @Inject
     SimpleObjects simpleObjects;
 }

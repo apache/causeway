@@ -49,7 +49,7 @@ public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
 
             // given
             fixtureScripts.runFixtureScript(new SimpleObject_persona.PersistAll());
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
             // when
             final List<SimpleObject> all = wrap(menu).listAll();
@@ -86,14 +86,14 @@ public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
 
             // given
             fixtureScripts.runBuilderScript(SimpleObject_persona.FIZZ.builder());
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
             // expect
         	Throwable cause = assertThrows(Throwable.class, ()->{
             
                 // when
                 wrap(menu).create("Fizz");
-                transactionService.nextTransaction();
+                transactionService.flushTransaction();
             	
             });
         	

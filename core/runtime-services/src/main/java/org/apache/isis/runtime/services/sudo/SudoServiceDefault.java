@@ -22,10 +22,11 @@ package org.apache.isis.runtime.services.sudo;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.applib.services.user.UserService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -92,11 +93,6 @@ public class SudoServiceDefault implements SudoService {
         }
     }
 
-
-    @javax.inject.Inject
-    private UserService userService;
-
-    @javax.inject.Inject
-    private List<Spi> spiServices;
+    @Inject private List<SudoService.Spi> spiServices;
 
 }

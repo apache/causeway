@@ -18,8 +18,13 @@
  */
 package domainapp.modules.simple.dom.impl;
 
+import static org.apache.isis.applib.annotation.CommandReification.ENABLED;
+import static org.apache.isis.applib.annotation.SemanticsOf.IDEMPOTENT;
+import static org.apache.isis.applib.annotation.SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE;
+
 import java.util.Comparator;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -34,10 +39,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
-
-import static org.apache.isis.applib.annotation.CommandReification.ENABLED;
-import static org.apache.isis.applib.annotation.SemanticsOf.IDEMPOTENT;
-import static org.apache.isis.applib.annotation.SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE;
 
 import domainapp.modules.simple.dom.types.Name;
 import domainapp.modules.simple.dom.types.Notes;
@@ -96,17 +97,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
-    @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    RepositoryService repositoryService;
-
-    @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    TitleService titleService;
-
-    @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    MessageService messageService;
+    @Inject RepositoryService repositoryService;
+    @Inject TitleService titleService;
+    @Inject MessageService messageService;
 
     // FACTORY
     

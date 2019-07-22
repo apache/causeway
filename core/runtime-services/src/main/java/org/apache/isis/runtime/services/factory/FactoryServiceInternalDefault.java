@@ -24,6 +24,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.NonRecoverableException;
@@ -114,20 +115,11 @@ public class FactoryServiceInternalDefault implements FactoryService {
     }
     
 
-    @javax.inject.Inject
-    IsisSessionFactory isisSessionFactory; // dependsOn
-    
-    @javax.inject.Inject
-    SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
-
-    @javax.inject.Inject
-    ServiceInjector serviceInjector;
-    
-    @javax.inject.Inject
-    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    @Inject IsisSessionFactory isisSessionFactory; // dependsOn
+    @Inject SpecificationLoader specificationLoader;
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject ServiceInjector serviceInjector;
+    @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 	
 

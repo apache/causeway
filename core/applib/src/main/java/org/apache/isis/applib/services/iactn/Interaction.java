@@ -27,6 +27,8 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -696,11 +698,7 @@ public class Interaction implements HasUniqueId {
         }
     }
 
-
-    @javax.inject.Inject
-    MetricsService metricsService;
-
-    @javax.inject.Inject
-    ClockService clockService;
+    @Inject MetricsService metricsService;
+    @Inject ClockService clockService;
 
 }

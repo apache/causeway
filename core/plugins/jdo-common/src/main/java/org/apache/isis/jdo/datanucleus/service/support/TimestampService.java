@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Vetoed;
+import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -70,12 +71,7 @@ javax.jdo.listener.StoreLifecycleListener {
         // no-op
     }
 
-    @javax.inject.Inject
-    UserService userService;
-
-    @javax.inject.Inject
-    ClockService clockService;
-
-    @javax.inject.Inject
-    IsisJdoSupport isisJdoSupport;
+    @Inject UserService userService;
+    @Inject ClockService clockService;
+    @Inject IsisJdoSupport isisJdoSupport;
 }

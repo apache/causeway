@@ -47,7 +47,7 @@ public class SimpleObjectBuilder extends BuilderScriptAbstract<SimpleObject, Sim
         object = wrap(simpleObjects).create(name);
     }
 
-    @javax.inject.Inject
+    @Inject
     SimpleObjects simpleObjects;
 
 }

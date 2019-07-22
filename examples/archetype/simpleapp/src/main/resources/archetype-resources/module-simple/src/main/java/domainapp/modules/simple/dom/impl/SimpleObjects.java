@@ -91,10 +91,10 @@ public class SimpleObjects {
         q.executeList();
     }
 
-    @javax.inject.Inject
+    @Inject
     RepositoryService repositoryService;
 
-    @javax.inject.Inject
+    @Inject
     IsisJdoSupport_v3_2 isisJdoSupport;
 
 }

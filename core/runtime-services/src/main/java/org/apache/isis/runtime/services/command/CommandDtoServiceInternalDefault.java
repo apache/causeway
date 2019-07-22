@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -177,17 +178,10 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     // //////////////////////////////////////
 
     // -- injected services
-    @javax.inject.Inject
-    CommandContext commandContext;
-
-    @javax.inject.Inject
-    private BookmarkService bookmarkService;
-
-    @javax.inject.Inject
-    SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    IsisSessionFactory isisSessionFactory;
+    @Inject CommandContext commandContext;
+    @Inject private BookmarkService bookmarkService;
+    @Inject SpecificationLoader specificationLoader;
+    @Inject IsisSessionFactory isisSessionFactory;
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {
         return IsisContext.getObjectAdapterProvider();

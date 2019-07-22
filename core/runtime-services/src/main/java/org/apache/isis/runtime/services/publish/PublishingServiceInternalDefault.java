@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -165,26 +166,13 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     }
 
     // -- injected services
-    @javax.inject.Inject
-    List<PublisherService> publisherServices;
-
-    @javax.inject.Inject
-    ChangedObjectsServiceInternal changedObjectsServiceInternal;
-
-    @javax.inject.Inject
-    CommandContext commandContext;
-
-    @javax.inject.Inject
-    InteractionContext interactionContext;
-
-    @javax.inject.Inject
-    ClockService clockService;
-
-    @javax.inject.Inject
-    UserService userService;
-
-    @javax.inject.Inject
-    MetricsService metricsService;
+    @Inject List<PublisherService> publisherServices;
+    @Inject ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    @Inject CommandContext commandContext;
+    @Inject InteractionContext interactionContext;
+    @Inject ClockService clockService;
+    @Inject UserService userService;
+    @Inject MetricsService metricsService;
 
 
 

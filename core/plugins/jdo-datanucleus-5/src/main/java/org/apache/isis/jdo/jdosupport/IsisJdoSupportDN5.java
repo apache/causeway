@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
@@ -202,8 +203,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     // //////////////////////////////////////
 
-    @javax.inject.Inject
-    IsisSessionFactory isisSessionFactory;
+    @Inject IsisSessionFactory isisSessionFactory;
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession().orElse(null);

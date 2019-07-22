@@ -20,6 +20,7 @@ package org.apache.isis.runtime.services.authsess;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
@@ -55,10 +56,7 @@ public class AuthenticationSessionProviderDefault implements AuthenticationSessi
         return isisSessionFactory.getCurrentSession().getAuthenticationSession();
     }
 
-    @javax.inject.Inject
-    UserServiceDefault  userServiceDefault;
-
-    @javax.inject.Inject
-    IsisSessionFactory isisSessionFactory;
+    @Inject UserServiceDefault  userServiceDefault;
+    @Inject IsisSessionFactory isisSessionFactory;
 
 }

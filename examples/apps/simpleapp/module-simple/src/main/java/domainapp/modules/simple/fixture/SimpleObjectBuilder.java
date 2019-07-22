@@ -19,6 +19,8 @@
 
 package domainapp.modules.simple.fixture;
 
+import javax.inject.Inject;
+
 import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
@@ -44,7 +46,6 @@ public class SimpleObjectBuilder extends BuilderScriptAbstract<SimpleObject> {
         object = wrap(simpleObjects).create(name);
     }
 
-    @javax.inject.Inject
-    SimpleObjects simpleObjects;
+    @Inject SimpleObjects simpleObjects;
 
 }

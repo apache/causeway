@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.services.i18n.po;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -41,12 +43,12 @@ import org.apache.isis.applib.value.Clob;
 public class TranslationServicePoMenu {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<TranslationServicePoMenu> {
-    }
+		private static final long serialVersionUID = 1L; }
 
     // //////////////////////////////////////
 
     public static class DownloadPotFileDomainEvent extends ActionDomainEvent {
-    }
+		private static final long serialVersionUID = 1L; }
 
     @Action(
             domainEvent = DownloadPotFileDomainEvent.class,
@@ -70,7 +72,8 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent { }
+    public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L; }
 
     @Action(
             domainEvent = ResetTranslationCacheDomainEvent.class,
@@ -91,7 +94,8 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent { }
+    public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L; }
 
     @Action(
             domainEvent = SwitchToReadingTranslationsDomainEvent.class,
@@ -112,7 +116,7 @@ public class TranslationServicePoMenu {
     // //////////////////////////////////////
 
     public static class SwitchToWritingTranslationsDomainEvent extends ActionDomainEvent {
-    }
+		private static final long serialVersionUID = 1L; }
 
     @Action(
             domainEvent = SwitchToWritingTranslationsDomainEvent.class,
@@ -132,7 +136,6 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    @javax.inject.Inject
-    private TranslationServicePo translationService;
+    @Inject private TranslationServicePo translationService;
 
 }

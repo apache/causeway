@@ -19,16 +19,17 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authentication.panel.SignInPanel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.cookies.CookieUtils;
-import org.apache.wicket.util.string.Strings;
+import javax.inject.Inject;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authentication.panel.SignInPanel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.cookies.CookieUtils;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -104,6 +105,5 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         return signInPanel;
     }
 
-    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
-    private PageNavigationService pageNavigationService;
+    @Inject private PageNavigationService pageNavigationService;
 }

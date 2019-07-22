@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -170,13 +171,8 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
 
     // //////////////////////////////////////
 
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
-    
-    @javax.inject.Inject
-    ServiceInjector serviceInjector;
-    
-    @javax.inject.Inject
-    TranslationService translationService;
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject ServiceInjector serviceInjector;
+    @Inject TranslationService translationService;
 
 }

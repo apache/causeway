@@ -28,6 +28,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -59,6 +60,7 @@ import lombok.val;
 class JdoBootstrappingTest {
 
 	@Inject private RepositoryService repository;
+	@Inject private TransactionService transactionService;
 
 	@BeforeAll
 	static void beforeAll() throws SQLException {
@@ -79,7 +81,7 @@ class JdoBootstrappingTest {
 		repository.allInstances(Inventory.class).forEach(repository::remove);
 		repository.allInstances(Book.class).forEach(repository::remove);
 		repository.allInstances(Product.class).forEach(repository::remove);
-
+		System.out.println("!!! CLEANUP DONE");
 	}
 
 	void setUp() {
@@ -92,6 +94,10 @@ class JdoBootstrappingTest {
 
 		val inventory = Inventory.of("Sample Inventory", products);
 		repository.persist(inventory);
+		
+		transactionService.flushTransaction();
+		
+		System.out.println("!!! SETUP DONE");
 	}
 
 	@Test @Order(1) @Rollback(false) 
@@ -101,6 +107,7 @@ class JdoBootstrappingTest {
 
 		cleanUp();
 		assertEquals(0, repository.allInstances(Inventory.class).size());
+		System.out.println("!!! VERIFY CLEANUP DONE");
 
 		// when
 

@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.jaxb;
 
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -97,13 +98,8 @@ public class JaxbServiceDefault extends JaxbService.Simple {
     }
 
 
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
-    
-    @javax.inject.Inject
-    ServiceInjector serviceInjector;
-
-    @javax.inject.Inject
-    MetaModelService metaModelService;
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject ServiceInjector serviceInjector;
+    @Inject MetaModelService metaModelService;
 }
 

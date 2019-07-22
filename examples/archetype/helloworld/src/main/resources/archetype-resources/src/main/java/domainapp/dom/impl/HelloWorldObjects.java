@@ -68,10 +68,10 @@ public class HelloWorldObjects {
         return repositoryService.allInstances(HelloWorldObject.class);
     }
 
-    @javax.inject.Inject
+    @Inject
     RepositoryService repositoryService;
 
-    @javax.inject.Inject
+    @Inject
     IsisJdoSupport_v3_2 isisJdoSupport;
 
 }

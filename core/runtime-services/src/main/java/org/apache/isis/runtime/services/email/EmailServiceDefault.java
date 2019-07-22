@@ -24,6 +24,7 @@ import java.util.Properties;
 
 import javax.activation.DataSource;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
@@ -258,7 +259,6 @@ public class EmailServiceDefault implements EmailService {
         return addresses != null && addresses.length > 0;
     }
 
-    @javax.inject.Inject
-    IsisConfiguration configuration;
+    @Inject IsisConfiguration configuration;
 
 }

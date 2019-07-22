@@ -18,25 +18,28 @@
  */
 package domainapp.dom.impl;
 
+import java.util.Comparator;
+
+import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
-import com.google.common.collect.ComparisonChain;
-
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.CommandReification;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
 import domainapp.dom.types.Name;
 import domainapp.dom.types.Notes;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.Comparator;
-import java.util.function.Function;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "helloworld" )
 @javax.jdo.annotations.DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
@@ -107,17 +110,9 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
         return Comparator.comparing(HelloWorldObject::getName).compare(this, other);
     }
 
-
-    @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    RepositoryService repositoryService;
-
-    @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    TitleService titleService;
-
-    @javax.inject.Inject
-    @javax.jdo.annotations.NotPersistent
-    MessageService messageService;
+    
+    @Inject RepositoryService repositoryService;
+    @Inject TitleService titleService;
+    @Inject MessageService messageService;
 
 }

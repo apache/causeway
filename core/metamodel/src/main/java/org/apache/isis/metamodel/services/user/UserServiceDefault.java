@@ -161,7 +161,7 @@ public class UserServiceDefault implements UserService {
         UserServiceDefault userServiceDefault;
     }
 
-    @javax.inject.Inject
+    @Inject
     AuthenticationSessionProvider authenticationSessionProvider;
 
 }

@@ -21,6 +21,7 @@ package org.apache.isis.jdo.metrics;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.InstanceLifecycleListener;
 import javax.jdo.listener.LoadLifecycleListener;
@@ -64,7 +65,6 @@ LoadLifecycleListener, WithTransactionScope {
         numberLoaded.set(0);
     }
 
-    @javax.inject.Inject
-    ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    @Inject ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
 }

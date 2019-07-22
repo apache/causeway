@@ -21,6 +21,8 @@ package org.apache.isis.runtime.services.ixn;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -124,17 +126,10 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 );
     }
 
-    @javax.inject.Inject
-    CommandDtoServiceInternal commandDtoServiceInternal;
-
-    @javax.inject.Inject
-    private BookmarkService bookmarkService;
-
-    @javax.inject.Inject
-    private InteractionContext interactionContext;
-
-    @javax.inject.Inject
-    private UserService userService;
+    @Inject CommandDtoServiceInternal commandDtoServiceInternal;
+    @Inject private BookmarkService bookmarkService;
+    @Inject private InteractionContext interactionContext;
+    @Inject private UserService userService;
 
 
 }

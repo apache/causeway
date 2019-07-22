@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -49,9 +51,6 @@ public class BookmarkHolder_lookup {
         return bookmarkService.lookup(bookmarkHolder, FieldResetPolicy.RESET);
     }
 
-
-
-    @javax.inject.Inject
-    private BookmarkService bookmarkService;
+    @Inject private BookmarkService bookmarkService;
 
 }

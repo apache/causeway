@@ -20,6 +20,7 @@ package org.apache.isis.jdo.jdosupport.mixins;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
 import javax.xml.bind.JAXBException;
@@ -81,7 +82,6 @@ public class Persistable_downloadJdoMetadata {
         return jdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
     }
 
-    @javax.inject.Inject
-    IsisJdoSupport jdoSupport;
+    @Inject IsisJdoSupport jdoSupport;
 
 }

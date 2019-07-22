@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.layout;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
@@ -122,10 +123,7 @@ public class LayoutServiceMenu {
     // //////////////////////////////////////
 
 
-    @javax.inject.Inject
-    LayoutService layoutService;
-
-
+    @Inject LayoutService layoutService;
 
 
 }

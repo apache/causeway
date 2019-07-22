@@ -18,6 +18,7 @@
  */
 package org.apache.isis.runtime.services.routing;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.services.routing.RoutingService;
@@ -44,7 +45,6 @@ public class RoutingServiceDefault implements RoutingService {
                         : null;
     }
 
-    @javax.inject.Inject
-    HomePageResolverService homePageProviderService;
+    @Inject HomePageResolverService homePageProviderService;
 
 }

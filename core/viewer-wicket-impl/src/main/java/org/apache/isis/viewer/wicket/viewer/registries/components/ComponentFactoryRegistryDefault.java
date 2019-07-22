@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -50,8 +51,8 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     private final Multimap<ComponentType, ComponentFactory> componentFactoriesByType;
 
-    @javax.inject.Inject
-    public ComponentFactoryRegistryDefault(final ComponentFactoryRegistrar componentFactoryList) {
+    @Inject
+    public ComponentFactoryRegistryDefault(final ComponentFactoryRegistrar componentFactoryRegistrar) {
         componentFactoriesByType = Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(), new Supplier<List<ComponentFactory>>() {
             @Override
             public List<ComponentFactory> get() {
@@ -59,7 +60,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
             }
         });
 
-        registerComponentFactories(componentFactoryList);
+        registerComponentFactories(componentFactoryRegistrar);
     }
 
     // ///////////////////////////////////////////////////////

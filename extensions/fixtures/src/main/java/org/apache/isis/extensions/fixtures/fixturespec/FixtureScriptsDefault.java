@@ -21,6 +21,7 @@ package org.apache.isis.extensions.fixtures.fixturespec;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -241,11 +242,8 @@ public class FixtureScriptsDefault extends FixtureScripts {
     
     // -- DEPS
     
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
-    
-    @javax.inject.Inject
-    EventBusService eventBusService;
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject EventBusService eventBusService;
 
 
 }

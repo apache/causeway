@@ -82,7 +82,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 
             // when
             wrap(simpleObject).updateName("new name");
-            transactionService.nextTransaction();
+            transactionService.flushTransaction();
 
             // then
             assertThat(wrap(simpleObject).getName()).isEqualTo("new name");

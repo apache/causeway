@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -165,7 +166,6 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         return Recognition.of(category, recognize(ex));
     }
 
-    @javax.inject.Inject
-    protected TranslationService translationService;
+    @Inject protected TranslationService translationService;
     
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
@@ -112,8 +114,7 @@ public class FixtureResult {
 
     // -- injected services
 
-    @javax.inject.Inject
-    FixtureScripts fixtureScripts;
+    @Inject FixtureScripts fixtureScripts;
 
 
 

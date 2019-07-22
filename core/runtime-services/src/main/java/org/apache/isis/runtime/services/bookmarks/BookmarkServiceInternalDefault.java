@@ -208,10 +208,10 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 
     // -- INJECTION
 
-    @javax.inject.Inject
+    @Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
-    @javax.inject.Inject
+    @Inject
     WrapperFactory wrapperFactory;
 
     @Inject

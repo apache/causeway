@@ -20,6 +20,7 @@ package domainapp.dom.impl;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.jdo.JDOQLTypedQuery;
 
 import org.apache.isis.applib.annotation.Action;
@@ -69,10 +70,7 @@ public class HelloWorldObjects {
         return repositoryService.allInstances(HelloWorldObject.class);
     }
 
-    @javax.inject.Inject
-    RepositoryService repositoryService;
-
-    @javax.inject.Inject
-    IsisJdoSupport_v3_2 isisJdoSupport;
+    @Inject RepositoryService repositoryService;
+    @Inject IsisJdoSupport_v3_2 isisJdoSupport;
 
 }

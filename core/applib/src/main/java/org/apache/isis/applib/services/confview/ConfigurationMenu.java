@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.confview;
 
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -61,7 +63,6 @@ public class ConfigurationMenu {
         return configurationService.allProperties();
     }
 
-    @javax.inject.Inject
-    private ConfigurationViewService configurationService;
+    @Inject private ConfigurationViewService configurationService;
 
 }

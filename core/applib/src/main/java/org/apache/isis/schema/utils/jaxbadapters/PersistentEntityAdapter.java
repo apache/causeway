@@ -16,6 +16,7 @@
  */
 package org.apache.isis.schema.utils.jaxbadapters;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -47,6 +48,5 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         return bookmarkService;
     }
 
-    @javax.inject.Inject
-    BookmarkService bookmarkService;
+    @Inject BookmarkService bookmarkService;
 }
