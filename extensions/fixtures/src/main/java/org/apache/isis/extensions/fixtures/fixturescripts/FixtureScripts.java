@@ -351,20 +351,26 @@ public abstract class FixtureScripts extends AbstractService {
 
     @Programmatic
     public void run(final FixtureScript... fixtureScriptList) {
-
-        val singleScript = toSingleScript(fixtureScriptList);
-        val parameters = (String)null;
-
-        transactionService.executeWithinTransaction(()->{
-            runFixtureScript(singleScript, parameters);	
-        });
-
+    	
+    	val singleScript = toSingleScript(fixtureScriptList);
+    	val parameters = (String)null;
+    	
+    	transactionService.executeWithinTransaction(()->{
+    		runFixtureScript(singleScript, parameters);	
+    	});
     }
 
     @Programmatic
-    public <T> T runPersona(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
-        val builderScript = persona.builder();
-        return runBuilderScript(builderScript);
+    public <T> void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
+        for (PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaWithBuilderScript : personaScripts) {
+            runPersona(personaWithBuilderScript);
+        }
+    }
+
+    @Programmatic
+    public <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> persona) {
+        final BuilderScriptAbstract<T> fixtureScript = persona.builder();
+        return runBuilderScript(fixtureScript);
     }
 
     /**

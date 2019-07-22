@@ -42,9 +42,12 @@ public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegr
         return this.fixtureScripts.runBuilderScript(fixtureScript);
     }
 
-    protected <T> T runBuilderScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
-        final BuilderScriptAbstract<T> builderScript = persona.builder();
-        return runBuilderScript(builderScript);
+    protected <T> void runPersonaScripts(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
+        this.fixtureScripts.runPersonaScripts(personaScripts);
+    }
+
+    protected <T> T runPersonaScript(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaScript) {
+        return this.fixtureScripts.runPersonaScript(personaScript);
     }
 
     /**
