@@ -29,6 +29,7 @@ import javax.servlet.ServletResponse;
 import javax.transaction.TransactionalException;
 
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 //@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"}) //[ahuber] to support 
@@ -36,18 +37,19 @@ import org.apache.isis.runtime.system.context.IsisContext;
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
-    private TransactionService transactionService;
+    private _Lazy<TransactionService> transactionService = 
+    		_Lazy.threadSafe(IsisContext::getTransactionService);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        transactionService = IsisContext.getTransactionService();
+        // too early ... transactionService = IsisContext.getTransactionService();
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
     		throws IOException, ServletException {
 
-        transactionService.executeWithinTransaction(()->{
+        transactionService.get().executeWithinTransaction(()->{
         
             try {
                 chain.doFilter(request, response);

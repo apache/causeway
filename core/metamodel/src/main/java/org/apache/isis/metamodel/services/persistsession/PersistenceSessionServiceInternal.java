@@ -19,7 +19,6 @@
 package org.apache.isis.metamodel.services.persistsession;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -103,10 +102,5 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      */
     <T> ObjectAdapter firstMatchingQuery(Query<T> query);
 
-    @Deprecated //TODO[2125] use new TransactionServiceSpring instead
-    void executeWithinTransaction(Runnable task);
-    
-    @Deprecated //TODO[2125] use new TransactionServiceSpring instead
-    <T> T executeWithinTransaction(Supplier<T> task);
 
 }

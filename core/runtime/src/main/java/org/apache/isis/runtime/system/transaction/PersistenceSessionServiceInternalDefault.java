@@ -22,7 +22,6 @@ import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,7 +30,6 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -141,22 +139,11 @@ implements PersistenceSessionServiceInternal {
         return getPersistenceSession().firstMatchingQuery(query);
     }
 
-    @Override
-    public void executeWithinTransaction(Runnable task) {
-        transactionService.executeWithinTransaction(task);
-    }
-    
-    @Override
-    public <T> T executeWithinTransaction(Supplier<T> task) {
-        return transactionService.executeWithinTransaction(task);
-    }
-
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession()
                 .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
     }
 
-    @Inject TransactionService transactionService;
     @Inject IsisSessionFactory isisSessionFactory;
     @Inject SpecificationLoader specificationLoader;
 

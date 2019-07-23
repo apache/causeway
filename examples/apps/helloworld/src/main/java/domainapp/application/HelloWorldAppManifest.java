@@ -56,7 +56,7 @@ import domainapp.dom.HelloWorldModule;
     IsisBootDataNucleus.class,
     IsisBootWebRestfulObjects.class,
     IsisBootWebWicket.class,
-    //FixtureScriptsDefault.class,
+    //IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {
