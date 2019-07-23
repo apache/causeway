@@ -22,13 +22,21 @@ import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.springframework.transaction.support.SmartTransactionObject;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.val;
 
-@Data @AllArgsConstructor(staticName = "of")
+@ToString
 public class IsisTransactionObject implements SmartTransactionObject {
+
+	public static IsisTransactionObject of(Transaction currentTransaction) {
+		val txObject = new IsisTransactionObject();
+		txObject.setCurrentTransaction(currentTransaction);
+		return txObject;
+	}
 	
-	Transaction currentTransaction;
+	@Getter @Setter Transaction currentTransaction;
 	
 	@Override
 	public boolean isRollbackOnly() {
@@ -47,6 +55,33 @@ public class IsisTransactionObject implements SmartTransactionObject {
 			return currentTransaction.getId();
 		}
 		return null;
-	}		
+	}	
+	
+	// -- RESET
+	
+	public void clear() {
+		transactionNestingLevel = 0;
+		setCurrentTransaction(null);
+	}
+	
+	
+	// -- NESTING
+	
+	@Getter private int transactionNestingLevel = 0;
+	
+	public int incTransactionNestingLevel() {
+		return ++transactionNestingLevel;
+	}
+	
+	public int decTransactionNestingLevel() {
+		if(transactionNestingLevel==0) {
+			return 0;
+		}
+		return --transactionNestingLevel;
+	}
+	
+	public boolean isTopLevel() {
+		return transactionNestingLevel == 0;
+	}
 
 }

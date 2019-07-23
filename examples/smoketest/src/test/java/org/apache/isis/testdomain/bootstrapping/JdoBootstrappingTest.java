@@ -28,7 +28,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -51,8 +50,9 @@ import lombok.val;
 	}, 
 	properties = {
 		"logging.config=log4j2-test.xml",
-		"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
+		"logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
 		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
+		"logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
 		// "isis.reflector.introspector.parallelize=false",
 		 //"logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
 })
@@ -60,7 +60,7 @@ import lombok.val;
 class JdoBootstrappingTest {
 
 	@Inject private RepositoryService repository;
-	@Inject private TransactionService transactionService;
+	//@Inject private TransactionService transactionService;
 
 	@BeforeAll
 	static void beforeAll() throws SQLException {
@@ -94,8 +94,6 @@ class JdoBootstrappingTest {
 
 		val inventory = Inventory.of("Sample Inventory", products);
 		repository.persist(inventory);
-		
-		transactionService.flushTransaction();
 		
 		System.out.println("!!! SETUP DONE");
 	}

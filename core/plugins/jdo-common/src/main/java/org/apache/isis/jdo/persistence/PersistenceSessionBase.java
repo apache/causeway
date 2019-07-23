@@ -84,7 +84,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
      */
     protected final PersistenceManagerFactory jdoPersistenceManagerFactory;
 
-    IsisTransactionManagerJdoInternal transactionManager;
+    IsisTransactionManagerJdo transactionManager;
 
     /**
      * populated only when {@link #open()}ed.
@@ -134,7 +134,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.persistenceQueryFactory = PersistenceQueryFactory.of(
                 obj->this.getObjectAdapterProvider().adapterFor(obj), 
                 this.specificationLoader);
-        this.transactionManager = new IsisTransactionManagerJdoInternal(this);
+        this.transactionManager = new IsisTransactionManagerJdo(this);
 
         this.state = State.NOT_INITIALIZED;
     }
