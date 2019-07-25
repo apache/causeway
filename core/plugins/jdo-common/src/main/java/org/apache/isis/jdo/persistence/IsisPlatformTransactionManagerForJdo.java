@@ -91,6 +91,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 		log.debug("doCommit {}", status);
 		
 		transactionManagerJdo().commitTransaction(txObject);
+		txObject.getCountDownLatch().countDown();
 		txObject.setCurrentTransaction(null);
 		IsisTransactionAspectSupport.clearTransactionObject();
 	}
@@ -102,6 +103,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 		log.debug("doRollback {}", status);
 		
 		transactionManagerJdo().abortTransaction(txObject);
+		txObject.getCountDownLatch().countDown();
 		txObject.setCurrentTransaction(null);
 		IsisTransactionAspectSupport.clearTransactionObject();
 	}

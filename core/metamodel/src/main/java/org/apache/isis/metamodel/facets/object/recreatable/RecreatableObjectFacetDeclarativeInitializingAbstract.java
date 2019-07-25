@@ -19,13 +19,11 @@
 
 package org.apache.isis.metamodel.facets.object.recreatable;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.PostConstructMethodCache;
@@ -55,26 +53,27 @@ extends RecreatableObjectFacetAbstract {
 			final Object viewModelPojo,
 			final String mementoStr) {
 
-		final _Mementos.Memento memento = parseMemento(mementoStr);
-
-		final Set<String> mementoKeys = memento.keySet();
-
-		final ObjectAdapter viewModelAdapter = getObjectAdapterProvider()
+		val memento = parseMemento(mementoStr);
+		val mementoKeys = memento.keySet();
+		
+		if(mementoKeys.isEmpty()) {
+			return;
+		}
+		
+		val viewModelAdapter = getObjectAdapterProvider()
 				.adapterForViewModel(viewModelPojo, mementoStr);
+		
 		viewModelAdapter.injectServices(getServiceInjector());
 
-		final ObjectSpecification spec = viewModelAdapter.getSpecification();
-		final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
+		val spec = viewModelAdapter.getSpecification();
+		val propertiesStream = spec.streamProperties(Contributed.EXCLUDED)
+				.filter(property->mementoKeys.contains(property.getId()));
 
-		properties.forEach(property->{
-			final String propertyId = property.getId();
-
-			Object propertyValue = null;
-
-			if(mementoKeys.contains(propertyId)) {
-				final Class<?> propertyType = property.getSpecification().getCorrespondingClass();
-				propertyValue = memento.get(propertyId, propertyType);
-			}
+		propertiesStream.forEach(property->{
+			
+			val propertyId = property.getId();
+			val propertyType = property.getSpecification().getCorrespondingClass();
+			val propertyValue = memento.get(propertyId, propertyType);
 
 			if(propertyValue != null) {
 				property.set(viewModelAdapter, getObjectAdapterProvider().adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);

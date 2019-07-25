@@ -19,12 +19,13 @@
 package org.apache.isis.testdomain.commandexecution;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -34,19 +35,26 @@ import org.apache.isis.testdomain.jdo.InventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
+import lombok.Getter;
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
                 JdoTestDomainModule.class,
+                BackgroundExecutionTest.ActionDomainEventListener.class
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                "logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
-                // "isis.reflector.introspector.parallelize=false",
-                //"logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
-        })
+//        		"logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
+//        		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
+//        		"logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
+        		})
 class BackgroundExecutionTest {
     
     @Inject private FixtureScripts fixtureScripts;
@@ -62,20 +70,61 @@ class BackgroundExecutionTest {
     }
 
     @Test
-    void testBackgroundService() {
+    void testBackgroundService_waitingForFixedTime() throws InterruptedException, ExecutionException {
         
-        val inventoryManager = facoryService.viewModel(InventoryManager.class, null);
+        val inventoryManager = facoryService.viewModel(InventoryManager.class);
         val product = repository.allInstances(Product.class).get(0);
+
+        assertEquals(99d, product.getPrice(), 1E-6);
         
         backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
         
+        Thread.sleep(1000); // fragile
         assertEquals(123d, product.getPrice(), 1E-6);
-        
     }
     
-    //public static class
+    @Test
+    void testBackgroundService_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
+        
+        val inventoryManager = facoryService.viewModel(InventoryManager.class);
+        val product = repository.allInstances(Product.class).get(0);
+
+        assertEquals(99d, product.getPrice(), 1E-6);
+        
+        actionDomainEventListener.prepareLatch();
+        
+        backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
+        
+        assertTrue(
+        		actionDomainEventListener.getCountDownLatch()
+        		.await(1, TimeUnit.SECONDS));
+        
+        assertEquals(123d, product.getPrice(), 1E-6);
+    }
+    
+    
+    @Service
+    public static class ActionDomainEventListener {
+    	
+    	@Getter private CountDownLatch countDownLatch;
+    	
+    	@EventListener(InventoryManager.UpdateProductPriceEvent.class)
+    	public void hi(InventoryManager.UpdateProductPriceEvent event) {
+    		//FIXME[2125] not triggered yet
+    		System.err.println("!!!!!!!!!!!! hiho");
+    		countDownLatch.countDown();
+    	}
+
+		public void prepareLatch() {
+			countDownLatch = new CountDownLatch(1);
+		}
+    	    	
+    }
+    
+    // -- DEPS
     
     @Inject BackgroundService backgroundService;
     @Inject FactoryService facoryService;
+    @Inject ActionDomainEventListener actionDomainEventListener;
 
 }

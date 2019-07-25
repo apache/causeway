@@ -19,7 +19,6 @@
 
 package org.apache.isis.applib.services.xactn;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
 public interface TransactionService {
@@ -51,11 +50,6 @@ public interface TransactionService {
      */
     TransactionState currentTransactionState();
 
-    /**
-     * Return a latch, that allows threads to wait on the current transaction to complete.
-     */
-    CountDownLatch currentTransactionLatch();
-    
     void executeWithinTransaction(Runnable task);
     <T> T executeWithinTransaction(Supplier<T> task);
 

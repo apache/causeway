@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +84,7 @@ public class EventStreamServiceDefault implements EventStreamService {
             break; // fall through
         }
 
-        val callingThread_TransactionLatch = transactionService.currentTransactionLatch();
+        val callingThread_TransactionLatch = IsisTransactionAspectSupport.transactionLatch();
 
         // spawn a new thread that gets its own session
         CompletableFuture.runAsync(()->{

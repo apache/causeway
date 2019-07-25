@@ -67,12 +67,21 @@ public interface FactoryService {
     /**
      * Creates a new ViewModel instance, and initializes according to the given {@code mementoStr} 
      * @param viewModelClass
-     * @param mementoStr
+     * @param mementoStr - ignored if {@code null}
      * @since 2.0
      * @apiNote EXPERIMENTAL
      */
     <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);
     
+    /**
+     * Creates a new ViewModel instance 
+     * @param viewModelClass
+     * @since 2.0
+     * @apiNote EXPERIMENTAL
+     */
+    default <T> T viewModel(Class<T> viewModelClass) {
+    	return viewModel(viewModelClass, /*mementoStr*/null);
+    }
     
     
 }

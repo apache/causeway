@@ -27,7 +27,9 @@ interface InvocationHandlerFactory extends AutoCloseable {
      * @param target - the object that is proxied, either a domain object or a mixin around a domain object
      * @param mixedInIfAny - if target is a mixin, then this is the domain object that is mixed-in to.
      */
-    <T> InvocationHandler newMethodHandler(T target, Object mixedInIfAny);
+    <T> InvocationHandler newMethodHandler(
+    		T target, 
+    		Object mixedInIfAny);
 
     void close(); // refined from AutoCloseable to not throw catched exceptions
 

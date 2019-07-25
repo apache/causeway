@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtime.system.transaction;
 
+import java.util.concurrent.CountDownLatch;
+
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.springframework.transaction.support.SmartTransactionObject;
@@ -37,6 +39,7 @@ public class IsisTransactionObject implements SmartTransactionObject {
 	}
 	
 	@Getter @Setter Transaction currentTransaction;
+	
 	
 	@Override
 	public boolean isRollbackOnly() {
@@ -64,6 +67,13 @@ public class IsisTransactionObject implements SmartTransactionObject {
 		setCurrentTransaction(null);
 	}
 	
+	// -- THREAD SYNCHRONICATION
+	
+    /**
+     * A latch that allows threads to wait on. The latch count drops to zero once 
+     * this transaction completes.
+     */
+	@Getter private final CountDownLatch countDownLatch = new CountDownLatch(1);	
 	
 	// -- NESTING
 	

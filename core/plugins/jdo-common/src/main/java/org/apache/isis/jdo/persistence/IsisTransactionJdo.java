@@ -468,27 +468,6 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
         return str;
     }
 
-    // -- getMessageBroker
-
-    //    /**
-    //     * The {@link org.apache.isis.commons.authentication.MessageBroker} for this transaction.
-    //     *
-    //     * <p>
-    //     * Injected in constructor
-    //     *
-    //     * @deprecated - obtain the {@link org.apache.isis.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
-    //     */
-    //    public MessageBroker getMessageBroker() {
-    //        return messageBroker;
-    //    }
-
-    // -- countDownLatch
-
-    @Override
-    public CountDownLatch getCountDownLatch() {
-        return countDownLatch;
-    }
-
 
 }
 

@@ -26,13 +26,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
@@ -41,6 +40,7 @@ import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
+import org.springframework.stereotype.Service;
 
 import lombok.val;
 
@@ -70,7 +70,7 @@ public class BackgroundServiceDefault implements BackgroundService {
                         .commandContext(commandContext)
                         .objectAdapterProvider(objectAdapterProvider)
                         .build()
-                    : new InvocationHandlerFactoryFallback();
+                    : new InvocationHandlerFactoryFallback(transactionService);
         
     }
 
@@ -82,54 +82,60 @@ public class BackgroundServiceDefault implements BackgroundService {
         }
     }
 
-    ObjectSpecification getSpecification(final Class<?> type) {
-        return specificationLoader.loadSpecification(type);
-    }
-
-    // //////////////////////////////////////
-
+    // -- EXECUTION
     
     @Override
     public <T> T execute(final T domainObject) {
         final Class<T> cls = uncheckedCast(domainObject.getClass());
-        val methodHandler = invocationHandlerFactory.newMethodHandler(domainObject, null);
-        return newProxy(cls, null, methodHandler);
+        val mixedIn = null;
+        val methodHandler = invocationHandlerFactory.newMethodHandler(domainObject, mixedIn);
+        return newProxy(cls, mixedIn, methodHandler);
     }
 
     @Override
     public <T> T executeMixin(Class<T> mixinClass, Object mixedIn) {
-        final T mixin = factoryService.mixin(mixinClass, mixedIn);
+        val mixin = factoryService.<T>mixin(mixinClass, mixedIn);
         val methodHandler = invocationHandlerFactory.newMethodHandler(mixin, mixedIn);
         return newProxy(mixinClass, mixedIn, methodHandler);
     }
 
+    // -- HELPER
+    
+    protected ObjectSpecification getSpecification(final Class<?> type) {
+        return specificationLoader.loadSpecification(type);
+    }
+    
     private <T> T newProxy(
             final Class<T> cls,
-            final Object mixedInIfAny,
+            final Object mixedInIfAny, 
             final InvocationHandler methodHandler) {
 
-        final Class<?>[] interfaces = _Arrays.combine(
+        val interfaces = _Arrays.combine(
                 cls.getInterfaces(),
                 new Class<?>[] { ProxyEnhanced.class });
 
-        final boolean initialize = mixedInIfAny!=null;
+        val initialize = mixedInIfAny!=null;
 
 
-        final Class<?>[] constructorArgTypes = initialize ? new Class<?>[] {mixedInIfAny.getClass()} : _Constants.emptyClasses;
-        final Object[] constructorArgs = initialize ? new Object[] {mixedInIfAny} : _Constants.emptyObjects;
+        val constructorArgTypes = initialize 
+        		? new Class<?>[] {mixedInIfAny.getClass()} 
+        			: _Constants.emptyClasses;
+        		
+        val constructorArgs = initialize 
+        		? new Object[] {mixedInIfAny} 
+        			: _Constants.emptyObjects;
 
-        final ProxyFactory<T> proxyFactory = ProxyFactory.builder(cls)
+        val proxyFactory = ProxyFactory.<T>builder(cls)
                 .interfaces(interfaces)
                 .constructorArgTypes(constructorArgTypes)
                 .build();
 
         return initialize
                 ? proxyFactory.createInstance(methodHandler, constructorArgs)
-                        : proxyFactory.createInstance(methodHandler, false)
-                        ;
+                        : proxyFactory.createInstance(methodHandler, /*initialize*/false);
     }
 
-    // //////////////////////////////////////
+    // -- DEPENDENCIES
 
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
@@ -137,6 +143,10 @@ public class BackgroundServiceDefault implements BackgroundService {
     @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ObjectAdapterProvider objectAdapterProvider;
+    @Inject private TransactionService transactionService;
+
+
+
    
 
 }

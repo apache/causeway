@@ -20,7 +20,6 @@ package org.apache.isis.runtime.system.transaction;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.commons.internal.context._Context;
 
 public final class IsisTransactionAspectSupport {
@@ -40,10 +39,16 @@ public final class IsisTransactionAspectSupport {
 
 	public static boolean isTransactionInProgress() {
 		return currentTransactionObject()
-		.map(IsisTransactionObject::getCurrentTransaction)
-		.map(Transaction::getCountDownLatch)
+		.map(IsisTransactionObject::getCountDownLatch)
 		.map(latch->latch.getCount()>0)
 		.orElse(false);
 	}
 
+	public static TransactionLatch transactionLatch() {
+		return currentTransactionObject()
+		.map(IsisTransactionObject::getCountDownLatch)
+		.map(TransactionLatch::of)
+		.orElseGet(TransactionLatch::unlocked);
+	}
+	
 }

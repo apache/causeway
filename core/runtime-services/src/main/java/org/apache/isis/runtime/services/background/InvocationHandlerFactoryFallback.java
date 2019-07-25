@@ -22,11 +22,16 @@ import java.lang.reflect.InvocationHandler;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.isis.applib.services.xactn.TransactionService;
+
+import lombok.RequiredArgsConstructor;
+
 /**
  * only used if there is no BackgroundCommandService available
  * @since 2.0
  *
  */
+@RequiredArgsConstructor
 final class InvocationHandlerFactoryFallback implements InvocationHandlerFactory {
 
     final static class SimpleExecutor {
@@ -56,12 +61,19 @@ final class InvocationHandlerFactoryFallback implements InvocationHandlerFactory
 
     }
     
-    final SimpleExecutor simpleExecutor = new SimpleExecutor();
-    
-    
-    @Override
-    public <T> InvocationHandler newMethodHandler(T target, Object mixedInIfAny) {
-        return new ForkingInvocationHandler<T>(target, mixedInIfAny, simpleExecutor.backgroundExecutorService);
+    private final SimpleExecutor simpleExecutor = new SimpleExecutor();
+    private final TransactionService transactionService;
+
+	@Override
+    public <T> InvocationHandler newMethodHandler(
+    		T target, 
+    		Object mixedInIfAny) {
+		
+        return new ForkingInvocationHandler<T>(
+        		target, 
+        		mixedInIfAny, 
+        		simpleExecutor.backgroundExecutorService,
+        		transactionService);
     }
 
     @Override

@@ -38,7 +38,9 @@ final class InvocationHandlerFactoryUsingBackgroundCommandService implements Inv
     private final ObjectAdapterProvider objectAdapterProvider;
 
     @Override
-    public <T> InvocationHandler newMethodHandler(T target, Object mixedInIfAny) {
+    public <T> InvocationHandler newMethodHandler(
+    		T target, 
+    		Object mixedInIfAny) {
         
         return new CommandInvocationHandler<T>(
                 backgroundCommandService,
@@ -54,5 +56,7 @@ final class InvocationHandlerFactoryUsingBackgroundCommandService implements Inv
     public void close() {
         backgroundCommandService.close();
     }
+
+
 
 }

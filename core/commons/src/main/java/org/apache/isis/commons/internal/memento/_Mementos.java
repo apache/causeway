@@ -22,11 +22,13 @@ package org.apache.isis.commons.internal.memento;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nullable;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * <h1>- internal use only -</h1>
@@ -142,17 +144,52 @@ public final class _Mementos {
      * @param codec (required)
      * @param serializer (required)
      * @param input
-     * @return null if {@code input} is empty
+     * @return {@code empty()} if {@code input} is empty
      *
      * @throws IllegalArgumentException if parsing fails
      *
      */
-    public static @Nullable Memento parse(
+    public static Memento parse(
             final EncoderDecoder codec,
             final SerializingAdapter serializer,
             final String input) {
-
+    	
+    	if(_Strings.isNullOrEmpty(input)) {
+    		return empty();
+    	}
         return _Mementos_MementoDefault.parse(codec, serializer, input);
+    }
+    
+    // -- EMPTY MEMENTO
+    
+    private static final class EmptyMemento implements Memento {
+
+		@Override
+		public <T> T get(String name, Class<T> cls) {
+			return null;
+		}
+
+		@Override
+		public Memento put(String name, Object value) {
+			throw _Exceptions.notImplemented();
+		}
+
+		@Override
+		public Set<String> keySet() {
+			return Collections.emptySet();
+		}
+
+		@Override
+		public String asString() {
+			return "EmptyMemento";
+		}
+    	
+    }
+    
+    private final static Memento EMPTY_MEMENTO = new EmptyMemento();
+    
+    public static Memento empty() {
+    	return EMPTY_MEMENTO;
     }
 
 }

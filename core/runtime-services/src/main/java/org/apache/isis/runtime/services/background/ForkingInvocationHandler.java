@@ -18,42 +18,35 @@
  */
 package org.apache.isis.runtime.services.background;
 
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.functions._Functions.uncheckedSupplier;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
-import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Package private invocation handler that executes actions in the background using a ExecutorService
+ * Package private invocation handler that executes actions in the background 
+ * using a ExecutorService.
  * @since 2.0
  */
-@Log4j2
+@Log4j2 @AllArgsConstructor
 class ForkingInvocationHandler<T> implements InvocationHandler {
 
-    private final T target;
+    @NonNull private final T target;
     private final Object mixedInIfAny;
-    private final ExecutorService backgroundExecutorService;
-
-    ForkingInvocationHandler(
-            T target,
-            Object mixedInIfAny,
-            ExecutorService backgroundExecutorService ) {
-        this.target = requires(target, "target");
-        this.mixedInIfAny = mixedInIfAny;
-        this.backgroundExecutorService = requires(backgroundExecutorService, "backgroundExecutorService");
-    }
+    @NonNull private final ExecutorService backgroundExecutorService;
+    @NonNull private final TransactionService transactionService;
 
     @Override
     public Object invoke(
@@ -61,40 +54,34 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
             final Method proxyMethod,
             final Object[] args) throws Throwable {
 
-        final boolean inheritedFromObject = proxyMethod.getDeclaringClass().equals(Object.class);
+        val inheritedFromObject = proxyMethod.getDeclaringClass().equals(Object.class);
         if(inheritedFromObject) {
             return proxyMethod.invoke(target, args);
         }
 
-        final Object domainObject;
-        if (mixedInIfAny == null) {
-            domainObject = target;
-        } else {
-            domainObject = mixedInIfAny;
-        }
+        val domainObject = mixedInIfAny != null
+        		? mixedInIfAny
+        				: target;
 
         val authenticationSession = 
                 IsisSession.current()
                 .map(IsisSession::getAuthenticationSession)
                 .orElse(new InitialisationSession());
         
-        val isisTransaction = (Transaction)IsisTransactionAspectSupport
-                .currentTransactionObject()
-                .map(x->x.getCurrentTransaction())
-                .orElse(null);
+        val transactionLatch = IsisTransactionAspectSupport.transactionLatch();
 
-        val countDownLatch = Optional.ofNullable(isisTransaction)
-                .map(Transaction::getCountDownLatch)
-                .orElse(new CountDownLatch(0));
-
-        backgroundExecutorService.submit(()->{
+        //unfortunately there is no easy way to make use of this future
+        val future = backgroundExecutorService.submit(()->{
 
             try {
-                countDownLatch.await(); // wait for current transaction of the calling thread to complete
+            	
+            	transactionLatch.await(); // wait for transaction of the calling thread to complete
 
-                IsisContext.getSessionFactory().doInSession(
-                        ()->proxyMethod.invoke(domainObject, args),
-                        authenticationSession);
+                return IsisContext.getSessionFactory().doInSession(
+                		()->transactionService.executeWithinTransaction(
+                				uncheckedSupplier(()->proxyMethod.invoke(domainObject, args))
+                		),
+                    	authenticationSession);
 
             } catch (Exception e) {
 
@@ -103,10 +90,12 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
                                 proxyMethod.getName(),
                                 domainObject.getClass().getName()),
                         e);
+                return null;
             }
         });
-
+        
         return null;
+        
     }
 
 }

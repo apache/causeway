@@ -115,6 +115,16 @@ public final class _Functions {
         };
     }
 
+    public static  Runnable uncheckedRunnable(CheckedRunnable checkedRunnable) {
+        return ()->{
+            try {
+                checkedRunnable.run();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
+    
     // -- CHECKED EXCEPTION ADAPTERS (CONSUMER)
 
     /**
@@ -173,6 +183,17 @@ public final class _Functions {
                 return checkedSupplier.get();
             } catch (Exception e) {
                 throw toUncheckedException.apply(e);
+            }
+        };
+    }
+    
+    public static <T, U extends RuntimeException> Supplier<T> uncheckedSupplier(
+            CheckedSupplier<T> checkedSupplier) {
+        return ()->{
+            try {
+                return checkedSupplier.get();
+            } catch (Exception e) {
+            	throw new RuntimeException(e);
             }
         };
     }

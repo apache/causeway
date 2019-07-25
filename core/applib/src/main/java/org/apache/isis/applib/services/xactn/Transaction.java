@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.services.xactn;
 
-import java.util.concurrent.CountDownLatch;
-
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -48,13 +46,6 @@ public interface Transaction {
 
     @Programmatic
     TransactionState getTransactionState();
-    
-    /**
-     * Returns a latch that allows threads to wait on. The latch count drops to zero once this transaction completes.
-     *
-     */
-    @Programmatic
-    CountDownLatch getCountDownLatch();
 
 
 }

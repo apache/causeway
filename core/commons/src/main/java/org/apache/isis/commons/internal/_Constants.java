@@ -47,8 +47,7 @@ public final class _Constants {
     /**
      * Convenient e.g. for reflective invocation
      */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] emptyClasses = new Class[0];
+    public static final Class<?>[] emptyClasses = new Class[0];
 
     /**
      * Convenient e.g. for toArray conversions

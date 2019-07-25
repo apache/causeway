@@ -20,11 +20,15 @@ package org.apache.isis.testdomain.jdo;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.domain.DomainObjectList.ActionDomainEvent;
 
 @ViewModel
 public class InventoryManager {
 
-    @Action
+	public static class UpdateProductPriceEvent extends ActionDomainEvent {
+		private static final long serialVersionUID = 1L;}
+	
+    @Action(domainEvent = UpdateProductPriceEvent.class)
     public Product updateProductPrice(Product product, double newPrice) {
         product.setPrice(newPrice);
         return product;
