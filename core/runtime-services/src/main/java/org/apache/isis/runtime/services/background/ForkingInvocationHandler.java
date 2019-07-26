@@ -71,6 +71,7 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
         val transactionLatch = IsisTransactionAspectSupport.transactionLatch();
 
         //unfortunately there is no easy way to make use of this future
+        //would be nice if users had access to it via the background-service
         val future = backgroundExecutorService.submit(()->{
 
             try {

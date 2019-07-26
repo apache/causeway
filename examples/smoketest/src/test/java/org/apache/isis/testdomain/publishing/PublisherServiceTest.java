@@ -24,9 +24,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
@@ -43,98 +47,118 @@ import lombok.val;
  * Depends on {@link JdoBootstrappingTest_usingFixtures} to succeed.
  */
 @SpringBootTest(
-		classes = { 
-				JdoTestDomainModule.class, 
-				PublisherServiceTest.PublisherServiceProbe.class
-		}, 
-		properties = {
-				"logging.config=log4j2-test.xml",
-				"logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
-				// "isis.reflector.introspector.parallelize=false",
-				// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
-	})
-//@Transactional //XXX this test is non transactional
+        classes = { 
+                JdoTestDomainModule.class, 
+                PublisherServiceTest.PublisherServiceProbe.class
+        }, 
+        properties = {
+                "logging.config=log4j2-test.xml",
+                "logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
+                // "isis.reflector.introspector.parallelize=false",
+                // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+        })
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PublisherServiceTest {
 
-	@Inject private RepositoryService repository;
-	@Inject private FixtureScripts fixtureScripts;
-	@Inject private PublisherServiceProbe publisherService;
+    @Inject private RepositoryService repository;
+    @Inject private FixtureScripts fixtureScripts;
+    @Inject private BackgroundService backgroundService;
+    @Inject private PublisherServiceProbe publisherService;
 
-	@BeforeEach
-	void setUp() {
-		
-		val transactionTemplate = IsisContext.createTransactionTemplate();
-		transactionTemplate.execute(status -> {
+    @BeforeEach
+    void setUp() {
 
-			// cleanup
-			fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
+        val transactionTemplate = IsisContext.createTransactionTemplate();
+        transactionTemplate.execute(status -> {
 
-			// given
-			fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
-			
-			return null;
-			
-		});
+            // cleanup
+            fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
 
-	}
+            // given
+            fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
 
-	@Test
-	void publisherServiceShouldBeAwareOfInventoryChanges() {
+            return null;
 
-		// given
-		val book = repository.allInstances(Book.class).listIterator().next();
+        });
 
-		// when - running within its own transactional boundary
-		val transactionTemplate = IsisContext.createTransactionTemplate();
-		transactionTemplate.execute(status -> {
+    }
 
-			publisherService.clearHistory();
-			book.setName("Book #2");
-			repository.persist(book);
-			
-			// then - before the commit
-			assertEquals("", publisherService.getHistory());
-				
-			return null;
-		});
-		
-		// then - after the commit
-		assertEquals("publishedObjects=created=0,deleted=0,loaded=0,updated=1,modified=1,",
-				publisherService.getHistory());
+    @Test @Order(1)
+    void publisherServiceShouldBeAwareOfInventoryChanges() {
 
-	}
+        // given
+        val book = repository.allInstances(Book.class).listIterator().next();
+        publisherService.clearHistory();
 
-	// -- HELPER
+        // when - running within its own transactional boundary
+        val transactionTemplate = IsisContext.createTransactionTemplate();
+        transactionTemplate.execute(status -> {
 
-	@Singleton
-	public static class PublisherServiceProbe implements PublisherService {
+            book.setName("Book #2");
+            repository.persist(book);
 
-		private StringBuilder history = new StringBuilder();
+            // then - before the commit
+            assertEquals("", publisherService.getHistory());
 
-		void clearHistory() {
-			history = new StringBuilder();
-		}
+            return null;
+        });
 
-		String getHistory() {
-			return history.toString();
-		}
+        // then - after the commit
+        assertEquals("publishedObjects=created=0,deleted=0,loaded=0,updated=1,modified=1,",
+                publisherService.getHistory());
 
-		@Override
-		public void publish(Execution<?, ?> execution) {
-			history.append("execution=").append(execution).append(",");
-		}
+    }
 
-		@Override
-		public void publish(PublishedObjects publishedObjects) {
-			history.append("publishedObjects=")
-			.append("created=").append(publishedObjects.getNumberCreated()).append(",")
-			.append("deleted=").append(publishedObjects.getNumberDeleted()).append(",")
-			.append("loaded=").append(publishedObjects.getNumberLoaded()).append(",")
-			.append("updated=").append(publishedObjects.getNumberUpdated()).append(",")
-			.append("modified=").append(publishedObjects.getNumberPropertiesModified()).append(",")
-			;
-		}
+    @Test @Order(2)
+    void publisherServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() throws InterruptedException {
 
-	}
+        // given
+        val book = repository.allInstances(Book.class).listIterator().next();
+        publisherService.clearHistory();
+        
+        // when - running within its own background task
+        backgroundService.execute(book)
+        .setName("Book #2");
+        
+        Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
+
+        // then - after the commit
+        assertEquals("publishedObjects=created=0,deleted=1,loaded=0,updated=2,modified=1,",
+                publisherService.getHistory());
+
+    }
+
+    // -- HELPER
+
+    @Singleton
+    public static class PublisherServiceProbe implements PublisherService {
+
+        private StringBuilder history = new StringBuilder();
+
+        void clearHistory() {
+            history = new StringBuilder();
+        }
+
+        String getHistory() {
+            return history.toString();
+        }
+
+        @Override
+        public void publish(Execution<?, ?> execution) {
+            history.append("execution=").append(execution).append(",");
+        }
+
+        @Override
+        public void publish(PublishedObjects publishedObjects) {
+            history.append("publishedObjects=")
+            .append("created=").append(publishedObjects.getNumberCreated()).append(",")
+            .append("deleted=").append(publishedObjects.getNumberDeleted()).append(",")
+            .append("loaded=").append(publishedObjects.getNumberLoaded()).append(",")
+            .append("updated=").append(publishedObjects.getNumberUpdated()).append(",")
+            .append("modified=").append(publishedObjects.getNumberPropertiesModified()).append(",")
+            ;
+        }
+
+    }
 
 }

@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.isis.applib.services.audit.AuditerService;
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
@@ -46,104 +47,125 @@ import lombok.extern.log4j.Log4j2;
  * Depends on {@link JdoBootstrappingTest_usingFixtures} to succeed.
  */
 @SpringBootTest(
-		classes = { 
-				JdoTestDomainModule.class, 
-				AuditerServiceTest.AuditerServiceProbe.class
-		}, 
-		properties = {
-				"logging.config=log4j2-test.xml",
-				"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
-				"logging.level.org.apache.isis.runtime.system.transaction.IsisTransaction=DEBUG",
-				// "isis.reflector.introspector.parallelize=false",
-				// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
-	})
+        classes = { 
+                JdoTestDomainModule.class, 
+                AuditerServiceTest.AuditerServiceProbe.class
+        }, 
+        properties = {
+                "logging.config=log4j2-test.xml",
+                "logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
+                "logging.level.org.apache.isis.runtime.system.transaction.IsisTransaction=DEBUG",
+                // "isis.reflector.introspector.parallelize=false",
+                // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+        })
 //@Transactional //XXX this test is non transactional
 class AuditerServiceTest {
 
-	@Inject private RepositoryService repository;
-	@Inject private FixtureScripts fixtureScripts;
-	@Inject private AuditerServiceProbe auditerService;
+    @Inject private RepositoryService repository;
+    @Inject private FixtureScripts fixtureScripts;
+    @Inject private BackgroundService backgroundService;
+    @Inject private AuditerServiceProbe auditerService;
 
-	@BeforeEach
-	void setUp() {
-		
-		val transactionTemplate = IsisContext.createTransactionTemplate();
-		transactionTemplate.execute(status -> {
+    @BeforeEach
+    void setUp() {
 
-			// cleanup
-			fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
+        val transactionTemplate = IsisContext.createTransactionTemplate();
+        transactionTemplate.execute(status -> {
 
-			// given
-			fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
-			
-			return null;
-			
-		});
+            // cleanup
+            fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
 
-	}
+            // given
+            fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
 
-	@Test
-	void auditerServiceShouldBeAwareOfInventoryChanges() {
+            return null;
 
-		// given
-		val books = repository.allInstances(Book.class);
-		assertEquals(1, books.size());
-		val book = books.listIterator().next();
+        });
 
-		// when - running within its own transactional boundary
-		val transactionTemplate = IsisContext.createTransactionTemplate();
-		transactionTemplate.execute(status -> {
-			
-		    	auditerService.clearHistory();
-				book.setName("Book #2");
-				repository.persist(book);
-				
-				// then - before the commit
-				assertEquals("", auditerService.getHistory());
-				
-				return null;
-		});
-		
-		// then - after the commit
-		assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
-				auditerService.getHistory());
-	}
+    }
 
-	// -- HELPER
+    @Test
+    void auditerServiceShouldBeAwareOfInventoryChanges() {
 
-	@Singleton @Log4j2
-	public static class AuditerServiceProbe implements AuditerService {
+        // given
+        val books = repository.allInstances(Book.class);
+        assertEquals(1, books.size());
+        val book = books.listIterator().next();
+        auditerService.clearHistory();
 
-		private StringBuilder history = new StringBuilder();
+        // when - running within its own transactional boundary
+        val transactionTemplate = IsisContext.createTransactionTemplate();
+        transactionTemplate.execute(status -> {
 
-		@Override
-		public boolean isEnabled() {
-			return true;
-		}
+            book.setName("Book #2");
+            repository.persist(book);
 
-		@Override
-		public void audit(UUID interactionId, int sequence, String targetClassName, Bookmark target,
-				String memberIdentifier, String propertyName, String preValue, String postValue, String user,
-				Timestamp timestamp) {
-			
-			history.append("targetClassName=").append(targetClassName).append(",").append("propertyName=")
-					.append(propertyName).append(",").append("preValue=").append(preValue).append(",")
-					.append("postValue=").append(postValue).append(";");
-			
-			log.debug("audit {}", history.toString());
-		}
+            // then - before the commit
+            assertEquals("", auditerService.getHistory());
 
-		void clearHistory() {
-			log.debug("clearing");
-			history = new StringBuilder();
-			log.debug("cleared");
-		}
+            return null;
+        });
 
-		String getHistory() {
-			log.debug("get {}", history.toString());
-			return history.toString();
-		}
+        // then - after the commit
+        assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
+                auditerService.getHistory());
+    }
 
-	}
+    @Test
+    void auditerServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() throws InterruptedException {
+
+        // given
+        val books = repository.allInstances(Book.class);
+        assertEquals(1, books.size());
+        val book = books.listIterator().next();
+        auditerService.clearHistory();
+        
+        // when - running within its own background task
+        backgroundService.execute(book)
+        .setName("Book #2");
+        
+        Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
+
+        // then - after the commit
+        assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
+                auditerService.getHistory());
+    }
+
+    // -- HELPER
+
+    @Singleton @Log4j2
+    public static class AuditerServiceProbe implements AuditerService {
+
+        private StringBuilder history = new StringBuilder();
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+
+        @Override
+        public void audit(UUID interactionId, int sequence, String targetClassName, Bookmark target,
+                String memberIdentifier, String propertyName, String preValue, String postValue, String user,
+                Timestamp timestamp) {
+
+            history.append("targetClassName=").append(targetClassName).append(",").append("propertyName=")
+            .append(propertyName).append(",").append("preValue=").append(preValue).append(",")
+            .append("postValue=").append(postValue).append(";");
+
+            log.debug("audit {}", history.toString());
+        }
+
+        void clearHistory() {
+            log.debug("clearing");
+            history = new StringBuilder();
+            log.debug("cleared");
+        }
+
+        String getHistory() {
+            log.debug("get {}", history.toString());
+            return history.toString();
+        }
+
+    }
 
 }

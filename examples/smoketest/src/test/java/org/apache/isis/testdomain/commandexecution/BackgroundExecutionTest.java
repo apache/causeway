@@ -79,7 +79,7 @@ class BackgroundExecutionTest {
         
         backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
         
-        Thread.sleep(1000); // fragile
+        Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
         assertEquals(123d, product.getPrice(), 1E-6);
     }
     
@@ -97,7 +97,7 @@ class BackgroundExecutionTest {
         
         assertTrue(
         		actionDomainEventListener.getCountDownLatch()
-        		.await(1, TimeUnit.SECONDS));
+        		.await(5, TimeUnit.SECONDS));
         
         assertEquals(123d, product.getPrice(), 1E-6);
     }
