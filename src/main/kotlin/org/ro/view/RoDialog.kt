@@ -48,12 +48,9 @@ class RoDialog(
                         add(TextArea(label = fi.label, value = fi.content as String, rows = rowCnt))
                     }
                     "Select" -> {
-                        //val list = fi.content as List<StringPair>
-                        //val preSelectedValue = list.first().first
-                        //val select = Select(label = fi.label, options = list, value = preSelectedValue)
-                        //TODO how can the first entry be selected by default?
-                        //val select =
-                        add(Select(label = fi.label, options = fi.content as List<StringPair>))
+                        val list = fi.content as List<StringPair>
+                        val preSelectedValue = list.first().first
+                        add(Select(label = fi.label, options = list, value = preSelectedValue))
                     }
                 }
             }
