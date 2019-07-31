@@ -15,8 +15,8 @@ class ServiceHandlerTest : IntegrationTest() {
             val observer = NavigationObserver()
             // when
             mockResponse(RESTFUL_SERVICES, observer)
-            // then 
-            assertEquals(8, Menu.limit)
+            // then
+            assertEquals(8, Menu.list.size)
         }
     }
 

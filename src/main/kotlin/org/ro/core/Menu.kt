@@ -5,13 +5,7 @@ import org.ro.to.MemberType
 import org.ro.to.Service
 
 object Menu {
-    //TODO chekck if limit can be avoided by the use of observeableList
-    var limit: Int = 0
     var list = mutableListOf<MenuEntry>()
-
-    fun isFull(): Boolean {
-        return list.size >= limit
-    }
 
     fun add(service: Service) {
         val title = service.title

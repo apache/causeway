@@ -18,6 +18,6 @@ package org.ro.core.event
  */
 
 interface IObserver {
-    fun update(le: LogEntry)
+    fun update(logEntry: LogEntry)
 }
 
