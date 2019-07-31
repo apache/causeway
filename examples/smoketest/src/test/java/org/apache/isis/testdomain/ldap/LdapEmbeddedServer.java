@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testsecurity.ldap;
+package org.apache.isis.testdomain.ldap;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -42,13 +42,15 @@ import lombok.val;
         @CreatePartition(name = "test", suffix = "dc=myorg,dc=com")
     })
 @CreateLdapServer(transports = { 
-		@CreateTransport(protocol = "LDAP", address = "localhost", port = 10389)})
+		@CreateTransport(protocol = "LDAP", address = "localhost", port = LdapEmbeddedServer.PORT)})
 @ApplyLdifFiles({"ldap-users.ldif"})
 public class LdapEmbeddedServer extends AbstractLdapTestUnit {
 	
-    @Test
+    public static final int PORT = 10389;
+
+	@Test
     public void authenticateAgainstLdap() {
-    	// at this stage the LDAP server is setup an listening
+    	// at this stage the LDAP server is setup and listening
     }
     
     public static CountDownLatch run() throws InitializationError, InterruptedException {
@@ -75,7 +77,7 @@ public class LdapEmbeddedServer extends AbstractLdapTestUnit {
 		
 		thread.start();
 		
-		serverLanchedLatch.await();
+		serverLanchedLatch.await(); // wait for the server to be fully launched
 		
 		return serverTerminatedLatch;
 		

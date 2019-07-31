@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testsecurity.shiro;
+package org.apache.isis.testdomain.shiro;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

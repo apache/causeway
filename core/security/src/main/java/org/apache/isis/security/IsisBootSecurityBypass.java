@@ -18,7 +18,6 @@
  */
 package org.apache.isis.security;
 
-import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
 import org.apache.isis.security.authentication.bypass.AuthenticatorBypass;
@@ -43,12 +42,12 @@ import org.springframework.context.annotation.Import;
 })
 public class IsisBootSecurityBypass {
 
-    @Bean @Produces @Singleton
+    @Bean @Singleton
     public Authenticator authenticator() {
         return new AuthenticatorBypass();
     }
 
-    @Bean @Produces @Singleton
+    @Bean @Singleton
     public Authorizor autorizor() {
         return new AuthorizorBypass();
     }

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.security.shiro;
 
-import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
 import org.apache.isis.security.authentication.manager.AuthorizationManagerStandard;
@@ -44,12 +43,12 @@ import org.springframework.context.annotation.Import;
 })
 public class IsisBootSecurityShiro {
     
-    @Bean @Produces @Singleton
+    @Bean @Singleton
     public Authenticator authenticator() {
         return new ShiroAuthenticator();
     }
 
-    @Bean @Produces @Singleton
+    @Bean @Singleton
     public Authorizor autorizor() {
         return new ShiroAuthorizor();
     }

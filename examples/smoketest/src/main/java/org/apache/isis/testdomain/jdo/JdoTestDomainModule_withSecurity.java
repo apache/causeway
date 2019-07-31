@@ -24,9 +24,16 @@ import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.IsisBootSecurityBypass;
+import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -40,30 +47,49 @@ import org.springframework.context.annotation.PropertySources;
 @Configuration
 @Import({
 	IsisBoot.class,
-	IsisBootSecurityBypass.class,
+	
+	IsisBootSecurityShiro.class,
+    
+    // Security Manager Extension (secman)
+    IsisBootSecmanModel.class,
+    IsisBootSecmanRealmShiro.class,
+    IsisBootSecmanPersistenceJdo.class,
+    IsisBootSecmanEncryptionJbcrypt.class,
+	
 	IsisBootDataNucleus.class,
 	IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {        		
-        		JdoTestDomainModule.class
+        		JdoTestDomainModule_withSecurity.class
         },
         includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})}
-        )
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
 @PropertySources({
 	@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
-@ConditionalOnProperty(value = "withSecurity", havingValue = "false", matchIfMissing = true)
-public class JdoTestDomainModule {
+@ConditionalOnProperty(value = "withSecurity", havingValue = "true", matchIfMissing = false)
+public class JdoTestDomainModule_withSecurity {
     
    @Bean @Singleton
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()
                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
                .build();
+   }
+   
+   @Bean @Singleton
+   public SecurityModuleConfig securityModuleConfigBean() {
+	   return SecurityModuleConfig.builder()
+			   .build();
+   }
+   
+   @Bean @Singleton
+   public PermissionsEvaluationService permissionsEvaluationService() {
+	   return new PermissionsEvaluationServiceAllowBeatsVeto();
    }
     
 }

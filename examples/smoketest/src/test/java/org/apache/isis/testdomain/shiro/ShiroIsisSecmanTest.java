@@ -16,29 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testsecurity.shiro;
+package org.apache.isis.testdomain.shiro;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withSecurity;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.subject.Subject;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.val;
 
+@SpringBootTest(
+		classes = { 
+				JdoTestDomainModule_withSecurity.class, 
+		}, 
+		properties = {
+				"withSecurity=true",
+				"logging.config=log4j2-test.xml",
+				"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
+				"logging.level.org.apache.isis.runtime.system.transaction.IsisTransaction=DEBUG",
+				// "isis.reflector.introspector.parallelize=false",
+				// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+		})
 class ShiroIsisSecmanTest extends AbstractShiroTest {
 
 	@BeforeAll
-	public static void beforeClass() {
+	static void beforeClass() {
 		//0.  Build and set the SecurityManager used to build Subject instances used in your tests
 		//    This typically only needs to be done once per class if your shiro.ini doesn't change,
 		//    otherwise, you'll need to do this logic in each test that is different
@@ -47,27 +60,12 @@ class ShiroIsisSecmanTest extends AbstractShiroTest {
 	}
 
 	@AfterAll
-	public static void tearDownSubject() {
+	static void tearDownSubject() {
 		tearDownShiro();
 	}
 
-	@BeforeEach
-	public void setUp() {
-		//1.  Build the Subject instance for the test to run:
-		val subjectUnderTest = new Subject.Builder(getSecurityManager()).buildSubject();
-		//2. Bind the subject to the current thread:
-		setSubject(subjectUnderTest);
-	}
-
-	@AfterEach
-	public void cleanUp() {
-		//3. Unbind the subject from the current thread:
-		clearSubject();    	
-	}
-
-
 	@Test
-	public void loginLogoutRoundtrip() {
+	void loginLogoutRoundtrip() {
 
 		val secMan = SecurityUtils.getSecurityManager();
 		assertNotNull(secMan);
@@ -76,16 +74,42 @@ class ShiroIsisSecmanTest extends AbstractShiroTest {
 		assertNotNull(subject);
 		assertFalse(subject.isAuthenticated());
 
-		val token = (AuthenticationToken) new UsernamePasswordToken("sven", "pass");
+		val token = (AuthenticationToken) new UsernamePasswordToken(
+				IsisModuleSecurityAdminUser.USER_NAME,
+				IsisModuleSecurityAdminUser.PASSWORD);
+
 		subject.login(token);
 		assertTrue(subject.isAuthenticated());
 
 		subject.logout();
 		assertFalse(subject.isAuthenticated());
 
+	}
+
+	@Test
+	void invalidLogin() {
+
+		val secMan = SecurityUtils.getSecurityManager();
+		assertNotNull(secMan);
+
+		val subject = SecurityUtils.getSubject(); 
+		assertNotNull(subject);
+		assertFalse(subject.isAuthenticated());
+
+		val token = (AuthenticationToken) new UsernamePasswordToken(
+				"non-existent-user",
+				"pass");
+		
+		assertThrows(Exception.class, ()->{
+			subject.login(token);
+		});
+		
+		assertFalse(subject.isAuthenticated());
+		
 
 	}
 
+	
 
 
 }

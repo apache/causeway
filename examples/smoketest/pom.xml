@@ -116,6 +116,30 @@
 			<artifactId>isis-extensions-fixtures</artifactId>
 			<version>${isis.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-model</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-realm-shiro</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
 		<!-- <dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 

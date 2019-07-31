@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testsecurity.ldap;
+package org.apache.isis.testdomain.ldap;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -39,11 +39,11 @@ class LdapEmbeddedServerTest {
     @Test
     void authenticateAgainstLdap() throws InitializationError, InterruptedException {
     	
-    	val latch = LdapEmbeddedServer.run();
+    	val serverLatch = LdapEmbeddedServer.run();
     	
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "ldap://localhost:10389");
+        env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapEmbeddedServer.PORT);
 
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, "cn=Sven Tester,ou=Users,dc=myorg,dc=com");
@@ -64,7 +64,7 @@ class LdapEmbeddedServerTest {
         } catch (NamingException e) {
             fail(e.getMessage());
         } finally {
-        	latch.countDown(); // release the ldap-server	
+        	serverLatch.countDown(); // release the ldap-server	
         }
         
         
