@@ -44,7 +44,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.transaction.support.TransactionTemplate;
+
+import lombok.val;
 
 public class IsisModuleSecurityRealm extends AuthorizingRealm implements SecurityRealm {
 
@@ -71,14 +72,14 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
             throw new AuthenticationException();
         }
 
-        final UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
-        String username = usernamePasswordToken.getUsername();
-        char[] password = usernamePasswordToken.getPassword();
+        val usernamePasswordToken = (UsernamePasswordToken) token;
+        val username = usernamePasswordToken.getUsername();
+        val password = usernamePasswordToken.getPassword();
 
         // lookup from database, for roles/perms, but also
         // determine how to authenticate (delegate or local), whether disabled
-        final PrincipalForApplicationUser principal = lookupPrincipal(username,
-                (hasDelegateAuthenticationRealm() && getAutoCreateUser()));
+        val autoCreateUser = hasDelegateAuthenticationRealm() && getAutoCreateUser(); 
+        val principal = lookupPrincipal(username, autoCreateUser);
         if (principal == null) {
             // if no delegate authentication
             throw new CredentialsException("Unknown user/password combination");
@@ -115,8 +116,8 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
             }
         }
 
-        final Object credentials = token.getCredentials();
-        final String realmName = getName();
+        val credentials = token.getCredentials();
+        val realmName = getName();
         return new AuthInfoForApplicationUser(principal, realmName, credentials);
     }
 
@@ -133,11 +134,14 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
      * @param username
      * @param autoCreateUser
      */
-    private PrincipalForApplicationUser lookupPrincipal(final String username, final boolean autoCreateUser) {
+    private PrincipalForApplicationUser lookupPrincipal(
+    		final String username, 
+    		final boolean autoCreateUser) {
+    	
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
             public PrincipalForApplicationUser get() {
-                final ApplicationUser applicationUser = lookupUser();
+                val applicationUser = lookupUser();
                 return PrincipalForApplicationUser.from(applicationUser);
             }
 
@@ -202,8 +206,8 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
                 new Callable<V>() {
                     @Override
                     public V call() {
-                        PersistenceSession persistenceSession = getPersistenceSession();
-                        persistenceSession.getServiceInjector().injectServicesInto(closure);
+                    	val serviceInjector = IsisContext.getServiceInjector();
+                    	serviceInjector.injectServicesInto(closure);
                         return doExecute(closure);
                     }
                 }
@@ -211,26 +215,14 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     }
 
     <V> V doExecute(final Supplier<V> closure) {
-        //final PersistenceSession persistenceSession = getPersistenceSession();
-        
-        TransactionTemplate txTemplate = IsisContext.createTransactionTemplate();
-
-        return txTemplate.execute(status->{
-        	return closure.get();
-        });
-        
-//        
-//        final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
-//        return transactionManager.executeWithinTransaction(closure);
+        val txTemplate = IsisContext.createTransactionTemplate();
+        return txTemplate.execute(status->closure.get());
     }
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession().orElse(null);
     }
 
-//    protected IsisTransactionManager getTransactionManager(PersistenceSession persistenceSession) {
-//        return persistenceSession.getTransactionManager();
-//    }
 
     protected IsisSessionFactory getSessionFactory() {
         return IsisContext.getSessionFactory();
