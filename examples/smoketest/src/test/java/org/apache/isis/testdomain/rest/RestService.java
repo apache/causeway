@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.rest.server;
+package org.apache.isis.testdomain.rest;
 
 import javax.inject.Inject;
+import javax.ws.rs.client.Invocation.Builder;
 
 import org.apache.isis.applib.client.RestfulClient;
 import org.apache.isis.applib.client.RestfulClientConfig;
+import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service @Log4j2
-public class RestServerService {
+public class RestService {
 
 	public int getPort() {
 		if(port==null) {
@@ -59,7 +61,13 @@ public class RestServerService {
 		RestfulClient client = RestfulClient.ofConfig(clientConfig);
 
 		return client;
-	}	
+	}
+	
+	public Builder newRecommendedBookOfTheWeekRequest(RestfulClient client) {
+		return client.request(
+				"services/testdomain.InventoryRepository/actions/recommendedBookOfTheWeek/invoke", 
+				SuppressionType.ALL);
+	}
 
 	// -- HELPER
 
@@ -72,5 +80,7 @@ public class RestServerService {
 	// -- DEPENDENCIES
 
 	@Inject Environment environment;
+
+	
 
 }

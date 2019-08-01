@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.rest.server;
+package org.apache.isis.testdomain.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,13 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import javax.inject.Inject;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.client.ResponseDigest;
-import org.apache.isis.applib.client.RestfulClient;
-import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
@@ -42,7 +36,7 @@ import org.springframework.context.annotation.Import;
 import lombok.val;
 
 @SpringBootTest(
-		classes = {RestServerService.class},
+		classes = {RestService.class},
 		properties = {
 				"logging.config=log4j2-test.xml",
 		},
@@ -51,41 +45,32 @@ import lombok.val;
 	JdoTestDomainModule.class,
 	IsisBootWebRestfulObjects.class
 })
-class RestServerServiceTest {
+class RestServiceTest {
 
 	@LocalServerPort int port;
-	@Inject RestServerService restServerService;
+	@Inject RestService restServerService;
 
 	@Test
-	void test() throws InterruptedException {
-		
-		//Thread.sleep(10000000000L);
+	void bookOfTheWeek_viaRestService() {
 		
 		assertNotNull(restServerService.getPort());
 		assertTrue(restServerService.getPort()>0);
 
-		RestfulClient client = restServerService.newClient();
+		val restfulClient = restServerService.newClient();
+		val request = restServerService.newRecommendedBookOfTheWeekRequest(restfulClient);
 
-		Builder request = client.request(
-				"services/testdomain.InventoryRepository/actions/recommendedBookOfTheWeek/invoke", 
-				SuppressionType.ALL);
-
-		Entity<String> args = client.arguments()
+		val args = restfulClient.arguments()
 				.build();
 
-		Response response = request.post(args);
-
-		ResponseDigest<Book> digest = client.digest(response, Book.class);
+		val response = request.post(args);
+		val digest = restfulClient.digest(response, Book.class);
 
 		if(digest.isSuccess()) {
 		
 			val bookOfTheWeek = digest.get();
-			System.out.println("result: "+ bookOfTheWeek);
-			
 			
 			assertNotNull(bookOfTheWeek);
 			assertEquals("Book of the week", bookOfTheWeek.getName());
-			
 
 		} else {
 			
