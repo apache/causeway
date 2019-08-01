@@ -20,11 +20,35 @@ package org.apache.isis.extensions.secman.api;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 
 @Builder
 public class SecurityModuleConfig {
-	
-	@Getter @Builder.Default 
+
+	// -- ROLES
+
+	@Getter @Builder.Default @NonNull
 	final String regularUserRoleName = "isis-module-security-regular-user";
-	
+
+	@Getter @Builder.Default @NonNull
+	final String fixtureRoleName = "isis-module-security-fixtures";
+
+	@Getter @Builder.Default @NonNull
+	final String adminRoleName = "isis-module-security-admin";
+
+	// -- ADMIN
+
+	@Getter @Builder.Default @NonNull
+	final String adminUserName = "isis-module-security-admin";
+
+	@Getter @Builder.Default @NonNull
+	final String adminPassword = "pass";
+
+	@Getter @Builder.Default @NonNull
+	final String[] adminStickyPackagePermissions = new String[]{
+			"org.apache.isis.extensions.secman.api",
+			"org.apache.isis.extensions.secman.jdo.dom",
+	};
+
+
 }

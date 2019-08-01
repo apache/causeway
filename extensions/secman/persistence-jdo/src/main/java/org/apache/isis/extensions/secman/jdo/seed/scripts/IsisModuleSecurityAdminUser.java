@@ -20,16 +20,18 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import java.util.Arrays;
 
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 
 public class IsisModuleSecurityAdminUser extends AbstractUserAndRolesFixtureScript {
 
-    public static final String USER_NAME = "isis-module-security-admin";
-    public static final String PASSWORD = "pass";
-
-    public IsisModuleSecurityAdminUser() {
-        super(USER_NAME, PASSWORD, null,
-                GlobalTenancy.TENANCY_PATH, AccountType.LOCAL,
-                Arrays.asList(IsisModuleSecurityAdminRoleAndPermissions.ROLE_NAME));
+    public IsisModuleSecurityAdminUser(SecurityModuleConfig configBean) {
+        super(
+        		configBean.getAdminUserName(), 
+        		configBean.getAdminPassword(),
+        		null,
+                GlobalTenancy.TENANCY_PATH, 
+                AccountType.LOCAL,
+                Arrays.asList(configBean.getAdminRoleName()));
     }
 }

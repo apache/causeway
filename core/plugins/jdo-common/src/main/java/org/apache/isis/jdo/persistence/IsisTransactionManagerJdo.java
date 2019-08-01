@@ -172,6 +172,10 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
             endTransactionInternal(txObject);
         } finally {
         	val tx = (IsisTransactionJdo) txObject.getCurrentTransaction();
+        	if(tx==null) {
+        		log.error("race condition when ending the current transaction object");
+        		return;
+        	}
             val state = tx.getState();
             if(isTopLevel && !state.isComplete()) {
                 log.error("endTransaction: when top-level, "

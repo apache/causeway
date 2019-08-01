@@ -20,31 +20,33 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import java.util.Objects;
 
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
 public class IsisModuleSecurityAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = "isis-module-security-admin";
-    public static final String ORG_ISISADDONS_MODULE_SECURITY_APP = "org.apache.isis.extensions.secman.jdo.app";
-    public static final String ORG_ISISADDONS_MODULE_SECURITY_DOM = "org.apache.isis.extensions.secman.jdo.dom";
+	private String[] adminStickyPackagePermissions;
 
-    public IsisModuleSecurityAdminRoleAndPermissions() {
-        super(ROLE_NAME, "Administer security");
+    public IsisModuleSecurityAdminRoleAndPermissions(SecurityModuleConfig configBean) {
+        super(configBean.getAdminRoleName(), "Administer security");
+        this.adminStickyPackagePermissions = configBean.getAdminStickyPackagePermissions();
     }
-
 
     @Override
     protected void execute(ExecutionContext executionContext) {
         newPackagePermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                ORG_ISISADDONS_MODULE_SECURITY_APP,
-                ORG_ISISADDONS_MODULE_SECURITY_DOM);
+                adminStickyPackagePermissions);
     }
 
-    public static boolean oneOf(String featureFqn) {
-        return Objects.equals(featureFqn, ORG_ISISADDONS_MODULE_SECURITY_APP) ||
-               Objects.equals(featureFqn, ORG_ISISADDONS_MODULE_SECURITY_DOM);
+    public static boolean oneOf(SecurityModuleConfig configBean, String featureFqn) {
+        for(String stickyPackage : configBean.getAdminStickyPackagePermissions()) {
+        	if(Objects.equals(featureFqn, stickyPackage)) {
+        		return true;
+        	}
+        }
+        return false;
     }
 }

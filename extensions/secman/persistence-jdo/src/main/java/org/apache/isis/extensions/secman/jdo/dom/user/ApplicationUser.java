@@ -57,6 +57,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
@@ -67,8 +68,6 @@ import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissio
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
-import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 import lombok.Getter;
@@ -637,7 +636,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     }
     public String disableLock() {
         if(isAdminUser()) {
-            return "Cannot disable the '" + IsisModuleSecurityAdminUser.USER_NAME + "' user.";
+            return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";
         }
         return getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
     }
@@ -933,10 +932,8 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     // -- isAdminUser (programmatic)
     @Programmatic
     public boolean isAdminUser() {
-        return IsisModuleSecurityAdminUser.USER_NAME.equals(getName());
+        return configBean.getAdminUserName().equals(getName());
     }
-
-    
 
     // -- helpers
     boolean isForSelfOrRunAsAdministrator() {
@@ -950,12 +947,15 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     boolean isRunAsAdministrator() {
         final UserMemento currentUser = userService.getUser();
         final List<RoleMemento> roles = currentUser.getRoles();
+        
+        val adminRoleSuffix = ":" + configBean.getAdminRoleName();
+        
         for (final RoleMemento role : roles) {
             final String roleName = role.getName();
             // format is realmName:roleName.
             // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
             // simply check that the last part matches the role name.
-            if(roleName.endsWith(IsisModuleSecurityAdminRoleAndPermissions.ROLE_NAME)) {
+            if(roleName.endsWith(adminRoleSuffix)) {
                 return true;
             }
         }
@@ -1003,5 +1003,6 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
      * implementation.
      */
     @Inject PermissionsEvaluationService permissionsEvaluationService;
+    @Inject SecurityModuleConfig configBean;
     
 }

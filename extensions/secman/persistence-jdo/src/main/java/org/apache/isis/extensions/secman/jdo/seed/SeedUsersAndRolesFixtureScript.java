@@ -52,12 +52,12 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         executionContext.executeChild(this, new GlobalTenancy());
 
         // security module
-        executionContext.executeChild(this, new IsisModuleSecurityAdminRoleAndPermissions());
+        executionContext.executeChild(this, new IsisModuleSecurityAdminRoleAndPermissions(configBean));
 
-        executionContext.executeChild(this, new IsisModuleSecurityFixtureRoleAndPermissions());
+        executionContext.executeChild(this, new IsisModuleSecurityFixtureRoleAndPermissions(configBean));
         executionContext.executeChild(this, new IsisModuleSecurityRegularUserRoleAndPermissions(configBean));
 
-        executionContext.executeChild(this, new IsisModuleSecurityAdminUser());
+        executionContext.executeChild(this, new IsisModuleSecurityAdminUser(configBean));
 
         // isis applib
         executionContext.executeChild(this, new IsisApplibFixtureResultsRoleAndPermissions());

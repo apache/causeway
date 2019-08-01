@@ -55,6 +55,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.SecurityModule;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
@@ -546,7 +547,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             final ApplicationFeatureType type,
             @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String featureFqn) {
-        if(isAdminRole() && IsisModuleSecurityAdminRoleAndPermissions.oneOf(featureFqn)) {
+        if(isAdminRole() && IsisModuleSecurityAdminRoleAndPermissions.oneOf(configBean, featureFqn)) {
             return "Cannot remove top-level package permissions for the admin role.";
         }
         return null;
@@ -684,7 +685,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Programmatic
     public boolean isAdminRole() {
         final ApplicationRole adminRole = applicationRoleRepository.findByNameCached(
-                IsisModuleSecurityAdminRoleAndPermissions.ROLE_NAME);
+        		configBean.getAdminRoleName());
         return this == adminRole;
     }
     
@@ -729,6 +730,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Inject ApplicationPermissionRepository applicationPermissionRepository;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
+    @Inject SecurityModuleConfig configBean;
     
 
 }

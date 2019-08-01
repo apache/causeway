@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
@@ -71,7 +72,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 	@Inject LdapServerService ldapServerService;
 	@Inject ApplicationUserRepository applicationUserRepository;
 	@Inject ApplicationRoleRepository applicationRoleRepository;
-	@Inject SecurityModuleConfig securityModuleConfig;
+	@Inject SecurityModuleConfig securityConfig;
 	
 	@BeforeAll
 	static void beforeClass() {
@@ -87,15 +88,20 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 		tearDownShiro();
 	}
 	
+	private ApplicationUser setupSvenInDb() {
+		val regularUserRoleName = securityConfig.getRegularUserRoleName();
+		val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
+		val enabled = true;
+		val svenUser = applicationUserRepository
+				.newDelegateUser(LdapEmbeddedServer.SVEN_PRINCIPAL, regularUserRole, enabled);
+		return svenUser;
+	}
+	
+	
 	@Test
 	void loginLogoutRoundtrip() {
 		
-		// setup sven account in DB
-		val regularUserRoleName = securityModuleConfig.getRegularUserRoleName();
-		val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
-		val enabled = true;
-		applicationUserRepository.newDelegateUser(LdapEmbeddedServer.SVEN_PRINCIPAL, regularUserRole, enabled);
-		//
+		setupSvenInDb();
 		
 		val secMan = SecurityUtils.getSecurityManager();
 		assertNotNull(secMan);

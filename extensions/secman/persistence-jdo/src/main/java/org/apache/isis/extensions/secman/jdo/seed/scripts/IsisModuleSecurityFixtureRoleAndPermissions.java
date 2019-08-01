@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
@@ -26,10 +27,8 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRul
  */
 public class IsisModuleSecurityFixtureRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String ROLE_NAME = "isis-module-security-fixtures";
-
-    public IsisModuleSecurityFixtureRoleAndPermissions() {
-        super(ROLE_NAME, "Security module fixtures");
+    public IsisModuleSecurityFixtureRoleAndPermissions(SecurityModuleConfig configBean) {
+        super(configBean.getFixtureRoleName(), "Security module fixtures");
     }
 
     @Override
