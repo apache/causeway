@@ -23,8 +23,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withSecurity;
+import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -33,25 +37,33 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import lombok.val;
 
 @SpringBootTest(
 		classes = { 
-				JdoTestDomainModule_withSecurity.class, 
+				JdoTestDomainModule_withShiro.class, 
 		}, 
 		properties = {
 				"logging.config=log4j2-test.xml",
-				"smoketest.withSecurity=true", // enable security specific config to be picked up by Spring 
+				"smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
 		})
-class ShiroIsisSecmanTest extends AbstractShiroTest {
+@Import({
+    // Security Manager Extension (secman)
+    IsisBootSecmanModel.class,
+    IsisBootSecmanRealmShiro.class,
+    IsisBootSecmanPersistenceJdo.class,
+    IsisBootSecmanEncryptionJbcrypt.class,
+})
+class ShiroSecmanTest extends AbstractShiroTest {
 
 	@BeforeAll
 	static void beforeClass() {
 		//0.  Build and set the SecurityManager used to build Subject instances used in your tests
 		//    This typically only needs to be done once per class if your shiro.ini doesn't change,
 		//    otherwise, you'll need to do this logic in each test that is different
-		val factory = new IniSecurityManagerFactory("classpath:shiro-isis.ini");
+		val factory = new IniSecurityManagerFactory("classpath:shiro-secman.ini");
 		setSecurityManager(factory.getInstance());
 	}
 
@@ -83,7 +95,29 @@ class ShiroIsisSecmanTest extends AbstractShiroTest {
 	}
 
 	@Test
-	void invalidLogin() {
+	void login_withInvalidPassword() {
+
+		val secMan = SecurityUtils.getSecurityManager();
+		assertNotNull(secMan);
+
+		val subject = SecurityUtils.getSubject(); 
+		assertNotNull(subject);
+		assertFalse(subject.isAuthenticated());
+
+		val token = (AuthenticationToken) new UsernamePasswordToken(
+				IsisModuleSecurityAdminUser.USER_NAME,
+				"invalid-pass");
+		
+		assertThrows(Exception.class, ()->{
+			subject.login(token);
+		});
+		
+		assertFalse(subject.isAuthenticated());
+
+	}
+	
+	@Test
+	void login_withNonExistentUser() {
 
 		val secMan = SecurityUtils.getSecurityManager();
 		assertNotNull(secMan);
@@ -94,7 +128,7 @@ class ShiroIsisSecmanTest extends AbstractShiroTest {
 
 		val token = (AuthenticationToken) new UsernamePasswordToken(
 				"non-existent-user",
-				"pass");
+				"invalid-pass");
 		
 		assertThrows(Exception.class, ()->{
 			subject.login(token);
@@ -104,8 +138,6 @@ class ShiroIsisSecmanTest extends AbstractShiroTest {
 		
 
 	}
-
-	
 
 
 }

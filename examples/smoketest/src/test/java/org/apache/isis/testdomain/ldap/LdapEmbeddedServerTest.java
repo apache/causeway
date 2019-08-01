@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.ldap;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Hashtable;
@@ -26,28 +26,27 @@ import java.util.Hashtable;
 import javax.inject.Inject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NameClassPair;
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runners.model.InitializationError;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import lombok.val;
+
 @SpringBootTest(
 		classes = {LdapServerService.class},
 		properties = {
 	        "logging.config=log4j2-test.xml",
-	        "logging.level.org.apache.directory.api.ldap.model.entry.Value=OFF",
 })
 class LdapEmbeddedServerTest {
 	
 	@Inject LdapServerService ldapServerService;
 
     @Test
-    void authenticateAgainstLdap() throws InitializationError, InterruptedException {
+    void authenticate_Sven() throws InitializationError, InterruptedException {
     	
-        Hashtable<String, String> env = new Hashtable<>();
+        val env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapEmbeddedServer.PORT);
 
@@ -56,16 +55,47 @@ class LdapEmbeddedServerTest {
         env.put(Context.SECURITY_CREDENTIALS, "pass");
         
         try {
-            Context ctx = new InitialContext(env);
-            NamingEnumeration<NameClassPair> enm = ctx.list("");
+            val ctx = new InitialContext(env);
+            val namingEnumeration = ctx.list("");
 
-            assertTrue(enm.hasMore());
-            
-            while (enm.hasMore()) {
-                System.out.println(enm.next());
+            int entryCount = 0;
+            while (namingEnumeration.hasMore()) {
+            	namingEnumeration.next();
+            	++entryCount;
             }
+            assertEquals(3, entryCount);
 
-            enm.close();
+            namingEnumeration.close();
+            ctx.close();
+        } catch (NamingException e) {
+            fail(e.getMessage());
+        } 
+    	
+    }
+    
+    @Test
+    void authenticate_Admin() throws InitializationError, InterruptedException {
+    	
+        val env = new Hashtable<String, String>();
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapEmbeddedServer.PORT);
+
+        env.put( Context.SECURITY_AUTHENTICATION, "simple" );
+        env.put( Context.SECURITY_PRINCIPAL, "uid=admin,ou=system" );
+        env.put( Context.SECURITY_CREDENTIALS, "secret" );
+        
+        try {
+            val ctx = new InitialContext(env);
+            val namingEnumeration = ctx.list("");
+
+            int entryCount = 0;
+            while (namingEnumeration.hasMore()) {
+            	namingEnumeration.next();
+            	++entryCount;
+            }
+            assertEquals(3, entryCount);
+
+            namingEnumeration.close();
             ctx.close();
         } catch (NamingException e) {
             fail(e.getMessage());

@@ -27,10 +27,6 @@ import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
-import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
@@ -50,18 +46,12 @@ import org.springframework.context.annotation.PropertySources;
 	
 	IsisBootSecurityShiro.class,
     
-    // Security Manager Extension (secman)
-    IsisBootSecmanModel.class,
-    IsisBootSecmanRealmShiro.class,
-    IsisBootSecmanPersistenceJdo.class,
-    IsisBootSecmanEncryptionJbcrypt.class,
-	
 	IsisBootDataNucleus.class,
 	IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {        		
-        		JdoTestDomainModule_withSecurity.class
+        		JdoTestDomainModule_withShiro.class
         },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
@@ -71,9 +61,9 @@ import org.springframework.context.annotation.PropertySources;
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
-// enable security specific config to be picked up by Spring
-@ConditionalOnProperty(value = "smoketest.withSecurity", havingValue = "true", matchIfMissing = false)
-public class JdoTestDomainModule_withSecurity {
+// enable shiro specific config to be picked up by Spring
+@ConditionalOnProperty(value = "smoketest.withShiro", havingValue = "true", matchIfMissing = false)
+public class JdoTestDomainModule_withShiro {
     
    @Bean @Singleton
    public WebAppConfigBean webAppConfigBean() {

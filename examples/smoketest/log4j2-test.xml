@@ -23,6 +23,9 @@
 		<Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
 		<logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
 		
+		<logger name="org.apache.directory" level="warn"/>
+		<logger name="org.apache.directory.api.ldap.model.entry.Value" level="off"/>
+		
 		<logger name="DataNucleus.Persistence" level="info"/>
 		<logger name="DataNucleus.Transaction" level="info"/>
 		<logger name="DataNucleus.Datastore.Schema" level="info"/>

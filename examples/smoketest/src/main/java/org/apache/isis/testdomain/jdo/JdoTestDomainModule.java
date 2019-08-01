@@ -56,8 +56,8 @@ import org.springframework.context.annotation.PropertySources;
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
-//by default disable security specific config to be picked up by Spring 
-@ConditionalOnProperty(value = "smoketest.withSecurity", havingValue = "false", matchIfMissing = true)
+//by default disable shiro specific config to be picked up by Spring 
+@ConditionalOnProperty(value = "smoketest.withShiro", havingValue = "false", matchIfMissing = true)
 public class JdoTestDomainModule {
     
    @Bean @Singleton
