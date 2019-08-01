@@ -38,7 +38,7 @@ import lombok.val;
 class ShiroSimpleTest extends AbstractShiroTest {
 
     @BeforeAll
-    public static void beforeClass() {
+    static void beforeClass() {
         //0.  Build and set the SecurityManager used to build Subject instances used in your tests
         //    This typically only needs to be done once per class if your shiro.ini doesn't change,
         //    otherwise, you'll need to do this logic in each test that is different
@@ -47,12 +47,12 @@ class ShiroSimpleTest extends AbstractShiroTest {
     }
     
     @AfterAll
-    public static void tearDownSubject() {
+    static void tearDownSubject() {
         tearDownShiro();
     }
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         //1.  Build the Subject instance for the test to run:
         val subjectUnderTest = new Subject.Builder(getSecurityManager()).buildSubject();
         //2. Bind the subject to the current thread:
@@ -60,14 +60,14 @@ class ShiroSimpleTest extends AbstractShiroTest {
     }
     
     @AfterEach
-    public void cleanUp() {
+    void cleanUp() {
         //3. Unbind the subject from the current thread:
         clearSubject();    	
     }
     
 
     @Test
-    public void loginLogoutRoundtrip() {
+    void loginLogoutRoundtrip() {
     	
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
@@ -83,9 +83,7 @@ class ShiroSimpleTest extends AbstractShiroTest {
 		subject.logout();
 		assertFalse(subject.isAuthenticated());
         
-        
     }
-
     
 
 }

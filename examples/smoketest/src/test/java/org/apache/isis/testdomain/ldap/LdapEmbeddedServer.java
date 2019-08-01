@@ -29,14 +29,13 @@ import org.apache.directory.server.core.integ.AbstractLdapTestUnit;
 import org.apache.directory.server.core.integ.FrameworkRunner;
 import org.junit.Test;
 import org.junit.runner.Description;
-import org.junit.runner.RunWith;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 
 import lombok.val;
 
-@RunWith(FrameworkRunner.class)
+//@RunWith(FrameworkRunner.class) //when picked up as a regular JUnit Test just act as a no-op.
 @CreateDS(name = "myDS",
     partitions = {
         @CreatePartition(name = "test", suffix = "dc=myorg,dc=com")
@@ -46,13 +45,21 @@ import lombok.val;
 @ApplyLdifFiles({"ldap-users.ldif"})
 public class LdapEmbeddedServer extends AbstractLdapTestUnit {
 	
+	/** IP port for the LDAP server to listen on */
     public static final int PORT = 10389;
 
 	@Test
     public void authenticateAgainstLdap() {
-    	// at this stage the LDAP server is setup and listening
+    	// when test runs with the FrameworkRunner, at this stage the LDAP server is setup and listening
     }
     
+	/**
+	 * Launches an LDAP server, that waits for the returned latch to count down by the caller, 
+	 * before it shuts down.
+	 * @return a {@link CountDownLatch} for the caller to count down, once the server is no longer needed.
+	 * @throws InitializationError
+	 * @throws InterruptedException
+	 */
     public static CountDownLatch run() throws InitializationError, InterruptedException {
     	
     	val serverLanchedLatch = new CountDownLatch(1);

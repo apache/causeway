@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Hashtable;
 
+import javax.inject.Inject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameClassPair;
@@ -31,15 +32,20 @@ import javax.naming.NamingException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runners.model.InitializationError;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import lombok.val;
-
+@SpringBootTest(
+		classes = {LdapServerService.class},
+		properties = {
+	        "logging.config=log4j2-test.xml",
+	        "logging.level.org.apache.directory.api.ldap.model.entry.Value=OFF",
+})
 class LdapEmbeddedServerTest {
+	
+	@Inject LdapServerService ldapServerService;
 
     @Test
     void authenticateAgainstLdap() throws InitializationError, InterruptedException {
-    	
-    	val serverLatch = LdapEmbeddedServer.run();
     	
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -63,13 +69,8 @@ class LdapEmbeddedServerTest {
             ctx.close();
         } catch (NamingException e) {
             fail(e.getMessage());
-        } finally {
-        	serverLatch.countDown(); // release the ldap-server	
-        }
-        
-        
+        } 
     	
     }
-        
     
 }

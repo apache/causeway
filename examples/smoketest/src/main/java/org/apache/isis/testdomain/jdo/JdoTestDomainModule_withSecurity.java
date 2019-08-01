@@ -71,7 +71,8 @@ import org.springframework.context.annotation.PropertySources;
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
-@ConditionalOnProperty(value = "withSecurity", havingValue = "true", matchIfMissing = false)
+// enable security specific config to be picked up by Spring
+@ConditionalOnProperty(value = "smoketest.withSecurity", havingValue = "true", matchIfMissing = false)
 public class JdoTestDomainModule_withSecurity {
     
    @Bean @Singleton

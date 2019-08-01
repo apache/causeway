@@ -41,12 +41,8 @@ import lombok.val;
 				JdoTestDomainModule_withSecurity.class, 
 		}, 
 		properties = {
-				"withSecurity=true",
 				"logging.config=log4j2-test.xml",
-				"logging.level.org.apache.isis.jdo.transaction.IsisPlatformTransactionManagerForJdo=DEBUG",
-				"logging.level.org.apache.isis.runtime.system.transaction.IsisTransaction=DEBUG",
-				// "isis.reflector.introspector.parallelize=false",
-				// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+				"smoketest.withSecurity=true", // enable security specific config to be picked up by Spring 
 		})
 class ShiroIsisSecmanTest extends AbstractShiroTest {
 
@@ -60,7 +56,7 @@ class ShiroIsisSecmanTest extends AbstractShiroTest {
 	}
 
 	@AfterAll
-	static void tearDownSubject() {
+	static void afterClass() {
 		tearDownShiro();
 	}
 
