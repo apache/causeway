@@ -38,7 +38,7 @@ import lombok.val;
 //@RunWith(FrameworkRunner.class) //when picked up as a regular JUnit Test just act as a no-op.
 @CreateDS(name = "myDS",
     partitions = {
-        @CreatePartition(name = "test", suffix = "dc=myorg,dc=com")
+        @CreatePartition(name = "mojo", suffix = "o=mojo")
     })
 @CreateLdapServer(transports = { 
 		@CreateTransport(protocol = "LDAP", address = "localhost", port = LdapEmbeddedServer.PORT)})
@@ -47,6 +47,8 @@ public class LdapEmbeddedServer extends AbstractLdapTestUnit {
 	
 	/** IP port for the LDAP server to listen on */
     public static final int PORT = 10389;
+	public static final String SVEN_PRINCIPAL = "cn=Sven Mojo,o=mojo";
+	public static final String OLAF_PRINCIPAL = "cn=Olaf Mojo,o=mojo";
 
 	@Test
     public void authenticateAgainstLdap() {

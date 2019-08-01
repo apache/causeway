@@ -51,7 +51,7 @@ class LdapEmbeddedServerTest {
         env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapEmbeddedServer.PORT);
 
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, "cn=Sven Tester,ou=Users,dc=myorg,dc=com");
+        env.put(Context.SECURITY_PRINCIPAL, LdapEmbeddedServer.SVEN_PRINCIPAL);
         env.put(Context.SECURITY_CREDENTIALS, "pass");
         
         try {

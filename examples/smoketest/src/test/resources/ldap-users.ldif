@@ -18,27 +18,37 @@
 #
 
 version: 1
-dn: dc=myorg,dc=com
+dn: o=mojo
 objectClass: domain
 objectClass: top
 dc: myorg
 
-dn: ou=Users,dc=myorg,dc=com
+dn: ou=users,o=mojo
 objectClass: organizationalUnit
 objectClass: top
-ou: Users
+ou: users
 
-dn: ou=Groups,dc=myorg,dc=com
+dn: ou=groups,o=mojo
 objectClass: organizationalUnit
 objectClass: top
-ou: Groups
+ou: groups
 
-dn: cn=Sven Tester,ou=Users,dc=myorg,dc=com
+dn: cn=Sven Mojo,o=mojo
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
-cn: Sven Tester
-sn: Ldap
+cn: Sven Mojo
+sn: Mojo
 uid: sven
+userPassword: pass
+
+dn: cn=Olaf Mojo,o=mojo
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Olaf Mojo
+sn: Mojo
+uid: olaf
 userPassword: pass

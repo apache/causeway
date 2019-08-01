@@ -23,7 +23,8 @@ import java.util.Collection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
 @SuppressWarnings("rawtypes")
-public class PrincipalCollectionWithSinglePrincipalForApplicationUserInAnyRealm extends SimplePrincipalCollection {
+public class PrincipalCollectionWithSinglePrincipalForApplicationUserInAnyRealm 
+extends SimplePrincipalCollection {
 
     private static final long serialVersionUID = 1L;
 

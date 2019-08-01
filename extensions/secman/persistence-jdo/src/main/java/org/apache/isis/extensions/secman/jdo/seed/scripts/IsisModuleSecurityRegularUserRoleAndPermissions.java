@@ -31,7 +31,7 @@ import org.apache.isis.extensions.secman.model.app.user.MeService;
  */
 public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    //public static final String ROLE_NAME = "isis-module-security-regular-user";
+    //public static final String ROLE_NAME = "isis-module-security-regular-user"; .. moved to SecurityModuleConfig
 
     public IsisModuleSecurityRegularUserRoleAndPermissions(SecurityModuleConfig configBean) {
         super(configBean.getRegularUserRoleName(), "Regular user of the security module");
