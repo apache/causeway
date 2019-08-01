@@ -58,9 +58,9 @@ class ShiroLdapTest extends AbstractShiroTest {
 
 	@BeforeAll
 	static void beforeClass() {
-		//0.  Build and set the SecurityManager used to build Subject instances used in your tests
-		//    This typically only needs to be done once per class if your shiro.ini doesn't change,
-		//    otherwise, you'll need to do this logic in each test that is different
+		// Build and set the SecurityManager used to build Subject instances used in your tests
+		// This typically only needs to be done once per class if your shiro.ini doesn't change,
+		// otherwise, you'll need to do this logic in each test that is different
 		val factory = new IniSecurityManagerFactory("classpath:shiro-ldap.ini");
 		setSecurityManager(factory.getInstance());
 	}
@@ -69,7 +69,7 @@ class ShiroLdapTest extends AbstractShiroTest {
 	static void afterClass() {
 		tearDownShiro();
 	}
-
+	
 	@Test
 	void loginLogoutRoundtrip() {
 		
@@ -80,6 +80,7 @@ class ShiroLdapTest extends AbstractShiroTest {
 
 		val subject = SecurityUtils.getSubject(); 
 		assertNotNull(subject);
+		
 		assertFalse(subject.isAuthenticated());
 
 		val token = (AuthenticationToken) new UsernamePasswordToken(

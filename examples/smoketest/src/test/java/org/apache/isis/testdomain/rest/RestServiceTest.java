@@ -47,17 +47,17 @@ import lombok.val;
 })
 class RestServiceTest {
 
-	@LocalServerPort int port;
-	@Inject RestService restServerService;
+	@LocalServerPort int port; // just for reference (not used)
+	@Inject RestService restService;
 
 	@Test
-	void bookOfTheWeek_viaRestService() {
+	void bookOfTheWeek_viaRestEndpoint() {
 		
-		assertNotNull(restServerService.getPort());
-		assertTrue(restServerService.getPort()>0);
+		assertNotNull(restService.getPort());
+		assertTrue(restService.getPort()>0);
 
-		val restfulClient = restServerService.newClient();
-		val request = restServerService.newRecommendedBookOfTheWeekRequest(restfulClient);
+		val restfulClient = restService.newClient();
+		val request = restService.newRecommendedBookOfTheWeekRequest(restfulClient);
 
 		val args = restfulClient.arguments()
 				.build();

@@ -24,6 +24,7 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
 import org.apache.shiro.util.LifecycleUtils;
+import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
 
 class AbstractShiroTest {
@@ -60,6 +61,13 @@ class AbstractShiroTest {
     }
 
     private static void doClearSubject() {
+    	
+    	Subject subject = ThreadContext.getSubject();
+    	if(subject!=null) {
+    		ThreadContext.unbindSubject();
+    	}
+    	
+    	
         if (subjectThreadState != null) {
             subjectThreadState.clear();
             subjectThreadState = null;
@@ -67,7 +75,15 @@ class AbstractShiroTest {
     }
 
     protected static void setSecurityManager(SecurityManager securityManager) {
-        SecurityUtils.setSecurityManager(securityManager);
+    	try {
+    		// guard against SecurityManager already being set
+    		getSecurityManager();
+    		throw new IllegalStateException("It seems a previous test, did not cleanup the its SecurityManager.");
+    	} catch (UnavailableSecurityManagerException e) {
+    		
+    		// happy case
+    		SecurityUtils.setSecurityManager(securityManager);
+		}
     }
 
     protected static SecurityManager getSecurityManager() {
@@ -85,7 +101,7 @@ class AbstractShiroTest {
             // need a SecurityManager instance because it was using only
             // mock Subject instances)
         }
-        setSecurityManager(null);
+        SecurityUtils.setSecurityManager(null);
     }
 	
 }
