@@ -165,6 +165,30 @@
 		<!-- TEST DEPENDENCIES -->
 		
 		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.ws.rs</groupId>
+		    <artifactId>javax.ws.rs-api</artifactId>
+		    <version>2.1.1</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-client</artifactId>
+		    <version>2.25.1</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>org.eclipse.persistence.moxy</artifactId>
+		    <version>2.6.0</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-testing</artifactId>
 			<scope>test</scope>

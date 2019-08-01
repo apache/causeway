@@ -18,13 +18,18 @@
  */
 package org.apache.isis.testdomain.jdo;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.domain.DomainObjectList.ActionDomainEvent;
+import org.apache.isis.applib.services.repository.RepositoryService;
 
 @ViewModel
 public class InventoryManager {
 
+	// -- UPDATE PRODUCT PRICE
+	
 	public static class UpdateProductPriceEvent extends ActionDomainEvent {
 		private static final long serialVersionUID = 1L;}
 	
@@ -33,5 +38,16 @@ public class InventoryManager {
         product.setPrice(newPrice);
         return product;
     }
+    
+	// -- COUNT PRODUCTS
+    
+    @Action
+    public int countProducts() {
+        return repository.allInstances(Product.class).size();
+    }
+    
+    // -- DEPENDENCIES
+    
+    @Inject RepositoryService repository;
     
 }
