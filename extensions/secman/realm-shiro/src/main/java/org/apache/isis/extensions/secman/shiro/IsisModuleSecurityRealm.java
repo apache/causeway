@@ -24,11 +24,11 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
@@ -77,32 +77,36 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         val password = usernamePasswordToken.getPassword();
 
         // lookup from database, for roles/perms
-        val principal = lookupPrincipal(username);
+        val principal = lookupPrincipal_inApplicationUserRepository(username);
+        
+        val autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && getAutoCreateUser();
+        if (principal == null && autoCreateUserWhenDelegatedAuthentication) {
+        	// When using delegated authentication, desired behavior is to auto-create user accounts in the 
+        	// DB only if these do successfully authenticate with the delegated authentication mechanism,
+        	// while the newly created user will be disabled by default
+        	authenticateElseThrow_usingDelegatedMechanism(token);
+        	val newPrincipal = createPrincipal_inApplicationUserRepository(username);
+            
+            _Assert.assertNotNull(newPrincipal);
+            _Assert.assertTrue("Auto-created user accounts must be initially disabled!", newPrincipal.isDisabled());
+            
+            throw disabledAccountException(username); // default behavior after user auto-creation
+        }
+        
         if (principal == null) {
             // if no delegate authentication
             throw new CredentialsException("Unknown user/password combination");
         }
 
         if (principal.isDisabled()) {
-            // this is the default if delegated account and automatically created
-            throw new DisabledAccountException(String.format("username='%s'", principal.getUsername()));
+            throw disabledAccountException(principal.getUsername());
         }
 
         if(principal.getAccountType() == AccountType.DELEGATED) {
-            AuthenticationInfo delegateAccount = null;
-            if (hasDelegateAuthenticationRealm()) {
-                try {
-                    delegateAccount = delegateAuthenticationRealm.getAuthenticationInfo(token);
-                } catch (AuthenticationException ex) {
-                    // fall through
-                }
-            }
-            if(delegateAccount == null) {
-                throw new CredentialsException("Unknown user/password combination");
-            }
+        	authenticateElseThrow_usingDelegatedMechanism(token);
         } else {
-            final CheckPasswordResult result = checkPassword(password, principal.getEncryptedPassword());
-            switch (result) {
+            val checkPasswordResult = checkPassword(password, principal.getEncryptedPassword());
+            switch (checkPasswordResult) {
                 case OK:
                     break;
                 case BAD_PASSWORD:
@@ -128,30 +132,46 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         return urp;
     }
 
-    private PrincipalForApplicationUser lookupPrincipal(final String username) {
-    	
-    	//FIXME[2157] do not auto-create if user cannot authenticate
-    	// determine how to authenticate (delegate or local), whether disabled
-        val autoCreateUser = hasDelegateAuthenticationRealm() && getAutoCreateUser();
+    private DisabledAccountException disabledAccountException(String username) {
+    	return new DisabledAccountException(String.format("username='%s'", username));
+    }
+    
+    private void authenticateElseThrow_usingDelegatedMechanism(AuthenticationToken token) {
+    	AuthenticationInfo delegateAccount = null;
+    	try {
+    		delegateAccount = delegateAuthenticationRealm.getAuthenticationInfo(token);
+        } catch (AuthenticationException ex) {
+        	// fall through
+        }
+		if(delegateAccount == null) {
+            throw new CredentialsException("Unknown user/password combination");
+        }
+    }
+    
+    private PrincipalForApplicationUser lookupPrincipal_inApplicationUserRepository(final String username) {
     	
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
             public PrincipalForApplicationUser get() {
-                val applicationUser = lookupUser();
+                val applicationUser = applicationUserRepository.findByUsername(username);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
-
-            private ApplicationUser lookupUser() {
-                if (autoCreateUser) {
-                    return applicationUserRepository.findOrCreateUserByUsername(username);
-                } else {
-                    return applicationUserRepository.findByUsername(username);
-                }
-            }
-
             @Inject private ApplicationUserRepository applicationUserRepository;
         });
     }
+    
+    private PrincipalForApplicationUser createPrincipal_inApplicationUserRepository(final String username) {
+    	
+        return execute(new Supplier<PrincipalForApplicationUser>() {
+            @Override
+            public PrincipalForApplicationUser get() {
+                val applicationUser = applicationUserRepository.findOrCreateUserByUsername(username);
+                return PrincipalForApplicationUser.from(applicationUser);
+            }
+            @Inject private ApplicationUserRepository applicationUserRepository;
+        });
+    }
+    
 
     private static enum CheckPasswordResult {
         OK,
