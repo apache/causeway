@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -79,6 +80,26 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         val usernamePasswordToken = (UsernamePasswordToken) token;
         val username = usernamePasswordToken.getUsername();
         val password = usernamePasswordToken.getPassword();
+        
+
+        // this code block is just an optimization, entirely optional
+        // we reuse principal information on subjects that are already authenticated
+        {
+            val currentSubject = SecurityUtils.getSubject();
+            if(currentSubject!=null && currentSubject.isAuthenticated()) {
+                val authenticatedPrincipalObject = currentSubject.getPrincipal();
+                if(authenticatedPrincipalObject instanceof PrincipalForApplicationUser) {
+                    val authenticatedPrincipal = (PrincipalForApplicationUser) authenticatedPrincipalObject;
+                    val authenticatedUsername = authenticatedPrincipal.getUsername();
+                    val isAuthenticatedWithThisRealm = username.equals(authenticatedUsername);
+                    if(isAuthenticatedWithThisRealm) {
+                        val credentials = token.getCredentials();
+                        val realmName = getName();
+                        return new AuthInfoForApplicationUser(authenticatedPrincipal, realmName, credentials);                        
+                    }
+                }
+            }
+        }
 
         // lookup from database, for roles/perms
         val principal = lookupPrincipal_inApplicationUserRepository(username);

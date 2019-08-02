@@ -79,13 +79,8 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @BeforeAll
     static void beforeClass() {
-        //    Build and set the SecurityManager used to build Subject instances used in your tests
-        //    This typically only needs to be done once per class if your shiro.ini doesn't change,
-        //    otherwise, you'll need to do this logic in each test that is different
-        //val factory = new IniSecurityManagerFactory("classpath:shiro-secman-ldap.ini");
-        //setSecurityManager(factory.getInstance());
+        //WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap-cached.ini");
         WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
-
     }
 
     @AfterAll
@@ -108,19 +103,17 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
     }
 
     @Test
-    void bookOfTheWeek_viaRestEndpoint() {
-
-        //TODO not very stressfull yet
+    void stressTheRestEndpoint() {
 
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
-
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
+        for(int i=0; i<100; ++i) {
+            val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
+            if(!digest.isSuccess()) {
+                fail(digest.getFailureCause());
+            }
         }
-
     }
 
 }
