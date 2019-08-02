@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.collections.collection.modify;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.Map;
 import java.util.Set;
 
@@ -35,6 +33,8 @@ import org.apache.isis.metamodel.facets.DomainEventHelper;
 import org.apache.isis.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public abstract class CollectionAddToFacetForDomainEventFromAbstract
 extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>

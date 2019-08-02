@@ -18,9 +18,6 @@
  */
 package org.apache.isis.jdo.persistence;
 
-import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -38,6 +35,10 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.identity.SingleFieldIdentity;
 import javax.jdo.listener.InstanceLifecycleListener;
+
+import org.datanucleus.enhancement.Persistable;
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
+import org.datanucleus.identity.DatastoreIdImpl;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.command.Command;
@@ -96,9 +97,9 @@ import org.apache.isis.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.datanucleus.enhancement.Persistable;
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
-import org.datanucleus.identity.DatastoreIdImpl;
+
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
 import lombok.val;

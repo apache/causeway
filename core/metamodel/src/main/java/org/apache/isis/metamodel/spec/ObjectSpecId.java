@@ -18,11 +18,11 @@
  */
 package org.apache.isis.metamodel.spec;
 
-import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
-
 import java.io.Serializable;
 
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

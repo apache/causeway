@@ -18,13 +18,18 @@
  */
 package org.apache.isis.metamodel.facets.object.ident.title.annotation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -38,13 +43,9 @@ import org.apache.isis.metamodel.facets.object.title.annotation.TitleFacetViaTit
 import org.apache.isis.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 

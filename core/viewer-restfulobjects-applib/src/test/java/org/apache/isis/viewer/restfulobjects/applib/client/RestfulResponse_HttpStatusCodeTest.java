@@ -18,13 +18,14 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.client;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.Response.Status.Family;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.junit.Test;
+
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class RestfulResponse_HttpStatusCodeTest {
 

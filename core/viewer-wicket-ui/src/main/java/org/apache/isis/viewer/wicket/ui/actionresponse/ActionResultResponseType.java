@@ -22,6 +22,9 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.IRequestHandler;
+
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -38,8 +41,6 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.IRequestHandler;
 
 import lombok.val;
 

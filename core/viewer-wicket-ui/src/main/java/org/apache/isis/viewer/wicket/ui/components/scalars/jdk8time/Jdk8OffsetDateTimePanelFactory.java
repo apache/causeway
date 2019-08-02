@@ -21,10 +21,11 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 
 import java.time.OffsetDateTime;
 
+import org.apache.wicket.Component;
+
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-import org.apache.wicket.Component;
 
 /**
  * {@link ComponentFactory} for {@link Jdk8LocalDatePanel}.

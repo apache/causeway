@@ -35,7 +35,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;

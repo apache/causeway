@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.beans.IntrospectionException;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
@@ -51,6 +49,8 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public final class Annotations  {
 

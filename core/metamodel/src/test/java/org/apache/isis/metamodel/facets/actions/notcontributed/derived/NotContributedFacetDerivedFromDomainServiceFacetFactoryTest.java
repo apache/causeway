@@ -29,8 +29,6 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet;
-import org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacet;
-import org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 

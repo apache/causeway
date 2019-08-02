@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.metamodel.services.ServiceInjectorDefault;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;

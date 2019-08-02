@@ -32,11 +32,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -46,6 +41,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
+
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.Contributed;
+import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 class ExcelFileModel extends LoadableDetachableModel<File> {
 

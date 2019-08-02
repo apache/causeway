@@ -21,6 +21,9 @@ package org.apache.isis.runtime.system.persistence;
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
+
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -30,8 +33,6 @@ import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
 import org.apache.isis.runtime.system.context.session.SessionLifecycleEvent;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.event.EventListener;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

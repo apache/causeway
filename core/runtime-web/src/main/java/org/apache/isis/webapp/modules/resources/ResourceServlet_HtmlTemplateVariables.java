@@ -19,14 +19,14 @@
 
 package org.apache.isis.webapp.modules.resources;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * Package private mixin for ResourceServlet

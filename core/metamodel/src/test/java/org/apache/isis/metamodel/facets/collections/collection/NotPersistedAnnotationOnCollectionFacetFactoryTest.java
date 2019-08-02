@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.unittestsupport.bidir;
 
-import javax.jdo.annotations.Persistent;
-
 public class PeerDomainObjectForTesting extends PeerDomainObject {
 
 }

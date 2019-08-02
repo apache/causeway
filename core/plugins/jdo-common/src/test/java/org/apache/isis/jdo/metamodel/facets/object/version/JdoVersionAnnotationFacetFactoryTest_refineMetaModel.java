@@ -19,15 +19,16 @@
 package org.apache.isis.jdo.metamodel.facets.object.version;
 
 import javax.jdo.annotations.Version;
+
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
+
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

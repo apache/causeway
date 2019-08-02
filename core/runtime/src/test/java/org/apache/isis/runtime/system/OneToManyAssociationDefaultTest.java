@@ -19,10 +19,6 @@
 
 package org.apache.isis.runtime.system;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -31,7 +27,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -47,6 +42,10 @@ import org.apache.isis.metamodel.specloader.specimpl.OneToManyAssociationDefault
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class OneToManyAssociationDefaultTest {
 

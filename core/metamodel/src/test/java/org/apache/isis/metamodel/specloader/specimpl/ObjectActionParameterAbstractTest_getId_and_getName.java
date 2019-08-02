@@ -20,6 +20,13 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.function.Predicate;
+
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -28,13 +35,6 @@ import org.apache.isis.metamodel.facets.TypedHolder;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.metamodel.specloader.specimpl.ObjectActionDefault;
-import org.apache.isis.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

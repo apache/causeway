@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.client;
 
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 public class RestfulResponse_HeaderTest_Warning {
 

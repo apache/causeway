@@ -19,15 +19,15 @@
 
 package org.apache.isis.metamodel.consent;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.apache.isis.metamodel.consent.InteractionResult;
-import org.apache.isis.metamodel.interactions.InteractionAdvisorFacet;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.metamodel.interactions.InteractionAdvisorFacet;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class InteractionResultTest {
 

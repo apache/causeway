@@ -20,10 +20,11 @@ package org.apache.isis.extensions.secman.jdo.dom.role;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.services.factory.FactoryService;
 
 /**
  * Optional hook so that alternative implementations of {@link org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole}.

@@ -39,7 +39,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.services.grid.GridServiceDefault;
 import org.apache.isis.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
 
 import static org.hamcrest.CoreMatchers.equalTo;

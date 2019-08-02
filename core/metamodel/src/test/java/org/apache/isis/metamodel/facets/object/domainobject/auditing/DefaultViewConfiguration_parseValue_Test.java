@@ -21,7 +21,9 @@ package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration.*;
+import static org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration.HIDDEN;
+import static org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration.TABLE;
+import static org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration.parseValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 

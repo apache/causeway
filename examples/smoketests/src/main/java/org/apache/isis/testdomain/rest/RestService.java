@@ -20,6 +20,9 @@ package org.apache.isis.testdomain.rest;
 
 import javax.inject.Inject;
 
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.client.ResponseDigest;
 import org.apache.isis.applib.client.RestfulClient;
 import org.apache.isis.applib.client.RestfulClientConfig;
@@ -27,8 +30,6 @@ import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.ldap.LdapConstants;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

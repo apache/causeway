@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facetapi;
 
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 
 /**

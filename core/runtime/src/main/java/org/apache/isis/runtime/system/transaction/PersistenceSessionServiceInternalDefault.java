@@ -18,9 +18,6 @@
  */
 package org.apache.isis.runtime.system.transaction;
 
-import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,6 +38,9 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
+
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 @Singleton
 public class PersistenceSessionServiceInternalDefault 

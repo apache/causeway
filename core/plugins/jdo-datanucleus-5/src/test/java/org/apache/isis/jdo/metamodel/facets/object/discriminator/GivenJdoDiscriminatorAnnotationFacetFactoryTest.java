@@ -24,10 +24,7 @@ import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.datanucleus.enhancement.Persistable;
-import org.apache.isis.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
-import org.apache.isis.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorFacet;
-import org.apache.isis.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorFacetDefault;
-import org.apache.isis.jdo.metamodel.facets.object.discriminator.ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;

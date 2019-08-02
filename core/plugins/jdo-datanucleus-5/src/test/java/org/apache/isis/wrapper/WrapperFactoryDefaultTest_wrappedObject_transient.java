@@ -62,7 +62,6 @@ import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.authentication.standard.SimpleSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.wrapper.WrapperFactoryDefault;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

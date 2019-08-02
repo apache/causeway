@@ -21,8 +21,6 @@ package org.apache.isis.unittestsupport.value;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.unittestsupport.value.ValueTypeContractTestAbstract;
-
 public class ValueTypeContractTestAbstract_StringTest extends ValueTypeContractTestAbstract<String> {
 
     @Override

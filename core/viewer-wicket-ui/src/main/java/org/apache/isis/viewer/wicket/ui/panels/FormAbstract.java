@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -28,8 +31,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.IModel;
 
 public abstract class FormAbstract<T> extends Form<T>
 implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {

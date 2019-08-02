@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.commons;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +26,8 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public final class ListExtensions {
     private static final String DEFAULT_DELIMITER = ",";

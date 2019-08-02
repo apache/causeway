@@ -21,11 +21,12 @@ package org.apache.isis.unittestsupport.jmocking;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 import org.jmock.api.Imposteriser;
 import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
 import org.jmock.lib.JavaReflectionImposteriser;
+
+import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 
 class ImposteriserUsingCodegenPlugin implements Imposteriser {
 

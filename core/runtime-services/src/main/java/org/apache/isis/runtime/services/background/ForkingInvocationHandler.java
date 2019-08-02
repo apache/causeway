@@ -18,8 +18,6 @@
  */
 package org.apache.isis.runtime.services.background;
 
-import static org.apache.isis.commons.internal.functions._Functions.uncheckedSupplier;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +27,8 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
+
+import static org.apache.isis.commons.internal.functions._Functions.uncheckedSupplier;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;

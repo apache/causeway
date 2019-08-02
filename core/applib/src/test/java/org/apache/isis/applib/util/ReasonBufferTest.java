@@ -19,10 +19,10 @@
 
 package org.apache.isis.applib.util;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ReasonBufferTest {
     private ReasonBuffer reason;

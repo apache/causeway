@@ -19,11 +19,6 @@
 
 package org.apache.isis.metamodel.facets.propparam.specification;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.util.Collections;
 import java.util.Optional;
 
@@ -44,6 +39,11 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet;
 import org.apache.isis.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class MustSatisfySpecificationValidatingInteractionMoreTest {
 

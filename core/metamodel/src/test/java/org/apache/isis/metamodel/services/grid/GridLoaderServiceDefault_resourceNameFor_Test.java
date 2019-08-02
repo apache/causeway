@@ -25,8 +25,6 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 
-import org.apache.isis.metamodel.services.grid.GridLoaderServiceDefault;
-
 public class GridLoaderServiceDefault_resourceNameFor_Test {
 
     private GridLoaderServiceDefault gridLoaderServiceDefault;

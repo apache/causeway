@@ -25,7 +25,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
 
-import org.apache.isis.metamodel.facets.Annotations;
 import org.junit.Assert;
 import org.junit.Test;
 

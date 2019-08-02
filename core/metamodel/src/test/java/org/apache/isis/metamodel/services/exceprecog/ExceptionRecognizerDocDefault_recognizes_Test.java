@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.services.exceprecog;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.metamodel.services.exceprecog.ExceptionRecognizerDocDefault;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;

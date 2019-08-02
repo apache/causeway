@@ -24,11 +24,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -42,6 +37,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 

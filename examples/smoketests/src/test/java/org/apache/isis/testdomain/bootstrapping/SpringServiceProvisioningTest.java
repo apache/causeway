@@ -18,24 +18,25 @@
  */
 package org.apache.isis.testdomain.bootstrapping;
 
-import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
-import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
+import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 

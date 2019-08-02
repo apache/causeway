@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.memento;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,6 +39,8 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  *

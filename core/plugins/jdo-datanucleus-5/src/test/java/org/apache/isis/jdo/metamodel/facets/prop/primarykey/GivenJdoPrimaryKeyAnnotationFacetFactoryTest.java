@@ -23,10 +23,6 @@ import java.util.List;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.isis.jdo.metamodel.facets.prop.primarykey.DisabledFacetDerivedFromJdoPrimaryKeyAnnotation;
-import org.apache.isis.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
-import org.apache.isis.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
-import org.apache.isis.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;

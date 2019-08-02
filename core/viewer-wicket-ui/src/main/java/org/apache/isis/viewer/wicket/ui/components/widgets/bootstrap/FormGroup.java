@@ -18,14 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap;
 
-import de.agilecoders.wicket.core.util.Attributes;
-
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.util.lang.Args;
+
+import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * A container around Bootstrap form component that sets

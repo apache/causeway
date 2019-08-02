@@ -19,15 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.components.tree;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
-import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
 /**
  * Immutable tree, reuses the ScalarPanelTextField functionality without the need of its text field.

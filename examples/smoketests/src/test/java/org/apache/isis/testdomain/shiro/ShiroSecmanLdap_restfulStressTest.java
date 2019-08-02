@@ -18,9 +18,14 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 import javax.inject.Inject;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
@@ -35,12 +40,8 @@ import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
+import org.apache.isis.commons.internal.encoding.Encodable;
 
 /**
  * Indicates that the class should have a default, by providing a link to a

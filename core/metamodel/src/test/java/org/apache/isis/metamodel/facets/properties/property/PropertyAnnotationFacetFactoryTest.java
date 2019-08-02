@@ -52,7 +52,6 @@ import org.apache.isis.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfyS
 import org.apache.isis.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
@@ -74,7 +73,6 @@ import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterF
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 
 import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.is;

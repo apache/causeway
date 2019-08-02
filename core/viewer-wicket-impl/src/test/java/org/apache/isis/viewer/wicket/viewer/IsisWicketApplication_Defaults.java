@@ -19,11 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.junit.After;
@@ -31,11 +26,17 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class IsisWicketApplication_Defaults {
 

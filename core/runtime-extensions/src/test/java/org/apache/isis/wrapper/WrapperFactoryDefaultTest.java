@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.wrapper.WrapperFactoryDefault;
 import org.apache.isis.wrapper.proxy.ProxyCreator;
 
 import static org.hamcrest.CoreMatchers.is;

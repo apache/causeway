@@ -19,7 +19,9 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
+
 import org.junit.Test;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 

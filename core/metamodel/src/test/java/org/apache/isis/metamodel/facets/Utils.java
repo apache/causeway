@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.DomainEventHelper;
 
 class Utils {
 

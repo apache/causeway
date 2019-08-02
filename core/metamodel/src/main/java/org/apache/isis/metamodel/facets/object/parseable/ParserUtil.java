@@ -19,13 +19,13 @@
 
 package org.apache.isis.metamodel.facets.object.parseable;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public final class ParserUtil {
 

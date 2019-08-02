@@ -22,11 +22,6 @@ package org.apache.isis.metamodel.specloader;
 import org.datanucleus.enhancement.Persistable;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -36,8 +31,11 @@ import org.apache.isis.metamodel.facets.object.objectvalidprops.ObjectValidPrope
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.SpecificationLoaderTestAbstract;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract {
 

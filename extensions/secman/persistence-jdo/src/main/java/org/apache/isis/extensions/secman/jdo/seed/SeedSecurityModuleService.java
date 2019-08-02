@@ -22,9 +22,10 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.transaction.TransactionStatus;
+
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.springframework.transaction.TransactionStatus;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

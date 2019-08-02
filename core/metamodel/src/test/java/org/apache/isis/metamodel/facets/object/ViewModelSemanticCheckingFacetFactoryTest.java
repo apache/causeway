@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

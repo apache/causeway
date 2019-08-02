@@ -18,9 +18,9 @@
  */
 package org.apache.isis.runtime.services.email;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.runtime.services.email.EmailServiceDefault;
 import org.junit.Test;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

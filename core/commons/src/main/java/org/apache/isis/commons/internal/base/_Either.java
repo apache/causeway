@@ -19,14 +19,14 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

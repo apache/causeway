@@ -18,12 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.util;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Map;
 
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class MapUtilsTest {
 

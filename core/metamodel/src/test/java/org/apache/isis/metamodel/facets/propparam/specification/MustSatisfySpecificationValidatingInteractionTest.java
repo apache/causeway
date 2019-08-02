@@ -19,15 +19,7 @@
 
 package org.apache.isis.metamodel.facets.propparam.specification;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
-import lombok.val;
-
 import java.util.Collections;
-import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -38,8 +30,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
@@ -47,6 +37,13 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet;
 import org.apache.isis.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class MustSatisfySpecificationValidatingInteractionTest {
 

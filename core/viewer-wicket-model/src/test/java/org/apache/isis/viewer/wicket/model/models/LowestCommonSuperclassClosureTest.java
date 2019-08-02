@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.metamodel.commons.matchers.IsisMatchers;
 import org.junit.Test;
+
+import org.apache.isis.metamodel.commons.matchers.IsisMatchers;
+
+import static org.junit.Assert.assertThat;
 
 public class LowestCommonSuperclassClosureTest {
 

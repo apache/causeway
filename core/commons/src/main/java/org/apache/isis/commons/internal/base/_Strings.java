@@ -19,12 +19,6 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.base._NullSafe.size;
-import static org.apache.isis.commons.internal.base._Strings_SplitIterator.splitIterator;
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.isis.commons.internal.base._With.requires;
-import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
-
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -44,6 +38,12 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Bytes.BytesOperator;
+
+import static org.apache.isis.commons.internal.base._NullSafe.size;
+import static org.apache.isis.commons.internal.base._Strings_SplitIterator.splitIterator;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
 /**
  * <h1>- internal use only -</h1>

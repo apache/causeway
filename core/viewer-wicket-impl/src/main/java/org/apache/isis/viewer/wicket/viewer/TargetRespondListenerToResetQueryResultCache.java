@@ -18,9 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.viewer;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import lombok.extern.log4j.Log4j2;
 

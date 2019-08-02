@@ -18,8 +18,6 @@
  */
 package domainapp.dom.events;
 
-import static domainapp.utils.DemoUtils.emphasize;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -32,6 +30,8 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+
+import static domainapp.utils.DemoUtils.emphasize;
 
 import domainapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
 import lombok.extern.log4j.Log4j2;

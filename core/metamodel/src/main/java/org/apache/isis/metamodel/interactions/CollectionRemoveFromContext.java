@@ -19,13 +19,13 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionRemoveFromEvent;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+
+import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 /**
  * See {@link InteractionContext} for overview; analogous to

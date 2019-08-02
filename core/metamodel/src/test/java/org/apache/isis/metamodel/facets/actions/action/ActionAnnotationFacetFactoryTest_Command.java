@@ -18,13 +18,9 @@
  */
 package org.apache.isis.metamodel.facets.actions.action;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.reflect.Method;
+
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
@@ -39,7 +35,12 @@ import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromC
 import org.apache.isis.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFacetFactoryTest {
 

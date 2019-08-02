@@ -24,8 +24,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.runtime.services.i18n.po.PoWriter;
-
 public class PoWriterTest_escape {
 
     @Test

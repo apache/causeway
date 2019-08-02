@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2Choice;
+
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

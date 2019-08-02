@@ -19,10 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui;
 
+import org.junit.Test;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 public class ComponentType_ConstantsTest {
 

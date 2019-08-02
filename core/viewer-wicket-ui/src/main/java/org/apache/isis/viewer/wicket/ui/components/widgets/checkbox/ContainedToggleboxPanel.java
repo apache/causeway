@@ -24,6 +24,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**

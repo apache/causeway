@@ -20,14 +20,6 @@ package domainapp.application;
 
 import javax.inject.Singleton;
 
-import org.apache.isis.config.Presets;
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
-import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -37,6 +29,15 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
+
+import org.apache.isis.config.Presets;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.jdo.IsisBootDataNucleus;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
+import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.dom.HelloWorldModule;
 

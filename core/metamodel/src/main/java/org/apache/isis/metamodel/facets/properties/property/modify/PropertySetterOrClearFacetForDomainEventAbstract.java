@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.properties.property.modify;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Objects;
@@ -49,6 +47,8 @@ import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {

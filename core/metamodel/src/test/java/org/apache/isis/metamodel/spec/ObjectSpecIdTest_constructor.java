@@ -18,7 +18,6 @@
  */
 package org.apache.isis.metamodel.spec;
 
-import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.junit.Test;
 
 public class ObjectSpecIdTest_constructor {

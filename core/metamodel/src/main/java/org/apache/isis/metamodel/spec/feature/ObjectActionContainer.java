@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -28,6 +26,8 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public interface ObjectActionContainer {
 

@@ -18,9 +18,6 @@
  */
 package org.apache.isis.metamodel.services.appfeat;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -58,6 +55,9 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 import lombok.val;
 

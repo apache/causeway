@@ -30,10 +30,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.value.ValueTypeContractTestAbstract;
 

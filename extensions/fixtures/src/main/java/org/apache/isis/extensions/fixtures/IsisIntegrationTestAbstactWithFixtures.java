@@ -20,6 +20,8 @@ package org.apache.isis.extensions.fixtures;
 
 import javax.inject.Inject;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
@@ -29,7 +31,6 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.extensions.fixtures.legacy.TickingFixtureClock;
 import org.apache.isis.integtestsupport.IsisIntegrationTestAbstact;
-import org.joda.time.LocalDate;
 
 public abstract class IsisIntegrationTestAbstactWithFixtures extends IsisIntegrationTestAbstact {
 

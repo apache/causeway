@@ -19,11 +19,11 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.exceptions._Exceptions.notImplemented;
-
 import java.util.Optional;
 
 import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
+
+import static org.apache.isis.commons.internal.exceptions._Exceptions.notImplemented;
 
 /**
  *

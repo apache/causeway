@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.metamodel.facets.Annotations;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -18,12 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.health;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToUp;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class HealthRepresentation extends DomainRepresentation implements HasLinkToUp {
 

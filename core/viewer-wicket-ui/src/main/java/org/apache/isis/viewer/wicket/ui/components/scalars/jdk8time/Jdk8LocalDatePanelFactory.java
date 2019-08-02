@@ -19,9 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 
-import org.apache.wicket.Component;
-
 import java.time.LocalDate;
+
+import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;

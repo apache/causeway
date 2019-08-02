@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 public class EntityIconAndTitlePanelTest_abbreviated {
 

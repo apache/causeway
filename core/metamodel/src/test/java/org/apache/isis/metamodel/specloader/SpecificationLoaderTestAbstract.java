@@ -41,8 +41,6 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPo
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;

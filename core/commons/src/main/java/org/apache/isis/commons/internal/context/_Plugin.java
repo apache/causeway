@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.context;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -30,12 +28,15 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.plugins.PluginResolveException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

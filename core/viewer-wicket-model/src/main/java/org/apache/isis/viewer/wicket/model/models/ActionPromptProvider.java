@@ -18,11 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 
 public interface ActionPromptProvider {
 

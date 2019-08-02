@@ -18,16 +18,17 @@
  */
 package org.apache.isis.viewer.wicket.model.util;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import java.io.Serializable;
+
+import javax.inject.Provider;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import javax.inject.Provider;
-import java.io.Serializable;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 /**
  * Scoped by the {@link Component component's path}.

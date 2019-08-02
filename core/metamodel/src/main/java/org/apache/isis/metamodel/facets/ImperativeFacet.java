@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.commons.ObjectExtensions;
 import org.apache.isis.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

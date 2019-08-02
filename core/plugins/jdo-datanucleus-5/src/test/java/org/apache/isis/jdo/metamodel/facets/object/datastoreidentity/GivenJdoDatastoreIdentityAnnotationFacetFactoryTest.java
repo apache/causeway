@@ -25,9 +25,7 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.datanucleus.enhancement.Persistable;
-import org.apache.isis.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
-import org.apache.isis.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
-import org.apache.isis.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacetAnnotation;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;

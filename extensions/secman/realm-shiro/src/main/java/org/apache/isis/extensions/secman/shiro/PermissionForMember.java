@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions.secman.shiro;
 
+import org.apache.shiro.authz.Permission;
+
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.shiro.authz.Permission;
 
 /**
  * As created by {@link org.apache.isis.extensions.secman.shiro.PermissionResolverForIsisShiroAuthorizor}, interprets the

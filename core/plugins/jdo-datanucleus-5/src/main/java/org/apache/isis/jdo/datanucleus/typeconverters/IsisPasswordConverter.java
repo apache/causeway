@@ -19,6 +19,7 @@
 package org.apache.isis.jdo.datanucleus.typeconverters;
 
 import org.datanucleus.store.types.converters.TypeConverter;
+
 import org.apache.isis.applib.value.Password;
 
 public class IsisPasswordConverter implements TypeConverter<Password, String>{

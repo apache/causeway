@@ -28,11 +28,10 @@ import java.util.Set;
 import org.jmock.Expectations;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;

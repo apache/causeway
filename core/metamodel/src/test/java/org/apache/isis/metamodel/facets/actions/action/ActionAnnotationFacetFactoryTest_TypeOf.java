@@ -18,10 +18,10 @@
  */
 package org.apache.isis.metamodel.facets.actions.action;
 
-import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
-import static org.junit.Assert.assertThat;
-
 import java.util.Collection;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -29,8 +29,9 @@ import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
+import static org.junit.Assert.assertThat;
 
 public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFacetFactoryTest {
 

@@ -40,7 +40,6 @@ import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;

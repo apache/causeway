@@ -16,16 +16,16 @@
  */
 package org.apache.isis.security.shiro.permrolemapper;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
 
 import org.apache.isis.commons.internal.collections._Sets;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class PermissionToRoleMapperFromStringTest {
 

@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+
+import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
  * {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} to create container for the page footer.

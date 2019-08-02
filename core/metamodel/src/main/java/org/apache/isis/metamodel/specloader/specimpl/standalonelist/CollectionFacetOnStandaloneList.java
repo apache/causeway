@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.specloader.specimpl.standalonelist;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -32,6 +30,8 @@ import org.apache.isis.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.metamodel.spec.FreeStandingList;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
 

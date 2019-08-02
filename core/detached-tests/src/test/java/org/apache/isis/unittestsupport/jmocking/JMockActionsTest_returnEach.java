@@ -19,16 +19,15 @@
 
 package org.apache.isis.unittestsupport.jmocking;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.apache.isis.unittestsupport.jmocking.JMockActions;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class JMockActionsTest_returnEach {
 

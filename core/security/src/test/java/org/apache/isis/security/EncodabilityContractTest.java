@@ -19,11 +19,6 @@
 
 package org.apache.isis.security;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -32,11 +27,17 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataInputStreamExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputStreamExtended;
 import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.security.authentication.AuthenticationSession;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public abstract class EncodabilityContractTest {
 

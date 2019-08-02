@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.function.BiPredicate;
@@ -31,6 +29,8 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

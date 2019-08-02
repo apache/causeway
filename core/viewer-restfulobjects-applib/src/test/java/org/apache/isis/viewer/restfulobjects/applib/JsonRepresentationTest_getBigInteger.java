@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 import java.math.BigInteger;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

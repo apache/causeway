@@ -30,7 +30,6 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
-import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 
 @RunWith(JMock.class)

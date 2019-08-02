@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.validation.validator.StringValidator;
+
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

@@ -19,14 +19,13 @@
 
 package org.apache.isis.commons.internal.assertions;
 
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
-
-import org.apache.isis.commons.internal.assertions._Ensure;
-import org.junit.Test;
 
 public class Ensure_GivenValueThatDoesMatchTest {
 

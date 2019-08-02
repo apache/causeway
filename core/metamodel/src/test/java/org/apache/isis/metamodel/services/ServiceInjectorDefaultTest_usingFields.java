@@ -32,7 +32,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.metamodel.services.ServiceInjectorDefault;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.hamcrest.Matchers.any;

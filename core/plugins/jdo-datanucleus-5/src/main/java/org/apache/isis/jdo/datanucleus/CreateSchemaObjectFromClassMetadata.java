@@ -25,13 +25,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.enhancer.EnhancementNucleusContextImpl;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.store.ConnectionEncryptionProvider;
+
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.extern.log4j.Log4j2;
 

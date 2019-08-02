@@ -18,20 +18,17 @@
  */
 package org.apache.isis.jdo.metamodel.facets.prop.column;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
-import org.apache.isis.jdo.metamodel.facets.prop.column.BigDecimalFacetDerivedFromJdoColumn;
-import org.apache.isis.jdo.metamodel.facets.prop.column.BigDecimalFacetFallback;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

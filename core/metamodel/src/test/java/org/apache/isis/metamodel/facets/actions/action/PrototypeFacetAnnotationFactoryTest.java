@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 

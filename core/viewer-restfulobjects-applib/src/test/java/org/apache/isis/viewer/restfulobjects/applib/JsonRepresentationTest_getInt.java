@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 

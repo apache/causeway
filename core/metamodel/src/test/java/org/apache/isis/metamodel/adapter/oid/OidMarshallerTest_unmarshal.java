@@ -21,15 +21,11 @@ package org.apache.isis.metamodel.adapter.oid;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.Oid_Marshaller;
-import org.apache.isis.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 /**
 * <dt>CUS:123</dt>

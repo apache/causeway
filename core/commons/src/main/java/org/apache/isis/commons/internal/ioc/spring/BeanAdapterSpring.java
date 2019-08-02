@@ -18,11 +18,12 @@
  */
 package org.apache.isis.commons.internal.ioc.spring;
 
+import org.springframework.beans.factory.ObjectProvider;
+
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
-import org.springframework.beans.factory.ObjectProvider;
 
 import lombok.Value;
 import lombok.val;

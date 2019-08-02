@@ -18,20 +18,12 @@
  */
 package org.apache.isis.testdomain.bootstrapping;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.Inventory;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-import org.apache.isis.testdomain.jdo.Product;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -41,6 +33,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.testdomain.jdo.Book;
+import org.apache.isis.testdomain.jdo.Inventory;
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
+import org.apache.isis.testdomain.jdo.Product;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 

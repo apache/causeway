@@ -22,11 +22,11 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.isis.wrapper.handlers.DelegatingInvocationHandler;
-import org.apache.isis.wrapper.proxy.ProxyCreator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.wrapper.handlers.DelegatingInvocationHandler;
 
 public class ProxyCreatorTestUsingCodegenPlugin {
 

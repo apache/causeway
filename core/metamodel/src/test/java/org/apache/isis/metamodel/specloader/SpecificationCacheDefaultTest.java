@@ -21,16 +21,16 @@ package org.apache.isis.metamodel.specloader;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationCacheDefault;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

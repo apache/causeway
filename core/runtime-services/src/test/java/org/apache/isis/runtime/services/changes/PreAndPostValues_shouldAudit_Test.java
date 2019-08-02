@@ -18,13 +18,13 @@
  */
 package org.apache.isis.runtime.services.changes;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import org.apache.isis.runtime.system.transaction.IsisTransactionPlaceholder;
 import org.apache.isis.runtime.system.transaction.PreAndPostValues;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class PreAndPostValues_shouldAudit_Test {
 

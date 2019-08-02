@@ -32,8 +32,6 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.runtime.services.i18n.po.PoReader;
-import org.apache.isis.runtime.services.i18n.po.TranslationServicePo;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;

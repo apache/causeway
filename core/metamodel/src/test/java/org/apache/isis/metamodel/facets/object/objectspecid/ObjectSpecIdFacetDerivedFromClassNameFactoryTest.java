@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.facets.object.objectspecid;
 import org.datanucleus.testing.dom.CustomerAsProxiedByDataNucleus;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
 import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.metamodel.spec.ObjectSpecId;

@@ -18,21 +18,11 @@
  */
 package domainapp.application.integtests.mml;
 
-import static org.approvaltests.Approvals.getReporter;
-import static org.approvaltests.Approvals.verify;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assume.assumeThat;
-
 import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.schema.metamodel.v1.DomainClassDto;
-import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 import org.approvaltests.namer.StackTraceNamer;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.QuietReporter;
@@ -40,6 +30,17 @@ import org.approvaltests.reporters.UseReporter;
 import org.approvaltests.writers.ApprovalTextWriter;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.schema.metamodel.v1.DomainClassDto;
+import org.apache.isis.schema.metamodel.v1.MetamodelDto;
+
+import static org.approvaltests.Approvals.getReporter;
+import static org.approvaltests.Approvals.verify;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assume.assumeThat;
 
 import domainapp.application.manifest.SimpleAppManifest;
 

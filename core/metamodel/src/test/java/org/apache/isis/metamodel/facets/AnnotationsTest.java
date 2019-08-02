@@ -20,7 +20,6 @@ package org.apache.isis.metamodel.facets;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.facets.Annotations;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

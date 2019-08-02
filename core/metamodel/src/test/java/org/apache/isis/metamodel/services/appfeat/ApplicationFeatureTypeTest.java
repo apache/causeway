@@ -26,9 +26,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
-
 public class ApplicationFeatureTypeTest {
 
     public static class HideClassName extends ApplicationFeatureTypeTest {

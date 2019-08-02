@@ -34,7 +34,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;

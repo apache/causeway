@@ -19,18 +19,17 @@
 
 package org.apache.isis.metamodel.commons;
 
-import static org.junit.Assert.assertThat;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-import org.apache.isis.metamodel.commons.InputStreamExtensions;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertThat;
 
 public class IoUtils_CopyTest {
 

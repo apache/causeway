@@ -23,10 +23,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.SSESupport;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -38,6 +34,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.SSESupport;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 

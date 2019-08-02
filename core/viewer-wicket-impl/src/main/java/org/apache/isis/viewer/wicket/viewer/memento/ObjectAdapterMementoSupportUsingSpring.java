@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.viewer.memento;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,6 +41,8 @@ import org.apache.isis.runtime.persistence.adapter.ObjectAdapterForBean;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSession;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 

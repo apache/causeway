@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.restfulobjects;
 
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
-import org.apache.isis.webapp.IsisBootWebApp;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.webapp.IsisBootWebApp;
 
 /**
  * 

@@ -18,20 +18,6 @@
  */
 package org.apache.isis.unittestsupport.bidir;
 
-import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
-import static org.apache.isis.commons.internal.reflection._Reflect.streamAllFields;
-import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
-import static org.apache.isis.commons.internal.reflection._Reflect.withName;
-import static org.apache.isis.unittestsupport.utils.ReflectUtils.withEntityParameter;
-import static org.apache.isis.unittestsupport.utils.ReflectUtils.withParametersAssignableFrom;
-import static org.apache.isis.unittestsupport.utils.ReflectUtils.withReturnTypeAssignableFrom;
-import static org.apache.isis.unittestsupport.utils.ReflectUtils.withTypeAssignableFrom;
-import static org.apache.isis.commons.internal.reflection._Reflect.withMethodParametersCount;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -42,11 +28,26 @@ import java.util.function.Predicate;
 
 import javax.jdo.annotations.Persistent;
 
+import org.hamcrest.Matchers;
+
 import org.apache.isis.unittestsupport.AbstractApplyToAllContractTest;
 import org.apache.isis.unittestsupport.utils.CollectUtils;
 import org.apache.isis.unittestsupport.utils.ReflectUtils;
 import org.apache.isis.unittestsupport.utils.StringUtils;
-import org.hamcrest.Matchers;
+
+import static org.apache.isis.commons.internal.collections._Collections.toHashSet;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllFields;
+import static org.apache.isis.commons.internal.reflection._Reflect.streamAllMethods;
+import static org.apache.isis.commons.internal.reflection._Reflect.withMethodParametersCount;
+import static org.apache.isis.commons.internal.reflection._Reflect.withName;
+import static org.apache.isis.unittestsupport.utils.ReflectUtils.withEntityParameter;
+import static org.apache.isis.unittestsupport.utils.ReflectUtils.withParametersAssignableFrom;
+import static org.apache.isis.unittestsupport.utils.ReflectUtils.withReturnTypeAssignableFrom;
+import static org.apache.isis.unittestsupport.utils.ReflectUtils.withTypeAssignableFrom;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertThat;
 
 public abstract class BidirectionalRelationshipContractTestAbstract extends AbstractApplyToAllContractTest implements Instantiators {
 

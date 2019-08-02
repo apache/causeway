@@ -19,14 +19,14 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import java.util.List;
 
-import org.apache.isis.commons.internal.base._Reduction;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.apache.isis.commons.internal.collections._Lists;
+
+import static org.hamcrest.CoreMatchers.is;
 
 public class ReductionTest {
 

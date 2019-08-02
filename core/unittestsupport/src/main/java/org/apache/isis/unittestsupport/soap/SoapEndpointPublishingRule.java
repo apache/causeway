@@ -18,8 +18,6 @@
  */
 package org.apache.isis.unittestsupport.soap;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +25,8 @@ import java.util.stream.Collectors;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 
 /**

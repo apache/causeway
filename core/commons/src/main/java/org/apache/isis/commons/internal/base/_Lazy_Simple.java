@@ -19,9 +19,9 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.function.Supplier;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * package private mixin for _Lazy 

@@ -21,6 +21,7 @@ package org.apache.isis.jdo.datanucleus.valuetypes;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.ClassNameConstants;
 import org.datanucleus.ExecutionContext;
@@ -29,6 +30,7 @@ import org.datanucleus.metadata.AbstractMemberMetaData;
 import org.datanucleus.store.rdbms.RDBMSStoreManager;
 import org.datanucleus.store.rdbms.mapping.java.SingleFieldMultiMapping;
 import org.datanucleus.store.rdbms.table.Table;
+
 import org.apache.isis.applib.value.Blob;
 
 public class IsisBlobMapping extends SingleFieldMultiMapping {

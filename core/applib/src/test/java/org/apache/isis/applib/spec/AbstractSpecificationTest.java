@@ -19,15 +19,15 @@
 
 package org.apache.isis.applib.spec;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 
 import org.apache.isis.applib.spec.AbstractSpecification.Nullability;
 import org.apache.isis.applib.spec.AbstractSpecification.TypeChecking;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class AbstractSpecificationTest {
 

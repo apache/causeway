@@ -18,9 +18,6 @@
  */
 package org.apache.isis.commons.internal.concurrent;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -29,10 +26,14 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.Level;
+
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.logging.log4j.Level;
+
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.pages.error;
 
 import java.util.List;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+
 import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
@@ -31,7 +33,6 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.errors.StackTraceDetail;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 /**
  * Web page representing the home page (showing a welcome message).

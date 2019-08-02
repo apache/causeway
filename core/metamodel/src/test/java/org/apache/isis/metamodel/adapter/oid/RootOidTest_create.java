@@ -20,13 +20,12 @@ package org.apache.isis.metamodel.adapter.oid;
 
 import org.junit.Test;
 
+import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
 
 public class RootOidTest_create {
 

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.metamodel.facets.actions.action;
 
-import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
-import static org.junit.Assert.assertThat;
+import org.junit.Assert;
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -33,8 +33,9 @@ import org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEv
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
+import static org.junit.Assert.assertThat;
 
 public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotationFacetFactoryTest {
 

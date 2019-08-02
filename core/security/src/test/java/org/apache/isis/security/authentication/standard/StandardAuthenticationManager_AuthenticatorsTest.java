@@ -21,16 +21,14 @@ package org.apache.isis.security.authentication.standard;
 
 import java.util.List;
 
-import org.apache.isis.security.authentication.AuthenticationRequestPassword;
-import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.security.authentication.standard.Authenticator;
-import org.apache.isis.security.authentication.standard.NoAuthenticatorException;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;

@@ -27,8 +27,8 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.events.ui.IconUiEvent;
-import org.apache.isis.applib.events.ui.TitleUiEvent;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
+import org.apache.isis.applib.events.ui.TitleUiEvent;
 
 /**
  * Layout hints for domain objects.

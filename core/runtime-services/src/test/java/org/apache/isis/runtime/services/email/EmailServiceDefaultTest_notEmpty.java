@@ -23,8 +23,6 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.runtime.services.email.EmailServiceDefault;
-
 public class EmailServiceDefaultTest_notEmpty {
 
     @Test

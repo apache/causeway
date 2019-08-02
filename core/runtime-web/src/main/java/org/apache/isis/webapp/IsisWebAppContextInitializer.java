@@ -21,9 +21,10 @@ package org.apache.isis.webapp;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
+
+import org.apache.isis.commons.internal.context._Context;
 
 import lombok.extern.log4j.Log4j2;
 

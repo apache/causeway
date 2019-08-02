@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.metamodel.facets.object.facets.annotation.FacetsFacetAnnotation;
 import org.apache.isis.metamodel.facets.object.facets.annotation.FacetsFacetAnnotationFactory;
 

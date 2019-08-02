@@ -18,6 +18,17 @@
  */
 package org.apache.isis.viewer.restfulobjects;
 
+import javax.inject.Singleton;
+import javax.servlet.FilterRegistration.Dynamic;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
+
+import org.springframework.core.annotation.Order;
+
+import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleContext;
+
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._Strings.prefix;
@@ -25,16 +36,6 @@ import static org.apache.isis.commons.internal.base._Strings.suffix;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
-
-import javax.inject.Singleton;
-import javax.servlet.FilterRegistration.Dynamic;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-
-import org.apache.isis.webapp.modules.WebModule;
-import org.apache.isis.webapp.modules.WebModuleContext;
-import org.springframework.core.annotation.Order;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.

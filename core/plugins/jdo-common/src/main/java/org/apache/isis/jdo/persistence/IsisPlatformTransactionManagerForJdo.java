@@ -21,6 +21,11 @@ package org.apache.isis.jdo.persistence;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionStatus;
+
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.internal.InitialisationSession;
@@ -29,10 +34,6 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionException;
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
-import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

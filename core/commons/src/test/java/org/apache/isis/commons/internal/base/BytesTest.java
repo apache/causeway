@@ -19,14 +19,9 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.hamcrest.Matchers.lessThan;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +29,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+
+import org.apache.isis.commons.internal._Constants;
+
+import static org.hamcrest.Matchers.lessThan;
 
 public class BytesTest {
 

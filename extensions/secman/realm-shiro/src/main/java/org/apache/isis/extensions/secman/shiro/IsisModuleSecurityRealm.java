@@ -24,15 +24,6 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.extensions.secman.api.SecurityRealm;
-import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
-import org.apache.isis.extensions.secman.api.user.AccountType;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -43,6 +34,16 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.extensions.secman.api.SecurityRealm;
+import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
+import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
+import org.apache.isis.extensions.secman.api.user.AccountType;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import lombok.Getter;
 import lombok.Setter;

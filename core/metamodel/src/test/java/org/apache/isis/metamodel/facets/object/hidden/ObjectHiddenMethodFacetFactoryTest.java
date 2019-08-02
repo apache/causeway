@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.isis.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethod;
 import org.apache.isis.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
 

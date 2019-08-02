@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,10 +26,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
 
 public class NullSafeTest {
 

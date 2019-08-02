@@ -26,10 +26,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public final class UrlEncodingUtils {
 

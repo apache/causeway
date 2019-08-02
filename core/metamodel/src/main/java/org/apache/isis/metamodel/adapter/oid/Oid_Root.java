@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.adapter.oid;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -32,6 +30,8 @@ import org.apache.isis.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.OidDto;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 

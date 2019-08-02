@@ -22,10 +22,11 @@ import java.util.Locale;
 
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.cycle.RequestCycle;
+
+import org.apache.isis.applib.services.i18n.LocaleProvider;
 
 
 /**

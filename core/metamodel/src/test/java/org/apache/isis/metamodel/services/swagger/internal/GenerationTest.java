@@ -20,7 +20,6 @@ package org.apache.isis.metamodel.services.swagger.internal;
 
 import java.util.Set;
 
-import org.apache.isis.metamodel.services.swagger.internal.Generation;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

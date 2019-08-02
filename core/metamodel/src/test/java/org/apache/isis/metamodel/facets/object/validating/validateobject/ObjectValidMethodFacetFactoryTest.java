@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.validating.validateobject.ValidateObjectFacet;
 import org.apache.isis.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethod;
 import org.apache.isis.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

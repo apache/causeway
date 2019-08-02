@@ -20,7 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.io.Serializable;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.viewer.wicket.model.models.PageType;
 
 /**

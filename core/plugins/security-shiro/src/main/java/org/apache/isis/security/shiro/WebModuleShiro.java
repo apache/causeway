@@ -18,24 +18,25 @@
  */
 package org.apache.isis.security.shiro;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-
 import javax.inject.Singleton;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.webapp.modules.WebModule;
-import org.apache.isis.webapp.modules.WebModuleContext;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.env.WebEnvironment;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.webapp.modules.WebModule;
+import org.apache.isis.webapp.modules.WebModuleContext;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 import lombok.val;
 

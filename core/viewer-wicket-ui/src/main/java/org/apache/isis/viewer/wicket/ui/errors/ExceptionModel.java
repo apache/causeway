@@ -23,12 +23,13 @@ import java.util.List;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
+
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {

@@ -25,6 +25,9 @@ import java.util.Objects;
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManagerFactory;
 
+import org.datanucleus.PropertyNames;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
@@ -38,8 +41,6 @@ import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.datanucleus.PropertyNames;
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 
 import lombok.Getter;
 import lombok.Setter;

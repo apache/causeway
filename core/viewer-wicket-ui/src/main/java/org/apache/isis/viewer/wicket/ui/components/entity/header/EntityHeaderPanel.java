@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.header;
 import java.util.List;
 
 import org.apache.wicket.Component;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;

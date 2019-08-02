@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.specloader.specimpl.dflt;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +66,8 @@ import org.apache.isis.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.OneToOneAssociationDefault;
+
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import lombok.extern.log4j.Log4j2;
 

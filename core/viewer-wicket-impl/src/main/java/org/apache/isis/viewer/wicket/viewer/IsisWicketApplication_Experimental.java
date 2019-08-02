@@ -21,13 +21,13 @@ package org.apache.isis.viewer.wicket.viewer;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.isis.commons.internal.collections._Sets;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  * package private mixin for IsisWicketApplication;

@@ -19,9 +19,10 @@
 
 package org.apache.isis.metamodel.facets.value.datejodalocal;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
-import org.joda.time.LocalDate;
 
 public class JodaLocalDateValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingSemanticsProviderFactory<LocalDate> {
 

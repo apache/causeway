@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import com.fasterxml.jackson.databind.node.NullNode;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
@@ -30,8 +32,6 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-
-import com.fasterxml.jackson.databind.node.NullNode;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 

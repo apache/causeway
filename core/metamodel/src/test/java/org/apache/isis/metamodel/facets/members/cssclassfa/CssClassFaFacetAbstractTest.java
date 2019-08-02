@@ -23,8 +23,6 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
-
 public class CssClassFaFacetAbstractTest {
 
     public static class Sanitize extends CssClassFaFacetAbstractTest {

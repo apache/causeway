@@ -18,9 +18,6 @@
  */
 package org.apache.isis.testdomain.ldap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.Hashtable;
 
 import javax.inject.Inject;
@@ -31,6 +28,9 @@ import javax.naming.NamingException;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.model.InitializationError;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

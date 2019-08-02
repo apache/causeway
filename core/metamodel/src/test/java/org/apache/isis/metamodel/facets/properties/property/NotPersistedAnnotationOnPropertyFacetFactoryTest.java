@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 
 public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {

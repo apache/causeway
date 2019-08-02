@@ -20,9 +20,10 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
-import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 
 import lombok.extern.log4j.Log4j2;
 

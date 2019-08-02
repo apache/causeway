@@ -26,16 +26,14 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.jdo.persistence.PersistenceSession5;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.runtime.persistence.adapterfactory.pojo.RuntimeTestPojo;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;

@@ -34,9 +34,9 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration;
@@ -56,7 +56,6 @@ import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
-import static org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;

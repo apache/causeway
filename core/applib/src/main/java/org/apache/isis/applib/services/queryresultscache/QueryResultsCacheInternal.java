@@ -23,13 +23,14 @@ import java.util.concurrent.Callable;
 
 import javax.enterprise.context.RequestScoped;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.extern.log4j.Log4j2;
 

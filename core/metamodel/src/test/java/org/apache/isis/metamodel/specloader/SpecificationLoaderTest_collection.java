@@ -21,12 +21,12 @@ package org.apache.isis.metamodel.specloader;
 
 import java.util.Vector;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

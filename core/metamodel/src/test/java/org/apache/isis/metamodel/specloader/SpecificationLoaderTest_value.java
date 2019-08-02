@@ -21,11 +21,10 @@ package org.apache.isis.metamodel.specloader;
 
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
 

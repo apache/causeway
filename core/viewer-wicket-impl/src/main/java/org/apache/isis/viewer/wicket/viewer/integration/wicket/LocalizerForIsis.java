@@ -22,12 +22,6 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.concurrent.Callable;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.wicket.Component;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.MarkupContainer;
@@ -35,6 +29,13 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSession;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 /**
  * Implementation integrates Isis' own i18n support ({@link TranslationService}) with Wicket's equivalent i18n

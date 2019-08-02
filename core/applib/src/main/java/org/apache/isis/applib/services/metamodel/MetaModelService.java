@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.metamodel;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;

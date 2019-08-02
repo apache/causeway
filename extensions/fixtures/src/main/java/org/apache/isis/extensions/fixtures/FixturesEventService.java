@@ -22,11 +22,12 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
 import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
 
 /**
  * @since 2.0

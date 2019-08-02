@@ -19,13 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
-import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
-
 import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.resources._Resources;
+
+import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
 
 final class MarkupComponent_observing  {
 

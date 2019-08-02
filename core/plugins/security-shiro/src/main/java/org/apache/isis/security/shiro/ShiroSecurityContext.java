@@ -18,12 +18,13 @@
  */
 package org.apache.isis.security.shiro;
 
-import org.apache.isis.security.authentication.standard.Authenticator;
-import org.apache.isis.security.authorization.standard.Authorizor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
+
+import org.apache.isis.security.authentication.standard.Authenticator;
+import org.apache.isis.security.authorization.standard.Authorizor;
 
 /**
  * @since 2.0

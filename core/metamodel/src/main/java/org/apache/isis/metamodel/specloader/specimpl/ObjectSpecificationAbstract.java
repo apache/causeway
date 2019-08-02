@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.specloader.specimpl;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +93,8 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.security.authentication.AuthenticationSession;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
 import lombok.val;

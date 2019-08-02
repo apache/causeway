@@ -20,6 +20,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.node.NullNode;
+
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
@@ -34,8 +36,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
-
-import com.fasterxml.jackson.databind.node.NullNode;
 
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
 

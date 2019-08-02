@@ -38,7 +38,6 @@ import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.metamodel.facets.objectvalue.regex.RegExFacet;
-import org.apache.isis.metamodel.facets.param.parameter.ParameterAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.isis.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;

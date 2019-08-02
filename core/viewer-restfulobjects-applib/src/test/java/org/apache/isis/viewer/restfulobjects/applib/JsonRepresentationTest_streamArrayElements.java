@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 import java.util.Iterator;
+
 import org.junit.Test;
 
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;

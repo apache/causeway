@@ -20,8 +20,6 @@ package org.apache.isis.config;
 
 import org.junit.Test;
 
-import org.apache.isis.config.ConfigurationConstants;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

@@ -23,8 +23,6 @@ import java.math.BigDecimal;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
-import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;

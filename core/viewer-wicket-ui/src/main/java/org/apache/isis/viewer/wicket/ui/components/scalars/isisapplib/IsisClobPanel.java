@@ -22,10 +22,13 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import java.nio.charset.Charset;
 import java.util.List;
+
 import com.google.common.base.Charsets;
+
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.request.resource.CharSequenceResource;
 import org.apache.wicket.request.resource.IResource;
+
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 

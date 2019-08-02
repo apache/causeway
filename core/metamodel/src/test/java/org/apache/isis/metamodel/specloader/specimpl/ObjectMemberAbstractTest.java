@@ -22,9 +22,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.*;
-
-import org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class ObjectMemberAbstractTest {
 

@@ -29,7 +29,6 @@ import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;

@@ -24,11 +24,11 @@ import java.lang.reflect.Method;
 import javax.validation.constraints.Pattern;
 
 import org.junit.Before;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.objectvalue.regex.RegExFacet;
-import org.apache.isis.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 
 public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {

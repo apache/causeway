@@ -19,9 +19,6 @@
 
 package org.apache.isis.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.util.Locale;
 
 import org.junit.Before;
@@ -32,6 +29,9 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.metamodel.facets.value.money.MoneyValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

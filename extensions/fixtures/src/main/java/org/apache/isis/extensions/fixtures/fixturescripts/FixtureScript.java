@@ -29,6 +29,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.springframework.transaction.support.TransactionTemplate;
+
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -52,9 +56,6 @@ import org.apache.isis.extensions.fixtures.api.FixtureScriptWithExecutionStrateg
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.api.WithPrereqs;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript

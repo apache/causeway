@@ -24,13 +24,11 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
+import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import org.apache.isis.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 
-import static org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;

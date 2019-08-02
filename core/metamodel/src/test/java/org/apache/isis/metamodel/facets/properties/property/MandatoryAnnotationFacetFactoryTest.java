@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
+
 import org.junit.Before;
 
 import org.apache.isis.applib.annotation.Optionality;
@@ -28,7 +29,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 
 public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

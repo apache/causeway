@@ -18,19 +18,16 @@
  */
 package org.apache.isis.jdo.metamodel.facets.prop.column;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.jdo.metamodel.facets.prop.column.MandatoryFacetDerivedFromJdoColumn;
-import org.apache.isis.jdo.metamodel.facets.prop.column.MandatoryFacetInferredFromAbsenceOfJdoColumn;
-import org.apache.isis.jdo.metamodel.facets.prop.column.MandatoryFromJdoColumnAnnotationFacetFactory;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

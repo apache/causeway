@@ -21,9 +21,10 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.wicket.model.IModel;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action

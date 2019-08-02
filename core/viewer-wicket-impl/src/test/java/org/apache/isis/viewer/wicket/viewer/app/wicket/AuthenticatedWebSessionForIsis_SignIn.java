@@ -19,9 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Locale;
 
 import org.apache.wicket.request.Request;
@@ -30,11 +27,15 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class AuthenticatedWebSessionForIsis_SignIn {
 

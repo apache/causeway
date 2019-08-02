@@ -20,15 +20,13 @@ package org.apache.isis.metamodel.facets.object.domainservice.annotation;
 
 import org.junit.Assert;
 
-import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotation;
-import org.apache.isis.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
+
+import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 
 public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 

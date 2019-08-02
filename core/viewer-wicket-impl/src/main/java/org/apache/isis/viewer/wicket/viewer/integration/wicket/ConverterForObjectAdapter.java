@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.IConverter;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;

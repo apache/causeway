@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.metamodel.facets.param.parameter.ParameterAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 

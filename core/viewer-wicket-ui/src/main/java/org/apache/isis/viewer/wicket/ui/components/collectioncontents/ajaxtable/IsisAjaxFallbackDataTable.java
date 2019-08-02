@@ -35,6 +35,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Generics;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;

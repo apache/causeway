@@ -19,8 +19,6 @@
 
 package org.apache.isis.jdo.jdosupport;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -47,6 +45,8 @@ import org.apache.isis.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 
 /**

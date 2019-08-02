@@ -22,6 +22,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
+
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 

@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.ignore.annotation;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -37,6 +35,8 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
 

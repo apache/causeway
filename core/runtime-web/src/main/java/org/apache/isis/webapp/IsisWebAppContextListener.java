@@ -24,12 +24,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.springframework.context.ApplicationContext;
+
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
-import org.springframework.context.ApplicationContext;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.metamodel.specloader;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +53,8 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorService;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.schema.utils.CommonDtoUtils;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

@@ -33,8 +33,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetedMethod;
-import org.apache.isis.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
-import org.apache.isis.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation;
 import org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;

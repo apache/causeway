@@ -18,9 +18,6 @@
  */
 package org.apache.isis.runtime.services;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -39,12 +36,12 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.runtime.services.RequestScopedService;
-import org.apache.isis.runtime.services.ServiceInstantiator;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ServiceInjectorTestUsingCodegenPlugin {
 

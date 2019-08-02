@@ -18,8 +18,6 @@
  */
 package org.apache.isis.runtime.services.i18n.po;
 
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
@@ -31,6 +29,8 @@ import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.runtime.system.context.IsisContext;
+
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @Singleton
 public class TranslationServicePo implements TranslationService {

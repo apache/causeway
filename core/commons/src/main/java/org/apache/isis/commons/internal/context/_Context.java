@@ -19,11 +19,6 @@
 
 package org.apache.isis.commons.internal.context;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
-import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -36,6 +31,11 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironmentPlugin;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
+import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

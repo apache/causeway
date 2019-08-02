@@ -33,6 +33,8 @@ import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
 
+import org.datanucleus.identity.DatastoreId;
+
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -41,7 +43,6 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.datanucleus.identity.DatastoreId;
 
 public final class JdoObjectIdSerializer {
 

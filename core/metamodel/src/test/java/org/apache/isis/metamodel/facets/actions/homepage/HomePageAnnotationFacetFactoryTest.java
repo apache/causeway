@@ -25,7 +25,6 @@ import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotation;
 import org.apache.isis.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 

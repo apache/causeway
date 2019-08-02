@@ -18,10 +18,11 @@
  */
 package org.apache.isis.applib.tree;
 
-import static org.junit.Assert.*;
-
 import org.hamcrest.Matchers;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class TreePathTest {
 

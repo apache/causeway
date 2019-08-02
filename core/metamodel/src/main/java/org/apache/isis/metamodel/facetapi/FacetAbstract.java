@@ -19,14 +19,14 @@
 
 package org.apache.isis.metamodel.facetapi;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.assertions._Ensure;
 import org.apache.isis.metamodel.MetaModelContext;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 
 public abstract class FacetAbstract implements Facet, MetaModelContext.Delegating {

@@ -19,8 +19,6 @@
 
 package org.apache.isis.jdo.datanucleus;
 
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.enhancement.Persistable;
@@ -28,6 +26,9 @@ import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
+
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 

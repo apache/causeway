@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.members.hidden;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -32,6 +30,8 @@ import org.apache.isis.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.spec.ManagedObject;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 /**
  * This implements {@link org.apache.isis.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation

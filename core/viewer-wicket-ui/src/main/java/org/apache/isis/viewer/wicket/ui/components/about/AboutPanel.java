@@ -24,11 +24,12 @@ import java.io.InputStream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.wicket.markup.html.basic.Label;
+
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.wicket.markup.html.basic.Label;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on

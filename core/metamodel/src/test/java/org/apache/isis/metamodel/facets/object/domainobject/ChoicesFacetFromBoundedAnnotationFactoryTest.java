@@ -25,7 +25,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
 public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetFactoryTest {

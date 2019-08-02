@@ -19,13 +19,12 @@
 
 package org.apache.isis.metamodel.commons;
 
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.apache.isis.metamodel.commons.LocaleUtil;
-import org.junit.Test;
 
 public class LocaleUtilsTest {
 

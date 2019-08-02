@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domaintypes;
 
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
-
 import com.fasterxml.jackson.databind.JsonNode;
+
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 
 public class DomainTypeRepresentation extends DomainRepresentation {
 

@@ -24,6 +24,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.conmap.spi.CommandDtoProcessorService;
@@ -37,7 +39,6 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
-import org.springframework.core.annotation.Order;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class ContentMappingServiceForCommandDto implements ContentMappingService {

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.publishing;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -40,6 +38,8 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 

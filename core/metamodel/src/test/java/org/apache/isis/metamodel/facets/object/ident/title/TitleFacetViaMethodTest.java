@@ -21,9 +21,6 @@ package org.apache.isis.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -32,6 +29,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

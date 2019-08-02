@@ -19,8 +19,10 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;

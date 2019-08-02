@@ -19,8 +19,8 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.junit.Test;
+
 import org.apache.isis.metamodel.commons.StringExtensions;
-import org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

@@ -19,19 +19,18 @@
 
 package org.apache.isis.metamodel.facets.object.navparent;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.metamodel.facets.object.navparent.method.NavigableParentFacetMethodFactory;
+
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class NavigableParentFacetMethodFactoryTest extends AbstractFacetFactoryTest {
 

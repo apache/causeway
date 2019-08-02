@@ -18,13 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.viewer;
 
-import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._Strings.suffix;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-
 import javax.inject.Singleton;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
@@ -32,10 +25,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
-import org.springframework.core.annotation.Order;
+
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._Strings.prefix;
+import static org.apache.isis.commons.internal.base._Strings.suffix;
+import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 /**
  * WebModule that provides the Wicket Viewer.

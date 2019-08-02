@@ -21,12 +21,12 @@ package org.apache.isis.viewer.restfulobjects.applib;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 public class JsonFixture {
 

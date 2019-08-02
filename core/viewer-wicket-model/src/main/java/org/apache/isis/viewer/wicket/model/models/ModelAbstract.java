@@ -19,12 +19,13 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.wicket.model.LoadableDetachableModel;
+
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the

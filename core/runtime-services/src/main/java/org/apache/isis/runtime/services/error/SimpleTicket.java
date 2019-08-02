@@ -18,14 +18,14 @@
  */
 package org.apache.isis.runtime.services.error;
 
-import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
-
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.commons.internal.base._Strings;
+
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.

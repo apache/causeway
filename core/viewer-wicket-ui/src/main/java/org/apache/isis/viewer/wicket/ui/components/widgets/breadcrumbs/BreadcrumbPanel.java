@@ -21,15 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
-import org.apache.isis.security.authentication.MessageBroker;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
@@ -40,8 +34,15 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.security.authentication.MessageBroker;
+import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 

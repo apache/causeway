@@ -22,14 +22,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

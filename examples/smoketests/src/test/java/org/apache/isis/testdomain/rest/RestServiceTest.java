@@ -18,19 +18,20 @@
  */
 package org.apache.isis.testdomain.rest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import javax.inject.Inject;
 
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
+import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 

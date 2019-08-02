@@ -23,8 +23,6 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
-import org.apache.isis.metamodel.facets.object.recreatable.RecreatableObjectFacetForRecreatableObjectInterface;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 
 public class RecreatableObjectFacetFactoryTest extends AbstractFacetFactoryTest {

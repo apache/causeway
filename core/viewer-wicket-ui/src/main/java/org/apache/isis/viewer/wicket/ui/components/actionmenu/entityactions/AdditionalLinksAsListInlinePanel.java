@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
+
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 
 public class AdditionalLinksAsListInlinePanel extends AdditionalLinksPanel {

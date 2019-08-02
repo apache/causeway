@@ -18,8 +18,9 @@
  */
 package domainapp.modules.simple.integtests;
 
-import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstactWithFixtures;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstactWithFixtures;
 
 @SpringBootTest(
 		classes = SimpleModuleManifestForTesting.class, 

@@ -18,9 +18,10 @@
  */
 package org.apache.isis.extensions.secman.encryption.jbcrypt;
 
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 
 @Service
 public class PasswordEncryptionServiceUsingJBcrypt implements PasswordEncryptionService {

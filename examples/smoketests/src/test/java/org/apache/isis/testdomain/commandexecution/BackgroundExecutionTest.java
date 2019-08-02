@@ -18,14 +18,17 @@
  */
 package org.apache.isis.testdomain.commandexecution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -35,11 +38,9 @@ import org.apache.isis.testdomain.jdo.InventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
 import lombok.val;

@@ -20,11 +20,12 @@ package org.apache.isis.extensions.fixtures.legacy.queryresultscache;
 
 import javax.inject.Singleton;
 
+import org.springframework.context.event.EventListener;
+
 import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
 import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
-import org.springframework.context.event.EventListener;
 
 
 /**

@@ -19,8 +19,9 @@
 
 package org.apache.isis.metamodel.util.snapshot;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.w3c.dom.Element;
+
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
 /**
  * Represents a place in the graph to be navigated; really just wraps an object

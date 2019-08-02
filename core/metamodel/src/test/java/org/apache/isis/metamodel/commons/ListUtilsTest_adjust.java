@@ -18,16 +18,15 @@
  */
 package org.apache.isis.metamodel.commons;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.metamodel.commons.ListExtensions;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class ListUtilsTest_adjust {
     

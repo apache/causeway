@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.metamodel.facets.Annotations;
 
 import static org.hamcrest.CoreMatchers.is;
 

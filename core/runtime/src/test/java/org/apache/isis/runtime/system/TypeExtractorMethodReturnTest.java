@@ -19,16 +19,17 @@
 
 package org.apache.isis.runtime.system;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
+import org.junit.Test;
+
+import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
+
 import static org.apache.isis.runtime.system.TypeExtractorMethodsParametersTest.containsElementThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
-import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodReturn;
-import org.junit.Test;
 
 public class TypeExtractorMethodReturnTest {
 

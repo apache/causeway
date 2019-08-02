@@ -20,14 +20,15 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.UnsupportedEncodingException;
 
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 
 public class RestfulHttpMethodTest_setUp {
 

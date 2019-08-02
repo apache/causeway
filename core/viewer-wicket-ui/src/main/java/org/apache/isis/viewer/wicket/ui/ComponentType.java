@@ -19,8 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.wicket.Component;
+
+import org.apache.isis.metamodel.commons.StringExtensions;
 
 /**
  * Enumerates the different types of {@link Component}s that can be constructed

@@ -24,14 +24,15 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.AbstractResource;
+
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.AbstractResource;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

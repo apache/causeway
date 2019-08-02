@@ -21,6 +21,13 @@ package org.apache.isis.metamodel.facets.object.navparent.annotation;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -31,12 +38,6 @@ import org.apache.isis.metamodel.facets.object.navparent.annotation.NavigablePar
 import org.apache.isis.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 

@@ -20,8 +20,6 @@ package org.apache.isis.config;
 
 import org.junit.Test;
 
-import org.apache.isis.config.ConfigurationConstants;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

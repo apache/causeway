@@ -18,14 +18,14 @@
  */
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

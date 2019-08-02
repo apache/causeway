@@ -28,9 +28,10 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.webapp.IsisWebAppContextListener;
-import org.springframework.core.annotation.Order;
 
 import lombok.val;
 

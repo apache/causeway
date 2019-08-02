@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.spec;
 
-import static org.apache.isis.commons.internal.functions._Predicates.instanceOf;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
@@ -59,6 +57,8 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.security.authentication.AuthenticationSession;
+
+import static org.apache.isis.commons.internal.functions._Predicates.instanceOf;
 
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the

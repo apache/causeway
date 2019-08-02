@@ -24,9 +24,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
-import org.springframework.core.annotation.Order;
 
 /**
  * WebModule to provide static resources utilizing an in-memory cache.

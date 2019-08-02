@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.mappers;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +39,8 @@ import org.apache.isis.viewer.restfulobjects.server.IsisJaxrsServerPlugin;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionDetail;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionPojo;
 import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class ExceptionMapperAbstract<T extends Throwable> implements ExceptionMapper<T> {
 

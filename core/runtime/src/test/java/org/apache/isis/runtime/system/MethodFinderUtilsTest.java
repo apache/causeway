@@ -19,23 +19,24 @@
 
 package org.apache.isis.runtime.system;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.isis.metamodel.commons.ClassExtensions;
-import org.apache.isis.metamodel.commons.MethodUtil;
-import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import org.apache.isis.metamodel.commons.ClassExtensions;
+import org.apache.isis.metamodel.commons.MethodUtil;
+import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class MethodFinderUtilsTest {

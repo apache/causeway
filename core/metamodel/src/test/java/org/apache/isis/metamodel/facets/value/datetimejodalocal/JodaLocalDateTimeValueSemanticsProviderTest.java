@@ -27,7 +27,6 @@ import org.junit.Test;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.value.datetimejodalocal.JodaLocalDateTimeValueSemanticsProvider;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;

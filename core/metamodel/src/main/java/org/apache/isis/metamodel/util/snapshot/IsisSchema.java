@@ -19,10 +19,11 @@
 
 package org.apache.isis.metamodel.util.snapshot;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 
 /**
  * Utility methods relating to the Isis meta model.

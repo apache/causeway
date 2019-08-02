@@ -18,14 +18,14 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasExtensions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinks;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public abstract class DomainRepresentation extends JsonRepresentation implements HasLinkToSelf, HasLinks, HasExtensions {
 

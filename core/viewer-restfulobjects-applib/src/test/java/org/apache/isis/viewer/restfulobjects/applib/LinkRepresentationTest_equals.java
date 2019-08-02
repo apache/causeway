@@ -18,14 +18,14 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import java.io.UnsupportedEncodingException;
+
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
-
-import java.io.UnsupportedEncodingException;
-
-import org.junit.Test;
 
 public class LinkRepresentationTest_equals {
 

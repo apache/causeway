@@ -20,9 +20,10 @@ package domainapp.application.integtests;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 import domainapp.application.manifest.SimpleAppManifest;
 

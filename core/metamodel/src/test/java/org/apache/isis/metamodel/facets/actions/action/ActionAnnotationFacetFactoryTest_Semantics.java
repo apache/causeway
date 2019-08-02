@@ -18,15 +18,16 @@
  */
 package org.apache.isis.metamodel.facets.actions.action;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Assert;
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotationFacetFactoryTest {
 

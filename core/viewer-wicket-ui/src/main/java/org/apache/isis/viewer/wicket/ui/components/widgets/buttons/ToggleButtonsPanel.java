@@ -20,7 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.buttons;
 
 import java.io.Serializable;
+
 import org.apache.wicket.Component;
+
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 

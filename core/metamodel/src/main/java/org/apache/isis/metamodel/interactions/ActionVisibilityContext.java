@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ActionVisibilityEvent;
@@ -28,6 +26,8 @@ import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
+
+import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 /**
  * See {@link InteractionContext} for overview; analogous to

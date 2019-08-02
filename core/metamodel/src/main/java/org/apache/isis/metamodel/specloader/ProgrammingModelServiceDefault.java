@@ -24,8 +24,8 @@ import javax.inject.Singleton;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
 @Singleton

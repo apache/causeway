@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,6 +34,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

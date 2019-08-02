@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
 import com.fasterxml.jackson.databind.JsonNode;
+
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class ScalarValueRepresentation extends DomainRepresentation {
 

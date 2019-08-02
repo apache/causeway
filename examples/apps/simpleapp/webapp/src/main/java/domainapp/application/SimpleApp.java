@@ -18,14 +18,15 @@
  */
 package domainapp.application;
 
-import org.apache.isis.config.Presets;
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+
+import org.apache.isis.config.Presets;
+import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.application.manifest.SimpleAppManifest;
 

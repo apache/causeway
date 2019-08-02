@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 

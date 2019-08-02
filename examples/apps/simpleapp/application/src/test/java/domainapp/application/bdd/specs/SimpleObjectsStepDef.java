@@ -18,17 +18,18 @@
  */
 package domainapp.application.bdd.specs;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.junit.Ignore;
+
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.junit.Ignore;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;

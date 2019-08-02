@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.collections.layout;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.Comparator;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -28,6 +26,8 @@ import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public class SortedByFacetForCollectionXml extends SortedByFacetAbstract {
 

@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facetapi;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,6 +27,8 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 /**
  * For base subclasses or, more likely, to help write tests.

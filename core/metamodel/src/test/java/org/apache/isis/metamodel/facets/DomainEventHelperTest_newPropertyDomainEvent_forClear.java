@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.metamodel.facets.DomainEventHelper;
 
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;

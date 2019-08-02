@@ -19,9 +19,6 @@
 package org.apache.isis.unittestsupport.bidir;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.unittestsupport.bidir.BidirectionalRelationshipContractTestAbstract;
-import org.apache.isis.unittestsupport.bidir.Instantiator;
-import org.apache.isis.unittestsupport.bidir.InstantiatorSimple;
 
 public class BidirectionalRelationshipContractTestAll extends BidirectionalRelationshipContractTestAbstract {
 

@@ -19,11 +19,6 @@
 
 package org.apache.isis.webapp.modules.resources;
 
-import static org.apache.isis.commons.internal.base._Strings.pair;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
-import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -40,6 +35,11 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.metamodel.commons.InputStreamExtensions;
 import org.apache.isis.metamodel.commons.ResourceUtil;
 import org.apache.isis.metamodel.commons.StringExtensions;
+
+import static org.apache.isis.commons.internal.base._Strings.pair;
+import static org.apache.isis.commons.internal.base._Strings.prefix;
+import static org.apache.isis.commons.internal.base._With.ifPresentElse;
+import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

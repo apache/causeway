@@ -20,15 +20,16 @@ package org.apache.isis.security;
 
 import javax.inject.Singleton;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.security.authentication.bypass.AuthenticatorBypass;
 import org.apache.isis.security.authentication.manager.AuthorizationManagerStandard;
 import org.apache.isis.security.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.security.authentication.standard.Authenticator;
 import org.apache.isis.security.authorization.bypass.AuthorizorBypass;
 import org.apache.isis.security.authorization.standard.Authorizor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * Auth/bypass for eg. Integration Testing

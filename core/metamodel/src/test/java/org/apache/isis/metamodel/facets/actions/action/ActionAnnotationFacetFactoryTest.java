@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;

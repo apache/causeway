@@ -19,24 +19,19 @@
 
 package org.apache.isis.commons.internal.encoding;
 
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-
-import org.apache.isis.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.commons.internal.encoding.DataInputStreamExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.commons.internal.encoding.DataOutputStreamExtended;
-import org.apache.isis.commons.internal.encoding.Encodable;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ByteEncoderDecoderRoundtripTest {
 

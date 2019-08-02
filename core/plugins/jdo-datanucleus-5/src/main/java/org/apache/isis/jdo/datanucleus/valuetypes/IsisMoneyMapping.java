@@ -20,6 +20,7 @@ package org.apache.isis.jdo.datanucleus.valuetypes;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.ClassNameConstants;
 import org.datanucleus.ExecutionContext;
@@ -30,6 +31,7 @@ import org.datanucleus.store.rdbms.mapping.MappingManager;
 import org.datanucleus.store.rdbms.mapping.java.SingleFieldMultiMapping;
 import org.datanucleus.store.rdbms.table.Column;
 import org.datanucleus.store.rdbms.table.Table;
+
 import org.apache.isis.applib.value.Money;
 
 public class IsisMoneyMapping extends SingleFieldMultiMapping {

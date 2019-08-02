@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.services.factory;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -40,6 +38,8 @@ import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServi
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 

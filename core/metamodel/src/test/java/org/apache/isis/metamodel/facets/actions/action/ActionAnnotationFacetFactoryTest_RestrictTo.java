@@ -18,13 +18,14 @@
  */
 package org.apache.isis.metamodel.facets.actions.action;
 
-import static org.junit.Assert.assertNull;
+import org.junit.Assert;
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacet;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.junit.Assert.assertNull;
 
 public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotationFacetFactoryTest {
 

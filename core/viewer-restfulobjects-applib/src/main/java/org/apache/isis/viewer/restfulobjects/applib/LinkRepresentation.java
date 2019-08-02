@@ -20,14 +20,14 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.apache.isis.viewer.legacy.ClientExecutor;
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public final class LinkRepresentation extends JsonRepresentation {
 

@@ -18,11 +18,6 @@
  */
 package org.apache.isis.metamodel.facets;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +27,11 @@ import javax.annotation.PostConstruct;
 import org.junit.Test;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.facets.MethodFinderUtils;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class MethodFinderUtilsTest {
 

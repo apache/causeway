@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -39,6 +37,8 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

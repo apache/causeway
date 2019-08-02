@@ -18,8 +18,6 @@
  */
 package org.apache.isis.webapp.modules;
 
-import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +32,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
+
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

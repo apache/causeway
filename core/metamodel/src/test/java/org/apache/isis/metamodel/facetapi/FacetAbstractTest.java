@@ -19,11 +19,6 @@
 
 package org.apache.isis.metamodel.facetapi;
 
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
-
 import junit.framework.TestCase;
 
 public class FacetAbstractTest extends TestCase {

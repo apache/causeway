@@ -19,14 +19,13 @@
 
 package org.apache.isis.unittestsupport.jmocking;
 
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.jmock.auto.Mock;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.One;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class JUnitRuleMockery2Test_mockAnnotatedWithOne_happyCase {
 

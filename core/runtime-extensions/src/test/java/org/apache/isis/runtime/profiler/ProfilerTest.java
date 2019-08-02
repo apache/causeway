@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.profiler;
 
-import org.apache.isis.runtime.profiler.Profiler;
-
 import junit.framework.TestCase;
 
 public class ProfilerTest extends TestCase {

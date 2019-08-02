@@ -22,11 +22,12 @@ package org.apache.isis.runtime.system;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodParameters;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
+
+import org.apache.isis.metamodel.specloader.traverser.TypeExtractorMethodParameters;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

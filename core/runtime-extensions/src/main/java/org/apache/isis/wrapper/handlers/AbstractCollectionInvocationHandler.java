@@ -22,10 +22,10 @@ package org.apache.isis.wrapper.handlers;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvocationHandlerDefault<C> {
 

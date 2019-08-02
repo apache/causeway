@@ -23,9 +23,6 @@ import java.util.List;
 
 import javax.jdo.annotations.NotPersistent;
 
-import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
-import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
-import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.NotPersistedFacetDerivedFromJdoNotPersistentAnnotation;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;

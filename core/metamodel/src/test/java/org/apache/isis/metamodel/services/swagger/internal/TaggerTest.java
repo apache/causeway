@@ -24,8 +24,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.services.swagger.internal.Tagger;
-
 public class TaggerTest {
 
     public static class TagFor extends TaggerTest {

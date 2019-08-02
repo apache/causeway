@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.services.repository;
 
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -42,6 +40,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @Singleton
 public class RepositoryServiceJdo implements RepositoryService {

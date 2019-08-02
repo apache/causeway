@@ -16,20 +16,21 @@
  */
 package org.apache.isis.applib.services.xmlsnapshot;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import org.apache.isis.commons.internal.resources._Resources;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import org.apache.isis.commons.internal.resources._Resources;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class XmlSnapshotServiceAbstractTest {
 

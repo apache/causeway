@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -29,6 +27,8 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  *

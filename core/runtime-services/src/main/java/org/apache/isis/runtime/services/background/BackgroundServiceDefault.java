@@ -18,13 +18,13 @@
  */
 package org.apache.isis.runtime.services.background;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.lang.reflect.InvocationHandler;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
@@ -40,7 +40,8 @@ import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
-import org.springframework.stereotype.Service;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.val;
 

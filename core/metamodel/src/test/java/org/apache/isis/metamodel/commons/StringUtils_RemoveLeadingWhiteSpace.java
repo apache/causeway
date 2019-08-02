@@ -18,7 +18,6 @@
  */
 package org.apache.isis.metamodel.commons;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;

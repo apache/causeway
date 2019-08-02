@@ -21,11 +21,12 @@ package domainapp.application.services.homepage;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.springframework.stereotype.Service;
 
 @Service @Named("homepage.HomePageService")
 public class HomePageService {

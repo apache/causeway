@@ -24,13 +24,13 @@ import java.util.Collection;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
+
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
-import org.apache.isis.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFactoryTest {

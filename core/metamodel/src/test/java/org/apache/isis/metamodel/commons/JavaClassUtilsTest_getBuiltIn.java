@@ -19,10 +19,9 @@
 
 package org.apache.isis.metamodel.commons;
 
-import static org.junit.Assert.assertEquals;
-
-import org.apache.isis.metamodel.commons.ClassUtil;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class JavaClassUtilsTest_getBuiltIn {
 

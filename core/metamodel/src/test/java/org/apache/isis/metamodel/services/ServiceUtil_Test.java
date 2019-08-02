@@ -18,15 +18,14 @@
  */
 package org.apache.isis.metamodel.services;
 
+import org.junit.Test;
+
+import org.apache.isis.applib.annotation.DomainService;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
-
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.metamodel.services.ServiceUtil;
 
 public class ServiceUtil_Test {
 

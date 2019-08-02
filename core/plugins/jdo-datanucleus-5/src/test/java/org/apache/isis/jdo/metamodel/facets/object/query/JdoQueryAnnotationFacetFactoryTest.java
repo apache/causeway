@@ -25,8 +25,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
-
 public class JdoQueryAnnotationFacetFactoryTest {
 
     public static class From_Test extends JdoQueryAnnotationFacetFactoryTest {

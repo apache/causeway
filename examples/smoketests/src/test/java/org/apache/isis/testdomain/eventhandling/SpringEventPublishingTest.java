@@ -18,20 +18,21 @@
  */
 package org.apache.isis.testdomain.eventhandling;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+
+import org.apache.isis.commons.internal.ioc.spring._Spring;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.Getter;
 import lombok.Value;

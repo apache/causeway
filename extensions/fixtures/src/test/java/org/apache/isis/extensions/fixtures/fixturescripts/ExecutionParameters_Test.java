@@ -21,7 +21,6 @@ package org.apache.isis.extensions.fixtures.fixturescripts;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParameters;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;

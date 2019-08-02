@@ -19,16 +19,15 @@
 
 package org.apache.isis.metamodel.facetapi;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.facetapi.FeatureType;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class FeatureTypeTest_identifierFor {
 

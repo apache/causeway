@@ -22,16 +22,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jmock.Sequence;
+import org.jmock.States;
+import org.jmock.auto.Auto;
+import org.jmock.auto.Mock;
+
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Checking;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.ExpectationsOn;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Ignoring;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Never;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.One;
-import org.jmock.Sequence;
-import org.jmock.States;
-import org.jmock.auto.Auto;
-import org.jmock.auto.Mock;
 
 class MyMockomatic {
     private final JUnitRuleMockery2 context;

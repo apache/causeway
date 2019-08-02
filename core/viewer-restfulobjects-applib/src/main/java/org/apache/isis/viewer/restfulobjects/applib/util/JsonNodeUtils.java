@@ -23,11 +23,11 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class JsonNodeUtils {
 

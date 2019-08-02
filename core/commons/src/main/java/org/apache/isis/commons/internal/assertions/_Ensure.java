@@ -19,10 +19,10 @@
 
 package org.apache.isis.commons.internal.assertions;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 
 /**

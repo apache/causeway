@@ -18,16 +18,16 @@
  */
 package org.apache.isis.jdo;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.jdo.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.jdo.jdosupport.mixins.Persistable_datanucleusIdLong;
 import org.apache.isis.jdo.metrics.MetricsServiceDefault;
 import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
-
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({

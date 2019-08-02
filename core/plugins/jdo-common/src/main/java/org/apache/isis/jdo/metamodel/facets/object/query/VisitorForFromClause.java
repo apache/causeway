@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import org.apache.isis.metamodel.spec.Hierarchical;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 class VisitorForFromClause extends VisitorForClauseAbstract {

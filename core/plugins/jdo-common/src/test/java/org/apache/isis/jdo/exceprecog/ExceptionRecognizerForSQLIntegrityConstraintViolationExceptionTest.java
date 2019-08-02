@@ -20,7 +20,6 @@ package org.apache.isis.jdo.exceprecog;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
-import org.apache.isis.jdo.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -19,12 +19,12 @@
 
 package org.apache.isis.commons.internal.context;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.base._Casts;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Value;
 import lombok.val;

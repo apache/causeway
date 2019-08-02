@@ -19,9 +19,10 @@
 
 package org.apache.isis.metamodel.facets.value.datejodalocal;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.joda.time.LocalDate;
 
 public interface JodaLocalDateValueFacet extends Facet {
 

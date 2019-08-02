@@ -18,10 +18,6 @@ package domainapp.modules.simple.dom.impl;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.unittestsupport.jmocking.JMockActions;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -30,7 +26,12 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.unittestsupport.jmocking.JMockActions;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

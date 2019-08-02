@@ -18,10 +18,6 @@
  */
 package org.apache.isis.config.registry;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;
-import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,6 +46,10 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
+
+import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;
+import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
 
 import lombok.AccessLevel;
 import lombok.Getter;

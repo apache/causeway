@@ -19,9 +19,6 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +26,9 @@ import java.util.Base64;
 import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
+
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

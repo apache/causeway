@@ -20,8 +20,6 @@ package org.apache.isis.unittestsupport.comparable;
 
 import java.util.List;
 
-import org.apache.isis.unittestsupport.comparable.ComparableContractTest_compareTo;
-
 public class CategorizedDomainObjectComparableContractTest_compareTo extends ComparableContractTest_compareTo<CategorizedDomainObject> {
 
     @SuppressWarnings("unchecked")

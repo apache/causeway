@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.profiler;
 
-import org.apache.isis.runtime.profiler.ProfilerSystem;
-
 public class ProfilerTestSystem extends ProfilerSystem {
     long[] memory = new long[] { 10000, 20300, 30000 };
     int memoryIndex = 0;

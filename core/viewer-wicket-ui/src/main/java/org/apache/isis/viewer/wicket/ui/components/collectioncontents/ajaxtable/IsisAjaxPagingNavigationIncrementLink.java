@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationBehavior;
@@ -27,6 +25,8 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
 
 public class IsisAjaxPagingNavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
 

@@ -18,10 +18,6 @@
  */
 package org.apache.isis.security.shiro;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
-
-import org.apache.isis.security.shiro.authorization.IsisPermission;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.hamcrest.Description;
@@ -30,6 +26,11 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.security.shiro.authorization.IsisPermission;
+
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
 
 public class IsisPermissionTest_typicalUsage {
 

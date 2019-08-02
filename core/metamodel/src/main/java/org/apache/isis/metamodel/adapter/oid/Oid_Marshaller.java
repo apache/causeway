@@ -18,8 +18,6 @@
  */
 package org.apache.isis.metamodel.adapter.oid;
 
-import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,6 +31,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+
+import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
 
 /**
  * Factory for subtypes of {@link Oid}, based on their oid str.

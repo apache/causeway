@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
+
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;

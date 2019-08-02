@@ -23,8 +23,6 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback;
 import org.apache.isis.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
 import static org.hamcrest.CoreMatchers.is;

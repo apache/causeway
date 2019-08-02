@@ -20,8 +20,8 @@ package domainapp.dom.types.blob;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;

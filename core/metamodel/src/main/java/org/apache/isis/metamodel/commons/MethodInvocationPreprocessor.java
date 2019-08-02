@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.commons;
 
-import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -31,6 +29,8 @@ import java.util.SortedSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
+
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
 /**
  * Utility for method invocation pre-processing.

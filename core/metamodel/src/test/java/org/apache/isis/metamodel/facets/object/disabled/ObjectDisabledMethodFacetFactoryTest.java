@@ -26,7 +26,6 @@ import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.metamodel.facets.object.disabled.DisabledObjectFacet;
 import org.apache.isis.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
 import org.apache.isis.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

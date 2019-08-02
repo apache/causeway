@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtime.persistence.adapter;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -39,6 +37,8 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.security.authentication.AuthenticationSession;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

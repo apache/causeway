@@ -20,9 +20,10 @@ package org.apache.isis.runtime.system.transaction;
 
 import java.util.concurrent.CountDownLatch;
 
+import org.springframework.transaction.support.SmartTransactionObject;
+
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
-import org.springframework.transaction.support.SmartTransactionObject;
 
 import lombok.Getter;
 import lombok.Setter;

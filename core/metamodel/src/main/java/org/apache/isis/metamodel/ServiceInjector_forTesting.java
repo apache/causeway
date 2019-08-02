@@ -18,8 +18,6 @@
  */
 package org.apache.isis.metamodel;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.InjectionPoint;
@@ -27,6 +25,8 @@ import org.springframework.beans.factory.InjectionPoint;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.services.ServiceInjectorDefault;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
+
+import static java.util.Objects.requireNonNull;
 
 import lombok.val;
 

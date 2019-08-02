@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.buttons;
 
 import java.util.List;
-import org.apache.isis.commons.internal.collections._Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -28,6 +28,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**

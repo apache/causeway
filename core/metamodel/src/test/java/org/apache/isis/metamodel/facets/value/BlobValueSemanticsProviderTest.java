@@ -19,10 +19,6 @@
 
 package org.apache.isis.metamodel.facets.value;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +26,10 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.value.blobs.BlobValueSemanticsProvider;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class BlobValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

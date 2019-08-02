@@ -18,8 +18,6 @@
  */
 package org.apache.isis.commons.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +34,8 @@ import javax.enterprise.inject.Instance;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 

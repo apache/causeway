@@ -19,10 +19,10 @@
 
 package org.apache.isis.metamodel.consent;
 
-import static org.apache.isis.commons.internal.assertions._Ensure.ensureThatArg;
-
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.Facet;
+
+import static org.apache.isis.commons.internal.assertions._Ensure.ensureThatArg;
 
 public class Veto extends ConsentAbstract {
 

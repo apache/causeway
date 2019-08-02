@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;

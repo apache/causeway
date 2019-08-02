@@ -19,9 +19,6 @@
 
 package org.apache.isis.commons.internal.exceptions;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +33,9 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.functions._Functions;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>

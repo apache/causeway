@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.adapter.version;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -33,6 +31,8 @@ import org.apache.isis.commons.internal.encoding.Encodable;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.commons.DateExtensions;
+
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 /**
  * An instance of this class is held by each {@link ObjectAdapter} and is used

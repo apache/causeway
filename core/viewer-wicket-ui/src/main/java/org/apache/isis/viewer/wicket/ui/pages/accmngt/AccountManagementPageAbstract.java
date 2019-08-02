@@ -21,18 +21,6 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import javax.inject.Inject;
 
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
-import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
-import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.Placement;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -47,6 +35,19 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.Placement;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;

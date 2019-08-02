@@ -25,6 +25,8 @@ import java.util.stream.Stream;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Where;
@@ -46,7 +48,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.springframework.core.annotation.Order;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 @Order(200) //in effect, is the relative priority (lower numbers have higher priority)

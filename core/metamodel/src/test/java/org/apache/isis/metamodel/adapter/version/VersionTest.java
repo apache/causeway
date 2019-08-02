@@ -19,18 +19,18 @@
 
 package org.apache.isis.metamodel.adapter.version;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class VersionTest {
     
