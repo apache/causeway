@@ -52,63 +52,63 @@ import lombok.extern.log4j.Log4j2;
 public class IsisMavenPlugin_SpringContextLauncher {
 
     private final static String exclude_from_scan = "org.apache.isis.core";
-    
+
     public static ConfigurableApplicationContext getContext(/*MavenProject project, Log log*/) {
-        
+
         Set<String> packages = scanForPackages(/*project*/);
-        
+
         log.info("packages from package-scan: " + packages);
-        
+
         String[] basePackages = packages.stream()
-        .collect(_Arrays.toArray(String.class));
-        
+                .collect(_Arrays.toArray(String.class));
+
         AnnotationConfigApplicationContext springContext =  new AnnotationConfigApplicationContext();
         springContext.register(IsisMavenPlugin_SpringContextConfig.class);
         if(basePackages.length>0) {
             springContext.scan(basePackages);
         }
         springContext.refresh();
-        
+
         return springContext;
     }
-    
+
     // -- COLLECT PACKAGE NAMES
-    
+
     private static Set<String> scanForPackages(/*MavenProject topProject*/) {
         Set<String> packageNames = new HashSet<String>();
-        
-//        Stream.concat(Stream.of(topProject), topProject.getCollectedProjects().stream())
-//        .forEach(project->{
-//            
-//            for(String className : scanForClassNames(project)) {
-//                if(className.contains(".")) {
-//                    int endIndex = className.lastIndexOf('.');
-//                    String packageName = className.substring(0, endIndex);
-//                    if(
-//                            !packageName.equals(exclude_from_scan) && 
-//                            !packageName.startsWith(exclude_from_scan + ".") ) {
-//                    
-//                        packageNames.add(packageName);
-//                    }
-//                     
-//                }
-//            }
-//            
-//        });
+
+        //        Stream.concat(Stream.of(topProject), topProject.getCollectedProjects().stream())
+        //        .forEach(project->{
+        //            
+        //            for(String className : scanForClassNames(project)) {
+        //                if(className.contains(".")) {
+        //                    int endIndex = className.lastIndexOf('.');
+        //                    String packageName = className.substring(0, endIndex);
+        //                    if(
+        //                            !packageName.equals(exclude_from_scan) && 
+        //                            !packageName.startsWith(exclude_from_scan + ".") ) {
+        //                    
+        //                        packageNames.add(packageName);
+        //                    }
+        //                     
+        //                }
+        //            }
+        //            
+        //        });
         return packageNames;
     }
-    
+
     // -- COLLECT ALL CLASSNAMES
-    
+
     private static Set<String> scanForClassNames(/*MavenProject project*/) {
         Set<String> classNames = new HashSet<String>();
-        
+
         List<String> roots = _Lists.newArrayList();
-        		//(List<String>)(project.getCompileSourceRoots()); 
+        //(List<String>)(project.getCompileSourceRoots()); 
         for (String root : roots) {
 
             toPath(root).ifPresent(rootPath->{
-                
+
                 for (String path : getFiles(rootPath)) {
                     String relPath = rootPath.relativize(Paths.get(path)).toString();
                     if (!relPath.endsWith(".java")) {
@@ -118,31 +118,31 @@ public class IsisMavenPlugin_SpringContextLauncher {
                     String name = relPath.replaceFirst("\\.java$", "").replace("/", ".");
                     classNames.add(name);
                 }
-                
+
             });
-            
+
         }
         return classNames;
     }
-    
+
     private static Optional<Path> toPath(String name) {
         try {
-            
+
             Path path = Paths.get(name);
             File file = path.toFile();
             if(!file.exists()) {
-                
+
                 System.out.println("not found: " + name);
-                
+
                 return Optional.empty();
             }
             return Optional.of(path);
-            
+
         } catch (Exception e) {
             return Optional.empty();
         }
     }
-    
+
     private static List<String> getFiles(Path root) {
         final List<String> paths = new ArrayList<String>();
 
@@ -159,6 +159,6 @@ public class IsisMavenPlugin_SpringContextLauncher {
         }
 
         return paths;
-}
-    
+    }
+
 }

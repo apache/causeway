@@ -36,19 +36,19 @@ final class ThreadPoolSizeAdvisor {
     // if we are running in a container, eg docker, its up to the JVM to report correct values
     private final int logicalCoreCount = 
             Runtime.getRuntime().availableProcessors(); // reasonable upper limit    
-    
+
     int corePoolSize() {
         return minThreadCount;
     }
-    
+
     int maximumPoolSize() {
         final int upperLimit = Math.min(maxThreadCount, logicalCoreCount);
         return Math.max(minThreadCount, upperLimit);
     }
-    
+
     public static ThreadPoolSizeAdvisor get() {
         return new ThreadPoolSizeAdvisor();
     }
-    
-    
+
+
 }

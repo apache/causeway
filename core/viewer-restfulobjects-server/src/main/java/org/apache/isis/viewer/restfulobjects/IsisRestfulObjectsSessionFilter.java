@@ -145,7 +145,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     public static final String IGNORE_EXTENSIONS_KEY = "ignoreExtensions";
 
     private static final Function<String, Pattern> STRING_TO_PATTERN = (final String input) -> {
-            return Pattern.compile(".*\\." + input);
+        return Pattern.compile(".*\\." + input);
     };
 
     private List<String> passThruList = Collections.emptyList();
@@ -282,7 +282,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             this.restrictedPaths = 
                     _Strings.splitThenStream(restrictedPathsStr, ",")
                     .collect(Collectors.toList());
-                    
+
         }
 
     }
@@ -295,7 +295,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         final String passThru = config.getInitParameter(PASS_THRU_KEY);
         return passThru != null && !passThru.equals("")
                 ? Arrays.asList(passThru.split(","))
-                : Collections.<String>emptyList();
+                        : Collections.<String>emptyList();
     }
 
     private void lookupRedirectToOnException(final FilterConfig config) {
@@ -337,7 +337,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         try {
             final String queryString = httpServletRequest.getQueryString();
             if (queryString != null && queryString
-            		.contains(SystemConstants.ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
+                    .contains(SystemConstants.ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
 
                 authSessionStrategy.invalidate(httpServletRequest, httpServletResponse);
                 return;
@@ -385,8 +385,8 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
 
 
     private static void ensureMetamodelIsValid() {
-    	val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-        
+        val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
+
         if(metaModelDeficiencies != null) {
             final Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
             final StringBuilder buf = new StringBuilder();

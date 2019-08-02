@@ -84,7 +84,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
                 return (IConverter<C>) converter;

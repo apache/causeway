@@ -35,22 +35,24 @@ final class BeanAdapterCDI implements BeanAdapter {
     private final LifecycleContext lifecycleContext;
     private final Bean<?> bean;
     private final BeanSort managedObjectSort;
-    
+
+    @Override
     public Bin<?> getInstance() {
         val type = bean.getBeanClass();
         return _CDI.select(type, bean.getQualifiers());
     }
-    
+
+    @Override
     public boolean isCandidateFor(Class<?> requiredType) {
         return bean.getTypes().stream()
-        .filter(type -> type instanceof Class)
-        .map(type->(Class<?>)type)
-        .anyMatch(type->requiredType.isAssignableFrom(type));
+                .filter(type -> type instanceof Class)
+                .map(type->(Class<?>)type)
+                .anyMatch(type->requiredType.isAssignableFrom(type));
     }
 
     @Override
     public Class<?> getBeanClass() {
         return bean.getBeanClass(); //TODO[2033] does not work for 'produced' beans
     }
-    
+
 }

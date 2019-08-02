@@ -35,7 +35,7 @@ extends CollectionAddToFacetForDomainEventFromAbstract {
                     final CollectionDomainEventFacetAbstract collectionInteractionFacet,
                     final FacetHolder holder, 
                     final ServiceRegistry serviceRegistry) {
-    	
+
         super(eventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, serviceRegistry, holder);
     }
 

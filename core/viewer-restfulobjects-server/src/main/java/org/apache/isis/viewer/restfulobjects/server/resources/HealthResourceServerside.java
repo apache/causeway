@@ -97,12 +97,12 @@ public class HealthResourceServerside extends ResourceAbstract implements Health
 
             final Response.ResponseBuilder responseBuilder = health.getResult()
                     ? Responses.ofOk(renderer, Caching.NONE)
-                    : Response.serverError()
+                            : Response.serverError()
                             .entity(JsonWriterUtil.jsonFor(renderer.render()))
                             .cacheControl(Caching.NONE.getCacheControl());
 
-            final Response[] responseHolder = (Response[]) context;
-            responseHolder[0] = responseBuilder.build();
+                    final Response[] responseHolder = (Response[]) context;
+                    responseHolder[0] = responseBuilder.build();
         }
 
         @Inject

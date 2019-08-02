@@ -39,19 +39,19 @@ public class PojoAdapterBuilder {
 
     private PojoAdapterBuilder(){
     }
-    
+
     private Object pojo = new Object();
 
     // override; else will delegate to SpecificationLoader
     private ObjectSpecification objectSpec;
-    
+
     private SpecificationLoader specificationLoader;
-    
+
     private ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
     private String identifier = "1";
     // only used if type is AGGREGATED
     private String aggregatedId = "firstName";
-    
+
     private Type type = Type.ROOT;
     private Persistence persistence = Persistence.PERSISTENT;
 
@@ -61,7 +61,7 @@ public class PojoAdapterBuilder {
 
     private AuthenticationSession authenticationSession;
 
-    
+
     public enum Persistence {
         TRANSIENT {
             @Override
@@ -113,12 +113,12 @@ public class PojoAdapterBuilder {
         this.identifier = identifier;
         return this;
     }
-    
+
     public PojoAdapterBuilder withObjectType(String objectType) {
         this.objectSpecId = ObjectSpecId.of(objectType);
         return this;
     }
-    
+
     public PojoAdapterBuilder withPojo(Object pojo) {
         this.pojo = pojo;
         return this;
@@ -127,7 +127,7 @@ public class PojoAdapterBuilder {
     //test only
     public PojoAdapterBuilder withOid(String oidAndTitle) {
         final Iterator<String> iterator = _Strings.splitThenStream(oidAndTitle, "|").iterator(); 
-                
+
         if(!iterator.hasNext()) { return this; }
         withObjectType(iterator.next());
         if(!iterator.hasNext()) { return this; }
@@ -136,7 +136,7 @@ public class PojoAdapterBuilder {
         withTitleString(iterator.next());
         return this;
     }
-    
+
     /**
      * A Persistence of VALUE implies a Type of VALUE also
      */
@@ -147,7 +147,7 @@ public class PojoAdapterBuilder {
         }
         return this;
     }
-    
+
     /**
      * A Type of VALUE implies a Persistence of VALUE also.
      */
@@ -158,7 +158,7 @@ public class PojoAdapterBuilder {
         }
         return this;
     }
-    
+
     public PojoAdapterBuilder with(ObjectSpecification objectSpec) {
         this.objectSpec = objectSpec;
         return this;
@@ -173,12 +173,12 @@ public class PojoAdapterBuilder {
         this.specificationLoader = specificationLoader;
         return this;
     }
-    
+
     public PojoAdapterBuilder with(AuthenticationSession authenticationSession) {
         this.authenticationSession = authenticationSession;
         return this;
     }
-    
+
     public PojoAdapterBuilder with(Version version) {
         this.version = version;
         return this;

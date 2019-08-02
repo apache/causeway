@@ -24,9 +24,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MixinConstants {
 
-	public static final String METADATA_LAYOUT_GROUPNAME = "metadata";
-	public static final String FILENAME_PROPERTY_NAME = "File name";
-	public static final String FILENAME_PROPERTY_DESCRIPTION = "File name extension can be omitted.";
-	
-	
+    public static final String METADATA_LAYOUT_GROUPNAME = "metadata";
+    public static final String FILENAME_PROPERTY_NAME = "File name";
+    public static final String FILENAME_PROPERTY_DESCRIPTION = "File name extension can be omitted.";
+
+
 }

@@ -46,15 +46,15 @@ import lombok.ToString;
 @DomainObjectLayout()  // causes UI events to be triggered
 @NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
 public class Inventory {
-    
+
     public String title() {
         return toString();
     }
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "true")
     private String name;
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "true")
     private Set<Product> products;

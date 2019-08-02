@@ -57,18 +57,18 @@ public final class JdoPropertyUtils {
             final ObjectSpecification objSpec, 
             final String annotationName, 
             final Predicate<ObjectAssociation> predicate) {
-        
+
         if (objSpec == null || !objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
             return null;
         }
-        
-                
+
+
         final List<ObjectAssociation> propertyList = objSpec
                 .streamAssociations(Contributed.EXCLUDED)
                 .filter(predicate)
                 .limit(2)
                 .collect(Collectors.toList());
-        
+
         if (propertyList.size() == 0) {
             return JdoPropertyUtils.getPropertyFor(objSpec.superclass(), annotationName, predicate);
         }

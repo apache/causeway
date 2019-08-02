@@ -124,7 +124,7 @@ public final class _Functions {
             }
         };
     }
-    
+
     // -- CHECKED EXCEPTION ADAPTERS (CONSUMER)
 
     /**
@@ -186,14 +186,14 @@ public final class _Functions {
             }
         };
     }
-    
+
     public static <T, U extends RuntimeException> Supplier<T> uncheckedSupplier(
             CheckedSupplier<T> checkedSupplier) {
         return ()->{
             try {
                 return checkedSupplier.get();
             } catch (Exception e) {
-            	throw new RuntimeException(e);
+                throw new RuntimeException(e);
             }
         };
     }

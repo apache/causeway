@@ -84,7 +84,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         //FacetUtil.addFacet(new ImmutableFacetNever(holder)); 
         FacetUtil.addFacet(titleFacet);
         FacetUtil.addFacet(pagedFacet);
-        
+
     }
 
     @Override

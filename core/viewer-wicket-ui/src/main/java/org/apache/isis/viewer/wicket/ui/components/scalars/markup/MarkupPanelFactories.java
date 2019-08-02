@@ -37,9 +37,9 @@ import lombok.val;
  * {@link ComponentFactory} for {@link MarkupPanel}.
  */
 public class MarkupPanelFactories {
-    
+
     // -- PUBLIC FACTORIES (FOR REGISTRATION)
-    
+
     public static ComponentFactory parented() {
         return new Parented();
     }
@@ -49,12 +49,12 @@ public class MarkupPanelFactories {
     }
 
     // -- PARENTED (ABSTRACT)
-    
+
     public static abstract class ParentedAbstract extends ComponentFactoryAbstract {
         private static final long serialVersionUID = 1L;
 
         private final Class<?> valueType;
-        
+
         public ParentedAbstract(Class<?> valueType) {
             super(ComponentType.SCALAR_NAME_AND_VALUE, MarkupPanel.class);
             this.valueType = valueType;
@@ -79,16 +79,16 @@ public class MarkupPanelFactories {
         public final Component createComponent(final String id, final IModel<?> model) {
             return new MarkupPanel(id, (ScalarModel) model, getMarkupComponentFactory());        
         }
-        
+
         protected abstract MarkupComponentFactory getMarkupComponentFactory();
-        
+
     }
-    
+
     // -- STANDALONE (ABSTRACT)
 
     public static abstract class StandaloneAbstract extends ComponentFactoryAbstract {
         private static final long serialVersionUID = 1L;
-        
+
         private final Class<?> valueType;
 
         public StandaloneAbstract(Class<?> valueType) {
@@ -113,12 +113,12 @@ public class MarkupPanelFactories {
         public final Component createComponent(final String id, final IModel<?> model) {
             return new StandaloneMarkupPanel(id, (ValueModel) model, getMarkupComponentFactory());
         }
-        
+
         protected abstract MarkupComponentFactory getMarkupComponentFactory();
     }
 
     // -- CONCRETE COMPONENT FACTORY - PARENTED
-    
+
     static class Parented extends ParentedAbstract {
         private static final long serialVersionUID = 1L;
 
@@ -135,9 +135,9 @@ public class MarkupPanelFactories {
                 return markupComponent;    
             };
         }
-        
+
         // -- HELPER
-        
+
         private LocalResourcePath getEventStreamResource(ScalarModel scalarModel) {
             final ObserveFacet observeFacet  = scalarModel.getFacet(ObserveFacet.class);
             if(observeFacet==null) {
@@ -149,9 +149,9 @@ public class MarkupPanelFactories {
         }
 
     }
-    
+
     // -- CONCRETE COMPONENT FACTORY - STANDALONE
-    
+
     static class Standalone extends StandaloneAbstract {
         private static final long serialVersionUID = 1L;
 
@@ -168,7 +168,7 @@ public class MarkupPanelFactories {
             };
         }
     }
-    
-    
+
+
 
 }

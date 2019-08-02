@@ -25,20 +25,20 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
 public interface ApplicationUserRepository {
 
-	ApplicationUser findByUsername(String username);
+    ApplicationUser findByUsername(String username);
 
-	ApplicationUser findOrCreateUserByUsername(String username);
+    ApplicationUser findOrCreateUserByUsername(String username);
 
-	List<? extends ApplicationUser> allUsers();
+    List<? extends ApplicationUser> allUsers();
 
-	List<? extends ApplicationUser> find(String search);
+    List<? extends ApplicationUser> find(String search);
 
-	String validateNewLocalUser(String username, Password password, Password passwordRepeat,
-			ApplicationRole initialRole, Boolean enabled, String emailAddress);
+    String validateNewLocalUser(String username, Password password, Password passwordRepeat,
+            ApplicationRole initialRole, Boolean enabled, String emailAddress);
 
-	ApplicationUser newLocalUser(String username, Password password, Password passwordRepeat,
-			ApplicationRole initialRole, Boolean enabled, String emailAddress);
+    ApplicationUser newLocalUser(String username, Password password, Password passwordRepeat,
+            ApplicationRole initialRole, Boolean enabled, String emailAddress);
 
-	ApplicationUser newDelegateUser(String username, ApplicationRole initialRole, Boolean enabled);
+    ApplicationUser newDelegateUser(String username, ApplicationRole initialRole, Boolean enabled);
 
 }

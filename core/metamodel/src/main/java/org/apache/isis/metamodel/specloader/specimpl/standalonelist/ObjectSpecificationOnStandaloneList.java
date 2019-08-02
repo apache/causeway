@@ -92,7 +92,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     public BeanSort getBeanSort() {
         return BeanSort.COLLECTION;
     }
-    
+
     // -- PREDICTATES
 
     @Override
@@ -118,7 +118,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     // -- Title and Icon
-    
+
     @Override
     public String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter) {
         return ((FreeStandingList) targetAdapter.getPojo()).titleString();
@@ -155,21 +155,21 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     // -- ELEMENT SPECIFICATION
-    
+
     private final _Lazy<ObjectSpecification> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
-    
+
     @Override
     public ObjectSpecification getElementSpecification() {
         return elementSpecification.get();
     }
-    
+
     private ObjectSpecification lookupElementSpecification() {
         return mapIfPresentElse(
                 getFacet(TypeOfFacet.class), 
                 typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType(), 
                 null);
     }
-    
+
     // --
 
 

@@ -89,6 +89,6 @@ public class RestfulRequest_RequestParameterTest_valueOf_xrofollowlinks {
         assertThat(valueOf.get(1).get(1), is("c"));
     }
 
-    
-    
+
+
 }

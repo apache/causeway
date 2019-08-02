@@ -51,6 +51,6 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         return authorizationManager.isUsable(getAuthenticationSession(), ic.getIdentifier()) ? null : "Not authorized to edit";
     }
-    
+
 
 }

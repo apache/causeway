@@ -33,30 +33,30 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class IsisBeanScanInterceptorForSpring implements TypeFilter {
-	
-	@Getter(lazy=true) 
-	private final IsisBeanTypeRegistry typeRegistry = IsisBeanTypeRegistry.current();
 
-	@Override
-	public boolean match(
-			MetadataReader metadataReader, 
-			MetadataReaderFactory metadataReaderFactory)
-			throws IOException {
-		
-		val classMetadata = metadataReader.getClassMetadata();
-		if(!classMetadata.isConcrete()) {
-			return false;
-		}
-		
-		//val annotationMetadata = metadataReader.getAnnotationMetadata();
-		//val annotationTypes = annotationMetadata.getAnnotationTypes();
-		val typeMetaData = TypeMetaData.of(classMetadata.getClassName()/*, annotationTypes*/);
-		
-		if(log.isDebugEnabled()) {
+    @Getter(lazy=true) 
+    private final IsisBeanTypeRegistry typeRegistry = IsisBeanTypeRegistry.current();
+
+    @Override
+    public boolean match(
+            MetadataReader metadataReader, 
+            MetadataReaderFactory metadataReaderFactory)
+                    throws IOException {
+
+        val classMetadata = metadataReader.getClassMetadata();
+        if(!classMetadata.isConcrete()) {
+            return false;
+        }
+
+        //val annotationMetadata = metadataReader.getAnnotationMetadata();
+        //val annotationTypes = annotationMetadata.getAnnotationTypes();
+        val typeMetaData = TypeMetaData.of(classMetadata.getClassName()/*, annotationTypes*/);
+
+        if(log.isDebugEnabled()) {
             log.debug("scanning concrete type {} -> {}", classMetadata.getClassName(), typeMetaData);
         }
-		
-		return getTypeRegistry().isIoCManagedType(typeMetaData);
-	}
+
+        return getTypeRegistry().isIoCManagedType(typeMetaData);
+    }
 
 }

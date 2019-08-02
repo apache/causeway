@@ -42,5 +42,5 @@ class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.
     private QueryResultsCache lookupQueryResultsCache() {
         return IsisContext.getServiceRegistry().lookupService(QueryResultsCache.class).orElse(null);
     }
-    
+
 }

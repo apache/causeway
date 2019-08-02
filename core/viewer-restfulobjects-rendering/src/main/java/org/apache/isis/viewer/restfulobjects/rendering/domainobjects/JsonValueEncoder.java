@@ -71,8 +71,8 @@ public final class JsonValueEncoder {
 
         public List<ObjectSpecId> getSpecIds() {
             return _NullSafe.stream(classes)
-            .map((Class<?> cls) ->ObjectSpecId.of(cls.getName()))
-            .collect(Collectors.toList());
+                    .map((Class<?> cls) ->ObjectSpecId.of(cls.getName()))
+                    .collect(Collectors.toList());
         }
 
         /**
@@ -730,10 +730,10 @@ public final class JsonValueEncoder {
 
 
     public static ObjectAdapter asAdapter(
-    		final ObjectSpecification objectSpec, 
-    		final JsonRepresentation argValueRepr, 
-    		final String format) {
-    	
+            final ObjectSpecification objectSpec, 
+            final JsonRepresentation argValueRepr, 
+            final String format) {
+
         if(argValueRepr == null) {
             return null;
         }
@@ -830,7 +830,7 @@ public final class JsonValueEncoder {
     }
 
     // -- ObjectAdapter Provider
-    
+
     private static ObjectAdapter adapterFor(Object value) {
         return pojoToAdapterFunction().apply(value);
     }
@@ -844,9 +844,9 @@ public final class JsonValueEncoder {
 
     private static Function<Object, ObjectAdapter> pojoToAdapterFunction() {
         return testPojoToAdapterFunction != null
-        		? testPojoToAdapterFunction
-        				: IsisContext.newManagedObjectContext()::adapterOfPojo;
+                ? testPojoToAdapterFunction
+                        : IsisContext.newManagedObjectContext()::adapterOfPojo;
     }
-    
+
 
 }

@@ -27,8 +27,8 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
  */
 public class NamedFacetForParameterUsingReflection extends NamedFacetAbstract {
 
-	public NamedFacetForParameterUsingReflection(final String value, final FacetHolder holder) {
-		super(value, false, holder);
-	}
-	
+    public NamedFacetForParameterUsingReflection(final String value, final FacetHolder holder) {
+        super(value, false, holder);
+    }
+
 }

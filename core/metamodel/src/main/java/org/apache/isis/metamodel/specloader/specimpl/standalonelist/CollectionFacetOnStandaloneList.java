@@ -61,14 +61,14 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
             ObjectSpecification collectionSpec,
             Stream<T> elements, 
             int elementCount) {
-        
+
         throw _Exceptions.unexpectedCodeReach();
     }
 
     // -- HELPER
-    
+
     private List<ManagedObject> collection(final ManagedObject wrappedObjectList) {
         return (FreeStandingList) wrappedObjectList.getPojo();
     }
-    
+
 }

@@ -50,7 +50,7 @@ import lombok.val;
  * @since 2.0
  */
 public class _Probe {
-    
+
     public static enum MaxCallsReachedAction {
         IGNORE,
         SYSTEM_EXIT,
@@ -64,16 +64,16 @@ public class _Probe {
     private String indentLiteral = "  ";
     private String emphasisFormat = "__PROBE__ %s";
     private boolean silenced = false;
-    
+
     private final LongAdder counter = new LongAdder();
-    
+
     private _Probe(long maxCalls, MaxCallsReachedAction maxAction) {
         this.maxCalls = maxCalls;
         this.maxAction = maxAction;
     }
 
     // -- FACTORIES
-    
+
     public static _Probe maxCallsThenIgnore(long max) {
         return of(max, MaxCallsReachedAction.IGNORE);
     }
@@ -89,18 +89,18 @@ public class _Probe {
     public static _Probe unlimited() {
         return of(Long.MAX_VALUE-1, MaxCallsReachedAction.IGNORE);
     }
-    
+
     private static _Probe of(long maxCalls, MaxCallsReachedAction maxAction) {
         return new _Probe(maxCalls, maxAction);
     }
-    
+
     // -- WITHERS
-    
+
     public _Probe out(PrintStream out) {
         this.out = out;
         return this;
     }
-    
+
     public _Probe label(String label) {
         this.label = label;
         return this;
@@ -110,32 +110,32 @@ public class _Probe {
         this.indentLiteral = indentLiteral;
         return this;
     }
-    
+
     public _Probe emphasisFormat(String emphasisFormat) {
         this.emphasisFormat = emphasisFormat;
         return this;
     }
-    
+
     public _Probe silence() {
-    	this.silenced = true;
-		return this;
-	}
-    
+        this.silenced = true;
+        return this;
+    }
+
     // -- INDENTING
-    
+
     public int currentIndent = 0;
-    
+
     // -- PRINTING
 
     public void println(int indent, CharSequence chars) {
         if(counter.longValue()<maxCalls) {
             counter.increment();
             if(!silenced) {
-            	print_line(indent, chars);
+                print_line(indent, chars);
             }
             return;
         }
-        
+
         switch (maxAction) {
         case IGNORE:
             return;
@@ -165,17 +165,17 @@ public class _Probe {
     public void println(String format, Object...args) {
         println(currentIndent, format, args);
     }
-    
+
     public void warnNotImplementedYet(String format, Object... args) {
-    	val warnMsg = String.format(format, args);
-    	val restore_out = out;
-    	out=System.err;
-    	println("WARN NotImplementedYet %s", warnMsg);
-    	errOut("-------------------------------------");
-    	_Exceptions.dumpStackTrace(System.err, 1, 12);
-    	errOut("-------------------------------------");
-    	out=restore_out;
-	}
+        val warnMsg = String.format(format, args);
+        val restore_out = out;
+        out=System.err;
+        println("WARN NotImplementedYet %s", warnMsg);
+        errOut("-------------------------------------");
+        _Exceptions.dumpStackTrace(System.err, 1, 12);
+        errOut("-------------------------------------");
+        out=restore_out;
+    }
 
     // -- CONVENIENT DEBUG TOOLS (STATIC)
 
@@ -187,16 +187,16 @@ public class _Probe {
         System.err.println(String.format(format, args));
     }
 
-    
+
     private final static Map<String, String> abbreviations = 
             _Maps.unmodifiableEntries(
-                _Maps.entry("org.apache.isis", "~"),
-                _Maps.entry("core", "c"),
-                _Maps.entry("applib", "alib"),
-                _Maps.entry("metamodel", "mm"),
-                _Maps.entry("runtime", "rt"),
-                _Maps.entry("viewer", "vw")
-            );
+                    _Maps.entry("org.apache.isis", "~"),
+                    _Maps.entry("core", "c"),
+                    _Maps.entry("applib", "alib"),
+                    _Maps.entry("metamodel", "mm"),
+                    _Maps.entry("runtime", "rt"),
+                    _Maps.entry("viewer", "vw")
+                    );
     public static String compact(Class<?> cls) {
         String[] name = {cls.getName()};
         // pre-process for isis
@@ -206,12 +206,12 @@ public class _Probe {
             }
         });
         return _Strings.splitThenStream(name[0], ".")
-        .map(part->_With.mapIfPresentElse(abbreviations.get(part), value->value, part))
-        .collect(Collectors.joining("."));
+                .map(part->_With.mapIfPresentElse(abbreviations.get(part), value->value, part))
+                .collect(Collectors.joining("."));
     }
 
     // -- HELPER
-    
+
     private void print_line(int indent, CharSequence chars) {
         final long counterValue = counter.longValue();
         for(int i=0; i<indent; ++i) {

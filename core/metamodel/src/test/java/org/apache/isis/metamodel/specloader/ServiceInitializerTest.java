@@ -47,16 +47,16 @@ public class ServiceInitializerTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
-    
+
     private Map<String,String> props;
-    
+
     @Mock
     private IsisConfiguration configuration;
     private ServiceInitializer serviceInitializer;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
-    
+
     @Before
     public void setUp() throws Exception {
         props = _Maps.newHashMap();
@@ -73,7 +73,7 @@ public class ServiceInitializerTest {
         serviceInitializer = null;
     }
 
-    
+
     private static List<Object> listOf(Object... elements) {
         return stream(elements)
                 .collect(Collectors.toList());
@@ -96,7 +96,7 @@ public class ServiceInitializerTest {
             this.called = true;
         }
     }
-    
+
     @Test
     public void postConstruct() {
         final DomainServiceWithPostConstruct d1 = new DomainServiceWithPostConstruct();
@@ -114,7 +114,7 @@ public class ServiceInitializerTest {
         assertThat(d2.properties, is(props));
     }
 
-    
+
     public static class DomainServiceWithPreDestroy {
         boolean called;
         @PreDestroy
@@ -122,7 +122,7 @@ public class ServiceInitializerTest {
             this.called = true;
         }
     }
-    
+
     @Test
     public void preDestroy() {
         final DomainServiceWithPreDestroy d1 = new DomainServiceWithPreDestroy();
@@ -150,13 +150,13 @@ public class ServiceInitializerTest {
             this.called = true;
         }
     }
-    
+
     @Test
     public void init_when_postConstructMultiple() {
         final DomainServiceWithMultiplePostConstruct d1 = new DomainServiceWithMultiplePostConstruct();
         expectedException.expectMessage(
                 containsString(
-                "Found more than one @PostConstruct method; service is: org.apache.isis.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePostConstruct, found"));
+                        "Found more than one @PostConstruct method; service is: org.apache.isis.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePostConstruct, found"));
         serviceInitializer = new ServiceInitializer(configuration, listOf(d1));
 
         // when
@@ -174,13 +174,13 @@ public class ServiceInitializerTest {
             this.called = true;
         }
     }
-    
+
     @Test
     public void init_when_preDestroyMultiple() {
         final DomainServiceWithMultiplePreDestroy d1 = new DomainServiceWithMultiplePreDestroy();
         expectedException.expectMessage(
                 containsString(
-                "Found more than one @PreDestroy method; service is: org.apache.isis.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePreDestroy, found"));
+                        "Found more than one @PreDestroy method; service is: org.apache.isis.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePreDestroy, found"));
         serviceInitializer = new ServiceInitializer(configuration, listOf(d1));
 
         // when
@@ -194,7 +194,7 @@ public class ServiceInitializerTest {
             this.called = true;
         }
     }
-    
+
     @Test
     public void init_when_postConstructWrongType() {
         final DomainServiceWithPostConstructOneArgWrongType d1 = new DomainServiceWithPostConstructOneArgWrongType();
@@ -213,7 +213,7 @@ public class ServiceInitializerTest {
             this.called = true;
         }
     }
-    
+
     @Test
     public void init_when_postConstructWrongArgs() {
         final DomainServiceWithPostConstructTwoArgs d1 = new DomainServiceWithPostConstructTwoArgs();
@@ -232,7 +232,7 @@ public class ServiceInitializerTest {
             this.called = true;
         }
     }
-    
+
 
     @Test
     public void init_when_preDestroyWrongArgs() {

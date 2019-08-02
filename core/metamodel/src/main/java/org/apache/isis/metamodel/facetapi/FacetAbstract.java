@@ -148,8 +148,8 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.holder = facetHolder;
         this.identifiedHolder = (holder!=null && holder instanceof IdentifiedHolder) 
-        		? (IdentifiedHolder) holder 
-        				: null;
+                ? (IdentifiedHolder) holder 
+                        : null;
     }
 
     protected String toStringValues() {
@@ -233,13 +233,13 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
      */
     public static interface Validating {
     }
-    
+
     // -- dependencies
-    
+
     @Override
     public MetaModelContext getMetaModelContext() {
         return MetaModelContext.current();
     }
-   
+
 
 }

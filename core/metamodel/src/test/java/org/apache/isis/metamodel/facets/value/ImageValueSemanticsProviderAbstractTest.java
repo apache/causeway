@@ -57,7 +57,7 @@ public class ImageValueSemanticsProviderAbstractTest {
 
         adapter = new TestImageSemanticsProvider(mockFacetHolder);
     }
-    
+
     @Test
     public void testImageData() throws Exception {
 

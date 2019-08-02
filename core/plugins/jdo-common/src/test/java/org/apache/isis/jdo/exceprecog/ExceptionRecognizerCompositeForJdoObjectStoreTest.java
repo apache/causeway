@@ -34,7 +34,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
     @Before
     public void setUp() throws Exception {
         _Config.clear();
-        
+
         called = new boolean[1];
         recog = new ExceptionRecognizerCompositeForJdoObjectStore() {
             @Override protected void addChildren() {
@@ -52,10 +52,10 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
         assertThat(called[0], is(true));
     }
 
-    
+
     @Test
     public void whenDisabledFlagSetToTrue() throws Exception {
-        
+
         // when
         _Config.put(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, true);
         recog.init();

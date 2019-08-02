@@ -58,17 +58,17 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
-    
+
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
 
     private IsisConfiguration configuration;
-    
+
     @Getter(onMethod=@__({@Override})) 
     @Setter(onMethod=@__({@Override})) 
     FixturesInstalledState fixturesInstalledState;
-    
-    
+
+
     @Override
     public void init() {
         this.configuration = _Config.getConfiguration();
@@ -78,7 +78,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         _Blackhole.consume(applicationComponents.get());
     }
 
-    
+
     @Override
     public boolean isInitialized() {
         return this.configuration != null;
@@ -89,9 +89,9 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         val jdoObjectstoreConfig = configuration.subsetWithNamesStripped(JDO_OBJECTSTORE_CONFIG_PREFIX);
         val dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
         val datanucleusProps = dataNucleusConfig.copyToMap();
-        
+
         addDataNucleusPropertiesIfRequired(datanucleusProps);
-        
+
         val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
 
         return new DataNucleusApplicationComponents5(
@@ -150,13 +150,13 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
             putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
             putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
-            
+
             if(log.isInfoEnabled()) {
                 log.info("using JDBC connection '{}'", 
                         props.get("javax.jdo.option.ConnectionURL"));
             }
-            
-            
+
+
         }
     }
 
@@ -169,7 +169,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         }
     }
 
-    
+
     @Override
     public final void shutdown() {
         if(!isInitialized()) {
@@ -185,17 +185,17 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     /**
      * Called by {@link org.apache.isis.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
-    
+
     @Override
     public PersistenceSession5 createPersistenceSession(
             final AuthenticationSession authenticationSession) {
 
         Objects.requireNonNull(applicationComponents.get(),
                 () -> "PersistenceSession5 requires initialization. "+this.hashCode());
-        
+
         //[ahuber] if stale force recreate
         guardAgainstStaleState();
-        
+
         final PersistenceManagerFactory persistenceManagerFactory =
                 applicationComponents.get().getPersistenceManagerFactory();
 
@@ -205,12 +205,12 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
                 this);
     }
 
-    
+
     // [ahuber] JRebel support, not tested at all
     private void guardAgainstStaleState() {
-    	if(!applicationComponents.isMemoized()) {
-    		return;
-    	}
+        if(!applicationComponents.isMemoized()) {
+            return;
+        }
         if(applicationComponents.get().isStale()) {
             try {
                 applicationComponents.get().shutdown();

@@ -53,70 +53,70 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 @Singleton
 public class IsisWebAppContextListener implements ServletContextListener {
 
-	private @Inject ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned 
-	
-	// -- INTERFACE IMPLEMENTATION
+    private @Inject ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned 
 
-	@Override
-	public void contextInitialized(ServletContextEvent event) {
-		
-		if(!isIsisProvisioned()) {
-			log.error("skipping initialization, Spring should already have provisioned all configured Beans");
-			return;
-		}
-		if(!isSpringContextAvailable()) {
-			log.error("skipping initialization, SpringContext is required to be initialzed already");
-			return;
-		}
-		if(!isServletContextAvailable()) {
-			log.error("skipping initialization, a ServletContext is required on the _Context prior to this");
-			return;
-		}
+    // -- INTERFACE IMPLEMENTATION
 
-		val servletContext = _Context.getIfAny(ServletContext.class);
-				
-		//[ahuber] set the ServletContext initializing thread as preliminary default until overridden by
-		// IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
-		_Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
 
-		val contextPath = servletContext.getContextPath();
-		
-		log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
-		
-		_Resources.putContextPathIfPresent(contextPath);
+        if(!isIsisProvisioned()) {
+            log.error("skipping initialization, Spring should already have provisioned all configured Beans");
+            return;
+        }
+        if(!isSpringContextAvailable()) {
+            log.error("skipping initialization, SpringContext is required to be initialzed already");
+            return;
+        }
+        if(!isServletContextAvailable()) {
+            log.error("skipping initialization, a ServletContext is required on the _Context prior to this");
+            return;
+        }
 
-		final WebModuleContext webModuleContext = new WebModuleContext();
-		webModuleContext.prepare();
-		
-		_Context.putSingleton(WebModuleContext.class, webModuleContext);
+        val servletContext = _Context.getIfAny(ServletContext.class);
 
-		log.info("=== PHASE 2 === Initializing the ServletContext");
-		
-		webModuleContext.init();	
-		log.info("=== DONE === ServletContext initialized.");
+        //[ahuber] set the ServletContext initializing thread as preliminary default until overridden by
+        // IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
+        _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
 
-	}
+        val contextPath = servletContext.getContextPath();
 
-	@Override
-	public void contextDestroyed(ServletContextEvent event) {
-		val webModuleContext = _Context.getIfAny(WebModuleContext.class);
-		if(webModuleContext!=null) {
-			webModuleContext.shutdown(event);
-		}
-	}
+        log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
 
-	// -- HELPER
-	
-	private boolean isIsisProvisioned() {
-		return serviceRegistry!=null;
-	}
-	
-	private static boolean isSpringContextAvailable() {
-		return _Context.getIfAny(ApplicationContext.class)!=null;
-	}
+        _Resources.putContextPathIfPresent(contextPath);
 
-	private static boolean isServletContextAvailable() {
-		return _Context.getIfAny(ServletContext.class)!=null;
-	}
+        final WebModuleContext webModuleContext = new WebModuleContext();
+        webModuleContext.prepare();
+
+        _Context.putSingleton(WebModuleContext.class, webModuleContext);
+
+        log.info("=== PHASE 2 === Initializing the ServletContext");
+
+        webModuleContext.init();	
+        log.info("=== DONE === ServletContext initialized.");
+
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
+        val webModuleContext = _Context.getIfAny(WebModuleContext.class);
+        if(webModuleContext!=null) {
+            webModuleContext.shutdown(event);
+        }
+    }
+
+    // -- HELPER
+
+    private boolean isIsisProvisioned() {
+        return serviceRegistry!=null;
+    }
+
+    private static boolean isSpringContextAvailable() {
+        return _Context.getIfAny(ApplicationContext.class)!=null;
+    }
+
+    private static boolean isServletContextAvailable() {
+        return _Context.getIfAny(ServletContext.class)!=null;
+    }
 
 }

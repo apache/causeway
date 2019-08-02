@@ -64,7 +64,7 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 final Stream<OneToManyAssociation> objectCollections = objectSpec.streamCollections(Contributed.EXCLUDED);
-                
+
                 objectCollections.forEach(objectCollection->{
                     final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);
                     if(facet != null) {
@@ -77,7 +77,7 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
                         }
                     }
                 });
-                
+
                 return true;
             }
         };

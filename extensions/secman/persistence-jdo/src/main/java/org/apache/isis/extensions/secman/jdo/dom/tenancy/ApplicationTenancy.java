@@ -71,66 +71,66 @@ import lombok.Setter;
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
 @javax.jdo.annotations.Uniques({
-        @javax.jdo.annotations.Unique(
-                name = "ApplicationTenancy_name_UNQ", members = { "name" })
+    @javax.jdo.annotations.Unique(
+            name = "ApplicationTenancy_name_UNQ", members = { "name" })
 })
 @javax.jdo.annotations.Queries( {
-        @javax.jdo.annotations.Query(
-                name = "findByPath", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-                        + "WHERE path == :path"),
-        @javax.jdo.annotations.Query(
-                name = "findByName", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-                        + "WHERE name == :name"),
-        @javax.jdo.annotations.Query(
-                name = "findByNameOrPathMatching", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-                        + "WHERE name.matches(:regex) || path.matches(:regex) ")})
+    @javax.jdo.annotations.Query(
+            name = "findByPath", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+                    + "WHERE path == :path"),
+    @javax.jdo.annotations.Query(
+            name = "findByName", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+                    + "WHERE name == :name"),
+    @javax.jdo.annotations.Query(
+            name = "findByNameOrPathMatching", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+                    + "WHERE name.matches(:regex) || path.matches(:regex) ")})
 @DomainObject(
         objectType = "isissecurity.ApplicationTenancy",
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteAction = "findMatching"
-)
+        )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
-)
+        )
 public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
 org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- name (property, title)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
     @Title
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             typicalLength=TYPICAL_LENGTH_NAME
-    )
+            )
     @MemberOrder(sequence = "1")
     @Getter @Setter
     private String name;
 
 
-    
+
 
     // -- updateName (action)
 
     public static class UpdateNameDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent =UpdateNameDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="name", sequence = "1")
     public ApplicationTenancy updateName(
             @Parameter(maxLength = MAX_LENGTH_NAME)
@@ -143,12 +143,12 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public String default0UpdateName() {
         return getName();
     }
-    
+
 
     // -- path
 
     public static class PathDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.PrimaryKey
@@ -156,24 +156,24 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     @Property(
             domainEvent = PathDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @Getter @Setter
     private String path;
 
-    
+
 
     // -- users (collection)
 
     public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Collection(
             domainEvent = UsersDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @MemberOrder(sequence = "10")
     public List<ApplicationUser> getUsers() {
         return applicationUserRepository.findByAtPath(getPath());
@@ -187,20 +187,20 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public void removeFromUsers(final ApplicationUser applicationUser) {
         applicationUser.setAtPath(null);
     }
-    
+
 
     // -- addUser (action)
 
     public static class AddUserDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
-           domainEvent = AddUserDomainEvent.class,
+            domainEvent = AddUserDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(
             named="Add"
-    )
+            )
     @MemberOrder(name="Users", sequence = "1")
     public ApplicationTenancy addUser(final ApplicationUser applicationUser) {
         applicationUser.setAtPath(this.getPath());
@@ -219,15 +219,15 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     // -- removeUser (action)
 
     public static class RemoveUserDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = RemoveUserDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(
             named="Remove"
-    )
+            )
     @MemberOrder(name="Users", sequence = "2")
     public ApplicationTenancy removeUser(final ApplicationUser applicationUser) {
         applicationUser.setAtPath(null);
@@ -241,41 +241,41 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
         return choices0RemoveUser().isEmpty()? "No users to remove": null;
     }
 
-    
+
 
     // -- parent (property)
 
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(name = "parentPath", allowsNull = "true")
     @Property(
             domainEvent = ParentDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden = Where.PARENTED_TABLES
-    )
+            )
     @Getter @Setter
     private ApplicationTenancy parent;
 
-    
+
 
     // -- updateParent (action)
 
     public static class UpdateParentDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = UpdateParentDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="parent", sequence = "1")
     public ApplicationTenancy updateParent(
             @Parameter(optionality = Optionality.OPTIONAL)
             final ApplicationTenancy tenancy
-    ) {
+            ) {
         // no need to add to children set, since will be done by JDO/DN.
         setParent(tenancy);
         return this;
@@ -284,22 +284,22 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public ApplicationTenancy default0UpdateParent() {
         return getParent();
     }
-    
+
 
 
     // -- children
 
     public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @javax.jdo.annotations.Persistent(mappedBy = "parent")
     @Collection(
             domainEvent = ChildrenDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @Getter @Setter
     private SortedSet<ApplicationTenancy> children = new TreeSet<>();
 
@@ -312,20 +312,20 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public void removeFromChildren(final ApplicationTenancy applicationTenancy) {
         getChildren().remove(applicationTenancy);
     }
-    
+
 
     // -- addChild (action)
 
     public static class AddChildDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AddChildDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(
             named="Add"
-    )
+            )
     @MemberOrder(name="Children", sequence = "1")
     public ApplicationTenancy addChild(final ApplicationTenancy applicationTenancy) {
         applicationTenancy.setParent(this);
@@ -337,12 +337,12 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     // -- removeChild (action)
 
     public static class RemoveChildDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = RemoveChildDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="Children", sequence = "2")
     public ApplicationTenancy removeChild(final ApplicationTenancy applicationTenancy) {
         applicationTenancy.setParent(null);
@@ -359,12 +359,12 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- delete (action)
     public static class DeleteDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = DeleteDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
-    )
+            )
     @MemberOrder(sequence = "1")
     public List<ApplicationTenancy> delete() {
         for (final ApplicationUser user : getUsers()) {
@@ -373,22 +373,22 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
         repository.removeAndFlush(this);
         return applicationTenancyRepository.allTenancies();
     }
-    
+
 
     // -- CONTRACT
-    
-	private final static Equality<ApplicationTenancy> equality =
-			ObjectContracts.checkEquals(ApplicationTenancy::getPath);
 
-	private final static Hashing<ApplicationTenancy> hashing =
-			ObjectContracts.hashing(ApplicationTenancy::getPath);
+    private final static Equality<ApplicationTenancy> equality =
+            ObjectContracts.checkEquals(ApplicationTenancy::getPath);
 
-	private final static ToString<ApplicationTenancy> toString =
-			ObjectContracts.toString("path", ApplicationTenancy::getPath)
-			.thenToString("name", ApplicationTenancy::getName);
-	
-	 private final static Comparator<ApplicationTenancy> comparator =
-		 		Comparator.comparing(ApplicationTenancy::getPath);
+    private final static Hashing<ApplicationTenancy> hashing =
+            ObjectContracts.hashing(ApplicationTenancy::getPath);
+
+    private final static ToString<ApplicationTenancy> toString =
+            ObjectContracts.toString("path", ApplicationTenancy::getPath)
+            .thenToString("name", ApplicationTenancy::getName);
+
+    private final static Comparator<ApplicationTenancy> comparator =
+            Comparator.comparing(ApplicationTenancy::getPath);
 
 
     @Override
@@ -398,7 +398,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     @Override
     public int hashCode() {
-    	return hashing.hashCode(this);
+        return hashing.hashCode(this);
     }
 
     @Override
@@ -410,10 +410,10 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public int compareTo(final ApplicationTenancy o) {
         return comparator.compare(this, o);
     }
-    
+
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationTenancyRepository applicationTenancyRepository;
     @Inject FactoryService factoryService;
     @Inject RepositoryService repository;
-    
+
 }

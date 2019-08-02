@@ -220,10 +220,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // wrap and unwrap
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
         return w(factoryService.mixin(mixinClass, mixedIn));
     }
 
+    @Override
     public <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
         return w(factoryService.mixin(mixinClass, mixedIn));
     }

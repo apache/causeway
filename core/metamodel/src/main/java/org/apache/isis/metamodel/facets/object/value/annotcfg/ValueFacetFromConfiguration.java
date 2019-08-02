@@ -28,7 +28,7 @@ public class ValueFacetFromConfiguration extends ValueFacetAbstract {
     public ValueFacetFromConfiguration(
             final String candidateSemanticsProviderName, 
             final FacetHolder holder) {
-        
+
         super(
                 ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), 
                 AddFacetsIfInvalidStrategy.DONT_ADD, 

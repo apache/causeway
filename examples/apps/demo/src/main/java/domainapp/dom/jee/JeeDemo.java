@@ -36,9 +36,10 @@ import domainapp.utils.DemoStub;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL)
 public class JeeDemo extends DemoStub {
-    
+
     @Inject private JeeDemoService jeeDemoService;
-    
+
+    @Override
     public String title() {
         return "JEE Demo";
     }
@@ -46,17 +47,17 @@ public class JeeDemo extends DemoStub {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public String getJeeMessage(){
-        
+
         if(jeeDemoService==null) {
             return "Sorry, no CDI available";
         }
-        
+
         return jeeDemoService.getMessage();
     }
-    
+
     @Override
     public void initDefaults() {
-        
+
     }
 
 }

@@ -33,7 +33,7 @@ import org.apache.isis.runtime.system.persistence.adaptermanager.factories.OidFa
 
 class ObjectAdapterContext_OidProviders {
 
-    
+
     static class GuardAgainstRootOid implements OidProvider {
 
         @Override
@@ -49,8 +49,8 @@ class ObjectAdapterContext_OidProviders {
         }
 
     }
-    
-    
+
+
     static class OidForServices implements OidProvider {
 
         @Override
@@ -89,7 +89,7 @@ class ObjectAdapterContext_OidProviders {
                 return Oid.Factory.transientOf(spec.getSpecId(), identifier);    
             }
         }
-        
+
     }
 
     static class OidForValues implements OidProvider {
@@ -105,7 +105,7 @@ class ObjectAdapterContext_OidProviders {
         }
 
     }
-    
+
     static class OidForViewModels implements OidProvider {
 
         @Override
@@ -121,7 +121,7 @@ class ObjectAdapterContext_OidProviders {
         }
 
     }
-    
+
     static class OidForOthers implements OidProvider {
 
         @Override
@@ -136,6 +136,6 @@ class ObjectAdapterContext_OidProviders {
         }
 
     }
-    
+
 
 }

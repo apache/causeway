@@ -54,12 +54,12 @@ import lombok.val;
 @Vetoed// @Singleton
 public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMementoSupport {
 
-//    @Getter(lazy=true) private final BeanSortClassifier beanSortClassifier = IsisBeanTypeRegistry.current();
+    //    @Getter(lazy=true) private final BeanSortClassifier beanSortClassifier = IsisBeanTypeRegistry.current();
 
     @Override
     public ObjectAdapterMemento mementoForRootOid(RootOid rootOid) {
         requires(rootOid, "rootOid");
-        
+
         val spec = specificationLoader.lookupBySpecIdElseLoad(rootOid.getObjectSpecId());
         val sort = spec.getBeanSort();
         return ObjectAdapterMementoUsingSupport.of(null, sort, spec.getSpecId(), rootOid);
@@ -78,124 +78,124 @@ public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMeme
         val spec = specificationLoader.loadSpecification(pojo.getClass());
         return mementoForPojo(pojo, spec);
     }
-    
+
     private ObjectAdapterMemento mementoForPojo(Object pojo, ObjectSpecification spec) {
-        
+
         val specId = spec.getSpecId();
         val sort = spec.getBeanSort();
-        
+
         val msg = String.format("Storing %s of type %s [%s].", 
                 sort, 
                 specId,
                 spec.getCorrespondingClass()
                 );
         probe.println(msg);
-        
+
         switch (sort) {
         case MANAGED_BEAN:
             return ObjectAdapterMementoUsingSupport.of(null, sort, spec.getSpecId(), null);
 
         case ENTITY:
-            
-          val isisSession = IsisSession.currentOrElseNull();
-          val adapterProvider = isisSession.getObjectAdapterProvider();
-          
-//          val ps = IsisContext.getPersistenceSession().get();
-//          ps.refreshRoot(pojo);
-          
-          val objectAdapter = adapterProvider.adapterFor(pojo);
-          val rootOid = (RootOid)objectAdapter.getOid();
-          
-          if(rootOid.isPersistent()) {
-              return mementoForRootOid(rootOid);    
-          } 
-          // else fall through
-          
-            
+
+            val isisSession = IsisSession.currentOrElseNull();
+            val adapterProvider = isisSession.getObjectAdapterProvider();
+
+            //          val ps = IsisContext.getPersistenceSession().get();
+            //          ps.refreshRoot(pojo);
+
+            val objectAdapter = adapterProvider.adapterFor(pojo);
+            val rootOid = (RootOid)objectAdapter.getOid();
+
+            if(rootOid.isPersistent()) {
+                return mementoForRootOid(rootOid);    
+            } 
+            // else fall through
+
+
         case VALUE:
         case VIEW_MODEL:
         case MIXIN:
         case COLLECTION:
         case UNKNOWN: // simple types like String, should be VALUE
-            
+
             val key = UUID.randomUUID();
-            
+
             mementoStore.put(key, pojo);
-            
+
             return ObjectAdapterMementoUsingSupport.of(key, sort, spec.getSpecId(), null);
-            
+
         default:
             break;
         }
-                
+
         val msg2 = String.format("Cannot store %s of type %s [%s].", 
                 sort, 
                 specId,
                 spec.getCorrespondingClass()
                 );
         throw _Exceptions.unrecoverable(msg2);
-        
+
     }
-    
+
 
     _Probe probe = _Probe.unlimited().label("ObjectAdapterMementoSupportUsingSpring");
 
     @Override
     public ObjectAdapter reconstructObjectAdapter(ObjectAdapterMemento memento) {
         requires(memento, "memento");
-        
+
         val specId = memento.getObjectSpecId(); 
         val spec = specificationLoader.lookupBySpecIdElseLoad(specId);
         val sort = memento.getBeanSort();
-        
+
         probe.println("reconstruct [%s] %s", sort, memento.getObjectSpecId());
-        
+
         //TODO[2112] if always equal remove field 'beanSort' from ObjectAdapterMemento
         _Assert.assertEquals("expected same sort", sort, spec.getBeanSort());
-        
+
         val key = memento.getStoreKey();
-        
+
         // we need get some meta info on the object, deciding how to
         switch (sort) {
         case MANAGED_BEAN:
-            
+
             val bean = serviceRegistry.lookupRegisteredBeanByNameElseFail(specId.asString());
             return ObjectAdapterForBean.of(bean, specificationLoader);
-        
+
         case ENTITY:
-            
+
             if(key==null) {
-            
+
                 probe.println("fetch from persistence oid='%s'", memento.getRootOid());
                 val rootOid = memento.getRootOid();
                 _Assert.assertTrue("expected persistent", rootOid.isPersistent());
                 val ps = IsisContext.getPersistenceSession().get();
                 return ps.getObjectAdapterByIdProvider().adapterFor(rootOid);
             } else {
-                
+
                 val pojo = mementoStore.get(key);
                 return PojoAdapter.ofTransient(pojo, specId);
-                
-//                val ps = IsisContext.getPersistenceSession().get();
-//                
-//                ps.refreshRoot(pojo);
-//                val adapter = ps.getObjectAdapterProvider().adapterFor(pojo);
-//                Assert.assertTrue("expected persistent", adapter.getOid().isPersistent());
-//                return adapter;
+
+                //                val ps = IsisContext.getPersistenceSession().get();
+                //                
+                //                ps.refreshRoot(pojo);
+                //                val adapter = ps.getObjectAdapterProvider().adapterFor(pojo);
+                //                Assert.assertTrue("expected persistent", adapter.getOid().isPersistent());
+                //                return adapter;
             }
-            
+
         case VALUE:
         case VIEW_MODEL:
         case MIXIN:
         case COLLECTION:
         case UNKNOWN:
-            
+
             val pojo = mementoStore.get(key);
             if(pojo==null) {
                 throw _Exceptions.unrecoverable("cannot find pojo for " + specId);
             }
             return PojoAdapter.of(pojo, Oid.Factory.persistentOf(specId, "deprecated"));
-            
+
         default:
             break;
         }
@@ -205,19 +205,19 @@ public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMeme
                 spec.getCorrespondingClass()
                 );
         throw _Exceptions.unrecoverable(msg);
-        
+
     }
 
     // -- naive cache
-    
+
     private final static Map<UUID, Object> mementoStore = new ConcurrentHashMap<>();
-    
+
     // -- DEPS
-    
+
     //@Inject private WebSessionManager webSessionManager;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceRegistry serviceRegistry;
-    
+
     // --
 
 

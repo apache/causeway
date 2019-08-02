@@ -53,14 +53,14 @@ public interface AuthenticationSession extends Encodable, Serializable {
      * @since 2.0
      */
     Stream<String> streamRoles();
-    
+
     /**
      * Whether this user has specified {@code role}
      * @param role 
      * @since 2.0
      */
     boolean hasRole(String role);
-    
+
     /**
      * A unique code given to this session during authentication.
      *

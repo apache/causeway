@@ -38,7 +38,7 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
             final ObjectSpecification specification) {
-        
+
         super(facetedMethod, featureType);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");

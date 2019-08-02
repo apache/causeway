@@ -43,7 +43,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final Method method,
             final Class<?> choicesType,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
         this.choicesType = choicesType;

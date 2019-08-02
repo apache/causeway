@@ -42,15 +42,15 @@ import domainapp.application.manifest.SimpleAppManifest;
 @PropertySource("classpath:/domainapp/application/isis.properties")
 public class SimpleApp extends SpringBootServletInitializer {
 
-	/**
-	 * 
-	 * @param args
-	 * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
-	 * entry point by searching for classes having a {@code main(...)}
-	 */
-	public static void main(String[] args) {
-	    Presets.prototyping();
-		SpringApplication.run(new Class[] { SimpleApp.class }, args);
-	}
-	
+    /**
+     * 
+     * @param args
+     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+     * entry point by searching for classes having a {@code main(...)}
+     */
+    public static void main(String[] args) {
+        Presets.prototyping();
+        SpringApplication.run(new Class[] { SimpleApp.class }, args);
+    }
+
 }

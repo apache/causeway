@@ -59,7 +59,7 @@ public interface ApplicationTenancyFactory {
     public static class Default implements ApplicationTenancyFactory {
 
         @Override
-		public ApplicationTenancy newApplicationTenancy() {
+        public ApplicationTenancy newApplicationTenancy() {
             return factory.instantiate(ApplicationTenancy.class);
         }
 

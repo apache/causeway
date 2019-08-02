@@ -28,9 +28,10 @@ interface InvocationHandlerFactory extends AutoCloseable {
      * @param mixedInIfAny - if target is a mixin, then this is the domain object that is mixed-in to.
      */
     <T> InvocationHandler newMethodHandler(
-    		T target, 
-    		Object mixedInIfAny);
+            T target, 
+            Object mixedInIfAny);
 
+    @Override
     void close(); // refined from AutoCloseable to not throw catched exceptions
 
 }

@@ -28,12 +28,12 @@ import org.apache.isis.commons.internal.ioc.spring._Spring;
 
 @Configuration
 public class RuntimeEventSupport_Spring {
-    
+
     @Bean
     public Event<AppLifecycleEvent> appLifecycleEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<SessionLifecycleEvent> sessionLifecycleEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);

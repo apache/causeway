@@ -26,20 +26,20 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationClassCollection"
-)
+        )
 @ViewModelLayout(paged=100)
 public class ApplicationClassCollection extends ApplicationClassMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassCollection, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassCollection, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassCollection> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
-    
+
 
     // -- constructors
 
@@ -48,36 +48,36 @@ public class ApplicationClassCollection extends ApplicationClassMember {
     public ApplicationClassCollection(final ApplicationFeatureId featureId) {
         super(featureId);
     }
-    
 
-    
+
+
 
     // -- returnType
 
     public static class ElementTypeDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Property(
             domainEvent = ElementTypeDomainEvent.class
-    )
+            )
     @MemberOrder(name="Data Type", sequence = "2.6")
     public String getElementType() {
         return getFeature().getReturnTypeName();
     }
-    
+
 
     // -- derived
 
     public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Property(
             domainEvent = DerivedDomainEvent.class
-    )
+            )
     @MemberOrder(name="Detail", sequence = "2.7")
     public boolean isDerived() {
         return getFeature().isDerived();
     }
-    
+
 
 }

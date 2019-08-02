@@ -104,9 +104,9 @@ public final class JdoNamedQuery implements MetaModelExportSupport {
         return true;
     }
 
-	@Override
-	public String toMetamodelString() {
-		return getName();
-	}
+    @Override
+    public String toMetamodelString() {
+        return getName();
+    }
 
 }

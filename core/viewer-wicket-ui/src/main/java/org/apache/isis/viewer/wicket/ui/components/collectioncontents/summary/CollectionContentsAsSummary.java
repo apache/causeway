@@ -107,7 +107,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
             addItem(item, ID_MIN, summary.getMin());
             addItem(item, ID_MAX, summary.getMax());
         });
-        
+
     }
 
     public static class Summary {

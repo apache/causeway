@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class IsisConfiguration_whitespaceTest {
 
     IsisConfiguration configuration;
-    
+
     @BeforeEach
     void setUp() throws Exception {
 
@@ -39,7 +39,7 @@ class IsisConfiguration_whitespaceTest {
         _Config.put("properties.trailingSpaces", "twoSpacesAfterThis  ");
         _Config.put("properties.trailingTab", "oneTabAfterThis\t");
         _Config.put("properties.trailingTabAndSpaces", "oneTabAndTwoSpacesAfterThis\t  ");
-        
+
         configuration = _Config.getConfiguration();
 
     }

@@ -35,8 +35,8 @@ import org.apache.isis.metamodel.facets.object.domainobject.DomainObjectAnnotati
  * Implements {@link ObjectSpecIdFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
 public class JdoPersistenceCapableAnnotationFacetFactory
-        extends FacetFactoryAbstract
-        implements ObjectSpecIdFacetFactory {
+extends FacetFactoryAbstract
+implements ObjectSpecIdFacetFactory {
 
     public JdoPersistenceCapableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

@@ -60,13 +60,13 @@ public interface Oid extends Encodable {
     boolean isViewModel();
 
     boolean isPersistent();
-    
+
     default boolean isValue() {
         return false; // default, only overridden by Oid_Value
     }
-    
+
     // -- MARSHALLING
-    
+
     public static interface Marshaller {
 
         String marshal(Version version);
@@ -80,38 +80,38 @@ public interface Oid extends Encodable {
         String marshal(RootOid rootOid);
 
         String joinAsOid(String domainType, String instanceId);
-        
+
     }
-    
+
     public static Marshaller marshaller() {
         return Oid_Marshaller.INSTANCE;
     }
-    
+
     // -- UN-MARSHALLING
 
     public static interface Unmarshaller {
-        
+
         <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType);
 
         String splitInstanceId(String oidStr);
-        
+
     }
-    
+
     public static Unmarshaller unmarshaller() {
         return Oid_Marshaller.INSTANCE;
     }
-    
+
     // -- FACTORIES
-    
+
     /** for convenience*/
     public static final class Factory {
-        
+
         public static RootOid value() {
             return Oid_Value.INSTANCE;
         }
-        
+
         // -- LEGACY
-        
+
         public static RootOid ofBookmark(final Bookmark bookmark) {
             return Oid_Root.of(ObjectSpecId.of(bookmark.getObjectType()), 
                     bookmark.getIdentifier(), Oid_State.from(bookmark), Version.empty());
@@ -120,7 +120,7 @@ public interface Oid extends Encodable {
         public static RootOid viewmodelOf(ObjectSpecId objectSpecId, String mementoStr) {
             return Oid_Root.of(objectSpecId, mementoStr, Oid_State.VIEWMODEL, Version.empty());
         }
-        
+
         public static RootOid transientOf(final ObjectSpecId objectSpecId, final String identifier) {
             return Oid_Root.of(objectSpecId, identifier, Oid_State.TRANSIENT, Version.empty());
         }
@@ -147,7 +147,7 @@ public interface Oid extends Encodable {
         }
 
         // -- PARENTED COLLECTIONS
-        
+
         public static ParentedOid parentedOfOneToMany(RootOid parentRootOid, OneToManyAssociation otma) {
             return Oid_Parented.ofName(parentRootOid, otma.getId());
         }
@@ -156,7 +156,7 @@ public interface Oid extends Encodable {
             return Oid_Parented.ofName(parentRootOid, name);
         }
 
-        
+
     }
 
     Oid copy();

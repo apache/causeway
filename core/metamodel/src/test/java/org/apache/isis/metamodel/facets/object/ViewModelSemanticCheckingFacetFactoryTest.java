@@ -65,7 +65,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         _Context.clear();
         _Config.clear();
         _Config.put(ConfigurationConstants.Keys.Reflector.viewModelSemanticCheckingFacetFactoryEnable, true);
-        
+
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
     }
 

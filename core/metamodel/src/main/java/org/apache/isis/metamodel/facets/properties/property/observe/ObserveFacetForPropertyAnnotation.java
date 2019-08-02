@@ -50,9 +50,9 @@ public class ObserveFacetForPropertyAnnotation extends ObserveFacetAbstract {
     private ObserveFacetForPropertyAnnotation(
             Class<? extends EventStreamSource> eventStreamType, 
             FacetHolder holder) {
-        
+
         super(eventStreamType, holder);
     }
-    
+
 
 }

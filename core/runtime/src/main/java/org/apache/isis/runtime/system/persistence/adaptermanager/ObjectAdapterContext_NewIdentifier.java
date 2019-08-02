@@ -36,10 +36,10 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 class ObjectAdapterContext_NewIdentifier {
-    
+
     private final PersistenceSession persistenceSession;
     private final SpecificationLoader specificationLoader;
-    
+
     /**
      * Return an equivalent {@link RootOid}, but being persistent.
      *
@@ -52,13 +52,13 @@ class ObjectAdapterContext_NewIdentifier {
      * @param pojo - being persisted
      */
     final RootOid createPersistentOid(Object pojo) {
-  
+
         final ObjectSpecification spec = specificationLoader.loadSpecification(pojo.getClass());
-        
+
         final String identifier = persistenceSession.identifierFor(pojo);
-        
+
         final ObjectSpecId objectSpecId = spec.getSpecId();
         return Oid.Factory.persistentOf(objectSpecId, identifier);
     }
-    
+
 }

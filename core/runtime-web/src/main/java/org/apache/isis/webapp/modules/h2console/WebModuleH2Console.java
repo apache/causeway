@@ -39,19 +39,19 @@ import lombok.val;
 @Singleton @Order(0)
 public class WebModuleH2Console implements WebModule  {
 
-	@Inject private IsisConfiguration isisConfiguration;
-	
+    @Inject private IsisConfiguration isisConfiguration;
+
     private final static String SERVLET_NAME = "H2Console";
     private final static String SERVLET_CLASS_NAME = "org.h2.server.web.WebServlet";
     private final static String CONSOLE_PATH = "/db"; //XXX could be made a config value 
-    
+
     @Getter private LocalResourcePath localResourcePathIfEnabled;
-    
+
     @Override
     public String getName() {
         return "H2Console";
     }
-    
+
     @Override
     public void prepare(WebModuleContext ctx) {
         // nothing special required
@@ -63,44 +63,44 @@ public class WebModuleH2Console implements WebModule  {
         val servlet = ctx.addServlet(SERVLET_NAME, SERVLET_CLASS_NAME);
         ctx.getServletRegistration(SERVLET_NAME)
         .addMapping(CONSOLE_PATH+"/*");
-        
+
         servlet.setInitParameter("webAllowOthers", "true"); //XXX could be made a config value 
-        
+
         return null; // does not provide a listener
     }
 
     @Override
     public boolean isApplicable(WebModuleContext ctx) {
-    	val enabled = canEnable(ctx);
-    	if(enabled) {
-    		localResourcePathIfEnabled = new LocalResourcePath(CONSOLE_PATH);
-    	}
-    	return enabled;
-    }
-    
-    // -- HELPER
-    
-    private boolean canEnable(WebModuleContext ctx) {
-    	
-    	if(!isisConfiguration.getEnvironment().getDeploymentType().isPrototyping()) {
-    		return false;
-    	}
-    	
-    	val connectionUrl = isisConfiguration
-        		.getString("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL");
-        
-        val usesH2Connection = !_Strings.isNullOrEmpty(connectionUrl) && connectionUrl.contains(":h2:mem:");
-        
-        if(!usesH2Connection) {
-        	return false;
+        val enabled = canEnable(ctx);
+        if(enabled) {
+            localResourcePathIfEnabled = new LocalResourcePath(CONSOLE_PATH);
         }
-    	
-    	try {
-    		_Context.loadClass(SERVLET_CLASS_NAME);
-    		return true;
-    	} catch (Exception e) {
-    		return false;
-		}
+        return enabled;
+    }
+
+    // -- HELPER
+
+    private boolean canEnable(WebModuleContext ctx) {
+
+        if(!isisConfiguration.getEnvironment().getDeploymentType().isPrototyping()) {
+            return false;
+        }
+
+        val connectionUrl = isisConfiguration
+                .getString("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL");
+
+        val usesH2Connection = !_Strings.isNullOrEmpty(connectionUrl) && connectionUrl.contains(":h2:mem:");
+
+        if(!usesH2Connection) {
+            return false;
+        }
+
+        try {
+            _Context.loadClass(SERVLET_CLASS_NAME);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

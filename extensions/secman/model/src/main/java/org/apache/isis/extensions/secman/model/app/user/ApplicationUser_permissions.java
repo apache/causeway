@@ -45,21 +45,21 @@ import lombok.val;
 public class ApplicationUser_permissions {
 
     public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationUser_permissions> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     private final ApplicationUser holder;
 
     @Action(
-        semantics = SemanticsOf.SAFE,
-        domainEvent = ActionDomainEvent.class
-    )
+            semantics = SemanticsOf.SAFE,
+            domainEvent = ActionDomainEvent.class
+            )
     @ActionLayout(
             contributed = Contributed.AS_ASSOCIATION
-    )
+            )
     @CollectionLayout(
             paged=50,
             defaultView = "table"
-    )
+            )
     @MemberOrder(sequence = "30")
     public List<UserPermissionViewModel> $$() {
         val allMembers = applicationFeatureRepository.allMembers();
@@ -68,8 +68,8 @@ public class ApplicationUser_permissions {
 
     List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
         return _Lists.map(
-                        features,
-                        UserPermissionViewModel.Functions.asViewModel(holder, factory));
+                features,
+                UserPermissionViewModel.Functions.asViewModel(holder, factory));
     }
 
     @Inject RepositoryService repository;

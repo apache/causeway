@@ -63,20 +63,20 @@ import lombok.val;
  * @since 2.0
  */
 public final class _CDI {
-    
+
     /**
      * Bootstrap CDI if not already present.
      * @param onDiscover - Packages of the specified (stream of) classes will be scanned and found classes 
      * will be added to the set of bean classes for the synthetic bean archive. 
      */
     public static void init(Supplier<Stream<Class<?>>> onDiscover) {
-        
+
         if(cdi().isPresent()) {
             return;
         }
-        
+
         requires(onDiscover, "onDiscover");
-        
+
         // plug in the provider
         final CDIProvider standaloneCDIProvider = CdiPlugin.get().getCDIProvider(onDiscover.get());
         CDI.setCDIProvider(standaloneCDIProvider);
@@ -85,15 +85,15 @@ public final class _CDI {
         if(!cdi().isPresent()) {
             throw _Exceptions.unrecoverable("Could not resolve an instance of CDI.");
         }
-        
+
         // proper CDI lifecycle support utilizing the fact that WELD provides a WeldContainer that 
         // implements AutoCloseable, which we can put on the _Context, such that when _Context.clear()
         // is called, gets properly closed
         final CheckedRunnable onClose = () -> ((AutoCloseable)CDI.current()).close();
         _Context.putSingleton(_CDI_Lifecycle.class, _CDI_Lifecycle.of(onClose));
-        
+
     }
-    
+
     /**
      * Get the CDI BeanManager for the current context.
      * @return non-null
@@ -103,7 +103,7 @@ public final class _CDI {
         return cdi().map(CDI::getBeanManager)
                 .orElseThrow(()->_Exceptions.unrecoverable("Could not resolve a BeanManager."));
     }
-    
+
     /**
      * Obtains a child Instance for the given required type and additional required qualifiers. 
      * @param subType
@@ -114,15 +114,15 @@ public final class _CDI {
         if(isEmpty(qualifiers)) {
             return select(subType);
         }
-        
+
         final Annotation[] _qualifiers = qualifiers.toArray(new Annotation[] {});
-        
+
         return cdi()
                 .map(cdi->tryGet(()->cdi.select(subType, _qualifiers)))
                 .map(instance->Bin.ofInstance(instance))
                 .orElse(Bin.empty());
     }
-    
+
     /**
      * Obtains a child Instance for the given required type and additional required qualifiers. 
      * @param subType
@@ -134,8 +134,8 @@ public final class _CDI {
                 .map(instance->Bin.ofInstance(instance))
                 .orElse(Bin.empty());
     }
-    
-    
+
+
     /**
      * Filters the input array into a collection, such that only annotations are retained, 
      * that are valid qualifiers for CDI.
@@ -144,10 +144,10 @@ public final class _CDI {
      */
     public static List<Annotation> filterQualifiers(final Annotation[] annotations) {
         return stream(annotations)
-        .filter(_CDI::isQualifier)
-        .collect(Collectors.toList());
+                .filter(_CDI::isQualifier)
+                .collect(Collectors.toList());
     }
-    
+
     /**
      * @param annotation
      * @return whether or not the annotation is a valid qualifier for CDI
@@ -158,9 +158,9 @@ public final class _CDI {
         }
         return annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0;
     }
-    
+
     // -- GENERIC SINGLETON RESOLVING
-    
+
     /**
      * @return CDI managed singleton wrapped in an Optional
      */
@@ -170,7 +170,7 @@ public final class _CDI {
         }
         return _CDI.select(type).getSingleton();
     }
-    
+
     /**
      * @return CDI managed singleton
      * @throws NoSuchElementException - if the singleton is not resolvable
@@ -178,75 +178,75 @@ public final class _CDI {
     public static <T> T getSingletonElseFail(@Nullable Class<T> type) {
         return getSingleton(type)
                 .orElseThrow(()->_Exceptions.noSuchElement("Cannot resolve singleton '%s'", type));
-                        
+
     }
-    
+
     // -- ENUMERATE BEANS
-    
+
     public final static AnnotationLiteral<Any> QUALIFIER_ANY = 
             new AnnotationLiteral<Any>() {
         private static final long serialVersionUID = 1L;};
-    
-    private static Stream<Bean<?>> streamAllCDIBeans() {
-        BeanManager beanManager = _CDI.getBeanManager();
-        Set<Bean<?>> beans = beanManager.getBeans(Object.class, _CDI.QUALIFIER_ANY);
-        return beans.stream();
-    }
-    
-    /**
-     * 
-     * @param classifier
-     * @param beanNameProvider - usually ServiceUtil::idOfBean
-     */
-    public static Stream<BeanAdapter> streamAllBeans(
-            Function<Class<?>, BeanSort> classifier, 
-            Function<Bean<?>, String> beanNameProvider) {
-        
-        return streamAllCDIBeans()
-        .map(bean->{
 
-            val scope = bean.getScope().getSimpleName(); // also works for produced beans
-            val lifecycleContext = LifecycleContext.valueOf(scope);
-
-            // getBeanClass() does not work for produced beans as intended here! 
-            // (we do get the producer's class instead)
-            val type = bean.getBeanClass(); 
-            val sort = classifier.apply(type);
-
-            val id = beanNameProvider.apply(bean);
-            val beanAdapter = BeanAdapterCDI.of(id, lifecycleContext, bean, sort);
-            return beanAdapter;
-        });
-        
-    }
-        
-    // -- HELPER
-    
-    private _CDI() {}
-    
-    /**
-     * Get the CDI instance that provides access to the current container. 
-     * @return an optional
-     */
-    private static Optional<CDI<Object>> cdi() {
-        try {
-            CDI<Object> cdi = CDI.current();
-            return Optional.ofNullable(cdi);
-        } catch (Exception e) {
-            return Optional.empty();
+        private static Stream<Bean<?>> streamAllCDIBeans() {
+            BeanManager beanManager = _CDI.getBeanManager();
+            Set<Bean<?>> beans = beanManager.getBeans(Object.class, _CDI.QUALIFIER_ANY);
+            return beans.stream();
         }
-    }
-    
-    private static <T> T tryGet(final Supplier<T> supplier) {
-        try { 
-            return supplier.get();  
-        } catch (Exception e) {
-            return null;
+
+        /**
+         * 
+         * @param classifier
+         * @param beanNameProvider - usually ServiceUtil::idOfBean
+         */
+        public static Stream<BeanAdapter> streamAllBeans(
+                Function<Class<?>, BeanSort> classifier, 
+                Function<Bean<?>, String> beanNameProvider) {
+
+            return streamAllCDIBeans()
+                    .map(bean->{
+
+                        val scope = bean.getScope().getSimpleName(); // also works for produced beans
+                        val lifecycleContext = LifecycleContext.valueOf(scope);
+
+                        // getBeanClass() does not work for produced beans as intended here! 
+                        // (we do get the producer's class instead)
+                        val type = bean.getBeanClass(); 
+                        val sort = classifier.apply(type);
+
+                        val id = beanNameProvider.apply(bean);
+                        val beanAdapter = BeanAdapterCDI.of(id, lifecycleContext, bean, sort);
+                        return beanAdapter;
+                    });
+
         }
-    }
+
+        // -- HELPER
+
+        private _CDI() {}
+
+        /**
+         * Get the CDI instance that provides access to the current container. 
+         * @return an optional
+         */
+        private static Optional<CDI<Object>> cdi() {
+            try {
+                CDI<Object> cdi = CDI.current();
+                return Optional.ofNullable(cdi);
+            } catch (Exception e) {
+                return Optional.empty();
+            }
+        }
+
+        private static <T> T tryGet(final Supplier<T> supplier) {
+            try { 
+                return supplier.get();  
+            } catch (Exception e) {
+                return null;
+            }
+        }
 
 
-    
+
 
 
 }

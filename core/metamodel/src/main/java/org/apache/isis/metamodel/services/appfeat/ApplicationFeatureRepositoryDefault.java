@@ -108,7 +108,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     private Collection<ObjectSpecification> primeMetaModel() {
         serviceRegistry.streamRegisteredBeans()
-            .forEach(bean->specificationLoader.loadSpecification(bean.getBeanClass()));
+        .forEach(bean->specificationLoader.loadSpecification(bean.getBeanClass()));
         return specificationLoader.currentSpecifications();
     }
 
@@ -340,7 +340,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
      * </p>
      */
     private boolean isSuperClassOfService(final ObjectSpecification spec) {
-    	
+
         val specClass = spec.getCorrespondingClass();
 
         // is this class a supertype or the actual type of one of the services?
@@ -380,7 +380,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     // -- packageFeatures, classFeatures, memberFeatures
-    
+
     public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         switch (featureId.getType()) {
@@ -394,19 +394,19 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         throw new IllegalArgumentException("Feature has unknown feature type " + featureId.getType());
     }
 
-    
+
     public ApplicationFeature findPackage(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return packageFeatures.get(featureId);
     }
 
-    
+
     public ApplicationFeature findClass(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return classFeatures.get(featureId);
     }
 
-    
+
     public ApplicationFeature findMember(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return memberFeatures.get(featureId);
@@ -415,7 +415,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     // -- allFeatures, allPackages, allClasses, allMembers
-    
+
     public Collection<ApplicationFeature> allFeatures(final ApplicationFeatureType featureType) {
         initializeIfRequired();
         if (featureType == null) {
@@ -432,37 +432,37 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         throw new IllegalArgumentException("Unknown feature type " + featureType);
     }
 
-    
+
     public Collection<ApplicationFeature> allPackages() {
         initializeIfRequired();
         return packageFeatures.values();
     }
 
-    
+
     public Collection<ApplicationFeature> allClasses() {
         initializeIfRequired();
         return classFeatures.values();
     }
 
-    
+
     public Collection<ApplicationFeature> allMembers() {
         initializeIfRequired();
         return memberFeatures.values();
     }
 
-    
+
     public Collection<ApplicationFeature> allProperties() {
         initializeIfRequired();
         return propertyFeatures.values();
     }
 
-    
+
     public Collection<ApplicationFeature> allCollections() {
         initializeIfRequired();
         return collectionFeatures.values();
     }
 
-    
+
     public Collection<ApplicationFeature> allActions() {
         initializeIfRequired();
         return actionFeatures.values();
@@ -482,7 +482,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     public Set<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
         initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.PACKAGE);
-        
+
         return stream(packages)
                 .filter(ApplicationFeature.Predicates.packageContainingClasses(memberType, this))
                 .map(ApplicationFeature.Functions.GET_FQN)
@@ -543,10 +543,10 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     @Inject ApplicationFeatureFactory applicationFeatureFactory;
 
     private _Lazy<List<BeanAdapter>> registeredServices = _Lazy.threadSafe(()->{
-    	val registeredServices = 
-        		serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
+        val registeredServices = 
+                serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
                 .collect(Collectors.toList());
-    	return registeredServices;
+        return registeredServices;
     });
 
 

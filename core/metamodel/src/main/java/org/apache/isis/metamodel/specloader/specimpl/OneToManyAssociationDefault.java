@@ -59,7 +59,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     protected OneToManyAssociationDefault(
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec) {
-        
+
         super(facetedMethod, FeatureType.COLLECTION, objectSpec);
     }
 
@@ -164,12 +164,12 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         if (collection == null) {
             return null;
         }
-        
+
         val parentOid = (RootOid)ownerAdapter.getOid();
         val newAdapter = getObjectAdapterProvider().adapterForCollection(collection, parentOid, this);
         return newAdapter.injectServices(getServiceInjector());
     }
-    
+
     @Override
     public boolean isEmpty(final ObjectAdapter parentAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         // REVIEW should we be able to determine if a collection is empty

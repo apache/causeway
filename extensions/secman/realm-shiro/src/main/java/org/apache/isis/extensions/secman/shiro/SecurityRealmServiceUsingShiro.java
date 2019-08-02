@@ -26,9 +26,9 @@ import org.apache.isis.extensions.secman.api.SecurityRealmService;
 @Service
 public class SecurityRealmServiceUsingShiro implements SecurityRealmService {
 
-	@Override
-	public SecurityRealm getCurrentRealm() {
-		return ShiroUtils.getIsisModuleSecurityRealm();
-	}
+    @Override
+    public SecurityRealm getCurrentRealm() {
+        return ShiroUtils.getIsisModuleSecurityRealm();
+    }
 
 }

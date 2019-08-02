@@ -19,6 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.server.mappers;
 
 public class RestfulObjectsApplicationExceptionMapper_Test extends
-        RestfulObjectsApplicationExceptionMapper_Test_Contract {
+RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
 }

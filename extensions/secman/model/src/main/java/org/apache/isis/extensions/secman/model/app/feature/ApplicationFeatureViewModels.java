@@ -42,21 +42,21 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureRepositoryDe
         nature = NatureOfService.VIEW,
         objectType = "isissecurity.ApplicationFeatureViewModels",
         repositoryFor = ApplicationFeatureViewModel.class
-)
+        )
 @DomainServiceLayout(
         named="Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-)
+        )
 public class ApplicationFeatureViewModels  {
 
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationFeatureViewModels, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationFeatureViewModels, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationFeatureViewModels> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     // -- ICON NAME
 
@@ -67,16 +67,16 @@ public class ApplicationFeatureViewModels  {
     // -- ALL PACKAGES
 
     public static class AllPackagesDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllPackagesDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-list"
-    )
+            )
     @MemberOrder(sequence = "100.40.1")
     public List<ApplicationPackage> allPackages() {
         return asViewModels(applicationFeatureRepository.allPackages(), ApplicationPackage.class);
@@ -85,16 +85,16 @@ public class ApplicationFeatureViewModels  {
     // -- ALL CLASSES
 
     public static class AllClassesDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllClassesDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-list"
-    )
+            )
     @MemberOrder(sequence = "100.40.2")
     public List<ApplicationClass> allClasses() {
         return asViewModels(applicationFeatureRepository.allClasses(), ApplicationClass.class);
@@ -103,34 +103,34 @@ public class ApplicationFeatureViewModels  {
     // -- ALL ACTIONS
 
     public static class AllActionsDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllActionsDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-list"
-    )
+            )
     @MemberOrder(sequence = "100.40.3")
     public List<ApplicationClassAction> allActions() {
         return asViewModels(applicationFeatureRepository.allActions(), ApplicationClassAction.class);
     }
-    
+
     // -- ALL PROPERTIES
 
     public static class AllPropertiesDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllPropertiesDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-list"
-    )
+            )
     @MemberOrder(sequence = "100.40.4")
     public List<ApplicationClassProperty> allProperties() {
         return asViewModels(applicationFeatureRepository.allProperties(), ApplicationClassProperty.class);
@@ -139,39 +139,39 @@ public class ApplicationFeatureViewModels  {
     // -- ALL COLLECTIONS
 
     public static class AllCollectionsDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllCollectionsDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-list"
-    )
+            )
     @MemberOrder(sequence = "100.40.5")
     public List<ApplicationClassCollection> allCollections() {
         return asViewModels(applicationFeatureRepository.allCollections(), ApplicationClassCollection.class);
     }
 
     // -- HELPERS
-    
+
     private <T extends ApplicationFeatureViewModel> List<T> asViewModels(
-    		final Collection<ApplicationFeature> features, 
-    		final Class<T> cls) {
-    	
+            final Collection<ApplicationFeature> features, 
+            final Class<T> cls) {
+
         return _Lists.map(
-                        features,
-                        ApplicationFeatureViewModel.Functions
-                        	.<T>asViewModel(applicationFeatureRepository, factory)
+                features,
+                ApplicationFeatureViewModel.Functions
+                .<T>asViewModel(applicationFeatureRepository, factory)
                 );
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
-    
+
 
 }

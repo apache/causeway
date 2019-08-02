@@ -36,20 +36,20 @@ public class FreeStandingList extends AbstractList<ManagedObject> {
     public static <T extends ManagedObject> FreeStandingList of(
             final ObjectSpecification instanceSpecification, 
             final List<T> instances) {
-        
+
         return new FreeStandingList(instanceSpecification, instances.stream()
                 .map(x->(T)x)
                 .collect(Collectors.toList()));
     }
-    
+
     private FreeStandingList(
             final ObjectSpecification instanceSpecification, 
             final List<ManagedObject> instances) {
-        
+
         this.instanceSpecification = instanceSpecification;
         this.instances = instances;
     }
-    
+
     /**
      * Required implementation of {@link AbstractList}.
      */

@@ -67,10 +67,10 @@ implements CssClassFacet {
     private final MetamodelEventService metamodelEventService;
 
     public CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-    				final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
-    				final MetamodelEventService metamodelEventService,
-    				final FacetHolder holder) {
-    	
+            final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
+                    final MetamodelEventService metamodelEventService,
+                    final FacetHolder holder) {
+
         super(CssClassFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         this.cssClassUiEventClass = cssClassUiEventClass;
         this.metamodelEventService = metamodelEventService;

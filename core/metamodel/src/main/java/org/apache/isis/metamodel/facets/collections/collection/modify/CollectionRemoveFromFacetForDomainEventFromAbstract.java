@@ -58,7 +58,7 @@ implements CollectionRemoveFromFacet {
                     final CollectionDomainEventFacetAbstract collectionDomainEventFacet,
                     final ServiceRegistry serviceRegistry,
                     final FacetHolder holder) {
-    	
+
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.collectionRemoveFromFacet = collectionRemoveFromFacet;

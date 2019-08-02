@@ -22,22 +22,22 @@ package org.apache.isis.commons.collections;
  * @since 2.0
  */
 public enum Cardinality {
-	
-	ZERO,
-	ONE,
-	MULTIPLE
-	;
-	
-	public boolean isZero() {
-		return this == ZERO;
-	}
-	
-	public boolean isOne() {
-		return this == ONE;
-	}
-	
-	public boolean isMultiple() {
-		return this == MULTIPLE;
-	}
-	
+
+    ZERO,
+    ONE,
+    MULTIPLE
+    ;
+
+    public boolean isZero() {
+        return this == ZERO;
+    }
+
+    public boolean isOne() {
+        return this == ONE;
+    }
+
+    public boolean isMultiple() {
+        return this == MULTIPLE;
+    }
+
 }

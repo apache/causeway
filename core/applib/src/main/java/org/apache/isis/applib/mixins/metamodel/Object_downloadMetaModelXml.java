@@ -52,44 +52,44 @@ public class Object_downloadMetaModelXml {
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
-    )
+            )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public Object act(
-    		
-    		// PARAM 0
-    		@ParameterLayout(
-            		named = MixinConstants.FILENAME_PROPERTY_NAME,
-            		describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+
+            // PARAM 0
+            @ParameterLayout(
+                    named = MixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
-    	val pkg = holder.getClass().getPackage().getName();
-    	
+        val pkg = holder.getClass().getPackage().getName();
+
         val config =
                 new MetaModelService.Config()
-                        .withIgnoreNoop()
-                        .withIgnoreAbstractClasses()
-                        .withIgnoreInterfaces()
-                        .withIgnoreBuiltInValueTypes()
-                        .withPackagePrefix(pkg);
-        
+                .withIgnoreNoop()
+                .withIgnoreAbstractClasses()
+                .withIgnoreInterfaces()
+                .withIgnoreBuiltInValueTypes()
+                .withPackagePrefix(pkg);
+
         val metamodelDto = metaModelService.exportMetaModel(config);
 
         val className = holder.getClass().getName();
-        
+
         val domainClassDtos = metamodelDto.getDomainClassDto();
         domainClassDtos.removeIf(classDto->!Objects.equals(classDto.getId(), className));
-        
+
         val xmlString = jaxbService.toXml(metamodelDto);
 
         return BlobClobFactory.clobXml(fileName, xmlString);
-        		
+
     }
-    
+
     // -- PARAM 0
 
     public String default0Act() {
@@ -97,11 +97,11 @@ public class Object_downloadMetaModelXml {
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject MetaModelService metaModelService;
     @Inject JaxbService jaxbService;
     @Inject MetaModelServicesMenu metaModelServicesMenu;
 
-    
+
 
 }

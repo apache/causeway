@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
-)
+        )
 public enum Redirect {
     /**
      * As defined by configuration property <code>isis.viewer.wicket.redirectEvenIfSameObject</code>

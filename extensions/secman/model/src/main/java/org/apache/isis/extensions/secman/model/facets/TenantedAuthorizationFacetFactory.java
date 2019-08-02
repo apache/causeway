@@ -67,16 +67,16 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
             final FacetHolder holder) {
 
         val serviceRegistry = IsisContext.getServiceRegistry();
-        
+
         val evaluators = serviceRegistry
                 .select(ApplicationTenancyEvaluator.class)
                 .stream()
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
         val evaluatorsForCls = Collections.unmodifiableList(
-        		_NullSafe.stream(evaluators)
-        		.filter(applicationTenancyEvaluator->applicationTenancyEvaluator.handles(cls))
-        		.collect(Collectors.<ApplicationTenancyEvaluator>toList()));
+                _NullSafe.stream(evaluators)
+                .filter(applicationTenancyEvaluator->applicationTenancyEvaluator.handles(cls))
+                .collect(Collectors.<ApplicationTenancyEvaluator>toList()));
 
         if(evaluatorsForCls.isEmpty()) {
             return null;
@@ -90,7 +90,7 @@ public class TenantedAuthorizationFacetFactory extends FacetFactoryAbstract {
                 serviceRegistry.lookupService(UserService.class).orElse(null);
 
         return new TenantedAuthorizationFacetDefault(
-        		evaluatorsForCls, applicationUserRepository, queryResultsCache, userService, holder);
+                evaluatorsForCls, applicationUserRepository, queryResultsCache, userService, holder);
     }
 
 

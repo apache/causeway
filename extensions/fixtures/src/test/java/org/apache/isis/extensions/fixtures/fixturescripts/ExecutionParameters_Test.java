@@ -149,7 +149,7 @@ public class ExecutionParameters_Test {
         assertThat(roundTripped, is(value));
         assertThat(roundTrippedAsT, is(value));
     }
-    
+
     @Test
     public void roundTripString() throws Exception {
 
@@ -246,12 +246,12 @@ public class ExecutionParameters_Test {
         assertThat(roundTripped, is(value));
         assertThat(roundTrippedAsT, is(value));
     }
-    
+
     private static enum EnumForTest {
-		hello,
-		world
-	}
-    
+        hello,
+        world
+    }
+
     @Test
     public void roundTripEnum() throws Exception {
 

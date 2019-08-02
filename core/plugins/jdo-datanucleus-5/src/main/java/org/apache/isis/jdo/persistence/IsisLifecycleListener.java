@@ -186,9 +186,9 @@ SuspendableListener {
     // Logging
     // /////////////////////////////////////////////////////////
 
-//    private enum Phase {
-//        PRE, POST
-//    }
+    //    private enum Phase {
+    //        PRE, POST
+    //    }
 
     private static Map<Integer, LifecycleEventType> events = _Maps.newHashMap();
 
@@ -199,15 +199,15 @@ SuspendableListener {
             events.put(code, this);
         }
 
-//        public static LifecycleEventType lookup(int code) {
-//            return events.get(code);
-//        }
+        //        public static LifecycleEventType lookup(int code) {
+        //            return events.get(code);
+        //        }
     }
 
-//    private String logString(Phase phase, LoggingLocation location, InstanceLifecycleEvent event) {
-//        final Persistable pojo = Utils.persistenceCapableFor(event);
-//        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
-//        return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
-//    }
+    //    private String logString(Phase phase, LoggingLocation location, InstanceLifecycleEvent event) {
+    //        final Persistable pojo = Utils.persistenceCapableFor(event);
+    //        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
+    //        return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
+    //    }
 
 }

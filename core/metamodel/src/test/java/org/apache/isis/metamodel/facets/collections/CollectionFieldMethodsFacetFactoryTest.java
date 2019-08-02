@@ -68,7 +68,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     private ObjectSpecification mockSpecification;
 
     @Override
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
 
         // expecting
@@ -423,7 +423,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testValidateAddToFacetIsInstalledAndMethodRemoved() {
-        
+
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
         @SuppressWarnings("hiding")

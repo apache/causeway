@@ -64,7 +64,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
 
         final MenuBarsService menuBarsService =
-        		getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+                getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
 
         final MenuBars menuBars = menuBarsService.menuBars();
 

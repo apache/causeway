@@ -34,7 +34,7 @@ import lombok.val;
  */
 public class UsernameAvailableValidator implements IValidator<String> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     public static final UsernameAvailableValidator INSTANCE = new UsernameAvailableValidator();
 
     private UsernameAvailableValidator() {
@@ -43,16 +43,16 @@ public class UsernameAvailableValidator implements IValidator<String> {
     @Override
     public void validate(final IValidatable<String> validatable) {
 
-    	val userRegistrationService = getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
-    	
+        val userRegistrationService = getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
+
         getIsisSessionFactory().doInSession(() -> {
-            
-                final String username = validatable.getValue();
-                boolean usernameExists = userRegistrationService.usernameExists(username);
-                if (usernameExists) {
-                    validatable.error(new ValidationError().addKey("usernameIsNotAvailable"));
-                }
-            
+
+            final String username = validatable.getValue();
+            boolean usernameExists = userRegistrationService.usernameExists(username);
+            if (usernameExists) {
+                validatable.error(new ValidationError().addKey("usernameIsNotAvailable"));
+            }
+
         });
 
     }

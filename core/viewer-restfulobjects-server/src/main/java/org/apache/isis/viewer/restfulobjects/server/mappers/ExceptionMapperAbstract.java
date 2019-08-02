@@ -94,7 +94,7 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         if(statusCode!=null) {
             return statusCode;
         }
-        
+
         final Optional<RecoverableException> recoverableIfAny = recoverableFor(ex);
 
         if(recoverableIfAny.isPresent()) {
@@ -109,24 +109,24 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
     }
 
     private static String messageFor(final Throwable ex) {
-        
+
         final Optional<RecoverableException> recoverableIfAny = recoverableFor(ex);
-                
+
         return (recoverableIfAny.isPresent() ? recoverableIfAny.get() : ex).getMessage();
     }
 
     private static Optional<RecoverableException> recoverableFor(final Throwable ex) {
         final List<Throwable> chain = _Exceptions.getCausalChain(ex);
-        
+
         final Optional<RecoverableException> recoverableIfAny = stream(chain)
-        .filter(t->t instanceof RecoverableException)
-        .map(t->(RecoverableException)t)
-        .findFirst();
-        
+                .filter(t->t instanceof RecoverableException)
+                .map(t->(RecoverableException)t)
+                .findFirst();
+
         return recoverableIfAny;
     }
-    
-    
+
+
     private ExceptionDetail detailIfRequired(
             final RestfulResponse.HttpStatusCode httpStatusCode,
             final Throwable ex) {

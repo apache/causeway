@@ -51,23 +51,23 @@ public class DateConverterForJdk8LocalDateTest {
             }
         });
     }
-    
+
     @Test
     public void roundtrip() {
         final DateConverterForJdk8LocalDate converter = new DateConverterForJdk8LocalDate(settings, 0);
         final LocalDate dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(LocalDate.of(2013, 05, 11)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11"));
     }
-    
+
     @Test
     public void roundtripWithAdjustBy() {
         final DateConverterForJdk8LocalDate converter = new DateConverterForJdk8LocalDate(settings, -1);
         final LocalDate dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(LocalDate.of(2013, 05, 12)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11"));
     }

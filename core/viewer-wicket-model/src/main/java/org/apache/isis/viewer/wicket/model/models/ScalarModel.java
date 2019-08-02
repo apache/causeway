@@ -187,7 +187,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                     final ObjectAdapter[] argsIfAvailable,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
-                
+
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
@@ -206,7 +206,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                     final ScalarModel scalarModel,
                     final ObjectAdapter[] argumentsIfAvailable,
                     final AuthenticationSession authenticationSession) {
-                
+
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
@@ -229,7 +229,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                     final ScalarModel scalarModel,
                     final String searchArg,
                     final AuthenticationSession authenticationSession) {
-                
+
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
@@ -422,7 +422,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                     final ObjectAdapter[] argsIfAvailable,
                     final int paramNumUpdated,
                     final AuthenticationSession authenticationSession) {
-                
+
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
@@ -1130,10 +1130,10 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     // //////////////////////////////////////
 
-//    @Override
-//    public boolean isInlinePrompt() {
-//        return getPromptStyle() == PromptStyle.INLINE && canEnterEditMode();
-//    }
+    //    @Override
+    //    public boolean isInlinePrompt() {
+    //        return getPromptStyle() == PromptStyle.INLINE && canEnterEditMode();
+    //    }
 
 
     private InlinePromptContext inlinePromptContext;
@@ -1236,6 +1236,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
      * @param deploymentCategory
      * @return
      */
+    @Override
     public boolean isInlinePrompt() {
         return (getPromptStyle().isInline() && canEnterEditMode()) ||
                 associatedActionsIfProperty().hasAssociatedActionWithInlineAsIfEdit();

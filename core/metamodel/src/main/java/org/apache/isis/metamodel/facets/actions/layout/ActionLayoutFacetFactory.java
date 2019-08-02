@@ -129,7 +129,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
     private static boolean isContributingService(final ObjectSpecification spec) {
         final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
         return domainServiceFacet != null && !domainServiceFacet.isNoop() && 
-        		domainServiceFacet.getNatureOfService().isContributingToViewer();
+                domainServiceFacet.getNatureOfService().isContributingToViewer();
     }
 
     private static boolean isMixinObject(final ObjectSpecification spec) {

@@ -46,14 +46,14 @@ import lombok.val;
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isissecurity.ApplicationUserMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-)
+        )
 public class ApplicationUserMenu {
-    
-    
+
+
     public static abstract class PropertyDomainEvent<T> 
     extends SecurityModule.PropertyDomainEvent<ApplicationUserMenu, T> {
         private static final long serialVersionUID = 1L;
@@ -81,7 +81,7 @@ public class ApplicationUserMenu {
     @Action(
             domainEvent = FindUsersByNameDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @MemberOrder(sequence = "100.10.2")
     public List<? extends ApplicationUser> findUsers(
             final @ParameterLayout(named = "Search") String search) {
@@ -95,7 +95,7 @@ public class ApplicationUserMenu {
     @Action(
             domainEvent = NewDelegateUserDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
-    )
+            )
     @MemberOrder(sequence = "100.10.3")
     public ApplicationUser newDelegateUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
@@ -125,7 +125,7 @@ public class ApplicationUserMenu {
     @Action(
             domainEvent = NewLocalUserDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(sequence = "100.10.4")
     public ApplicationUser newLocalUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
@@ -147,7 +147,7 @@ public class ApplicationUserMenu {
             @ParameterLayout(named = "Email Address")
             final String emailAddress) {
         return applicationUserRepository.newLocalUser(
-        		username, password, passwordRepeat, initialRole, enabled, emailAddress);
+                username, password, passwordRepeat, initialRole, enabled, emailAddress);
     }
 
     public String validateNewLocalUser(
@@ -158,7 +158,7 @@ public class ApplicationUserMenu {
             final Boolean enabled,
             final String emailAddress) {
         return applicationUserRepository.validateNewLocalUser(
-        		username, password, passwordRepeat, initialRole, enabled, emailAddress);
+                username, password, passwordRepeat, initialRole, enabled, emailAddress);
     }
 
     public ApplicationRole default3NewLocalUser() {
@@ -172,19 +172,19 @@ public class ApplicationUserMenu {
     @Action(
             domainEvent = AllUsersDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @MemberOrder(sequence = "100.10.5")
     public List<? extends ApplicationUser> allUsers() {
         return applicationUserRepository.allUsers();
     }
 
     private boolean hasNoDelegateAuthenticationRealm() {
-    	val realm = securityRealmService.getCurrentRealm();
+        val realm = securityRealmService.getCurrentRealm();
         return realm == null || !realm.getCharacteristics().contains(SecurityRealmCharacteristic.DELEGATING);
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject SecurityModuleConfig configBean;
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject ApplicationUserRepository applicationUserRepository;

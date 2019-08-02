@@ -72,7 +72,7 @@ public interface FactoryService {
      * @apiNote EXPERIMENTAL
      */
     <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);
-    
+
     /**
      * Creates a new ViewModel instance 
      * @param viewModelClass
@@ -80,8 +80,8 @@ public interface FactoryService {
      * @apiNote EXPERIMENTAL
      */
     default <T> T viewModel(Class<T> viewModelClass) {
-    	return viewModel(viewModelClass, /*mementoStr*/null);
+        return viewModel(viewModelClass, /*mementoStr*/null);
     }
-    
-    
+
+
 }

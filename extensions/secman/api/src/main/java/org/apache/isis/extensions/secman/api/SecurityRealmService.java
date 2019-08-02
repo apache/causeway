@@ -20,6 +20,6 @@ package org.apache.isis.extensions.secman.api;
 
 public interface SecurityRealmService {
 
-	SecurityRealm getCurrentRealm();
-	
+    SecurityRealm getCurrentRealm();
+
 }

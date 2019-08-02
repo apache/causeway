@@ -120,12 +120,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
         final PageParameters pageParameters = PageParametersUtils.newPageParameters();
 
-//        final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
-//                adapter.getOid().enString():
-//                    adapter.getOid().enStringNoVersion();
-        
+        //        final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
+        //                adapter.getOid().enString():
+        //                    adapter.getOid().enStringNoVersion();
+
         val oidStr = adapter.getOid().enStringNoVersion();
-                
+
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
 
         final ActionType actionType = objectAction.getType();
@@ -467,20 +467,20 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         final Stream<RoutingService> routingServices = getServiceRegistry()
                 .select(RoutingService.class)
                 .stream();
-        
+
         final Object resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
-        
+
         val pojoToAdapter = IsisContext.pojoToAdapter();
-        
+
         return routingServices
-            .filter(routingService->routingService.canRoute(resultPojo))
-            .map(routingService->routingService.route(resultPojo))
-            .filter(_NullSafe::isPresent)
-            .map(pojoToAdapter)
-            .filter(_NullSafe::isPresent)
-            .findFirst()
-            .orElse(resultAdapter);
-        
+                .filter(routingService->routingService.canRoute(resultPojo))
+                .map(routingService->routingService.route(resultPojo))
+                .filter(_NullSafe::isPresent)
+                .map(pojoToAdapter)
+                .filter(_NullSafe::isPresent)
+                .findFirst()
+                .orElse(resultAdapter);
+
     }
 
     public String getReasonDisabledIfAny() {

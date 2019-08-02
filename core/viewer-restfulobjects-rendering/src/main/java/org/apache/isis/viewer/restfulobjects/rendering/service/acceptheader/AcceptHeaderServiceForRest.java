@@ -70,11 +70,11 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
         @Override
         public void filter(final ContainerRequestContext requestContext) throws IOException {
             final List<MediaType> acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
-            
+
             final List<MediaType> mediaTypes = stream(acceptableMediaTypes)
-            .filter(_NullSafe::isPresent)
-            .collect(Collectors.toList());
-            
+                    .filter(_NullSafe::isPresent)
+                    .collect(Collectors.toList());
+
             setMediaTypes(mediaTypes);
         }
     }
@@ -85,7 +85,7 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
         public void filter(
                 final ContainerRequestContext requestContext, 
                 final ContainerResponseContext responseContext) throws IOException {
-            
+
             removeMediaTypes();
         }
     }

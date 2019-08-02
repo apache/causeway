@@ -55,28 +55,28 @@ public interface ViewModelFacet extends Facet {
         public boolean isInstantiates() {
             return this == INSTANTIATES;
         }
-        
+
         public boolean isInitializes() {
             return this == INITIALIZES;
         }
-	
+
     }
 
     default Object createViewModelPojo(
-    		ObjectSpecification spec, 
-    		String mementoStr, 
-    		Function<ObjectSpecification, Object> factory) {
-    	
-    	final Object viewModelPojo;
-		if(getRecreationMechanism().isInitializes()) {
-			viewModelPojo = factory.apply(spec);
-			initialize(viewModelPojo, mementoStr);
-		} else {
-			viewModelPojo = instantiate(spec.getCorrespondingClass(), mementoStr);
-		}
-		return viewModelPojo;
+            ObjectSpecification spec, 
+            String mementoStr, 
+            Function<ObjectSpecification, Object> factory) {
+
+        final Object viewModelPojo;
+        if(getRecreationMechanism().isInitializes()) {
+            viewModelPojo = factory.apply(spec);
+            initialize(viewModelPojo, mementoStr);
+        } else {
+            viewModelPojo = instantiate(spec.getCorrespondingClass(), mementoStr);
+        }
+        return viewModelPojo;
     }
-    
+
     /**
      * Whether this implementation supports the recreation of objects by {@link RecreationMechanism#INSTANTIATES instantiating} (and implicitly also initializing) a new pojo, or by {@link RecreationMechanism#INITIALIZES initializing} a pojo created and passed to it by the framework.
      *
@@ -95,7 +95,7 @@ public interface ViewModelFacet extends Facet {
      * Will be called only if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INSTANTIATES}.
      */
     Object instantiate(final Class<?> viewModelClass, String memento);
-    
+
     /**
      * Obtain a memento of the pojo, which can then be used to reinstantiate (either by {@link #instantiate(Class, String)} or {@link #initialize(Object, String)}) subsequently.
      */

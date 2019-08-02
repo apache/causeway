@@ -31,9 +31,9 @@ import lombok.extern.log4j.Log4j2;
 @Configuration @Log4j2
 public class IsisWebAppContextInitializer implements ServletContextInitializer {
 
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-		log.info("Storing the ServletContext on Isis' context.");
-		_Context.putSingleton(ServletContext.class, servletContext);
-	}
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        log.info("Storing the ServletContext on Isis' context.");
+        _Context.putSingleton(ServletContext.class, servletContext);
+    }
 }

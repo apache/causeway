@@ -19,11 +19,11 @@
 package org.apache.isis.extensions.secman.api.role;
 
 public interface ApplicationRole {
-	
-	public static final int MAX_LENGTH_NAME = 50;
+
+    public static final int MAX_LENGTH_NAME = 50;
     public static final int TYPICAL_LENGTH_NAME = 30;
     public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
 
-	String getName();
-	
+    String getName();
+
 }

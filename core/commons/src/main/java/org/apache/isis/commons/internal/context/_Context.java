@@ -61,9 +61,9 @@ public final class _Context {
      * If synchronization is required it should happen elsewhere, not here!<br/>
      */
     private final static Map<Class<?>, Object> singletonMap = new ConcurrentHashMap<>();
-    
+
     private final static Object $LOCK = new Object[0];
-    
+
 
     /**
      * Puts a singleton instance onto the current context.
@@ -133,34 +133,34 @@ public final class _Context {
         if(existingIfAny!=null) {
             return existingIfAny;
         }
-        
+
         // Note: we don't want to do this inside the synchronized block
         final T t = factory.apply(type);
-        
+
         // we don't store null to the map
         if(t==null) {
-        	return null;
-//        	throw _Exceptions.unrecoverable(String.format("factory to compute new value for type '%s' "
-//        			+ "returned 'null', which is not allowed", type));
+            return null;
+            //        	throw _Exceptions.unrecoverable(String.format("factory to compute new value for type '%s' "
+            //        			+ "returned 'null', which is not allowed", type));
         }
-        
+
         // let writes to the map be atomic
         synchronized ($LOCK) {
-            
+
             // Note: cannot just use 'singletonMap.computeIfAbsent(toKey(type), __->factory.apply(type));'
             // here because it does not allow for modification of singletonMap inside the factory call
-        	// Also we do need a second check for existing key, since it might have been changed by another
-        	// thread since.
-        	final T existingIfAny2 = _Casts.uncheckedCast(singletonMap.get(type));
+            // Also we do need a second check for existing key, since it might have been changed by another
+            // thread since.
+            final T existingIfAny2 = _Casts.uncheckedCast(singletonMap.get(type));
             if(existingIfAny2!=null) {
                 return existingIfAny2;
             }        	
-            
+
             singletonMap.put(type, t);
             return t;
         }
     }
-    
+
     /**
      * If the specified key is not already associated with a value (or is mapped to null),
      * attempts to compute its value using the given factory supplier and enters it into this map unless null.
@@ -173,8 +173,8 @@ public final class _Context {
         requires(factory, "factory");
         return computeIfAbsent(type, __->factory.get());
     }
-    
-    
+
+
 
     /**
      * Gets a singleton instance of {@code type} if there is any,
@@ -201,8 +201,8 @@ public final class _Context {
             Class<? super T> type,
             Supplier<E> onNotFound)
                     throws E {
-    	
-    	requires(type, "type");
+
+        requires(type, "type");
         requires(onNotFound, "onNotFound");
         return ifPresentElseThrow(getIfAny(type), onNotFound);
     }
@@ -217,10 +217,10 @@ public final class _Context {
         return ifPresentElseThrow(getIfAny(type), ()-> 
         new NoSuchElementException(String.format("Could not resolve an instance of type '%s'", type.getName())));
     }
-    
-    
+
+
     // -- REMOVAL
-    
+
     public static void remove(Class<?> type) {
         // let writes to the map be atomic
         synchronized ($LOCK) {
@@ -228,9 +228,9 @@ public final class _Context {
         }
         tryClose(type);
     }
-    
+
     // -- CLEARING
-    
+
     /**
      * Removes any singleton references from the current context. <br/>
      * Any singletons that implement the AutoClosable interface are being closed.
@@ -251,38 +251,38 @@ public final class _Context {
         stream(objects)
         .forEach(_Context::tryClose);
     }
-    
+
     // -- THREAD LOCAL SUPPORT
 
     /**
      * Clear key {@code type} from current thread's map.
      * @param type - the key into the thread-local store
      */
-	public static void threadLocalClear(Class<?> type) {
-		_Context_ThreadLocal.clear(type);
-	}
-    
+    public static void threadLocalClear(Class<?> type) {
+        _Context_ThreadLocal.clear(type);
+    }
+
     /**
      * Puts {@code payload} onto the current thread's map.
      * @param type - the key into the thread-local store
      * @param payload
      * @return a Runnable which, when run, removes any references to payload
      */
-	public static <T> Runnable threadLocalPut(Class<? super T> type, T payload) {
-		return _Context_ThreadLocal.put(type, payload);
-	}
+    public static <T> Runnable threadLocalPut(Class<? super T> type, T payload) {
+        return _Context_ThreadLocal.put(type, payload);
+    }
 
-    
+
     /**
      * Looks up current thread's values for any instances that match the given type, as previously stored 
      * with {@link _Context#threadLocalPut(Class, Object)}.
      * @param type - the key into the thread-local store
      * @return
      */
-	public static <T> Bin<T> threadLocalGet(Class<? super T> type) {
-		return _Context_ThreadLocal.get(type);
-	}
-	
+    public static <T> Bin<T> threadLocalGet(Class<? super T> type) {
+        return _Context_ThreadLocal.get(type);
+    }
+
     /**
      * Looks up current thread's values for any instances that match the given type, as previously stored 
      * with {@link _Context#threadLocalPut(Class, Object)}.
@@ -290,17 +290,17 @@ public final class _Context {
      * @param requiredType - the required type of the elements in the returned bin
      * @return
      */
-	public static <T> Bin<T> threadLocalSelect(Class<? super T> type, Class<? super T> requiredType) {
-		return _Context_ThreadLocal.select(type, requiredType);
-	}
+    public static <T> Bin<T> threadLocalSelect(Class<? super T> type, Class<? super T> requiredType) {
+        return _Context_ThreadLocal.select(type, requiredType);
+    }
 
-	/**
-	 * Removes any of current thread's values as stored with {@link _Context#threadLocalPut(Class, Object)}.
-	 */
-	public static <T> void threadLocalCleanup() {
-		_Context_ThreadLocal.cleanupThread();
-	}
-    
+    /**
+     * Removes any of current thread's values as stored with {@link _Context#threadLocalPut(Class, Object)}.
+     */
+    public static <T> void threadLocalCleanup() {
+        _Context_ThreadLocal.cleanupThread();
+    }
+
 
     // -- DEFAULT CLASSLOADER
 
@@ -355,25 +355,25 @@ public final class _Context {
     }
 
     // -- ENVIRONMENT
-    
+
     /** framework internal, exposed by IsisContext */
     public static IsisSystemEnvironment getEnvironment() {
         return getOrElse(IsisSystemEnvironment.class, 
                 IsisSystemEnvironmentPlugin.get()::getIsisSystemEnvironment);
     }
-    
+
     /** framework internal, shortcut for convenience */
     public static boolean isPrototyping() {
         return getEnvironment().getDeploymentType().isPrototyping();
     }
-    
+
     /** framework internal, shortcut for convenience */
     public static boolean isUnitTesting() {
         return getEnvironment().isUnitTesting();
     }
 
     // -- HELPER
-    
+
     private static void tryClose(Object singleton) {
         if(singleton==null) {
             return;
@@ -389,7 +389,7 @@ public final class _Context {
 
 
 
-	
+
 
 
 }

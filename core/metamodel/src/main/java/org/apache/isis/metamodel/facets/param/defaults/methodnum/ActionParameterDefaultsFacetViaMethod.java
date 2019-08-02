@@ -35,17 +35,17 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     private final int paramNum;
 
     /**
-    *
-    * @param method
-    * @param paramNum - which parameter this facet relates to.
-    * @param holder
-    * @param adapterManager
-    */
+     *
+     * @param method
+     * @param paramNum - which parameter this facet relates to.
+     * @param holder
+     * @param adapterManager
+     */
     public ActionParameterDefaultsFacetViaMethod(
             final Method method,
             final int paramNum,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
         this.paramNum = paramNum;
@@ -88,8 +88,8 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
             // converesly, if method default2Foo(int), and the second param is updated... we don't want to re-evaluate
             // so numParams == 1, and paramNumUpdated == 1, and (paramNumUpdated < numParams) is FALSE
             //
-        return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable);
-    }
+            return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable);
+        }
 
         // otherwise, just return the arguments that are already known; we don't want to recompute the default
         // because if we did then this would trample over any pending changes already made by the end-user.

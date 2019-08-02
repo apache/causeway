@@ -138,7 +138,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDefaultedMustHaveANoArgConstructor() {
         _Config.clear();
-        
+
         facetFactory.process(new ProcessClassContext(MyDefaultedWithoutNoArgConstructor.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNull(facet);
@@ -183,9 +183,9 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedProviderNameCanBePickedUpFromConfiguration() {
-        
+
         final String className = "org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
-        
+
         _Config.clear();
         _Config.put(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
@@ -209,9 +209,9 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testNonAnnotatedDefaultedCanBePickedUpFromConfiguration() {
-        
+
         final String className = "org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
-        
+
         _Config.clear();
         _Config.put(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));

@@ -248,9 +248,9 @@ class PoReader extends PoAbstract {
 
     private List<String> readUrl(final String candidate) {
         return translationsResolver.stream()
-        .map(resolver->resolver.readLines(candidate))
-        .flatMap(List::stream)
-        .collect(Collectors.toList());
+                .map(resolver->resolver.readLines(candidate))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
 

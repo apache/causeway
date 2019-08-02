@@ -150,10 +150,10 @@ public final class ClassUtil {
     }
 
     public static Class<?> forNameElseFail(final String fullName) {
-    	requiresNotEmpty(fullName, "fullName");
-    	final Class<?> builtIn = ClassUtil.getBuiltIn(fullName);
-		if (builtIn != null) {
-			return builtIn;
+        requiresNotEmpty(fullName, "fullName");
+        final Class<?> builtIn = ClassUtil.getBuiltIn(fullName);
+        if (builtIn != null) {
+            return builtIn;
         }
         try {
             return _Context.loadClass(fullName);
@@ -172,7 +172,7 @@ public final class ClassUtil {
             return null;
         }
     }
-    
+
     /**
      * Returns {@code cls.getCanonicalName()} if present. 
      * Otherwise resorts to fully qualified class-name, with any '$' replaced by '.$'.
@@ -181,7 +181,7 @@ public final class ClassUtil {
      */
     public static String getCanonicalName_friendlyToInnerClasses(Class<?> cls) {
         requires(cls, "cls");
-        
+
         val name = cls.getCanonicalName();
         if(name==null) {
             return cls.getName().replace("$", ".$").replace("..", ".");

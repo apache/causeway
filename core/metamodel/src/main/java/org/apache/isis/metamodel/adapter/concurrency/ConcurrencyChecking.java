@@ -35,8 +35,8 @@ enum ConcurrencyChecking {
                 configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
         return concurrencyCheckingGloballyDisabled;
     }
-    
-    
+
+
     @Programmatic
     public boolean isChecking() {
         return this == CHECK;

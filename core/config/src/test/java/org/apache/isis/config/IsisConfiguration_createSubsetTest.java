@@ -36,44 +36,44 @@ class IsisConfiguration_createSubsetTest {
 
     @Test
     void empty() {
-        
+
         val configuration = _Config.getConfiguration();
-        
+
         final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
         assertEquals(true, subset.isEmpty());
     }
 
     @Test
     void nonEmptyButNoneInSubset() {
-        
+
         _Config.put("bar", "barValue");
-        
+
         val configuration = _Config.getConfiguration();
-        
+
         final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
         assertEquals(true, subset.isEmpty());
     }
 
     @Test
     void nonEmptyButSingleKeyedInSubset() {
-        
+
         _Config.put("foo", "fooValue");
-        
+
         val configuration = _Config.getConfiguration();
-        
+
         final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
         assertEquals(true, subset.isEmpty());
     }
 
     @Test
     void nonEmptyAndMultiKeyedInSubset() {
-        
+
         _Config.put("foo.foz", "fozValue");
-        
+
         val configuration = _Config.getConfiguration();
-        
+
         final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
-        
+
         assertEquals(1, subset.copyToMap().size());
         assertEquals("fozValue", subset.getString("foz"));
     }
@@ -83,17 +83,17 @@ class IsisConfiguration_createSubsetTest {
         _Config.put("foo.foz", "fozValue");
         _Config.put("foo.faz", "fazValue");
         _Config.put("bar.baz", "bazValue");
-        
+
         val configuration = _Config.getConfiguration();
-        
+
         final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
-        
+
         assertEquals("fozValue", subset.getString("foz"));
         assertEquals("fazValue", subset.getString("faz"));
-        
+
         assertEquals(2, subset.copyToMap().size());
-        
-        
+
+
     }
 
 }

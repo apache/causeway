@@ -35,17 +35,17 @@ import static org.junit.jupiter.api.Assertions.fail;
 import lombok.val;
 
 @SpringBootTest(
-		classes = {LdapServerService.class},
-		properties = {
-	        "logging.config=log4j2-test.xml",
-})
+        classes = {LdapServerService.class},
+        properties = {
+                "logging.config=log4j2-test.xml",
+        })
 class LdapEmbeddedServerTest {
-	
-	@Inject LdapServerService ldapServerService;
+
+    @Inject LdapServerService ldapServerService;
 
     @Test
     void authenticate_Sven() throws InitializationError, InterruptedException {
-    	
+
         val env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapConstants.PORT);
@@ -53,15 +53,15 @@ class LdapEmbeddedServerTest {
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, LdapConstants.SVEN_PRINCIPAL);
         env.put(Context.SECURITY_CREDENTIALS, "pass");
-        
+
         try {
             val ctx = new InitialContext(env);
             val namingEnumeration = ctx.list("");
 
             int entryCount = 0;
             while (namingEnumeration.hasMore()) {
-            	namingEnumeration.next();
-            	++entryCount;
+                namingEnumeration.next();
+                ++entryCount;
             }
             assertEquals(3, entryCount);
 
@@ -70,12 +70,12 @@ class LdapEmbeddedServerTest {
         } catch (NamingException e) {
             fail(e.getMessage());
         } 
-    	
+
     }
-    
+
     @Test
     void authenticate_Admin() throws InitializationError, InterruptedException {
-    	
+
         val env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapConstants.PORT);
@@ -83,15 +83,15 @@ class LdapEmbeddedServerTest {
         env.put( Context.SECURITY_AUTHENTICATION, "simple" );
         env.put( Context.SECURITY_PRINCIPAL, "uid=admin,ou=system" );
         env.put( Context.SECURITY_CREDENTIALS, "secret" );
-        
+
         try {
             val ctx = new InitialContext(env);
             val namingEnumeration = ctx.list("");
 
             int entryCount = 0;
             while (namingEnumeration.hasMore()) {
-            	namingEnumeration.next();
-            	++entryCount;
+                namingEnumeration.next();
+                ++entryCount;
             }
             assertEquals(3, entryCount);
 
@@ -100,7 +100,7 @@ class LdapEmbeddedServerTest {
         } catch (NamingException e) {
             fail(e.getMessage());
         } 
-    	
+
     }
-    
+
 }

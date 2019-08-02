@@ -45,7 +45,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     public ParseableFacetUsingParser(
             final Parser<?> parser,
             final FacetHolder holder) {
-        
+
         super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
     }

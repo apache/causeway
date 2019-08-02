@@ -27,6 +27,7 @@ public abstract class ConfigPropertyAbstract<T> implements ConfigProperty<T> {
         this.key = key;
         this.defaultValue = defaultValue;
     }
+    @Override
     public abstract T from(final IsisConfiguration configuration);
 
 }

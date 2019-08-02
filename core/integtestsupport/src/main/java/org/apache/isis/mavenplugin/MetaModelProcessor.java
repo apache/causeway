@@ -22,19 +22,19 @@ interface MetaModelProcessor {
 
     public interface Context {
 
-//        MavenProject getMavenProject();
-//
-//        Log getLog();
-//
-//        void logErrors(final String... logMessages);
-//
-//        void throwFailureException(final String errorMessage, final Set<String> logMessages) throws MojoFailureException;
-//
-//        void throwFailureException(final String errorMessage, final String... logMessages) throws MojoFailureException;
-//
-//        void throwExecutionException(final String errorMessage, final Exception e) throws MojoExecutionException;
+        //        MavenProject getMavenProject();
+        //
+        //        Log getLog();
+        //
+        //        void logErrors(final String... logMessages);
+        //
+        //        void throwFailureException(final String errorMessage, final Set<String> logMessages) throws MojoFailureException;
+        //
+        //        void throwFailureException(final String errorMessage, final String... logMessages) throws MojoFailureException;
+        //
+        //        void throwExecutionException(final String errorMessage, final Exception e) throws MojoExecutionException;
     }
 
-//    void process(final Context context, final SpecificationLoader specificationLoader) throws MojoFailureException;
+    //    void process(final Context context, final SpecificationLoader specificationLoader) throws MojoFailureException;
 
 }

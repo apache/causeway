@@ -44,7 +44,7 @@ implements ImperativeFacet {
             final ObjectSpecification typeSpec,
             final Method method,
             final FacetHolder holder) {
-        
+
         super(typeSpec, holder);
         this.method = method;
     }

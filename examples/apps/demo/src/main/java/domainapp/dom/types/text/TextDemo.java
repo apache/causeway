@@ -46,30 +46,30 @@ public class TextDemo extends DemoStub {
     public void initDefaults() {
 
         log.info("TextDemo::initDefaults");
-        
+
         string = "a string (click me)";
         stringMultiline = "A multiline string\nspanning\n3 lines. (click me)";
-        
+
         stringReadonly = "a readonly string (but allows text select)";
         stringMultilineReadonly = "A readonly string\nspanning\n3 lines. (but allows text select)";
     }
-    
+
     // -- EDITABLE
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @XmlElement @Getter @Setter private String string;
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(multiLine=3)
     @XmlElement @Getter @Setter private String stringMultiline;
 
     // -- READONLY
-    
+
     @Property(editing=Editing.DISABLED)
     @XmlElement @Getter @Setter private String stringReadonly;
-    
+
     @Property(editing=Editing.DISABLED)
     @PropertyLayout(multiLine=3)
     @XmlElement @Getter @Setter private String stringMultilineReadonly;
-    
+
 }

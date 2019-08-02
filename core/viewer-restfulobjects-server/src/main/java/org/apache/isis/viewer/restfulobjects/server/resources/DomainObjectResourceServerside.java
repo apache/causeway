@@ -242,16 +242,16 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         byte[] toBytes() {
             String imageName =  getImageName();
-            
+
             try {
-                
+
                 final InputStream resource = _Resources.load(domainClass, imageName);
                 return _Bytes.of(resource);
-                
+
             } catch (IOException e) {
                 return null;
             }
-            
+
         }
     }
 

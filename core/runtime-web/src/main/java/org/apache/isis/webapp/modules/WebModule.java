@@ -50,14 +50,14 @@ import lombok.val;
  * @since 2.0
  */
 public interface WebModule {
-    
+
     // -- INTERFACE
 
     /**
      * @return (display-) name of this module
      */
     public String getName();
-    
+
     /**
      * Before initializing any WebModule we call each WebModule's prepare method 
      * to allow for a WebModule to leave information useful for other modules on 
@@ -66,7 +66,7 @@ public interface WebModule {
      * @param ctx WebModuleContext
      */
     default public void prepare(WebModuleContext ctx) {}
-    
+
     /**
      * Expected to be called after all WebModules had a chance to prepare the WebModuleContext.
      * Sets this WebModule's {@link Filter}s, {@link Servlet}s or {@link WebListener}s 
@@ -74,28 +74,28 @@ public interface WebModule {
      * @param ctx ServletContext
      */
     public ServletContextListener init(ServletContext ctx) throws ServletException;
-    
+
     /**
      * Expected to be called after all WebModules had a chance to prepare the WebModuleContext.
      * @param ctx WebModuleContext
      * @return whether this module is applicable/usable
      */
     public boolean isApplicable(WebModuleContext ctx);
-    
+
     // -- DISCOVERY 
-    
+
     /**
      * @return Stream of 'discovered' WebModules, whether applicable or not is not decided here 
      */
     static Stream<WebModule> discoverWebModules() {
-        
+
         // modules are discovered by Spring, order of filters is relevant/critical 
-        
-    	val webModules = IsisContext.getServiceRegistry()
-    	.select(WebModule.class);
-    	
-    	return webModules.stream();
+
+        val webModules = IsisContext.getServiceRegistry()
+                .select(WebModule.class);
+
+        return webModules.stream();
     }
-    
-    
+
+
 }

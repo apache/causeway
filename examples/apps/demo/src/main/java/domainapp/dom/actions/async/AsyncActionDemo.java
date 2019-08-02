@@ -47,32 +47,32 @@ import lombok.val;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class AsyncActionDemo extends DemoStub {
-    
+
     @XmlTransient
     @Inject EventStreamService eventStreamService;
 
     @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class)
     @Property(observe=DemoTask.class)
     @Getter @Setter Markup progressView;
-    
+
     @Action
     public AsyncActionDemo startSimpleTask() {
-        
+
         val demoTask = DemoTask.of(10);  // setup to run in 10 steps
         eventStreamService.submit(demoTask, ExecutionBehavior.SIMPLE);
-        
+
         return this;
     }
-    
+
     @Action
     public AsyncActionDemo startTaskWithItsOwnSession() {
-        
+
         val demoTask = DemoTask.of(10);  // setup to run in 10 steps
         eventStreamService.submit(demoTask, ExecutionBehavior.REQUIRES_NEW_SESSION);
-        
+
         return this;
     }
-    
+
     @Override
     public void initDefaults() {
         progressView = new Markup("Please start a task!");

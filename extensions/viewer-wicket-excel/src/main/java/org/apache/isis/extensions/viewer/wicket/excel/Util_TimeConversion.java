@@ -25,25 +25,25 @@ import java.time.ZoneId;
 import java.util.Date;
 
 final class Util_TimeConversion {
-	
-	public static Date toDate(LocalDate value) {
-		return toDate(value.atStartOfDay());
-	}
 
-	public static Date toDate(LocalDateTime value) {
-		return new Date(toEpochMilli(value));
-	}
+    public static Date toDate(LocalDate value) {
+        return toDate(value.atStartOfDay());
+    }
 
-	public static Date toDate(OffsetDateTime value) {
-		return toDate(value.toLocalDateTime());
-	}
-	
-	// -- HELPER
-	
-	private final static ZoneId zId = ZoneId.systemDefault();
-	
-	private static long toEpochMilli(LocalDateTime localDateTime){
-		return localDateTime.atZone(zId).toInstant().toEpochMilli();
-	}
+    public static Date toDate(LocalDateTime value) {
+        return new Date(toEpochMilli(value));
+    }
+
+    public static Date toDate(OffsetDateTime value) {
+        return toDate(value.toLocalDateTime());
+    }
+
+    // -- HELPER
+
+    private final static ZoneId zId = ZoneId.systemDefault();
+
+    private static long toEpochMilli(LocalDateTime localDateTime){
+        return localDateTime.atZone(zId).toInstant().toEpochMilli();
+    }
 
 }

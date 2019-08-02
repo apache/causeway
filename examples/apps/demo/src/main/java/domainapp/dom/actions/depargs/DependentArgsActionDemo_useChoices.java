@@ -37,32 +37,32 @@ import lombok.RequiredArgsConstructor;
 @Mixin
 @RequiredArgsConstructor
 public class DependentArgsActionDemo_useChoices {
-    
+
     @Inject MessageService messageService;
-    
-    
+
+
     private final DependentArgsActionDemo holder;
-    
+
     @ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
     @Action(semantics = SemanticsOf.SAFE)
     public DependentArgsActionDemo $$(
-            
+
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY)
             Parity parity,
-            
+
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
             DemoItem item
-            
+
             ) {
-        
+
         messageService.informUser(item.getName());
         return holder;
     }
-    
+
     // -- PARAM 1 (DemoItem)
-    
+
     public Collection<DemoItem> choices1$$(Parity parity) {
         if(parity == null) {
             return holder.getItems();

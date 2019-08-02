@@ -125,23 +125,23 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
         final List<ObjectAction> visibleActions = _Lists.transform(actionLayoutDatas, stream->stream
                 .filter((final ActionLayoutData actionLayoutData) -> {
-                        return actionLayoutData.getMetadataError() == null;
+                    return actionLayoutData.getMetadataError() == null;
                 })
                 .map((@Nullable final ActionLayoutData actionLayoutData) -> {
-                        return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
+                    return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
                 })
                 .filter(_NullSafe::isPresent));
-                //
-                // visibility needs to be determined at point of rendering, by ActionLink itself
-                //
-                //.filter(new Predicate<ObjectAction>() {
-                //    @Override public boolean apply(@Nullable final ObjectAction objectAction) {
-                //        final Consent visibility = objectAction
-                //                .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
-                //        return visibility.isAllowed();
-                //    }
-                //})
-                
+        //
+        // visibility needs to be determined at point of rendering, by ActionLink itself
+        //
+        //.filter(new Predicate<ObjectAction>() {
+        //    @Override public boolean apply(@Nullable final ObjectAction objectAction) {
+        //        final Consent visibility = objectAction
+        //                .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+        //        return visibility.isAllowed();
+        //    }
+        //})
+
         final List<LinkAndLabel> entityActionLinks =
                 LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null);
 

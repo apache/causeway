@@ -141,7 +141,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(namedFacet));
 
                 atLeast(1).of(namedFacet).value();
@@ -160,7 +160,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
@@ -179,7 +179,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
@@ -198,7 +198,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         context.checking(new Expectations() {
             {
-            	oneOf(actionParamPeer).getFacet(NamedFacet.class);
+                oneOf(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));

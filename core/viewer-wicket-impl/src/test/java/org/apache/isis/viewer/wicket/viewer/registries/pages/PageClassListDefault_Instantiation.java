@@ -63,7 +63,7 @@ public class PageClassListDefault_Instantiation {
         });
         newPageClassRegistryDefault(mockPageClassList);
     }
-    
+
     // -- HELPER
 
     public static PageClassRegistryDefault newPageClassRegistryDefault(PageClassList pageClassList) {
@@ -72,5 +72,5 @@ public class PageClassListDefault_Instantiation {
         pageClassRegistry.init();
         return pageClassRegistry;
     }
-    
+
 }

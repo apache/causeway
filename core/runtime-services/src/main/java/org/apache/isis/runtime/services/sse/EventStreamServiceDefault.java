@@ -67,15 +67,15 @@ public class EventStreamServiceDefault implements EventStreamService {
     public Optional<EventStream> lookupByType(Class<?> sourceType) {
         return eventStreamPool.lookupByType(sourceType);
     }
-    
+
     @Override
     public void submit(EventStreamSource task, ExecutionBehavior executionBehavior) {
 
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
-        
+
         val threadPool = ThreadPoolSupport.getInstance();
-        
+
         switch(executionBehavior) {
         case SIMPLE:
             CompletableFuture.runAsync(()->run(task), threadPool.getExecutor());
@@ -88,21 +88,21 @@ public class EventStreamServiceDefault implements EventStreamService {
 
         // spawn a new thread that gets its own session
         CompletableFuture.runAsync(()->{
-          
-         // wait for calling thread to commit its current transaction 
+
+            // wait for calling thread to commit its current transaction 
             try {
                 callingThread_TransactionLatch.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-      
+
             IsisContext.getSessionFactory().doInSession(()->run(task));
-            
+
         }, threadPool.getExecutor());
-        
-//        ForkJoinPool.commonPool().submit(()->{
-//
-//        });
+
+        //        ForkJoinPool.commonPool().submit(()->{
+        //
+        //        });
 
     }
 
@@ -268,6 +268,6 @@ public class EventStreamServiceDefault implements EventStreamService {
 
     }
 
-    
+
 
 }

@@ -45,19 +45,19 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
         this.toggleboxColumn = toggleboxColumn;
         addShowAllButton(table);
     }
-    
+
     @Override
     protected PagingNavigator newPagingNavigator(String navigatorId, DataTable<?, ?> table) {
         return new IsisAjaxPagingNavigator(navigatorId, table);
     }
-    
+
     // -- HELPER
 
     private void addShowAllButton(final DataTable<?, ?> table) {
         table.setOutputMarkupId(true);
 
         final MarkupContainer container = navigatorContainer();
-        
+
         container.add(new AjaxLink<Void>(ID_SHOW_ALL) {
 
             private static final long serialVersionUID = 1L;
@@ -82,11 +82,11 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 target.add(table);
             }
         });
-        
+
         container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel())); 
-        
+
     }
-    
+
     private MarkupContainer navigatorContainer() {
         return ((MarkupContainer)get(navigatorContainerId));
     }

@@ -81,7 +81,7 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
             semantics = SemanticsOf.IDEMPOTENT,
             command = CommandReification.ENABLED, publishing = Publishing.ENABLED,
             associateWith = "name"
-    )
+            )
     public HelloWorldObject updateName(
             @Name final String name) {
         setName(name);
@@ -110,7 +110,7 @@ public class HelloWorldObject implements Comparable<HelloWorldObject> {
         return Comparator.comparing(HelloWorldObject::getName).compare(this, other);
     }
 
-    
+
     @Inject RepositoryService repositoryService;
     @Inject TitleService titleService;
     @Inject MessageService messageService;

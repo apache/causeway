@@ -44,7 +44,7 @@ public class ActionParameterDisabledFacetViaMethod extends ActionParameterDisabl
             final TranslationService translationService,
             final String translationContext,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
         this.translationService = translationService;

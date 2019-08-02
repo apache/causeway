@@ -162,11 +162,11 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
     // ///////////////////////////////////////////////////////////////////
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
-    
+
     public Function<Object, ObjectAdapter> pojoToAdapter() {
         return IsisContext.pojoToAdapter();
     }
-    
+
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }

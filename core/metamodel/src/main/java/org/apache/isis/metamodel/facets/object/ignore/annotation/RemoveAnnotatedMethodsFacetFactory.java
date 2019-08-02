@@ -45,22 +45,22 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
             "org.axonframework.eventhandling.annotation.EventHandler", // axon 2.x
             "com.google.common.eventbus.Subscribe" // guava
             );
-    
+
     private final List<Class<? extends Annotation>> eventHandlerClasses;
 
     public RemoveAnnotatedMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
 
         eventHandlerClasses = eventHandlerClassNames.stream()
-        .map(name->{
-            Class<? extends Annotation> eventHandlerAnnotationClass;
-            // doing this reflectively so that don't bring in a dependency on axon.
-            eventHandlerAnnotationClass = uncheckedCast(ClassUtil.forNameElseNull(name));
-            return eventHandlerAnnotationClass;
-        })
-        .filter(_NullSafe::isPresent)
-        .collect(Collectors.toList());
-        
+                .map(name->{
+                    Class<? extends Annotation> eventHandlerAnnotationClass;
+                    // doing this reflectively so that don't bring in a dependency on axon.
+                    eventHandlerAnnotationClass = uncheckedCast(ClassUtil.forNameElseNull(name));
+                    return eventHandlerAnnotationClass;
+                })
+                .filter(_NullSafe::isPresent)
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -88,7 +88,7 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
             final MethodRemover methodRemover, 
             final Method method, 
             final Class<T> annotationClass) {
-        
+
         if (!Annotations.isAnnotationPresent(method, annotationClass)) {
             return;
         }

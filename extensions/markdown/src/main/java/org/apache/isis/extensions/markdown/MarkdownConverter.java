@@ -28,64 +28,64 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 
 public final class MarkdownConverter {
 
-	/**
-	 * For syntax highlighting to work, the client/browser needs to load specific 
-	 * java-script and css. 
-	 * <p>
-	 * 1) In your web-app's {@code scripts/application.js} include the bundled 
-	 * {@code src/main/resources/prism1.14.js}.
-	 * <pre>
-	 * function includeJs(jsFilePath) {
-	 *     var js = document.createElement("script");
-	 *     js.type = "text/javascript";
-	 *     js.src = jsFilePath;
-	 *     document.body.appendChild(js);
-	 * }
-	 * 
-	 * includeJs("/scripts/prism1.14.js");
-	 * </pre>
-	 * <p>
-	 * 2) In your web-app's {@code css/application.css} include the bundled
-	 * {@code src/main/resources/prism.css}.
-	 * <pre>
-	 * {@code @import "prism.css"}.
-	 * </pre>
-	 *  
-	 * @param markdown - formated input to be converted to HTML
-	 */
-	public static String mdToHtml(String markdown) {
-		if(markdownSupport==null) {
-			markdownSupport = new MarkdownSupport();
-		}
-		return markdownSupport.toHtml(markdown);
-	}
+    /**
+     * For syntax highlighting to work, the client/browser needs to load specific 
+     * java-script and css. 
+     * <p>
+     * 1) In your web-app's {@code scripts/application.js} include the bundled 
+     * {@code src/main/resources/prism1.14.js}.
+     * <pre>
+     * function includeJs(jsFilePath) {
+     *     var js = document.createElement("script");
+     *     js.type = "text/javascript";
+     *     js.src = jsFilePath;
+     *     document.body.appendChild(js);
+     * }
+     * 
+     * includeJs("/scripts/prism1.14.js");
+     * </pre>
+     * <p>
+     * 2) In your web-app's {@code css/application.css} include the bundled
+     * {@code src/main/resources/prism.css}.
+     * <pre>
+     * {@code @import "prism.css"}.
+     * </pre>
+     *  
+     * @param markdown - formated input to be converted to HTML
+     */
+    public static String mdToHtml(String markdown) {
+        if(markdownSupport==null) {
+            markdownSupport = new MarkdownSupport();
+        }
+        return markdownSupport.toHtml(markdown);
+    }
 
-	// -- HELPER
+    // -- HELPER
 
-	private static MarkdownSupport markdownSupport;
+    private static MarkdownSupport markdownSupport;
 
-	private static class MarkdownSupport {
-		private Parser parser;
-		private HtmlRenderer renderer;
+    private static class MarkdownSupport {
+        private Parser parser;
+        private HtmlRenderer renderer;
 
-		public MarkdownSupport() {
-			MutableDataSet options = new MutableDataSet();
+        public MarkdownSupport() {
+            MutableDataSet options = new MutableDataSet();
 
-			// uncomment to set optional extensions
-			options.set(Parser.EXTENSIONS, Arrays.asList(
-					TablesExtension.create(), 
-					StrikethroughExtension.create()));
+            // uncomment to set optional extensions
+            options.set(Parser.EXTENSIONS, Arrays.asList(
+                    TablesExtension.create(), 
+                    StrikethroughExtension.create()));
 
-			// uncomment to convert soft-breaks to hard breaks
-			//options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
+            // uncomment to convert soft-breaks to hard breaks
+            //options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
 
-			parser = Parser.builder(options).build();
-			renderer = HtmlRenderer.builder(options).build();
-		}
+            parser = Parser.builder(options).build();
+            renderer = HtmlRenderer.builder(options).build();
+        }
 
-		public String toHtml(String markdown) {
-			return renderer.render(parser.parse(markdown));
-		}
-	}
+        public String toHtml(String markdown) {
+            return renderer.render(parser.parse(markdown));
+        }
+    }
 
 }

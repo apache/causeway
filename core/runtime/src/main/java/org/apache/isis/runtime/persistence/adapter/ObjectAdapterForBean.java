@@ -30,10 +30,10 @@ import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of") 
 public class ObjectAdapterForBean implements ObjectAdapter {
-    
+
     private final BeanAdapter bean;
     private final SpecificationLoader specificationLoader;
-    
+
     private ObjectSpecification spec;
 
     @Override
@@ -83,7 +83,7 @@ public class ObjectAdapterForBean implements ObjectAdapter {
     public boolean isDestroyed() {
         return false;
     }
-    
+
     @Override
     public String toString() {
         return String.format("ObjectAdapterForBean[specId=%s, featureType=%s, moSort=%s]", 
@@ -91,5 +91,5 @@ public class ObjectAdapterForBean implements ObjectAdapter {
                 spec.getFeatureType(),
                 spec.getBeanSort().name());
     }
-    
+
 }

@@ -36,23 +36,23 @@ public class XmlSnapshotServiceAbstractTest {
 
     private XmlSnapshotServiceAbstract xmlSnapshotService;
     private String xmlStr;
-    
+
     @Before
     public void setUp() throws Exception {
         xmlStr = _Resources.loadAsString(
-        		XmlSnapshotServiceAbstractTest.class, 
-        		"XmlSnapshotServiceAbstractTest.xml", 
-        		Charset.forName("UTF-8"));
+                XmlSnapshotServiceAbstractTest.class, 
+                "XmlSnapshotServiceAbstractTest.xml", 
+                Charset.forName("UTF-8"));
         xmlSnapshotService = new XmlSnapshotServiceForUnitTesting();
-        
+
     }
 
-    
+
     @Test
     public void test() {
 
         Locale locale = Locale.getDefault();
-        
+
         Locale[] locales = new Locale[]{Locale.getDefault(), lookupLocale("en", "US"), lookupLocale("en", "GB"), lookupLocale("es", "ES")};
         for (Locale eachLocal : locales) {
             try {
@@ -61,7 +61,7 @@ public class XmlSnapshotServiceAbstractTest {
 
                 Document xmlDoc = xmlSnapshotService.asDocument(xmlStr);
                 Element rootEl = xmlDoc.getDocumentElement();
-                
+
                 assertThat(
                         xmlSnapshotService.getChildElementValue(rootEl, "app:someString", String.class), is("OXF"));
                 assertThat(
@@ -98,7 +98,7 @@ public class XmlSnapshotServiceAbstractTest {
         throw new IllegalArgumentException("no such locale:" + language + "_" + country);
     }
 
-    
+
     static class XmlSnapshotServiceForUnitTesting extends XmlSnapshotServiceAbstract {
 
         @Override

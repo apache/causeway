@@ -45,5 +45,5 @@ public class IsisMavenPlugin_SpringContextConfig {
                 //.menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
                 .build();
     }
-    
+
 }

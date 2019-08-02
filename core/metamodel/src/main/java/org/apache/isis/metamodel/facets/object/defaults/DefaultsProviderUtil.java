@@ -35,9 +35,9 @@ public final class DefaultsProviderUtil {
     public static final String DEFAULTS_PROVIDER_NAME_KEY_SUFFIX = ".providerName";
 
     public static String defaultsProviderNameFromConfiguration(final Class<?> type) {
-        
+
         final IsisConfiguration configuration = _Config.getConfiguration();
-        
+
         final String key = DEFAULTS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
         final String defaultsProviderName = configuration.getString(key);
         return !_Strings.isNullOrEmpty(defaultsProviderName) ? defaultsProviderName : null;

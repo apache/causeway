@@ -84,7 +84,7 @@ public abstract class IsisIntegrationTestAbstact {
     protected <T> T unwrap(final T obj) {
         return wrapperFactory.unwrap(obj);
     }
-    
+
     // -- DEPENDENCIES
 
     @Inject protected MetaModelService metaModelService;
@@ -95,5 +95,5 @@ public abstract class IsisIntegrationTestAbstact {
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
     @Inject protected SessionManagementService sessionManagementService;
-	
+
 }

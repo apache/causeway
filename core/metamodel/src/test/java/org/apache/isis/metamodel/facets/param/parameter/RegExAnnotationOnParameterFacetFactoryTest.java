@@ -36,7 +36,7 @@ public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFac
     private ParameterAnnotationFacetFactory facetFactory;
 
     @Override
-	@Before
+    @Before
     public void setUp() throws Exception {
         super.setUp();
         facetFactory = new ParameterAnnotationFacetFactory();

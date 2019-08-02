@@ -22,6 +22,6 @@ import java.util.EnumSet;
 
 public interface SecurityRealm {
 
-	EnumSet<SecurityRealmCharacteristic> getCharacteristics();
-	
+    EnumSet<SecurityRealmCharacteristic> getCharacteristics();
+
 }

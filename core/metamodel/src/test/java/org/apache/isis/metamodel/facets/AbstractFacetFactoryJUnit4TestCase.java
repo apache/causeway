@@ -80,11 +80,11 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock    protected OneToOneAssociation mockOneToOneAssociation;
     @Mock    protected OneToManyAssociation mockOneToManyAssociation;
     @Mock    protected OneToOneActionParameter mockOneToOneActionParameter;
-//    @Mock    protected EventBusService mockEventBusService;
+    //    @Mock    protected EventBusService mockEventBusService;
     @Mock    protected ObjectAdapterProvider mockObjectAdapterProvider;
-    
+
     @Mock    protected MetamodelEventService mockMetamodelEventService;
-    
+
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
 
@@ -105,13 +105,13 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public void setUpFacetedMethodAndParameter() throws Exception {
 
         // PRODUCTION
-        
-    	MetaModelContext.preset(MetaModelContext.builder()
-    			.specificationLoader(mockSpecificationLoader)
-        		.serviceInjector(mockServiceInjector)
-        		.serviceRegistry(mockServiceRegistry)
-        		.build());
-        
+
+        MetaModelContext.preset(MetaModelContext.builder()
+                .specificationLoader(mockSpecificationLoader)
+                .serviceInjector(mockServiceInjector)
+                .serviceRegistry(mockServiceRegistry)
+                .build());
+
         context.checking(new Expectations() {{
 
             allowing(mockServiceRegistry).lookupService(TranslationService.class);
@@ -123,24 +123,24 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             allowing(mockServiceRegistry).lookupServiceElseFail(MetamodelEventService.class);
             will(returnValue(mockMetamodelEventService));
 
-//            allowing(mockServicesInjector).lookupServiceElseFail(EventBusService.class);
-//            will(returnValue(mockEventBusService));
+            //            allowing(mockServicesInjector).lookupServiceElseFail(EventBusService.class);
+            //            will(returnValue(mockEventBusService));
 
         }});
 
         facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
-        );
+                );
     }
-    
+
     @After
     public void tearDown() throws Exception {
         facetHolder = null;
         facetedMethod = null;
         facetedMethodParameter = null;
     }
-    
+
     protected boolean contains(final Class<?>[] types, final Class<?> type) {
         return Utils.contains(types, type);
     }

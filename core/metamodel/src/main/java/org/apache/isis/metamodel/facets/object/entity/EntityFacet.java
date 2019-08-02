@@ -28,8 +28,8 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
  */
 public interface EntityFacet extends Facet {
 
-	static EntityFacet create(FacetHolder facetHolder) {
-		return new EntityFacetSimple(facetHolder);
-	}
+    static EntityFacet create(FacetHolder facetHolder) {
+        return new EntityFacetSimple(facetHolder);
+    }
 
 }

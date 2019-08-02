@@ -173,7 +173,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
                     command = CommandReification.AS_CONFIGURED,
                     commandPersistence = CommandPersistence.IF_HINTED,
                     commandExecuteIn = CommandExecuteIn.BACKGROUND
-            )
+                    )
             public void someAction() {
             }
         }
@@ -236,7 +236,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
                     command = CommandReification.AS_CONFIGURED,
                     commandPersistence = CommandPersistence.IF_HINTED,
                     commandExecuteIn = CommandExecuteIn.BACKGROUND
-            )
+                    )
             public void someAction() {
             }
         }

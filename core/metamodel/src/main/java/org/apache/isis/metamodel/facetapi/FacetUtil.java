@@ -39,12 +39,12 @@ public final class FacetUtil {
         final FacetHolder facetHolder = facet.getFacetHolder();
 
         Optional.ofNullable(facetHolder.getFacet(facet.facetType()))
-            .filter(each -> facet.getClass() == each.getClass())
-            .ifPresent(existingFacet -> {
-                final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
-                facetHolder.removeFacet(existingFacet);
-                facet.setUnderlyingFacet(underlyingFacet);
-            } );
+        .filter(each -> facet.getClass() == each.getClass())
+        .ifPresent(existingFacet -> {
+            final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
+            facetHolder.removeFacet(existingFacet);
+            facet.setUnderlyingFacet(underlyingFacet);
+        } );
         facetHolder.addFacet(facet);
     }
 
@@ -103,7 +103,7 @@ public final class FacetUtil {
     }
 
     public static <T extends Facet> ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {
-        
+
         return new ExtensionData<T>() {
 
             @Override
@@ -117,7 +117,7 @@ public final class FacetUtil {
                 facetHolder.streamFacets()
                 .forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
             }
-            
+
         };
     }
 

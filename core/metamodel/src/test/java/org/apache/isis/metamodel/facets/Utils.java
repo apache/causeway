@@ -27,10 +27,10 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 
 class Utils {
 
-	static DomainEventHelper domainEventHelper() {
-		return DomainEventHelper.ofEventService(null);
-	}
-	
+    static DomainEventHelper domainEventHelper() {
+        return DomainEventHelper.ofEventService(null);
+    }
+
     protected static boolean contains(final Class<?>[] array, final Class<?> val) {
         for (final Class<?> element : array) {
             if (element == val) {

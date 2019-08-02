@@ -82,12 +82,12 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
         }
 
         if(log.isDebugEnabled()) {
-        	val logScope = className.startsWith("org.apache.isis.") ||
-            		className.startsWith("domainapp.");
-        	if(logScope) {
-            	log.debug("processing annotated type %s", className);
+            val logScope = className.startsWith("org.apache.isis.") ||
+                    className.startsWith("domainapp.");
+            if(logScope) {
+                log.debug("processing annotated type %s", className);
             }	
-        	
+
             if(isTabu) {
                 log.debug("veto type: " + className);
                 event.veto();
@@ -95,7 +95,7 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
                 log.debug("allowing type: " + className);
             }
         }
-        
+
     }
 
     void afterBeanDiscovery(@Observes AfterBeanDiscovery event) {
@@ -105,7 +105,7 @@ public final class IsisCDIBeanScanInterceptor implements Extension {
     // -- HELPER
 
     private boolean isVetoed(Class<?> clazz, ProcessAnnotatedType<?> event) {
-        
+
         if(event.getAnnotatedType().isAnnotationPresent(DomainService.class)) {
             return true;
         }

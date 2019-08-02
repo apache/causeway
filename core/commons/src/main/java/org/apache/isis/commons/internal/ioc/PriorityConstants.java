@@ -34,20 +34,20 @@ public class PriorityConstants {
      * To use with the {@link Priority} annotation.
      */
     public static final int PRIORITY_ABOVE_DEFAULT = -100;
-    
+
     /**
      * To use with the {@link Priority} annotation.
      */
     public static final int PRIORITY_DEFAULT = 0;
-    
+
     /**
      * To use with the {@link Priority} annotation.
      */
     public static final int PRIORITY_BELOW_DEFAULT = 100;
-    
+
     /**
      * To use with the {@link Priority} annotation.
      */
     public static final int PRIORITY_LOWEST = Integer.MAX_VALUE;
-    
+
 }

@@ -40,83 +40,83 @@ import lombok.extern.log4j.Log4j2;
 
 @Singleton @Log4j2
 public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
-	
-	private static final long serialVersionUID = 1L;
-	
-	@Inject private IsisSessionFactory isisSessionFactory;
-	@Inject private ServiceRegistry serviceRegistry;
 
-	@Override
-	protected Object doGetTransaction() throws TransactionException {
-		
-		val isInSession = IsisSession.isInSession();
-		log.debug("doGetTransaction isInSession={}", isInSession);
-		
-		if(!isInSession) {
-		    
+    private static final long serialVersionUID = 1L;
+
+    @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private ServiceRegistry serviceRegistry;
+
+    @Override
+    protected Object doGetTransaction() throws TransactionException {
+
+        val isInSession = IsisSession.isInSession();
+        log.debug("doGetTransaction isInSession={}", isInSession);
+
+        if(!isInSession) {
+
             // get authenticationSession from IoC, or fallback to InitialisationSession 
             val authenticationSession = serviceRegistry.select(AuthenticationSession.class)
                     .getFirst()
                     .orElseGet(InitialisationSession::new);
-                    
+
             log.debug("open new session authenticationSession={}", authenticationSession);
-            
+
             isisSessionFactory.openSession(authenticationSession);
-		}
-		
-		val transactionBeforeBegin = 
+        }
+
+        val transactionBeforeBegin = 
                 IsisTransactionAspectSupport
                 .currentTransactionObject()
                 .map(x->x.getCurrentTransaction())
                 .orElse(null);
-		
+
         return IsisTransactionObject.of(transactionBeforeBegin);
-		
-	}
-	
-	@Override
-	protected void doBegin(Object transaction, TransactionDefinition definition) throws TransactionException {
-		IsisTransactionObject txObject = (IsisTransactionObject) transaction;
-		
-		log.debug("doBegin {}", definition);
-		
-		val tx = transactionManagerJdo().beginTransaction();
-		txObject.setCurrentTransaction(tx);
-		IsisTransactionAspectSupport.putTransactionObject(txObject);
-	}
 
-	@Override
-	protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
-		IsisTransactionObject txObject = (IsisTransactionObject) status.getTransaction();
+    }
 
-		log.debug("doCommit {}", status);
-		
-		transactionManagerJdo().commitTransaction(txObject);
-		txObject.getCountDownLatch().countDown();
-		txObject.setCurrentTransaction(null);
-		IsisTransactionAspectSupport.clearTransactionObject();
-	}
+    @Override
+    protected void doBegin(Object transaction, TransactionDefinition definition) throws TransactionException {
+        IsisTransactionObject txObject = (IsisTransactionObject) transaction;
 
-	@Override
-	protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
-		IsisTransactionObject txObject = (IsisTransactionObject) status.getTransaction();
-		
-		log.debug("doRollback {}", status);
-		
-		transactionManagerJdo().abortTransaction(txObject);
-		txObject.getCountDownLatch().countDown();
-		txObject.setCurrentTransaction(null);
-		IsisTransactionAspectSupport.clearTransactionObject();
-	}
+        log.debug("doBegin {}", definition);
 
-	private IsisTransactionManagerJdo transactionManagerJdo() {
-	    val persistenceSessionBase = (PersistenceSessionBase)IsisContext.getPersistenceSession().get();
-	    return persistenceSessionBase.transactionManager;
-	}
-	
-//	private PersistenceManager persistenceManagerJdo() {
-//	    val persistenceSessionBase = (PersistenceSessionBase)IsisContext.getPersistenceSession().get();
-//	    return persistenceSessionBase.persistenceManager;
-//	}
-	
+        val tx = transactionManagerJdo().beginTransaction();
+        txObject.setCurrentTransaction(tx);
+        IsisTransactionAspectSupport.putTransactionObject(txObject);
+    }
+
+    @Override
+    protected void doCommit(DefaultTransactionStatus status) throws TransactionException {
+        IsisTransactionObject txObject = (IsisTransactionObject) status.getTransaction();
+
+        log.debug("doCommit {}", status);
+
+        transactionManagerJdo().commitTransaction(txObject);
+        txObject.getCountDownLatch().countDown();
+        txObject.setCurrentTransaction(null);
+        IsisTransactionAspectSupport.clearTransactionObject();
+    }
+
+    @Override
+    protected void doRollback(DefaultTransactionStatus status) throws TransactionException {
+        IsisTransactionObject txObject = (IsisTransactionObject) status.getTransaction();
+
+        log.debug("doRollback {}", status);
+
+        transactionManagerJdo().abortTransaction(txObject);
+        txObject.getCountDownLatch().countDown();
+        txObject.setCurrentTransaction(null);
+        IsisTransactionAspectSupport.clearTransactionObject();
+    }
+
+    private IsisTransactionManagerJdo transactionManagerJdo() {
+        val persistenceSessionBase = (PersistenceSessionBase)IsisContext.getPersistenceSession().get();
+        return persistenceSessionBase.transactionManager;
+    }
+
+    //	private PersistenceManager persistenceManagerJdo() {
+    //	    val persistenceSessionBase = (PersistenceSessionBase)IsisContext.getPersistenceSession().get();
+    //	    return persistenceSessionBase.persistenceManager;
+    //	}
+
 }

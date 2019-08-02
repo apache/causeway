@@ -55,14 +55,14 @@ public class BackgroundServiceDefault implements BackgroundService {
 
     private InvocationHandlerFactory invocationHandlerFactory;  
 
-    
+
     @PostConstruct
     public void init() {
         val backgroundCommandService = 
                 serviceRegistry.select(BackgroundCommandService.class)
                 .getFirst()
                 .orElse(null);
-        
+
         this.invocationHandlerFactory = (backgroundCommandService!=null)
                 ? InvocationHandlerFactoryUsingBackgroundCommandService.builder()
                         .backgroundCommandService(backgroundCommandService)
@@ -71,11 +71,11 @@ public class BackgroundServiceDefault implements BackgroundService {
                         .commandContext(commandContext)
                         .objectAdapterProvider(objectAdapterProvider)
                         .build()
-                    : new InvocationHandlerFactoryFallback(transactionService);
-        
+                        : new InvocationHandlerFactoryFallback(transactionService);
+
     }
 
-    
+
     @PreDestroy
     public void shutdown() {
         if(invocationHandlerFactory!=null) {
@@ -84,7 +84,7 @@ public class BackgroundServiceDefault implements BackgroundService {
     }
 
     // -- EXECUTION
-    
+
     @Override
     public <T> T execute(final T domainObject) {
         final Class<T> cls = uncheckedCast(domainObject.getClass());
@@ -101,11 +101,11 @@ public class BackgroundServiceDefault implements BackgroundService {
     }
 
     // -- HELPER
-    
+
     protected ObjectSpecification getSpecification(final Class<?> type) {
         return specificationLoader.loadSpecification(type);
     }
-    
+
     private <T> T newProxy(
             final Class<T> cls,
             final Object mixedInIfAny, 
@@ -119,21 +119,21 @@ public class BackgroundServiceDefault implements BackgroundService {
 
 
         val constructorArgTypes = initialize 
-        		? new Class<?>[] {mixedInIfAny.getClass()} 
-        			: _Constants.emptyClasses;
-        		
-        val constructorArgs = initialize 
-        		? new Object[] {mixedInIfAny} 
-        			: _Constants.emptyObjects;
+                ? new Class<?>[] {mixedInIfAny.getClass()} 
+        : _Constants.emptyClasses;
 
-        val proxyFactory = ProxyFactory.<T>builder(cls)
-                .interfaces(interfaces)
-                .constructorArgTypes(constructorArgTypes)
-                .build();
+                val constructorArgs = initialize 
+                        ? new Object[] {mixedInIfAny} 
+                : _Constants.emptyObjects;
 
-        return initialize
-                ? proxyFactory.createInstance(methodHandler, constructorArgs)
-                        : proxyFactory.createInstance(methodHandler, /*initialize*/false);
+                        val proxyFactory = ProxyFactory.<T>builder(cls)
+                                .interfaces(interfaces)
+                                .constructorArgTypes(constructorArgTypes)
+                                .build();
+
+                        return initialize
+                                ? proxyFactory.createInstance(methodHandler, constructorArgs)
+                                        : proxyFactory.createInstance(methodHandler, /*initialize*/false);
     }
 
     // -- DEPENDENCIES
@@ -148,6 +148,6 @@ public class BackgroundServiceDefault implements BackgroundService {
 
 
 
-   
+
 
 }

@@ -47,10 +47,10 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     public static ProjectionFacet create(final ObjectSpecification objectSpecification) {
         return objectSpecification.streamProperties(Contributed.EXCLUDED)
                 .filter(otoa -> {
-                        final ProjectingFacet projectingFacet = otoa
-                                .getFacet(ProjectingFacet.class);
-                        return projectingFacet != null && !projectingFacet.isNoop()
-                                && projectingFacet.value() == Projecting.PROJECTED;
+                    final ProjectingFacet projectingFacet = otoa
+                            .getFacet(ProjectingFacet.class);
+                    return projectingFacet != null && !projectingFacet.isNoop()
+                            && projectingFacet.value() == Projecting.PROJECTED;
                 })
                 .map(otoa -> new ProjectionFacetFromProjectingProperty(otoa, objectSpecification))
                 .findFirst()
@@ -61,6 +61,6 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     public ObjectAdapter projected(final ManagedObject owningAdapter) {
         return owningAdapter instanceof ObjectAdapter
                 ? projectingProperty.get((ObjectAdapter) owningAdapter)
-                : null ;
+                        : null ;
     }
 }

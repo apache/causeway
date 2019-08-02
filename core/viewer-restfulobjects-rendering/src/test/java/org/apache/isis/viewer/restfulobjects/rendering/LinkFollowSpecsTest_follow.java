@@ -136,15 +136,15 @@ public class LinkFollowSpecsTest_follow {
         LinkFollowSpecs followX = linkFollower.follow("x");
         assertThat(followX.isFollowing(), is(true));
         assertThat(followX.isTerminated(), is(false));
-        
+
         LinkFollowSpecs followXY = followX.follow("y");
         assertThat(followXY.isFollowing(), is(true));
         assertThat(followXY.isTerminated(), is(false));
-        
+
         LinkFollowSpecs followXYZ = followXY.follow("z");
         assertThat(followXYZ.isFollowing(), is(true));
         assertThat(followXYZ.isTerminated(), is(false));
-        
+
         LinkFollowSpecs followXYZQ = followXY.follow("q");
         assertThat(followXYZQ.isFollowing(), is(false));
         assertThat(followXYZQ.isTerminated(), is(true));
@@ -159,7 +159,7 @@ public class LinkFollowSpecsTest_follow {
         LinkFollowSpecs followRelVersion = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/version]");
         assertThat(followRelVersion.isFollowing(), is(true));
         assertThat(followRelVersion.isTerminated(), is(false));
-        
+
         assertThat(followRelVersion.follow("x").isFollowing(), is(true));
 
         LinkFollowSpecs followRelUser = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/user]");

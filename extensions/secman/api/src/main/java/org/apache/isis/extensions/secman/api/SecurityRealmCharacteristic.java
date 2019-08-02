@@ -19,5 +19,5 @@
 package org.apache.isis.extensions.secman.api;
 
 public enum SecurityRealmCharacteristic {
-	DELEGATING
+    DELEGATING
 }

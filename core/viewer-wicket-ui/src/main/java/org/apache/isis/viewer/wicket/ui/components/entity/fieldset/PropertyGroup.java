@@ -166,30 +166,30 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         return FluentIterable.from(properties)
                 .filter((final PropertyLayoutData propertyLayoutData) -> {
-                        return propertyLayoutData.getMetadataError() == null;
+                    return propertyLayoutData.getMetadataError() == null;
                 })
                 .transform((final PropertyLayoutData propertyLayoutData)->{
-                        ObjectSpecification adapterSpecification = adapter.getSpecification();
-                        try {
-                            // this shouldn't happen, but has been reported (https://issues.apache.org/jira/browse/ISIS-1574),
-                            // suggesting that in some cases the GridService can get it wrong.  This is therefore a hack...
-                            return adapterSpecification.getAssociation(propertyLayoutData.getId());
-                        } catch (ObjectSpecificationException e) {
-                            return null;
-                        }
+                    ObjectSpecification adapterSpecification = adapter.getSpecification();
+                    try {
+                        // this shouldn't happen, but has been reported (https://issues.apache.org/jira/browse/ISIS-1574),
+                        // suggesting that in some cases the GridService can get it wrong.  This is therefore a hack...
+                        return adapterSpecification.getAssociation(propertyLayoutData.getId());
+                    } catch (ObjectSpecificationException e) {
+                        return null;
+                    }
                 })
                 .filter((@Nullable final ObjectAssociation objectAssociation) -> {
-                        if(objectAssociation == null) {
+                    if(objectAssociation == null) {
+                        return false;
+                    }
+                    final HiddenFacet facet = objectAssociation.getFacet(HiddenFacet.class);
+                    if(facet != null && !facet.isNoop()) {
+                        // static invisible.
+                        if(facet.where() == Where.EVERYWHERE || facet.where() == Where.OBJECT_FORMS) {
                             return false;
                         }
-                        final HiddenFacet facet = objectAssociation.getFacet(HiddenFacet.class);
-                        if(facet != null && !facet.isNoop()) {
-                            // static invisible.
-                            if(facet.where() == Where.EVERYWHERE || facet.where() == Where.OBJECT_FORMS) {
-                                return false;
-                            }
-                        }
-                        return true;
+                    }
+                    return true;
                 })
                 .toList();
     }

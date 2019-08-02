@@ -36,34 +36,34 @@ import lombok.val;
  */
 public interface IsisConfiguration {
 
-//TODO[2112] remove comment    
-//    /**
-//     * How to handle the case when the configuration already contains the key being added.
-//     */
-//    public enum ContainsPolicy {
-//        /**
-//         * If the configuration already contains the key, then ignore the new value.
-//         */
-//        IGNORE,
-//        /**
-//         * If the configuration already contains the key, then overwrite with the new.
-//         */
-//        OVERWRITE,
-//        /**
-//         * If the configuration already contains the key, then throw an exception.
-//         */
-//        EXCEPTION
-//    }
+    //TODO[2112] remove comment    
+    //    /**
+    //     * How to handle the case when the configuration already contains the key being added.
+    //     */
+    //    public enum ContainsPolicy {
+    //        /**
+    //         * If the configuration already contains the key, then ignore the new value.
+    //         */
+    //        IGNORE,
+    //        /**
+    //         * If the configuration already contains the key, then overwrite with the new.
+    //         */
+    //        OVERWRITE,
+    //        /**
+    //         * If the configuration already contains the key, then throw an exception.
+    //         */
+    //        EXCEPTION
+    //    }
 
-    
+
     // -- VERSION
-    
+
     public static String getVersion() {
         return "2.0.0-M3";
     }
-    
+
     // --
-    
+
     /**
      * Creates a copy of this instance, that is a new IsisConfiguration populated 
      * with a copy of the underlying key/value pairs.
@@ -80,7 +80,7 @@ public interface IsisConfiguration {
      * @see #subset(String)
      */
     IsisConfiguration subsetWithNamesStripped(String prefix);
-    
+
     /**
      * Creates a new IsisConfiguration containing the properties starting with
      * the specified prefix. The names of the properties in the copy are the
@@ -206,18 +206,18 @@ public interface IsisConfiguration {
      * A mutable copy of the current set of properties (name/values) held in this configuration.
      */
     Map<String, String> copyToMap();
-    
+
     /**
      * pre-bootstrapping configuration
      */
     default public IsisSystemEnvironment getEnvironment() {
         return _Context.getEnvironment();
     }
-    
+
     // -- TO STRING
-    
+
     default public String toStringFormatted() {
-        
+
         val sb = new StringBuilder();
         val configuration = this.subset("isis");
 
@@ -230,7 +230,7 @@ public interface IsisConfiguration {
         final int fillLeft = fillCount/2;
         final int fillRight = fillCount-fillLeft;
         head = _Strings.padStart("", fillLeft, ' ') + head + _Strings.padEnd("", fillRight, ' ');
-        
+
         sb.append("================================================\n");
         sb.append("="+head+"=\n");
         sb.append("================================================\n");
@@ -238,7 +238,7 @@ public interface IsisConfiguration {
             sb.append(k+" -> "+v).append("\n");
         });
         sb.append("================================================\n");
-        
+
         return sb.toString();
     }
 

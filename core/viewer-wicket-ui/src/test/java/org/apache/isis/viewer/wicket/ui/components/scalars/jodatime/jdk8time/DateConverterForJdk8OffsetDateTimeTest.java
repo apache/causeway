@@ -53,34 +53,34 @@ public class DateConverterForJdk8OffsetDateTimeTest {
             }
         });
     }
-    
-    
+
+
     @Test
     public void roundtripWhenParsingDateFormat() {
         final DateConverterForJdk8OffsetDateTime converter = new DateConverterForJdk8OffsetDateTime(settings, 0);
         final OffsetDateTime dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(sample(2013, 05, 11, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateTimeFormat() {
         final DateConverterForJdk8OffsetDateTime converter = new DateConverterForJdk8OffsetDateTime(settings, 0);
         final OffsetDateTime dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(sample(2013, 05, 11, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateFormatWithAdjustBy() {
         final DateConverterForJdk8OffsetDateTime converter = new DateConverterForJdk8OffsetDateTime(settings, -1);
         final OffsetDateTime dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(sample(2013, 05, 12, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
@@ -90,19 +90,19 @@ public class DateConverterForJdk8OffsetDateTimeTest {
         final DateConverterForJdk8OffsetDateTime converter = new DateConverterForJdk8OffsetDateTime(settings, -1);
         final OffsetDateTime dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(sample(2013, 05, 12, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
 
 
-	private static OffsetDateTime sample( int year, int month, int dayOfMonth,
+    private static OffsetDateTime sample( int year, int month, int dayOfMonth,
             int hour, int minute) {
-		return OffsetDateTime.of(year, month, dayOfMonth, hour, minute, 0, 0, 
-				OffsetDateTime.now().getOffset());
-	}
-    
-    
-    
+        return OffsetDateTime.of(year, month, dayOfMonth, hour, minute, 0, 0, 
+                OffsetDateTime.now().getOffset());
+    }
+
+
+
 
 }

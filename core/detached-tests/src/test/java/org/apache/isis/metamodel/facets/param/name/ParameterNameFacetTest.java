@@ -40,73 +40,74 @@ import static org.junit.Assert.assertThat;
  */
 public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
-	ProgrammingModelFacetsJava8 programmingModel;
+    ProgrammingModelFacetsJava8 programmingModel;
     Method actionMethod;
 
     @Before
     public void setUp() throws Exception {
-    	programmingModel = new ProgrammingModelFacetsJava8(DeprecatedPolicy.IGNORE);
-    	programmingModel.init();
+        programmingModel = new ProgrammingModelFacetsJava8(DeprecatedPolicy.IGNORE);
+        programmingModel.init();
         super.setUpFacetedMethodAndParameter();
     }
-    
-	@After
+
+    @Override
+    @After
     public void tearDown() throws Exception {
-		super.tearDown();
-		programmingModel = null;
+        super.tearDown();
+        programmingModel = null;
     }
 
     @Test
     public void someActionParameterShouldHaveProperName() {
-    	
-    	class Customer {
-    		@SuppressWarnings("unused")
-			public void someAction(final String anAwesomeName) { }
+
+        class Customer {
+            @SuppressWarnings("unused")
+            public void someAction(final String anAwesomeName) { }
         }
-    	
-    	// given
+
+        // given
         actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
         // when
         final FacetFactory.ProcessParameterContext processParameterContext = 
-        		new FacetFactory.ProcessParameterContext(
-        				Customer.class, actionMethod, 0, null, facetedMethodParameter);
+                new FacetFactory.ProcessParameterContext(
+                        Customer.class, actionMethod, 0, null, facetedMethodParameter);
         programmingModel.getList().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
         final NamedFacet namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertThat(namedFacet.value(), is("An Awesome Name"));
-    	
+
     }
-    
+
     @Test
     public void explicitNameShouldTakePrecedenceOverReflective() {
-    	
-    	class Customer {
-    		@SuppressWarnings("unused")
-			public void someAction(
-					@ParameterLayout(
-		                    named = "Even Better Name"
-		            )
-					final String anAwesomeName) { }
-        }
-    	
 
-    	
-    	// given
+        class Customer {
+            @SuppressWarnings("unused")
+            public void someAction(
+                    @ParameterLayout(
+                            named = "Even Better Name"
+                            )
+                    final String anAwesomeName) { }
+        }
+
+
+
+        // given
         actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
         // when
         final FacetFactory.ProcessParameterContext processParameterContext = 
-        		new FacetFactory.ProcessParameterContext(
-        				Customer.class, actionMethod, 0, null, facetedMethodParameter);
+                new FacetFactory.ProcessParameterContext(
+                        Customer.class, actionMethod, 0, null, facetedMethodParameter);
         programmingModel.getList().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
         final NamedFacet namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);
         Assert.assertNotNull(namedFacet);
         assertThat(namedFacet.value(), is("Even Better Name"));
-    	
+
     }
-    
+
 }

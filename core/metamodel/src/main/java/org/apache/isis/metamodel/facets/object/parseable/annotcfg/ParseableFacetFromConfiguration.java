@@ -27,7 +27,7 @@ public class ParseableFacetFromConfiguration extends ParseableFacetAbstract {
     public ParseableFacetFromConfiguration(
             final String candidateParserName,
             final FacetHolder holder) {
-        
+
         super(candidateParserName, null, holder);
     }
 }

@@ -51,9 +51,9 @@ import lombok.val;
 
 public class IsisModuleSecurityRealm extends AuthorizingRealm implements SecurityRealm {
 
-	@Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
+    @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
     @Getter @Setter private boolean autoCreateUser = true;
-	
+
     /**
      * Configures a {@link org.apache.shiro.authz.permission.PermissionResolver} that knows how to process the
      * permission strings that are provided by Isis'
@@ -82,21 +82,21 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
 
         // lookup from database, for roles/perms
         val principal = lookupPrincipal_inApplicationUserRepository(username);
-        
+
         val autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && isAutoCreateUser();
         if (principal == null && autoCreateUserWhenDelegatedAuthentication) {
-        	// When using delegated authentication, desired behavior is to auto-create user accounts in the 
-        	// DB only if these do successfully authenticate with the delegated authentication mechanism,
-        	// while the newly created user will be disabled by default
-        	authenticateElseThrow_usingDelegatedMechanism(token);
-        	val newPrincipal = createPrincipal_inApplicationUserRepository(username);
-            
+            // When using delegated authentication, desired behavior is to auto-create user accounts in the 
+            // DB only if these do successfully authenticate with the delegated authentication mechanism,
+            // while the newly created user will be disabled by default
+            authenticateElseThrow_usingDelegatedMechanism(token);
+            val newPrincipal = createPrincipal_inApplicationUserRepository(username);
+
             _Assert.assertNotNull(newPrincipal);
             _Assert.assertTrue("Auto-created user accounts must be initially disabled!", newPrincipal.isDisabled());
-            
+
             throw disabledAccountException(username); // default behavior after user auto-creation
         }
-        
+
         if (principal == null) {
             throw credentialsException();
         }
@@ -106,18 +106,18 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         }
 
         if(principal.getAccountType() == AccountType.DELEGATED) {
-        	authenticateElseThrow_usingDelegatedMechanism(token);
+            authenticateElseThrow_usingDelegatedMechanism(token);
         } else {
             val checkPasswordResult = checkPassword(password, principal.getEncryptedPassword());
             switch (checkPasswordResult) {
-                case OK:
-                    break;
-                case BAD_PASSWORD:
-                    throw credentialsException();
-                case NO_PASSWORD_ENCRYPTION_SERVICE_CONFIGURED:
-                    throw new AuthenticationException("No password encryption service is installed");
-                default:
-                    throw new AuthenticationException();
+            case OK:
+                break;
+            case BAD_PASSWORD:
+                throw credentialsException();
+            case NO_PASSWORD_ENCRYPTION_SERVICE_CONFIGURED:
+                throw new AuthenticationException("No password encryption service is installed");
+            default:
+                throw new AuthenticationException();
             }
         }
 
@@ -135,38 +135,38 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         return urp;
     }
 
-	@Override
-	public EnumSet<SecurityRealmCharacteristic> getCharacteristics() {
-		if(hasDelegateAuthenticationRealm()) {
-			return EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
-		}
-		return EnumSet.noneOf(SecurityRealmCharacteristic.class);
-	}
-
-	// -- HELPER
-    
-    private DisabledAccountException disabledAccountException(String username) {
-    	return new DisabledAccountException(String.format("username='%s'", username));
-    }
-    
-    private CredentialsException credentialsException() {
-    	return new CredentialsException("Unknown user/password combination");
-    }
-    
-    private void authenticateElseThrow_usingDelegatedMechanism(AuthenticationToken token) {
-    	AuthenticationInfo delegateAccount = null;
-    	try {
-    		delegateAccount = delegateAuthenticationRealm.getAuthenticationInfo(token);
-        } catch (AuthenticationException ex) {
-        	// fall through
+    @Override
+    public EnumSet<SecurityRealmCharacteristic> getCharacteristics() {
+        if(hasDelegateAuthenticationRealm()) {
+            return EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
         }
-		if(delegateAccount == null) {
+        return EnumSet.noneOf(SecurityRealmCharacteristic.class);
+    }
+
+    // -- HELPER
+
+    private DisabledAccountException disabledAccountException(String username) {
+        return new DisabledAccountException(String.format("username='%s'", username));
+    }
+
+    private CredentialsException credentialsException() {
+        return new CredentialsException("Unknown user/password combination");
+    }
+
+    private void authenticateElseThrow_usingDelegatedMechanism(AuthenticationToken token) {
+        AuthenticationInfo delegateAccount = null;
+        try {
+            delegateAccount = delegateAuthenticationRealm.getAuthenticationInfo(token);
+        } catch (AuthenticationException ex) {
+            // fall through
+        }
+        if(delegateAccount == null) {
             throw credentialsException();
         }
     }
-    
+
     private PrincipalForApplicationUser lookupPrincipal_inApplicationUserRepository(final String username) {
-    	
+
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
             public PrincipalForApplicationUser get() {
@@ -176,9 +176,9 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
             @Inject private ApplicationUserRepository applicationUserRepository;
         });
     }
-    
+
     private PrincipalForApplicationUser createPrincipal_inApplicationUserRepository(final String username) {
-    	
+
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
             public PrincipalForApplicationUser get() {
@@ -188,7 +188,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
             @Inject private ApplicationUserRepository applicationUserRepository;
         });
     }
-    
+
 
     private static enum CheckPasswordResult {
         OK,
@@ -205,37 +205,37 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
                 }
                 return passwordEncryptionService.matches(new String(candidate), actualEncryptedPassword)
                         ? CheckPasswordResult.OK
-                        : CheckPasswordResult.BAD_PASSWORD;
+                                : CheckPasswordResult.BAD_PASSWORD;
             }
 
             @Inject private PasswordEncryptionService passwordEncryptionService;
         });
     }
 
-	private boolean hasDelegateAuthenticationRealm() {
+    private boolean hasDelegateAuthenticationRealm() {
         return delegateAuthenticationRealm != null;
     }
-	
+
     <V> V execute(final Supplier<V> closure) {
         return getSessionFactory().doInSession(
                 new Callable<V>() {
                     @Override
                     public V call() {
-                    	val serviceInjector = IsisContext.getServiceInjector();
-                    	serviceInjector.injectServicesInto(closure);
+                        val serviceInjector = IsisContext.getServiceInjector();
+                        serviceInjector.injectServicesInto(closure);
                         return doExecute(closure);
                     }
                 }
-        );
+                );
     }
 
     <V> V doExecute(final Supplier<V> closure) {
         val txTemplate = IsisContext.createTransactionTemplate();
         return txTemplate.execute(status->closure.get());
     }
-	
-	// -- DEPENDENCIES
-	
+
+    // -- DEPENDENCIES
+
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession().orElse(null);
     }

@@ -44,7 +44,7 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
 
         final List<DomainObjectLayout> domainObjectLayouts = Annotations.getAnnotations(cls, DomainObjectLayout.class);
         final List<ViewModelLayout> viewModelLayouts = Annotations.getAnnotations(cls, ViewModelLayout.class);
-        
+
         val metamodelEventService = getServiceRegistry().lookupServiceElseFail(MetamodelEventService.class);
 
         FacetUtil.addFacet(

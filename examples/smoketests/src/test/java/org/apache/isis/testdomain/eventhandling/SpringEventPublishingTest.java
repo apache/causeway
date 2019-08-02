@@ -39,66 +39,66 @@ import lombok.Value;
 import lombok.val;
 
 @SpringBootTest(
-	classes = { 
-		SpringEventPublishingTest.TestConfig.class, 
-		SpringEventPublishingTest.TestPublisher.class,
-		SpringEventPublishingTest.TestListener.class 
-})
+        classes = { 
+                SpringEventPublishingTest.TestConfig.class, 
+                SpringEventPublishingTest.TestPublisher.class,
+                SpringEventPublishingTest.TestListener.class 
+        })
 class SpringEventPublishingTest {
 
-	@Inject private TestPublisher testPublisher;
-	@Inject private TestListener testListener;
+    @Inject private TestPublisher testPublisher;
+    @Inject private TestListener testListener;
 
-	@Test
-	void firedEventShouldBeReceivedImmediately() {
+    @Test
+    void firedEventShouldBeReceivedImmediately() {
 
-		val history = testListener.getHistory();
+        val history = testListener.getHistory();
 
-		testPublisher.fireHelloWorld();
+        testPublisher.fireHelloWorld();
 
-		assertEquals("Hello World!", history.toString());
-	}
+        assertEquals("Hello World!", history.toString());
+    }
 
-	// -- HELPER
+    // -- HELPER
 
-	@Configuration
-	static class TestConfig {
+    @Configuration
+    static class TestConfig {
 
-		@Bean
-		Event<GenericSpringEvent<String>> createEvent(ApplicationEventPublisher publisher) {
-			return _Spring.event(publisher);
-		}
+        @Bean
+        Event<GenericSpringEvent<String>> createEvent(ApplicationEventPublisher publisher) {
+            return _Spring.event(publisher);
+        }
 
-	}
+    }
 
-	@Singleton
-	public static class TestPublisher {
+    @Singleton
+    public static class TestPublisher {
 
-		@Inject
-		Event<GenericSpringEvent<String>> genericEvent;
+        @Inject
+        Event<GenericSpringEvent<String>> genericEvent;
 
-		public void fireHelloWorld() {
-			genericEvent.fire(GenericSpringEvent.of("Hello World!"));
-		}
+        public void fireHelloWorld() {
+            genericEvent.fire(GenericSpringEvent.of("Hello World!"));
+        }
 
-	}
+    }
 
-	@Singleton
-	public static class TestListener {
+    @Singleton
+    public static class TestListener {
 
-		@Getter
-		private final StringBuilder history = new StringBuilder();
+        @Getter
+        private final StringBuilder history = new StringBuilder();
 
-		@EventListener(GenericSpringEvent.class)
-		public void receiveHelloWorld(@Observes GenericSpringEvent<String> event) {
-			history.append(event.what);
-		}
+        @EventListener(GenericSpringEvent.class)
+        public void receiveHelloWorld(@Observes GenericSpringEvent<String> event) {
+            history.append(event.what);
+        }
 
-	}
+    }
 
-	@Value(staticConstructor = "of")
-	static class GenericSpringEvent<T> {
-		private T what;
-	}
+    @Value(staticConstructor = "of")
+    static class GenericSpringEvent<T> {
+        private T what;
+    }
 
 }

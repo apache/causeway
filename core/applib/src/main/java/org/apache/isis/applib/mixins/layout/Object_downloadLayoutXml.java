@@ -58,13 +58,13 @@ public class Object_downloadLayoutXml {
             )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
     public Object act(
-    		
-    		// PARAM 0
-    		@ParameterLayout(
-            		named = MixinConstants.FILENAME_PROPERTY_NAME,
-            		describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+
+            // PARAM 0
+            @ParameterLayout(
+                    named = MixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-            
+
             // PARAM 1
             final LayoutService.Style style) {
 
@@ -73,17 +73,17 @@ public class Object_downloadLayoutXml {
     }
 
     // -- PARAM 0 (fileName)
-    
+
     public String default0Act() {
         return holder.getClass().getSimpleName() + ".layout";
     }
-    
+
     // -- PARAM 1 (style)
-    
+
     public LayoutService.Style default1Act() {
         return LayoutService.Style.NORMALIZED;
     }
-    
+
     // -- DEPENDENCIES
 
     @Inject LayoutService layoutService;

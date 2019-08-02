@@ -32,7 +32,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setPrimitiveWithNoAnnotation(int primitive) {
         this.primitiveWithNoAnnotation = primitive;
     }
-    
+
     private int primitiveWithNoAllowsNull;
     @Column
     public int getPrimitiveWithNoAllowsNull() {
@@ -41,7 +41,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setPrimitiveWithNoAllowsNull(int primitive) {
         this.primitiveWithNoAllowsNull = primitive;
     }
-    
+
     private int primitiveWithAllowsNullFalse;
     @Column(allowsNull="false")
     public int getPrimitiveWithAllowsNullFalse() {
@@ -50,7 +50,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setPrimitiveWithAllowsNullFalse(int primitive) {
         this.primitiveWithAllowsNullFalse = primitive;
     }
-    
+
 
     private int primitiveWithAllowsNullTrue;
     @Column(allowsNull="true")
@@ -60,8 +60,8 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setPrimitiveWithAllowsNullTrue(int primitive) {
         this.primitiveWithAllowsNullTrue = primitive;
     }
-    
-    
+
+
     private String referenceWithNoAnnotation;
     public String getReferenceWithNoAnnotation() {
         return referenceWithNoAnnotation;
@@ -69,7 +69,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setReferenceWithNoAnnotation(String reference) {
         this.referenceWithNoAnnotation = reference;
     }
-    
+
     private String referenceWithNoAllowsNull;
     @Column
     public String getReferenceWithNoAllowsNull() {
@@ -78,7 +78,7 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setReferenceWithNoAllowsNull(String reference) {
         this.referenceWithNoAllowsNull = reference;
     }
-    
+
     private String referenceWithAllowsNullFalse;
     @Column(allowsNull="false")
     public String getReferenceWithAllowsNullFalse() {
@@ -87,8 +87,8 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setReferenceWithAllowsNullFalse(String referenceWithAllowsNullFalse) {
         this.referenceWithAllowsNullFalse = referenceWithAllowsNullFalse;
     }
-    
-    
+
+
     private String referenceWithAllowsNullTrue;
     @Column(allowsNull="true")
     public String getReferenceWithAllowsNullTrue() {
@@ -97,6 +97,6 @@ public abstract class SimpleObjectWithColumnAllowsNullAnnotations implements Per
     public void setReferenceWithAllowsNullTrue(String referenceWithAllowsNullTrue) {
         this.referenceWithAllowsNullTrue = referenceWithAllowsNullTrue;
     }
-    
+
 
 }

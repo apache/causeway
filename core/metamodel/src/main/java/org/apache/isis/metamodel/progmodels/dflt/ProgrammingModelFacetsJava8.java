@@ -414,8 +414,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
     @Override
     public List<ObjectSpecificationPostProcessor> getPostProcessors() {
         return _Lists.singleton(
-            new DeriveFacetsPostProcessor()
-        );
+                new DeriveFacetsPostProcessor()
+                );
     }
 
     // -- HELPER

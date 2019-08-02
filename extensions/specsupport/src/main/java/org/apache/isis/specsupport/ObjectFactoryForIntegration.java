@@ -49,7 +49,7 @@ public class ObjectFactoryForIntegration implements ObjectFactory {
         T instance = type.cast(this.instances.get(type));
         if (instance == null) {
             instance = this.newInstance(type);
-            
+
             val injector = IsisContext.getServiceInjector();
             if(injector != null) {
                 instance = this.cacheInstance(type, instance);

@@ -22,107 +22,107 @@ public abstract class IsisMojoAbstract /*extends AbstractMojo*/ {
 
     protected static final String CURRENT_PLUGIN_KEY = "org.apache.isis.tool:isis-maven-plugin";
 
-//    @Component
-//    private MavenProject mavenProject;
-//
-//    @Parameter(required = true, readonly = false, property = "appManifest")
-//    private String appManifest;
-//
-//    protected IsisMojoAbstract() {
-//    }
-//
-//    @Override
-//    public void execute() throws MojoExecutionException, MojoFailureException {
-//
-//        new IsisLoggingConfigurer(Level.INFO).configureLogging(".", new String[]{});
-//        IsisSystemEnvironment.setUnitTesting(true);
-//        
-//        final ContextForMojo mjContext = new ContextForMojo(mavenProject, getLog());
-//
-//        final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
-//        _Blackhole.consume(plugin);
-//
-//        final ConfigurableApplicationContext springContext = 
-//                IsisMavenPlugin_SpringContextLauncher.getContext(mavenProject, getLog());
-//        
-//        Objects.requireNonNull(springContext, "Failed to bring up Spring's context.");
-//        
-//        try {
-//            
-//            doExecute(mjContext);
-//            
-//        } catch (IOException e) {
-//            // ignore
-//        } finally {
-//            
-//            if(springContext!=null) {
-//                springContext.close();
-//            }
-//            
-//        }
-//
-//    }
-//
-//    protected abstract void doExecute(
-//            final ContextForMojo mojoContext)
-//                    throws MojoFailureException, IOException;
-//
-//    // -- Context
-//    static class ContextForMojo implements MetaModelProcessor.Context {
-//
-//        private final MavenProject mavenProject;
-//        private final Log log;
-//
-//        public ContextForMojo(final MavenProject mavenProject, final Log log) {
-//            this.mavenProject = mavenProject;
-//            this.log = log;
-//        }
-//
-//        @Override
-//        public MavenProject getMavenProject() {
-//            return mavenProject;
-//        }
-//
-//        @Override
-//        public Log getLog() {
-//            return log;
-//        }
-//
-//        @Override
-//        public void throwFailureException(String errorMessage, Set<String> logMessages) throws MojoFailureException {
-//            logErrors(logMessages);
-//            throw new MojoFailureException(errorMessage);
-//        }
-//
-//        @Override
-//        public void throwFailureException(String errorMessage, String... logMessages) throws MojoFailureException {
-//            logErrors(logMessages);
-//            throw new MojoFailureException(errorMessage);
-//        }
-//
-//        @Override
-//        public void throwExecutionException(String errorMessage, Exception e) throws MojoExecutionException {
-//            logErrors(errorMessage);
-//            throw new MojoExecutionException(errorMessage, e);
-//        }
-//
-//        private void logErrors(Set<String> logMessages) {
-//            logErrors(logMessages.toArray(new String[] {}));
-//        }
-//
-//        @Override
-//        public void logErrors(String... logMessages) {
-//            log.error("");
-//            log.error("");
-//            log.error("");
-//            for (String logMessage : logMessages) {
-//                log.error(logMessage);
-//            }
-//            log.error("");
-//            log.error("");
-//            log.error("");
-//        }
-//    }
+    //    @Component
+    //    private MavenProject mavenProject;
+    //
+    //    @Parameter(required = true, readonly = false, property = "appManifest")
+    //    private String appManifest;
+    //
+    //    protected IsisMojoAbstract() {
+    //    }
+    //
+    //    @Override
+    //    public void execute() throws MojoExecutionException, MojoFailureException {
+    //
+    //        new IsisLoggingConfigurer(Level.INFO).configureLogging(".", new String[]{});
+    //        IsisSystemEnvironment.setUnitTesting(true);
+    //        
+    //        final ContextForMojo mjContext = new ContextForMojo(mavenProject, getLog());
+    //
+    //        final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
+    //        _Blackhole.consume(plugin);
+    //
+    //        final ConfigurableApplicationContext springContext = 
+    //                IsisMavenPlugin_SpringContextLauncher.getContext(mavenProject, getLog());
+    //        
+    //        Objects.requireNonNull(springContext, "Failed to bring up Spring's context.");
+    //        
+    //        try {
+    //            
+    //            doExecute(mjContext);
+    //            
+    //        } catch (IOException e) {
+    //            // ignore
+    //        } finally {
+    //            
+    //            if(springContext!=null) {
+    //                springContext.close();
+    //            }
+    //            
+    //        }
+    //
+    //    }
+    //
+    //    protected abstract void doExecute(
+    //            final ContextForMojo mojoContext)
+    //                    throws MojoFailureException, IOException;
+    //
+    //    // -- Context
+    //    static class ContextForMojo implements MetaModelProcessor.Context {
+    //
+    //        private final MavenProject mavenProject;
+    //        private final Log log;
+    //
+    //        public ContextForMojo(final MavenProject mavenProject, final Log log) {
+    //            this.mavenProject = mavenProject;
+    //            this.log = log;
+    //        }
+    //
+    //        @Override
+    //        public MavenProject getMavenProject() {
+    //            return mavenProject;
+    //        }
+    //
+    //        @Override
+    //        public Log getLog() {
+    //            return log;
+    //        }
+    //
+    //        @Override
+    //        public void throwFailureException(String errorMessage, Set<String> logMessages) throws MojoFailureException {
+    //            logErrors(logMessages);
+    //            throw new MojoFailureException(errorMessage);
+    //        }
+    //
+    //        @Override
+    //        public void throwFailureException(String errorMessage, String... logMessages) throws MojoFailureException {
+    //            logErrors(logMessages);
+    //            throw new MojoFailureException(errorMessage);
+    //        }
+    //
+    //        @Override
+    //        public void throwExecutionException(String errorMessage, Exception e) throws MojoExecutionException {
+    //            logErrors(errorMessage);
+    //            throw new MojoExecutionException(errorMessage, e);
+    //        }
+    //
+    //        private void logErrors(Set<String> logMessages) {
+    //            logErrors(logMessages.toArray(new String[] {}));
+    //        }
+    //
+    //        @Override
+    //        public void logErrors(String... logMessages) {
+    //            log.error("");
+    //            log.error("");
+    //            log.error("");
+    //            for (String logMessage : logMessages) {
+    //                log.error(logMessage);
+    //            }
+    //            log.error("");
+    //            log.error("");
+    //            log.error("");
+    //        }
+    //    }
 
 
 }

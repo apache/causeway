@@ -89,9 +89,9 @@ public class DeweyOrderSetTest extends TestCase {
 
     @Override
     protected void setUp() {
-        
+
         _Context.clear();
-        
+
         mockTranslationService = context.mock(TranslationService.class);
         context.checking(new Expectations() {{
             allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));

@@ -70,12 +70,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
 
     @Override
-	public void setUp() throws Exception {
-        
+    public void setUp() throws Exception {
+
         // PRODUCTION
-        
+
         super.setUp();
-        
+
         final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
         context.checking(new Expectations() {{
@@ -83,48 +83,48 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
 
-//            allowing(mockServicesInjector).lookupService(TranslationService.class);
-//            will(returnValue(Optional.of(mockTranslationService)));
-//
-//            allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
-//            will(returnValue(mockAuthenticationSessionProvider));
+            //            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            //            will(returnValue(Optional.of(mockTranslationService)));
+            //
+            //            allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
+            //            will(returnValue(mockAuthenticationSessionProvider));
 
-//            allowing(mockServicesInjector).getAuthenticationSessionProvider();
-//            will(returnValue(mockAuthenticationSessionProvider));
-//
-//            allowing(mockServicesInjector).getSpecificationLoader();
-//            will(returnValue(mockSpecificationLoader));
-//
-//            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-//            will(returnValue(mockPersistenceSessionServiceInternal));
+            //            allowing(mockServicesInjector).getAuthenticationSessionProvider();
+            //            will(returnValue(mockAuthenticationSessionProvider));
+            //
+            //            allowing(mockServicesInjector).getSpecificationLoader();
+            //            will(returnValue(mockSpecificationLoader));
+            //
+            //            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+            //            will(returnValue(mockPersistenceSessionServiceInternal));
 
         }});
 
     }
 
-//    public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
-//        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
-//
-//        facetFactory.setServicesInjector(mockServicesInjector);
-//
-//        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-//        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-//
-//        class Customer {
-//            @SuppressWarnings("unused")
-//            public void anActionWithNamedAnnotation() {
-//            }
-//        }
-//        final Method method = findMethod(Customer.class, "anActionWithNamedAnnotation");
-//
-//        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
-//
-//        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-//        assertNotNull(facet);
-//        assertTrue(facet instanceof NamedFacet);
-//        final NamedFacet namedFacet = (NamedFacet) facet;
-//        assertEquals("An Action With Named Annotation", namedFacet.value());
-//    }
+    //    public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
+    //        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
+    //
+    //        facetFactory.setServicesInjector(mockServicesInjector);
+    //
+    //        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+    //        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
+    //
+    //        class Customer {
+    //            @SuppressWarnings("unused")
+    //            public void anActionWithNamedAnnotation() {
+    //            }
+    //        }
+    //        final Method method = findMethod(Customer.class, "anActionWithNamedAnnotation");
+    //
+    //        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+    //
+    //        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
+    //        assertNotNull(facet);
+    //        assertTrue(facet instanceof NamedFacet);
+    //        final NamedFacet namedFacet = (NamedFacet) facet;
+    //        assertEquals("An Action With Named Annotation", namedFacet.value());
+    //    }
 
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
@@ -442,7 +442,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             public List<Long> choices1SomeAction() {
                 return Collections.emptyList();
             }
-            
+
             @SuppressWarnings("unused")
             public Set<Long> choices2SomeAction() {
                 return Collections.emptySet();
@@ -453,7 +453,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method choices0Method = findMethod(Customer.class, "choices0SomeAction", new Class[] {});
         final Method choices1Method = findMethod(Customer.class, "choices1SomeAction", new Class[] {});
         final Method choices2Method = findMethod(Customer.class, "choices2SomeAction", new Class[] {});
-        
+
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetHolderWithParms));

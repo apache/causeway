@@ -21,7 +21,7 @@ package org.apache.isis.extensions.secman.api.tenancy;
 import org.apache.isis.extensions.secman.api.SecurityModule;
 
 public interface ApplicationTenancy {
-	
+
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancy, T> {
         private static final long serialVersionUID = 1L;}
 
@@ -31,7 +31,7 @@ public interface ApplicationTenancy {
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancy> {
         private static final long serialVersionUID = 1L;}
 
-    
+
 
     public static final int MAX_LENGTH_PATH = 255;
     public static final int MAX_LENGTH_NAME = 40;

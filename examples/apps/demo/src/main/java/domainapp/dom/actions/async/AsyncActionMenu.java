@@ -32,7 +32,7 @@ import lombok.val;
 @DomainService(nature=NatureOfService.VIEW)
 @DomainObjectLayout(named="Async Actions")
 public class AsyncActionMenu {
-    
+
     @Inject private FactoryService factoryService;
 
     @Action
@@ -42,5 +42,5 @@ public class AsyncActionMenu {
         demo.initDefaults();
         return demo;
     }
-    
+
 }

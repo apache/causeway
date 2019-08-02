@@ -54,13 +54,13 @@ public final class CollectionUtils {
     public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final ObjectAdapterProvider adapterProvider) {
         final ObjectAdapter collection = adapterProvider.adapterFor(option);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-        
+
         final Stream<ObjectAdapter> objectAdapters = 
                 CollectionFacet.Utils.streamAdapters(collection);
-        
+
         return objectAdapters
-            .map(nextElement->nextElement != null? nextElement.getPojo(): null)
-            .collect(_Arrays.toArray(Object.class, facet.size(collection)));
+                .map(nextElement->nextElement != null? nextElement.getPojo(): null)
+                .collect(_Arrays.toArray(Object.class, facet.size(collection)));
     }
 
     private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _With.hashMap(

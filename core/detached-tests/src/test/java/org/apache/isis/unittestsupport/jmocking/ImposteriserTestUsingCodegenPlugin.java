@@ -96,30 +96,30 @@ class ImposteriserTestUsingCodegenPlugin {
         assertNotNull(imposter);
         imposter.toString();
     }
-    
+
     // class we want to mock, while making sure, that we have access to non public methods 
     static class NonPublicMethodStub {
         Integer getInteger() {
             return 1;
         }
     }
-    
+
     @Test
     void imposteriserShouldBeUsableForMockery() {
-        
+
         final JUnit4Mockery context = new JUnit4Mockery() {
             {
                 setImposteriser(imposteriser);
             }
         };
-        
+
         final NonPublicMethodStub mocked = context.mock(NonPublicMethodStub.class);
-                
+
         context.checking(new Expectations() {{
             allowing(mocked).getInteger();
             will(returnValue(Integer.valueOf(2)));
         }});
-        
+
         assertNotNull(mocked);
         assertNotNull(mocked.getInteger());
         assertEquals(2, mocked.getInteger().intValue());

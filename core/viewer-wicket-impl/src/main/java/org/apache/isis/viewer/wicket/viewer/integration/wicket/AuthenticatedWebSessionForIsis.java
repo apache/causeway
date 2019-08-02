@@ -126,7 +126,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
         if (!isSignedIn()) {
             return null;
         }
-        
+
         final Roles roles = new Roles();
         authenticationSession.streamRoles()
         .forEach(roles::add);

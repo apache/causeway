@@ -43,7 +43,7 @@ public class TypesTest_filteredList {
     public void setUp() throws Exception {
         shapes = Arrays.<Object>asList(new Square(), new Circle(), new Square());
     }
-    
+
     @Test
     public void empty() throws ClassNotFoundException {
         final Collection<Object> filtered = ListExtensions.filtered(Collections.emptyList(), Object.class);

@@ -63,10 +63,10 @@ class ServiceInjectorDefaultTest_validateServices {
     }
 
     // -- TESTS
-    
+
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private ApplicationContext applicationContext;
-    
+
     @BeforeEach
     void setup() {
         _Context.clear();
@@ -75,10 +75,10 @@ class ServiceInjectorDefaultTest_validateServices {
 
     @Test 
     public void validate_DomainServicesWithDuplicateIds() {
-        
+
         // ensure we actually test a ServiceRegistryDefault 
         assertEquals(ServiceRegistryDefault.class, serviceRegistry.getClass());
-        
+
         fail("Spring Boot should not provision the given scenario."); 
     }
 

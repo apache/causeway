@@ -26,15 +26,15 @@ import org.apache.isis.commons.internal.context._Context;
 public interface TreeThemeProvider {
 
     // -- INTERFACE
-    
+
     /**
      * @param model - TODO yet just a draft, refine the type 
      * @return tree-theme to use for given model 
      */
     public Behavior treeThemeFor(Object model);
-    
+
     // -- LOOKUP
-    
+
     /**
      * Gets the singleton TreeThemeProvider from current context.
      * <p> 
@@ -46,5 +46,5 @@ public interface TreeThemeProvider {
                 TreeThemeProvider.class, 
                 TreeThemeProviderDefault::new);
     }
-    
+
 }

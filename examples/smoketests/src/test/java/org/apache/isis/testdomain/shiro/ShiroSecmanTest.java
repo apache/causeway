@@ -46,13 +46,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import lombok.val;
 
 @SpringBootTest(
-		classes = { 
-				JdoTestDomainModule_withShiro.class, 
-		}, 
-		properties = {
-				"logging.config=log4j2-test.xml",
-				"smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
-		})
+        classes = { 
+                JdoTestDomainModule_withShiro.class, 
+        }, 
+        properties = {
+                "logging.config=log4j2-test.xml",
+                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
+        })
 @Import({
     // Security Manager Extension (secman)
     IsisBootSecmanModel.class,
@@ -61,89 +61,89 @@ import lombok.val;
     IsisBootSecmanEncryptionJbcrypt.class,
 })
 class ShiroSecmanTest extends AbstractShiroTest {
-	
-	@Inject SecurityModuleConfig securityConfig;
 
-	@BeforeAll
-	static void beforeClass() {
-		//    Build and set the SecurityManager used to build Subject instances used in your tests
-		//    This typically only needs to be done once per class if your shiro.ini doesn't change,
-		//    otherwise, you'll need to do this logic in each test that is different
-		val factory = new IniSecurityManagerFactory("classpath:shiro-secman.ini");
-		setSecurityManager(factory.getInstance());
-	}
+    @Inject SecurityModuleConfig securityConfig;
 
-	@AfterAll
-	static void afterClass() {
-		tearDownShiro();
-	}
-	
-	@Test
-	void loginLogoutRoundtrip() {
+    @BeforeAll
+    static void beforeClass() {
+        //    Build and set the SecurityManager used to build Subject instances used in your tests
+        //    This typically only needs to be done once per class if your shiro.ini doesn't change,
+        //    otherwise, you'll need to do this logic in each test that is different
+        val factory = new IniSecurityManagerFactory("classpath:shiro-secman.ini");
+        setSecurityManager(factory.getInstance());
+    }
 
-		val secMan = getSecurityManager();
-		assertNotNull(secMan);
-		
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
+    @AfterAll
+    static void afterClass() {
+        tearDownShiro();
+    }
 
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				securityConfig.getAdminUserName(),
-				securityConfig.getAdminPassword());
+    @Test
+    void loginLogoutRoundtrip() {
 
-		subject.login(token);
-		assertTrue(subject.isAuthenticated());
+        val secMan = getSecurityManager();
+        assertNotNull(secMan);
 
-		subject.logout();
-		assertFalse(subject.isAuthenticated());
+        val subject = SecurityUtils.getSubject(); 
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
 
-	}
+        val token = (AuthenticationToken) new UsernamePasswordToken(
+                securityConfig.getAdminUserName(),
+                securityConfig.getAdminPassword());
 
-	@Test
-	void login_withInvalidPassword() {
+        subject.login(token);
+        assertTrue(subject.isAuthenticated());
 
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
+        subject.logout();
+        assertFalse(subject.isAuthenticated());
 
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
+    }
 
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				securityConfig.getAdminUserName(),
-				"invalid-pass");
-		
-		assertThrows(CredentialsException.class, ()->{
-			subject.login(token);
-		});
-		
-		assertFalse(subject.isAuthenticated());
+    @Test
+    void login_withInvalidPassword() {
 
-	}
-	
-	@Test
-	void login_withNonExistentUser() {
+        val secMan = SecurityUtils.getSecurityManager();
+        assertNotNull(secMan);
 
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
+        val subject = SecurityUtils.getSubject(); 
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
 
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
+        val token = (AuthenticationToken) new UsernamePasswordToken(
+                securityConfig.getAdminUserName(),
+                "invalid-pass");
 
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				"non-existent-user",
-				"invalid-pass");
-		
-		assertThrows(CredentialsException.class, ()->{
-			subject.login(token);
-		});
-		
-		assertFalse(subject.isAuthenticated());
-		
+        assertThrows(CredentialsException.class, ()->{
+            subject.login(token);
+        });
 
-	}
+        assertFalse(subject.isAuthenticated());
+
+    }
+
+    @Test
+    void login_withNonExistentUser() {
+
+        val secMan = SecurityUtils.getSecurityManager();
+        assertNotNull(secMan);
+
+        val subject = SecurityUtils.getSubject(); 
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
+
+        val token = (AuthenticationToken) new UsernamePasswordToken(
+                "non-existent-user",
+                "invalid-pass");
+
+        assertThrows(CredentialsException.class, ()->{
+            subject.login(token);
+        });
+
+        assertFalse(subject.isAuthenticated());
+
+
+    }
 
 
 }

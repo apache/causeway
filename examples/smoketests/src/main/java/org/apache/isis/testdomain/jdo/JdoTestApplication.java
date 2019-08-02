@@ -22,6 +22,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackageClasses= {JdoTestDomainModule.class})
 public class JdoTestApplication {
-    
+
 
 }

@@ -218,7 +218,7 @@ public final class _With<T> {
         }
         return obj;
     }
-    
+
     // -- PARAMETER NON-EMPTY CHECK(S)
 
     /**
@@ -250,7 +250,7 @@ public final class _With<T> {
     public static <T> T create(Supplier<T> factory, Consumer<T> initializer) {
         return accept(factory.get(), initializer);
     }
-    
+
     /**
      * Allows for single line instantiation and initialization of an ArrayList.
      * @param initializer

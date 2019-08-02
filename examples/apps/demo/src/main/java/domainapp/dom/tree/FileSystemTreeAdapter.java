@@ -27,41 +27,41 @@ import org.apache.isis.applib.tree.TreeAdapter;
 import lombok.val;
 
 public class FileSystemTreeAdapter implements TreeAdapter<FileNode> {
-	
-	@Override
-	public Optional<FileNode> parentOf(FileNode value) {
-		if(value.getType()==FileNode.Type.FileSystemRoot) {
-			return Optional.empty();
-		}
-		val parentFolderIfAny = value.asFile().getParentFile();
-		if(parentFolderIfAny==null) {
-			return Optional.empty(); // unexpected code reach, but just in case
-		}
-		return Optional.ofNullable(parentFolderIfAny)
-				.map(FileNodeFactory::toFileNode);
-	}
 
-	@Override
-	public int childCountOf(FileNode value) {
-		return (int) streamChildFiles(value).count();
-	}
+    @Override
+    public Optional<FileNode> parentOf(FileNode value) {
+        if(value.getType()==FileNode.Type.FileSystemRoot) {
+            return Optional.empty();
+        }
+        val parentFolderIfAny = value.asFile().getParentFile();
+        if(parentFolderIfAny==null) {
+            return Optional.empty(); // unexpected code reach, but just in case
+        }
+        return Optional.ofNullable(parentFolderIfAny)
+                .map(FileNodeFactory::toFileNode);
+    }
 
-	@Override
-	public Stream<FileNode> childrenOf(FileNode value) {
-		return streamChildFiles(value)
-				.map(FileNodeFactory::toFileNode);
-	}
-	
-	// -- HELPER
-	
-	private static Stream<File> streamChildFiles(FileNode value){
-		val file = value.asFile();
-		val childFiles = file.listFiles();
-		if(childFiles==null) {
-			return Stream.empty();
-		}
-		return Stream.of(childFiles)
-				.filter(f->!f.isHidden());
-	}
+    @Override
+    public int childCountOf(FileNode value) {
+        return (int) streamChildFiles(value).count();
+    }
+
+    @Override
+    public Stream<FileNode> childrenOf(FileNode value) {
+        return streamChildFiles(value)
+                .map(FileNodeFactory::toFileNode);
+    }
+
+    // -- HELPER
+
+    private static Stream<File> streamChildFiles(FileNode value){
+        val file = value.asFile();
+        val childFiles = file.listFiles();
+        if(childFiles==null) {
+            return Stream.empty();
+        }
+        return Stream.of(childFiles)
+                .filter(f->!f.isHidden());
+    }
 
 }

@@ -30,7 +30,7 @@ import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
 final class MarkupComponent_observing  {
 
     private static final String jScriptTemplateResource = "ObservingComponent.js";
-    
+
     static CharSequence decorate(CharSequence htmlContent, LocalResourcePath observing) {
         if(observing==null) {
             return htmlContent;
@@ -39,19 +39,19 @@ final class MarkupComponent_observing  {
         try {
             jScriptTemplate = _Resources.loadAsStringUtf8(
                     MarkupComponent_observing.class, jScriptTemplateResource);
-            
+
         } catch (IOException e) {
             e.printStackTrace();
             return resourceNotFound();
         }
-        
+
         if(isNullOrEmpty(jScriptTemplate)) {
             return resourceNotFound();
         }
-        
+
         final String targetId = UUID.randomUUID().toString();
         final String observingPath = _Resources.prependContextPathIfPresent(observing.getPath());
-        
+
         final StringBuilder sb = new StringBuilder();
         sb
         .append("<div id=\"").append(targetId).append("\">\n")
@@ -62,12 +62,12 @@ final class MarkupComponent_observing  {
                 .replace("${targetId}", targetId)
                 .replace("${observing}", observingPath))
         .append("\n</script>\n");
-        
+
         return sb.toString();
     }
 
     private static String resourceNotFound() {
         return "Template resource not found: '"+jScriptTemplateResource+"'.";
     }
-    
+
 }

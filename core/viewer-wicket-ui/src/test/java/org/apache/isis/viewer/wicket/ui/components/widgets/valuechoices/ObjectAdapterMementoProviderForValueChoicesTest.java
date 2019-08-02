@@ -66,7 +66,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
 
         mementos = _Lists.of(
                 mockMemento1, mockMemento2
-        );
+                );
 
         WicketViewerSettings wicketViewerSettings = context.mock(WicketViewerSettings.class);
         provider = new ObjectAdapterMementoProviderForValueChoices(null, mementos, wicketViewerSettings) {

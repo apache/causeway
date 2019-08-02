@@ -127,25 +127,25 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         @Override public void postVisit(final BS3MenuSection menuSection) { }
 
         @Override public void visit(final ServiceActionLayoutData serviceActionLayoutData) { }
-        
+
         // -- PREDEFINED SHORTCUTS
-        
+
         public static VisitorAdapter visitingMenuSections(Consumer<BS3MenuSection> onVisit) {
-        	return new VisitorAdapter() {
-        		@Override public void visit(final BS3MenuSection section) { 
-        			onVisit.accept(section);
-        		}
-        	};
+            return new VisitorAdapter() {
+                @Override public void visit(final BS3MenuSection section) { 
+                    onVisit.accept(section);
+                }
+            };
         }
-        
+
         public static VisitorAdapter visitingMenus(Consumer<BS3Menu> onVisit) {
-        	return new VisitorAdapter() {
-        		@Override public void visit(final BS3Menu menu) { 
-        			onVisit.accept(menu);
-        		}
-        	};
+            return new VisitorAdapter() {
+                @Override public void visit(final BS3Menu menu) { 
+                    onVisit.accept(menu);
+                }
+            };
         }
-        
+
     }
 
     @Override

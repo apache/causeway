@@ -21,11 +21,11 @@ package org.apache.isis.commons.internal.plugins.environment;
 import org.apache.isis.commons.internal.context._Plugin;
 
 public interface IsisSystemEnvironmentPlugin {
-    
+
     // -- INTERFACE
-    
+
     public IsisSystemEnvironment getIsisSystemEnvironment();
-    
+
 
     // -- PLUGIN LOOKUP
 
@@ -38,5 +38,5 @@ public interface IsisSystemEnvironmentPlugin {
                     return IsisSystemEnvironment::getDefault;
                 });
     }
-    
+
 }

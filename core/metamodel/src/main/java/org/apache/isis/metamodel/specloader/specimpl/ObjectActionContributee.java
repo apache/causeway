@@ -63,7 +63,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
             final ObjectActionDefault serviceAction,
             final int contributeeParam,
             final ObjectSpecification contributeeType) {
-        
+
         super(serviceAction.getFacetedMethod());
 
         this.servicePojo = servicePojo;
@@ -131,8 +131,8 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                     serviceParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
                     ? new OneToOneActionParameterContributee(
                             servicePojo, serviceParameter, contributeeParamNum, this)
-                    : new OneToManyActionParameterContributee(
-                            servicePojo, serviceParameter, contributeeParamNum, this);
+                            : new OneToManyActionParameterContributee(
+                                    servicePojo, serviceParameter, contributeeParamNum, this);
 
                             contributeeParameters.add(contributedParam);
 

@@ -37,7 +37,7 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
             final String value, 
             final Class<?> constructorType,
             final FacetHolder holder) {
-        
+
         super(mixinType, value, constructorType, holder);
     }
 

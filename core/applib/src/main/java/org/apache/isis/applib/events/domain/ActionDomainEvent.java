@@ -73,26 +73,26 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public ActionDomainEvent() {
     }
 
-//    // -- command
-//    private Command command;
-//
-//    /**
-//     * @deprecated - use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
-//     */
-//    @Deprecated
-//    public Command getCommand() {
-//        return command;
-//    }
-//
-//    /**
-//     * Not API - set by the framework.
-//     *
-//     * @deprecated - the corresponding {@link #getCommand()} should not be called, instead use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
-//     */
-//    @Deprecated
-//    public void setCommand(Command command) {
-//        this.command = command;
-//    }
+    //    // -- command
+    //    private Command command;
+    //
+    //    /**
+    //     * @deprecated - use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
+    //     */
+    //    @Deprecated
+    //    public Command getCommand() {
+    //        return command;
+    //    }
+    //
+    //    /**
+    //     * Not API - set by the framework.
+    //     *
+    //     * @deprecated - the corresponding {@link #getCommand()} should not be called, instead use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
+    //     */
+    //    @Deprecated
+    //    public void setCommand(Command command) {
+    //        this.command = command;
+    //    }
 
 
     // -- actionSemantics
@@ -147,12 +147,14 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     /**
      * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
      */
+    @Override
     public Object getMixedIn() {
         return mixedIn;
     }
     /**
      * Not API - set by the framework.
      */
+    @Override
     public void setMixedIn(final Object mixedIn) {
         this.mixedIn = mixedIn;
     }

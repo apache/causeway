@@ -25,35 +25,35 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 public class DateFormatSettings implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final String datePattern;
     private final String dateTimePattern;
     private final int adjustBy;
-    
+
     // -- FACTORIES
-    
+
     public static DateFormatSettings of(String datePattern, String dateTimePattern, int adjustBy) {
         return new DateFormatSettings(datePattern, dateTimePattern, adjustBy);
     }
-    
+
     public static DateFormatSettings of(String datePattern, String dateTimePattern) {
         return of(datePattern, dateTimePattern, /*adjustBy*/ 0);
     }
-    
+
     public static DateFormatSettings of(String datePattern) {
         return of(datePattern, /*dateTimePattern same as*/ datePattern, /*adjustBy*/ 0);
     }
-    
+
     public static DateFormatSettings ofDateAndTime(WicketViewerSettings settings, int adjustBy) {
         return of(settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
     }
-    
+
     public static DateFormatSettings ofDateOnly(WicketViewerSettings settings, int adjustBy) {
         return of(settings.getDatePattern(), settings.getDatePattern(), adjustBy);
     }
-    
+
     // -- IMPLEMENTATION
-    
+
     private DateFormatSettings(String datePattern, String dateTimePattern, int adjustBy) {
         this.datePattern = datePattern;
         this.dateTimePattern = dateTimePattern;
@@ -81,6 +81,6 @@ public class DateFormatSettings implements Serializable {
                 + adjustBy + "]";
     }
 
-    
-    
+
+
 }

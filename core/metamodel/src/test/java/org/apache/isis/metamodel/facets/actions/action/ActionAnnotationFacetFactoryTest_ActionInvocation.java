@@ -48,10 +48,10 @@ public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractF
     public void setUp() throws Exception {
         super.setUp();
         this.facetFactory =  new ActionAnnotationFacetFactory();
-        
+
         System.out.println("setup " + MetaModelContext.current().getSpecificationLoader());
-        
-        
+
+
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {

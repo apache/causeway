@@ -138,8 +138,8 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         case LIST:
 
             final Stream<ObjectAdapter> collectionAdapters =
-                CollectionFacet.Utils.streamAdapters(returnedAdapter);
-            
+            CollectionFacet.Utils.streamAdapters(returnedAdapter);
+
             final ListReprRenderer listReprRenderer =
                     new ListReprRenderer(rendererContext, null, representation).withElementRel(Rel.ELEMENT);
             listReprRenderer.with(collectionAdapters)

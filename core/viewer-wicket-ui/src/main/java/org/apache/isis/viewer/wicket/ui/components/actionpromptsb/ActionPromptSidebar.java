@@ -27,8 +27,8 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 
 public class ActionPromptSidebar
-        extends GenericPanel<Void>
-        implements ActionPromptWithExtraContent {
+extends GenericPanel<Void>
+implements ActionPromptWithExtraContent {
 
     private static final long serialVersionUID = 1L;
 

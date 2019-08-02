@@ -70,7 +70,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
 
         context.checking(new Expectations() {
             {
-            	oneOf(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
+                oneOf(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
             }
         });
 
@@ -90,7 +90,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     public void delegatesToAuthenticationManagerAndHandlesIfNotAuthenticated() {
         context.checking(new Expectations() {
             {
-            	oneOf(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
+                oneOf(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
                 will(returnValue(null));
             }
         });

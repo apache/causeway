@@ -101,8 +101,8 @@ class Smoke_IntegTest {
     }
 
     private <T> T wrap(T domainObject) {
-		return wrapperFactory.wrap(domainObject);
-	}
+        return wrapperFactory.wrap(domainObject);
+    }
 
 }
 

@@ -78,50 +78,50 @@ import lombok.Setter;
 @javax.jdo.annotations.DatastoreIdentity(
         strategy = IdGeneratorStrategy.NATIVE, column = "id")
 @javax.jdo.annotations.Uniques({
-        @javax.jdo.annotations.Unique(
-                name = "ApplicationRole_name_UNQ", members = { "name" })
+    @javax.jdo.annotations.Unique(
+            name = "ApplicationRole_name_UNQ", members = { "name" })
 })
 @javax.jdo.annotations.Queries({
-        @javax.jdo.annotations.Query(
-                name = "findByName", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
-                        + "WHERE name == :name"),
-        @javax.jdo.annotations.Query(
-                name = "findByNameContaining", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
-                        + "WHERE name.matches(:nameRegex) ")
+    @javax.jdo.annotations.Query(
+            name = "findByName", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
+                    + "WHERE name == :name"),
+    @javax.jdo.annotations.Query(
+            name = "findByNameContaining", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
+                    + "WHERE name.matches(:nameRegex) ")
 })
 @DomainObject(
-		bounding = Bounding.BOUNDED,
-//		bounded = true,
+        bounding = Bounding.BOUNDED,
+        //		bounded = true,
         objectType = "isissecurity.ApplicationRole",
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteAction = "findMatching"
-)
+        )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
-)
+        )
 public class ApplicationRole 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
 
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationRole, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationRole, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationRole> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
-    
+
     // -- constants, moved to interface
 
-//    public static final int MAX_LENGTH_NAME = 50;
-//    public static final int TYPICAL_LENGTH_NAME = 30;
-//    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
-    
+    //    public static final int MAX_LENGTH_NAME = 50;
+    //    public static final int TYPICAL_LENGTH_NAME = 30;
+    //    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
+
 
     // -- identification
     /**
@@ -131,35 +131,35 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public String title() {
         return getName();
     }
-    
+
 
     // -- name (property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(typicalLength=TYPICAL_LENGTH_NAME)
     @MemberOrder(sequence = "1")
     @Getter @Setter
     private String name;
 
-    
+
 
     // -- updateName (action)
 
     public static class UpdateNameDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = UpdateNameDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="name", sequence = "1")
     public ApplicationRole updateName(
             @Parameter(maxLength = MAX_LENGTH_NAME) @ParameterLayout(named="Name", typicalLength = TYPICAL_LENGTH_NAME)
@@ -172,43 +172,43 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return getName();
     }
 
-    
+
 
     // -- description (property)
 
     public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(allowsNull="true", length = DescriptionType.Meta.MAX_LEN)
     @Property(
             domainEvent = DescriptionDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             typicalLength=TYPICAL_LENGTH_DESCRIPTION
-    )
+            )
     @MemberOrder(sequence = "2")
     @Getter @Setter
     private String description;
 
-    
+
 
     // -- updateDescription (action)
 
     public static class UpdateDescriptionDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = UpdateDescriptionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="description", sequence = "1")
     public ApplicationRole updateDescription(
             @Parameter(
                     maxLength = DescriptionType.Meta.MAX_LEN,
                     optionality = Optionality.OPTIONAL
-            )
+                    )
             @ParameterLayout(named="Description", typicalLength=TYPICAL_LENGTH_DESCRIPTION)
             final String description) {
         setDescription(description);
@@ -219,29 +219,29 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return getDescription();
     }
 
-    
+
 
     // -- permissions (derived collection)
     public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Collection(
             domainEvent = PermissionsCollectionDomainEvent.class
-    )
+            )
     @CollectionLayout(
             defaultView="table",
             sortedBy = ApplicationPermission.DefaultComparator.class
-    )
+            )
     @MemberOrder(sequence = "10")
     public List<ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
     }
-    
+
 
     // -- addPackage (action)
 
     public static class AddPackageDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -251,7 +251,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Action(
             domainEvent = AddPackageDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Permissions", sequence = "1")
     public ApplicationRole addPackage(
             @ParameterLayout(named="Rule")
@@ -275,11 +275,11 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public java.util.Collection<String> choices2AddPackage() {
         return applicationFeatureRepository.packageNames();
     }
-    
+
 
     // -- addClass (action)
     public static class AddClassDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -289,7 +289,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Action(
             domainEvent = AddClassDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Permissions", sequence = "2")
     public ApplicationRole addClass(
             @ParameterLayout(named="Rule")
@@ -330,11 +330,11 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return applicationFeatureRepository.classNamesContainedIn(packageFqn, null);
     }
 
-    
+
 
     // -- addAction (action)
     public static class AddActionDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -345,7 +345,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Action(
             domainEvent = AddActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Permissions", sequence = "3")
     public ApplicationRole addAction(
             @ParameterLayout(named="Rule")
@@ -389,11 +389,11 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.ACTION);
     }
 
-    
+
 
     // -- addProperty (action)
     public static class AddPropertyDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
      * {@link ApplicationMemberType#PROPERTY property}
@@ -403,7 +403,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Action(
             domainEvent = AddPropertyDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Permissions", sequence = "4")
     public ApplicationRole addProperty(
             @ParameterLayout(named="Rule")
@@ -455,11 +455,11 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             final String className) {
         return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.PROPERTY);
     }
-    
+
 
     // -- addCollection (action)
     public static class AddCollectionDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     /**
      * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
@@ -470,7 +470,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Action(
             domainEvent = AddCollectionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Permissions", sequence = "5")
     public ApplicationRole addCollection(
             @ParameterLayout(named="Rule")
@@ -514,16 +514,16 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.COLLECTION);
     }
 
-    
+
 
     // -- removePermission (action)
     public static class RemovePermissionDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent= RemovePermissionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Permissions", sequence = "9")
     public ApplicationRole removePermission(
             @ParameterLayout(named="Rule")
@@ -535,7 +535,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         final ApplicationPermission permission = applicationPermissionRepository.findByRoleAndRuleAndFeature(this,
                 rule, type, featureFqn);
         if(permission != null) {
-        	repository.remove(permission);
+            repository.remove(permission);
         }
         return this;
     }
@@ -565,25 +565,25 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         final List<ApplicationPermission> permissions = applicationPermissionRepository.findByRoleAndRuleAndFeatureTypeCached(
                 this, rule, type);
         return _Lists.map(
-                        permissions,
-                        ApplicationPermission.Functions.GET_FQN);
+                permissions,
+                ApplicationPermission.Functions.GET_FQN);
     }
 
-    
+
 
     // -- users (collection)
 
     public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @javax.jdo.annotations.Persistent(mappedBy = "roles")
     @Collection(
             domainEvent = UsersDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @MemberOrder(sequence = "20")
     @Getter @Setter
     private SortedSet<ApplicationUser> users = new TreeSet<>();
@@ -597,19 +597,19 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public void removeFromUsers(final ApplicationUser applicationUser) {
         getUsers().remove(applicationUser);
     }
-    
+
 
     // -- addUser (action)
 
     public static class AddUserDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AddUserDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(
-        named="Add")
+            named="Add")
     @MemberOrder(name="Users", sequence = "1")
     public ApplicationRole addUser(final ApplicationUser applicationUser) {
         applicationUser.addRole(this);
@@ -624,20 +624,20 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return list;
     }
 
-    
+
 
     // -- removeUser (action)
 
     public static class RemoveUserDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = RemoveUserDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(
             named="Remove"
-    )
+            )
     @MemberOrder(name="Users", sequence = "2")
     public ApplicationRole removeUser(final ApplicationUser applicationUser) {
         applicationUser.removeRole(this);
@@ -654,16 +654,16 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return applicationUser.validateRemoveRole(this);
     }
 
-    
+
 
     // -- delete (action)
     public static class DeleteDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = DeleteDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
-    )
+            )
     @MemberOrder(sequence = "1")
     public List<ApplicationRole> delete() {
         getUsers().clear();
@@ -679,40 +679,40 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return isAdminRole() ? "Cannot delete the admin role" : null;
     }
 
-    
+
 
     // -- isAdminRole (programmatic)
     @Programmatic
     public boolean isAdminRole() {
         final ApplicationRole adminRole = applicationRoleRepository.findByNameCached(
-        		configBean.getAdminRoleName());
+                configBean.getAdminRoleName());
         return this == adminRole;
     }
-    
+
 
     // -- equals, hashCode, compareTo, toString
-    
+
     private final static Comparator<ApplicationRole> comparator =
-     		Comparator.comparing(ApplicationRole::getName);
-    
-	private final static Equality<ApplicationRole> equality =
-			ObjectContracts.checkEquals(ApplicationRole::getName);
+            Comparator.comparing(ApplicationRole::getName);
 
-	private final static Hashing<ApplicationRole> hashing =
-			ObjectContracts.hashing(ApplicationRole::getName);
+    private final static Equality<ApplicationRole> equality =
+            ObjectContracts.checkEquals(ApplicationRole::getName);
 
-	private final static ToString<ApplicationRole> toString =
-			ObjectContracts.toString("name", ApplicationRole::getName);
-	
+    private final static Hashing<ApplicationRole> hashing =
+            ObjectContracts.hashing(ApplicationRole::getName);
+
+    private final static ToString<ApplicationRole> toString =
+            ObjectContracts.toString("name", ApplicationRole::getName);
+
 
     @Override
     public int compareTo(final ApplicationRole o) {
-    	return comparator.compare(this, o);
+        return comparator.compare(this, o);
     }
 
     @Override
     public boolean equals(final Object obj) {
-    	return equality.equals(this, obj);
+        return equality.equals(this, obj);
     }
 
     @Override
@@ -724,13 +724,13 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public String toString() {
         return toString.toString(this);
     }
-    
+
     @Inject RepositoryService repository;
     @Inject ApplicationFeatureRepository applicationFeatureRepository;
     @Inject ApplicationPermissionRepository applicationPermissionRepository;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecurityModuleConfig configBean;
-    
+
 
 }

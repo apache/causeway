@@ -66,21 +66,21 @@ public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends Abs
         assertTrue(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn);
         assertThat(facet.isInvertedSemantics(), is(false));
     }
-    
+
     public void testPrimitiveWithNoAllowsNull_isMandatory() throws Exception {
         final Method method = cls.getMethod("getPrimitiveWithNoAllowsNull");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-        
+
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MandatoryFacetDerivedFromJdoColumn);
         assertThat(facet.isInvertedSemantics(), is(false));
     }
-    
+
     public void testPrimitiveWithAllowsNullFalse() throws Exception {
         final Method method = cls.getMethod("getPrimitiveWithAllowsNullFalse");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-        
+
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MandatoryFacetDerivedFromJdoColumn);
@@ -90,51 +90,51 @@ public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends Abs
     public void testPrimitiveWithAllowsNullTrue() throws Exception {
         final Method method = cls.getMethod("getPrimitiveWithAllowsNullTrue");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-        
+
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MandatoryFacetDerivedFromJdoColumn);
         assertThat(facet.isInvertedSemantics(), is(true));
     }
-    
+
     public void testReferenceWithNoAnnotation_isOptional() throws Exception {
         final Method method = cls.getMethod("getReferenceWithNoAnnotation");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-        
+
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn);
         assertThat(facet.isInvertedSemantics(), is(true));
     }
-    
+
     public void testReferenceWithNoAllowsNull_isOptional() throws Exception {
         final Method method = cls.getMethod("getReferenceWithNoAllowsNull");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-        
+
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MandatoryFacetDerivedFromJdoColumn);
         assertThat(facet.isInvertedSemantics(), is(true));
     }
-    
+
     public void testReferenceWithAllowsNullFalse() throws Exception {
         final Method method = cls.getMethod("getReferenceWithAllowsNullFalse");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-        
+
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MandatoryFacetDerivedFromJdoColumn);
         assertThat(facet.isInvertedSemantics(), is(false));
     }
-    
+
     public void testReferenceWithAllowsNullTrue() throws Exception {
         final Method method = cls.getMethod("getReferenceWithAllowsNullTrue");
         facetFactory.process(new FacetFactory.ProcessMethodContext(cls, null, method, methodRemover, facetedMethod));
-        
+
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MandatoryFacetDerivedFromJdoColumn);
         assertThat(facet.isInvertedSemantics(), is(true));
     }
-    
+
 }

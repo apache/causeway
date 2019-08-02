@@ -82,7 +82,7 @@ public class PathNode {
         final Map<String, String> criteria = _Maps.newHashMap();
         final String criteriaStr = nodeMatcher.group(3);
         if (criteriaStr != null) {
-            
+
             _Strings.splitThenStream(criteriaStr, WHITESPACE)
             .forEach(criterium->{
                 final Matcher keyValueMatcher = LIST_CRITERIA_SYNTAX.matcher(criterium);
@@ -93,7 +93,7 @@ public class PathNode {
                     criteria.put(criterium, null);
                 }
             });
-            
+
         }
 
         return new PathNode(key, criteria);

@@ -60,26 +60,26 @@ public class Version implements Serializable, Encodable {
     public static Version empty() {
         return Factory.EMPTY_VERSION;
     }
-    
+
     public static Version of(long sequence, @Nullable String user) {
         return of(sequence, user, Factory.EMPTY_TIMESTAMP);
     }
-    
+
     public static Version of(long sequence, @Nullable String user, long utcTimestamp) {
         return new Version(sequence, user, utcTimestamp);
     }
-    
+
     // -- LOGIC FOR EMPTY
-    
+
     public static boolean isEmpty(Version version) {
         return version == Factory.EMPTY_VERSION;
     }
-    
+
     public boolean hasTimestamp() {
         return utcTimestamp!=Factory.EMPTY_TIMESTAMP;
     }
 
-    
+
     // -- constructor, fields
     private final long sequence;
     private final String user;
@@ -202,43 +202,43 @@ public class Version implements Serializable, Encodable {
     }
 
     // -- SPECIAL CASES
-    
+
     /** for convenience*/
     public static final class Factory {
-        
+
         private final static Version EMPTY_VERSION = null;
         private final static long EMPTY_TIMESTAMP = 0L;
-    
+
         public static @Nullable Version ifPresent(@Nullable Long sequence, String user, @Nullable Long utcTimestamp) {
             return mapIfPresentElse(sequence, __->
-                of(sequence.longValue(), user, timestampOfNullable(utcTimestamp)), EMPTY_VERSION);
+            of(sequence.longValue(), user, timestampOfNullable(utcTimestamp)), EMPTY_VERSION);
         }
-        
+
         public static @Nullable Version ifPresent(@Nullable Long sequence, String user, long utcTimestamp) {
             return mapIfPresentElse(sequence, __->
-                of(sequence.longValue(), user, utcTimestamp), EMPTY_VERSION);
+            of(sequence.longValue(), user, utcTimestamp), EMPTY_VERSION);
         }
-        
+
         public static @Nullable Version ifPresent(@Nullable Long sequence, String user) {
             return mapIfPresentElse(sequence, __->
-                of(sequence.longValue(), user, EMPTY_TIMESTAMP), EMPTY_VERSION);
+            of(sequence.longValue(), user, EMPTY_TIMESTAMP), EMPTY_VERSION);
         }
-        
+
         public static @Nullable Version parse(@Nullable String sequence, String user, @Nullable String utcTimestamp) {
             return mapIfPresentElse(sequence, __->
-                of(Long.parseLong(sequence), user, parseTimeStamp(utcTimestamp)), EMPTY_VERSION); 
+            of(Long.parseLong(sequence), user, parseTimeStamp(utcTimestamp)), EMPTY_VERSION); 
         }
-        
+
         // -- HELPER
-        
+
         private static long parseTimeStamp(@Nullable String utcTimestamp) {
             return utcTimestamp != null ? Long.parseLong(utcTimestamp) : EMPTY_TIMESTAMP;
         }
-        
+
         private static long timestampOfNullable(@Nullable Long utcTimestamp) {
             return utcTimestamp != null ? utcTimestamp.longValue() : EMPTY_TIMESTAMP;
         }
-        
+
     }
 
 

@@ -52,11 +52,11 @@ final class Oid_Root implements RootOid {
     public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state) {
         return of(objectSpecId, identifier, state, Version.empty());
     }
-    
+
     public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state, final Version version) {
         return new Oid_Root(objectSpecId, identifier, state, version);
     }
-    
+
     private Oid_Root(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state, final Version version) {
 
         requires(objectSpecId, "objectSpecId");
@@ -72,14 +72,14 @@ final class Oid_Root implements RootOid {
         this.state = state;
         this.version = version;
         this.hashCode = calculateHash();
-        
-        
+
+
         val debug = this.toString(); 
         if(debug.contains("/spring/")) {
-        	_Exceptions.throwUnexpectedCodeReach();
+            _Exceptions.throwUnexpectedCodeReach();
         }
-        
-        
+
+
     }
 
     // -- Encodeable
@@ -89,11 +89,11 @@ final class Oid_Root implements RootOid {
         this.objectSpecId = oid.objectSpecId;
         this.identifier = oid.identifier;
         this.state = oid.state;
-        
+
         requires(objectSpecId, "objectSpecId");
         requires(identifier, "identifier");
         requires(state, "state");
-        
+
         this.version = oid.version;
         this.hashCode = calculateHash();
     }
@@ -166,12 +166,12 @@ final class Oid_Root implements RootOid {
     public Bookmark asBookmark() {
         return state.bookmarkOf(this);
     }
-    
+
     @Override
     public OidDto asOidDto() {
         return state.toOidDto(this);
     }
-    
+
     // -- equals, hashCode
 
     private int calculateHash() {

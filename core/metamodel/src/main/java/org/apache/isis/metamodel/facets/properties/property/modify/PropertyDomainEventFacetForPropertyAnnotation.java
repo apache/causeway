@@ -31,8 +31,8 @@ public class PropertyDomainEventFacetForPropertyAnnotation extends PropertyDomai
      */
     public PropertyDomainEventFacetForPropertyAnnotation(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-            final FacetHolder holder) {
+                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
+                    final FacetHolder holder) {
         super(eventType, getterFacetIfAny, holder);
     }
 

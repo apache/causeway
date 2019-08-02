@@ -65,8 +65,8 @@ public class IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent extends IconF
 
     public IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent(
             final Class<? extends IconUiEvent<?>> iconUiEventClass,
-            final MetamodelEventService metamodelEventService,
-            final FacetHolder holder) {
+                    final MetamodelEventService metamodelEventService,
+                    final FacetHolder holder) {
         super(holder);
         this.iconUiEventClass = iconUiEventClass;
         this.metamodelEventService = metamodelEventService;

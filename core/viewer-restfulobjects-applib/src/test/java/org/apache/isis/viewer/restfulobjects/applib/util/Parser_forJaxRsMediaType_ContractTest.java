@@ -33,11 +33,11 @@ public abstract class Parser_forJaxRsMediaType_ContractTest {
         final Parser<javax.ws.rs.core.MediaType> parser = Parser.forJaxRsMediaType();
 
         for (final javax.ws.rs.core.MediaType v : new javax.ws.rs.core.MediaType[] {
-        		javax.ws.rs.core.MediaType.APPLICATION_ATOM_XML_TYPE,
-        		javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE,
-        		javax.ws.rs.core.MediaType.APPLICATION_XHTML_XML_TYPE,
-        		MediaTypes.parse(RestfulMediaType.APPLICATION_JSON_OBJECT)
-        		}) {
+                javax.ws.rs.core.MediaType.APPLICATION_ATOM_XML_TYPE,
+                javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE,
+                javax.ws.rs.core.MediaType.APPLICATION_XHTML_XML_TYPE,
+                MediaTypes.parse(RestfulMediaType.APPLICATION_JSON_OBJECT)
+        }) {
             final String asString = parser.asString(v);
             final javax.ws.rs.core.MediaType valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));

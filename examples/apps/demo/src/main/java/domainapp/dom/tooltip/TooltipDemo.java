@@ -53,19 +53,20 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL)
 public class TooltipDemo extends DemoStub {
-    
+
+    @Override
     public String title() {
         return "Tooltip Demo";
     }
 
     // -- NO ARG
-    
+
     @Action
     @ActionLayout(describedAs="This is a no-arg action with a tooltip.")
     public TooltipDemo noArgAction(){
         return this;
     }
-    
+
     @Action(semantics=SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
             cssClass="btn-danger",
@@ -74,32 +75,32 @@ public class TooltipDemo extends DemoStub {
     public TooltipDemo noArgActionWithConfirm(){
         return this;
     }
-    
+
     // -- WITH ARG
-    
+
     @Action
     @ActionLayout(describedAs="This is an action with arguments and a tooltip.")
     public TooltipDemo biArgAction(
-            
+
             @Parameter(optionality=Optionality.MANDATORY)
             @ParameterLayout(
                     named="first",
                     describedAs="This is a mandatory parameter with a tooltip.") 
             String firstArg,
-            
+
             @Parameter(optionality=Optionality.OPTIONAL)
             @ParameterLayout(
                     named="second",
                     describedAs="This is an optional parameter with a tooltip.") 
             String secondArg
-            
+
             ){
-        
+
         return this;
     }
-    
+
     // -- DISABLED
-    
+
     @Action
     @ActionLayout(
             named="Disabled Action", // metamodel validation is picky when method prefix 'disabled' is used
@@ -107,11 +108,11 @@ public class TooltipDemo extends DemoStub {
     public TooltipDemo disAbledAction(){
         return this;
     }
-    
+
     public String disableDisAbledAction() {
         return "Disabled for demonstration.";
     }
-    
+
     @Action
     @ActionLayout(
             named="Disabled Action with Confirmation", // metamodel validation is picky when method prefix 'disabled' is used
@@ -121,72 +122,72 @@ public class TooltipDemo extends DemoStub {
     public TooltipDemo disAbledActionWithConfirmation(){
         return this;
     }
-    
+
     public String disableDisAbledActionWithConfirmation() {
         return "Disabled for demonstration.";
     }
-    
+
     // -- PROPERTIES
-    
+
     @Property(editing=Editing.ENABLED)
     @PropertyLayout(describedAs="This is a property with a tooltip.")
     @Getter @Setter private String stringProperty;
-    
+
     @Property
     @PropertyLayout(describedAs="This is a readonly property with a tooltip.")
     @Getter private String readonlyStringProperty = "readonly";
-    
+
     @Property(
             editing=Editing.DISABLED, 
             editingDisabledReason="Editing disabled for demonstration.")
     @PropertyLayout(describedAs="This is a 'editing-disabled' property with a tooltip.")
     @Getter @Setter private String editingDisabledStringProperty = "editing disabled";
-    
+
     // -- COLLECTION
-    
+
     @Collection
     @CollectionLayout(
             describedAs="This is a collection with a tooltip. Also note, you can mouse-over the "
                     + "'Name' column's head label.")
     @PropertyLayout(labelPosition=LabelPosition.TOP)
     @Getter private List<DemoItem> collection;
-    
+
     // -- FIELDSET CONTENT
-    
+
     @PropertyLayout(labelPosition=LabelPosition.NONE)
     public Markup getText1() {
         return new Markup("Mouse-over above buttons, then tooltips should pop up.");
     }
-    
+
     @PropertyLayout(labelPosition=LabelPosition.NONE)
     public Markup getText2() {
         return new Markup("Click the above button, and mouse-over then action's "
                 + "parameter lables. Tooltips should pop up.");
     }
-    
+
     @PropertyLayout(labelPosition=LabelPosition.NONE)
     public Markup getText3() {
         return new Markup("Mouse-over above buttons, then the 'disabled reason' "
                 + "should pop up.");
     }
-    
+
     @PropertyLayout(labelPosition=LabelPosition.NONE)
     public Markup getText4() {
         return new Markup("Mouse-over below property lables, then tooltips should "
                 + "pop up.<p>Mouse-over the disabled/readonly property value form-field,"
                 + " then the 'editing disabled reason' should pop up.</p>");
     }
-    
+
     // ---
-        
+
     @Override @Programmatic
     public void initDefaults() {
-        
+
         collection = new ArrayList<>();
         collection.add(DemoItem.of("first"));
         collection.add(DemoItem.of("second"));
         collection.add(DemoItem.of("third"));
-        
+
     }
 
 }

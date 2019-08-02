@@ -37,7 +37,7 @@ public class AuthenticationRequestLogonFixture extends AuthenticationRequestAbst
     public static AuthenticationRequestLogonFixture of(final String name, final String ... roles) {
         return new AuthenticationRequestLogonFixture(name, 
                 roles == null 
-                    ? Collections.emptyList()
+                ? Collections.emptyList()
                         : _Lists.of(roles));
     }
 

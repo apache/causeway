@@ -204,9 +204,9 @@ public class CommandDefault implements Command {
         return toString.toString(this);
     }
 
-    
+
     // -- FRAMEWORK INTERNATA
-    
+
     private final Command.Internal INTERNAL = new Command.Internal() {
         @Override
         public void setMemberIdentifier(String actionIdentifier) {
@@ -273,7 +273,7 @@ public class CommandDefault implements Command {
             CommandDefault.this.executor = executor;
         }
     };
-    
+
     @Override
     public Command.Internal internal() {
         return INTERNAL;

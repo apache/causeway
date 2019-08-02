@@ -48,40 +48,40 @@ import lombok.val;
 
 @Singleton
 public class HomePageResolverServiceDefault implements HomePageResolverService {
-    
+
     @Inject FactoryService factoryService;
     @Inject ServiceRegistry serviceRegistry;
-    
+
     @Override
     public HomePageAction getHomePageAction() {
         return homePage.get();
     }
-    
+
     private final _Lazy<HomePageAction> homePage = _Lazy.threadSafe(this::lookupHomePageAction);
 
     private HomePageAction lookupHomePageAction() {
-        
-    	val metaModelContext = MetaModelContext.current();
+
+        val metaModelContext = MetaModelContext.current();
         val specLoader = metaModelContext.getSpecificationLoader();
-    	
-    	val viewModelTypes = IsisBeanTypeRegistry.current().getViewModelTypes();
-    	
-    	// -- 1) lookup view-models that are type annotated with @HomePage
-    	
-    	HomePageAction homePageAction = viewModelTypes.stream()
-    	.map(viewModelType->homePageViewModelIfUsable(viewModelType))
-    	.filter(_NullSafe::isPresent)
-    	.findFirst()
-    	.orElse(null);
-    	
-    	if(homePageAction!=null) {
+
+        val viewModelTypes = IsisBeanTypeRegistry.current().getViewModelTypes();
+
+        // -- 1) lookup view-models that are type annotated with @HomePage
+
+        HomePageAction homePageAction = viewModelTypes.stream()
+                .map(viewModelType->homePageViewModelIfUsable(viewModelType))
+                .filter(_NullSafe::isPresent)
+                .findFirst()
+                .orElse(null);
+
+        if(homePageAction!=null) {
             return homePageAction;
         }
-    	
+
         val specRef = new ObjectSpecification[] {null}; // simple object reference
-        
+
         // -- 2) lookup managed beans that have actions annotated with @HomePage
-        
+
         homePageAction = 
                 serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
                 .map(bean->bean.getBeanClass())
@@ -93,9 +93,9 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
                 .filter(_NullSafe::isPresent)
                 .findAny()
                 .orElse(null);
-        
+
         // -- 3) lookup view-models that have actions annotated with @HomePage
-        
+
         homePageAction = viewModelTypes.stream()
                 .map(viewModelType->specLoader.loadSpecification(viewModelType))
                 .filter(_NullSafe::isPresent)
@@ -105,79 +105,79 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
                 .filter(_NullSafe::isPresent)
                 .findAny()
                 .orElse(null);
-        
+
         if(homePageAction!=null) {
             return homePageAction;
         }
-        
+
         return homePageAction;
     }
-    
+
     @Vetoed @ViewModel
     public static class HomePageActionContainer {
-    	
-    	@Inject private FactoryService factoryService;
-    	private static Class<?> viewModelType;
-    	
-    	@Action @HomePage
-    	public Object homePage() {
-    		val viewModelPojo = factoryService.instantiate(viewModelType);
-    		return viewModelPojo;
-    	}
+
+        @Inject private FactoryService factoryService;
+        private static Class<?> viewModelType;
+
+        @Action @HomePage
+        public Object homePage() {
+            val viewModelPojo = factoryService.instantiate(viewModelType);
+            return viewModelPojo;
+        }
     }
-    
-    
+
+
     protected HomePageAction homePageViewModelIfUsable(Class<?> type) {
-    	if(!type.isAnnotationPresent(HomePage.class)) {
-    		return null; 
-    	}
-    	
-    	val metaModelContext = MetaModelContext.current();
+        if(!type.isAnnotationPresent(HomePage.class)) {
+            return null; 
+        }
+
+        val metaModelContext = MetaModelContext.current();
         val specLoader = metaModelContext.getSpecificationLoader();
-    	val spec = specLoader.loadSpecification(type);
-    	if(!spec.isViewModel()) {
-    		return null;
-    	}
-    	
-    	HomePageActionContainer.viewModelType = type;
-    	
-    	val containerSpec = specLoader.loadSpecification(HomePageActionContainer.class);
-    	
-    	val homePageAction = containerSpec.streamObjectActions(Contributed.EXCLUDED)
-    	.map(objectAction->homePageActionIfUsable(objectAction, containerSpec))
-        .filter(_NullSafe::isPresent)
-        .findAny()
-        .orElse(null);
-    	
-    	return homePageAction;
+        val spec = specLoader.loadSpecification(type);
+        if(!spec.isViewModel()) {
+            return null;
+        }
+
+        HomePageActionContainer.viewModelType = type;
+
+        val containerSpec = specLoader.loadSpecification(HomePageActionContainer.class);
+
+        val homePageAction = containerSpec.streamObjectActions(Contributed.EXCLUDED)
+                .map(objectAction->homePageActionIfUsable(objectAction, containerSpec))
+                .filter(_NullSafe::isPresent)
+                .findAny()
+                .orElse(null);
+
+        return homePageAction;
     }
 
     protected HomePageAction homePageActionIfUsable(ObjectAction objectAction, ObjectSpecification spec) {
-        
+
         if (!objectAction.containsDoOpFacet(HomePageFacet.class)) {
             return null;
         }
 
         val metaModelContext = MetaModelContext.current();
         val objectAdapterProvider = metaModelContext.getObjectAdapterProvider();
-        
+
         final ObjectAdapter adapterForHomePageActionDeclaringPojo;
-        
+
         if(spec.isViewModel()) {
             val viewModelPojo = factoryService.instantiate(spec.getCorrespondingClass());
             adapterForHomePageActionDeclaringPojo = objectAdapterProvider.adapterFor(viewModelPojo);
         } else if(spec.isManagedBean()) {
-            
+
             adapterForHomePageActionDeclaringPojo = 
                     serviceRegistry.streamRegisteredBeansOfType(spec.getCorrespondingClass())
                     .map(objectAdapterProvider::adapterForBean)
                     .findFirst()
                     .orElseThrow(_Exceptions::unexpectedCodeReach);
-            
+
         } else {
             throw _Exceptions.unexpectedCodeReach();
         }
-        
+
         final Consent visibility =
                 objectAction.isVisible(
                         adapterForHomePageActionDeclaringPojo,
@@ -196,7 +196,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         if (usability.isVetoed()) {
             return null;
         }
-        
+
         return HomePageAction.of(adapterForHomePageActionDeclaringPojo, objectAction);
     }
 

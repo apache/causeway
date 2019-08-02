@@ -51,52 +51,52 @@ import lombok.val;
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorDefaultTest.Producers.class,
-    },
-    properties = {
-            "isis.services.injector.setPrefix=true"
-    })
+},
+properties = {
+        "isis.services.injector.setPrefix=true"
+})
 class ServiceInjectorDefaultTest {
 
     // -- SPRING SETUP
-    
+
     @Configuration
     @Profile("test")
     static class Producers {
-        
+
         @Bean
         InjectorMethodEvaluator getInjectorMethodEvaluator() {
             return new InjectorMethodEvaluatorDefault();
         }
-        
+
         @Bean
         SomeDomainObject mockDomainObject() {
             return Mockito.mock(SomeDomainObject.class);
         }
-        
+
         @Bean
         RepositoryService mockRepositoryService() {
             return Mockito.mock(RepositoryServiceExtended.class);
         }
-        
+
         @Bean
         MixinService mockMixin() {
             return Mockito.mock(MixinService.class);
         }
-        
+
         @Bean
         Service1 mockService1() {
             return Mockito.mock(Service1.class);
         }
-        
+
         @Bean
         Service2 mockService2() {
             return Mockito.mock(Service2.class);
         }
-        
+
     }
 
     // -- SCENARIO
-    
+
     public static interface Service1 {
     }
 
@@ -116,13 +116,13 @@ class ServiceInjectorDefaultTest {
         private Service1 c;
         private Service2 d;
     }
-    
+
     // -- TESTS
-    
+
     @Inject private ServiceInjector injector;
     @Inject private ServiceRegistry registry;
     @Inject private ApplicationContext applicationContext;
-    
+
     @BeforeEach
     void setup() {
         if(!_Spring.isContextAvailable()) {
@@ -134,20 +134,20 @@ class ServiceInjectorDefaultTest {
     void shouldInject_RepositoryService() {
 
         val mockDomainObject = new SomeDomainObject();
-        
+
         injector.injectServicesInto(mockDomainObject, onNotResolvable->{
             // ignore, checked below
         });
 
-        
+
         assertNotNull(mockDomainObject.getA());
         //FIXME[2112] does not get injected ... 
         //assertNotNull(mockDomainObject.getB());
         assertNotNull(mockDomainObject.getC());
         assertNotNull(mockDomainObject.getD());
-        
+
     }
-    
+
     @Test
     void shouldStreamRegisteredServices() {
         long registeredServiceCount = registry.streamRegisteredBeans()

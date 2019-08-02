@@ -33,12 +33,12 @@ public interface ParentedOid extends Serializable, Oid {
     String getName();
 
     // -- DECODE FROM STRING
-    
+
     public static ParentedOid deStringEncoded(final String urlEncodedOidStr) {
         final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
     }
-    
+
     public static ParentedOid deString(String enString) {
         return Oid.unmarshaller().unmarshal(enString, ParentedOid.class);
     }

@@ -48,105 +48,105 @@ import lombok.val;
 final class _Context_ThreadLocal {
 
     // -- MIXINS
-    
-	@Value(staticConstructor = "of")
-	private final static class ThreadKey {
-		long threadId;
-		int threadHashCode;
-		static ThreadKey of(Thread thread) {
-			return of(thread.getId(), thread.hashCode());
-		}
-	}
-	
-	static <T> Runnable put(Class<? super T> type, T variant) {
-		requires(type, "type");
-    	requires(variant, "variant");
-    	
-    	val threadLocalMap = getOrCreateThreadLocalMap();
-    	threadLocalMap
-    	.compute(type, (k, v) -> v == null 
-    		? Bin.<T>ofSingleton(variant)
-    				: Bin.<T>concat(_Casts.uncheckedCast(v), variant));
-    	
-    	val key = THREAD_LOCAL_MAP_KEY.get();
-    	    	
-		return ()->{MAPS_BY_KEY.remove(key);};
+
+    @Value(staticConstructor = "of")
+    private final static class ThreadKey {
+        long threadId;
+        int threadHashCode;
+        static ThreadKey of(Thread thread) {
+            return of(thread.getId(), thread.hashCode());
+        }
     }
-	
-	static <T> Bin<T> select(Class<? super T> type, Class<? super T> instanceOf) {
-		val bin = _Context_ThreadLocal.<T>get(type);
-		return bin.filter(t -> isInstanceOf(t, instanceOf));
-	}
-	
-	private static boolean isInstanceOf(Object obj, Class<?> type) {
-		return type.isAssignableFrom(obj.getClass());
-	}
-    
+
+    static <T> Runnable put(Class<? super T> type, T variant) {
+        requires(type, "type");
+        requires(variant, "variant");
+
+        val threadLocalMap = getOrCreateThreadLocalMap();
+        threadLocalMap
+        .compute(type, (k, v) -> v == null 
+        ? Bin.<T>ofSingleton(variant)
+                : Bin.<T>concat(_Casts.uncheckedCast(v), variant));
+
+        val key = THREAD_LOCAL_MAP_KEY.get();
+
+        return ()->{MAPS_BY_KEY.remove(key);};
+    }
+
+    static <T> Bin<T> select(Class<? super T> type, Class<? super T> instanceOf) {
+        val bin = _Context_ThreadLocal.<T>get(type);
+        return bin.filter(t -> isInstanceOf(t, instanceOf));
+    }
+
+    private static boolean isInstanceOf(Object obj, Class<?> type) {
+        return type.isAssignableFrom(obj.getClass());
+    }
+
     static <T> Bin<T> get(Class<? super T> type) {
-    	val threadLocalMap = getThreadLocalMap();
-    	if(threadLocalMap==null) {
-    		return Bin.empty();
-    	}
-    	val bin = threadLocalMap.get(type);
-    	if(bin==null) {
-    		return Bin.empty();	
-    	}
-    	return _Casts.uncheckedCast(bin);
+        val threadLocalMap = getThreadLocalMap();
+        if(threadLocalMap==null) {
+            return Bin.empty();
+        }
+        val bin = threadLocalMap.get(type);
+        if(bin==null) {
+            return Bin.empty();	
+        }
+        return _Casts.uncheckedCast(bin);
     }
-    
+
     static void clear(Class<?> type) {
-    	val threadLocalMap = getThreadLocalMap();
-    	if(threadLocalMap==null) {
-    		return;
-    	}
-    	threadLocalMap.remove(type);
+        val threadLocalMap = getThreadLocalMap();
+        if(threadLocalMap==null) {
+            return;
+        }
+        threadLocalMap.remove(type);
     }
-    
+
     static void cleanupThread() {
-    	val key = THREAD_LOCAL_MAP_KEY.get();
-    	THREAD_LOCAL_MAP_KEY.remove();
-    	MAPS_BY_KEY.remove(key);
+        val key = THREAD_LOCAL_MAP_KEY.get();
+        THREAD_LOCAL_MAP_KEY.remove();
+        MAPS_BY_KEY.remove(key);
     }
-    
+
     // -- HELPER
-    
+
     private _Context_ThreadLocal(){}
-    
+
     static void clear() {
-    	MAPS_BY_KEY.clear();
+        MAPS_BY_KEY.clear();
     }
 
-//	/**
-//	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
-//	 */
-//    private final static ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
-//    		InheritableThreadLocal.withInitial(HashMap::new);
+    //	/**
+    //	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
+    //	 */
+    //    private final static ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
+    //    		InheritableThreadLocal.withInitial(HashMap::new);
 
-	/**
-	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
-	 */
+    /**
+     * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
+     */
     private final static ThreadLocal<ThreadKey> THREAD_LOCAL_MAP_KEY = 
-    		InheritableThreadLocal.withInitial(()->ThreadKey.of(Thread.currentThread()));
+            InheritableThreadLocal.withInitial(()->ThreadKey.of(Thread.currentThread()));
 
-    
+
     private final static _Multimaps.MapMultimap<ThreadKey, Class<?>, Bin<?>> MAPS_BY_KEY = 
-    		_Multimaps.newConcurrentMapMultimap(); 
-    
+            _Multimaps.newConcurrentMapMultimap(); 
+
     private static Map<Class<?>, Bin<?>> getThreadLocalMap() {
-    	val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
-    	val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
-    	return threadLocalMap;
+        val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
+        val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
+        return threadLocalMap;
     }
-    
+
     private static Map<Class<?>, Bin<?>> getOrCreateThreadLocalMap() {
-    	val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
-    	val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
-    	if(threadLocalMap!=null) {
-        	return threadLocalMap;
-    	}
-		val map = _Maps.<Class<?>, Bin<?>>newHashMap();
-		MAPS_BY_KEY.put(key, map);
-		return map;
+        val key = THREAD_LOCAL_MAP_KEY.get(); // non-null
+        val threadLocalMap = MAPS_BY_KEY.get(key); // might be null
+        if(threadLocalMap!=null) {
+            return threadLocalMap;
+        }
+        val map = _Maps.<Class<?>, Bin<?>>newHashMap();
+        MAPS_BY_KEY.put(key, map);
+        return map;
     }
-    
+
 }

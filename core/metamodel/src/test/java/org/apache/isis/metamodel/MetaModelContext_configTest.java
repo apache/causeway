@@ -31,42 +31,42 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import lombok.val;
 
 class MetaModelContext_configTest {
-    
+
     @BeforeEach
     void setUp() {
         _Context.clear();
     }
-    
+
     @Test
     void shouldReturnEmptyValue() {
-        
+
         val config = config();
         assertEquals(null, config.getString("test"));
     }
-    
+
     @Test
     void shouldNotAllowChangeAfterFinalizedConfig() {
-        
+
         @SuppressWarnings("unused")
         val config = config();
-        
+
         assertThrows(IllegalStateException.class, ()->{
             _Config.put("test", "Hello World!");    
         });
     }
-    
+
     @Test
     void shouldReturnPrimedValue() {
-        
+
         _Config.put("test", "Hello World!");
-        
+
         val config = config();
-        
+
         assertEquals("Hello World!", config.getString("test"));
     }
-    
+
     // -- HELPER
-    
+
     private IsisConfiguration config() {
         return MetaModelContext.current().getConfiguration();
     }

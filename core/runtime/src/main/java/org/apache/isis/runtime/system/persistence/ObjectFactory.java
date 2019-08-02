@@ -32,7 +32,7 @@ public class ObjectFactory {
     public ObjectFactory(
             final PersistenceSession persistenceSession,
             final ServiceInjector serviceInjector) {
-        
+
         this.persistenceSession = persistenceSession;
         this.serviceInjector = serviceInjector;
     }

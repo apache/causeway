@@ -23,15 +23,15 @@ package domainapp.modules.simple;
  */
 public class SimpleModuleManifest /*extends AppManifestAbstract2*/ {
 
-  //FIXME[2112] needs migration
-//    public static final Builder BUILDER = Builder.forModule(new SimpleModule())
-//            .withConfigurationProperty("isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll","true")
-//            .withConfigurationProperty("isis.persistor.datanucleus.impl.datanucleus.identifier.case","MixedCase")
-//            ;
-//
-//    public SimpleModuleManifest() {
-//        super(BUILDER);
-//    }
+    //FIXME[2112] needs migration
+    //    public static final Builder BUILDER = Builder.forModule(new SimpleModule())
+    //            .withConfigurationProperty("isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll","true")
+    //            .withConfigurationProperty("isis.persistor.datanucleus.impl.datanucleus.identifier.case","MixedCase")
+    //            ;
+    //
+    //    public SimpleModuleManifest() {
+    //        super(BUILDER);
+    //    }
 
 
 }

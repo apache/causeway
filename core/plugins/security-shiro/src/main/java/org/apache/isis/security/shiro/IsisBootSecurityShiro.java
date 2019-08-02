@@ -38,12 +38,12 @@ import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
  */
 @Configuration
 @Import({
-        AuthorizationManagerStandard.class,
-        AuthenticationManagerStandard.class,
-        WebModuleShiro.class
+    AuthorizationManagerStandard.class,
+    AuthenticationManagerStandard.class,
+    WebModuleShiro.class
 })
 public class IsisBootSecurityShiro {
-    
+
     @Bean @Singleton
     public Authenticator authenticator() {
         return new ShiroAuthenticator();

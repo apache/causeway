@@ -27,22 +27,22 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationClassMember"
-)
+        )
 @ViewModelLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
-)
+        )
 public abstract class ApplicationClassMember extends ApplicationFeatureViewModel {
 
     public static abstract class PropertyDomainEvent<S extends ApplicationClassMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClassMember, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<S extends ApplicationClassMember, T> extends ApplicationFeatureViewModel.CollectionDomainEvent<S, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent<S extends ApplicationClassMember> extends ApplicationFeatureViewModel.ActionDomainEvent<S> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
-    
+
 
     // -- constructors
     public ApplicationClassMember() {
@@ -51,21 +51,22 @@ public abstract class ApplicationClassMember extends ApplicationFeatureViewModel
     public ApplicationClassMember(final ApplicationFeatureId featureId) {
         super(featureId);
     }
-    
+
 
     // -- memberName (properties)
 
     public static class MemberNameDomainEvent extends PropertyDomainEvent<ApplicationClassMember, String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
+    @Override
     @Property(
             domainEvent = MemberNameDomainEvent.class
-    )
+            )
     @MemberOrder(name="Id", sequence = "2.4")
     public String getMemberName() {
         return super.getMemberName();
     }
-    
+
 
 
 

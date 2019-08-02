@@ -97,7 +97,7 @@ implements LinksProvider, UiHintContainer {
                 final Stream<ObjectAdapter> resolveResults = isBulkLoad
                         ? loadInBulk(entityCollectionModel)
                                 : loadOneByOne(entityCollectionModel);
-                return resolveResults.collect(Collectors.toList());
+                        return resolveResults.collect(Collectors.toList());
             }
 
             private Stream<ObjectAdapter> loadInBulk(final EntityCollectionModel model) {
@@ -110,7 +110,7 @@ implements LinksProvider, UiHintContainer {
                         .map(ObjectAdapterMemento::asBookmarkIfSupported)
                         .filter(_NullSafe::isPresent)
                         .map(Oid.Factory::ofBookmark);
-                
+
                 final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
                 final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
                 return stream(adapterList)
@@ -118,7 +118,7 @@ implements LinksProvider, UiHintContainer {
             }
 
             private Stream<ObjectAdapter> loadOneByOne(final EntityCollectionModel model) {
-                
+
                 return stream(model.mementoList)
                         .map(ObjectAdapterMemento::getObjectAdapter)
                         .filter(_NullSafe::isPresent);
@@ -254,7 +254,7 @@ implements LinksProvider, UiHintContainer {
                 .collect(Collectors.toList());
 
         val specificationLoader = IsisContext.getSpecificationLoader();
-        
+
         final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
                 .map(specificationLoader::loadSpecification)
                 .orElse(collectionAsAdapter.getSpecification().getElementSpecification());

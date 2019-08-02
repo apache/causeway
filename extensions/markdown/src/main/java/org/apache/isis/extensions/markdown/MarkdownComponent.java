@@ -40,28 +40,28 @@ public class MarkdownComponent extends MarkupComponent {
     public MarkdownComponent(String id, IModel<?> model) {
         super(id, model, /*observing*/ null);
     }
-    
+
     @Override
     public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag, 
                 MarkupComponent_reloadJs.decorate(htmlContent, jsRef.get()));
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        
+
         response.render(CssHeaderItem.forReference(
                 new CssResourceReference(MarkdownComponent.class, "css/prism.css")));
 
         response.render(JavaScriptHeaderItem.forReference(jsRef.get()));
 
     }
-    
+
     // -- HELPER
-    
+
     private final static _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
-        new JavaScriptResourceReference(MarkdownComponent.class, "js/prism1.14.js"));
+    new JavaScriptResourceReference(MarkdownComponent.class, "js/prism1.14.js"));
 
 }

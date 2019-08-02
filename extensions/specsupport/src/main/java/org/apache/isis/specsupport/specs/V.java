@@ -27,7 +27,7 @@ public class V {
 
     private V() {
     }
-    
+
     /**
      * @deprecated this is just a dummy, it seems the former cucumber.api.Transformer was removed; 
      * what's the replacement?
@@ -35,7 +35,7 @@ public class V {
      * @param <T>
      */
     public static abstract class Transformer<T> {
-    	public abstract T transform(java.lang.String value);
+        public abstract T transform(java.lang.String value);
     }
 
     /**

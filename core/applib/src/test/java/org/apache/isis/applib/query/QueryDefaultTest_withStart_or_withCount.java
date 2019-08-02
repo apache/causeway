@@ -25,14 +25,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class QueryDefaultTest_withStart_or_withCount {
-    
+
     private QueryDefault<Customer> queryDefault;
 
     @Rule
     public ExpectedException thrown= ExpectedException.none();
-    
+
     static class Customer {}
-    
+
     @Before
     public void setUp() throws Exception {
         queryDefault = new QueryDefault<Customer>(Customer.class, "findByLastName", "lastName", "Smith");
@@ -48,7 +48,7 @@ public class QueryDefaultTest_withStart_or_withCount {
     @Test
     public void typicalHappyCase() throws Exception {
         final QueryDefault<Customer> q = queryDefault.withStart(10L).withCount(5L);
-        
+
         assertThat(q, is(queryDefault));
         assertThat(q.getStart(), is(10L));
         assertThat(q.getCount(), is(5L));
@@ -57,7 +57,7 @@ public class QueryDefaultTest_withStart_or_withCount {
     @Test
     public void happyCase_startOnly() throws Exception {
         final QueryDefault<Customer> q = queryDefault.withStart(10L);
-        
+
         assertThat(q, is(queryDefault));
         assertThat(q.getStart(), is(10L));
         assertThat(q.getCount(), is(0L));
@@ -66,7 +66,7 @@ public class QueryDefaultTest_withStart_or_withCount {
     @Test
     public void happyCase_startZero() throws Exception {
         final QueryDefault<Customer> q = queryDefault.withStart(0);
-        
+
         assertThat(q, is(queryDefault));
         assertThat(q.getStart(), is(0L));
     }
@@ -80,7 +80,7 @@ public class QueryDefaultTest_withStart_or_withCount {
     @Test
     public void happyCase_countOnly() throws Exception {
         final QueryDefault<Customer> q = queryDefault.withCount(20L);
-        
+
         assertThat(q, is(queryDefault));
         assertThat(q.getStart(), is(0L));
         assertThat(q.getCount(), is(20L));

@@ -34,24 +34,24 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 @DomainObjectLayout(named="Event Demo")
 public class EventLogMenu {
 
-	@Inject private EventLogRepository eventLog;
-	@Inject private EventBusService eventBusService;
-	
-	@Action
-	public List<EventLogEntry> listEvents(){
-		return eventLog.listAll();
-	}
-	
-	public static class EventTestProgrammaticEvent extends ActionDomainEvent<EventLogMenu>  {
-		private static final long serialVersionUID = 1L;
-	}
-	
-	@Action
-	@ActionLayout(cssClassFa="fa-bolt")
-	public List<EventLogEntry> triggerEvent(){
-		eventBusService.post(new EventTestProgrammaticEvent());
-		return listEvents();
-	}
+    @Inject private EventLogRepository eventLog;
+    @Inject private EventBusService eventBusService;
 
-	
+    @Action
+    public List<EventLogEntry> listEvents(){
+        return eventLog.listAll();
+    }
+
+    public static class EventTestProgrammaticEvent extends ActionDomainEvent<EventLogMenu>  {
+        private static final long serialVersionUID = 1L;
+    }
+
+    @Action
+    @ActionLayout(cssClassFa="fa-bolt")
+    public List<EventLogEntry> triggerEvent(){
+        eventBusService.post(new EventTestProgrammaticEvent());
+        return listEvents();
+    }
+
+
 }

@@ -34,7 +34,7 @@ public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
             final List<Action> actions,
             final FacetHolder holder,
             final DeploymentType deploymentType) {
-        
+
         return actions.stream()
                 .map(Action::restrictTo)
                 .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)

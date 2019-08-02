@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 public class MetaModelDeficiencies implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Getter private final Set<String> validationErrors;
-    
+
     public String getValidationErrorsAsString() {
         return concatenate(validationErrors);
     }

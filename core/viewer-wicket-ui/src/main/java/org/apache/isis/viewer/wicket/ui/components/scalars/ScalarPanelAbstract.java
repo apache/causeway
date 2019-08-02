@@ -174,7 +174,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         }
 
         final ScalarModel scalarModel = getModel();
-        
+
         final String disableReasonIfAny = scalarModel.whetherDisabled();
         if (disableReasonIfAny != null) {
             if(disableReasonIfAny.contains("Always disabled")) {
@@ -334,8 +334,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                 return "label-none";
             case TOP:
                 return "label-top";
-			default:
-				break;
+            default:
+                break;
             }
         }
         return "label-left";

@@ -36,11 +36,11 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         public Set<SomeReferencedObject> getReferences() { return null; }
     }
     public static class SomeReferencedObject {}
-    
+
     public static class SomeDomainObjectCollectionRemovedFromDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
         private static final long serialVersionUID = 1L;
     }
-    
+
     @Test
     public void defaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
@@ -82,5 +82,5 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
         assertThat(ev.getValue(), is(other));
     }
-    
+
 }

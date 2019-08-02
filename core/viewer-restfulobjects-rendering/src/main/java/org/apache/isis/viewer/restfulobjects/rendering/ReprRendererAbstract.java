@@ -206,7 +206,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     protected Stream<ObjectAdapter> streamServiceAdapters() {
-    	val metaModelContext = MetaModelContext.current();
+        val metaModelContext = MetaModelContext.current();
         return metaModelContext.streamServiceAdapters();
     }
 

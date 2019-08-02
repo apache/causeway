@@ -77,9 +77,9 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
 
     public TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent(
             final Class<? extends TitleUiEvent<?>> titleUiEventClass,
-            final String translationContext,
-            final MetamodelEventService metamodelEventService,
-            final FacetHolder holder) {
+                    final String translationContext,
+                    final MetamodelEventService metamodelEventService,
+                    final FacetHolder holder) {
         super(holder);
         this.titleUiEventClass = titleUiEventClass;
         this.translationService = super.getTranslationService();

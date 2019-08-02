@@ -46,7 +46,7 @@ public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
     protected AbstractTextComponent<String> createTextFieldForRegular(String id) {
         final TextFieldStringModel textModel = new TextFieldStringModel(this);
         final PasswordTextField passwordField = new PasswordTextField(id, textModel) {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
             @Override
             protected void onComponentTag(ComponentTag tag) {

@@ -41,7 +41,7 @@ public class Persistable_datanucleusVersionTimestamp {
     }
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusVersionTimestamp> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

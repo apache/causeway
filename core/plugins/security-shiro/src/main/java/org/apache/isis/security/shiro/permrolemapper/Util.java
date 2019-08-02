@@ -31,31 +31,31 @@ class Util {
 
     public static Map<String, Set<String>> parse(String permissionsByRoleStr) {
         final Map<String, Set<String>> permsByRole = _Maps.newHashMap();
-        
+
         final List<String> roleAndPerms = new ArrayList<>(2);
-        
+
         _Strings.splitThenStream(permissionsByRoleStr, ";")
         .forEach(roleAndPermsStr->{
-            
+
             roleAndPerms.clear();
-            
+
             _Strings.splitThenStream(roleAndPermsStr, "=")
-                    .map(String::trim)
-                    .forEach(roleAndPerms::add);
-            
+            .map(String::trim)
+            .forEach(roleAndPerms::add);
+
             if(roleAndPerms.size() != 2) {
                 return;
             }
             final String role = roleAndPerms.get(0);
             final String permStr = roleAndPerms.get(1);
-            
+
             final Set<String> perms = _Strings.splitThenStream(permStr, ",")
                     .map(String::trim)
                     .collect(Collectors.toSet());
-            
+
             permsByRole.put(role, perms);
         });
-        
+
         return permsByRole;
     }
 }

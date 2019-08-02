@@ -22,7 +22,7 @@ package org.apache.isis.applib.value;
 import org.junit.Test;
 
 public class ClobTest_constructor {
-    
+
     @Test
     public void happyCase() throws Exception {
         new Clob("validName", "application", "xml", "abc");

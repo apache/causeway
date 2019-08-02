@@ -54,61 +54,62 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TemporalDemo extends DemoStub {
 
+    @Override
     public String title() {
         return "Temporal Demo";
     }
 
     // -- DATE ONLY (LOCAL TIME)
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.sql.Date")
     @XmlElement @XmlJavaTypeAdapter(SqlDateAdapter.class)
     @Getter @Setter private java.sql.Date javaSqlDate;
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.time.LocalDate")
     @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
     @Getter @Setter private LocalDate javaLocalDate;
-    
+
     // -- DATE AND TIME (LOCAL TIME)
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.util.Date")
     @XmlElement @XmlJavaTypeAdapter(DateAdapter.class)
     @Getter @Setter private Date javaUtilDate;
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.sql.Timestamp")
     @XmlElement @XmlJavaTypeAdapter(SqlTimestampAdapter.class)
     @Getter @Setter private java.sql.Timestamp javaSqlTimestamp;
-        
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.time.LocalDateTime")
     @XmlElement @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @Getter @Setter private LocalDateTime javaLocalDateTime;
-    
+
     // -- DATE AND TIME (WITH TIMEZONE OFFSET)
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.time.OffsetDateTime")
     @XmlElement @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
     @Getter @Setter private OffsetDateTime javaOffsetDateTime;
-    
+
     // --
-    
+
     @Override
     public void initDefaults() {
-        
+
         log.info("TemporalDemo::initDefaults");
-        
+
         javaUtilDate = new Date();
         javaSqlDate = new java.sql.Date(System.currentTimeMillis());
         javaSqlTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
-        
+
         javaLocalDate = LocalDate.now();
         javaLocalDateTime = LocalDateTime.now();
         javaOffsetDateTime = OffsetDateTime.now();
     }
-    
-    
+
+
 }

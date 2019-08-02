@@ -76,10 +76,10 @@ public final class ServiceActionUtil {
             if (!menuItem.isEnabled()) {
                 listItem.add(new CssClassAppender("disabled"));
                 subMenuItemLink.setEnabled(false);
-                
+
                 Tooltips.addTooltip(listItem, menuItem.getDisabledReason());
-                
-                
+
+
             } else {
 
                 if(!_Strings.isNullOrEmpty(menuItem.getDescription())) {
@@ -176,7 +176,7 @@ public final class ServiceActionUtil {
         final List<CssMenuItem> menuItems = separatorStrategy.applySeparatorStrategy(subMenuItem);
         ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
                 menuItems) {
-             private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<CssMenuItem> listItem) {
@@ -214,7 +214,7 @@ public final class ServiceActionUtil {
 
                 for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
                     val serviceSpecId = actionLayoutData.getObjectType();
-                    
+
                     val serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceSpecId);
                     if(serviceAdapter == null) {
                         // service not recognized, presumably the menu layout is out of sync with actual configured modules
@@ -271,7 +271,7 @@ public final class ServiceActionUtil {
         .withPlacement(TooltipConfig.Placement.bottom)
         .withBtnOkClass("btn btn-danger")
         .withBtnCancelClass("btn btn-default");
-        
+
         component.add(new ConfirmationBehavior(null, confirmationConfig));
     }
 

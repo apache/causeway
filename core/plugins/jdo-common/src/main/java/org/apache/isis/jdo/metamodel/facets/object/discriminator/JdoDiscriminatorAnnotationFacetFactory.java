@@ -34,8 +34,8 @@ import org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpec
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
 public class JdoDiscriminatorAnnotationFacetFactory
-        extends FacetFactoryAbstract
-        implements ObjectSpecIdFacetFactory {
+extends FacetFactoryAbstract
+implements ObjectSpecIdFacetFactory {
 
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
@@ -61,11 +61,11 @@ public class JdoDiscriminatorAnnotationFacetFactory
         final String annotationValue = annotation.value();
         final ObjectSpecIdFacet facet =
                 !_Strings.isNullOrEmpty(annotationValue)
-                        ? new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
+                ? new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
                         annotationValue, facetHolder)
                         : new ObjectSpecIdFacetDerivedFromClassName(
-                        classSubstitutor.getClass(cls).getCanonicalName(), facetHolder);
-        FacetUtil.addFacet(facet);
+                                classSubstitutor.getClass(cls).getCanonicalName(), facetHolder);
+                        FacetUtil.addFacet(facet);
     }
 
 

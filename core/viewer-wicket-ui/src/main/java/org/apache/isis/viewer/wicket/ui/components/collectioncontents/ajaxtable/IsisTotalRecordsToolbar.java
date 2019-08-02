@@ -40,7 +40,7 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
     private static final String navigatorContainerId = "navigatorContainer";
 
     public IsisTotalRecordsToolbar(final DataTable<?, ?> table) {
-        
+
         this(table, new Model<String>() {
 
             private static final long serialVersionUID = 1L;
@@ -50,11 +50,11 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
                 return String.format("Showing all of %d", 
                         table.getRowCount());
             }
-            
+
         });
-        
+
     }
-    
+
     /**
      * @param table
      *            data table this toolbar will be attached to
@@ -94,7 +94,7 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
             setVisible(false);
             return;
         }
-        
+
         setVisible(getTable().getPageCount() == 1);
     }
 

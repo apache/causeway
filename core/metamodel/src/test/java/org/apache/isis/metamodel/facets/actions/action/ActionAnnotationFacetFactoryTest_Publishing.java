@@ -168,7 +168,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         class Customer {
             @Action(
                     publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
-            )
+                    )
             public void someAction() {
             }
         }
@@ -186,7 +186,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         assertNotNull(facet);
         final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
         _Blackhole.consume(facetImpl);
-        
+
         expectNoMethodsRemoved();
     }
 
@@ -233,7 +233,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         class Customer {
             @Action(
                     publishing = org.apache.isis.applib.annotation.Publishing.AS_CONFIGURED
-            )
+                    )
             public void someAction() {
             }
         }
@@ -259,7 +259,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         class Customer {
             @Action(
                     publishing = org.apache.isis.applib.annotation.Publishing.ENABLED
-            )
+                    )
             public void someAction() {
             }
         }
@@ -284,7 +284,7 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
         class Customer {
             @Action(
                     publishing = org.apache.isis.applib.annotation.Publishing.DISABLED
-            )
+                    )
             public void someAction() {
             }
         }

@@ -25,7 +25,7 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 public abstract class PermissionsEvaluationServiceAbstract implements PermissionsEvaluationService {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Override
     public ApplicationPermissionValueSet.Evaluation evaluate(
@@ -33,12 +33,12 @@ public abstract class PermissionsEvaluationServiceAbstract implements Permission
             final ApplicationPermissionMode mode,
             final Collection<ApplicationPermissionValue> permissionValues) {
 
-    	if(_NullSafe.isEmpty(permissionValues)) {
-        	return null;
+        if(_NullSafe.isEmpty(permissionValues)) {
+            return null;
         }
-    	
+
         final Collection<ApplicationPermissionValue> ordered = ordered(permissionValues);
-        
+
         for (final ApplicationPermissionValue permissionValue : ordered) {
             if(permissionValue.implies(targetMemberId, mode)) {
                 return new ApplicationPermissionValueSet.Evaluation(permissionValue, true);
@@ -50,6 +50,6 @@ public abstract class PermissionsEvaluationServiceAbstract implements Permission
     }
 
     protected abstract Collection<ApplicationPermissionValue> ordered(
-    		Collection<ApplicationPermissionValue> permissionValues);
+            Collection<ApplicationPermissionValue> permissionValues);
 
 }

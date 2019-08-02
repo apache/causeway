@@ -53,7 +53,7 @@ public class Favicon extends WebComponent {
 
         String url = webAppConfigBean.getFaviconUrl();
         String contentType = webAppConfigBean.getFaviconContentType();
-        
+
         tag.put("href", url);
 
         if (!Strings.isEmpty(contentType)) {

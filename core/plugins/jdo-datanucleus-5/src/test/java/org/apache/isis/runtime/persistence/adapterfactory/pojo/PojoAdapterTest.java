@@ -45,7 +45,7 @@ public class PojoAdapterTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
+
     private ObjectAdapter adapter;
     private RuntimeTestPojo domainObject;
 
@@ -63,16 +63,16 @@ public class PojoAdapterTest {
     @Before
     public void setUp() throws Exception {
         domainObject = new RuntimeTestPojo();
-        
+
         adapter = PojoAdapter.of(
                 domainObject, 
                 Factory.persistentOf(ObjectSpecId.of("CUS"), "1"),
                 mockAuthenticationSession,
                 mockSpecificationLoader, 
                 mockPersistenceSession);
-        
+
         adapter.setVersion(mockVersion);
-        
+
         allowUnimportantMethodCallsOn(mockVersion);
         allowUnimportantMethodCallsOn(mockVersion2);
     }
@@ -85,10 +85,10 @@ public class PojoAdapterTest {
                 allowing(version).sequence();
                 allowing(version).getUser();
                 allowing(version).hasTimestamp();
-                
+
                 allowing(version).getTime();
                 will(returnValue(new Date()));
-                
+
                 allowing(mockAuthenticationSession).getUserName();
                 will(returnValue("fredbloggs"));
             }
@@ -110,38 +110,38 @@ public class PojoAdapterTest {
         assertSame(mockVersion, adapter.getVersion());
     }
 
-//TODO[2154] remove    
-//    @Test
-//    public void checkLock_whenVersionsSame() throws Exception {
-//
-//        context.checking(new Expectations() {
-//            {
-//                oneOf(mockVersion).different(mockVersion2);
-//                will(returnValue(false));
-//            }
-//        });
-//        
-//        adapter.checkLock(mockVersion2);
-//    }
-//
-//    @Test(expected=ConcurrencyException.class)
-//    public void checkLock_whenVersionsDifferent() throws Exception {
-//
-//        adapter = PojoAdapterBuilder.create()
-//                .with(mockSpecificationLoader)
-//                .withTitleString("some pojo")
-//                .with(mockVersion)
-//                .with(mockAuthenticationSession)
-//                .build();
-//        
-//        context.checking(new Expectations() {
-//            {
-//                oneOf(mockVersion).different(mockVersion2);
-//                will(returnValue(true));
-//            }
-//        });
-//        
-//        adapter.checkLock(mockVersion2);
-//    }
+    //TODO[2154] remove    
+    //    @Test
+    //    public void checkLock_whenVersionsSame() throws Exception {
+    //
+    //        context.checking(new Expectations() {
+    //            {
+    //                oneOf(mockVersion).different(mockVersion2);
+    //                will(returnValue(false));
+    //            }
+    //        });
+    //        
+    //        adapter.checkLock(mockVersion2);
+    //    }
+    //
+    //    @Test(expected=ConcurrencyException.class)
+    //    public void checkLock_whenVersionsDifferent() throws Exception {
+    //
+    //        adapter = PojoAdapterBuilder.create()
+    //                .with(mockSpecificationLoader)
+    //                .withTitleString("some pojo")
+    //                .with(mockVersion)
+    //                .with(mockAuthenticationSession)
+    //                .build();
+    //        
+    //        context.checking(new Expectations() {
+    //            {
+    //                oneOf(mockVersion).different(mockVersion2);
+    //                will(returnValue(true));
+    //            }
+    //        });
+    //        
+    //        adapter.checkLock(mockVersion2);
+    //    }
 
 }

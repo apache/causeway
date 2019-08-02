@@ -82,14 +82,14 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
                     "%s: menu/contributed services (nature == VIEW) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
                     cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
             break;
-//TODO[2142] remove deprecated case          
-//        case VIEW_CONTRIBUTIONS_ONLY:
-//            mixinOnlyValidator.addFailure(
-//                    "%s: contributed services (nature == VIEW_CONTRIBUTIONS_ONLY) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
-//                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
-//            break;
-            default:
-            	// no op
+            //TODO[2142] remove deprecated case          
+            //        case VIEW_CONTRIBUTIONS_ONLY:
+            //            mixinOnlyValidator.addFailure(
+            //                    "%s: contributed services (nature == VIEW_CONTRIBUTIONS_ONLY) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
+            //                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
+            //            break;
+        default:
+            // no op
         }
     }
 
@@ -118,12 +118,12 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
                     }
 
                     final Stream<ObjectAssociation> associations = thisSpec.streamAssociations(Contributed.EXCLUDED);
-                    
+
                     final String associationNames = associations
-                        .map(ObjectAssociation::getName)
-                        // it's okay to have an "association" called "Id" (corresponding to getId() method)
-                        .filter(associationName->!"Id".equalsIgnoreCase(associationName))
-                        .collect(Collectors.joining(", "));
+                            .map(ObjectAssociation::getName)
+                            // it's okay to have an "association" called "Id" (corresponding to getId() method)
+                            .filter(associationName->!"Id".equalsIgnoreCase(associationName))
+                            .collect(Collectors.joining(", "));
 
                     if(associationNames.isEmpty()) {
                         return;

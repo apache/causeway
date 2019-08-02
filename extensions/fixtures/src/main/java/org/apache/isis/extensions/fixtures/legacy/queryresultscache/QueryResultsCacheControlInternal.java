@@ -38,7 +38,7 @@ public class QueryResultsCacheControlInternal implements QueryResultCacheControl
     public void onFixturesInstallingEvent(FixturesInstallingEvent ev) {
         fixturesInstalling = true;
     }
-    
+
     @EventListener(FixturesInstalledEvent.class)
     public void onFixturesInstallingEvent(FixturesInstalledEvent ev) {
         fixturesInstalling = false;

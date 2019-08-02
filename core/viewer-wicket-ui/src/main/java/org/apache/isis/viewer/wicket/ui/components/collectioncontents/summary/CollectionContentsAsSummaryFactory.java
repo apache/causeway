@@ -48,48 +48,48 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
     private static final String NAME = "summary";
 
     final static Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
-            final ObjectSpecification objectSpec = objectAssoc.getSpecification();
-            return objectSpec.containsDoOpFacet(BigDecimalValueFacet.class);
-        };
+        final ObjectSpecification objectSpec = objectAssoc.getSpecification();
+        return objectSpec.containsDoOpFacet(BigDecimalValueFacet.class);
+    };
 
-        // //////////////////////////////////////
+    // //////////////////////////////////////
 
-        public CollectionContentsAsSummaryFactory() {
-            super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
+    public CollectionContentsAsSummaryFactory() {
+        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsSummary.class);
+    }
+
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        if(!(model instanceof EntityCollectionModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
         }
+        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
+        final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(Contributed.EXCLUDED);
 
-        @Override
-        public ApplicationAdvice appliesTo(final IModel<?> model) {
-            if(!(model instanceof EntityCollectionModel)) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            }
-            final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-            final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
-            final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(Contributed.EXCLUDED);
-            
-            return appliesIf(associations.anyMatch(OF_TYPE_BIGDECIMAL));
-        }
+        return appliesIf(associations.anyMatch(OF_TYPE_BIGDECIMAL));
+    }
 
-        @Override
-        public Component createComponent(final String id, final IModel<?> model) {
-            final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-            return new CollectionContentsAsSummary(id, collectionModel);
-        }
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        return new CollectionContentsAsSummary(id, collectionModel);
+    }
 
-        @Override
-        public CssResourceReference getCssResourceReference() {
-            // do not bundle, because of relative CSS images...
-            return null;
-        }
+    @Override
+    public CssResourceReference getCssResourceReference() {
+        // do not bundle, because of relative CSS images...
+        return null;
+    }
 
-        @Override
-        public IModel<String> getTitleLabel() {
-            return new ResourceModel("CollectionContentsAsSummaryFactory.Summary", "Summary");
-        }
+    @Override
+    public IModel<String> getTitleLabel() {
+        return new ResourceModel("CollectionContentsAsSummaryFactory.Summary", "Summary");
+    }
 
-        @Override
-        public IModel<String> getCssClass() {
-            return Model.of("fa fa-fw fa-usd");
-        }
+    @Override
+    public IModel<String> getCssClass() {
+        return Model.of("fa fa-fw fa-usd");
+    }
 
 }

@@ -170,7 +170,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
         if(describedAs != null) {
             Tooltips.addTooltip(scalarName, describedAs);
         }
-        
+
         formGroup.add(scalarName);
 
         return formGroup;
@@ -338,7 +338,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
         inlinePromptLink.setEnabled(true);
         clearTooltip();
     }
-    
+
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
         textField.setEnabled(false);
@@ -361,7 +361,7 @@ extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider 
         Tooltips.addTooltip(textField, tooltip);
         Tooltips.addTooltip(inlinePromptLink, tooltip);
     }
-    
+
     private void clearTooltip() {
         Tooltips.clearTooltip(textField);
         Tooltips.clearTooltip(inlinePromptLink);

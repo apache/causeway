@@ -84,23 +84,23 @@ public interface ServiceRegistry {
      * Streams all bean adapters of given BeanSort.
      */
     default Stream<BeanAdapter> streamRegisteredBeansOfSort(BeanSort sort) {
-    	return streamRegisteredBeans()
-    			.filter(beanAdapter->beanAdapter.getManagedObjectSort()==sort);
+        return streamRegisteredBeans()
+                .filter(beanAdapter->beanAdapter.getManagedObjectSort()==sort);
     }
 
     /**
      * Returns all bean adapters that have been registered.
      */
     public Stream<BeanAdapter> streamRegisteredBeans();
-    
+
     /**
      * Returns a registered bean of given {@code name}.
      *   
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
     public Optional<BeanAdapter> lookupRegisteredBeanById(String id);
-    
-    
+
+
     public default BeanAdapter lookupRegisteredBeanByNameElseFail(String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(

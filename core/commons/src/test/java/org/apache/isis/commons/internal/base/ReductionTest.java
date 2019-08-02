@@ -30,45 +30,45 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class ReductionTest {
 
-	@Test
-	public void findMinimum() throws Exception {
-		
-		final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
-		
-		_Reduction<Integer> toMinReduction = _Reduction.of((min, next)-> next<min ? next : min);
-		
-		values.forEach(toMinReduction);
-		
-		Assert.assertThat(toMinReduction.getResult().get(), is(1));
-	}
-	
-	@Test
-	public void findMinimum_initialized_low() throws Exception {
-		
-		final int initial = -1;
-		
-		final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
-		
-		_Reduction<Integer> toMinReduction = _Reduction.of(initial, (min, next)-> next<min ? next : min);
-		
-		values.forEach(toMinReduction);
-		
-		Assert.assertThat(toMinReduction.getResult().get(), is(initial));
-	}
-	
-	@Test
-	public void findMinimum_initialized_high() throws Exception {
-		
-		final int initial = 3;
-		
-		final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
-		
-		_Reduction<Integer> toMinReduction = _Reduction.of(initial, (min, next)-> next<min ? next : min);
-		
-		values.forEach(toMinReduction);
-		
-		Assert.assertThat(toMinReduction.getResult().get(), is(1));
-	}
-	
-	
+    @Test
+    public void findMinimum() throws Exception {
+
+        final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
+
+        _Reduction<Integer> toMinReduction = _Reduction.of((min, next)-> next<min ? next : min);
+
+        values.forEach(toMinReduction);
+
+        Assert.assertThat(toMinReduction.getResult().get(), is(1));
+    }
+
+    @Test
+    public void findMinimum_initialized_low() throws Exception {
+
+        final int initial = -1;
+
+        final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
+
+        _Reduction<Integer> toMinReduction = _Reduction.of(initial, (min, next)-> next<min ? next : min);
+
+        values.forEach(toMinReduction);
+
+        Assert.assertThat(toMinReduction.getResult().get(), is(initial));
+    }
+
+    @Test
+    public void findMinimum_initialized_high() throws Exception {
+
+        final int initial = 3;
+
+        final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
+
+        _Reduction<Integer> toMinReduction = _Reduction.of(initial, (min, next)-> next<min ? next : min);
+
+        values.forEach(toMinReduction);
+
+        Assert.assertThat(toMinReduction.getResult().get(), is(1));
+    }
+
+
 }

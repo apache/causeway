@@ -49,7 +49,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
             return null;
         }
         val rootOid = RootOid.deStringEncoded(value);
-        
+
         return ObjectAdapterMemento.ofRootOid(rootOid);
     }
 

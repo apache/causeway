@@ -38,7 +38,7 @@ import org.apache.isis.runtime.system.context.IsisContext;
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
     private _Lazy<TransactionService> transactionService = 
-    		_Lazy.threadSafe(IsisContext::getTransactionService);
+            _Lazy.threadSafe(IsisContext::getTransactionService);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -47,23 +47,23 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
-    		throws IOException, ServletException {
+            throws IOException, ServletException {
 
         transactionService.get().executeWithinTransaction(()->{
-        
+
             try {
                 chain.doFilter(request, response);
             } catch (IOException | ServletException e) {
                 throw new TransactionalException("", e);
             }
-            
+
         });
-		
+
     }
 
     @Override
     public void destroy() {
     }
-    
+
 
 }

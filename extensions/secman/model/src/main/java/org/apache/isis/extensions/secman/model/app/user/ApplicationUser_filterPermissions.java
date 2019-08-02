@@ -53,14 +53,14 @@ public class ApplicationUser_filterPermissions {
     }
 
     private final ApplicationUser holder;
-    
+
 
     // -- filterPermissions (action)
 
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @MemberOrder(sequence = "1", name="permissions")
     public List<UserPermissionViewModel> $$(
             @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
@@ -91,24 +91,24 @@ public class ApplicationUser_filterPermissions {
 
     static Predicate<ApplicationFeature> within(final String packageFqn, final String className) {
         return (ApplicationFeature input) -> {
-                final ApplicationFeatureId inputFeatureId = input.getFeatureId();
+            final ApplicationFeatureId inputFeatureId = input.getFeatureId();
 
-                // recursive match on package
-                final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
-                final List<ApplicationFeatureId> pathIds = inputFeatureId.getPathIds();
-                if(!pathIds.contains(packageId)) {
-                    return false;
-                }
+            // recursive match on package
+            final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
+            final List<ApplicationFeatureId> pathIds = inputFeatureId.getPathIds();
+            if(!pathIds.contains(packageId)) {
+                return false;
+            }
 
-                // match on class (if specified)
-                return className == null || Objects.equals(inputFeatureId.getClassName(), className);
+            // match on class (if specified)
+            return className == null || Objects.equals(inputFeatureId.getClassName(), className);
         };
     }
 
     List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
         return _Lists.map(
-                        features,
-                        UserPermissionViewModel.Functions.asViewModel(holder, factory));
+                features,
+                UserPermissionViewModel.Functions.asViewModel(holder, factory));
     }
 
     @Inject RepositoryService repository;

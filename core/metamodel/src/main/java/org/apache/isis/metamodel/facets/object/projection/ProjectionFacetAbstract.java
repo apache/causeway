@@ -24,8 +24,8 @@ import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 public abstract class ProjectionFacetAbstract
-        extends FacetAbstract
-        implements ProjectionFacet {
+extends FacetAbstract
+implements ProjectionFacet {
 
     public static Class<? extends Facet> type() {
         return ProjectionFacet.class;

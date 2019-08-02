@@ -49,7 +49,7 @@ import lombok.val;
 public class JaxbUtil {
 
     private JaxbUtil(){}
-    
+
     // -- READ
 
     public static <T> T fromXml(
@@ -72,7 +72,7 @@ public class JaxbUtil {
         val s = _Resources.loadAsStringUtf8(contextClass, resourceName);
         return fromXml(new StringReader(s), dtoClass);
     }
-    
+
     // -- WRITE
 
     public static <T> String toXml(final T dto) {

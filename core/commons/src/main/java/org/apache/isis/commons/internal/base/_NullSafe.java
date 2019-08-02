@@ -106,7 +106,7 @@ public final class _NullSafe {
                         false) //not parallel
                         : Stream.empty();
     }
-    
+
     /**
      * If {@code stream} is {@code null} returns the empty stream,
      * otherwise returns the stream argument.
@@ -116,7 +116,7 @@ public final class _NullSafe {
     public static <T> Stream<T> stream(@Nullable final Stream<T> stream) {
         return stream!=null ? stream : Stream.empty();
     }
-    
+
     /**
      * If {@code enumeration} is {@code null} returns the empty stream,
      * otherwise returns a stream of the enumeration's elements.
@@ -128,13 +128,15 @@ public final class _NullSafe {
                 ? stream(toIterator(enumeration))
                         : Stream.empty();
     }
-    
+
     // [ahuber] not public, since one time use of enumeration only!
     private static <T> Iterator<T> toIterator(final Enumeration<T> e){
         return new Iterator<T>() {
+            @Override
             public T next() {
                 return e.nextElement();
             }
+            @Override
             public boolean hasNext() {
                 return e.hasMoreElements();
             }
@@ -209,7 +211,7 @@ public final class _NullSafe {
     public static boolean isEmpty(long[] array){ return array==null || array.length == 0;}
     public static boolean isEmpty(short[] array){ return array==null || array.length == 0;}
     public static <T> boolean isEmpty(T[] array){ return array==null || array.length == 0;}
-    
+
     // -- SIZE/LENGTH CHECKS
 
     public static int size(String x){ return x!=null ? x.length() : 0; }

@@ -47,33 +47,33 @@ enum DNStoreManagerType {
         if(hasSecondaryDataStore(datanucleusProps)) {
             return Federated; 
         } 
-        
+
         if(isKnownSchemaAwareStoreManagerIfNotFederated(datanucleusProps)) {
             return SchemaAware;
         }
-        
+
         return probe(datanucleusProps, storeManager->{
-            
+
             if(storeManager instanceof SchemaAwareStoreManager) {
                 return SchemaAware;
             }
-            
+
             if(storeManager instanceof FederatedStoreManager) {
                 return Federated;
             }
-            
+
             return Other;
-            
+
         });
 
     }
-    
+
     public boolean isSchemaAware() {
         return this == SchemaAware;
     }
 
     // -- HELPER
-    
+
     /* not necessarily complete, just for speed up */
     private final static String[] knownSchemaAwareIfNotFederated = {
             "jdbc:hsqldb:",
@@ -83,11 +83,11 @@ enum DNStoreManagerType {
             "jdbc:mariadb:",
             "jdbc:postgresql:",
             "jdbc:db2:",
-            };
-    
+    };
+
     private static boolean hasSecondaryDataStore(Map<String,String> datanucleusProps) {
         final boolean hasSecondaryDataStore = datanucleusProps.keySet().stream()
-            .anyMatch(key->key.startsWith("datanucleus.datastore."));
+                .anyMatch(key->key.startsWith("datanucleus.datastore."));
         return hasSecondaryDataStore;
     }
 
@@ -104,14 +104,14 @@ enum DNStoreManagerType {
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     private static DNStoreManagerType probe(
             Map<String,String> datanucleusProps, 
             Function<StoreManager, DNStoreManagerType> categorizer) {
-        
+
         // we create a throw-away instance of PMF so that we can probe whether DN has
         // been configured with a schema-aware store manager or not.
         final JDOPersistenceManagerFactory probePmf = (JDOPersistenceManagerFactory) 
@@ -120,7 +120,7 @@ enum DNStoreManagerType {
         try {
             final PersistenceNucleusContext nucleusContext = probePmf.getNucleusContext();
             final StoreManager storeManager = nucleusContext.getStoreManager();
-            
+
             return categorizer.apply(storeManager);
         } finally {
             probePmf.close();

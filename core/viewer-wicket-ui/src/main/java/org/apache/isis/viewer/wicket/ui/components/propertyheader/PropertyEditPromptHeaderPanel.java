@@ -31,8 +31,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
 
-	private static final long serialVersionUID = 1L;
-	private static final String ID_PROPERTY_NAME = "propertyName";
+    private static final long serialVersionUID = 1L;
+    private static final String ID_PROPERTY_NAME = "propertyName";
 
     public PropertyEditPromptHeaderPanel(String id, final ScalarModel model) {
         super(id, model);
@@ -42,9 +42,9 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
         final Label label = new Label(ID_PROPERTY_NAME, new IModel<String>() {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public String getObject() {
                 final OneToOneAssociation property = model.getPropertyMemento().getProperty(getSpecificationLoader());
                 return property.getName();

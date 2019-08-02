@@ -81,7 +81,7 @@ final public class ObjectAdapterContext {
             PersistenceSession persistenceSession) {
 
         val runtimeContext = IsisContext.newManagedObjectContext();
-        
+
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession, runtimeContext);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, runtimeContext.getServiceRegistry());
@@ -176,7 +176,7 @@ final public class ObjectAdapterContext {
     }
 
     private final ObjectAdapterFactories objectAdapterFactories;
-    
+
 
     // package private
     ObjectAdapterFactories getFactories() {
@@ -193,7 +193,7 @@ final public class ObjectAdapterContext {
         final ObjectAdapter adapter = recreatePojo(oid, pojo);
         return adapter;
     }
-    
+
     public ObjectAdapter recreatePojo(Oid oid, Object recreatedPojo) {
         final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
         return injectServices(createdAdapter);
@@ -209,7 +209,7 @@ final public class ObjectAdapterContext {
         serviceInjector.injectServicesInto(pojo);
         return adapter;
     }
-    
+
     // package private
     ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
         final ObjectAdapter createdAdapter;
@@ -222,7 +222,7 @@ final public class ObjectAdapterContext {
         }
         return createdAdapter;
     }
-    
+
 
     // -- OBJECT ADAPTER PROVIDER SUPPORT
 
@@ -252,7 +252,7 @@ final public class ObjectAdapterContext {
 
     // package private
     ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoString) {
-       
+
         final ObjectSpecification objectSpecification = 
                 specificationLoader.loadSpecification(viewModelPojo.getClass());
         final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
@@ -270,9 +270,9 @@ final public class ObjectAdapterContext {
      * @param session 
      */
     public void asPersistent(final ObjectAdapter rootAdapter, PersistenceSession session) {
-        
+
         final RootOid persistentOid = createPersistentOrViewModelOid(rootAdapter.getPojo());
-        
+
         Objects.requireNonNull(persistentOid);
         _Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
         if(persistentOid.isTransient()) {

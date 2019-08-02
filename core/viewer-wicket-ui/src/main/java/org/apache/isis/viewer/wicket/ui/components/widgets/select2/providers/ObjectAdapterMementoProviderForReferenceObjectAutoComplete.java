@@ -76,15 +76,15 @@ extends ObjectAdapterMementoProviderAbstract {
     @Override
     public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
         final Function<String, ObjectAdapterMemento> function = (final String input) -> {
-                if(NULL_PLACEHOLDER.equals(input)) {
-                    return null;
-                }
-                final RootOid oid = RootOid.deString(input);
-                final ObjectAdapterMemento oam = ObjectAdapterMemento.ofRootOid(oid);
-                return oam;
+            if(NULL_PLACEHOLDER.equals(input)) {
+                return null;
+            }
+            final RootOid oid = RootOid.deString(input);
+            final ObjectAdapterMemento oam = ObjectAdapterMemento.ofRootOid(oid);
+            return oam;
         };
         return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
-        
+
     }
 
 }

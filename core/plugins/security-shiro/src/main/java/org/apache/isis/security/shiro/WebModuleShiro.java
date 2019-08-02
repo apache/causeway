@@ -54,52 +54,52 @@ public final class WebModuleShiro implements WebModule  {
 
     private final static String SHIRO_FILTER_CLASS_NAME = 
             "org.apache.shiro.web.servlet.ShiroFilter";
-    
+
     private final static String SHIRO_FILTER_NAME = "ShiroFilter";
-    
+
     // -- CONFIGURATION
-    
+
     public static void setShiroEnvironmentClass(Class<? extends WebEnvironment> shiroEnvironmentClass) {
-    	if(shiroEnvironmentClass==null) {
-    		System.setProperty("shiroEnvironmentClass", null);
-    		return;
-    	} 
-    	System.setProperty("shiroEnvironmentClass", shiroEnvironmentClass.getName());
+        if(shiroEnvironmentClass==null) {
+            System.setProperty("shiroEnvironmentClass", null);
+            return;
+        } 
+        System.setProperty("shiroEnvironmentClass", shiroEnvironmentClass.getName());
     }
-    
-	public static class IniWebEnvironmentUsingSystemProperty extends IniWebEnvironment {
-		@Override
-		public Ini getIni() {
-			val customShiroIniResource = System.getProperty("shiroIniResource");
-			if(_Strings.isNotEmpty(customShiroIniResource)) {
-				val ini = new Ini();
-				ini.loadFromPath(customShiroIniResource);
-				return ini;	
-	        } 
-	        return null;
-		}
-	}
-    
-	public static void setShiroIniResource(String resourcePath) {
-    	if(resourcePath==null) {
-    		System.setProperty("shiroIniResource", null);
-    		setShiroEnvironmentClass(null);
-    		return;
-    	}
-    	System.setProperty("shiroIniResource", resourcePath);
-		setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
-	}
-	
-	// -- 
+
+    public static class IniWebEnvironmentUsingSystemProperty extends IniWebEnvironment {
+        @Override
+        public Ini getIni() {
+            val customShiroIniResource = System.getProperty("shiroIniResource");
+            if(_Strings.isNotEmpty(customShiroIniResource)) {
+                val ini = new Ini();
+                ini.loadFromPath(customShiroIniResource);
+                return ini;	
+            } 
+            return null;
+        }
+    }
+
+    public static void setShiroIniResource(String resourcePath) {
+        if(resourcePath==null) {
+            System.setProperty("shiroIniResource", null);
+            setShiroEnvironmentClass(null);
+            return;
+        }
+        System.setProperty("shiroIniResource", resourcePath);
+        setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
+    }
+
+    // -- 
 
     @Override
     public String getName() {
         return "Shiro";
     }
-    
+
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
-        
+
         final Dynamic filter;
         try {
             val filterClass = getDefaultClassLoader().loadClass(SHIRO_FILTER_CLASS_NAME);
@@ -112,15 +112,15 @@ public final class WebModuleShiro implements WebModule  {
             // guarded against by isAvailable()
             throw unexpectedCodeReach();
         }
-        
+
         val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isNotEmpty(customShiroEnvironmentClassName)) {
-        	ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);	
+            ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);	
         }
-        
+
         val urlPattern = "/*";
         filter.addMappingForUrlPatterns(null, false, urlPattern); // filter is forced first
-        
+
         try {
             val listenerClass = getDefaultClassLoader().loadClass(SHIRO_LISTENER_CLASS_NAME);
             return ctx.createListener(uncheckedCast(listenerClass));
@@ -128,7 +128,7 @@ public final class WebModuleShiro implements WebModule  {
             // guarded against by isAvailable()
             throw unexpectedCodeReach();
         }
-      
+
     }
 
     @Override

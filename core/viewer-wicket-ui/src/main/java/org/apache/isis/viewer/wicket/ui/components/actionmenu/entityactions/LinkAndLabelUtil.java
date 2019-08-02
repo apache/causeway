@@ -77,8 +77,8 @@ public final class LinkAndLabelUtil {
 
         return _Lists.transform(objectActions, stream -> stream
                 .map((ObjectAction objectAction) ->
-                        linkFactory.newLink(
-                                objectAction, AdditionalLinksPanel.ID_ADDITIONAL_LINK, toggledMementosProviderIfAny))
+                linkFactory.newLink(
+                        objectAction, AdditionalLinksPanel.ID_ADDITIONAL_LINK, toggledMementosProviderIfAny))
                 .filter(_NullSafe::isPresent));
     }
 

@@ -114,7 +114,7 @@ public interface Command extends HasUniqueId {
      * </p>
      */
     String getTargetAction();
-    
+
     // -- arguments (property)
 
     /**
@@ -293,7 +293,7 @@ public interface Command extends HasUniqueId {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     public static interface Internal {
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *
@@ -336,7 +336,7 @@ public interface Command extends HasUniqueId {
          */
         void setTargetAction(String targetAction);
 
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *
@@ -344,27 +344,27 @@ public interface Command extends HasUniqueId {
          * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
          */
         void setArguments(final String arguments);
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         void setExecutor(final Executor executor);   
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         void setResult(Bookmark resultBookmark);
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         void setException(String stackTrace);
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         void setParent(final Command parent);
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *
@@ -378,7 +378,7 @@ public interface Command extends HasUniqueId {
          * {@link Interaction.Execution#setCompletedAt(Timestamp)}.
          */
         void setCompletedAt(Timestamp completedAt);
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          *
@@ -409,12 +409,12 @@ public interface Command extends HasUniqueId {
          * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</t>).
          */
         void setTargetClass(String targetClass);
-        
+
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         void setPersistence(final CommandPersistence persistence);
-        
+
         /**
          * Hint that this {@link Command} should be persisted, if possible.
          *
@@ -424,13 +424,13 @@ public interface Command extends HasUniqueId {
          * @see #getPersistence()
          */
         void setPersistHint(boolean persistHint);
-        
+
     }
-    
+
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Programmatic @Deprecated // bad API design
     Internal internal();
-    
+
 }

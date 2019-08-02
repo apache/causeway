@@ -31,20 +31,20 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationPackage"
-)
+        )
 @ViewModelLayout(paged=100)
 public class ApplicationPackage extends ApplicationFeatureViewModel {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationClass, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
-    
+
 
     // -- constructors
 
@@ -54,19 +54,19 @@ public class ApplicationPackage extends ApplicationFeatureViewModel {
     public ApplicationPackage(final ApplicationFeatureId featureId) {
         super(featureId);
     }
-    
+
 
     // -- contents (collection, for packages only)
 
     public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationPackage> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Collection(
             domainEvent = ContentsDomainEvent.class
-    )
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @MemberOrder(sequence = "4")
     public List<ApplicationFeatureViewModel> getContents() {
         final SortedSet<ApplicationFeatureId> contents = getFeature().getContents();
@@ -75,6 +75,6 @@ public class ApplicationPackage extends ApplicationFeatureViewModel {
     public boolean hideContents() {
         return getType() != ApplicationFeatureType.PACKAGE;
     }
-    
+
 
 }

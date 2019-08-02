@@ -72,7 +72,7 @@ public class CollectionSelectorHelper implements Serializable {
         final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(ComponentType.COLLECTION_CONTENTS, model);
         final List<ComponentFactory> otherFactories = _Lists.filter(componentFactories, 
                 (final ComponentFactory input) ->
-                    input.getClass() != CollectionContentsMultipleViewsPanelFactory.class);
+        input.getClass() != CollectionContentsMultipleViewsPanelFactory.class);
         return ordered(otherFactories);
     }
 

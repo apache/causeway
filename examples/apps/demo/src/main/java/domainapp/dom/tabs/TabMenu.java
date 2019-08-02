@@ -30,7 +30,7 @@ import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW)
 public class TabMenu {
-    
+
     @Inject private FactoryService factoryService;
 
     @Action
@@ -42,5 +42,5 @@ public class TabMenu {
         demo.initDefaults();
         return demo;
     }
-    
+
 }

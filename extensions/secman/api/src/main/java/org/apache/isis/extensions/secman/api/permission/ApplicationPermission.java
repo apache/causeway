@@ -22,8 +22,8 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureType;
 
 public interface ApplicationPermission {
 
-	ApplicationFeatureType getFeatureType();
+    ApplicationFeatureType getFeatureType();
 
-	String getFeatureFqn();
+    String getFeatureFqn();
 
 }

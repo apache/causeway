@@ -63,7 +63,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                     } else {
                         translationContext = null;
                     }
-                    
+
                     return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
                             titleUiEventClass, translationContext, metamodelEventService, facetHolder);
                 })

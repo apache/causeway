@@ -49,7 +49,7 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
             final String candidateProviderName, 
             final Class<?> candidateProviderClass, 
             final FacetHolder holder) {
-        
+
         super(candidateProviderName, candidateProviderClass, holder);
     }
 

@@ -38,8 +38,8 @@ public class JsonRepresentationTest_streamMapEntries {
     public void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
         final Iterator<Entry<String, JsonRepresentation>> mapIterator = 
-        		jsonRepresentation.streamMapEntries()
-        		.iterator();
+                jsonRepresentation.streamMapEntries()
+                .iterator();
 
         for (int i = 0; i < jsonRepresentation.asJsonNode().size(); i++) {
             assertThat(mapIterator.hasNext(), is(true));

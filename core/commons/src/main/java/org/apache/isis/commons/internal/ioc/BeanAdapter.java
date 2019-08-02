@@ -28,5 +28,5 @@ public interface BeanAdapter {
     BeanSort getManagedObjectSort();
 
     boolean isCandidateFor(Class<?> requiredType);
-    
+
 }

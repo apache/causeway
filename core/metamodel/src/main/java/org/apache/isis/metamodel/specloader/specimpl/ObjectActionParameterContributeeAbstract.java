@@ -56,7 +56,7 @@ implements ObjectActionParameterContributee {
     }
 
     protected ObjectAdapter getServiceAdapter() {
-    	return getObjectAdapterProvider().adapterFor(servicePojo);
+        return getObjectAdapterProvider().adapterFor(servicePojo);
     }
 
     @Override

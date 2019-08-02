@@ -31,11 +31,11 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationClass"
-)
+        )
 @ViewModelLayout(
         paged=100,
         bookmarking = BookmarkPolicy.AS_ROOT
-)
+        )
 public class ApplicationClass extends ApplicationFeatureViewModel {
 
     public static abstract class PropertyDomainEvent<T> 
@@ -50,7 +50,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
     extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {
         private static final long serialVersionUID = 1L;}
 
-    
+
 
     // -- constructors
 
@@ -60,9 +60,9 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
     public ApplicationClass(final ApplicationFeatureId featureId) {
         super(featureId);
     }
-    
 
-    
+
+
 
     // -- actions (collection)
 
@@ -71,17 +71,17 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
         private static final long serialVersionUID = 1L;}
 
     @Collection(
-        domainEvent = ActionsDomainEvent.class
-    )
+            domainEvent = ActionsDomainEvent.class
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @MemberOrder(sequence = "20.1")
     public List<ApplicationClassAction> getActions() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getActions();
         return asViewModels(members);
     }
-    
+
 
     // -- properties (collection)
 
@@ -92,16 +92,16 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
 
     @Collection(
             domainEvent = PropertiesCollectionDomainEvent.class
-    )
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @MemberOrder(sequence = "20.2")
     public List<ApplicationClassProperty> getProperties() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getProperties();
         return asViewModels(members);
     }
-    
+
 
     // -- collections (collection)
     public static class CollectionsCollectionDomainEvent 
@@ -110,15 +110,15 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
 
     @Collection(
             domainEvent = CollectionsCollectionDomainEvent.class
-    )
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @MemberOrder(sequence = "20.3")
     public List<ApplicationClassCollection> getCollections() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getCollections();
         return asViewModels(members);
     }
-    
+
 
 }

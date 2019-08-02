@@ -32,11 +32,11 @@ import org.apache.isis.applib.value.Markup;
 public interface EventStreamSource {
 
     void run(EventStream eventStream);
-    
+
     Markup getPayload();
-    
+
     // -- PROPERTY ANNOTATION DEFAULT
-    
+
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Property#observe()} annotation attribute.  
@@ -52,11 +52,11 @@ public interface EventStreamSource {
         public Markup getPayload() {
             return new Markup();
         }
-        
+
     }
-    
+
     // -- BASIC PREDICATES
-    
+
     public static boolean isObservable(Class<?> type) {
         if(type==null) {
             return false;
@@ -66,5 +66,5 @@ public interface EventStreamSource {
         }
         return !type.equals(Noop.class);
     }
-    
+
 }

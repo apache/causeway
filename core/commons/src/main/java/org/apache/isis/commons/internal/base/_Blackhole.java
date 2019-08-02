@@ -39,7 +39,7 @@ import java.util.Random;
  * @since 2.0
  */
 public final class _Blackhole {
-    
+
     /**
      * Consume object. This call provides a side effect preventing JIT to eliminate dependent computations.
      *
@@ -57,24 +57,24 @@ public final class _Blackhole {
         }
 
     }
-    
+
     // -- HELPER
-    
+
     public final static class _Blackhole_Internal {
-        
+
         public int tlr;
         public volatile int tlrMask;
         public volatile Object obj1;
-        
+
         public _Blackhole_Internal() {
             Random r = new Random(System.nanoTime());
             tlr = r.nextInt();
             tlrMask = 1;
             obj1 = new Object();
         }
-        
+
     }
-    
+
     private final static _Blackhole_Internal internal = new _Blackhole_Internal();
 
 }

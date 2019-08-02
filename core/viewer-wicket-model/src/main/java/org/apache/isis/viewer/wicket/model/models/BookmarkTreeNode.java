@@ -196,7 +196,7 @@ public class BookmarkTreeNode implements Serializable {
     private boolean addToGraphIfParented(BookmarkableModel<?> candidateBookmarkableModel) {
 
         final boolean whetherAdded[] = {false}; // simply a fast non-thread-safe value reference
-        
+
         // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
         if(candidateBookmarkableModel instanceof EntityModel) {
             EntityModel entityModel = (EntityModel) candidateBookmarkableModel;
@@ -204,7 +204,7 @@ public class BookmarkTreeNode implements Serializable {
             final Stream<ObjectAssociation> properties = candidateAdapter.getSpecification()
                     .streamAssociations(Contributed.EXCLUDED)
                     .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
-            
+
             properties
             .map(objectAssoc->{
                 final ObjectAdapter parentAdapter = 

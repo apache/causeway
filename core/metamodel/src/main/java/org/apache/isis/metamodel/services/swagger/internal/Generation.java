@@ -100,7 +100,7 @@ class Generation {
 
     Swagger generate() {
         this.swagger = new Swagger();
-        
+
         final String swaggerVersionInfo = 
                 String.format("swagger.io (%s)", 
                         Swagger.class.getPackage().getImplementationVersion()
@@ -158,21 +158,21 @@ class Generation {
     private void debugTraverseAllSpecs(final Collection<ObjectSpecification> allSpecs) {
         for (final ObjectSpecification objectSpec :  allSpecs) {
             objectSpec.streamAssociations(Contributed.INCLUDED)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
             objectSpec.streamObjectActions(Contributed.INCLUDED)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
         }
     }
 
-//    @SuppressWarnings("unused")
-//    private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
-//        final ImmutableList<String> specs = FluentIterable.from(allSpecs)
-//                .transform((final ObjectSpecification objectSpecification)->
-//                        objectSpecification.getCorrespondingClass().getName())
-//                .toSortedList(Ordering.natural());
-//        final String all = Joiner.on(",").join(specs);
-//        System .out.println(all);
-//    }
+    //    @SuppressWarnings("unused")
+    //    private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
+    //        final ImmutableList<String> specs = FluentIterable.from(allSpecs)
+    //                .transform((final ObjectSpecification objectSpecification)->
+    //                        objectSpecification.getCorrespondingClass().getName())
+    //                .toSortedList(Ordering.natural());
+    //        final String all = Joiner.on(",").join(specs);
+    //        System .out.println(all);
+    //    }
 
     void appendObjectPathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,

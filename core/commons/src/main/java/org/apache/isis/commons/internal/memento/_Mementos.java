@@ -153,43 +153,43 @@ public final class _Mementos {
             final EncoderDecoder codec,
             final SerializingAdapter serializer,
             final String input) {
-    	
-    	if(_Strings.isNullOrEmpty(input)) {
-    		return empty();
-    	}
+
+        if(_Strings.isNullOrEmpty(input)) {
+            return empty();
+        }
         return _Mementos_MementoDefault.parse(codec, serializer, input);
     }
-    
+
     // -- EMPTY MEMENTO
-    
+
     private static final class EmptyMemento implements Memento {
 
-		@Override
-		public <T> T get(String name, Class<T> cls) {
-			return null;
-		}
+        @Override
+        public <T> T get(String name, Class<T> cls) {
+            return null;
+        }
 
-		@Override
-		public Memento put(String name, Object value) {
-			throw _Exceptions.notImplemented();
-		}
+        @Override
+        public Memento put(String name, Object value) {
+            throw _Exceptions.notImplemented();
+        }
 
-		@Override
-		public Set<String> keySet() {
-			return Collections.emptySet();
-		}
+        @Override
+        public Set<String> keySet() {
+            return Collections.emptySet();
+        }
 
-		@Override
-		public String asString() {
-			return "EmptyMemento";
-		}
-    	
+        @Override
+        public String asString() {
+            return "EmptyMemento";
+        }
+
     }
-    
+
     private final static Memento EMPTY_MEMENTO = new EmptyMemento();
-    
+
     public static Memento empty() {
-    	return EMPTY_MEMENTO;
+        return EMPTY_MEMENTO;
     }
 
 }

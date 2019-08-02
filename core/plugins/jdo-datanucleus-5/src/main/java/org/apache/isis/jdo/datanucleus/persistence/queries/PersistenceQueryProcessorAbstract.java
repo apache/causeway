@@ -68,9 +68,9 @@ implements PersistenceQueryProcessor<T> {
         }
         return adapters;
     }
-    
+
     // -- HELPER
-    
+
     protected static IsisJdoSupport_v3_2 isisJdoSupport() { 
         return IsisContext.getServiceRegistry().lookupServiceElseFail(IsisJdoSupport_v3_2.class);
     }

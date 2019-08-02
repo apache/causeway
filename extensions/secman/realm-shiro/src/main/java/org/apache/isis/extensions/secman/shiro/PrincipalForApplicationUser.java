@@ -53,7 +53,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 class PrincipalForApplicationUser implements AuthorizationInfo {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static PrincipalForApplicationUser from(ApplicationUser applicationUser) {
         if(applicationUser == null) {
             return null;
@@ -62,12 +62,12 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
         final String encryptedPassword = applicationUser.getEncryptedPassword();
         final AccountType accountType = applicationUser.getAccountType();
         final Set<String> roles = applicationUser.getRoles()
-        		.stream()
-        		.map(ApplicationRole::getName)
-        		.collect(Collectors.toCollection(TreeSet::new));
+                .stream()
+                .map(ApplicationRole::getName)
+                .collect(Collectors.toCollection(TreeSet::new));
         final ApplicationPermissionValueSet permissionSet = applicationUser.getPermissionSet();
         return new PrincipalForApplicationUser(username, encryptedPassword, accountType, 
-        		applicationUser.getStatus(), roles, permissionSet);
+                applicationUser.getStatus(), roles, permissionSet);
     }
 
     private final String username;

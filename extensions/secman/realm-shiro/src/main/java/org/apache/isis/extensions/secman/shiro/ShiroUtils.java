@@ -55,5 +55,5 @@ final class ShiroUtils {
         }
         return null;
     }
-    
+
 }

@@ -33,7 +33,7 @@ abstract class DateConverterForJdk8Abstract<T> extends DateConverterAbstract<T> 
     DateConverterForJdk8Abstract(Class<T> cls, DateFormatSettings dateFormatSettings) {
         super(cls, dateFormatSettings);
     }
-    
+
     @Override
     protected final T doConvertToObject(String value, Locale locale) {
         T dateTime = convert(value);

@@ -31,27 +31,27 @@ import lombok.val;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DemoErrorReportingService implements ErrorReportingService {
-	
-	@Override
-	public Ticket reportError(ErrorDetails errorDetails) {
 
-		String reference = "#0";
-		String userMessage = errorDetails.getMainMessage();
-		String details = "Apologies!";
-		
-		val mailTo = MailTo.builder()
-		.receiver("support@hello.world")
-		.subject("[Simple-Module] Unexpected Error ("+reference+")")
-		.body(MailTo.mailBodyOf(errorDetails))
-		.build();
-		
-		StackTracePolicy policy = StackTracePolicy.SHOW;
-		val ticket = new EmailTicket(mailTo, reference, userMessage, details, 
-               policy,
-               "http://www.randomkittengenerator.com/cats/rotator.php");
-		
-		return ticket;
-	}
-	
-	
+    @Override
+    public Ticket reportError(ErrorDetails errorDetails) {
+
+        String reference = "#0";
+        String userMessage = errorDetails.getMainMessage();
+        String details = "Apologies!";
+
+        val mailTo = MailTo.builder()
+                .receiver("support@hello.world")
+                .subject("[Simple-Module] Unexpected Error ("+reference+")")
+                .body(MailTo.mailBodyOf(errorDetails))
+                .build();
+
+        StackTracePolicy policy = StackTracePolicy.SHOW;
+        val ticket = new EmailTicket(mailTo, reference, userMessage, details, 
+                policy,
+                "http://www.randomkittengenerator.com/cats/rotator.php");
+
+        return ticket;
+    }
+
+
 }

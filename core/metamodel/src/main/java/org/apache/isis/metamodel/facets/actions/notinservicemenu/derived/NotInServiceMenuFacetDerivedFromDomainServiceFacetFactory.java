@@ -49,7 +49,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends F
 
         final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
         if(natureOfService.isView()) {
-        	return;
+            return;
         }
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();

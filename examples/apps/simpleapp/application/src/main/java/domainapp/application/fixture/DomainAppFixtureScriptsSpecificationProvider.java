@@ -31,8 +31,9 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
  */
 @DomainService(
         nature = NatureOfService.DOMAIN
-)
+        )
 public class DomainAppFixtureScriptsSpecificationProvider implements FixtureScriptsSpecificationProvider {
+    @Override
     public FixtureScriptsSpecification getSpecification() {
         return FixtureScriptsSpecification
                 .builder(DomainAppFixtureScriptsSpecificationProvider.class)

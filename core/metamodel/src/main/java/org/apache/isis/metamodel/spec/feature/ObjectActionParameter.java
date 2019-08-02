@@ -161,10 +161,10 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     public static class Functions {
         public static final Function<ObjectActionParameter, String> GET_NAME =
                 ObjectActionParameter::getName;
-        
+
         public static final Function<ObjectActionParameter, Class<?>> GET_TYPE = 
                 (final ObjectActionParameter input) ->
-                    input.getSpecification().getCorrespondingClass();
+        input.getSpecification().getCorrespondingClass();
 
         private Functions(){}
 

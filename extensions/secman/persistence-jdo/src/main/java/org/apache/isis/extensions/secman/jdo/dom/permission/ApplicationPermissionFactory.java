@@ -60,7 +60,7 @@ public interface ApplicationPermissionFactory {
     public static class Default implements ApplicationPermissionFactory {
 
         @Override
-		public ApplicationPermission newApplicationPermission() {
+        public ApplicationPermission newApplicationPermission() {
             return factory.instantiate(ApplicationPermission.class);
         }
 

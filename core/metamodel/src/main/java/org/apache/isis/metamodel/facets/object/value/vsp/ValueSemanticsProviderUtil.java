@@ -37,25 +37,25 @@ public final class ValueSemanticsProviderUtil {
     public static final String SEMANTICS_PROVIDER_NAME_KEY_SUFFIX = ".semanticsProviderName";
 
     public static String semanticsProviderNameFromConfiguration(final Class<?> type) {
-        
+
         final IsisConfiguration configuration = _Config.getConfiguration();
-        
+
         final String key = SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
         final String semanticsProviderName = configuration.getString(key);
         return !_Strings.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;
     }
 
-    
+
     public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-    
+
         final Class<? extends ValueSemanticsProvider<?>> clazz = candidateClass != null 
                 ? uncheckedCast(ClassUtil.implementingClassOrNull(
                         candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class)) 
                         : null;
-        return clazz != null 
-                ? clazz 
-                        : uncheckedCast(ClassUtil.implementingClassOrNull(
-                                classCandidateName, ValueSemanticsProvider.class, FacetHolder.class));
+                return clazz != null 
+                        ? clazz 
+                                : uncheckedCast(ClassUtil.implementingClassOrNull(
+                                        classCandidateName, ValueSemanticsProvider.class, FacetHolder.class));
     }
 
 }

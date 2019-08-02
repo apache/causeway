@@ -35,17 +35,17 @@ import org.apache.isis.webapp.modules.resources.ResourceServlet;
 })
 public class DemoApp extends SpringBootServletInitializer {
 
-	/**
-	 * 
-	 * @param args
-	 * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
-	 * entry point by searching for classes having a {@code main(...)}
-	 */
-	public static void main(String[] args) {
-	    Presets.prototyping();
-	    //Presets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
-	    //Presets.logging(IsisBeanTypeRegistry.class, "DEBUG");
-	    Presets.logging(ResourceServlet.class, "DEBUG");
-		SpringApplication.run(new Class[] { DemoApp.class }, args);
-	}
+    /**
+     * 
+     * @param args
+     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+     * entry point by searching for classes having a {@code main(...)}
+     */
+    public static void main(String[] args) {
+        Presets.prototyping();
+        //Presets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
+        //Presets.logging(IsisBeanTypeRegistry.class, "DEBUG");
+        Presets.logging(ResourceServlet.class, "DEBUG");
+        SpringApplication.run(new Class[] { DemoApp.class }, args);
+    }
 }

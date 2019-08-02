@@ -50,7 +50,7 @@ implements PersistenceSessionServiceInternal {
     public ObjectAdapterProvider getObjectAdapterProvider() {
         return getPersistenceSession();
     }
-    
+
     @Override
     public void makePersistent(final ObjectAdapter adapter) {
         getPersistenceSession().makePersistentInTransaction(adapter);
@@ -66,39 +66,39 @@ implements PersistenceSessionServiceInternal {
         return getPersistenceSession().newTransientInstance(spec);
     }
 
-//    @Override
-//    public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
-//        return getPersistenceSession().recreateViewModelInstance(spec, memento);
-//    }
+    //    @Override
+    //    public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
+    //        return getPersistenceSession().recreateViewModelInstance(spec, memento);
+    //    }
 
     @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
-        
+
         final RootOid rootOid = Factory.ofBookmark(bookmark);
         final PersistenceSession ps = getPersistenceSession();
         final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
-                        
+
         if(rootOid.isViewModel()) {
             final ObjectAdapter adapter = ps.adapterFor(rootOid);
             final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
-            
+
             return pojo;
-            
+
         } else if(denyRefresh) {
-            
+
             final Object pojo = ps.fetchPersistentPojoInTransaction(rootOid);
             return pojo;            
-            
+
         } else {
             final ObjectAdapter adapter = ps.adapterFor(rootOid);
-            
+
             final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
             acceptIfPresent(pojo, ps::refreshRootInTransaction);
             return pojo;
         }
-        
+
     }
 
     @Override

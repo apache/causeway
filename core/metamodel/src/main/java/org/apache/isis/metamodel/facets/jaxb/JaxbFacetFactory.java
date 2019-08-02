@@ -206,7 +206,7 @@ implements MetaModelValidatorRefiner {
 
                         final Stream<OneToOneAssociation> properties = objectSpec
                                 .streamProperties(Contributed.EXCLUDED);
-                        
+
                         properties
                         // ignore derived
                         .filter(property->property.containsDoOpFacet(PropertySetterFacet.class))
@@ -215,7 +215,7 @@ implements MetaModelValidatorRefiner {
                                 adapterValidator.validate(objectSpec, property, validationFailures);
                             }
                         });
-                        
+
                     }
                 });
         metaModelValidator.add(validator);

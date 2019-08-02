@@ -39,39 +39,39 @@ import lombok.val;
  */
 public final class Presets  {
 
-	public static final String ISIS_PERSISTOR                   = "isis.persistor.";
+    public static final String ISIS_PERSISTOR                   = "isis.persistor.";
     public static final String ISIS_PERSISTOR_DATANUCLEUS       = ISIS_PERSISTOR + "datanucleus.";
     public static final String ISIS_PERSISTOR_DATANUCLEUS_IMPL  = ISIS_PERSISTOR_DATANUCLEUS + "impl.";
-	
+
     @RequiredArgsConstructor
     private static enum Providers {
-    
+
         H2InMemory(Providers::withH2InMemoryProperties),
         HsqlDbInMemory(Providers::withHsqlDbInMemoryProperties),
         DataNucleusAutoCreate(Providers::withDataNucleusProperties),
         IsisIntegTest(Providers::withIsisIntegTestProperties),
-		NoTranslations(map->map.put("isis.services.translation.po.mode", "disable")),
+        NoTranslations(map->map.put("isis.services.translation.po.mode", "disable")),
         ;
-        
+
         private final Consumer<Map<String, String>> populator;
-        
+
         private static Map<String,String> withH2InMemoryProperties(final Map<String, String> map) {
             //map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:h2:mem:test-" + UUID.randomUUID().toString());
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:h2:mem:test");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.h2.Driver");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
-            
+
             return map;
         }
-        
+
         private static Map<String,String> withHsqlDbInMemoryProperties(final Map<String, String> map) {
             //map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test-" + UUID.randomUUID().toString());
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
-            
+
             return map;
         }
 
@@ -101,32 +101,32 @@ public final class Presets  {
         }
 
     }
-    
+
     public static final String H2InMemory = "H2InMemory";
     public static final String HsqlDbInMemory = "HsqlDbInMemory";
     public static final String DataNucleusAutoCreate = "DataNucleusAutoCreate";
     public static final String IsisIntegTest = "IsisIntegTest";
     public static final String NoTranslations = "NoTranslations";
-    
-    
+
+
     public static class Factory implements PropertySourceFactory {
 
         @Override
         public PropertySource<?> createPropertySource(
                 String name,
                 EncodedResource resource) throws IOException {
-            
+
             val map = new HashMap<String, String>(); 
             Providers.valueOf(name).populator.accept(map);
-            
+
             val widenedMap = new HashMap<String, Object>();
             widenedMap.putAll(map);
-            
+
             val propSource = new MapPropertySource(name, widenedMap);
-            
+
             return propSource;
         }
-       
+
     }
 
     /**
@@ -142,5 +142,5 @@ public final class Presets  {
     public static void logging(Class<?> clazz, String loggingLevel) {
         System.setProperty("logging.level." + clazz.getName(), loggingLevel);
     }
-    
+
 }

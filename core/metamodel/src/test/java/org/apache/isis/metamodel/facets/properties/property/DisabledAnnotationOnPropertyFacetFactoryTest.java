@@ -87,7 +87,7 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
 
         final DisabledFacet disabledFacet = (DisabledFacet) facet;
         assertThat(disabledFacet.disabledReason(null), is("Oh no you don't!"));
-        
+
         assertNoMethodsRemoved();
     }
 

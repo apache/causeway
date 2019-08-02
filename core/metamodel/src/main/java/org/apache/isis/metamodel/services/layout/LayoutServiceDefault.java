@@ -86,29 +86,29 @@ public class LayoutServiceDefault implements LayoutService {
         final Collection<ObjectSpecification> allSpecs = specificationLoader.currentSpecifications();
         final List<ObjectSpecification> domainObjectSpecs = _Lists
                 .filter(allSpecs, spec ->
-                        !spec.isAbstract() &&
-                                (spec.isEntity() || spec.isViewModel())
-                    );
-        
-        
+                !spec.isAbstract() &&
+                (spec.isEntity() || spec.isViewModel())
+                        );
+
+
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");
-        
+
         for (final ObjectSpecification objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
             val grid = toGrid(domainClass, style);
             if(grid != null) {
-            	zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->{
-            		
-            		val xmlString = jaxbService.toXml(grid,
+                zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->{
+
+                    val xmlString = jaxbService.toXml(grid,
                             _Maps.unmodifiable(
                                     Marshaller.JAXB_SCHEMA_LOCATION,
                                     grid.getTnsAndSchemaLocation()
                                     ));
-            		writer.write(xmlString);
-            	});
+                    writer.write(xmlString);
+                });
             }
         }
-        
+
         return zipWriter.toBytes();
     }
 
@@ -122,9 +122,9 @@ public class LayoutServiceDefault implements LayoutService {
         final MenuBars menuBars = menuBarsService.menuBars(type);
 
         return jaxbService.toXml(menuBars, _Maps.unmodifiable(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        menuBars.getTnsAndSchemaLocation()
-                        ));
+                Marshaller.JAXB_SCHEMA_LOCATION,
+                menuBars.getTnsAndSchemaLocation()
+                ));
     }
 
     @Inject SpecificationLoader specificationLoader;

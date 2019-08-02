@@ -32,15 +32,15 @@ import lombok.Setter;
 public class WebAppConfigBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static final String MenubarsLayoutResourceName = "menubars.layout.xml";
-    
+
     @Getter @Setter private String applicationName;
     @Getter @Setter private String applicationVersion;
     @Getter @Setter private String aboutMessage;
     @Getter @Setter private String welcomeMessage;
     @Getter @Setter private String faviconContentType;
-    
+
     // URL *not* sensitive to context path
     @Getter @Setter private String applicationCss;
     @Getter @Setter private String applicationJs;
@@ -49,9 +49,9 @@ public class WebAppConfigBean implements Serializable {
     @Setter private String faviconUrl;
     @Setter private String brandLogoHeader;
     @Setter private String brandLogoSignin;
-    
+
     @Getter @Setter private AbstractResource menubarsLayoutXml;
-    
+
     public String getFaviconUrl() {
         return honorContextPath(faviconUrl);
     }
@@ -65,10 +65,10 @@ public class WebAppConfigBean implements Serializable {
     }
 
     // -- HELPER
-    
+
     private String honorContextPath(String url) {
         return _Resources.prependContextPathIfRequired(url);
     }
-    
-    
+
+
 }

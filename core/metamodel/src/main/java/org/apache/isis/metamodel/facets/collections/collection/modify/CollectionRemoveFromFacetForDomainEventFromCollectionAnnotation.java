@@ -35,9 +35,9 @@ CollectionRemoveFromFacetForDomainEventFromAbstract {
                     final CollectionDomainEventFacetAbstract collectionInteractionFacet,
                     final ServiceRegistry serviceRegistry,
                     final FacetHolder holder) {
-    	
+
         super(eventType, getterFacet, collectionRemoveFromFacet, collectionInteractionFacet, 
-        		serviceRegistry, holder);
+                serviceRegistry, holder);
     }
 
 }

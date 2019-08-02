@@ -160,7 +160,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         FieldSet fieldSetForUnreferencedPropertiesRef;
         BS3TabGroup tabGroupForUnreferencedCollectionsRef;    
     }
-    
+
     /**
      * Mandatory hook method defined in {@link GridSystemServiceAbstract superclass}, called by {@link GridSystemServiceAbstract#normalize(Grid, Class)} }.
      */
@@ -254,7 +254,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         // ensure that there is exactly one col with the
         // unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
 
-        
+
         final GridVisitorResult result = new GridVisitorResult();
 
         bs3Grid.visit(new BS3Grid.VisitorAdapter(){
@@ -327,7 +327,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         if(     result.colForUnreferencedActionsRef == null && result.fieldSetForUnreferencedActionsRef == null ||
                 result.fieldSetForUnreferencedPropertiesRef == null ||
-                        result.colForUnreferencedCollectionsRef == null && result.tabGroupForUnreferencedCollectionsRef == null) {
+                result.colForUnreferencedCollectionsRef == null && result.tabGroupForUnreferencedCollectionsRef == null) {
             return false;
         }
 
@@ -357,11 +357,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 boundAssociationIdsByFieldSetId.put(fieldSetId, boundAssociationIds);
             }
         }
-        
+
         // 1-to-1-association Ids, that want to contribute to the 'metadata' FieldSet
         // but are unbound, because such a FieldSet is not defined by the given layout.
         val unboundMetadataContributingIds = _Sets.<String>newHashSet();
-        
+
         // along with any specified by existing metadata
         for (OneToOneAssociation otoa : oneToOneAssociationById.values()) {
             final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
@@ -372,7 +372,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                             boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                     boundAssociationIds.add(otoa.getId());
                 } else if(id.equals(MixinConstants.METADATA_LAYOUT_GROUPNAME)) {
-                	unboundMetadataContributingIds.add(otoa.getId());
+                    unboundMetadataContributingIds.add(otoa.getId());
                 }
             }
         }
@@ -393,10 +393,10 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
                 val associations1To1 =
                         associationIds.stream()
-                                .map(oneToOneAssociationById::get)
-                                .filter(_NullSafe::isPresent)
-                                .sorted(ObjectMember.Comparators.byMemberOrderSequence())
-                                .collect(Collectors.toList());
+                        .map(oneToOneAssociationById::get)
+                        .filter(_NullSafe::isPresent)
+                        .sorted(ObjectMember.Comparators.byMemberOrderSequence())
+                        .collect(Collectors.toList());
 
                 addPropertiesTo(fieldSet,
                         _Lists.map(associations1To1, ObjectAssociation::getId),
@@ -406,7 +406,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             if(!unboundPropertyIds.isEmpty()) {
                 val fieldSet = result.fieldSetForUnreferencedPropertiesRef;
                 if(fieldSet != null) {
-                	unboundPropertyIds.removeAll(unboundMetadataContributingIds);
+                    unboundPropertyIds.removeAll(unboundMetadataContributingIds);
                     addPropertiesTo(fieldSet, unboundPropertyIds, propertyLayoutDataById);
                 }
             }
@@ -428,10 +428,10 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             {
                 sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence());
             }
-            
+
             final List<String> sortedMissingCollectionIds = 
                     _Lists.map(sortedCollections, ObjectAssociation::getId);
-            
+
             final BS3TabGroup bs3TabGroup = result.tabGroupForUnreferencedCollectionsRef;
             if(bs3TabGroup != null) {
                 addCollectionsTo(bs3TabGroup, sortedMissingCollectionIds, objectSpec);
@@ -454,9 +454,9 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 _Lists.map(possiblyMissingActionIds, objectActionById::get);
         {
             sortedPossiblyMissingActions
-                .sort(ObjectMember.Comparators.byMemberOrderSequence());
+            .sort(ObjectMember.Comparators.byMemberOrderSequence());
         }
-                
+
 
         final List<String> sortedPossiblyMissingActionIds =
                 _Lists.map(sortedPossiblyMissingActions, ObjectMember::getId);
@@ -553,16 +553,16 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         return true;
     }
 
-	private void addPropertiesTo(
+    private void addPropertiesTo(
             final FieldSet fieldSet,
             final List<String> propertyIds,
             final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById) {
-        
+
         final Set<String> existingIds =
-            stream(fieldSet.getProperties())
-            .map(PropertyLayoutData::getId)
-            .collect(Collectors.toSet());
-        
+                stream(fieldSet.getProperties())
+                .map(PropertyLayoutData::getId)
+                .collect(Collectors.toSet());
+
         for (final String propertyId : propertyIds) {
             if(!existingIds.contains(propertyId)) {
                 final PropertyLayoutData propertyLayoutData = new PropertyLayoutData(propertyId);
@@ -657,8 +657,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject GridReaderUsingJaxb gridReader;
-    
+
 
 }

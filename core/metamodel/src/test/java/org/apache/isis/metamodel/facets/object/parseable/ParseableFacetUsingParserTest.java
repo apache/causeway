@@ -54,7 +54,7 @@ public class ParseableFacetUsingParserTest {
     private ServiceInjector mockServicesInjector;
     @Mock
     private ServiceRegistry mockServiceRegistry;
-    
+
     @Mock
     private ObjectAdapterService mockAdapterManager;
 
@@ -62,12 +62,12 @@ public class ParseableFacetUsingParserTest {
 
     @Before
     public void setUp() throws Exception {
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .objectAdapterProvider(mockAdapterManager)
                 .build());
-        
+
 
         context.checking(new Expectations() {
             {

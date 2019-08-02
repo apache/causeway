@@ -36,7 +36,8 @@ import domainapp.utils.DemoStub;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class ErrorDemo extends DemoStub {
-    
+
+    @Override
     public String title() {
         return "Error Handling Demo";
     }
@@ -46,10 +47,10 @@ public class ErrorDemo extends DemoStub {
     public Object triggerAnError(){
         throw new IllegalArgumentException("This is a demo Exception.");
     }
-    
+
     @Override
     public void initDefaults() {
-        
+
     }
 
 }

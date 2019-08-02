@@ -49,23 +49,23 @@ public class DateConverterForJodaLocalDateTest {
             }
         });
     }
-    
+
     @Test
     public void roundtrip() {
         final DateConverterForJodaLocalDate converter = new DateConverterForJodaLocalDate(settings, 0);
         final LocalDate dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(new LocalDate(2013, 05, 11)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11"));
     }
-    
+
     @Test
     public void roundtripWithAdjustBy() {
         final DateConverterForJodaLocalDate converter = new DateConverterForJodaLocalDate(settings, -1);
         final LocalDate dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(new LocalDate(2013, 05, 12)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11"));
     }

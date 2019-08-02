@@ -94,8 +94,8 @@ public class SwaggerSpecResource {
 
     class MyCallable implements Callable<String> {
 
-    	SwaggerService swaggerService;
-    	
+        SwaggerService swaggerService;
+
         private final SwaggerService.Visibility visibility;
         private final SwaggerService.Format format;
 
@@ -108,10 +108,10 @@ public class SwaggerSpecResource {
 
         @Override
         public String call() throws Exception {
-        	swaggerService = IsisContext.getServiceRegistry().lookupServiceElseFail(SwaggerService.class);
+            swaggerService = IsisContext.getServiceRegistry().lookupServiceElseFail(SwaggerService.class);
             return swaggerService.generateSwaggerSpec(visibility, format);
         }
-        
+
     }
 
 }

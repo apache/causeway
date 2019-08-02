@@ -34,76 +34,76 @@ import lombok.val;
 
 public abstract class DemoStub {
 
-	public String title() {
-		return getClass().getSimpleName();
-	}
+    public String title() {
+        return getClass().getSimpleName();
+    }
 
-	public abstract void initDefaults();
-	
-	@PropertyLayout(cssClass = "adoc")
-	public AsciiDoc getDescription() {
-		return AsciiDoc.valueOfAdoc(readAsciiDocDescription());
-	}
+    public abstract void initDefaults();
 
-	protected final static Map<String, String> constants = createConstants();
-	private static Map<String, String> createConstants() {
-		val map = new HashMap<String, String>();
-		map.put("SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java");
-		map.put("SOURCES_DEMO", "https://github.com/apache/isis/tree/v2/example/application/demo/src/main/java");
-		map.put("ISSUES_DEMO", "https://issues.apache.org/jira/"); 
-		return map;
-	}
+    @PropertyLayout(cssClass = "adoc")
+    public AsciiDoc getDescription() {
+        return AsciiDoc.valueOfAdoc(readAsciiDocDescription());
+    }
 
-	protected String link(String name, String href) {
-		return String.format("<a target=\"%s\" href=\"%s\">%s</a>", "blank", href, name);
-	}
+    protected final static Map<String, String> constants = createConstants();
+    private static Map<String, String> createConstants() {
+        val map = new HashMap<String, String>();
+        map.put("SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java");
+        map.put("SOURCES_DEMO", "https://github.com/apache/isis/tree/v2/example/application/demo/src/main/java");
+        map.put("ISSUES_DEMO", "https://issues.apache.org/jira/"); 
+        return map;
+    }
 
-	protected String p(String content) {
-		return String.format("<p>%s</p>", content);
-	}
+    protected String link(String name, String href) {
+        return String.format("<a target=\"%s\" href=\"%s\">%s</a>", "blank", href, name);
+    }
 
-	protected String var(String name) {
-		return String.format("${%s}", name);
-	}
+    protected String p(String content) {
+        return String.format("<p>%s</p>", content);
+    }
 
-	protected String readAsciiDocDescription() {
-		val adocResourceName = getClass().getSimpleName()+".adoc";
-		val adocResource = this.getClass().getResourceAsStream(adocResourceName);
-		if(adocResource==null) {
-			return String.format("Markdown resource '%s' not found.", adocResourceName);
-		}
-		try {
-			return read(adocResource);
-		} catch (IOException e) {
-			return String.format("Failed to read from adoc resource '%s': ", e.getMessage());
-		}
-	}
+    protected String var(String name) {
+        return String.format("${%s}", name);
+    }
 
-	/**
-	 * Read the given {@code input} into a String, while also pre-processing placeholders.
-	 * @param input
-	 * @return
-	 * @throws IOException
-	 */
-	private String read(InputStream input) throws IOException {
-		try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
-			return buffer.lines()
-					.map(this::resolveVariables)
-					.collect(Collectors.joining("\n"));
-		}
-	}
+    protected String readAsciiDocDescription() {
+        val adocResourceName = getClass().getSimpleName()+".adoc";
+        val adocResource = this.getClass().getResourceAsStream(adocResourceName);
+        if(adocResource==null) {
+            return String.format("Markdown resource '%s' not found.", adocResourceName);
+        }
+        try {
+            return read(adocResource);
+        } catch (IOException e) {
+            return String.format("Failed to read from adoc resource '%s': ", e.getMessage());
+        }
+    }
 
-	/**
-	 * For the given {@code input} replaces '${var-name}' with the variable's value.
-	 * @param input
-	 * @return
-	 */
-	private String resolveVariables(String input) {
-		val ref = new AtomicReference<String>(input);
-		constants.forEach((k, v)->{
-			ref.set(ref.get().replace(var(k), v));
-		});
-		return ref.get();
-	}
+    /**
+     * Read the given {@code input} into a String, while also pre-processing placeholders.
+     * @param input
+     * @return
+     * @throws IOException
+     */
+    private String read(InputStream input) throws IOException {
+        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
+            return buffer.lines()
+                    .map(this::resolveVariables)
+                    .collect(Collectors.joining("\n"));
+        }
+    }
+
+    /**
+     * For the given {@code input} replaces '${var-name}' with the variable's value.
+     * @param input
+     * @return
+     */
+    private String resolveVariables(String input) {
+        val ref = new AtomicReference<String>(input);
+        constants.forEach((k, v)->{
+            ref.set(ref.get().replace(var(k), v));
+        });
+        return ref.get();
+    }
 
 }

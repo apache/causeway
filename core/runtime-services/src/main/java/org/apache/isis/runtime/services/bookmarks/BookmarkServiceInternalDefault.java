@@ -80,12 +80,12 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         if(bookmark == null) {
             return null;
         }
-      //FIXME[2112] why would we ever store Service Beans as Bookmarks?        
-//        final String objectType = bookmark.getObjectType();
-//        final Object service = lookupService(objectType);
-//        if(service != null) {
-//            return service;
-//        }
+        //FIXME[2112] why would we ever store Service Beans as Bookmarks?        
+        //        final String objectType = bookmark.getObjectType();
+        //        final Object service = lookupService(objectType);
+        //        if(service != null) {
+        //            return service;
+        //        }
         return lookupInternal(bookmark, fieldResetPolicy);
     }
 
@@ -119,24 +119,24 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         return persistenceSessionServiceInternal.bookmarkFor(cls, identifier);
     }
 
-  //FIXME[2112] why would we ever store Service Beans as Bookmarks?
-//    private Map<String,Object> servicesByClassName;
-//    private Object lookupService(final String className) {
-//        cacheServicesByClassNameIfNecessary();
-//        return servicesByClassName.get(className);
-//    }
-//
-//    private void cacheServicesByClassNameIfNecessary() {
-//        if (servicesByClassName == null) {
-//            final Map<String,Object> servicesByClassName = _Maps.newHashMap();
-//            final Stream<Object> registeredServices = serviceRegistry.streamServices();
-//            registeredServices.forEach(registeredService->{
-//                final String serviceClassName = registeredService.getClass().getName();
-//                servicesByClassName.put(serviceClassName, registeredService);
-//            });
-//            this.servicesByClassName = servicesByClassName;
-//        }
-//    }
+    //FIXME[2112] why would we ever store Service Beans as Bookmarks?
+    //    private Map<String,Object> servicesByClassName;
+    //    private Object lookupService(final String className) {
+    //        cacheServicesByClassNameIfNecessary();
+    //        return servicesByClassName.get(className);
+    //    }
+    //
+    //    private void cacheServicesByClassNameIfNecessary() {
+    //        if (servicesByClassName == null) {
+    //            final Map<String,Object> servicesByClassName = _Maps.newHashMap();
+    //            final Stream<Object> registeredServices = serviceRegistry.streamServices();
+    //            registeredServices.forEach(registeredService->{
+    //                final String serviceClassName = registeredService.getClass().getName();
+    //                servicesByClassName.put(serviceClassName, registeredService);
+    //            });
+    //            this.servicesByClassName = servicesByClassName;
+    //        }
+    //    }
 
     // -- SERIALIZING ADAPTER IMPLEMENTATION
 

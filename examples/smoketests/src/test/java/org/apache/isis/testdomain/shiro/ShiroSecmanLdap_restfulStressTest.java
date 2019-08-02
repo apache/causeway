@@ -46,23 +46,23 @@ import static org.junit.jupiter.api.Assertions.fail;
 import lombok.val;
 
 @SpringBootTest(
-		classes = { 
-			JdoTestDomainModule_withShiro.class
-		}, 
-		properties = {
-				"logging.config=log4j2-test.xml",
-				"smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
-		},
-		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        classes = { 
+                JdoTestDomainModule_withShiro.class
+        }, 
+        properties = {
+                "logging.config=log4j2-test.xml",
+                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
+        },
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
-	
-	// Restful server
-	IsisBootWebRestfulObjects.class,
-	RestService.class,
-	
-	// Embedded LDAP server for testing
-	LdapServerService.class,
-	
+
+    // Restful server
+    IsisBootWebRestfulObjects.class,
+    RestService.class,
+
+    // Embedded LDAP server for testing
+    LdapServerService.class,
+
     // Security Manager Extension (secman)
     IsisBootSecmanModel.class,
     IsisBootSecmanRealmShiro.class,
@@ -71,56 +71,56 @@ import lombok.val;
 })
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
-	@Inject RestService restService;
-	@Inject LdapServerService ldapServerService;
-	@Inject ApplicationUserRepository applicationUserRepository;
-	@Inject ApplicationRoleRepository applicationRoleRepository;
-	@Inject SecurityModuleConfig securityConfig;
-	
-	@BeforeAll
-	static void beforeClass() {
-		//    Build and set the SecurityManager used to build Subject instances used in your tests
-		//    This typically only needs to be done once per class if your shiro.ini doesn't change,
-		//    otherwise, you'll need to do this logic in each test that is different
-		//val factory = new IniSecurityManagerFactory("classpath:shiro-secman-ldap.ini");
-		//setSecurityManager(factory.getInstance());
-		WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
-		
-	}
+    @Inject RestService restService;
+    @Inject LdapServerService ldapServerService;
+    @Inject ApplicationUserRepository applicationUserRepository;
+    @Inject ApplicationRoleRepository applicationRoleRepository;
+    @Inject SecurityModuleConfig securityConfig;
 
-	@AfterAll
-	static void afterClass() {
-		tearDownShiro();
-	}
-	
-	@BeforeEach
-	void setupSvenInDb() {
-		// only setup once per test run, consecutive calls have no effect
-		val regularUserRoleName = securityConfig.getRegularUserRoleName();
-		val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
-		val enabled = true;
-		val username = LdapConstants.SVEN_PRINCIPAL;
-		val svenUser = applicationUserRepository.findByUsername(username);
-		if(svenUser==null) {
-			applicationUserRepository
-				.newDelegateUser(username, regularUserRole, enabled);
-		}
-	}
-	
-	@Test
-	void bookOfTheWeek_viaRestEndpoint() {
-		
-		//TODO not very stressfull yet
-		
-		val useRequestDebugLogging = false;
-		val restfulClient = restService.newClient(useRequestDebugLogging);
-		
-		val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
+    @BeforeAll
+    static void beforeClass() {
+        //    Build and set the SecurityManager used to build Subject instances used in your tests
+        //    This typically only needs to be done once per class if your shiro.ini doesn't change,
+        //    otherwise, you'll need to do this logic in each test that is different
+        //val factory = new IniSecurityManagerFactory("classpath:shiro-secman-ldap.ini");
+        //setSecurityManager(factory.getInstance());
+        WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
 
-		if(!digest.isSuccess()) {
-			fail(digest.getFailureCause());
-		}
+    }
 
-	}
+    @AfterAll
+    static void afterClass() {
+        tearDownShiro();
+    }
+
+    @BeforeEach
+    void setupSvenInDb() {
+        // only setup once per test run, consecutive calls have no effect
+        val regularUserRoleName = securityConfig.getRegularUserRoleName();
+        val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
+        val enabled = true;
+        val username = LdapConstants.SVEN_PRINCIPAL;
+        val svenUser = applicationUserRepository.findByUsername(username);
+        if(svenUser==null) {
+            applicationUserRepository
+            .newDelegateUser(username, regularUserRole, enabled);
+        }
+    }
+
+    @Test
+    void bookOfTheWeek_viaRestEndpoint() {
+
+        //TODO not very stressfull yet
+
+        val useRequestDebugLogging = false;
+        val restfulClient = restService.newClient(useRequestDebugLogging);
+
+        val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
+
+        if(!digest.isSuccess()) {
+            fail(digest.getFailureCause());
+        }
+
+    }
 
 }

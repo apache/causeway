@@ -129,5 +129,5 @@ public class MmvErrorPage extends WebPage {
     }
 
     @Inject private WebAppConfigBean webAppConfigBean;
-    
+
 }

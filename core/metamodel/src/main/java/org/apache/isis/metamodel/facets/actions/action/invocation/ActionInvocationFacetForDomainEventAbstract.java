@@ -82,7 +82,7 @@ implements ImperativeFacet {
     private final ObjectSpecification returnType;
 
     private final ServiceRegistry serviceRegistry;
-    
+
     private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
@@ -135,11 +135,11 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ObjectAdapter executionResult = 
-        		getTransactionService().executeWithinTransaction(()->
-                    doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
-        
+                getTransactionService().executeWithinTransaction(()->
+                doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
+
         //PersistableTypeGuard.instate(executionResult);
-        
+
         return executionResult;
     }
 
@@ -193,7 +193,7 @@ implements ImperativeFacet {
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
 
-                
+
                 @Override
                 public Object execute(final Interaction.ActionInvocation currentExecution) {
 
@@ -218,7 +218,7 @@ implements ImperativeFacet {
 
 
                         // ... post the executing event
-                
+
                         final ActionDomainEvent<?> event =
                                 domainEventHelper.postEventForAction(
                                         AbstractDomainEvent.Phase.EXECUTING,
@@ -236,7 +236,7 @@ implements ImperativeFacet {
                         ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
 
                         // ... post the executed event
-                        
+
                         //[ahuber] javac (jdk-8) won't compile this without the cast '(ActionDomainEvent)event', 
                         // while the eclipse compiler does ... 
                         domainEventHelper.postEventForAction(
@@ -443,19 +443,19 @@ implements ImperativeFacet {
         final Object result = resultAdapter.getPojo();
 
         if(result instanceof Collection || result.getClass().isArray()) {
-            
+
             final Stream<ObjectAdapter> adapters = CollectionFacet.Utils.streamAdapters(resultAdapter);
-            
+
             final List<ObjectAdapter> visibleAdapters =
                     ObjectAdapter.Util.visibleAdapters(adapters, interactionInitiatedBy);
-            
+
             final Object visibleObjects =
                     CollectionUtils.copyOf(
                             stream(visibleAdapters)
                             .map(ObjectAdapter.Util::unwrapPojo)
                             .collect(Collectors.toList()),
                             method.getReturnType());
-            
+
             if (visibleObjects != null) {
                 return getObjectAdapterProvider().adapterFor(visibleObjects);
             }

@@ -105,7 +105,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
     @Mock
     protected ObjectAdapter mockPasswordAdapter;
-    
+
     private final String passwordValue = "12345678";
 
     private final SimpleSession session = new SimpleSession("tester", Collections.<String>emptyList());
@@ -121,7 +121,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     public void setUp() throws Exception {
 
         // PRODUCTION
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
@@ -131,7 +131,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
-        
+
         getPasswordMethod = Employee.class.getMethod("getPassword");
         setPasswordMethod = Employee.class.getMethod("setPassword", String.class);
 
@@ -165,7 +165,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
                 allowing(mockSpecificationLoader).loadSpecification(Employee.class);
                 will(returnValue(mockEmployeeSpec));
-                
+
                 allowing(mockEmployeeSpec).getMember(with(setPasswordMethod));
                 will(returnValue(mockPasswordMember));
 
@@ -214,19 +214,19 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
             {
                 allowing(mockPasswordMember).streamFacets();
                 will(returnValue(facets.stream()));
-                
+
                 allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
-                
+
                 allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE
-                );
+                        );
                 will(returnValue(usabilityConsent));
             }
         });
-        
+
         // when
         employeeWO.setPassword(passwordValue);
-        
+
         // then should throw exception
     }
 
@@ -243,11 +243,11 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
             {
                 allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
-                
+
                 allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE
-                );
+                        );
                 will(returnValue(usabilityConsent));
-                
+
                 allowing(mockPasswordMember).isAssociationValid(mockEmployeeAdapter, mockPasswordAdapter,
                         InteractionInitiatedBy.USER);
                 will(returnValue(validityConsent));
@@ -270,12 +270,12 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         // and given
         facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(mockOnType, getPasswordMethod, mockPasswordMember
-        ));
+                ));
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).streamFacets();
                 will(returnValue(facets.stream()));
-                
+
                 oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);
                 will(returnValue(mockPasswordAdapter));
             }

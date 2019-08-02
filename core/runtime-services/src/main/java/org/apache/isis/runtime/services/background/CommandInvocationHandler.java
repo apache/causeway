@@ -134,17 +134,17 @@ class CommandInvocationHandler<T> implements InvocationHandler {
         final String actionId = action.getId();
         final ObjectSpecification domainSpec = getObjectAdapterProvider().adapterFor(domainObject).getSpecification();
         final Stream<ObjectAction> objectActions = domainSpec.streamObjectActions(Contributed.INCLUDED);
-        
+
         return objectActions
-            .filter(objectAction->objectAction instanceof ObjectActionMixedIn)
-            .map(objectAction->(ObjectActionMixedIn) objectAction)
-            .filter(objectActionMixedIn->objectActionMixedIn.hasMixinAction(action))
-            .findFirst()
-            .orElseThrow(()->
+                .filter(objectAction->objectAction instanceof ObjectActionMixedIn)
+                .map(objectAction->(ObjectActionMixedIn) objectAction)
+                .filter(objectActionMixedIn->objectActionMixedIn.hasMixinAction(action))
+                .findFirst()
+                .orElseThrow(()->
                 new IllegalArgumentException(String.format(
-                    "Unable to find mixin action '%s' for %s", actionId, domainSpec.getFullIdentifier()))
-            );
-             
+                        "Unable to find mixin action '%s' for %s", actionId, domainSpec.getFullIdentifier()))
+                        );
+
     }
 
     private ObjectAdapter[] adaptersFor(final Object[] args) {

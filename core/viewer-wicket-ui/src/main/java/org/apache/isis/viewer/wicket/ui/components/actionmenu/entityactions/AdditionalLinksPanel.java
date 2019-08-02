@@ -119,16 +119,16 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final AbstractLink link = linkAndLabel.getLink();
                 final Model<String> tooltipModel = link instanceof ActionLink
                         ? new Model<String>() {
-                            private static final long serialVersionUID = 1L;
-                            @Override
-                            public String getObject() {
-                                final ActionLink actionLink = (ActionLink) link;
-                                final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
-                                return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
-                            }
-                        } 
-                        : Model.of(linkAndLabel.getDescriptionIfAny());
-                
+                    private static final long serialVersionUID = 1L;
+                    @Override
+                    public String getObject() {
+                        final ActionLink actionLink = (ActionLink) link;
+                        final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
+                        return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
+                    }
+                } 
+                : Model.of(linkAndLabel.getDescriptionIfAny());
+
                 Tooltips.addTooltip(link, tooltipModel);
 
                 final Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
@@ -142,8 +142,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
                 SemanticsOf semantics = linkAndLabel.getSemantics();
                 if (linkAndLabel.getParameters().isNoParameters() &&
-                    (link instanceof ActionLink ? ((ActionLink)link).getReasonDisabledIfAny() : null) == null
-                    ) {
+                        (link instanceof ActionLink ? ((ActionLink)link).getReasonDisabledIfAny() : null) == null
+                        ) {
                     addConfirmationDialogIfAreYouSureSemantics(link, semantics);
                 }
 

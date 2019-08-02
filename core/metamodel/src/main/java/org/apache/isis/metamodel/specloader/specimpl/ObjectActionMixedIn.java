@@ -78,7 +78,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final String mixinMethodName,
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType) {
-        
+
         super(mixinAction.getFacetedMethod());
 
         this.mixinType = mixinType;

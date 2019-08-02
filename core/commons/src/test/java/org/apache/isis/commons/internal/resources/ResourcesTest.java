@@ -37,30 +37,30 @@ class ResourcesTest {
 
     @Test
     void localRelativeResourcePathDetection() {
-        
+
         assertTrue(_Resources.isLocalResource("/hello"));
         assertTrue(_Resources.isLocalResource("/hello/world"));
         assertTrue(_Resources.isLocalResource("/hello//world"));
-        
+
         assertTrue(_Resources.isLocalResource("hello"));
         assertTrue(_Resources.isLocalResource("hello/world"));
         assertTrue(_Resources.isLocalResource("hello//world"));
-        
+
     }
 
     @Test
     void externalResourcePathDetection() {
-        
+
         assertFalse(_Resources.isLocalResource("http://hello.world"));
         assertFalse(_Resources.isLocalResource("http://localhost:8080/hello"));
         assertFalse(_Resources.isLocalResource("http://localhost:8080/hello"));
         assertFalse(_Resources.isLocalResource("http://127.0.0.1:8080/hello"));
-        
+
         assertFalse(_Resources.isLocalResource("https://hello.world"));
         assertFalse(_Resources.isLocalResource("https://localhost:8080/hello"));
         assertFalse(_Resources.isLocalResource("https://localhost:8080/hello"));
         assertFalse(_Resources.isLocalResource("https://127.0.0.1:8080/hello"));
-        
+
     }
-    
+
 }

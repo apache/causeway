@@ -37,10 +37,10 @@ public class RootOidTest_create {
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion(), is(nullValue()));
-        
+
         assertThat(oid.isTransient(), is(false));
     }
-    
+
     @Test
     public void createTransient() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
@@ -48,11 +48,11 @@ public class RootOidTest_create {
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion(), is(nullValue()));
-        
+
         assertThat(oid.isTransient(), is(true));
     }
 
-    
+
     @Test
     public void createWithVersion() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
@@ -60,10 +60,10 @@ public class RootOidTest_create {
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion().getSequence(), is(456L));
-        
+
         assertThat(oid.isTransient(), is(false));
     }
-    
+
     @Test
     public void createTransientNoVersion() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
@@ -71,7 +71,7 @@ public class RootOidTest_create {
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion(), is(nullValue()));
-        
+
         assertThat(oid.isTransient(), is(true));
     }
 

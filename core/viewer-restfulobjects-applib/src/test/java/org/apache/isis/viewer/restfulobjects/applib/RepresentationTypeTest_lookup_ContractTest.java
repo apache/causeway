@@ -40,7 +40,7 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
             assertSame(repType, lookup);
         }
     }
-    
+
     @Test
     public void roundtrip_overloaded() {
         for (final RepresentationType repType : RepresentationType.values()) {
@@ -54,7 +54,7 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
     public void whenUnknown() {
         assertThat(RepresentationType.lookup(MediaType.APPLICATION_SVG_XML), is(RepresentationType.GENERIC));
         assertThat(RepresentationType.lookup("foobar"), is(RepresentationType.GENERIC));
-    
+
     }
 
     @Test
@@ -66,11 +66,11 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
     @Test
     public void whenDomainObjectWithXRoParameter() {
         MediaType toLookup = RepresentationType.DOMAIN_OBJECT
-        		.getMediaType("x-ro-domain-type", "http://mycompany.com:39393/domain-types/JdkValuedEntities");
-        
+                .getMediaType("x-ro-domain-type", "http://mycompany.com:39393/domain-types/JdkValuedEntities");
+
         // ignores the parameter ...
         assertThat(
-            RepresentationType.lookup(toLookup), is(RepresentationType.DOMAIN_OBJECT));
+                RepresentationType.lookup(toLookup), is(RepresentationType.DOMAIN_OBJECT));
     }
 
 

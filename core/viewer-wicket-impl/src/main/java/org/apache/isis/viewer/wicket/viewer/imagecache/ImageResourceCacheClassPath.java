@@ -70,7 +70,7 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
         } else {
             return fallbackResource;    
         }
-        
+
     }
 
     @Override

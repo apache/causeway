@@ -30,8 +30,8 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
 @Programmatic
 public class PersonaEnumPersistAll<
-    E extends Enum<E> & PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>, 
-    T>
+E extends Enum<E> & PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>, 
+        T>
 extends FixtureScript
 implements FixtureScriptWithExecutionStrategy {
 

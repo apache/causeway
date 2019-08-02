@@ -75,25 +75,25 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     final class Comparators{
         private Comparators(){}
-        
+
         public final static Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = 
                 (final ObjectSpecification o1, final ObjectSpecification o2) -> 
-                    o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
-        
+        o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
+
         public final static Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = 
                 (final ObjectSpecification s1, final ObjectSpecification s2) -> 
-                    s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+        s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
-    
+
     final class Functions {
         private Functions(){}
 
         public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = 
                 ObjectSpecification::getFullIdentifier;
     }
-    
+
     ObjectMember getMember(String memberId);
-    
+
     /**
      * @param onType
      * @return
@@ -224,7 +224,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * @since 2.0
      */
     ObjectSpecification getElementSpecification();
-    
+
     /**
      * 
      * @since 2.0
@@ -364,31 +364,31 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     default boolean isViewModel() {
         return getBeanSort().isViewModel();
     }
-    
+
     default boolean isMixin() {
         return getBeanSort().isMixin();
     }
-    
+
     boolean isViewModelCloneable(ManagedObject targetAdapter);
     boolean isWizard();
 
     default boolean isEntityOrViewModel() {
         return isViewModel() || isEntity();
     }
-    
+
     default boolean isEntity() {
         return getBeanSort().isEntity();
     }
-    
-    /**
-     * @since 2.0
-     */
-	boolean isExcludedFromMetamodel();
 
     /**
      * @since 2.0
      */
-	default Object instantiatePojo() {
+    boolean isExcludedFromMetamodel();
+
+    /**
+     * @since 2.0
+     */
+    default Object instantiatePojo() {
         final Class<?> correspondingClass = getCorrespondingClass();
         if (correspondingClass.isArray()) {
             return Array.newInstance(correspondingClass.getComponentType(), 0);
@@ -405,9 +405,9 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
         } catch (final IllegalAccessException | InstantiationException e) {
             throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
         }
-        
+
         return newInstance; 
-	}
-    
+    }
+
 
 }

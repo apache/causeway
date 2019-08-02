@@ -76,7 +76,7 @@ public interface LayoutService {
      * Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
      */
     byte[] toZip(final Style style);
-    
+
     /**
      * Obtains the serialized XML form of the menu bars layout ({@link MenuBarsService}).
      * @param type - either the current menubars (could be loaded from a file) or the fallback (obtained from metamodel facets)

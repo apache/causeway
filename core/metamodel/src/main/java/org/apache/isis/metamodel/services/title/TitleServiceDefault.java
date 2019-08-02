@@ -60,7 +60,7 @@ public class TitleServiceDefault implements TitleService {
     private ObjectAdapterProvider getObjectAdapterProvider() {
         return objectAdapterProvider;
     }
-    
+
     @Inject ObjectAdapterService objectAdapterProvider;
     @Inject WrapperFactory wrapperFactory;
 

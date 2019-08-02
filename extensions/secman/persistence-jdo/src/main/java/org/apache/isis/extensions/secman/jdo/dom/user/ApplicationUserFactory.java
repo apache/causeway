@@ -59,7 +59,7 @@ public interface ApplicationUserFactory {
     public static class Default implements ApplicationUserFactory {
 
         @Override
-		public ApplicationUser newApplicationUser() {
+        public ApplicationUser newApplicationUser() {
             return factory.instantiate(ApplicationUser.class);
         }
 

@@ -31,46 +31,46 @@ package org.apache.isis.applib.annotation;
  */
 public enum NatureOfService {
 
-	/**
-	 * The service's actions appear in the viewer, for example in the menu bar.
-	 */
-	VIEW,
+    /**
+     * The service's actions appear in the viewer, for example in the menu bar.
+     */
+    VIEW,
 
-	/**
-	 * The services actions should only be visible in the REST API exposed by the Restful Objects viewer.
-	 */
-	VIEW_REST_ONLY,
+    /**
+     * The services actions should only be visible in the REST API exposed by the Restful Objects viewer.
+     */
+    VIEW_REST_ONLY,
 
-	/**
-	 * The service's actions do not appear on menus and are not contributed.
-	 */
-	DOMAIN,
+    /**
+     * The service's actions do not appear on menus and are not contributed.
+     */
+    DOMAIN,
 
-	;
+    ;
 
-	// -- BASIC PREDICATES
+    // -- BASIC PREDICATES
 
-	public boolean isViewRestOnly() {
-		return this == VIEW_REST_ONLY;
-	}
+    public boolean isViewRestOnly() {
+        return this == VIEW_REST_ONLY;
+    }
 
-	public boolean isView() {
-		return this == VIEW;
-	}
+    public boolean isView() {
+        return this == VIEW;
+    }
 
-	public boolean isDomain() {
-		return this == DOMAIN;
-	}
+    public boolean isDomain() {
+        return this == DOMAIN;
+    }
 
-	// -- ADVANCED PREDICATES
+    // -- ADVANCED PREDICATES
 
-	/**
-	 * @implNote introduced as a refactoring step, should be removed if no longer required
-	 */
-	public boolean isContributingToViewer() {
-		return
-			//this != NatureOfService.VIEW_MENU_ONLY &&
-	        this != NatureOfService.DOMAIN;
-	}
+    /**
+     * @implNote introduced as a refactoring step, should be removed if no longer required
+     */
+    public boolean isContributingToViewer() {
+        return
+                //this != NatureOfService.VIEW_MENU_ONLY &&
+                this != NatureOfService.DOMAIN;
+    }
 
 }

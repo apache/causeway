@@ -35,33 +35,33 @@ import lombok.RequiredArgsConstructor;
 @Mixin
 @RequiredArgsConstructor
 public class DependentArgsActionDemo_useDefault {
-    
+
     @Inject MessageService messageService;
-    
-    
+
+
     private final DependentArgsActionDemo holder;
-    
+
     @ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
     @Action(semantics = SemanticsOf.SAFE)
     public DependentArgsActionDemo $$(
-            
+
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY)
             Parity parity,
-            
+
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named = "Message")
             String message
-            
+
             ) {
-        
+
         messageService.informUser(message);
         return holder;
     }
-    
+
     // -- PARAM 1 (String message)
-    
+
     public String default1$$(Parity parity) {
         if(parity == null) {
             return "no parity selected";

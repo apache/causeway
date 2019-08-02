@@ -50,25 +50,25 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     @Mock
     private IsisConfiguration mockConfiguration;
-    
+
     private ShiroAuthenticator authenticator;
     private ShiroAuthorizor authorizor;
 
     @Before
     public void setUp() throws Exception {
-        
+
         // PRODUCTION
 
         _Config.clear();
         _Config.put("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
-        
+
         authenticator = new ShiroAuthenticator();
         authorizor = new ShiroAuthorizor();
-        
+
         authenticator.init();
         authorizor.init();
     }
-    
+
 
     @After
     public void tearDown() throws Exception {
@@ -95,7 +95,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     }
 
-    
+
     @Test
     public void vetoingOverridden() throws Exception {
         // given
@@ -105,7 +105,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
         authenticator.authenticate(ar, null);
-        
+
         // when, then
         Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
         assertThat(authorizor.isVisibleInAnyRole(removeCustomerIdentifier), is(true));

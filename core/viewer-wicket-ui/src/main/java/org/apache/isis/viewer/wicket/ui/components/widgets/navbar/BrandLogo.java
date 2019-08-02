@@ -63,7 +63,7 @@ public class BrandLogo extends WebComponent {
     private String url() {
         String logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
         String logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
-        
+
         return placement.urlFor(logoHeaderUrl, logoSigninUrl);
     }
 

@@ -34,8 +34,8 @@ import lombok.val;
  */
 public class EmailAvailableValidator implements IValidator<String> {
 
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     public static final EmailAvailableValidator EXISTS = new EmailAvailableValidator(true, "noSuchUserByEmail");
     public static final EmailAvailableValidator DOESNT_EXIST = new EmailAvailableValidator(false, "emailIsNotAvailable");
 
@@ -49,15 +49,15 @@ public class EmailAvailableValidator implements IValidator<String> {
 
     @Override
     public void validate(final IValidatable<String> validatable) {
-    	
-    	val userRegistrationService = getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
-    	
+
+        val userRegistrationService = getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
+
         getIsisSessionFactory().doInSession(() -> {
-                String email = validatable.getValue();
-                boolean emailExists1 = userRegistrationService.emailExists(email);
-                if (emailExists1 != emailExists) {
-                    validatable.error(new ValidationError().addKey(resourceKey));
-                }
+            String email = validatable.getValue();
+            boolean emailExists1 = userRegistrationService.emailExists(email);
+            if (emailExists1 != emailExists) {
+                validatable.error(new ValidationError().addKey(resourceKey));
+            }
         });
 
     }

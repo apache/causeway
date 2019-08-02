@@ -52,8 +52,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public abstract class RuntimeContextBase implements RuntimeContext {
 
-	// -- FINAL FIELDS
-	
+    // -- FINAL FIELDS
+
     @Getter protected final IsisConfiguration configuration;
     @Getter protected final ServiceInjector serviceInjector;
     @Getter protected final ServiceRegistry serviceRegistry;
@@ -62,12 +62,12 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter protected final ObjectAdapterProvider objectAdapterProvider;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<HomePageAction> homePageActionResolver;
-    
+
     // -- NO ARG CONSTRUCTOR
-    
+
     protected RuntimeContextBase() {
         val mmc = MetaModelContext.current();
-    	configuration = mmc.getConfiguration();
+        configuration = mmc.getConfiguration();
         serviceInjector = mmc.getServiceInjector();
         serviceRegistry = mmc.getServiceRegistry();
         specificationLoader = mmc.getSpecificationLoader();
@@ -76,73 +76,73 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         transactionService = mmc.getTransactionService();
         homePageActionResolver = mmc::getHomePageAction;
     }
-    
+
     @Override
     public HomePageAction getHomePageAction() {
         return homePageActionResolver.get();
     }
-    
+
     // -- OBJECT ADAPTER SUPPORT
-    
+
     @Override
     public ObjectAdapter adapterOfPojo(Object pojo) {
-		return objectAdapterProvider.adapterFor(pojo);
-	}
-    
+        return objectAdapterProvider.adapterFor(pojo);
+    }
+
     @Override //FIXME [2033] decouple from JDO
     public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
-		return ps().adapterOfMemento(spec, oid, data);
-	}
- 
+        return ps().adapterOfMemento(spec, oid, data);
+    }
+
     // -- FIXTURE SCRIPT STATE SUPPORT
-    
+
     @Override //FIXME [2033] decouple from JDO
     public FixturesInstalledState getFixturesInstalledState() {
-    	return ps().getFixturesInstalledState();
+        return ps().getFixturesInstalledState();
     }
-    
+
     // -- AUTH
-    
+
     @Override
     public void logoutAuthenticationSession() {
-    	// we do the logout (removes this session from those valid)
+        // we do the logout (removes this session from those valid)
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
         final AuthenticationSession authenticationSession = getAuthenticationSession();
         IsisContext.getAuthenticationManager().closeSession(authenticationSession);
         IsisContext.getSessionFactory().closeSession();	
     }
-    
+
     // -- ENTITY SUPPORT
-    
+
     @Override
     public ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec) {
-		return objectAdapterProvider.newTransientInstance(domainTypeSpec);
-	}
-	
+        return objectAdapterProvider.newTransientInstance(domainTypeSpec);
+    }
+
     @Override
     public void makePersistentInTransaction(ObjectAdapter objectAdapter) {
-		ps().makePersistentInTransaction(objectAdapter);
-	}
-    
+        ps().makePersistentInTransaction(objectAdapter);
+    }
+
     @Override
     public Object fetchPersistentPojoInTransaction(RootOid rootOid) {
-		return ps().fetchPersistentPojoInTransaction(rootOid);
-	}
+        return ps().fetchPersistentPojoInTransaction(rootOid);
+    }
 
     @Override
     public ManagedObjectState stateOf(Object domainObject) {
-		return ps().stateOf(domainObject);	
-	}
-    
+        return ps().stateOf(domainObject);	
+    }
+
     // -- PERSISTENCE SUPPORT FOR MANAGED OBJECTS
-    
+
     private final _Lazy<PersistenceSession> persistenceSession = 
             _Lazy.of(IsisContext.getPersistenceSession()::get);
-    
+
     private PersistenceSession ps() {
-    	return persistenceSession.get();
+        return persistenceSession.get();
     }
-    
+
     // --
-	
+
 }

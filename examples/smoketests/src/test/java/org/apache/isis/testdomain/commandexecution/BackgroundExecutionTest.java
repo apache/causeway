@@ -52,12 +52,12 @@ import lombok.val;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-//        		"logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
-//        		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
-//        		"logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
-        		})
+                //        		"logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
+                //        		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
+                //        		"logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
+        })
 class BackgroundExecutionTest {
-    
+
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
 
@@ -72,58 +72,58 @@ class BackgroundExecutionTest {
 
     @Test
     void testBackgroundService_waitingForFixedTime() throws InterruptedException, ExecutionException {
-        
+
         val inventoryManager = facoryService.viewModel(InventoryManager.class);
         val product = repository.allInstances(Product.class).get(0);
 
         assertEquals(99d, product.getPrice(), 1E-6);
-        
+
         backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
-        
+
         Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
         assertEquals(123d, product.getPrice(), 1E-6);
     }
-    
+
     @Test
     void testBackgroundService_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
-        
+
         val inventoryManager = facoryService.viewModel(InventoryManager.class);
         val product = repository.allInstances(Product.class).get(0);
 
         assertEquals(99d, product.getPrice(), 1E-6);
-        
+
         actionDomainEventListener.prepareLatch();
-        
+
         backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
-        
+
         assertTrue(
-        		actionDomainEventListener.getCountDownLatch()
-        		.await(5, TimeUnit.SECONDS));
-        
+                actionDomainEventListener.getCountDownLatch()
+                .await(5, TimeUnit.SECONDS));
+
         assertEquals(123d, product.getPrice(), 1E-6);
     }
-    
-    
+
+
     @Service
     public static class ActionDomainEventListener {
-    	
-    	@Getter private CountDownLatch countDownLatch;
-    	
-    	@EventListener(InventoryManager.UpdateProductPriceEvent.class)
-    	public void hi(InventoryManager.UpdateProductPriceEvent event) {
-    		//FIXME[2125] not triggered yet
-    		System.err.println("!!!!!!!!!!!! hiho");
-    		countDownLatch.countDown();
-    	}
 
-		public void prepareLatch() {
-			countDownLatch = new CountDownLatch(1);
-		}
-    	    	
+        @Getter private CountDownLatch countDownLatch;
+
+        @EventListener(InventoryManager.UpdateProductPriceEvent.class)
+        public void hi(InventoryManager.UpdateProductPriceEvent event) {
+            //FIXME[2125] not triggered yet
+            System.err.println("!!!!!!!!!!!! hiho");
+            countDownLatch.countDown();
+        }
+
+        public void prepareLatch() {
+            countDownLatch = new CountDownLatch(1);
+        }
+
     }
-    
+
     // -- DEPS
-    
+
     @Inject BackgroundService backgroundService;
     @Inject FactoryService facoryService;
     @Inject ActionDomainEventListener actionDomainEventListener;

@@ -46,9 +46,9 @@ public class JsonRepresentationTest_asInputStream {
     @Test
     public void asInputStream() throws IOException {
         final InputStream array = jsonRepresentation.asInputStream();
-                
+
         final String jsonStr = _Strings.ofBytes(_Bytes.of(array), StandardCharsets.UTF_8);
-        
+
         assertThat(jsonStr, is(not(nullValue())));
     }
 

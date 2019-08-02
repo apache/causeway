@@ -21,9 +21,9 @@ package domainapp.dom.actions.depargs;
 public enum Parity {
     EVEN,
     ODD;
-    
+
     public String title() {
         return name();
     }
-    
+
 }

@@ -30,37 +30,39 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
  *
  */
 public interface ObjectAdapterByIdProvider {
-    
+
     // -- INTERFACE
 
-	/**
+    /**
      * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
      * know that the oid does indeed represent an object you know exists.
      */
     ObjectAdapter adapterFor(RootOid rootOid);
-    
+
     Map<RootOid, ObjectAdapter> adaptersFor(Stream<RootOid> rootOids);
-    
-    
+
+
     // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
-    
+
     public static interface Delegating extends ObjectAdapterByIdProvider {
-        
+
         @Programmatic
         ObjectAdapterByIdProvider getObjectAdapterByIdProvider();
-        
+
+        @Override
         @Programmatic
         default ObjectAdapter adapterFor(RootOid rootOid) {
             return getObjectAdapterByIdProvider().adapterFor(rootOid);
         }
-        
+
+        @Override
         @Programmatic
         default Map<RootOid, ObjectAdapter> adaptersFor(Stream<RootOid> rootOids) {
             return getObjectAdapterByIdProvider().adaptersFor(rootOids);
         }
 
-        
+
     }
-    
+
 
 }

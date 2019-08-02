@@ -31,13 +31,13 @@ import domainapp.application.manifest.SimpleAppManifest;
 @ContextConfiguration
 public abstract class SpringIntegrationTest {
 
-	@Inject protected WrapperFactory wrapperFactory;
-	
-	 /**
+    @Inject protected WrapperFactory wrapperFactory;
+
+    /**
      * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}
      */
     protected <T> T wrap(final T obj) {
         return wrapperFactory.wrap(obj);
     }
-	
+
 }

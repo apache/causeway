@@ -115,7 +115,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                 final Stream<ObjectAssociation> associations = objectSpec
                         .streamAssociations(Contributed.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
-                
+
                 associations.forEach(association->{
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
@@ -143,7 +143,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                         }
                     }
                 });
-                
+
 
             }
         };

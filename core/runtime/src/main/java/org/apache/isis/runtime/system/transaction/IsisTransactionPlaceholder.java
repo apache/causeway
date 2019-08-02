@@ -28,10 +28,10 @@ public enum IsisTransactionPlaceholder {
     NEW,
     DELETED
     ;
-    
+
     @Override
     public String toString() {
         return "[" + name() + "]";
     }
-    
+
 }

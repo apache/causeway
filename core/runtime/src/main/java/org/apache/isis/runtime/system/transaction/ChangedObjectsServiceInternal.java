@@ -94,7 +94,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         final Stream<ObjectAssociation> properties = adapter.getSpecification()
                 .streamAssociations(Contributed.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
-        
+
         enlist(adapter, properties, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
@@ -116,11 +116,11 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         }
 
         enlistForPublishing(adapter, PublishingChangeKind.UPDATE);
-        
+
         final Stream<ObjectAssociation> properties = adapter.getSpecification()
                 .streamAssociations(Contributed.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
-        
+
         enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
@@ -145,11 +145,11 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         if(!enlisted) {
             return;
         }
-        
+
         final Stream<ObjectAssociation> properties = adapter.getSpecification()
                 .streamAssociations(Contributed.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
-        
+
         enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
 
     }
@@ -201,33 +201,33 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
 
-    	final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = _Maps.newLinkedHashMap();
+        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = _Maps.newLinkedHashMap();
 
-    	while(!changedObjectProperties.isEmpty()) {
+        while(!changedObjectProperties.isEmpty()) {
 
-    		final Set<AdapterAndProperty> keys = _Sets.newLinkedHashSet(changedObjectProperties.keySet());
-    		for (final AdapterAndProperty aap : keys) {
+            final Set<AdapterAndProperty> keys = _Sets.newLinkedHashSet(changedObjectProperties.keySet());
+            for (final AdapterAndProperty aap : keys) {
 
-    			final PreAndPostValues papv = changedObjectProperties.remove(aap);
+                final PreAndPostValues papv = changedObjectProperties.remove(aap);
 
-    			final ObjectAdapter adapter = aap.getAdapter();
-    			if(adapter.isDestroyed()) {
-    				// don't touch the object!!!
-    				// JDO, for example, will complain otherwise...
-    				papv.setPost(IsisTransactionPlaceholder.DELETED);
-    			} else {
-    				papv.setPost(aap.getPropertyValue());
-    			}
+                final ObjectAdapter adapter = aap.getAdapter();
+                if(adapter.isDestroyed()) {
+                    // don't touch the object!!!
+                    // JDO, for example, will complain otherwise...
+                    papv.setPost(IsisTransactionPlaceholder.DELETED);
+                } else {
+                    papv.setPost(aap.getPropertyValue());
+                }
 
-    			// if we encounter the same objectProperty again, this will simply overwrite it
-    			processedObjectProperties.put(aap, papv);
-    		}
-    	}
+                // if we encounter the same objectProperty again, this will simply overwrite it
+                processedObjectProperties.put(aap, papv);
+            }
+        }
 
-    	return Collections.unmodifiableSet(
-    			processedObjectProperties.entrySet().stream()
-    			.filter(PreAndPostValues.Predicates.SHOULD_AUDIT)
-    			.collect(Collectors.toSet())    );
+        return Collections.unmodifiableSet(
+                processedObjectProperties.entrySet().stream()
+                .filter(PreAndPostValues.Predicates.SHOULD_AUDIT)
+                .collect(Collectors.toSet())    );
 
     }
 
@@ -268,7 +268,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     static String asString(Object object) {
         return object != null? object.toString(): null;
     }
-    
+
     private void enlist(
             final ObjectAdapter adapter, 
             final Stream<ObjectAssociation> properties, 

@@ -38,7 +38,7 @@ interface CdiPlugin {
     // -- LOOKUP
 
     public static CdiPlugin get() {
-        
+
         return _Plugin.getOrElse(CdiPlugin.class,
                 ambiguousPlugins->{
                     return _Plugin.pickAnyAndWarn(CdiPlugin.class, ambiguousPlugins);
@@ -47,6 +47,6 @@ interface CdiPlugin {
                     throw _Plugin.absenceNonRecoverable(CdiPlugin.class);
                 });
     }
-    
+
 
 }

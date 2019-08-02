@@ -23,7 +23,7 @@ package org.apache.isis.commons.internal.ioc;
  *
  */
 public enum BeanSort {
-    
+
     /**
      * Stateful object, with a state that can be marshaled and unmarshaled.
      * <p> 
@@ -31,7 +31,7 @@ public enum BeanSort {
      * with a persistence layer. <p>  see also {@link #ENTITY}
      */
     VIEW_MODEL,
-    
+
     /**
      * Persistable object, associated with a persistence layer/context.
      * <p>
@@ -40,29 +40,29 @@ public enum BeanSort {
      *  
      */
     ENTITY,
-    
+
     /**
      * Injectable object, associated with a lifecycle context 
      * (application-scoped, request-scoped, ...).
      */
     MANAGED_BEAN, 
-    
+
     /**
      * Object associated with an 'entity' or 'bean' to act as contributer of 
      * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
      */
     MIXIN,
-    
+
     /**
      * Immutable, serializable object.
      */
     VALUE,
-    
+
     /**
      * Container of objects.
      */
     COLLECTION,
-    
+
     UNKNOWN;
 
     public boolean isManagedBean() {

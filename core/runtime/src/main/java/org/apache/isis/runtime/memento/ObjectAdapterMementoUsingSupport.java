@@ -40,7 +40,7 @@ import lombok.Value;
 public class ObjectAdapterMementoUsingSupport implements ObjectAdapterMemento {
 
     private static final long serialVersionUID = 1L;
-    
+
     private transient _Lazy<ObjectAdapterMementoSupport> support = 
             _Lazy.threadSafe(ObjectAdapterMementoSupport::current);
 
@@ -49,7 +49,7 @@ public class ObjectAdapterMementoUsingSupport implements ObjectAdapterMemento {
     @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
     @Getter(onMethod = @__({@Override})) private final RootOid rootOid;
 
-    
+
     @Override
     public String asString() {
         // TODO Auto-generated method stub
@@ -72,12 +72,12 @@ public class ObjectAdapterMementoUsingSupport implements ObjectAdapterMemento {
     public ObjectAdapter getObjectAdapter() {
         return support.get().reconstructObjectAdapter(this);
     }
-    
+
     private final static _Probe probe = _Probe.unlimited().label("ObjectAdapterMementoUsingSupport");
 
     @Override
     public void resetVersion() {
-        
+
         // was only ever required on entities 
         if(beanSort.isEntity()) {
             probe.warnNotImplementedYet("resetVersion() was removed with 2.0.0, its unclear whether still required");

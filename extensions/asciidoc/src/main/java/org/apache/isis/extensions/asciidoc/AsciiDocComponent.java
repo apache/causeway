@@ -40,18 +40,18 @@ public class AsciiDocComponent extends MarkupComponent {
     public AsciiDocComponent(String id, IModel<?> model) {
         super(id, model, /*observing*/ null);
     }
-    
+
     @Override
     public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag, 
                 MarkupComponent_reloadJs.decorate(htmlContent, jsRef.get()));
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        
+
         response.render(CssHeaderItem.forReference(
                 new CssResourceReference(AsciiDocComponent.class, "css/prism.css")));
 
@@ -60,6 +60,6 @@ public class AsciiDocComponent extends MarkupComponent {
     }
 
     private final static _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
-        new JavaScriptResourceReference(AsciiDocComponent.class, "js/prism1.14.js"));
+    new JavaScriptResourceReference(AsciiDocComponent.class, "js/prism1.14.js"));
 
 }

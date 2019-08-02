@@ -28,40 +28,40 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName="of")
 final class Bin_Singleton<T> implements Bin<T> {
-	
-	private final T element;
-	
-	@Getter(lazy=true, onMethod=@__({@Override})) 
-	private final Optional<T> singleton = Optional.of(element);
 
-	@Override
-	public Cardinality getCardinality() {
-		return Cardinality.ONE;
-	}
+    private final T element;
 
-	@Override
-	public Stream<T> stream() {
-		return Stream.of(element);
-	}
+    @Getter(lazy=true, onMethod=@__({@Override})) 
+    private final Optional<T> singleton = Optional.of(element);
 
-	@Override
-	public Optional<T> getFirst() {
-		return getSingleton();
-	}
+    @Override
+    public Cardinality getCardinality() {
+        return Cardinality.ONE;
+    }
 
-	@Override
-	public int size() {
-		return 1;
-	}
+    @Override
+    public Stream<T> stream() {
+        return Stream.of(element);
+    }
 
-	@Override
-	public Iterator<T> iterator() {
-		return Collections.singletonList(element).iterator();
-	}
-	
-	@Override
-	public String toString() {
-		return "Bin["+element+"]";
-	}
+    @Override
+    public Optional<T> getFirst() {
+        return getSingleton();
+    }
+
+    @Override
+    public int size() {
+        return 1;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return Collections.singletonList(element).iterator();
+    }
+
+    @Override
+    public String toString() {
+        return "Bin["+element+"]";
+    }
 
 }

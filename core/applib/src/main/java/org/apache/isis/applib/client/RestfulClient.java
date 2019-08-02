@@ -91,7 +91,7 @@ Future<Response> asyncResponse = request
 
 CompletableFuture<ResponseDigest<MyObject>> digestFuture = 
                 client.digest(asyncResponse, MyObject.class);
-        
+
 ResponseDigest<MyObject> digest = digestFuture.get(); // blocking
 }
 
@@ -130,22 +130,22 @@ if(digest.isSuccess()) {
  */
 @Log4j2
 public class RestfulClient {
-    
+
     public static String DEFAULT_RESPONSE_CONTENT_TYPE = "application/json;profile=\"urn:org.apache.isis/v1\"";
 
     private RestfulClientConfig clientConfig;
     private Client client;
-    
+
     public static RestfulClient ofConfig(RestfulClientConfig clientConfig) {
         RestfulClient restClient = new RestfulClient();
         restClient.init(clientConfig);
         return restClient;
     }
-    
+
     public void init(RestfulClientConfig clientConfig) {
         this.clientConfig = clientConfig;
         client = ClientBuilder.newClient();
-        
+
         registerDefaultJsonProvider();
         registerBasicAuthFilter();
         registerRequestDebugLoggingFilter();
@@ -154,17 +154,17 @@ public class RestfulClient {
     public RestfulClientConfig getConfig() {
         return clientConfig;
     }
-    
+
     public Client getJaxRsClient() {
         return client;
     }
-    
+
     // -- REQUEST BUILDER
-    
+
     public Builder request(String path, SuppressionType ... suppressionTypes) {
         return request(path, SuppressionType.setOf(suppressionTypes));
     }
-    
+
     public Builder request(String path, EnumSet<SuppressionType> suppressionTypes) {
         final String responseContentType = DEFAULT_RESPONSE_CONTENT_TYPE
                 + toSuppressionLiteral(suppressionTypes);
@@ -173,40 +173,40 @@ public class RestfulClient {
     }
 
     // -- ARGUMENT BUILDER
-    
+
     public ActionParameterListBuilder arguments() {
         return new ActionParameterListBuilder();
     }
-    
+
     // -- RESPONSE PROCESSING (SYNC)
-    
+
     public <T> ResponseDigest<T> digest(Response response, Class<T> entityType) {
         return ResponseDigest.of(response, entityType);
     }
-    
+
     // -- RESPONSE PROCESSING (ASYNC)
-    
+
     public <T> CompletableFuture<ResponseDigest<T>> digest(
             final Future<Response> asyncResponse, 
             final Class<T> entityType) {
-        
+
         final CompletableFuture<ResponseDigest<T>> completableFuture = CompletableFuture.supplyAsync(()->{
             try {
                 Response response = asyncResponse.get();
                 ResponseDigest<T> digest = digest(response, entityType);
-                
+
                 return digest;
-                
+
             } catch (Exception e) {
                 return ResponseDigest.ofAsyncFailure(asyncResponse, entityType, e);
             }
         });
-        
+
         return completableFuture;
     }
-    
+
     // -- FILTER
-    
+
     private void registerDefaultJsonProvider() {
         try {
             Class<?> MOXyJsonProvider = _Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider");
@@ -217,7 +217,7 @@ public class RestfulClient {
                     + " Are you missing a maven dependency?");
         }
     }
-    
+
     private void registerBasicAuthFilter() {
         if(clientConfig.isUseBasicAuth()){
             final Credentials credentials = Credentials.of(
@@ -226,15 +226,15 @@ public class RestfulClient {
             client.register(BasicAuthFilter.of(credentials));
         }
     }
-    
+
     private void registerRequestDebugLoggingFilter() {
         if(clientConfig.isUseRequestDebugLogging()){
             client.register(new RestfulLoggingFilter());
         }
     }
-    
+
     // -- HELPER
-    
+
     private String relativePathToUri(String path) {
         final String baseUri = _Strings.suffix(clientConfig.getRestfulBase(), "/");
         while(path.startsWith("/")) {
@@ -242,20 +242,20 @@ public class RestfulClient {
         }
         return baseUri + path;
     }
-    
+
     private String toSuppressionLiteral(EnumSet<SuppressionType> suppressionTypes) {
         final String suppressionSetLiteral = stream(suppressionTypes)
                 .map(SuppressionType::name)
                 .collect(Collectors.joining(","));
-        
+
         if(_Strings.isNotEmpty(suppressionSetLiteral)) {
             return ";suppress=" + suppressionSetLiteral;
         }
-        
+
         return "";
     }
 
 
-    
-    
+
+
 }

@@ -63,7 +63,7 @@ public class MemberOrderComparatorTest extends TestCase {
     protected void setUp() {
 
         _Context.clear();
-        
+
         comparator = new MemberOrderComparator(true);
         laxComparator = new MemberOrderComparator(false);
 

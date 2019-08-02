@@ -85,5 +85,5 @@ public abstract class IsisIntegrationTestAbstactWithFixtures extends IsisIntegra
 
     @Inject protected FixtureScripts fixtureScripts;
 
-	
+
 }

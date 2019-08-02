@@ -36,20 +36,20 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     public JavaCollectionFacet(final FacetHolder holder) {
         super(holder);
     }
-    
+
     @Override
     public <T extends ManagedObject> Object populatePojo(
             Supplier<Object> emptyCollectionPojoFactory, 
             ObjectSpecification collectionSpec,
             Stream<T> initData, 
             int elementCount) {
-        
+
         final Collection<? super Object> pojoCollection = _Casts.uncheckedCast(emptyCollectionPojoFactory.get());
         pojoCollection.clear(); // just in case
         initData.forEach(pojoCollection::add);
         return pojoCollection;
     }
-    
+
     @Override
     public int size(final ManagedObject collection) {
         return pojoCollection(collection).size();
@@ -57,15 +57,15 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
 
     @Override
     public <T extends ManagedObject> Stream<T> stream(T collectionAdapter) {
-        
+
         final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
-        
+
         return pojoCollection(collectionAdapter)
                 .stream()
                 .map(adapterProvider::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
                 .map(x->(T)x);
     }
-    
+
     /**
      * The underlying collection of objects (not {@link ObjectAdapter}s).
      */

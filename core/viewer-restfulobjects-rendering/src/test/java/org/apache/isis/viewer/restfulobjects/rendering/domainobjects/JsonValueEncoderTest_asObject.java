@@ -99,7 +99,7 @@ public class JsonValueEncoderTest_asObject {
         never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-            	oneOf(mockObjectAdapter).getPojo();
+                oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(true));
             }
         });
@@ -122,7 +122,7 @@ public class JsonValueEncoderTest_asObject {
         never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-            	oneOf(mockObjectAdapter).getPojo();
+                oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(123));
             }
         });
@@ -145,7 +145,7 @@ public class JsonValueEncoderTest_asObject {
         never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-            	oneOf(mockObjectAdapter).getPojo();
+                oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(123456789L));
             }
         });
@@ -168,7 +168,7 @@ public class JsonValueEncoderTest_asObject {
         never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-            	oneOf(mockObjectAdapter).getPojo();
+                oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(12345.6789));
             }
         });
@@ -184,7 +184,7 @@ public class JsonValueEncoderTest_asObject {
         context.checking(new Expectations() {
 
             {
-            	oneOf(mockObjectAdapter).getPojo();
+                oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(value));
             }
         });

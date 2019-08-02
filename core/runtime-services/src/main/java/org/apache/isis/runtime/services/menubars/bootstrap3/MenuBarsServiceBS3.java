@@ -102,27 +102,27 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                         menuBars.getAllServiceActionsByObjectTypeAndId();
 
                 fallbackMenuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
-                	
-                	// created only if required to collect unreferenced actions
-                	// for this menuSection into a new section within the designated
-                	// unreferencedActionsMenu
-                	BS3MenuSection section = null;   
-                	
+
+                    // created only if required to collect unreferenced actions
+                    // for this menuSection into a new section within the designated
+                    // unreferencedActionsMenu
+                    BS3MenuSection section = null;   
+
                     for (ServiceActionLayoutData serviceAction : menuSection.getServiceActions()) {
                         val objectTypeAndId = serviceAction.getObjectTypeAndId();
                         val isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(objectTypeAndId);
-                        
+
                         if (isReferencedAction) {
-                        	continue; // check next
+                            continue; // check next
                         }
-                 
+
                         if(section == null) {
                             section = addSectionToMenu(unreferencedActionsMenu);
                         }
-                        
+
                         bindActionToSection(serviceAction, section);
                     }
-                    
+
                 }));
 
             } else {
@@ -135,20 +135,20 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         return menuBars;
     }
-    
+
     // -- HELPER
-    
+
     private static BS3MenuSection addSectionToMenu(BS3Menu menu) {
-    	val section = new BS3MenuSection();
-    	menu.getSections().add(section);
-    	return section;
+        val section = new BS3MenuSection();
+        menu.getSections().add(section);
+        return section;
     }
-    
+
     private static void bindActionToSection(
-    		ServiceActionLayoutData serviceAction, 
-    		BS3MenuSection section) {
-    	
-    	// detach from fallback, attach to this section
+            ServiceActionLayoutData serviceAction, 
+            BS3MenuSection section) {
+
+        // detach from fallback, attach to this section
         serviceAction.setOwner(section);
         section.getServiceActions().add(serviceAction);
     }
@@ -161,7 +161,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         val menusWithUnreferencedActionsFlagSet = _Lists.<BS3Menu>newArrayList();
         menuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenus(menu->{
-        	if(Boolean.TRUE.equals(menu.isUnreferencedActions())) {
+            if(Boolean.TRUE.equals(menu.isUnreferencedActions())) {
                 menusWithUnreferencedActionsFlagSet.add(menu);
             }
         }));
@@ -185,23 +185,23 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         final BS3MenuBars menuBars = new BS3MenuBars();
 
         val metaModelContext = MetaModelContext.current();
-        
+
         final List<ManagedObject> visibleServiceAdapters = metaModelContext.streamServiceAdapters()
-        .filter(objectAdapter -> {
-            val spec = objectAdapter.getSpecification();
-            if (spec.isHidden()) {
-                // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
-                // services that have an imperative hidden() method.
-                return false;
-            }
-            val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-            if (domainServiceFacet == null) {
-                return true;
-            }
-            val natureOfService = domainServiceFacet.getNatureOfService();
-            return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
-        })
-        .collect(Collectors.toList());
+                .filter(objectAdapter -> {
+                    val spec = objectAdapter.getSpecification();
+                    if (spec.isHidden()) {
+                        // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
+                        // services that have an imperative hidden() method.
+                        return false;
+                    }
+                    val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
+                    if (domainServiceFacet == null) {
+                        return true;
+                    }
+                    val natureOfService = domainServiceFacet.getNatureOfService();
+                    return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
+                })
+                .collect(Collectors.toList());
 
         append(visibleServiceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
         append(visibleServiceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
@@ -232,7 +232,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
             streamServiceActions(serviceAdapter, ActionType.USER).forEach(serviceActions::add);
             streamServiceActions(serviceAdapter, ActionType.PROTOTYPE).forEach(serviceActions::add);
-            
+
         });
 
         final Set<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
@@ -351,42 +351,42 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         }
 
         final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(actionType, Contributed.INCLUDED);
-        
+
         return objectActions
-        // skip if annotated to not be included in repository menu using legacy mechanism
-        .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
-        .map(objectAction->{
-            final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
-            String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
-            if(_Strings.isNullOrEmpty(serviceName)){
-                serviceName = serviceSpec.getFacet(NamedFacet.class).value();
-            }
-            return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
-        });
-       
+                // skip if annotated to not be included in repository menu using legacy mechanism
+                .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
+                .map(objectAction->{
+                    final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
+                    String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
+                    if(_Strings.isNullOrEmpty(serviceName)){
+                        serviceName = serviceSpec.getFacet(NamedFacet.class).value();
+                    }
+                    return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
+                });
+
     }
 
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
         return (ManagedObject input) -> {
-                final DomainServiceLayoutFacet facet =
-                        input.getSpecification().getFacet(DomainServiceLayoutFacet.class);
-                return facet != null && facet.getMenuBar() == menuBar;
+            final DomainServiceLayoutFacet facet =
+                    input.getSpecification().getFacet(DomainServiceLayoutFacet.class);
+            return facet != null && facet.getMenuBar() == menuBar;
         };
     }
 
 
     private String tnsAndSchemaLocation() {
-        
+
         return Stream.of(
                 MB3_TNS, 
                 MB3_SCHEMA_LOCATION,
-                
+
                 COMPONENT_TNS, 
                 COMPONENT_SCHEMA_LOCATION,
-                
+
                 LINKS_TNS,
                 LINKS_SCHEMA_LOCATION)
-        .collect(Collectors.joining(" "));
+                .collect(Collectors.joining(" "));
     }
 
 

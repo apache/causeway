@@ -42,9 +42,9 @@ import static org.junit.Assert.assertThat;
 
 public class MementosTest {
 
-	static enum DOW {
-		Mon,Tue,Wed,Thu,Fri
-	}
+    static enum DOW {
+        Mon,Tue,Wed,Thu,Fri
+    }
 
     UrlEncodingServiceWithCompression serviceWithCompression;
     UrlEncodingServiceUsingBaseEncodingAbstract serviceBaseEncoding;
@@ -52,85 +52,85 @@ public class MementosTest {
 
     @Before
     public void setUp() throws Exception {
-    	serviceWithCompression = new UrlEncodingServiceWithCompression();
-    	serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
-    	
-    	serializingAdapter = new SerializingAdapter() {
+        serviceWithCompression = new UrlEncodingServiceWithCompression();
+        serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
 
-			@Override
-			public Serializable write(Object value) {
-				return (Serializable) value;
-			}
+        serializingAdapter = new SerializingAdapter() {
 
-			@Override
-			public <T> T read(Class<T> cls, Serializable value) {
-				return _Casts.castToOrElseGet(value, cls, ()->null);
-			}
-    	};
-    	
+            @Override
+            public Serializable write(Object value) {
+                return (Serializable) value;
+            }
+
+            @Override
+            public <T> T read(Class<T> cls, Serializable value) {
+                return _Casts.castToOrElseGet(value, cls, ()->null);
+            }
+        };
+
     }
-	
-	@Test
-	public void roundtrip() {
-		roundtrip(serviceBaseEncoding);
-	}
-	
-	@Test
-	public void roundtrip_with_compression() {
-		roundtrip(serviceWithCompression);
-	}
-	
-	private void roundtrip(UrlEncodingService codec) {
-		final Memento memento = _Mementos.create(codec, serializingAdapter);
 
-		memento.put("someString", "a string");
-		memento.put("someStringWithDoubleSpaces", "a  string");
-		memento.put("someByte", (byte)123);
-		memento.put("someShort", (short)12345);
-		memento.put("someInt", 123456789);
-		memento.put("someLong", 1234567890123456789L);
-		memento.put("someFloat", 123.45F);
-		memento.put("someDouble", 1234567890.123456);
-		memento.put("someBooleanTrue", Boolean.TRUE);
-		memento.put("someBooleanFalse", Boolean.FALSE);
-		memento.put("someBigInteger", new BigInteger("123456789012345678901234567890"));
-		memento.put("someBigDecimal", new BigDecimal("123456789012345678901234567890.123456789"));
-		memento.put("someLocalDate", new LocalDate(2013,9,3));
-		memento.put("someJavaUtilDate", new Date(300_000_000));
+    @Test
+    public void roundtrip() {
+        roundtrip(serviceBaseEncoding);
+    }
 
-		memento.put("someBookmark", new Bookmark("CUS", "12345"));
-		memento.put("someNullValue", null);
+    @Test
+    public void roundtrip_with_compression() {
+        roundtrip(serviceWithCompression);
+    }
 
-		memento.put("someEnum", DOW.Wed);
+    private void roundtrip(UrlEncodingService codec) {
+        final Memento memento = _Mementos.create(codec, serializingAdapter);
 
-		final String str = memento.asString();
+        memento.put("someString", "a string");
+        memento.put("someStringWithDoubleSpaces", "a  string");
+        memento.put("someByte", (byte)123);
+        memento.put("someShort", (short)12345);
+        memento.put("someInt", 123456789);
+        memento.put("someLong", 1234567890123456789L);
+        memento.put("someFloat", 123.45F);
+        memento.put("someDouble", 1234567890.123456);
+        memento.put("someBooleanTrue", Boolean.TRUE);
+        memento.put("someBooleanFalse", Boolean.FALSE);
+        memento.put("someBigInteger", new BigInteger("123456789012345678901234567890"));
+        memento.put("someBigDecimal", new BigDecimal("123456789012345678901234567890.123456789"));
+        memento.put("someLocalDate", new LocalDate(2013,9,3));
+        memento.put("someJavaUtilDate", new Date(300_000_000));
 
-		final Memento memento2 = _Mementos.parse(codec, serializingAdapter, str);
+        memento.put("someBookmark", new Bookmark("CUS", "12345"));
+        memento.put("someNullValue", null);
 
-		assertThat(memento2.get("someString", String.class), is("a string"));
-		assertThat(memento2.get("someStringWithDoubleSpaces", String.class), is("a  string"));
-		assertThat(memento2.get("someByte", Byte.class), is((byte)123));
-		assertThat(memento2.get("someShort", Short.class), is((short)12345));
-		assertThat(memento2.get("someInt", Integer.class), is(123456789));
-		assertThat(memento2.get("someLong", Long.class), is(1234567890123456789L));
-		assertThat(memento2.get("someFloat", Float.class), is(123.45F));
-		assertThat(memento2.get("someDouble", Double.class), is(1234567890.123456));
-		assertThat(memento2.get("someBooleanTrue", Boolean.class), is(Boolean.TRUE));
-		assertThat(memento2.get("someBooleanFalse", Boolean.class), is(Boolean.FALSE));
-		assertThat(memento2.get("someBigInteger", BigInteger.class), is(new BigInteger("123456789012345678901234567890")));
-		assertThat(memento2.get("someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.123456789")));
-		assertThat(memento2.get("someLocalDate", LocalDate.class), is(new LocalDate(2013,9,3)));
-		assertThat(memento2.get("someJavaUtilDate", Date.class), is(new Date(300_000_000)));
-		assertThat(memento2.get("someBookmark", Bookmark.class), is(new Bookmark("CUS", "12345")));
+        memento.put("someEnum", DOW.Wed);
 
-		// a nullValue can be grabbed as any type, will always succeed
-		assertThat(memento2.get("someNullValue", Integer.class), is(nullValue()));
-		assertThat(memento2.get("someNullValue", Bookmark.class), is(nullValue()));
-		assertThat(memento2.get("someNullValue", LocalDate.class), is(nullValue()));
+        final String str = memento.asString();
 
-		assertThat(memento2.get("someEnum", DOW.class), is(DOW.Wed));
+        final Memento memento2 = _Mementos.parse(codec, serializingAdapter, str);
 
-	}
+        assertThat(memento2.get("someString", String.class), is("a string"));
+        assertThat(memento2.get("someStringWithDoubleSpaces", String.class), is("a  string"));
+        assertThat(memento2.get("someByte", Byte.class), is((byte)123));
+        assertThat(memento2.get("someShort", Short.class), is((short)12345));
+        assertThat(memento2.get("someInt", Integer.class), is(123456789));
+        assertThat(memento2.get("someLong", Long.class), is(1234567890123456789L));
+        assertThat(memento2.get("someFloat", Float.class), is(123.45F));
+        assertThat(memento2.get("someDouble", Double.class), is(1234567890.123456));
+        assertThat(memento2.get("someBooleanTrue", Boolean.class), is(Boolean.TRUE));
+        assertThat(memento2.get("someBooleanFalse", Boolean.class), is(Boolean.FALSE));
+        assertThat(memento2.get("someBigInteger", BigInteger.class), is(new BigInteger("123456789012345678901234567890")));
+        assertThat(memento2.get("someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.123456789")));
+        assertThat(memento2.get("someLocalDate", LocalDate.class), is(new LocalDate(2013,9,3)));
+        assertThat(memento2.get("someJavaUtilDate", Date.class), is(new Date(300_000_000)));
+        assertThat(memento2.get("someBookmark", Bookmark.class), is(new Bookmark("CUS", "12345")));
+
+        // a nullValue can be grabbed as any type, will always succeed
+        assertThat(memento2.get("someNullValue", Integer.class), is(nullValue()));
+        assertThat(memento2.get("someNullValue", Bookmark.class), is(nullValue()));
+        assertThat(memento2.get("someNullValue", LocalDate.class), is(nullValue()));
+
+        assertThat(memento2.get("someEnum", DOW.class), is(DOW.Wed));
+
+    }
 
 
 }

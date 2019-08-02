@@ -34,16 +34,16 @@ import org.apache.isis.webapp.IsisBootWebApp;
  */
 @Configuration
 @Import({
-	IsisBootWebApp.class
+    IsisBootWebApp.class
 })
 @ComponentScan(
         basePackageClasses= {
                 IsisBootWebRestfulObjects.class,
-           },
+        },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class IsisBootWebRestfulObjects {
 
- 
+
 }

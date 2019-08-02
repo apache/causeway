@@ -34,16 +34,16 @@ public class NotificationsResource {
     public Response ping() {
         return Response.ok().entity("Service online").build();
     }
- 
+
     @GET
     @Path("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getNotification(@PathParam("id") int id) {
         return Response.ok()
-          .entity(new Notification(id, "john", "test notification"))
-          .build();
+                .entity(new Notification(id, "john", "test notification"))
+                .build();
     }
- 
+
     @POST
     @Path("/post/")
     @Consumes(MediaType.APPLICATION_JSON)

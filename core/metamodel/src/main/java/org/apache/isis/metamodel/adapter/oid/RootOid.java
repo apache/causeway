@@ -35,9 +35,9 @@ public interface RootOid extends Oid, Serializable {
     Bookmark asBookmark();
 
     OidDto asOidDto();
-    
+
     // -- DECODE FROM STRING
-    
+
     public static RootOid deStringEncoded(final String urlEncodedOidStr) {
         final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
@@ -46,6 +46,6 @@ public interface RootOid extends Oid, Serializable {
     public static RootOid deString(final String oidStr) {
         return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
     }
-    
+
 
 }

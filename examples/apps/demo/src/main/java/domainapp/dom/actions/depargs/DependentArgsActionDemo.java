@@ -41,16 +41,16 @@ import lombok.Getter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class DependentArgsActionDemo extends DemoStub {
-    
+
     // -- INIT
-    
+
     @Getter private final Set<DemoItem> items = new LinkedHashSet<>();
-    
+
     @PropertyLayout(labelPosition=LabelPosition.NONE)
     public Markup getText() {
         return new Markup("Click one of these 5 actions to see how dependent arguments work.");
     }
-    
+
     @Override
     public void initDefaults() {
         items.clear();

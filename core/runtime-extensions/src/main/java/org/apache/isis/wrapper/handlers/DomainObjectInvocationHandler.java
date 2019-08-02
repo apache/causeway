@@ -118,7 +118,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         this.isisSessionFactory = isisSessionFactory;
 
         final MetaModelContext context = MetaModelContext.current();
-        
+
         this.authenticationSessionProvider = context.getAuthenticationSessionProvider(); 
         this.objectAdapterProvider = context.getObjectAdapterProvider();
 
@@ -284,14 +284,14 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
         final ObjectSpecification specification = domainObjectAdapter.getSpecification();
         final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
-        
+
         return objectActions
-            .filter(action->action instanceof ObjectActionMixedIn)
-            .map(action->(ObjectActionMixedIn) action)
-            .filter(mixedInAction->mixedInAction.hasMixinAction(objectAction))
-            .findFirst()
-            .orElse(null);
-        
+                .filter(action->action instanceof ObjectActionMixedIn)
+                .map(action->(ObjectActionMixedIn) action)
+                .filter(mixedInAction->mixedInAction.hasMixinAction(objectAction))
+                .findFirst()
+                .orElse(null);
+
         // throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
     }
 
@@ -320,14 +320,14 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 // is this a contributed property/collection?
                 final Stream<ObjectAssociation> associations =
                         objectSpec.streamAssociations(Contributed.INCLUDED);
-                
-                
+
+
                 final Optional<ContributeeMember> contributeeMember = associations
-                .filter(association->association instanceof ContributeeMember)
-                .map(association->(ContributeeMember) association)
-                .filter(contributeeMember1->contributeeMember1.isContributedBy(objectAction))
-                .findAny();
-                
+                        .filter(association->association instanceof ContributeeMember)
+                        .map(association->(ContributeeMember) association)
+                        .filter(contributeeMember1->contributeeMember1.isContributedBy(objectAction))
+                        .findAny();
+
                 if(contributeeMember.isPresent()) {
                     return contributeeMember.get();
                 }
@@ -337,18 +337,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             {
                 final Stream<ObjectAction> actions =
                         objectSpec.streamObjectActions(Contributed.INCLUDED);
-                
+
                 final Optional<ContributeeMember> contributeeMember = actions
                         .filter(action->action instanceof ContributeeMember)
                         .map(action->(ContributeeMember) action)
                         .filter(contributeeMember1->contributeeMember1.isContributedBy(objectAction))
                         .findAny();
-                
+
                 if(contributeeMember.isPresent()) {
                     return contributeeMember.get();
                 }
             }
-            
+
         }
 
         return null;

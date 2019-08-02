@@ -28,6 +28,7 @@ public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTe
     private Invoice3 inv123;
     private Invoice3 inv456;
 
+    @Override
     @Before
     public void setUp() throws Exception {
         inv123 = new Invoice3();
@@ -39,20 +40,20 @@ public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTe
     @Override
     protected List<InvoiceItem3> getObjectsWithSameValue() {
         return _Lists.of(
-                    InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1)),
-                    InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1))
+                InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1)),
+                InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(1))
                 );
     }
 
     @Override
     protected List<InvoiceItem3> getObjectsWithDifferentValue() {
         return _Lists.of(
-                    InvoiceItem3.newInvoiceItem(null, "A", new Integer(2)),
-                    InvoiceItem3.newInvoiceItem(inv456, "A", new Integer(2)),
-                    InvoiceItem3.newInvoiceItem(inv123, null, new Integer(1)),
-                    InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(2)),
-                    InvoiceItem3.newInvoiceItem(inv123, "B", new Integer(1)),
-                    InvoiceItem3.newInvoiceItem(inv123, "A", null)
+                InvoiceItem3.newInvoiceItem(null, "A", new Integer(2)),
+                InvoiceItem3.newInvoiceItem(inv456, "A", new Integer(2)),
+                InvoiceItem3.newInvoiceItem(inv123, null, new Integer(1)),
+                InvoiceItem3.newInvoiceItem(inv123, "A", new Integer(2)),
+                InvoiceItem3.newInvoiceItem(inv123, "B", new Integer(1)),
+                InvoiceItem3.newInvoiceItem(inv123, "A", null)
                 );
     }
 }
@@ -60,7 +61,7 @@ public class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTe
 @SuppressWarnings("deprecation")
 class Invoice3 {
     private static final String KEY_PROPERTIES = "number";
-    
+
     private String number;
     public String getNumber() {
         return number;
@@ -76,7 +77,7 @@ class Invoice3 {
     public boolean equals(Object obj) {
         return ObjectContracts.equals(this, obj, KEY_PROPERTIES);
     }
-    
+
 }
 
 @SuppressWarnings("deprecation")
@@ -105,7 +106,7 @@ class InvoiceItem3 {
     public void setProductCode(String productCode) {
         this.productCode = productCode;
     }
-    
+
     private Integer quantity;
     public Integer getQuantity() {
         return quantity;
@@ -113,8 +114,8 @@ class InvoiceItem3 {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
- 
-    
+
+
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity";
     @Override
     public int hashCode() {

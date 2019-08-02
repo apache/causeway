@@ -34,7 +34,7 @@ public interface EventStreamService {
         SIMPLE,
         REQUIRES_NEW_SESSION
     }
-    
+
     Optional<EventStream> lookupByType(Class<?> sourceType);
 
     void submit(EventStreamSource task, ExecutionBehavior executionBehavior);

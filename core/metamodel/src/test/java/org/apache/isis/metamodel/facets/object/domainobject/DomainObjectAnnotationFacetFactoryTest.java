@@ -71,7 +71,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     @Override
-	@After
+    @After
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -86,7 +86,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         public UUID getUniqueId() {
             return null;
         }
-        
+
     }
 
     protected void allowingConfigurationToReturn(final String name, final String value) {
@@ -235,7 +235,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
                 Assert.assertNotNull(facet);
-                
+
                 Assert.assertThat(facet.isDisabled(), is(true));
                 Assert.assertThat(facet.alwaysReplace(), is(true));
                 Assert.assertThat(facet.isNoop(), is(false));
@@ -323,7 +323,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 allowingConfigurationToReturn("isis.services.publish.objects", "all");
 
                 facetFactory.process(new ProcessClassContext(
-                		CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                        CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final PublishedObjectFacet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNotNull(facet);
@@ -336,7 +336,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 allowingConfigurationToReturn("isis.services.publish.objects", "none");
 
                 facetFactory.process(new ProcessClassContext(
-                		CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                        CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNull(facet);
@@ -349,7 +349,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 allowingConfigurationToReturn("isis.services.publish.objects", "foobar");
 
                 facetFactory.process(new ProcessClassContext(
-                		CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                        CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final PublishedObjectFacet facet = facetHolder.getFacet(PublishedObjectFacet.class);
                 Assert.assertNull(facet); 
@@ -386,7 +386,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
                 Assert.assertNotNull(facet);
-                
+
                 Assert.assertThat(facet.isDisabled(), is(false));
                 Assert.assertThat(facet.alwaysReplace(), is(true));
                 Assert.assertThat(facet.isNoop(), is(false));
@@ -406,7 +406,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         class CustomerRepositoryWithDefaultMethodName {
             public String autoComplete(final String x) { return null; }
         }
-        
+
         @DomainObject(autoCompleteRepository = CustomerRepository.class, autoCompleteAction = "lookup")
         class CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction {
         }
@@ -420,30 +420,30 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Override
-		@Before
+        @Before
         public void setUp() throws Exception {
             super.setUp();
-            
+
             context.checking(new Expectations() {
                 {
-//                    allowing(mockServicesInjector).isRegisteredService(CustomerRepository.class);
-//                    will(returnValue(true));
-//
-//                    allowing(mockServicesInjector).isRegisteredService(CustomerRepositoryWithDefaultMethodName.class);
-//                    will(returnValue(true));
-                    
+                    //                    allowing(mockServicesInjector).isRegisteredService(CustomerRepository.class);
+                    //                    will(returnValue(true));
+                    //
+                    //                    allowing(mockServicesInjector).isRegisteredService(CustomerRepositoryWithDefaultMethodName.class);
+                    //                    will(returnValue(true));
+
                     // anything else
-                    
+
                 }
             });
-            
+
         }
 
         @Test
         public void whenDomainObjectAndAutoCompleteRepositoryAndAction() {
 
             facetFactory.process(new ProcessClassContext(
-            		CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder));
+                    CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNotNull(facet);
@@ -462,7 +462,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         public void whenDomainObjectAndAutoCompleteRepository() {
 
             facetFactory.process(new ProcessClassContext(
-            		CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder)); 
+                    CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder)); 
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNotNull(facet);
@@ -481,7 +481,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         public void whenDomainObjectAnnotationButNoAutoComplete() {
 
             facetFactory.process(new ProcessClassContext(
-            		CustomerWithDomainObjectButNoAutoCompleteRepository.class, mockMethodRemover, facetHolder));
+                    CustomerWithDomainObjectButNoAutoCompleteRepository.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNull(facet);
@@ -493,7 +493,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         public void whenNoDomainObjectAnnotation() {
 
             facetFactory.process(new ProcessClassContext(
-            		DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                    DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
             Assert.assertNull(facet);
@@ -518,7 +518,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Override
-		@Before
+        @Before
         public void setUp() throws Exception {
             super.setUp();
             ignoringConfiguration();
@@ -667,7 +667,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "false");
 
                 facetFactory.process(new ProcessClassContext(
-                		CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
+                        CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
                 final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet); 
@@ -684,7 +684,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "true");
 
                 facetFactory.process(new ProcessClassContext(
-                		CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));
+                        CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                 Assert.assertNotNull(facet);
@@ -708,7 +708,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Override
-		@Before
+        @Before
         public void setUp() throws Exception {
             super.setUp();
             ignoringConfiguration();
@@ -782,7 +782,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Override
-		@Before
+        @Before
         public void setUp() throws Exception {
             super.setUp();
             ignoringConfiguration();

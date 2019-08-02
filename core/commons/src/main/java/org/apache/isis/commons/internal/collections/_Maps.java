@@ -103,32 +103,32 @@ public final class _Maps {
     public static <K, V> Map.Entry<K, V> entry(K k, V v){
         return new AbstractMap.SimpleEntry<K, V>(k, v);
     }
-    
+
     // -- TRANSFORMATIONS
-    
+
     public static <K, V> Map<K, V> filterKeys(
             @Nullable Map<K, V> input,
             Predicate<K> keyFilter, 
             Supplier<Map<K, V>> factory) {
-        
+
         requires(factory, "factory");
         final Map<K, V> result = factory.get();
-        
+
         if(input==null) {
             return result;
         }
-        
+
         requires(keyFilter, "keyFilter");
-        
+
         input.forEach((k, v)->{
             if(keyFilter.test(k)) {
                 result.put(k, v);
             }
         });
-        
+
         return result;
     }
-    
+
     public static <K, V> ListMultimap<V, K> invertToListMultimap(Map<K, V> input) {
         final ListMultimap<V, K> result = _Multimaps.newListMultimap();        
         if(input==null) {

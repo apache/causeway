@@ -173,8 +173,8 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockActThatIsHidden).getSemantics();
                 will(returnValue(SemanticsOf.SAFE));
 
-//                allowing(mockServiceRegistry).streamServices();
-//                will(returnValue(_Lists.newArrayList().stream()));
+                //                allowing(mockServiceRegistry).streamServices();
+                //                will(returnValue(_Lists.newArrayList().stream()));
             }});
 
             // then
@@ -245,21 +245,22 @@ public class ApplicationFeatureRepositoryDefaultTest {
             assertThat(barClass.getProperties(),
                     containsInAnyOrder(
                             ApplicationFeatureId.newMember(Bar.class.getName(), "someProperty")
-                    ));
+                            ));
             assertThat(barClass.getCollections(),
                     containsInAnyOrder(
                             ApplicationFeatureId.newMember(Bar.class.getName(), "someCollection")
-                    ));
+                            ));
             assertThat(barClass.getActions(),
                     containsInAnyOrder(
                             ApplicationFeatureId.newMember(Bar.class.getName(), "someAction")
-                    ));
+                            ));
         }
 
     }
 
     public static class AddClassParent extends ApplicationFeatureRepositoryDefaultTest {
 
+        @Override
         @Before
         public void setUp() throws Exception {
             super.setUp();

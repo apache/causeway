@@ -26,23 +26,23 @@ import static org.junit.Assert.assertThat;
 
 public class TreePathTest {
 
-	@Test
-	public void rootConstructor() {
-		final TreePath treePath = TreePath.root(); 
-		assertThat(treePath.isRoot(), Matchers.is(true));
-		assertThat(treePath.toString(), Matchers.is("/0"));
-	}
+    @Test
+    public void rootConstructor() {
+        final TreePath treePath = TreePath.root(); 
+        assertThat(treePath.isRoot(), Matchers.is(true));
+        assertThat(treePath.toString(), Matchers.is("/0"));
+    }
 
-	@Test
-	public void samePathsShouldBeEqual() {
-		final TreePath treePath1 = TreePath.of(0, 1, 2, 3);
-		final TreePath treePath2 = TreePath.of(0, 1, 2, 3);
-		assertEquals(treePath1, treePath2);
-		assertEquals(treePath1.hashCode(), treePath2.hashCode());
-		assertEquals(treePath1.isRoot(), treePath2.isRoot());
-		assertEquals(treePath1.toString(), treePath2.toString());
-		
-		assertThat(treePath1.toString(), Matchers.is("/0/1/2/3"));
-	}
-	
+    @Test
+    public void samePathsShouldBeEqual() {
+        final TreePath treePath1 = TreePath.of(0, 1, 2, 3);
+        final TreePath treePath2 = TreePath.of(0, 1, 2, 3);
+        assertEquals(treePath1, treePath2);
+        assertEquals(treePath1.hashCode(), treePath2.hashCode());
+        assertEquals(treePath1.isRoot(), treePath2.isRoot());
+        assertEquals(treePath1.toString(), treePath2.toString());
+
+        assertThat(treePath1.toString(), Matchers.is("/0/1/2/3"));
+    }
+
 }

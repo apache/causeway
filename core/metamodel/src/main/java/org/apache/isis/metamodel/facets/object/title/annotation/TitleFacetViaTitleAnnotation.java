@@ -43,55 +43,55 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     public static class TitleComponent {
         public static final Function<Annotations.Evaluator<Title>, TitleComponent> FROM_EVALUATORS = 
-            titleEvaluator -> TitleComponent.of(titleEvaluator);
+                titleEvaluator -> TitleComponent.of(titleEvaluator);
 
-        private final String prepend;
-        private final String append;
-        private final Annotations.Evaluator<Title> titleEvaluator;
-        private final int abbreviateTo;
+                private final String prepend;
+                private final String append;
+                private final Annotations.Evaluator<Title> titleEvaluator;
+                private final int abbreviateTo;
 
-        private TitleComponent(final String prepend, final String append, final Annotations.Evaluator<Title> titleEvaluator, final int abbreviateTo) {
-            super();
-            this.prepend = prepend;
-            this.append = append;
-            this.titleEvaluator = titleEvaluator;
-            this.abbreviateTo = abbreviateTo;
-        }
+                private TitleComponent(final String prepend, final String append, final Annotations.Evaluator<Title> titleEvaluator, final int abbreviateTo) {
+                    super();
+                    this.prepend = prepend;
+                    this.append = append;
+                    this.titleEvaluator = titleEvaluator;
+                    this.abbreviateTo = abbreviateTo;
+                }
 
-        public String getPrepend() {
-            return prepend;
-        }
+                public String getPrepend() {
+                    return prepend;
+                }
 
-        public String getAppend() {
-            return append;
-        }
+                public String getAppend() {
+                    return append;
+                }
 
-        public Annotations.Evaluator<Title> getTitleEvaluator() {
-            return titleEvaluator;
-        }
+                public Annotations.Evaluator<Title> getTitleEvaluator() {
+                    return titleEvaluator;
+                }
 
-        private static TitleComponent of(final Annotations.Evaluator<Title> titleEvaluator) {
-            final Title annotation = titleEvaluator.getAnnotation();
-            final String prepend = annotation != null ? annotation.prepend() : " ";
-            final String append = annotation != null ? annotation.append() : "";
-            final int abbreviateTo = annotation != null ? annotation.abbreviatedTo() : Integer.MAX_VALUE;
-            return new TitleComponent(prepend, append, titleEvaluator, abbreviateTo);
-        }
+                private static TitleComponent of(final Annotations.Evaluator<Title> titleEvaluator) {
+                    final Title annotation = titleEvaluator.getAnnotation();
+                    final String prepend = annotation != null ? annotation.prepend() : " ";
+                    final String append = annotation != null ? annotation.append() : "";
+                    final int abbreviateTo = annotation != null ? annotation.abbreviatedTo() : Integer.MAX_VALUE;
+                    return new TitleComponent(prepend, append, titleEvaluator, abbreviateTo);
+                }
 
-        @Override
-        public String toString() {
-            final List<String> parts = _Lists.newArrayList();
-            if(prepend != null && !_Strings.isNullOrEmpty(prepend.trim())) {
-                parts.add("prepend=" + prepend);
-            }
-            if(append != null && !_Strings.isNullOrEmpty(append.trim())) {
-                parts.add("append=" + append);
-            }
-            if(abbreviateTo != Integer.MAX_VALUE) {
-                parts.add("abbreviateTo=" + abbreviateTo);
-            }
-            return String.join(";", parts);
-        }
+                @Override
+                public String toString() {
+                    final List<String> parts = _Lists.newArrayList();
+                    if(prepend != null && !_Strings.isNullOrEmpty(prepend.trim())) {
+                        parts.add("prepend=" + prepend);
+                    }
+                    if(append != null && !_Strings.isNullOrEmpty(append.trim())) {
+                        parts.add("append=" + append);
+                    }
+                    if(abbreviateTo != Integer.MAX_VALUE) {
+                        parts.add("abbreviateTo=" + abbreviateTo);
+                    }
+                    return String.join(";", parts);
+                }
     }
 
     public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder) {
@@ -123,7 +123,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
         final StringBuilder stringBuilder = new StringBuilder();
         final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
-        
+
         try {
             for (final TitleComponent component : this.components) {
                 final Object titlePart = component.getTitleEvaluator().value(targetAdapter.getPojo());

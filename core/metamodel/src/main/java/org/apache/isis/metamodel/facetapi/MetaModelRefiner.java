@@ -36,9 +36,9 @@ public interface MetaModelRefiner extends MetaModelValidatorRefiner {
     void refineProgrammingModel(ProgrammingModel programmingModel);
 
     // -- LOOKUP ALL REFINERS
-    
-	static Bin<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
-		return serviceRegistry.select(MetaModelRefiner.class);
-	}
+
+    static Bin<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
+        return serviceRegistry.select(MetaModelRefiner.class);
+    }
 
 }

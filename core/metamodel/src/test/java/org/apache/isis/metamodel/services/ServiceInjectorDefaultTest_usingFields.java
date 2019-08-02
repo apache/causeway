@@ -45,40 +45,40 @@ import lombok.Getter;
         ServiceRegistryDefault.class,
         ServiceInjectorDefaultTest.Producers.class,
         ServiceInjectorDefaultTest_usingFields.Producers.class,
-    },
-    properties = {
-            "isis.services.injector.setPrefix=true"
-    }
-)
+},
+properties = {
+        "isis.services.injector.setPrefix=true"
+}
+        )
 class ServiceInjectorDefaultTest_usingFields {
-    
+
     @Configuration
     static class Producers {
-        
+
         private final int autowireMode = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
-        
+
         @Inject AutowireCapableBeanFactory beanFactory;
-        
-        
+
+
         @Bean @Singleton
         A mockA() {
             return (A) beanFactory.autowire(A.class, autowireMode, true);
         }
-        
+
         @Bean @Singleton
         B mockB() {
             return (B) beanFactory.autowire(B.class, autowireMode, true);
         }
-        
+
         @Bean @Singleton
         C mockC() {
             return (C) beanFactory.autowire(C.class, autowireMode, true);
         }
-        
+
     }
 
     // -- SCENARIO
-    
+
     private D serviceD = new D();
 
     // managed
@@ -98,23 +98,23 @@ class ServiceInjectorDefaultTest_usingFields {
     static class B extends B_Abstract {
         @Inject @Getter private C someC;
     }
-    
+
     // not-managed
     static class D { 
         @Inject @Getter private A someA;    
         @Inject @Getter private B someB;
         @Inject @Getter private C someC;
     }
-    
+
     // -- TESTS
-    
+
     @Inject private ServiceInjector injector;
-    
+
     @BeforeEach
     void setup() {
-    
+
     }
-    
+
     @Inject private A serviceA;
     @Inject private B serviceB;
 
@@ -124,15 +124,15 @@ class ServiceInjectorDefaultTest_usingFields {
         // managed
         assertThat(serviceA.getSomeB(), any(B_Abstract.class));
         assertThat(serviceB.getSomeC(), any(C.class));
-        
-        
+
+
         // not-managed
         injector.injectServicesInto(serviceD);
-        
+
         assertThat(serviceD.getSomeA(), any(A.class));
         assertThat(serviceD.getSomeB(), any(B.class));
         assertThat(serviceD.getSomeC(), any(C.class));
-                
+
     }
 
 }

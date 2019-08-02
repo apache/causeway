@@ -79,7 +79,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Inject private AuthenticationManager authenticationManager;
     @Inject private RuntimeEventService runtimeEventService;
     @Inject private SpecificationLoader specificationLoader;
-    
+
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
 
@@ -87,7 +87,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     public void init() {
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
-        
+
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
@@ -110,7 +110,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         runtimeEventService.fireAppPreMetamodel();
 
         val tasks = _Tasks.create();
-        
+
         tasks.addRunnable("SpecificationLoader.init()", ()->{
             // time to initialize...
             specificationLoader.init();
@@ -135,14 +135,14 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             authenticationManager.init();
             authorizationManager.init();
         });
-        
+
         tasks.addRunnable("ChangesDtoUtils.init()", ChangesDtoUtils::init);
         tasks.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
         tasks.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
-        
+
         val concurrentInit = false; // otherwise deadlocks
         tasks.invokeAndWait(concurrentInit);
-        
+
         runtimeEventService.fireAppPostMetamodel();
 
         //initServicesAndRunFixtures();
@@ -152,27 +152,27 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     public void initServices() {
 
         doInSession(()->{
-            
+
             //
             // postConstructInSession
             //
 
-//            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
-//            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
+            //            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
+            //            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
 
             //
             // translateServicesAndEnumConstants
             //
             val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
-            
+
             final Stream<Object> domainServices = serviceRegistry
-            		.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
+                    .streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
                     .map(BeanAdapter::getInstance)
                     .filter(Bin::isCardinalityOne)
                     .map(Bin::getSingleton)
                     .map(Optional::get)
                     ;
-            
+
             domainServices.forEach(domainService->{
                 final String unused = titleService.titleOf(domainService);
                 _Blackhole.consume(unused);
@@ -202,7 +202,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             for (String message : messages) {
                 translationService.translate(context, message);
             }
-            
+
             // meta-model validation ...            
             val mmDeficiencies = specificationLoader.validate().getDeficienciesIfAny(); 
             if(mmDeficiencies!=null) {
@@ -213,23 +213,23 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
                 }
                 _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
             }
-            
-           },
-           new InitialisationSession());
+
+        },
+                new InitialisationSession());
 
     }
 
     @PreDestroy
     @Override
     public void destroyServicesAndShutdown() {
-    	// call might originate from a different thread than main
+        // call might originate from a different thread than main
         shutdown();
     }
 
     // -- 
-    
+
     private final Set<IsisSession> openSessions = _Sets.newHashSet();
-    
+
     @Override
     public IsisSession openSession(final AuthenticationSession authenticationSession) {
 
@@ -245,7 +245,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     public void closeSession() {
         final IsisSession existingSessionIfAny = getCurrentSession();
         if (existingSessionIfAny == null) {
-        	_Context.threadLocalCleanup(); // just in case, to have a well defined post condition here
+            _Context.threadLocalCleanup(); // just in case, to have a well defined post condition here
             return;
         }
         existingSessionIfAny.close();
@@ -304,11 +304,11 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     // -- HELPER
 
     private void shutdown() {
-    	
-    	// just in case we still have an open session, must also work if called from a different thread than 'main'
-    	openSessions.forEach(IsisSession::close);
-    	openSessions.clear();
-		
+
+        // just in case we still have an open session, must also work if called from a different thread than 'main'
+        openSessions.forEach(IsisSession::close);
+        openSessions.clear();
+
         runtimeEventService.fireAppPreDestroy();
         authenticationManager.shutdown();
         //specificationLoader.shutdown(); //[2112] lifecycle is managed by IoC

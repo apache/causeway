@@ -57,11 +57,11 @@ public class Dto_downloadXml {
             )
     @MemberOrder(sequence = "500.1")
     public Object act(
-    		
-    		// PARAM 0
-    		@ParameterLayout(
-            		named = MixinConstants.FILENAME_PROPERTY_NAME,
-            		describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+
+            // PARAM 0
+            @ParameterLayout(
+                    named = MixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
         val xmlString = jaxbService.toXml(holder);
@@ -69,7 +69,7 @@ public class Dto_downloadXml {
     }
 
     // -- PARAM 0
-    
+
     public String default0Act() {
         return holder.getClass().getName();
     }

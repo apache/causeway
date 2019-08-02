@@ -129,7 +129,7 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 
         return indexOneBased.intValue()-1;
     }
-    
+
     private boolean isEqualTo(TreeNode<T> other) {
         if(other==null) {
             return false;

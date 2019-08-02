@@ -97,22 +97,22 @@ public class ServiceActionsPanel extends Panel {
                 final List<CssMenuItem> childItems = menuItem.getSubMenuItems();
                 final String cssForServices = _NullSafe.stream(childItems) 
                         .map((final CssMenuItem input) -> {
-                                final String actionIdentifier = input.getActionIdentifier();
-                                if (actionIdentifier != null) {
-                                    // busrules-busrulesobjects-findbyname
-                                    final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
-                                    final int i = actionId.lastIndexOf("-");
-                                    // busrules-busrulesobjects
-                                    return i == -1 ? actionId : actionId.substring(0, i);
-                                } else {
-                                    return null;
-                                }
+                            final String actionIdentifier = input.getActionIdentifier();
+                            if (actionIdentifier != null) {
+                                // busrules-busrulesobjects-findbyname
+                                final String actionId = CssClassAppender.asCssStyle(actionIdentifier);
+                                final int i = actionId.lastIndexOf("-");
+                                // busrules-busrulesobjects
+                                return i == -1 ? actionId : actionId.substring(0, i);
+                            } else {
+                                return null;
+                            }
                         })
                         .filter((@Nullable final String input) -> {
-                                return input != null;
+                            return input != null;
                         })
                         .map((final String input) -> {
-                                return "isis-" + input;
+                            return "isis-" + input;
                         })
                         .distinct()
                         .collect(Collectors.joining(" "));
@@ -133,15 +133,15 @@ public class ServiceActionsPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        
+
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
         Tooltips.renderHead(response);
-        
+
         response.render(JavaScriptHeaderItem.forReference(DropdownAutoOpenJavaScriptReference.instance()));
         response.render(OnDomReadyHeaderItem.forScript("$('.dropdown-toggle').dropdownHover();"));
-        
+
         SSESupport.renderHead(response);
-        
+
     }
 
 }

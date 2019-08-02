@@ -55,7 +55,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             final FacetHolder holder,
             final Class<?> repositoryClass,
             final Method repositoryMethod) {
-        
+
         super(type(), holder, Derivation.NOT_DERIVED);
 
         this.repositoryClass = repositoryClass;

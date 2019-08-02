@@ -109,7 +109,7 @@ public class FixtureScriptsDefault extends FixtureScripts {
             )
     @ActionLayout(
             cssClassFa="fa fa-chevron-right"
-    )
+            )
     @MemberOrder(sequence="10")
     @Override
     public List<FixtureResult> runFixtureScript(
@@ -233,15 +233,15 @@ public class FixtureScriptsDefault extends FixtureScripts {
     }
 
     // -- HELPER
-    
+
     private boolean hideIfPolicyNot(final FixtureScriptsSpecification.DropDownPolicy requiredPolicy) {
         return fixtureScriptsSpecificationProvider.isEmpty() || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
     }
 
     private Bin<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
-    
+
     // -- DEPS
-    
+
     @Inject ServiceRegistry serviceRegistry;
     @Inject EventBusService eventBusService;
 

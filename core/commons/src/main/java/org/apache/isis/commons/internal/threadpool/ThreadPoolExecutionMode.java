@@ -30,19 +30,19 @@ public enum ThreadPoolExecutionMode {
      *  (expected lowest concurrency)
      */
     SEQUENTIAL_WITHIN_CALLING_THREAD,
-    
+
     /**
      * Wraps submitted tasks into a single task, which is then executed on the default executor.
      * (expected medium concurrency)
      */
     SEQUENTIAL,
-    
+
     /**
      * Executes submitted tasks on the default executor. 
      * (expected highest concurrency)
      */
     PARALLEL,
-    
+
     ;
 
     /**
@@ -54,12 +54,12 @@ public enum ThreadPoolExecutionMode {
      */
     public static ThreadPoolExecutionMode honorHighestConcurrencyAllowed(
             ThreadPoolExecutionMode proposedExecutionMode) {
-        
+
         final int upper = ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED.ordinal();
         final int proposed = proposedExecutionMode.ordinal();
         final int bounded = proposed>upper ? upper : proposed; 
-        
+
         return ThreadPoolExecutionMode.values()[bounded];
     }
-    
+
 }

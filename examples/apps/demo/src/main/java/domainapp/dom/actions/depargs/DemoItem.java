@@ -33,15 +33,15 @@ import lombok.Setter;
 @NoArgsConstructor 
 @AllArgsConstructor(staticName="of")
 public class DemoItem {
-	
+
     public String title() {
         return String.format("DemoItem '%s' (%s)", getName(), getParity());
     }
-    
+
     @Property(editing = Editing.DISABLED)
     @PropertyLayout(describedAs="The name of this 'DemoItem'.")
-	@Getter @Setter private String name;
-    
+    @Getter @Setter private String name;
+
     @Property(editing = Editing.DISABLED)
     @PropertyLayout(describedAs="The parity of this 'DemoItem'.")
     @Getter @Setter private Parity parity;

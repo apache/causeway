@@ -48,20 +48,20 @@ class PrototypingMessageProvider {
             public String getObject() {
                 return getTookTimingMessage();
             }
-            
+
         };
     }
-    
+
     // -- HELPER
-    
+
     private static String getTookTimingMessage() {
-        
+
         if(!_Context.isPrototyping()) {
             return "";
         }
-        
+
         final StringBuilder tookTimingMessage = new StringBuilder();
-        
+
         IsisContext.getPersistenceSession().ifPresent(session->{
             StopWatch stopWatch = _Timing.atSystemNanos(session.getLifecycleStartedAtSystemNanos());    
             tookTimingMessage.append(String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds()));

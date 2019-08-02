@@ -131,7 +131,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
             final Map<String, String> datanucleusProps) {
 
         final DNStoreManagerType dnStoreManagerType = DNStoreManagerType.typeOf(datanucleusProps);
-        
+
         PersistenceManagerFactory persistenceManagerFactory;
 
         if(dnStoreManagerType.isSchemaAware()) {
@@ -141,7 +141,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
             final boolean createSchema = isSet(datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL);
 
             if(createSchema) {
-                
+
                 configureAutoCreateSchema(datanucleusProps);
                 persistenceManagerFactory = newPersistenceManagerFactory(datanucleusProps);
                 createSchema(persistenceManagerFactory, persistableClassNameSet, datanucleusProps);
@@ -176,11 +176,11 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
         datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_COLUMNS, "true");
         datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_CONSTRAINTS, "true");
     }
-    
+
     private void configureAutoStart(
             final Set<String> persistableClassNameSet, 
             final Map<String, String> datanucleusProps) {
-        
+
         final String persistableClassNames =
                 stream(persistableClassNameSet).collect(Collectors.joining(","));
 
@@ -205,9 +205,9 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
         registerMetadataListener(metaDataManager, datanucleusProps);
 
         if(_NullSafe.isEmpty(persistableClassNameSet)) {
-        	return; // skip
+            return; // skip
         }
-        
+
         schemaAwareStoreManager.createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
     }
 

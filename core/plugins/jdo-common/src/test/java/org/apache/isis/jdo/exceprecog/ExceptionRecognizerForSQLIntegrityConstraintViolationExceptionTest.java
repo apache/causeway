@@ -35,7 +35,7 @@ public class ExceptionRecognizerForSQLIntegrityConstraintViolationExceptionTest 
     public void setUp() throws Exception {
         exceptionRecognizer = new ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException();
     }
-    
+
     @Test
     public void uniqueConstraintOrIndexViolation() throws Exception {
         final String msg = "initial gumph: unique constraint or index violation; further details";

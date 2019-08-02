@@ -171,7 +171,7 @@ public class GridServiceDefault implements GridService {
                 final Class<?> gridImplementation = gridSystemService.gridImplementation();
                 final boolean seenBefore = _NullSafe.stream(services)
                         .anyMatch((GridSystemService<?> systemService) -> 
-                            systemService.gridImplementation() == gridImplementation);
+                        systemService.gridImplementation() == gridImplementation);
                 if(!seenBefore) {
                     services.add(gridSystemService);
                 }
@@ -184,19 +184,19 @@ public class GridServiceDefault implements GridService {
     }
 
     // -- poor man's testing support
-    
+
     List<GridSystemService<?>> gridSystemServicesForTest;
     Iterable<GridSystemService<?>> getGridSystemServices() {
         return gridSystemServices!=null 
                 ? gridSystemServices
                         : gridSystemServicesForTest;
     }
-    
+
     // -- DEPENDENCIES
 
     @Inject GridLoaderService gridLoaderService;
     @Inject private List<GridSystemService<?>> gridSystemServices;
-    
-    
+
+
 
 }

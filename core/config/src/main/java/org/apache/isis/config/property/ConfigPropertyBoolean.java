@@ -24,14 +24,15 @@ import java.util.Map;
 import org.apache.isis.config.IsisConfiguration;
 
 public class ConfigPropertyBoolean extends ConfigPropertyAbstract<Boolean> {
-    
-	public ConfigPropertyBoolean(final String key, final boolean defaultValue) {
+
+    public ConfigPropertyBoolean(final String key, final boolean defaultValue) {
         super(key, defaultValue);
     }
-    
-	/**
-	 * @returns not-null
-	 */
+
+    /**
+     * @returns not-null
+     */
+    @Override
     public Boolean from(final IsisConfiguration configuration) {
         return configuration.getBoolean(key, defaultValue);
     }

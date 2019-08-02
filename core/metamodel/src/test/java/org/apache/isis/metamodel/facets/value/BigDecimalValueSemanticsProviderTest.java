@@ -40,10 +40,10 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
     private FacetHolder holder;
 
     @Override
-	@Before
+    @Before
     public void setUp() throws Exception {
         super.setUp();
-        
+
         _Config.put("isis.value.format.decimal", null);
 
         bigDecimal = new BigDecimal("34132.199");

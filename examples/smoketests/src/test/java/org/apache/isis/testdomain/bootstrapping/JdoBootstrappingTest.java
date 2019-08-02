@@ -46,90 +46,90 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import lombok.val;
 
 @SpringBootTest(
-	classes = { 
-		JdoTestDomainModule.class,
-	}, 
-	properties = {
-		"logging.config=log4j2-test.xml",
-		"logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
-		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
-		"logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
-		// "isis.reflector.introspector.parallelize=false",
-		 //"logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
-})
+        classes = { 
+                JdoTestDomainModule.class,
+        }, 
+        properties = {
+                "logging.config=log4j2-test.xml",
+                "logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
+                "logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
+                "logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
+                // "isis.reflector.introspector.parallelize=false",
+                //"logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+        })
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoBootstrappingTest {
 
-	@Inject private RepositoryService repository;
-	//@Inject private TransactionService transactionService;
+    @Inject private RepositoryService repository;
+    //@Inject private TransactionService transactionService;
 
-	@BeforeAll
-	static void beforeAll() throws SQLException {
-		//XXX is it actually the case that tests might run in parallel?
-		//assertFalse(IsisSession.isInSession()); // expected pre condition 
-		// launch H2Console for troubleshooting ...
-		// Util_H2Console.main(null);
-	}
-	
-	@AfterAll
-	static void afterAll() throws SQLException {
-//		assertFalse(IsisSession.isInSession()); // expected post condition
-	}
-	
+    @BeforeAll
+    static void beforeAll() throws SQLException {
+        //XXX is it actually the case that tests might run in parallel?
+        //assertFalse(IsisSession.isInSession()); // expected pre condition 
+        // launch H2Console for troubleshooting ...
+        // Util_H2Console.main(null);
+    }
 
-	void cleanUp() {
+    @AfterAll
+    static void afterAll() throws SQLException {
+        //		assertFalse(IsisSession.isInSession()); // expected post condition
+    }
 
-		repository.allInstances(Inventory.class).forEach(repository::remove);
-		repository.allInstances(Book.class).forEach(repository::remove);
-		repository.allInstances(Product.class).forEach(repository::remove);
-		System.out.println("!!! CLEANUP DONE");
-	}
 
-	void setUp() {
+    void cleanUp() {
 
-		// setup sample Inventory
-		Set<Product> products = new HashSet<>();
+        repository.allInstances(Inventory.class).forEach(repository::remove);
+        repository.allInstances(Book.class).forEach(repository::remove);
+        repository.allInstances(Product.class).forEach(repository::remove);
+        System.out.println("!!! CLEANUP DONE");
+    }
 
-		products.add(Book.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
-				"Sample Publisher"));
+    void setUp() {
 
-		val inventory = Inventory.of("Sample Inventory", products);
-		repository.persist(inventory);
-		
-		System.out.println("!!! SETUP DONE");
-	}
+        // setup sample Inventory
+        Set<Product> products = new HashSet<>();
 
-	@Test @Order(1) @Rollback(false) 
-	void sampleInventoryShouldBeSetUp() {
-		
-		// given - expected pre condition: no inventories
+        products.add(Book.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
+                "Sample Publisher"));
 
-		cleanUp();
-		assertEquals(0, repository.allInstances(Inventory.class).size());
-		System.out.println("!!! VERIFY CLEANUP DONE");
+        val inventory = Inventory.of("Sample Inventory", products);
+        repository.persist(inventory);
 
-		// when
+        System.out.println("!!! SETUP DONE");
+    }
 
-		setUp();
+    @Test @Order(1) @Rollback(false) 
+    void sampleInventoryShouldBeSetUp() {
 
-		// then - expected post condition: ONE inventory
+        // given - expected pre condition: no inventories
 
-		val inventories = repository.allInstances(Inventory.class);
-		assertEquals(1, inventories.size());
+        cleanUp();
+        assertEquals(0, repository.allInstances(Inventory.class).size());
+        System.out.println("!!! VERIFY CLEANUP DONE");
 
-		val inventory = inventories.get(0);
-		assertNotNull(inventory);
-		assertNotNull(inventory.getProducts());
-		assertEquals(1, inventory.getProducts().size());
+        // when
 
-		val product = inventory.getProducts().iterator().next();
-		assertEquals("Sample Book", product.getName());
+        setUp();
 
-	}
-	
-	@Test @Order(2) @Rollback(false)
-	void aSecondRunShouldWorkAsWell() {
-		sampleInventoryShouldBeSetUp();
-	}
+        // then - expected post condition: ONE inventory
+
+        val inventories = repository.allInstances(Inventory.class);
+        assertEquals(1, inventories.size());
+
+        val inventory = inventories.get(0);
+        assertNotNull(inventory);
+        assertNotNull(inventory.getProducts());
+        assertEquals(1, inventory.getProducts().size());
+
+        val product = inventory.getProducts().iterator().next();
+        assertEquals("Sample Book", product.getName());
+
+    }
+
+    @Test @Order(2) @Rollback(false)
+    void aSecondRunShouldWorkAsWell() {
+        sampleInventoryShouldBeSetUp();
+    }
 
 }

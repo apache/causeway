@@ -51,7 +51,7 @@ public class CollectionContentsAsExcel extends PanelAbstract<EntityCollectionMod
     private void buildGui() {
 
         final EntityCollectionModel model = getModel();
-        
+
         final NotificationPanel feedback = new NotificationPanel(ID_FEEDBACK);
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
@@ -59,7 +59,7 @@ public class CollectionContentsAsExcel extends PanelAbstract<EntityCollectionMod
         final LoadableDetachableModel<File> fileModel = new ExcelFileModel(model);
         final String xlsxFileName = xlsxFileNameFor(model);
         final DownloadLink link = new ExcelFileDownloadLink(ID_DOWNLOAD, fileModel, xlsxFileName);
-        
+
         addOrReplace(link);
     }
 
@@ -67,7 +67,7 @@ public class CollectionContentsAsExcel extends PanelAbstract<EntityCollectionMod
         return model.getName().replaceAll(" ", "") + ".xlsx";
     }
 
-    
+
     @Override
     protected void onModelChanged() {
         buildGui();

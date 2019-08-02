@@ -50,86 +50,86 @@ import lombok.val;
 public class ObjectAdapterServiceDefault implements ObjectAdapterService {
 
 
-	@Override
-	public ObjectAdapter adapterFor(Object pojo) {
+    @Override
+    public ObjectAdapter adapterFor(Object pojo) {
 
-		if(pojo == null) {
-			return null;
-		}
+        if(pojo == null) {
+            return null;
+        }
 
-		val spec = specificationLoader.loadSpecification(pojo.getClass());
-		switch (spec.getBeanSort()) {
-		case VALUE:
-			return PojoAdapter.ofValue((Serializable) pojo);
-			
-		case VIEW_MODEL:
-		case MANAGED_BEAN:
-		case ENTITY:
-		case MIXIN:
-			return ps().adapterFor(pojo);
-		
-		case COLLECTION:
-			return PojoAdapter.ofTransient(pojo, spec.getSpecId());
-			
+        val spec = specificationLoader.loadSpecification(pojo.getClass());
+        switch (spec.getBeanSort()) {
+        case VALUE:
+            return PojoAdapter.ofValue((Serializable) pojo);
+
+        case VIEW_MODEL:
+        case MANAGED_BEAN:
+        case ENTITY:
+        case MIXIN:
+            return ps().adapterFor(pojo);
+
+        case COLLECTION:
+            return PojoAdapter.ofTransient(pojo, spec.getSpecId());
+
         case UNKNOWN:
             break;
-            
-		}
-		
-		_Probe.errOut("UNKNOWN ManagedObject type: '%s'", pojo.getClass());
-		
-		return null;
-		//throw _Exceptions.unmatchedCase("UNKNOWN ManagedObject type: " + pojo.getClass());
-	}
-	
+
+        }
+
+        _Probe.errOut("UNKNOWN ManagedObject type: '%s'", pojo.getClass());
+
+        return null;
+        //throw _Exceptions.unmatchedCase("UNKNOWN ManagedObject type: " + pojo.getClass());
+    }
+
     @Override
     public ObjectAdapter adapterForBean(BeanAdapter bean) {
         return ps().adapterForBean(bean);
     }
 
-	@Override
-	public ObjectAdapter adapterForCollection(
-			Object collectionPojo, 
-			RootOid parentOid, 
-			OneToManyAssociation oneToMany) {
-		
+    @Override
+    public ObjectAdapter adapterForCollection(
+            Object collectionPojo, 
+            RootOid parentOid, 
+            OneToManyAssociation oneToMany) {
+
         requires(parentOid, "parentOid");
         requires(collectionPojo, "collectionPojo");
-		
-		val collectionOid = Oid.Factory.parentedOfOneToMany(parentOid, oneToMany);
-		
+
+        val collectionOid = Oid.Factory.parentedOfOneToMany(parentOid, oneToMany);
+
         // the List, Set etc. instance gets wrapped in its own adapter
         val newAdapter = PojoAdapter.of(collectionPojo, collectionOid); 
         return newAdapter;
-	}
+    }
 
-	@Override
-	public ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoStr) {
-		
-		val objectSpecification = specificationLoader.loadSpecification(viewModelPojo.getClass());
+    @Override
+    public ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoStr) {
+
+        val objectSpecification = specificationLoader.loadSpecification(viewModelPojo.getClass());
         val objectSpecId = objectSpecification.getSpecId();
         val newRootOid = Oid.Factory.viewmodelOf(objectSpecId, mementoStr);
         val newAdapter = PojoAdapter.of(viewModelPojo, newRootOid); 
         return newAdapter; 
-	}
+    }
 
-	@Override
-	public ObjectAdapter newTransientInstance(ObjectSpecification spec) {
-		val pojo = spec.instantiatePojo();
+    @Override
+    public ObjectAdapter newTransientInstance(ObjectSpecification spec) {
+        val pojo = spec.instantiatePojo();
         val newAdapter = PojoAdapter.ofTransient(pojo, spec.getSpecId());
         newAdapter.injectServices(serviceInjector);
         return newAdapter;
-	}
+    }
 
-	// -- HELPER
+    // -- HELPER
 
-	protected PersistenceSession ps() {
-		return IsisContext.getPersistenceSession()
-				.orElseThrow(()->new NonRecoverableException("No PersistenceSession on current thread."));
-	}
-	
-	@Inject SpecificationLoader specificationLoader;
-	@Inject ServiceInjector serviceInjector;
+    protected PersistenceSession ps() {
+        return IsisContext.getPersistenceSession()
+                .orElseThrow(()->new NonRecoverableException("No PersistenceSession on current thread."));
+    }
+
+    @Inject SpecificationLoader specificationLoader;
+    @Inject ServiceInjector serviceInjector;
 
     @Override
     public ManagedObject disposableAdapterForViewModel(Object viewModelPojo) {
@@ -141,10 +141,10 @@ public class ObjectAdapterServiceDefault implements ObjectAdapterService {
         return ps().specificationForViewModel(viewModelPojo);
     }
 
-//    @Override
-//    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, String memento) {
-//        return ps().recreateViewModelInstance(objectSpec, memento);
-//    }
+    //    @Override
+    //    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, String memento) {
+    //        return ps().recreateViewModelInstance(objectSpec, memento);
+    //    }
 
     @Override
     public Stream<ObjectAdapter> streamServices() {

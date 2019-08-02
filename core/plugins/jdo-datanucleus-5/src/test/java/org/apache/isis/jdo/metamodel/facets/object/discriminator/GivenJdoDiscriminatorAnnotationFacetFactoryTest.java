@@ -75,14 +75,14 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         @Discriminator("CUS")
         abstract class Customer implements Persistable {
         }
-        
+
         facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
-        
+
         final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation);
     }
-    
+
     public void testIfNoEntityAnnotationThenNoFacet() {
 
         abstract class Customer implements Persistable {

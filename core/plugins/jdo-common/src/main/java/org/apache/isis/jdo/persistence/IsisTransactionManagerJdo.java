@@ -71,19 +71,19 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
     private IsisTransactionJdo beginTransaction(Command existingCommandIfAny) {
         val txInProgress = isTransactionInProgress();
         if (txInProgress) {
-        	
-        	val txObject = IsisTransactionAspectSupport.currentTransactionObject().get();
-        	txObject.incTransactionNestingLevel();
-        	val nestingLevel = txObject.getTransactionNestingLevel();
-        	
-        	if (log.isDebugEnabled()) {
+
+            val txObject = IsisTransactionAspectSupport.currentTransactionObject().get();
+            txObject.incTransactionNestingLevel();
+            val nestingLevel = txObject.getTransactionNestingLevel();
+
+            if (log.isDebugEnabled()) {
                 log.debug("startTransaction: nesting-level {}->{}", 
-                		nestingLevel - 1, 
-                		nestingLevel);
+                        nestingLevel - 1, 
+                        nestingLevel);
             }
-        	
-        	return (IsisTransactionJdo) txObject.getCurrentTransaction();
-        	
+
+            return (IsisTransactionJdo) txObject.getCurrentTransaction();
+
         } else {
 
             // previously we called __isis_startRequest here on all RequestScopedServices.  This is now
@@ -105,22 +105,22 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
                     interaction.next(Interaction.Sequence.TRANSACTION.id()));
 
             persistenceSession.startTransaction();
-            
+
             if (log.isDebugEnabled()) {
                 log.debug("startTransaction: top-level");
             }
-            
+
             return currentTransaction;
-            
+
         } 
-        
+
     }
 
 
     public void flushTransaction(IsisTransactionJdo transaction) {
         if (transaction != null) {
-        	log.debug("flushTransaction");
-        	transaction.flush();
+            log.debug("flushTransaction");
+            transaction.flush();
         }
     }
 
@@ -139,8 +139,8 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
      */
     public void commitTransaction(IsisTransactionObject txObject) {
 
-    	val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction(); 
-    	
+        val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction(); 
+
         if (transaction == null) {
             // allow this method to be called >1 with no adverse affects
 
@@ -150,7 +150,7 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
 
             return;
         }
-        
+
         if (transaction.getState().isComplete()) {
             // allow this method to be called >1 with no adverse affects
 
@@ -160,10 +160,10 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
 
             return;
         }
-        
+
         val transactionLevel = txObject.getTransactionNestingLevel();
         val isTopLevel = txObject.isTopLevel();
-        
+
         if (log.isDebugEnabled()) {
             log.debug("endTransaction: level {}->{}", transactionLevel, transactionLevel - 1);
         }
@@ -171,23 +171,23 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
         try {
             endTransactionInternal(txObject);
         } finally {
-        	val tx = (IsisTransactionJdo) txObject.getCurrentTransaction();
-        	if(tx==null) {
-        		log.error("race condition when ending the current transaction object");
-        		return;
-        	}
+            val tx = (IsisTransactionJdo) txObject.getCurrentTransaction();
+            if(tx==null) {
+                log.error("race condition when ending the current transaction object");
+                return;
+            }
             val state = tx.getState();
             if(isTopLevel && !state.isComplete()) {
                 log.error("endTransaction: when top-level, "
-                		+ "transactionState is expected COMMITTED or ABORTED but was: '{}'", state);
+                        + "transactionState is expected COMMITTED or ABORTED but was: '{}'", state);
             }
         }
     }
 
     private void endTransactionInternal(IsisTransactionObject txObject) {
 
-    	val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
-    	
+        val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
+
         // terminate the transaction early if an abort cause was already set.
         RuntimeException abortCause = transaction.getAbortCause();
         if(transaction.getState().mustAbort()) {
@@ -232,10 +232,10 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
         }
 
         if(!txObject.isTopLevel()) {
-        	txObject.decTransactionNestingLevel();
-        	return;
+            txObject.decTransactionNestingLevel();
+            return;
         }
-        
+
         //
         // TODO: granted, this is some fairly byzantine coding.  but I'm trying to account for different types
         // of object store implementations that could start throwing exceptions at any stage.
@@ -281,7 +281,7 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
         //
         // finally, if an exception was thrown, we rollback the transaction
         //
-        
+
         if(abortCause != null) {
 
             if (log.isDebugEnabled()) {
@@ -302,36 +302,36 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
             getCurrentTransaction().commit();
         }
 
- 
+
     }
 
     public void abortTransaction(IsisTransactionObject txObject) {
-    	val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
+        val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
         if (transaction != null) {
-        	transaction.markAsAborted();
+            transaction.markAsAborted();
             persistenceSession.abortTransaction();
             txObject.clear();
         }
     }
 
     public void addCommand(PersistenceCommand command) {
-    	val transaction = getCurrentTransaction();
-    	if (transaction != null && command != null) {
-    		transaction.addCommand(command);
-    	}
+        val transaction = getCurrentTransaction();
+        if (transaction != null && command != null) {
+            transaction.addCommand(command);
+        }
     }
-    
+
     // -- HELPER
-    
+
     private IsisTransactionJdo getCurrentTransaction() {
-		return IsisTransactionAspectSupport.currentTransactionObject()
-				.map(IsisTransactionObject::getCurrentTransaction)
-				.map(IsisTransactionJdo.class::cast)
-				.orElse(null);
-	}
-    
+        return IsisTransactionAspectSupport.currentTransactionObject()
+                .map(IsisTransactionObject::getCurrentTransaction)
+                .map(IsisTransactionJdo.class::cast)
+                .orElse(null);
+    }
+
     private boolean isTransactionInProgress() {
-    	return IsisTransactionAspectSupport.isTransactionInProgress();
+        return IsisTransactionAspectSupport.isTransactionInProgress();
     }
 
 

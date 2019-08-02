@@ -84,7 +84,7 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
     protected Date now() {
         return new Date(Clock.getTime());
     }
-    
+
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
     protected String doEncode(final Object pojo) {
         return ((Date)pojo).toString();

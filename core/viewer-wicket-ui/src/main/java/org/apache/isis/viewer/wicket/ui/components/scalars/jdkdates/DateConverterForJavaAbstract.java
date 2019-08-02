@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
 
 public abstract class DateConverterForJavaAbstract<T extends java.util.Date> extends DateConverterAbstract<T> {
     private static final long serialVersionUID = 1L;
-    
+
     private transient SimpleDateFormat dateOnlyPattern;
     private transient SimpleDateFormat dateTimePattern;
 
@@ -58,7 +58,7 @@ public abstract class DateConverterForJavaAbstract<T extends java.util.Date> ext
         }
         return temporalValueOf(addDaysTo(value, days));
     }
-    
+
     protected <X extends java.util.Date> T adjustDaysBackward(X value) {
         final int days = dateFormatSettings.getAdjustBy();
         if(days==0) {
@@ -66,7 +66,7 @@ public abstract class DateConverterForJavaAbstract<T extends java.util.Date> ext
         }
         return temporalValueOf(addDaysTo(value, -days));
     }    
-    
+
     protected T parseDateTime(String valueStr) {
         try {
             java.util.Date parsed = getDateTimeFormat().parse(valueStr);
@@ -80,7 +80,7 @@ public abstract class DateConverterForJavaAbstract<T extends java.util.Date> ext
             }
         }
     }
-    
+
     protected T parseDateOnly(String valueStr) {
         try {
             java.util.Date parsed =  getDateOnlyFormat().parse(valueStr);
@@ -89,11 +89,11 @@ public abstract class DateConverterForJavaAbstract<T extends java.util.Date> ext
             throw new ConversionException("Cannot convert into a date", e);
         }
     }
-    
+
     protected abstract T temporalValueOf(java.util.Date date);
-    
+
     // -- HELPER
-    
+
     private final <X extends java.util.Date> T addDaysTo(X value, final int days) {
         final Calendar cal = Calendar.getInstance();
         cal.setTime(value);

@@ -45,7 +45,7 @@ public class PathNodeTest_equalsHashcode {
         final PathNode node2 = PathNode.parse("a[d=e b=c]");
         assertEquals(node, node2);
     }
-    
+
     @Test
     public void notEqualKey() throws Exception {
         final PathNode node = PathNode.parse("a[b=c d=e]");

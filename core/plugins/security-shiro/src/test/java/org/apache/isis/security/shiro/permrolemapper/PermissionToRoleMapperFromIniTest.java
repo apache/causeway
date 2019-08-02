@@ -35,7 +35,7 @@ public class PermissionToRoleMapperFromIniTest {
         final Ini ini = Ini.fromResourcePath("classpath:org/apache/isis/security/shiro/permrolemapper/my.ini");
         final Map<String, Set<String>> permissionsByRole = 
                 new PermissionToRoleMapperFromIni(ini).getPermissionsByRole();
-        
+
         assertThat(permissionsByRole.get("role1"), is(equalTo((Set<String>)_Sets.of("foo","bar"))));
         assertThat(permissionsByRole.get("role2"), is(equalTo((Set<String>)_Sets.of("fiz:x","bip:bop:*"))));
         assertThat(permissionsByRole.get("role3"), is(equalTo((Set<String>)_Sets.of("*"))));

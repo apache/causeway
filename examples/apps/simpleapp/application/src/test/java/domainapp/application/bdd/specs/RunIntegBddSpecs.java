@@ -33,7 +33,7 @@ import cucumber.api.junit.Cucumber;
         },
         strict = true,
         tags = { "~@backlog", "~@ignore" }
-)
+        )
 public class RunIntegBddSpecs {
     // intentionally empty 
 }

@@ -40,36 +40,36 @@ import lombok.Value;
 import lombok.val;
 
 class ServiceRegistry_forTesting implements ServiceRegistry {
-    
+
     private final Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
-    
+
     @Override
     public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
-        
+
         if(_Spring.isContextAvailable()) {
             return ServiceRegistry.super.select(type, qualifiers);
         }
-        
+
         if(qualifiers!=null && qualifiers.length>0) {
             throw _Exceptions.notImplemented();
         }
 
         Optional<T> match = streamSingletons()
-        .filter(singleton->type.isAssignableFrom(singleton.getClass()))
-        .map(_Casts::<T>uncheckedCast)
-        .findFirst();
-            
+                .filter(singleton->type.isAssignableFrom(singleton.getClass()))
+                .map(_Casts::<T>uncheckedCast)
+                .findFirst();
+
         if(match.isPresent()) {
             return Bin.ofSingleton(match.get());
         }
-        
+
         // lookup the _Context 
         // XXX lombok bug, cannot use val here (https://github.com/rzwitserloot/lombok/issues/1588)
         T singleton = _Context.getIfAny(type);
         if(singleton!=null) {
             return Bin.ofSingleton(singleton);
         }
-        
+
         return Bin.empty();
     }
 
@@ -77,20 +77,20 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     public Stream<BeanAdapter> streamRegisteredBeans() {
         return registeredBeans().stream();
     }
-    
+
     @Override
     public Optional<BeanAdapter> lookupRegisteredBeanById(String id) {
         throw _Exceptions.notImplemented();
     }
-    
+
 
     // -- HELPER
-    
+
     private Set<BeanAdapter> registeredBeans() {
         if(registeredBeans.isEmpty()) {
-            
+
             val beanSortClassifier = IsisBeanTypeRegistry.current();
-            
+
             streamSingletons()
             .map(s->toBeanAdapter(s, beanSortClassifier))
             .filter(_NullSafe::isPresent)
@@ -98,7 +98,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         }
         return registeredBeans;
     }
-    
+
     private Stream<Object> streamSingletons() {
         // lookup the MetaModelContextBean's list of singletons
         val mmc = MetaModelContext.current();
@@ -108,32 +108,32 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         }
         return Stream.empty();
     }
-    
+
     @Value @Builder
     private static class PojoBeanAdapter implements BeanAdapter {
-        
+
         String id;
         Bin<?> instance;
         public Class<?> beanClass;
         BeanSort managedObjectSort;
-        
+
         @Override
         public boolean isCandidateFor(Class<?> requiredType) {
             throw _Exceptions.notImplemented();
         }
-        
+
     }
-    
+
     private BeanAdapter toBeanAdapter(Object singleton, IsisBeanTypeRegistry beanSortClassifier) {
-        
+
         return PojoBeanAdapter.builder()
                 .id(singleton.getClass().getName())
                 .instance(Bin.ofSingleton(singleton))
                 .beanClass(singleton.getClass())
                 .managedObjectSort(beanSortClassifier.quickClassify(singleton.getClass()))
                 .build();
-        
-        
+
+
     }
 
 

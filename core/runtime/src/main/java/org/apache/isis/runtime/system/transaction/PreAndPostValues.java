@@ -26,10 +26,10 @@ public class PreAndPostValues {
 
     public static class Predicates {
         public final static Predicate<Map.Entry<?, PreAndPostValues>> SHOULD_AUDIT = 
-            (Map.Entry<?, PreAndPostValues> input) -> {
-                final PreAndPostValues papv = input.getValue();
-                return papv.shouldAudit();
-        };
+                (Map.Entry<?, PreAndPostValues> input) -> {
+                    final PreAndPostValues papv = input.getValue();
+                    return papv.shouldAudit();
+                };
     }
 
     private final Object pre;

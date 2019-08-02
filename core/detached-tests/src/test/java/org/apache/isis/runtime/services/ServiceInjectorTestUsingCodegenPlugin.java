@@ -51,18 +51,18 @@ public class ServiceInjectorTestUsingCodegenPlugin {
     private ServiceInstantiator serviceInstantiator;
     private ServiceRegistry serviceRegistry;
     private ServiceInjector serviceInjector;
-    
+
 
     @Before
     public void setUp() throws Exception {
 
         serviceInstantiator = new ServiceInstantiator();
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .singleton(serviceInstantiator.createInstance(SingletonCalculator.class))
                 .singleton(serviceInstantiator.createInstance(AccumulatingCalculator.class))
                 .build());
-        
+
         serviceRegistry = IsisContext.getServiceRegistry();
         serviceInjector = IsisContext.getServiceInjector();
     }
@@ -84,7 +84,7 @@ public class ServiceInjectorTestUsingCodegenPlugin {
     @Test
     public void requestScoped_justOneThread() {
         final AccumulatingCalculator calculator = serviceRegistry.lookupService(AccumulatingCalculator.class).get();
-        
+
         try {
             ((RequestScopedService)calculator).__isis_startRequest(serviceInjector);
             assertThat(calculator.add(3), is(3));
@@ -97,28 +97,28 @@ public class ServiceInjectorTestUsingCodegenPlugin {
 
     @Test
     public void requestScoped_multipleThreads() throws InterruptedException, ExecutionException {
-        
+
         final AccumulatingCalculator calculator = serviceRegistry.lookupService(AccumulatingCalculator.class).get();
         final ExecutorService executor = Executors.newFixedThreadPool(10);
-        
+
         // setup 32 tasks
         final List<Callable<Integer>> tasks = IntStream.range(0, 32)
-        .<Callable<Integer>>mapToObj(index->()->{
-            
-            // within each task setup a new calculator instance that adds the numbers from 1 .. 100 = 5050
-            ((RequestScopedService)calculator).__isis_startRequest(serviceInjector);
-            for(int i=1; i<=100; i++) {
-                calculator.add(i);    
-            }
-            try {
-                return calculator.getTotal();
-            } finally {
-                ((RequestScopedService)calculator).__isis_endRequest();
-            }
-        })
-        .collect(Collectors.toList());
-        
-        
+                .<Callable<Integer>>mapToObj(index->()->{
+
+                    // within each task setup a new calculator instance that adds the numbers from 1 .. 100 = 5050
+                    ((RequestScopedService)calculator).__isis_startRequest(serviceInjector);
+                    for(int i=1; i<=100; i++) {
+                        calculator.add(i);    
+                    }
+                    try {
+                        return calculator.getTotal();
+                    } finally {
+                        ((RequestScopedService)calculator).__isis_endRequest();
+                    }
+                })
+                .collect(Collectors.toList());
+
+
         final List<Future<Integer>> results = executor.invokeAll(tasks);
         executor.shutdown();
         executor.awaitTermination(5, TimeUnit.SECONDS);

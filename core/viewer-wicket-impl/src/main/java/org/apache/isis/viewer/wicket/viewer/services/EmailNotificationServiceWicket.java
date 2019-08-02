@@ -29,7 +29,7 @@ import org.apache.isis.runtime.system.context.IsisContext;
 class EmailNotificationServiceWicket implements EmailNotificationService {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Override
     public void init() {
         // delegate is a managed object, hence the framework takes care of initializing it
@@ -49,11 +49,11 @@ class EmailNotificationServiceWicket implements EmailNotificationService {
     public boolean isConfigured() {
         return delegate.get().isConfigured();
     }
-    
+
     // -- HELPER
-    
+
     private final transient _Lazy<EmailNotificationService> delegate = _Lazy.of(this::loadDelegate);   
-    
+
     private EmailNotificationService loadDelegate() {
         return IsisContext.getServiceRegistry().lookupServiceElseFail(EmailNotificationService.class);
     }

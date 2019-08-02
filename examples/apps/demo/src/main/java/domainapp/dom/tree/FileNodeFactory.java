@@ -22,15 +22,15 @@ import java.io.File;
 import java.nio.file.FileSystems;
 
 class FileNodeFactory {
-	
-	public static FileNode toFileNode(File file) {
-		final FileNode fileNode = new FileNode();
-		fileNode.init(file);
-		return fileNode;
-	}
-	
-	public static FileNode defaultRoot() {
-		return toFileNode(FileSystems.getDefault().getRootDirectories().iterator().next().toFile());
-	}
+
+    public static FileNode toFileNode(File file) {
+        final FileNode fileNode = new FileNode();
+        fileNode.init(file);
+        return fileNode;
+    }
+
+    public static FileNode defaultRoot() {
+        return toFileNode(FileSystems.getDefault().getRootDirectories().iterator().next().toFile());
+    }
 
 }

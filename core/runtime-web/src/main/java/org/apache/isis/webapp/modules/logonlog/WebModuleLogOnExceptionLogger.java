@@ -60,7 +60,7 @@ public final class WebModuleLogOnExceptionLogger implements WebModule  {
     public void prepare(WebModuleContext ctx) {
         this.webModuleContext = ctx;
     }
-    
+
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
@@ -94,13 +94,13 @@ public final class WebModuleLogOnExceptionLogger implements WebModule  {
     }
 
     // -- HELPER
-    
+
     private String[] getProtectedUrlPatterns() {
         return webModuleContext.streamProtectedPaths()
-        .collect(_Arrays.toArray(String.class));
+                .collect(_Arrays.toArray(String.class));
     }
 
 
-    
+
 
 }

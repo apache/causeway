@@ -53,15 +53,15 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId() {
-        
-    	val serviceActionsByObjectTypeAndId = 
-        		_Maps.<String, ServiceActionLayoutData>newLinkedHashMap();
-        
+
+        val serviceActionsByObjectTypeAndId = 
+                _Maps.<String, ServiceActionLayoutData>newLinkedHashMap();
+
         visit(serviceActionLayoutData -> {
-                serviceActionsByObjectTypeAndId
-                .put(serviceActionLayoutData.getObjectTypeAndId(), serviceActionLayoutData);
+            serviceActionsByObjectTypeAndId
+            .put(serviceActionLayoutData.getObjectTypeAndId(), serviceActionLayoutData);
         });
-        
+
         return serviceActionsByObjectTypeAndId;
     }
 

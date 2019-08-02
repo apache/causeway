@@ -74,7 +74,7 @@ public final class _Exceptions {
         requires(format, "format");
         return new IllegalArgumentException(String.format(format, _case));
     }
-    
+
     public static final NoSuchElementException noSuchElement(String msg) {
         return new NoSuchElementException(msg);
     }
@@ -83,7 +83,7 @@ public final class _Exceptions {
         requires(format, "format");
         return noSuchElement(String.format(format, args));
     }
-    
+
     public static final IllegalStateException unexpectedCodeReach() {
         return new IllegalStateException("internal error: code was reached, that is expected unreachable");
     }
@@ -91,35 +91,35 @@ public final class _Exceptions {
     public static IllegalStateException notImplemented() {
         return new IllegalStateException("internal error: code was reached, that is not implemented yet");
     }
-    
+
     public static RuntimeException unrecoverable(Throwable cause) {
         return new RuntimeException("unrecoverable error: with cause ...", cause);
     }
-    
+
     public static RuntimeException unrecoverable(String msg) {
         return new RuntimeException(String.format("unrecoverable error: '%s'", msg));
     }
-    
+
     public static RuntimeException unrecoverable(String msg, Throwable cause) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
-    
+
     /**
-    * Used to hide from the compiler the fact, that this call always throws.
-    *
-    * <pre>{
-    *    throw unexpectedCodeReach();
-    *    return 0; // won't compile: unreachable code
-    *}</pre>
-    *
-    * hence ...
-    *
-    * <pre>{
-    *    throwUnexpectedCodeReach();
-    *    return 0;
-    *}</pre>
-    *
-    */
+     * Used to hide from the compiler the fact, that this call always throws.
+     *
+     * <pre>{
+     *    throw unexpectedCodeReach();
+     *    return 0; // won't compile: unreachable code
+     *}</pre>
+     *
+     * hence ...
+     *
+     * <pre>{
+     *    throwUnexpectedCodeReach();
+     *    return 0;
+     *}</pre>
+     *
+     */
     public static void throwUnexpectedCodeReach() {
         throw unexpectedCodeReach();
     }
@@ -200,10 +200,10 @@ public final class _Exceptions {
         .limit(maxLines)
         .forEach(writer::println);
     }
-    
-	public static void dumpStackTrace() {
-		dumpStackTrace(System.out, 0, 1000); 
-	}
+
+    public static void dumpStackTrace() {
+        dumpStackTrace(System.out, 0, 1000); 
+    }
 
     // -- CAUSAL CHAIN
 
@@ -339,5 +339,5 @@ public final class _Exceptions {
         }
     }
 
-    
+
 }

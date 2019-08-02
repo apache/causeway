@@ -130,7 +130,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
 
     // -- join, split
-    
+
     @Override //implementing Oid.Marshaller
     public String joinAsOid(String domainType, String instanceId) {
         return domainType + SEPARATOR + instanceId;
@@ -169,11 +169,11 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
         final String aggregateOidPart = getGroup(matcher, 6);
         final List<AggregateOidPart> aggregateOidParts = _Lists.newArrayList();
-//        final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
-//        final Splitter partsSplitter = Splitter.on(SEPARATOR);
+        //        final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
+        //        final Splitter partsSplitter = Splitter.on(SEPARATOR);
         if(aggregateOidPart != null) {
             final Stream<String> tildaSplitted = splitThenStream(aggregateOidPart, SEPARATOR_NESTING); 
-                    
+
             tildaSplitted.forEach(str->{
                 if(_Strings.isNullOrEmpty(str)) {
                     return; // leading "~"
@@ -183,7 +183,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
                 final String localId = colonSplitIter.next();
                 aggregateOidParts.add(new AggregateOidPart(objectType, localId));
             });
-            
+
         }
         final String collectionPart = getGroup(matcher, 8);
         final String collectionName = collectionPart != null ? collectionPart.substring(1) : null;
@@ -230,7 +230,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
     private <T> void ensureCorrectType(String oidStr, Class<T> requestedType, 
             final Class<? extends Oid> actualType) {
-        
+
         if(!requestedType.isAssignableFrom(actualType)) {
             throw new IllegalArgumentException(
                     String.format("OID '%s' was unmarshealled to type '%s' which cannot be assigned "
@@ -255,7 +255,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
         _Ensure.ensure("can not marshal values", !rootOid.isValue());
         return marshalNoVersion(rootOid) + marshal(rootOid.getVersion());
     }
-    
+
     @Override
     public final String marshalNoVersion(RootOid rootOid) {
         _Ensure.ensure("can not marshal values", !rootOid.isValue());

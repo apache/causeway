@@ -32,9 +32,9 @@ public class ClassSubstitutorTest_getClass {
     public void setUp() throws Exception {
         classSubstitutor = new ClassSubstitutor();
     }
-    
+
     public static class SomeDomainObject {
-        
+
         public static enum SomeEnum {
             Foo {
                 @Override
@@ -44,7 +44,7 @@ public class ClassSubstitutorTest_getClass {
             public abstract void x();
         }
     }
-    
+
     @Test
     public void regularDomainObject() throws Exception {
         Class<?> cls = classSubstitutor.getClass(SomeDomainObject.class);

@@ -73,7 +73,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
     public void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target) {
-    	
+
         final EntityPage entityPage = new EntityPage(resultAdapter, null);
         final RequestCycle requestCycle = RequestCycle.get();
         requestCycle.setResponsePage(entityPage);

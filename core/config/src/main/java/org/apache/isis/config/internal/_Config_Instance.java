@@ -37,7 +37,7 @@ import lombok.val;
 
 @RequiredArgsConstructor(staticName = "ofProperties")
 final class _Config_Instance implements IsisConfiguration {
-    
+
     private final Map<String, String> properties;
     private final Function<String, Boolean> booleanParser;
     private final Function<String, Integer> integerParser;
@@ -114,7 +114,7 @@ final class _Config_Instance implements IsisConfiguration {
     public boolean isEmpty() {
         return properties.isEmpty();
     }
-    
+
     // -- CONVERSION
 
     @Override
@@ -123,7 +123,7 @@ final class _Config_Instance implements IsisConfiguration {
         properties.forEach(copy::put);
         return copy;
     }
-    
+
     @Override
     public IsisConfiguration copy() {
         val copy = _Maps.<String, String>newHashMap();
@@ -135,22 +135,22 @@ final class _Config_Instance implements IsisConfiguration {
                 fontParser, 
                 listParser);
     }
-    
+
     @Override
     public IsisConfiguration subset(@Nullable String withPrefix) {
         if(_Strings.isNullOrEmpty(withPrefix)) {
             return copy();
         }
-        
+
         val prefixWithTerminalDot = _Strings.suffix(withPrefix, ".");
         val filteredByPrefix = _Maps.<String, String>newHashMap();
-                
+
         properties.forEach((k, v)->{
             if(k.startsWith(prefixWithTerminalDot)) {
                 filteredByPrefix.put(k, v);
             }
         });
-        
+
         return new _Config_Instance(filteredByPrefix, 
                 booleanParser, 
                 integerParser, 
@@ -158,28 +158,28 @@ final class _Config_Instance implements IsisConfiguration {
                 fontParser, 
                 listParser);
     }
-    
+
     @Override
     public IsisConfiguration subsetWithNamesStripped(String withPrefix) {
         if(_Strings.isNullOrEmpty(withPrefix)) {
             return copy();
         }
-        
+
         val prefixWithTerminalDot = _Strings.suffix(withPrefix, ".");
         val prefixLen = prefixWithTerminalDot.length();
         val filteredByPrefix = _Maps.<String, String>newHashMap(); 
-                
+
         properties.forEach((k, v)->{
             if(k.startsWith(prefixWithTerminalDot)) {
-                
+
                 val strippedKey = k.substring(prefixLen);
-                
+
                 if(strippedKey.length()>0) {
                     filteredByPrefix.put(strippedKey, v);
                 }
             }
         });
-        
+
         return new _Config_Instance(filteredByPrefix, 
                 booleanParser, 
                 integerParser, 

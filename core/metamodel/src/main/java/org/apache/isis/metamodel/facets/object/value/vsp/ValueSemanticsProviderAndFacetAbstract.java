@@ -82,7 +82,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
             final Immutability immutability,
             final EqualByContent equalByContent,
             final T defaultValue) {
-        
+
         super(adapterFacetType, holder, Derivation.NOT_DERIVED);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;

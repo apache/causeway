@@ -33,13 +33,13 @@ import lombok.Setter;
 @NoArgsConstructor 
 @AllArgsConstructor(staticName="of")
 public class DemoItem {
-	
+
     public String title() {
         return String.format("DemoItem '%s'", getName());
     }
-    
+
     @Property(editing = Editing.DISABLED)
     @PropertyLayout(describedAs="The name of this 'DemoItem'.")
-	@Getter @Setter private String name;
+    @Getter @Setter private String name;
 
 }

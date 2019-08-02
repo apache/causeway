@@ -37,9 +37,9 @@ import lombok.RequiredArgsConstructor;
 //@Log4j2
 @RequiredArgsConstructor
 class ObjectAdapterContext_DependencyInjection {
-    
+
     private final RuntimeContext runtimeContext;
-    
+
     Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
 
         final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
@@ -63,5 +63,5 @@ class ObjectAdapterContext_DependencyInjection {
         return newInstance;
 
     }
-    
+
 }

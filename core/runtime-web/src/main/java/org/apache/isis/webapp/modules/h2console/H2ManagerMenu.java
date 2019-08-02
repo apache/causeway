@@ -43,15 +43,15 @@ import org.apache.isis.applib.value.LocalResourcePath;
         )
 public class H2ManagerMenu {
 
-	@Inject private ServiceRegistry serviceRegistry;
-	
+    @Inject private ServiceRegistry serviceRegistry;
+
     private WebModuleH2Console webModule;
 
     @PostConstruct
     public void init() {
-    	webModule = serviceRegistry.select(WebModuleH2Console.class)
-    			.getFirst()
-    			.orElse(null);
+        webModule = serviceRegistry.select(WebModuleH2Console.class)
+                .getFirst()
+                .orElse(null);
     }
 
 
@@ -70,13 +70,13 @@ public class H2ManagerMenu {
     @MemberOrder(sequence = "500.800")
     public LocalResourcePath openH2Console() {
         if(webModule==null) {
-    		return null;
-    	}
-    	return webModule.getLocalResourcePathIfEnabled();
+            return null;
+        }
+        return webModule.getLocalResourcePathIfEnabled();
     }
-    
+
     public boolean hideOpenH2Console() {
-    	return webModule==null || webModule.getLocalResourcePathIfEnabled()==null;
+        return webModule==null || webModule.getLocalResourcePathIfEnabled()==null;
     }
 
 }

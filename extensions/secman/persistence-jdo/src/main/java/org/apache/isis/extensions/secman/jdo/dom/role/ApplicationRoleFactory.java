@@ -59,7 +59,7 @@ public interface ApplicationRoleFactory {
     public static class Default implements ApplicationRoleFactory {
 
         @Override
-		public ApplicationRole newApplicationRole() {
+        public ApplicationRole newApplicationRole() {
             return factory.instantiate(ApplicationRole.class);
         }
 

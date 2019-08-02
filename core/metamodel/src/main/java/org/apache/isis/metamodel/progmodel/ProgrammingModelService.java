@@ -24,5 +24,5 @@ import java.util.function.Supplier;
  * @since 2.0
  */
 public interface ProgrammingModelService extends Supplier<ProgrammingModel> {
-    
+
 }

@@ -44,8 +44,8 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
 
         class Customer {
 
-			class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-				private static final long serialVersionUID = 1L; }
+            class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
+                private static final long serialVersionUID = 1L; }
 
             @Action(domainEvent = SomeActionInvokedDomainEvent.class)
             public void someAction() {
@@ -64,7 +64,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processInvocation(processMethodContext);
 
         // then
@@ -87,7 +87,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         class Customer {
 
             class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-				private static final long serialVersionUID = 1L; }
+                private static final long serialVersionUID = 1L; }
 
             @Action(domainEvent = SomeActionInvokedDomainEvent.class)
             public void someAction() {
@@ -104,7 +104,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processInvocation(processMethodContext);
 
         // then
@@ -112,15 +112,15 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         Assert.assertNotNull(domainEventFacet);
         Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
         final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl = 
-        		(ActionDomainEventFacetForActionAnnotation) domainEventFacet;
+                (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
         assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
         final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
         Assert.assertNotNull(invocationFacet);
-        
+
         Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
         final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = 
-        		(ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
+                (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
         assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
     }
 
@@ -130,7 +130,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         class Customer {
 
             class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-            	private static final long serialVersionUID = 1L; }
+                private static final long serialVersionUID = 1L; }
 
             @Action(domainEvent= SomeActionInvokedDomainEvent.class)
             public void someAction() {
@@ -147,7 +147,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processInvocation(processMethodContext);
 
         // then
@@ -185,7 +185,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processInvocation(processMethodContext);
 
         // then

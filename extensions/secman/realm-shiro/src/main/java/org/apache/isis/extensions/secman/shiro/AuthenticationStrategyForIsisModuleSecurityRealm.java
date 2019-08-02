@@ -46,11 +46,11 @@ public class AuthenticationStrategyForIsisModuleSecurityRealm extends AllSuccess
      */
     @Override
     public AuthenticationInfo beforeAllAttempts(Collection<? extends Realm> realms, AuthenticationToken token) 
-    		throws AuthenticationException {
-    	
+            throws AuthenticationException {
+
         val authenticationInfo = (SimpleAuthenticationInfo) super.beforeAllAttempts(realms, token);
         val principalCollection = new PrincipalCollectionWithSinglePrincipalForApplicationUserInAnyRealm();
-        
+
         authenticationInfo.setPrincipals(principalCollection);
         return authenticationInfo;
     }

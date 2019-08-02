@@ -42,7 +42,7 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationUser.class
-)
+        )
 public class ApplicationUserRepository
 implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository {
 
@@ -57,7 +57,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
      * </p>
      */
     @Override
-	public ApplicationUser findOrCreateUserByUsername(
+    public ApplicationUser findOrCreateUserByUsername(
             final String username) {
         // slightly unusual to cache a function that modifies state, but safe because this is idempotent
         return queryResultsCache.execute(new Callable<ApplicationUser>() {
@@ -83,7 +83,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     }
 
     @Override
-	public ApplicationUser findByUsername(final String username) {
+    public ApplicationUser findByUsername(final String username) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
                 "findByUsername", "username", username));
@@ -108,7 +108,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     // -- findByName
 
     @Override
-	public List<ApplicationUser> find(final String search) {
+    public List<ApplicationUser> find(final String search) {
         final String regex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
@@ -136,7 +136,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     // -- newLocalUser (action)
 
     @Override
-	public ApplicationUser newLocalUser(
+    public ApplicationUser newLocalUser(
             final String username,
             final Password password,
             final Password passwordRepeat,
@@ -202,7 +202,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     // -- allUsers
 
     @Override
-	public List<ApplicationUser> allUsers() {
+    public List<ApplicationUser> allUsers() {
         return repository.allInstances(ApplicationUser.class);
     }
 
@@ -215,7 +215,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject QueryResultsCache queryResultsCache;
     @Inject PasswordEncryptionService passwordEncryptionService;
     @Inject ApplicationRoleRepository applicationRoleRepository;
@@ -223,6 +223,6 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
 
-    
+
 
 }

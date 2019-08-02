@@ -318,7 +318,7 @@ public class Interaction implements HasUniqueId {
         adder.increment();
         return adder.intValue();
     }
-    
+
     private LongAdder newAdder(String ignore) {
         final LongAdder adder = new LongAdder();
         adder.decrement();

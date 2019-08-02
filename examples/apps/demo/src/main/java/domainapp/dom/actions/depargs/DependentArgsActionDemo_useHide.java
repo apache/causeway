@@ -35,33 +35,33 @@ import lombok.RequiredArgsConstructor;
 @Mixin
 @RequiredArgsConstructor
 public class DependentArgsActionDemo_useHide {
-    
+
     @Inject MessageService messageService;
-    
-    
+
+
     private final DependentArgsActionDemo holder;
-    
+
     @ActionLayout(named="Hide", promptStyle = PromptStyle.DIALOG_MODAL)
     @Action(semantics = SemanticsOf.SAFE)
     public DependentArgsActionDemo $$(
-            
+
             // PARAM 0
             @ParameterLayout(named = "Hide Last Argument")
             boolean hideLastArg,
-            
+
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named = "Message")
             String message
-            
+
             ) {
-        
+
         messageService.informUser(message);
         return holder;
     }
-    
+
     // -- PARAM 1 (String message)
-    
+
     public boolean hide1$$(boolean hideLastArg) {
         return hideLastArg;
     }

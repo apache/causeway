@@ -100,17 +100,17 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
         throw _Exceptions.unexpectedCodeReach();
         //FIXME[ISIS-1976] marked for removal (must be dead code, since MutableProposedHolder has no implementation)
-//        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-//        final Object proposed = proposedHolder.getProposed();
-//        return getObjectAdapterProvider().adapterFor(proposed);
+        //        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+        //        final Object proposed = proposedHolder.getProposed();
+        //        return getObjectAdapterProvider().adapterFor(proposed);
     }
 
-//    protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
-//        if (!(owner instanceof MutableProposedHolder)) {
-//            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
-//        }
-//        return (MutableProposedHolder) owner;
-//    }
+    //    protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
+    //        if (!(owner instanceof MutableProposedHolder)) {
+    //            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
+    //        }
+    //        return (MutableProposedHolder) owner;
+    //    }
 
     /**
      * Parameter number, 0-based.
@@ -489,7 +489,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
         final VisibilityContext<?> ic = createArgumentVisibilityContext(
                 targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
-        );
+                );
 
         final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
         return visibleResult.createConsent();
@@ -516,7 +516,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
         final UsabilityContext<?> ic = createArgumentUsabilityContext(
                 targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
-        );
+                );
 
         final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);
         return usableResult.createConsent();

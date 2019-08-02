@@ -25,11 +25,11 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
 public interface MenuBars {
 
-	@FunctionalInterface
+    @FunctionalInterface
     interface Visitor {
         void visit(final ServiceActionLayoutData serviceActionLayoutData);
     }
-	
+
     String getTnsAndSchemaLocation();
 
     void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);

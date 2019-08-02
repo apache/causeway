@@ -35,15 +35,15 @@ import org.apache.isis.wrapper.IsisWrapperModule;
 
 @Configuration 
 @ComponentScan(
-		basePackageClasses= {
-				IsisApplibModule.class,
-				IsisMetamodelModule.class,
-				IsisRuntimeModule.class,
-				IsisRuntimeServicesModule.class,
-				IsisWrapperModule.class},
-		includeFilters= {
-				@Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
-		})
+        basePackageClasses= {
+                IsisApplibModule.class,
+                IsisMetamodelModule.class,
+                IsisRuntimeModule.class,
+                IsisRuntimeServicesModule.class,
+                IsisWrapperModule.class},
+        includeFilters= {
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
 public class IsisBoot implements ApplicationContextAware {
 
     @Override
@@ -52,5 +52,5 @@ public class IsisBoot implements ApplicationContextAware {
         // (its passed over to ServiceRegistryDefault)
     }
 
-	
+
 }

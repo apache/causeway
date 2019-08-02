@@ -37,55 +37,55 @@ import lombok.val;
 
 //@RunWith(FrameworkRunner.class) //when picked up as a regular JUnit Test just act as a no-op.
 @CreateDS(name = "myDS",
-    partitions = {
+partitions = {
         @CreatePartition(name = "mojo", suffix = "o=mojo")
-    })
+})
 @CreateLdapServer(transports = { 
-		@CreateTransport(protocol = "LDAP", address = "localhost", port = LdapConstants.PORT)})
+        @CreateTransport(protocol = "LDAP", address = "localhost", port = LdapConstants.PORT)})
 @ApplyLdifFiles({"ldap-users.ldif"})
 public class LdapEmbeddedServer extends AbstractLdapTestUnit {
-	
-	@Test
+
+    @Test
     public void authenticateAgainstLdap() {
-    	// when test runs with the FrameworkRunner, at this stage the LDAP server is setup and listening
+        // when test runs with the FrameworkRunner, at this stage the LDAP server is setup and listening
     }
-    
-	/**
-	 * Launches an LDAP server, that waits for the returned latch to count down by the caller, 
-	 * before it shuts down.
-	 * @return a {@link CountDownLatch} for the caller to count down, once the server is no longer needed.
-	 * @throws InitializationError
-	 * @throws InterruptedException
-	 */
+
+    /**
+     * Launches an LDAP server, that waits for the returned latch to count down by the caller, 
+     * before it shuts down.
+     * @return a {@link CountDownLatch} for the caller to count down, once the server is no longer needed.
+     * @throws InitializationError
+     * @throws InterruptedException
+     */
     public static CountDownLatch run() throws InitializationError, InterruptedException {
-    	
-    	val serverLanchedLatch = new CountDownLatch(1);
-    	val serverTerminatedLatch = new CountDownLatch(1);
-		val runner = new FrameworkRunner(LdapEmbeddedServer.class);
-		
-		val notifier = new RunNotifier();
-		notifier.addListener(new RunListener() {
-			@Override
-			public void testFinished(Description description) throws Exception {
-				serverLanchedLatch.countDown();
-				serverTerminatedLatch.await(); // wait for the latch to be decremented by the caller
-			}
-		});
-		
-		val thread = new Thread() {
-			@Override
-			public void run() {
-				runner.run(notifier);
-			}
-		};
-		
-		thread.start();
-		
-		serverLanchedLatch.await(); // wait for the server to be fully launched
-		
-		return serverTerminatedLatch;
-		
-	}
-    
-    
+
+        val serverLanchedLatch = new CountDownLatch(1);
+        val serverTerminatedLatch = new CountDownLatch(1);
+        val runner = new FrameworkRunner(LdapEmbeddedServer.class);
+
+        val notifier = new RunNotifier();
+        notifier.addListener(new RunListener() {
+            @Override
+            public void testFinished(Description description) throws Exception {
+                serverLanchedLatch.countDown();
+                serverTerminatedLatch.await(); // wait for the latch to be decremented by the caller
+            }
+        });
+
+        val thread = new Thread() {
+            @Override
+            public void run() {
+                runner.run(notifier);
+            }
+        };
+
+        thread.start();
+
+        serverLanchedLatch.await(); // wait for the server to be fully launched
+
+        return serverTerminatedLatch;
+
+    }
+
+
 }

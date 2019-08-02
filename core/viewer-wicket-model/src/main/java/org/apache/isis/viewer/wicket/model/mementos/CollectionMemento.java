@@ -39,7 +39,7 @@ public class CollectionMemento implements Serializable {
 
     private static ObjectSpecification owningSpecFor(
             final OneToManyAssociation association) {
-        
+
         val specificationLoader = IsisContext.getSpecificationLoader();
         val specId = ObjectSpecId.of(association.getIdentifier().toClassIdentityString());
         return specificationLoader.lookupBySpecIdElseLoad(specId);

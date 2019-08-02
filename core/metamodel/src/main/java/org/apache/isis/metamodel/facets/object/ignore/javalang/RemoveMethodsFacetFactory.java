@@ -93,14 +93,14 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
         }
 
-        
-         // removeInjectMethods(processClassContext);
-            Method[] methods2 = processClassContext.getCls().getMethods();
-            for (Method method : methods2) {
+
+        // removeInjectMethods(processClassContext);
+        Method[] methods2 = processClassContext.getCls().getMethods();
+        for (Method method : methods2) {
             if(injectorMethodEvaluator.getTypeToBeInjected(method)!=null) {
-                    processClassContext.removeMethod(method);
-                }
+                processClassContext.removeMethod(method);
             }
+        }
 
         removeSuperclassMethods(processClassContext.getCls(), processClassContext);
 

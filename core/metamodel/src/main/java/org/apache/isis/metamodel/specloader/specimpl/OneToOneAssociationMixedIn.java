@@ -72,7 +72,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final ObjectSpecification mixedInType,
             final Class<?> mixinType,
             final String mixinMethodName) {
-        
+
         super(mixinAction.getFacetedMethod(), mixinAction.getReturnType());
 
         this.mixinType = mixinType;

@@ -159,9 +159,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     private static Predicate<ObjectAdapter> isPublished() {
         return (final ObjectAdapter objectAdapter) -> {
-                final PublishedObjectFacet publishedObjectFacet =
-                        objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-                return publishedObjectFacet != null;
+            final PublishedObjectFacet publishedObjectFacet =
+                    objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+            return publishedObjectFacet != null;
         };
     }
 

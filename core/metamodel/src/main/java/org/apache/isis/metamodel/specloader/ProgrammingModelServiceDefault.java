@@ -35,16 +35,16 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
     public ProgrammingModel get() {
         return programmingModel.get();
     }
-    
+
     // -- HELPER
-    
+
     @Inject private IsisConfiguration configuration;
-    
+
     private _Lazy<ProgrammingModel> programmingModel = 
             _Lazy.threadSafe(this::createProgrammingModel);
-            
+
     private ProgrammingModel createProgrammingModel() {
-        
+
         final DeprecatedPolicy deprecatedPolicy = DeprecatedPolicy.parse(configuration);
 
         final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava8(deprecatedPolicy);

@@ -43,9 +43,9 @@ import lombok.val;
  * @since 2.0
  */
 public class _Json {
-    
+
     // -- STREAM CONTENT
-    
+
     /**
      * Deserialize JSON content from given JSON content InputStream into an instance of 
      * given {@code clazz} type.
@@ -59,10 +59,10 @@ public class _Json {
      */
     public static <T> T readJson(final Class<T> clazz, InputStream content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         return (T) new ObjectMapper().readValue(content, clazz);
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content InputStream into an instance of 
      * given {@code clazz} type, or any exception that occurred during parsing.
@@ -78,7 +78,7 @@ public class _Json {
             return _Either.right(e);
         }
     }
-    
+
     /**
      * Deserialize JSON content from given JSON content InputStream into an instance of List 
      * with given {@code elementType}.
@@ -92,12 +92,12 @@ public class _Json {
      */
     public static <T> List<T> readJsonList(final Class<T> elementType, InputStream content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
         return mapper.readValue(content, listFactory);    
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content InputStream into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
@@ -114,9 +114,9 @@ public class _Json {
         }
     }
 
-    
+
     // -- STRING CONTENT
-    
+
     /**
      * Deserialize JSON content from given JSON content String into an instance of 
      * given {@code clazz} type.
@@ -130,10 +130,10 @@ public class _Json {
      */
     public static <T> T readJson(final Class<T> clazz, String content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         return (T) new ObjectMapper().readValue(content, clazz);
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content String into an instance of 
      * given {@code clazz} type, or any exception that occurred during parsing.
@@ -149,7 +149,7 @@ public class _Json {
             return _Either.right(e);
         }
     }
-    
+
     /**
      * Deserialize JSON content from given JSON content String into an instance of List 
      * with given {@code elementType}.
@@ -163,12 +163,12 @@ public class _Json {
      */
     public static <T> List<T> readJsonList(final Class<T> elementType, String content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
         return mapper.readValue(content, listFactory);    
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content String into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
@@ -184,10 +184,10 @@ public class _Json {
             return _Either.right(e);
         }
     }
-    
-    
+
+
     // -- FILE CONTENT
-    
+
     /**
      * Deserialize JSON content from given JSON content File into an instance of 
      * given {@code clazz} type.
@@ -201,10 +201,10 @@ public class _Json {
      */
     public static <T> T readJson(final Class<T> clazz, File content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         return (T) new ObjectMapper().readValue(content, clazz);
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content File into an instance of 
      * given {@code clazz} type, or any exception that occurred during parsing.
@@ -220,7 +220,7 @@ public class _Json {
             return _Either.right(e);
         }
     }
-    
+
     /**
      * Deserialize JSON content from given JSON content File into an instance of List 
      * with given {@code elementType}.
@@ -234,12 +234,12 @@ public class _Json {
      */
     public static <T> List<T> readJsonList(final Class<T> elementType, File content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
         return mapper.readValue(content, listFactory);    
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content File into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
@@ -255,9 +255,9 @@ public class _Json {
             return _Either.right(e);
         }
     }
-    
+
     // -- BYTE CONTENT
-    
+
     /**
      * Deserialize JSON content from given JSON content byte[] into an instance of 
      * given {@code clazz} type.
@@ -271,10 +271,10 @@ public class _Json {
      */
     public static <T> T readJson(final Class<T> clazz, byte[] content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         return (T) new ObjectMapper().readValue(content, clazz);
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content byte[] into an instance of 
      * given {@code clazz} type, or any exception that occurred during parsing.
@@ -290,7 +290,7 @@ public class _Json {
             return _Either.right(e);
         }
     }
-    
+
     /**
      * Deserialize JSON content from given JSON content byte[] into an instance of List 
      * with given {@code elementType}.
@@ -304,12 +304,12 @@ public class _Json {
      */
     public static <T> List<T> readJsonList(final Class<T> elementType, byte[] content) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         val mapper = new ObjectMapper();
         val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
         return mapper.readValue(content, listFactory);    
     }
-    
+
     /**
      * Either deserialize JSON content from given JSON content byte[] into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
@@ -325,5 +325,5 @@ public class _Json {
             return _Either.right(e);
         }
     }
-    
+
 }

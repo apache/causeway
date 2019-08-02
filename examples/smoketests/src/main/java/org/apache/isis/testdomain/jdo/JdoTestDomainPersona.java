@@ -28,7 +28,7 @@ import org.apache.isis.runtime.system.context.IsisContext;
 
 public enum JdoTestDomainPersona 
 implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
-    
+
     PurgeAll {
         @Override
         public BuilderScriptAbstract<Inventory> builder() {
@@ -36,67 +36,67 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
 
                 @Override
                 protected void execute(ExecutionContext ec) {
-                    
+
                     //XXX lombok issue, cannot use val here (https://github.com/rzwitserloot/lombok/issues/434)
                     RepositoryService repository = IsisContext.getServiceRegistry()
                             .lookupServiceElseFail(RepositoryService.class);
-                    
+
                     repository.allInstances(Inventory.class)
                     .forEach(repository::remove);
-                    
+
                     repository.allInstances(Book.class)
                     .forEach(repository::remove);
-                    
+
                     repository.allInstances(Product.class)
                     .forEach(repository::remove);
-                    
+
                 }
 
                 @Override
                 public Inventory getObject() {
                     return null;
                 }
-                
+
             };
         }    
     },
-    
+
     InventoryWith1Book {
         @Override
         public BuilderScriptAbstract<Inventory> builder() {
             return new BuilderScriptAbstract<Inventory>() {
 
                 private Inventory inventory;
-                
+
                 @Override
                 protected void execute(ExecutionContext ec) {
-                    
+
                     //don't use lombok's val here (https://github.com/rzwitserloot/lombok/issues/434)
                     RepositoryService repository = IsisContext.getServiceRegistry()
                             .lookupServiceElseFail(RepositoryService.class);
-                    
+
                     Set<Product> products = new HashSet<>();
-                    
+
                     products.add(Book.of(
                             "Sample Book", "A sample book for testing.", 99.,
                             "Sample Author", "Sample ISBN", "Sample Publisher"));
-                    
+
                     inventory = Inventory.of("Sample Inventory", products);
                     repository.persist(inventory);
-                    
+
                 }
 
                 @Override
                 public Inventory getObject() {
                     return inventory;
                 }
-                
+
             };
         }    
     }
-    
+
     ;
 
-    
-    
+
+
 }

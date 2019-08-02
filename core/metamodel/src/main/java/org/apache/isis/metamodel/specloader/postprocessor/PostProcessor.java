@@ -36,12 +36,12 @@ public class PostProcessor {
 
     public void init() {
         postProcessors = programmingModel.getPostProcessors();
-//        for (final ObjectSpecificationPostProcessor postProcessor : postProcessors) {
-//            if(postProcessor instanceof ServicesInjectorAware) {
-//                final ServicesInjectorAware servicesInjectorAware = (ServicesInjectorAware) postProcessor;
-//                servicesInjectorAware.setServicesInjector(servicesInjector);
-//            }
-//        }
+        //        for (final ObjectSpecificationPostProcessor postProcessor : postProcessors) {
+        //            if(postProcessor instanceof ServicesInjectorAware) {
+        //                final ServicesInjectorAware servicesInjectorAware = (ServicesInjectorAware) postProcessor;
+        //                servicesInjectorAware.setServicesInjector(servicesInjector);
+        //            }
+        //        }
     }
     public void postProcess(final ObjectSpecification objectSpecification) {
 

@@ -30,18 +30,18 @@ import org.apache.isis.applib.value.Markup;
 public class AsciiDoc extends Markup {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static AsciiDoc valueOfAdoc(String asciiDoc) {
         return valueOfHtml(AsciiDocConverter.adocToHtml(asciiDoc));
     }
-    
+
     public static AsciiDoc valueOfHtml(String html) {
         return new AsciiDoc(html);
     }
-    
+
     private AsciiDoc(String html) {
         super(html);
     }
-     
-    
+
+
 }

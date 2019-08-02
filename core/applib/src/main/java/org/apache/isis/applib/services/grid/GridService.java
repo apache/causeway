@@ -103,7 +103,7 @@ public interface GridService {
      */
     @Programmatic
     Grid minimal(Grid grid);
-    
+
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>[domainClass].layout.[layout].xml</code> file, else <code>null</code>.

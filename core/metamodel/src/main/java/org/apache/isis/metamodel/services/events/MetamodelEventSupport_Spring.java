@@ -35,41 +35,41 @@ import org.apache.isis.commons.internal.ioc.spring._Spring;
 
 @Configuration
 public class MetamodelEventSupport_Spring {
-    
+
     @Bean
     public Event<CssClassUiEvent<Object>> cssClassUiEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<IconUiEvent<Object>> iconUiEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<LayoutUiEvent<Object>> layoutUiEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<TitleUiEvent<Object>> titleUiEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<ActionDomainEvent<?>> actionDomainEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<PropertyDomainEvent<?, ?>> propertyDomainEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<CollectionDomainEvent<?, ?>> collectionDomainEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
-    
+
+
 }

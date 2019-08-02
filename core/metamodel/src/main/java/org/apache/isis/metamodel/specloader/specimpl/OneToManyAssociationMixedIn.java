@@ -84,7 +84,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ObjectSpecification mixedInType,
             final Class<?> mixinType,
             final String mixinMethodName) {
-        
+
         super(mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
         this.mixinType = mixinType;
@@ -98,32 +98,32 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         final DisabledFacet disabledFacet = disabledFacet();
         final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {};
 
-                FacetUtil.addFacet(notPersistedFacet);
-                FacetUtil.addFacet(disabledFacet);
-                FacetUtil.addFacet(typeOfFacet);
+        FacetUtil.addFacet(notPersistedFacet);
+        FacetUtil.addFacet(disabledFacet);
+        FacetUtil.addFacet(typeOfFacet);
 
 
-                //
-                // in addition, copy over facets from contributed to own.
-                //
-                // These could include everything under @Collection(...) because the
-                // CollectionAnnotationFacetFactory is also run against actions.
-                //
-                FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
+        //
+        // in addition, copy over facets from contributed to own.
+        //
+        // These could include everything under @Collection(...) because the
+        // CollectionAnnotationFacetFactory is also run against actions.
+        //
+        FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
 
-                // adjust name if necessary
-                final String name = getName();
+        // adjust name if necessary
+        final String name = getName();
 
-                if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
-                    String memberName = ObjectActionMixedIn.determineNameFrom(mixinAction);
-                    FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
-                }
+        if(_Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
+            String memberName = ObjectActionMixedIn.determineNameFrom(mixinAction);
+            FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
+        }
 
-                // calculate the identifier
-                final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-                List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
+        // calculate the identifier
+        final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
+        List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
 
-                identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
+        identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
     }
 
     private DisabledFacet disabledFacet() {

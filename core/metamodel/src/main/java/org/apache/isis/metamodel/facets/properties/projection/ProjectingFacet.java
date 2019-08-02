@@ -24,6 +24,7 @@ import org.apache.isis.metamodel.facets.SingleValueFacet;
 
 public interface ProjectingFacet extends SingleValueFacet<Projecting> {
 
+    @Override
     Projecting value();
 
 }

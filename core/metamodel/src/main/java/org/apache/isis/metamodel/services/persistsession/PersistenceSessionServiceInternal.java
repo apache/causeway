@@ -28,7 +28,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider.Delegating {
-    
+
     // -- instantiate
 
     /**

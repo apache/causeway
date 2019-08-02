@@ -56,7 +56,7 @@ public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetF
         assertTrue(facet instanceof BookmarkPolicyFacetFallback);
         BookmarkPolicyFacet bookmarkableFacet = (BookmarkPolicyFacet) facet;
         assertThat(bookmarkableFacet.value(), is(BookmarkPolicy.NEVER));
-        
+
         assertNoMethodsRemoved();
     }
 

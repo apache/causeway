@@ -31,20 +31,20 @@ public class UrlEncodingServiceTest {
 
     @Before
     public void setUp() throws Exception {
-    	serviceWithCompression = new UrlEncodingServiceWithCompression();
-    	serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
+        serviceWithCompression = new UrlEncodingServiceWithCompression();
+        serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
     }
 
     @Test
     public void roundtrip() throws Exception {
-    	roundtrip(serviceBaseEncoding, false);
+        roundtrip(serviceBaseEncoding, false);
     }
-    
+
     @Test
     public void roundtrip_with_compression() throws Exception {
-    	roundtrip(serviceWithCompression, true);
+        roundtrip(serviceWithCompression, true);
     }
-    
+
     private void roundtrip(UrlEncodingService service, boolean testIsCompressing) throws Exception {
 
         final String original = "0-theme-entityPageContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-tabPanel-rows-1-rowContents-1-col-fieldSets-1-memberGroup-properties-1-property-scalarTypeContainer-scalarIfRegular-associatedActionLinksBelow-additionalLinkList-additionalLinkItem-0-additionalLink";
@@ -55,9 +55,9 @@ public class UrlEncodingServiceTest {
         Assert.assertThat(decoded, is(equalTo(original)));
 
         if(testIsCompressing) {
-        	Assert.assertThat(original.length(), is(greaterThan(encoded.length())));	
+            Assert.assertThat(original.length(), is(greaterThan(encoded.length())));	
         }
-        
+
     }
 
 

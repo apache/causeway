@@ -108,37 +108,37 @@ public class Parser_Test {
         assertThat(valueOf.get(2).get(2), is("f"));
     }
 
-//    @Test
-//    public void forGuavaMediaTypes() {
-//        final Parser<MediaType> parser = Parser.forGuavaMediaType();
-//        final MediaType mediaType = MediaType.parse("application/json");
-//        final String asString = parser.asString(mediaType);
-//        final MediaType valueOf = parser.valueOf(asString);
-//
-//        assertThat(valueOf, is(mediaType));
-//    }
-//
-//    @Test
-//    public void forListOfMediaTypes() {
-//        final Parser<List<MediaType>> parser = Parser.forListOfGuavaMediaTypes();
-//        final List<MediaType> list = Arrays.asList(MediaType.parse("application/xml"), MediaType.parse("application/json"));
-//        final String asString = parser.asString(list);
-//        final List<MediaType> valueOf = parser.valueOf(asString);
-//
-//        assertThat(list, sameContentsAs(valueOf));
-//    }
-//    
-//    @Test
-//    public void forMediaTypeJson() {
-//        final MediaType mediaType = MediaType.valueOf("application/json");
-//        assertEquals(MediaType.APPLICATION_JSON_TYPE, mediaType);
-//    }
-//
-//    @Test
-//    public void forMediaTypeXml() {
-//        final MediaType mediaType = MediaType.valueOf("application/xml");
-//        assertEquals(MediaType.APPLICATION_XML_TYPE, mediaType);
-//    }
+    //    @Test
+    //    public void forGuavaMediaTypes() {
+    //        final Parser<MediaType> parser = Parser.forGuavaMediaType();
+    //        final MediaType mediaType = MediaType.parse("application/json");
+    //        final String asString = parser.asString(mediaType);
+    //        final MediaType valueOf = parser.valueOf(asString);
+    //
+    //        assertThat(valueOf, is(mediaType));
+    //    }
+    //
+    //    @Test
+    //    public void forListOfMediaTypes() {
+    //        final Parser<List<MediaType>> parser = Parser.forListOfGuavaMediaTypes();
+    //        final List<MediaType> list = Arrays.asList(MediaType.parse("application/xml"), MediaType.parse("application/json"));
+    //        final String asString = parser.asString(list);
+    //        final List<MediaType> valueOf = parser.valueOf(asString);
+    //
+    //        assertThat(list, sameContentsAs(valueOf));
+    //    }
+    //    
+    //    @Test
+    //    public void forMediaTypeJson() {
+    //        final MediaType mediaType = MediaType.valueOf("application/json");
+    //        assertEquals(MediaType.APPLICATION_JSON_TYPE, mediaType);
+    //    }
+    //
+    //    @Test
+    //    public void forMediaTypeXml() {
+    //        final MediaType mediaType = MediaType.valueOf("application/xml");
+    //        assertEquals(MediaType.APPLICATION_XML_TYPE, mediaType);
+    //    }
 
     @Test
     public void forDate() {

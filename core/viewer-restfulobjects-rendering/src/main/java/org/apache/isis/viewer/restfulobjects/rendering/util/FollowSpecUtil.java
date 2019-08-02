@@ -29,11 +29,11 @@ public final class FollowSpecUtil {
     }
 
     public final static List<List<PathNode>> asFollowSpecs(final List<List<String>> links) {
-        
+
         final List<List<PathNode>> unmodifiable = _Lists.map(links, (List<String> pathParts) -> {
             return _Lists.newArrayList(_Lists.map(pathParts, (String input)->PathNode.parse(input)));
         });
-        
+
         return _Lists.newArrayList(unmodifiable);
     }
 }

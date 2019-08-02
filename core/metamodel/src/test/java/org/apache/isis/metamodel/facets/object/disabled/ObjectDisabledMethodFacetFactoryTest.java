@@ -37,7 +37,7 @@ public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTe
     private DisabledObjectFacetViaMethodFactory facetFactory;
 
     @Override
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         facetFactory = new DisabledObjectFacetViaMethodFactory();
     }

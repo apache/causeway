@@ -31,10 +31,10 @@ public interface Registrar extends Authenticator, ApplicationScopedComponent {
     static Predicate<Registrar> NON_NULL = _NullSafe::isPresent; 
 
     static Function<Authenticator, Registrar> AS_REGISTRAR_ELSE_NULL = (final Authenticator input) -> {
-            if (input instanceof Registrar) {
-                return (Registrar) input;
-            }
-            return null;
+        if (input instanceof Registrar) {
+            return (Registrar) input;
+        }
+        return null;
     };
 
     /**

@@ -107,15 +107,15 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
     public Object[] getChoices(
             ObjectAdapter adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-    	
-    	val context = MetaModelContext.current();
-    	val repository = context.getRepositoryService();
-    	
-    	final Predicate<ObjectAdapter> visibilityFilter = 
-    			objectAdapter -> ObjectAdapter.Util.isVisible(objectAdapter, interactionInitiatedBy); 
-    	
-        val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter);
-        return repository.allMatches(query).toArray();
+
+        val context = MetaModelContext.current();
+        val repository = context.getRepositoryService();
+
+        final Predicate<ObjectAdapter> visibilityFilter = 
+                objectAdapter -> ObjectAdapter.Util.isVisible(objectAdapter, interactionInitiatedBy); 
+
+                val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter);
+                return repository.allMatches(query).toArray();
     }
 
 }

@@ -25,11 +25,11 @@ import org.apache.isis.commons.internal.context._Plugin;
 public interface BeanTypeRegistryPlugin {
 
     // -- INTERFACE
-    
+
     Set<Class<?>> getEntityTypes();
-    
+
     // -- LOOKUP
-    
+
     public static BeanTypeRegistryPlugin get() {
         return _Plugin.getOrElse(BeanTypeRegistryPlugin.class,
                 ambiguousPlugins->{

@@ -45,19 +45,19 @@ public class BrandName extends Label {
     public BrandName(final String id, final Placement placement) {
         super(id);
         this.placement = placement;
-        
+
         String applicationName = webAppConfigBean.getApplicationName();
-        
+
         setDefaultModel(Model.of(applicationName));
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        
+
         String logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
         String logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
-        
+
         setVisible(placement.urlFor(logoHeaderUrl, logoSigninUrl) == null);
     }
 }

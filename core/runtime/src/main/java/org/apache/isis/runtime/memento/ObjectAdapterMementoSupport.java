@@ -38,14 +38,14 @@ public interface ObjectAdapterMementoSupport {
     ObjectAdapterMemento mementoForPojo(Object pojo);
 
     ObjectAdapter reconstructObjectAdapter(ObjectAdapterMemento memento);
-    
+
     // -- SPI
-    
+
     static ObjectAdapterMementoSupport current() {
         return IsisContext.getServiceRegistry().lookupServiceElseFail(ObjectAdapterMementoSupport.class);
     }
 
-    
 
-    
+
+
 }

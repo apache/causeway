@@ -151,14 +151,14 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
         final ObjectAdapter targetAdapter = entityModel.getObject();
         final ObjectAdapterModel redirectToModel;
-        
+
         if(targetAdapter != null) {
             final ProjectionFacet projectionFacet = entityModel.getTypeOfSpecification().getFacet(ProjectionFacet.class);
 
             final ObjectAdapter redirectToAdapter =
                     projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
 
-            redirectToModel = new EntityModel(redirectToAdapter);
+                    redirectToModel = new EntityModel(redirectToAdapter);
         } else {
             redirectToModel = entityModel;
         }
@@ -222,8 +222,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         ObjectAdapterModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
         return contextAdapterMementoIfAny != null
-        		? contextAdapterMementoIfAny.getObjectAdapter()
-        				: null;
+                ? contextAdapterMementoIfAny.getObjectAdapter()
+                        : null;
     }
 
     static String abbreviated(final String str, final int maxLength) {

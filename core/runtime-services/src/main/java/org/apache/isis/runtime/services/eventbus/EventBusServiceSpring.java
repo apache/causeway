@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 public class EventBusServiceSpring implements EventBusService {
 
     @Inject private ApplicationEventPublisher applicationEventPublisher;
-    
+
     @Override
     public void post(Object event) {
         applicationEventPublisher.publishEvent(event);

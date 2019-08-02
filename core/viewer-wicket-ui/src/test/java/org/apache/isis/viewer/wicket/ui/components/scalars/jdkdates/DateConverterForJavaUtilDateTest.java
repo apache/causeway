@@ -52,33 +52,33 @@ public class DateConverterForJavaUtilDateTest {
             }
         });
     }
-    
+
     @Test
     public void roundtripWhenParsingDateFormat() {
         final DateConverterForJavaUtilDate converter = new DateConverterForJavaUtilDate(settings, 0);
         final java.util.Date dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(newJavaUtilDate(2013, 5, 11)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateTimeFormat() {
         final DateConverterForJavaUtilDate converter = new DateConverterForJavaUtilDate(settings, 0);
         final Date dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(newJavaUtilDate(2013, 5, 11)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateFormatWithAdjustBy() {
         final DateConverterForJavaUtilDate converter = new DateConverterForJavaUtilDate(settings, -1);
         final Date dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(newJavaUtilDate(2013, 5, 12)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
@@ -88,7 +88,7 @@ public class DateConverterForJavaUtilDateTest {
         final DateConverterForJavaUtilDate converter = new DateConverterForJavaUtilDate(settings, -1);
         final Date dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(newJavaUtilDate(2013, 5, 12)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }

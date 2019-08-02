@@ -56,7 +56,7 @@ public abstract class ResourceAbstract {
     @Context HttpServletResponse httpServletResponse;
     @Context SecurityContext securityContext;
     @Context Providers providers;
-    
+
     private ResourceContext resourceContext;
 
     protected void init(
@@ -114,8 +114,8 @@ public abstract class ResourceAbstract {
 
 
     protected void setCommandExecutor(Command.Executor executor) {
-    	resourceContext.getServiceRegistry()
-    	.lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
+        resourceContext.getServiceRegistry()
+        .lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
     }
 
     // //////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ public abstract class ResourceAbstract {
         if (objectAdapter == null) {
             final String instanceIdUnencoded = org.apache.isis.viewer.restfulobjects.rendering.UrlDecoderUtils.urlDecode(instanceId);
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-            		"Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
+                    "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
         }
         return objectAdapter;
     }
@@ -138,13 +138,13 @@ public abstract class ResourceAbstract {
     }
 
     protected ObjectAdapter getServiceAdapter(final String serviceId) {
-    	
-    	val metaModelContext = MetaModelContext.current();
-    	
+
+        val metaModelContext = MetaModelContext.current();
+
         final ObjectAdapter serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
         if(serviceAdapter==null) {
-        	throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-            		"Could not locate service '%s'", serviceId);    
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
+                    "Could not locate service '%s'", serviceId);    
         }
         return serviceAdapter;
     }

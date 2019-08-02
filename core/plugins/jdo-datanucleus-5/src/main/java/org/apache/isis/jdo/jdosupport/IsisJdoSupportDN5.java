@@ -56,7 +56,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 @Singleton
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
-    
+
     @Override
     public <T> T refresh(final T domainObject) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
@@ -64,7 +64,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return domainObject;
     }
 
-    
+
     @Override
     public void ensureLoaded(final Collection<?> domainObjects) {
         getPersistenceSession().getPersistenceManager().retrieveAll(domainObjects);
@@ -72,7 +72,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     // //////////////////////////////////////
 
-    
+
     @Override
     public List<Map<String, Object>> executeSql(final String sql) {
         final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
@@ -88,7 +88,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         }
     }
 
-    
+
     @Override
     public Integer executeUpdate(final String sql) {
         final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
@@ -139,7 +139,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     // //////////////////////////////////////
 
-    
+
     @Override
     public void deleteAll(final Class<?>... pcClasses) {
         for (final Class<?> pcClass : pcClasses) {
@@ -147,7 +147,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
             final List<Object> instances = stream(extent).collect(Collectors.toList());
 
             try {
-            	getJdoPersistenceManager().deletePersistentAll(instances);
+                getJdoPersistenceManager().deletePersistentAll(instances);
             } catch (final Exception ex) {
                 throw new FatalException(ex);
             }
@@ -156,7 +156,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     // //////////////////////////////////////
 
-    
+
     @Override
     public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression filter) {
         JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
@@ -166,7 +166,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return executeListAndClose(query);
     }
 
-    
+
     @Override
     public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression filter) {
         JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
@@ -176,7 +176,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return executeUniqueAndClose(query);
     }
 
-    
+
     @Override
     public <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls) {
         return getJdoPersistenceManager().newJDOQLTypedQuery(cls);
@@ -213,7 +213,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return IsisContext.getServiceInjector();
     }
 
-    
+
     @Override
     public PersistenceManager getJdoPersistenceManager() {
         return getPersistenceSession().getPersistenceManager();

@@ -24,12 +24,12 @@ import lombok.Value;
 @Value(staticConstructor="of")
 public class AppLifecycleEvent {
 
-	public static enum EventType {
-		appPreMetamodel,
-		appPostMetamodel,
-		appPreDestroy,
-	}
-	
-	@Getter AppLifecycleEvent.EventType eventType;
-	
+    public static enum EventType {
+        appPreMetamodel,
+        appPostMetamodel,
+        appPreDestroy,
+    }
+
+    @Getter AppLifecycleEvent.EventType eventType;
+
 }

@@ -60,14 +60,14 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     private final PropertyClearFacet clearFacet;
 
     public PropertySetterOrClearFacetForDomainEventAbstract(
-                    final Class<? extends Facet> facetType,
-                    final Class<? extends PropertyDomainEvent<?, ?>> eventType,
+            final Class<? extends Facet> facetType,
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
                     final PropertySetterFacet setterFacet,
                     final PropertyClearFacet clearFacet,
                     final PropertyDomainEventFacetAbstract propertyDomainEventFacet,
                     final FacetHolder holder) {
-        
+
         super(facetType, eventType, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
@@ -153,7 +153,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ObjectAdapter mixedInAdapter = null;
-        
+
         getTransactionService().executeWithinTransaction(()->{
             doSetOrClearProperty(style, owningProperty, targetAdapter, mixedInAdapter, newValueAdapter, interactionInitiatedBy);
         });

@@ -33,10 +33,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class VersionTest {
-    
+
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
+
     @Mock
     private DataInputExtended input;
 
@@ -50,7 +50,7 @@ public class VersionTest {
     public void setUp() throws Exception {
         context.ignoring(input);
     }
-    
+
     @Test
     public void instantiate_usingDataInputExtended() throws Exception {
         new Version(input);
@@ -59,7 +59,7 @@ public class VersionTest {
     @Test
     public void encode() throws Exception {
         context.ignoring(output);
-        
+
         final Version oidVersion = new Version(input);
         oidVersion.encode(output);
     }
@@ -67,7 +67,7 @@ public class VersionTest {
     @Test
     public void sequence_and_toString() throws Exception {
         final Version testVersion = new Version(input);
-        
+
         assertTrue(testVersion.sequence().length() > 0);
         assertTrue(testVersion.getSequence() == 0);
         assertTrue(testVersion.toString().length() > 0);

@@ -45,7 +45,7 @@ public class DeepLinkServiceWicket implements DeepLinkService {
 
     @Inject private PageClassRegistry pageClassRegistry;
     @Inject private ObjectAdapterService objectAdapterProvider;
-    
+
     @Override
     public URI deepLinkFor(final Object domainObject) {
 
@@ -64,6 +64,6 @@ public class DeepLinkServiceWicket implements DeepLinkService {
             throw new RuntimeException("Cannot create a deep link to domain object: " + domainObject, ex);
         }
     }
-    
-    
+
+
 }

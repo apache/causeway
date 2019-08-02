@@ -41,7 +41,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
     public void setMultiPending(ArrayList<ObjectAdapterMemento> pending);
 
     public ScalarModel getScalarModel();
-    
+
     @Log4j2
     static class Util {
 
@@ -66,7 +66,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     val scalarModel = owner.getScalarModel();
                     val objectAdapterMemento = scalarModel.getObjectAdapterMemento();
                     return ObjectAdapterMemento.unwrapList(objectAdapterMemento)
-                                    .orElse(null);
+                            .orElse(null);
                 }
 
                 @Override

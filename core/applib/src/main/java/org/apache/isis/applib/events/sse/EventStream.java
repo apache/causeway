@@ -36,12 +36,12 @@ public interface EventStream {
     Class<?> getSourceType();
 
     void listenWhile(Predicate<EventStreamSource> listener);
-    
+
     void fire(EventStreamSource source);
-    
+
     void close();
-    
+
     void awaitClose() throws InterruptedException;
-    
-    
+
+
 }

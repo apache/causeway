@@ -75,14 +75,14 @@ public class CollectionUtilsTest {
                 SortedSet.class,
                 Set.class,
                 Collection.class
-        );
+                );
         for (Class<?> collectionType : collectionTypes) {
             Object o = CollectionUtils.copyOf(iterable, collectionType);
             assertThat(o, is(not(nullValue())));
             assertThat(collectionType.isAssignableFrom(o.getClass()), is(true));
 
             @SuppressWarnings("rawtypes")
-			Collection copy = (Collection)o;
+            Collection copy = (Collection)o;
             assertThat(copy.size(), is(3));
         }
 

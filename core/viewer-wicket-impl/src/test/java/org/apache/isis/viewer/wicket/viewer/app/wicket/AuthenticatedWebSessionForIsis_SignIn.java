@@ -67,7 +67,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
     public void signInJustDelegatesToAuthenticateAndSavesState() {
         context.checking(new Expectations() {
             {
-            	oneOf(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
+                oneOf(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
             }
         });
 

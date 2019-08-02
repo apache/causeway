@@ -58,16 +58,16 @@ public class HomePage extends PageAbstract {
         if(homePageAction != null) {
             val objectAdapter = homePageAction.getObjectAdapter();
             val action = homePageAction.getObjectAction();
-            
+
             Components.permanentlyHide(themeDiv, ComponentType.WELCOME);
             final ActionModel actionModel = 
                     ActionModel.create(new EntityModel(objectAdapter), action);
-            
+
             final FormExecutorDefault<ActionModel> formExecutor =
                     new FormExecutorDefault<>( new ActionFormExecutorStrategy(actionModel));
-            
+
             formExecutor.executeAndProcessResults(getPage(), null, null, actionModel.isWithinPrompt());
-            
+
         } else {
             Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
@@ -78,6 +78,6 @@ public class HomePage extends PageAbstract {
         breadcrumbModel.visitedHomePage();
     }
 
-   
+
 
 }

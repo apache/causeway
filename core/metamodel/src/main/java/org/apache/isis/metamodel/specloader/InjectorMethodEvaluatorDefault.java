@@ -28,42 +28,42 @@ import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 @Singleton
 public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvaluator {
 
-//TODO[2112] cleanup comment
-//    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = _Maps.newConcurrentHashMap();
-//
-//    private boolean isInjectorMethodFor(
-//            final Method method,
-//            final Class<?> serviceClass) {
-//
-//        // there's no need to synchronize this access.
-//        // if there were a race condition, then at worst a result of the determineXxx method might be discard
-//        // (but it would end up being calculated next time around)
-//
-//        Map<Class<?>, Boolean> classBooleanMap = isInjectorMethod.get(method);
-//        if(classBooleanMap == null) {
-//            classBooleanMap = _Maps.newConcurrentHashMap();
-//            isInjectorMethod.put(method, classBooleanMap);
-//        }
-//        Boolean result = classBooleanMap.get(serviceClass);
-//        if(result == null) {
-//            result = determineIsInjectorMethodFor(method, serviceClass);
-//            classBooleanMap.put(serviceClass, result);
-//        }
-//        return result;
-//    }
-//
-//    private static boolean determineIsInjectorMethodFor(
-//            final Method method,
-//            final Class<?> serviceClass) {
-//        final String methodName = method.getName();
-//        if (methodName.startsWith("set") || methodName.startsWith("inject")) {
-//            final Class<?>[] parameterTypes = method.getParameterTypes();
-//            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class && parameterTypes[0].isAssignableFrom(serviceClass)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    //TODO[2112] cleanup comment
+    //    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = _Maps.newConcurrentHashMap();
+    //
+    //    private boolean isInjectorMethodFor(
+    //            final Method method,
+    //            final Class<?> serviceClass) {
+    //
+    //        // there's no need to synchronize this access.
+    //        // if there were a race condition, then at worst a result of the determineXxx method might be discard
+    //        // (but it would end up being calculated next time around)
+    //
+    //        Map<Class<?>, Boolean> classBooleanMap = isInjectorMethod.get(method);
+    //        if(classBooleanMap == null) {
+    //            classBooleanMap = _Maps.newConcurrentHashMap();
+    //            isInjectorMethod.put(method, classBooleanMap);
+    //        }
+    //        Boolean result = classBooleanMap.get(serviceClass);
+    //        if(result == null) {
+    //            result = determineIsInjectorMethodFor(method, serviceClass);
+    //            classBooleanMap.put(serviceClass, result);
+    //        }
+    //        return result;
+    //    }
+    //
+    //    private static boolean determineIsInjectorMethodFor(
+    //            final Method method,
+    //            final Class<?> serviceClass) {
+    //        final String methodName = method.getName();
+    //        if (methodName.startsWith("set") || methodName.startsWith("inject")) {
+    //            final Class<?>[] parameterTypes = method.getParameterTypes();
+    //            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class && parameterTypes[0].isAssignableFrom(serviceClass)) {
+    //                return true;
+    //            }
+    //        }
+    //        return false;
+    //    }
 
     @Override
     public Class<?> getTypeToBeInjected(Method setter) {

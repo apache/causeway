@@ -40,116 +40,116 @@ import lombok.extern.log4j.Log4j2;
 @Singleton @Log4j2
 public class JdoPersistenceLifecycleService {
 
-	private PersistenceSessionFactory persistenceSessionFactory;
-	
-	@PostConstruct
-	public void postConstr() {
-		if(log.isDebugEnabled()) {
-			log.debug("init entity types {}", IsisBeanTypeRegistry.current().getEntityTypes());
-		}
-	}
+    private PersistenceSessionFactory persistenceSessionFactory;
 
-	@EventListener(AppLifecycleEvent.class)
-	public void onAppLifecycleEvent(AppLifecycleEvent event) {
+    @PostConstruct
+    public void postConstr() {
+        if(log.isDebugEnabled()) {
+            log.debug("init entity types {}", IsisBeanTypeRegistry.current().getEntityTypes());
+        }
+    }
 
-		val eventType = event.getEventType(); 
-		
-		log.debug("received app lifecycle event {}", eventType);
+    @EventListener(AppLifecycleEvent.class)
+    public void onAppLifecycleEvent(AppLifecycleEvent event) {
 
-		switch (eventType) {
-		case appPreMetamodel:
-			create();
-			break;
-		case appPostMetamodel:
-			init();
-			break;
-		case appPreDestroy:
-			shutdown();
-			break;
+        val eventType = event.getEventType(); 
 
-		default:
-			throw _Exceptions.unmatchedCase(eventType);
-		}
+        log.debug("received app lifecycle event {}", eventType);
 
-	}
+        switch (eventType) {
+        case appPreMetamodel:
+            create();
+            break;
+        case appPostMetamodel:
+            init();
+            break;
+        case appPreDestroy:
+            shutdown();
+            break;
 
-	@EventListener(SessionLifecycleEvent.class)
-	public void onSessionLifecycleEvent(SessionLifecycleEvent event) {
-	    
-		val eventType = event.getEventType();
-		
-		if(log.isDebugEnabled()) {
-			log.debug("received session event {}", eventType);
-		}
+        default:
+            throw _Exceptions.unmatchedCase(eventType);
+        }
 
-		switch (eventType) {
-		case sessionOpened:
-			openSession(event.getSession());
-			break;
-		case sessionClosing:
-			closeSession();
-			break;
-//		case sessionFlushing:
-//			flushSession();
-//			break;
-			
-		default:
-			throw _Exceptions.unmatchedCase(eventType);
-		}
+    }
 
-	}
-	
-	@Bean @Singleton //XXX note: the resulting singleton is not life-cycle managed by Spring/CDI, nor are InjectionPoints resolved by Spring/CDI
-	public PersistenceSessionFactory producePersistenceSessionFactory() {
-		return persistenceSessionFactory;
-	}
+    @EventListener(SessionLifecycleEvent.class)
+    public void onSessionLifecycleEvent(SessionLifecycleEvent event) {
 
-	// -- HELPER
+        val eventType = event.getEventType();
 
-	private void openSession(IsisSession isisSession) {
-		val authenticationSession = isisSession.getAuthenticationSession();
-		val persistenceSession =
-				persistenceSessionFactory.createPersistenceSession(authenticationSession);
+        if(log.isDebugEnabled()) {
+            log.debug("received session event {}", eventType);
+        }
 
-	      //TODO [2033] only to support IsisSessionFactoryDefault
+        switch (eventType) {
+        case sessionOpened:
+            openSession(event.getSession());
+            break;
+        case sessionClosing:
+            closeSession();
+            break;
+            //		case sessionFlushing:
+            //			flushSession();
+            //			break;
+
+        default:
+            throw _Exceptions.unmatchedCase(eventType);
+        }
+
+    }
+
+    @Bean @Singleton //XXX note: the resulting singleton is not life-cycle managed by Spring/CDI, nor are InjectionPoints resolved by Spring/CDI
+    public PersistenceSessionFactory producePersistenceSessionFactory() {
+        return persistenceSessionFactory;
+    }
+
+    // -- HELPER
+
+    private void openSession(IsisSession isisSession) {
+        val authenticationSession = isisSession.getAuthenticationSession();
+        val persistenceSession =
+                persistenceSessionFactory.createPersistenceSession(authenticationSession);
+
+        //TODO [2033] only to support IsisSessionFactoryDefault
         _Context.threadLocalPut(PersistenceSession.class, persistenceSession);
-		
-		persistenceSession.open();
-	}
 
-	private void closeSession() {
-		PersistenceSession.current(PersistenceSession.class)
-                .getSingleton()
-                .ifPresent(PersistenceSession::close);
-		_Context.threadLocalClear(PersistenceSession.class);
-	}
-	
-//	private void flushSession() {
-//		val persistenceSession = PersistenceSessionJdo.current();
-//		
-//		if(persistenceSession != null) {
-//			persistenceSession.flush();
-//		}
-//	}
+        persistenceSession.open();
+    }
 
-	private void create() {
-		persistenceSessionFactory = 
-				IsisJdoRuntimePlugin.get().getPersistenceSessionFactory();
-		persistenceSessionFactory.init();
-	}
-	
-	private void init() {
-		//TODO [2033] specloader should rather be a Spring/CDI managed object
-		val isisSessionFactory = _Context.getElseFail(IsisSessionFactory.class); 
-		val specificationLoader = isisSessionFactory.getSpecificationLoader();
-		_With.requires(specificationLoader, "specificationLoader");
-		persistenceSessionFactory.catalogNamedQueries(specificationLoader);
-	}
+    private void closeSession() {
+        PersistenceSession.current(PersistenceSession.class)
+        .getSingleton()
+        .ifPresent(PersistenceSession::close);
+        _Context.threadLocalClear(PersistenceSession.class);
+    }
 
-	private void shutdown() {
-		if(persistenceSessionFactory!=null) {
-			persistenceSessionFactory.shutdown();	
-		}
-	}
+    //	private void flushSession() {
+    //		val persistenceSession = PersistenceSessionJdo.current();
+    //		
+    //		if(persistenceSession != null) {
+    //			persistenceSession.flush();
+    //		}
+    //	}
+
+    private void create() {
+        persistenceSessionFactory = 
+                IsisJdoRuntimePlugin.get().getPersistenceSessionFactory();
+        persistenceSessionFactory.init();
+    }
+
+    private void init() {
+        //TODO [2033] specloader should rather be a Spring/CDI managed object
+        val isisSessionFactory = _Context.getElseFail(IsisSessionFactory.class); 
+        val specificationLoader = isisSessionFactory.getSpecificationLoader();
+        _With.requires(specificationLoader, "specificationLoader");
+        persistenceSessionFactory.catalogNamedQueries(specificationLoader);
+    }
+
+    private void shutdown() {
+        if(persistenceSessionFactory!=null) {
+            persistenceSessionFactory.shutdown();	
+        }
+    }
 
 }

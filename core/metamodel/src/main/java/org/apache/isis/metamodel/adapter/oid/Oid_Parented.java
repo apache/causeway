@@ -41,7 +41,7 @@ final class Oid_Parented implements ParentedOid {
     static Oid_Parented ofName(RootOid parentRootOid, String name) {
         return new Oid_Parented(parentRootOid, name);
     }
-    
+
     private Oid_Parented(RootOid parentRootOid, String name) {
         requires(parentRootOid, "parentRootOid");
         this.parentRootOid = parentRootOid;

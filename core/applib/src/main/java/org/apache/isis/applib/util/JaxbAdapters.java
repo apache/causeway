@@ -49,9 +49,9 @@ import org.apache.isis.commons.internal.base._Strings;
 public final class JaxbAdapters {
 
     // -- MARKUP
-    
+
     public static final class MarkupAdapter extends XmlAdapter<String, Markup> {
-        
+
         private final static Base64.Encoder encoder = Base64.getEncoder(); 
         private final static Base64.Decoder decoder = Base64.getDecoder();
 
@@ -74,18 +74,18 @@ public final class JaxbAdapters {
         }
 
     }
-    
+
     // -- BLOB
-    
+
     public static final class BlobAdapter extends XmlAdapter<String, Blob> {
         // copy pasted code from BlobValueSemanticsProvider
-    	
-		@Override
-		public Blob unmarshal(String data) throws Exception {
-		    if(data==null) {
+
+        @Override
+        public Blob unmarshal(String data) throws Exception {
+            if(data==null) {
                 return null;
             }
-		    final int colonIdx = data.indexOf(':');
+            final int colonIdx = data.indexOf(':');
             final String name  = data.substring(0, colonIdx);
             final int colon2Idx  = data.indexOf(":", colonIdx+1);
             final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
@@ -96,66 +96,74 @@ public final class JaxbAdapters {
             } catch (MimeTypeParseException e) {
                 throw new RuntimeException(e);
             }
-		}
-		
-		@Override
-		public String marshal(Blob blob) throws Exception {
-			if(blob==null) {
+        }
+
+        @Override
+        public String marshal(Blob blob) throws Exception {
+            if(blob==null) {
                 return null;
             }
-			return blob.getName() + ":" + 
-            	blob.getMimeType().getBaseType() + ":" + 
-            	_Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), 
-            			StandardCharsets.UTF_8);
-		}
-    	
+            return blob.getName() + ":" + 
+            blob.getMimeType().getBaseType() + ":" + 
+            _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), 
+                    StandardCharsets.UTF_8);
+        }
+
     }
-    
-    
+
+
     // -- TEMPORAL VALUE TYPES
-    
+
     public static final class DateAdapter extends XmlAdapter<String, java.util.Date> {
 
+        @Override
         public java.util.Date unmarshal(String v) throws Exception {
             return new java.util.Date(Long.parseLong(v));
         }
 
+        @Override
         public String marshal(java.util.Date v) throws Exception {
             return Long.toString(v.getTime());
         }
 
     }
-    
+
     public static final class SqlDateAdapter extends XmlAdapter<String, java.sql.Date> {
 
+        @Override
         public java.sql.Date unmarshal(String v) throws Exception {
             return java.sql.Date.valueOf(v);
         }
 
+        @Override
         public String marshal(java.sql.Date v) throws Exception {
             return v.toString();
         }
 
     }
-    
+
     public static final class SqlTimestampAdapter extends XmlAdapter<String, java.sql.Timestamp> {
 
+        @Override
         public java.sql.Timestamp unmarshal(String v) throws Exception {
             return new java.sql.Timestamp(Long.parseLong(v));
         }
 
+        @Override
         public String marshal(java.sql.Timestamp v) throws Exception {
             return Long.toString(v.getTime());
         }
 
     }
-    
+
     public static final class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
+        @Override
         public LocalDate unmarshal(String v) throws Exception {
             return LocalDate.parse(v);
         }
 
+        @Override
         public String marshal(LocalDate v) throws Exception {
             return v.toString();
         }
@@ -164,10 +172,12 @@ public final class JaxbAdapters {
 
     public static final class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 
+        @Override
         public LocalDateTime unmarshal(String v) throws Exception {
             return LocalDateTime.parse(v);
         }
 
+        @Override
         public String marshal(LocalDateTime v) throws Exception {
             return v.toString();
         }
@@ -176,14 +186,16 @@ public final class JaxbAdapters {
 
     public static final class OffsetDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
 
+        @Override
         public OffsetDateTime unmarshal(String v) throws Exception {
             return OffsetDateTime.parse(v);
         }
 
+        @Override
         public String marshal(OffsetDateTime v) throws Exception {
             return v.toString();
         }
 
     }
-    
+
 }

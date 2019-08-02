@@ -34,20 +34,20 @@ import lombok.extern.log4j.Log4j2;
 public class SeedSecurityModuleService {
 
     @Inject FixtureScripts fixtureScripts;
-    
+
     @PostConstruct
     public void init() {
-    	
-    	log.info("SEED");
-       
-    	val txTemplate = IsisContext.createTransactionTemplate();
-    	
-    	txTemplate.execute((TransactionStatus status) -> {
+
+        log.info("SEED");
+
+        val txTemplate = IsisContext.createTransactionTemplate();
+
+        txTemplate.execute((TransactionStatus status) -> {
             fixtureScripts.runFixtureScript(new SeedUsersAndRolesFixtureScript(), null);
             return null;
         });
-        
+
     }
-    
+
 
 }

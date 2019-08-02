@@ -22,7 +22,7 @@ package org.apache.isis.runtime.system;
 import java.util.Vector;
 
 public class TestObjectWithCollection extends RuntimeTestPojo {
-    
+
     private final Vector<Object> arrayList;
     private final boolean throwException;
 

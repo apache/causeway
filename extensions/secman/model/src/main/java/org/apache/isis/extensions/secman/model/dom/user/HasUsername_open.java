@@ -40,15 +40,15 @@ public class HasUsername_open {
     private final HasUsername holder;
 
     public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<HasUsername_open> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             semantics = SemanticsOf.SAFE,
             domainEvent = ActionDomainEvent.class
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ACTION
-    )
+            )
     @MemberOrder(name = "User", sequence = "1") // associate with a 'User' property (if any)
     public ApplicationUser exec() {
         if (holder == null || holder.getUsername() == null) {

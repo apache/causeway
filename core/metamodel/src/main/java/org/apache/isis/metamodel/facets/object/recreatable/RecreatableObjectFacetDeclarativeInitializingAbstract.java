@@ -38,109 +38,109 @@ import lombok.val;
 public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract 
 extends RecreatableObjectFacetAbstract {
 
-	public RecreatableObjectFacetDeclarativeInitializingAbstract(
-			final FacetHolder holder,
-			final RecreationMechanism recreationMechanism,
-			final PostConstructMethodCache postConstructMethodCache) {
-		super(holder, recreationMechanism, postConstructMethodCache);
-	}
+    public RecreatableObjectFacetDeclarativeInitializingAbstract(
+            final FacetHolder holder,
+            final RecreationMechanism recreationMechanism,
+            final PostConstructMethodCache postConstructMethodCache) {
+        super(holder, recreationMechanism, postConstructMethodCache);
+    }
 
-	private UrlEncodingService codec;
-	private SerializingAdapter serializer; 
+    private UrlEncodingService codec;
+    private SerializingAdapter serializer; 
 
-	@Override
-	protected void doInitialize(
-			final Object viewModelPojo,
-			final String mementoStr) {
+    @Override
+    protected void doInitialize(
+            final Object viewModelPojo,
+            final String mementoStr) {
 
-		val memento = parseMemento(mementoStr);
-		val mementoKeys = memento.keySet();
-		
-		if(mementoKeys.isEmpty()) {
-			return;
-		}
-		
-		val viewModelAdapter = getObjectAdapterProvider()
-				.adapterForViewModel(viewModelPojo, mementoStr);
-		
-		viewModelAdapter.injectServices(getServiceInjector());
+        val memento = parseMemento(mementoStr);
+        val mementoKeys = memento.keySet();
 
-		val spec = viewModelAdapter.getSpecification();
-		val propertiesStream = spec.streamProperties(Contributed.EXCLUDED)
-				.filter(property->mementoKeys.contains(property.getId()));
+        if(mementoKeys.isEmpty()) {
+            return;
+        }
 
-		propertiesStream.forEach(property->{
-			
-			val propertyId = property.getId();
-			val propertyType = property.getSpecification().getCorrespondingClass();
-			val propertyValue = memento.get(propertyId, propertyType);
+        val viewModelAdapter = getObjectAdapterProvider()
+                .adapterForViewModel(viewModelPojo, mementoStr);
 
-			if(propertyValue != null) {
-				property.set(viewModelAdapter, getObjectAdapterProvider().adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
-			}
-		});
+        viewModelAdapter.injectServices(getServiceInjector());
 
-	}
+        val spec = viewModelAdapter.getSpecification();
+        val propertiesStream = spec.streamProperties(Contributed.EXCLUDED)
+                .filter(property->mementoKeys.contains(property.getId()));
 
-	@Override
-	public String memento(Object viewModelPojo) {
+        propertiesStream.forEach(property->{
 
-		final _Mementos.Memento memento = newMemento();
+            val propertyId = property.getId();
+            val propertyType = property.getSpecification().getCorrespondingClass();
+            val propertyValue = memento.get(propertyId, propertyType);
 
-		final ManagedObject ownerAdapter = 
-	    /*
-	     * ObjectAdapter that holds the ObjectSpecification used for 
-	     * interrogating the domain object's metadata. 
-	     * 
-	     * Does _not_ perform dependency injection on the domain object. Also bypasses 
-	     * caching (if any), that is each call to this method creates a new unique instance.
-	     */
-	    ManagedObject.of(getSpecificationLoader().loadSpecification(viewModelPojo.getClass()), viewModelPojo);
-		
-		
-		final ObjectSpecification spec = ownerAdapter.getSpecification();
+            if(propertyValue != null) {
+                property.set(viewModelAdapter, getObjectAdapterProvider().adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
+            }
+        });
 
-		final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
+    }
 
-		properties
-		// ignore read-only
-		.filter(property->property.containsDoOpFacet(PropertySetterFacet.class)) 
-		// ignore those explicitly annotated as @NotPersisted
-		.filter(property->!property.isNotPersisted())
-		.forEach(property->{
-			final ManagedObject propertyValue = 
-					property.get2(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
-			if(propertyValue != null) {
-				memento.put(property.getId(), propertyValue.getPojo());
-			}
-		});
+    @Override
+    public String memento(Object viewModelPojo) {
 
-		return memento.asString();
-	}
+        final _Mementos.Memento memento = newMemento();
 
-	// -- HELPER
+        final ManagedObject ownerAdapter = 
+                /*
+                 * ObjectAdapter that holds the ObjectSpecification used for 
+                 * interrogating the domain object's metadata. 
+                 * 
+                 * Does _not_ perform dependency injection on the domain object. Also bypasses 
+                 * caching (if any), that is each call to this method creates a new unique instance.
+                 */
+                ManagedObject.of(getSpecificationLoader().loadSpecification(viewModelPojo.getClass()), viewModelPojo);
 
-	private void initDependencies() {
-		val serviceRegistry = getServiceRegistry();
-		this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
-		this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
-	}
 
-	private void ensureDependenciesInited() {
-		if(codec==null) {
-			initDependencies();
-		}
-	}
+        final ObjectSpecification spec = ownerAdapter.getSpecification();
 
-	private _Mementos.Memento newMemento() {
-		ensureDependenciesInited();
-		return _Mementos.create(codec, serializer);
-	}
+        final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
 
-	private _Mementos.Memento parseMemento(String input) {
-		ensureDependenciesInited();
-		return _Mementos.parse(codec, serializer, input);
-	}
+        properties
+        // ignore read-only
+        .filter(property->property.containsDoOpFacet(PropertySetterFacet.class)) 
+        // ignore those explicitly annotated as @NotPersisted
+        .filter(property->!property.isNotPersisted())
+        .forEach(property->{
+            final ManagedObject propertyValue = 
+                    property.get2(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
+            if(propertyValue != null) {
+                memento.put(property.getId(), propertyValue.getPojo());
+            }
+        });
+
+        return memento.asString();
+    }
+
+    // -- HELPER
+
+    private void initDependencies() {
+        val serviceRegistry = getServiceRegistry();
+        this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
+        this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
+    }
+
+    private void ensureDependenciesInited() {
+        if(codec==null) {
+            initDependencies();
+        }
+    }
+
+    private _Mementos.Memento newMemento() {
+        ensureDependenciesInited();
+        return _Mementos.create(codec, serializer);
+    }
+
+    private _Mementos.Memento parseMemento(String input) {
+        ensureDependenciesInited();
+        return _Mementos.parse(codec, serializer, input);
+    }
 
 
 }

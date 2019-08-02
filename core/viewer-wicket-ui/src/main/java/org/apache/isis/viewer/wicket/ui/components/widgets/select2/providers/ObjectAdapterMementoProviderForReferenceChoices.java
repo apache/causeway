@@ -74,11 +74,11 @@ extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProv
     @Override
     public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
         final Function<String, ObjectAdapterMemento> function = (final String input) -> {
-                if(NULL_PLACEHOLDER.equals(input)) {
-                    return null;
-                }
-                final RootOid oid = RootOid.deString(input);
-                return ObjectAdapterMemento.ofRootOid(oid);
+            if(NULL_PLACEHOLDER.equals(input)) {
+                return null;
+            }
+            final RootOid oid = RootOid.deString(input);
+            return ObjectAdapterMemento.ofRootOid(oid);
         };
         return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
     }

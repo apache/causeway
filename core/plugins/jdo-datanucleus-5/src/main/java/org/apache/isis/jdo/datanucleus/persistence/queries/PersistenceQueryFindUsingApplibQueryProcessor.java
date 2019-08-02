@@ -60,12 +60,12 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     }
 
     // -- HELPER
-    
+
     // special case handling
     private List<?> getResultsPk(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
         final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
-        
+
         final String queryName = persistenceQuery.getQueryName();
         final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
@@ -77,13 +77,13 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
         final String pkOtoaId = pkOtoa.getId();
         final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
-        
+
         /* FIXME[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead
          */
         final Query<?> jdoQuery = persistenceSession.newJdoQuery(cls, filter);
         isisJdoSupport.disableMultivaluedFetch(jdoQuery); // fetch optimization
-        
+
         if (log.isDebugEnabled()) {
             log.debug("{} # {} ( {} )", cls.getName(), queryName, filter);
         }
@@ -99,7 +99,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
         final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
-        
+
         final String queryName = persistenceQuery.getQueryName();
         final Map<String, Object> argumentsByParameterName = unwrap(
                 persistenceQuery.getArgumentsAdaptersByParameterName());
@@ -107,13 +107,13 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
 
         final Class<?> cls = objectSpec.getCorrespondingClass();
-        
+
         /* FIXME[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
          * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead 
          */
         final Query<?> jdoQuery = persistenceSession.newJdoNamedQuery(cls, queryName); 
         isisJdoSupport.disableMultivaluedFetch(jdoQuery);
-        
+
         if(persistenceQuery.hasRange()) {
             jdoQuery.setRange(persistenceQuery.getStart(), persistenceQuery.getEnd());
         }

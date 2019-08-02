@@ -51,7 +51,7 @@ public class PoReaderTest {
 
     @Before
     public void setUp() throws Exception {
-        
+
         context.checking(new Expectations() {{
             allowing(mockTranslationServicePo).getLocaleProvider();
             will(returnValue(Bin.ofSingleton(mockLocaleProvider)));
@@ -62,9 +62,9 @@ public class PoReaderTest {
             allowing(mockLocaleProvider).getLocale();
             will(returnValue(Locale.UK));
         }});
-        
+
     }
-    
+
     @Test
     public void properMockeryOfNonPublicMethods() {
         //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Isis runs on JDK 11+, 
@@ -241,7 +241,7 @@ public class PoReaderTest {
 
             // then
             assertThat(translated, is(equalTo("Something to translate")));
-       }
+        }
     }
 
 }

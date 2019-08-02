@@ -38,7 +38,7 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
     public ActionParameterHiddenFacetViaMethod(
             final Method method,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
     }

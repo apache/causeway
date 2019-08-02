@@ -30,10 +30,10 @@ import org.apache.isis.runtime.system.persistence.adaptermanager.factories.OidFa
 import org.apache.isis.runtime.system.persistence.adaptermanager.factories.OidFactory.OidProvider;
 
 class OidFactory_Builder implements OidFactoryBuilder {
-    
+
     private final List<OidProvider> handler = new ArrayList<>();
     private final Function<Object, ObjectSpecification> specProvider;
-    
+
     public OidFactory_Builder(Function<Object, ObjectSpecification> specProvider) {
         this.specProvider = specProvider;
     }
@@ -51,16 +51,16 @@ class OidFactory_Builder implements OidFactoryBuilder {
             final ObjectSpecification spec = specProvider.apply(pojo);
 
             final RootOid rootOid = handler.stream()
-            .filter(h->h.isHandling(pojo, spec))
-            .findFirst()
-            .map(h->h.oidFor(pojo, spec))
-            .orElse(null);
+                    .filter(h->h.isHandling(pojo, spec))
+                    .findFirst()
+                    .map(h->h.oidFor(pojo, spec))
+                    .orElse(null);
 
             Objects.requireNonNull(rootOid, () -> "Could not create an Oid for pojo: "+pojo);
 
             return rootOid;
         };
     }
-    
+
 
 }

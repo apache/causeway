@@ -113,7 +113,7 @@ public interface Parser<T> {
      * <tt>May 2, 2007</tt>, but its editable form might be <tt>20070502</tt>.
      */
     String parseableTitleOf(T existing);
-    
+
     /**
      * The max length of objects that can be parsed (if any).
      * A return type of -1 corresponds to unlimited.

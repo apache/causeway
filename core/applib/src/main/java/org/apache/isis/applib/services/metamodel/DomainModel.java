@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.metamodel;
 import java.util.List;
 
 public interface DomainModel {
-    
+
     public List<DomainMember> getDomainMembers();
-    
+
 }

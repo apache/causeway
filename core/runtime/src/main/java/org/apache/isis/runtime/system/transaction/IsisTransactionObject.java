@@ -33,66 +33,66 @@ import lombok.val;
 @ToString
 public class IsisTransactionObject implements SmartTransactionObject {
 
-	public static IsisTransactionObject of(Transaction currentTransaction) {
-		val txObject = new IsisTransactionObject();
-		txObject.setCurrentTransaction(currentTransaction);
-		return txObject;
-	}
-	
-	@Getter @Setter Transaction currentTransaction;
-	
-	
-	@Override
-	public boolean isRollbackOnly() {
-		return currentTransaction.getTransactionState().mustAbort();
-	}
+    public static IsisTransactionObject of(Transaction currentTransaction) {
+        val txObject = new IsisTransactionObject();
+        txObject.setCurrentTransaction(currentTransaction);
+        return txObject;
+    }
 
-	@Override
-	public void flush() {
-		if(currentTransaction!=null) {
-			currentTransaction.flush();
-		}
-	}
-	
-	public TransactionId getTransactionId() {
-		if(currentTransaction!=null) {
-			return currentTransaction.getId();
-		}
-		return null;
-	}	
-	
-	// -- RESET
-	
-	public void clear() {
-		transactionNestingLevel = 0;
-		setCurrentTransaction(null);
-	}
-	
-	// -- THREAD SYNCHRONICATION
-	
+    @Getter @Setter Transaction currentTransaction;
+
+
+    @Override
+    public boolean isRollbackOnly() {
+        return currentTransaction.getTransactionState().mustAbort();
+    }
+
+    @Override
+    public void flush() {
+        if(currentTransaction!=null) {
+            currentTransaction.flush();
+        }
+    }
+
+    public TransactionId getTransactionId() {
+        if(currentTransaction!=null) {
+            return currentTransaction.getId();
+        }
+        return null;
+    }	
+
+    // -- RESET
+
+    public void clear() {
+        transactionNestingLevel = 0;
+        setCurrentTransaction(null);
+    }
+
+    // -- THREAD SYNCHRONICATION
+
     /**
      * A latch that allows threads to wait on. The latch count drops to zero once 
      * this transaction completes.
      */
-	@Getter private final CountDownLatch countDownLatch = new CountDownLatch(1);	
-	
-	// -- NESTING
-	
-	@Getter private int transactionNestingLevel = 0;
-	
-	public int incTransactionNestingLevel() {
-		return ++transactionNestingLevel;
-	}
-	
-	public int decTransactionNestingLevel() {
-		if(transactionNestingLevel==0) {
-			return 0;
-		}
-		return --transactionNestingLevel;
-	}
-	
-	public boolean isTopLevel() {
-		return transactionNestingLevel == 0;
-	}
+    @Getter private final CountDownLatch countDownLatch = new CountDownLatch(1);	
+
+    // -- NESTING
+
+    @Getter private int transactionNestingLevel = 0;
+
+    public int incTransactionNestingLevel() {
+        return ++transactionNestingLevel;
+    }
+
+    public int decTransactionNestingLevel() {
+        if(transactionNestingLevel==0) {
+            return 0;
+        }
+        return --transactionNestingLevel;
+    }
+
+    public boolean isTopLevel() {
+        return transactionNestingLevel == 0;
+    }
 
 }

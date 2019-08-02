@@ -69,7 +69,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
     public TextFieldWithDateTimePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter) {
         super(id, model, type);
-        
+
         DateTimeConfig config = new DateTimeConfig();
 
         setOutputMarkupId(true);
@@ -165,7 +165,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
-    
+
     IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }

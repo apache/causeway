@@ -71,15 +71,15 @@ public final class _Strings {
      * (a duplicate of in {@link _Constants.emptyStringArray} )
      */
     public final static String[] emptyArray = new String[0];
-    
+
     // -- PAIR OF STRINGS
-    
+
     public static interface KeyValuePair extends Map.Entry<String, String> { }
-    
+
     public static KeyValuePair pair(final String key, final String value){
         return _Strings_KeyValuePair.of(key, value);
     }
-    
+
     /**
      * Parses a string assumed to be of the form <kbd>key=value</kbd> into its parts.
      *
@@ -88,9 +88,9 @@ public final class _Strings {
     public static Optional<KeyValuePair> parseKeyValuePair(@Nullable String keyValueLiteral) {
         return _Strings_KeyValuePair.parse(keyValueLiteral);
     }
-    
+
     // -- FILLING
-    
+
     public static String of(int length, char c) {
         if(length<=0) {
             return "";
@@ -141,7 +141,7 @@ public final class _Strings {
         }
         return input;
     }
-    
+
     /**
      * @param input
      * @return the empty string if the {@code input} is null, the {@code input} otherwise 
@@ -152,8 +152,8 @@ public final class _Strings {
         }
         return input;
     }
-    
-    
+
+
     /**
      * Trims the input.
      * @param input
@@ -198,9 +198,9 @@ public final class _Strings {
         }
         return Character.toUpperCase(input.charAt(0)) + input.substring(1);
     }
-    
+
     // -- SPECIAL UNARY OPERATORS
-    
+
     public static String htmlEscape(String source) {
         return _Strings_HtmlEscaper.htmlEscape(source);
     }
@@ -240,9 +240,9 @@ public final class _Strings {
         }
         return input + suffix;
     }
-    
+
     // -- REDUCTION (BINARY OPERATIOR)
-    
+
     /**    
      * Combines 2 strings {@code left} and {@code right} into a single string, such that left
      * and right are delimited by the {@code delimiter} and such that
@@ -256,9 +256,9 @@ public final class _Strings {
      */
     public static String combineWithDelimiter(
             @Nullable String left, @Nullable String right, String delimiter) {
-        
+
         requiresNotEmpty(delimiter, "pathDelimiter");
-        
+
         if (isNullOrEmpty(left) && isNullOrEmpty(right)) {
             return "";
         }
@@ -273,7 +273,7 @@ public final class _Strings {
         }
         return left + delimiter + right;
     }
-    
+
 
     // -- PADDING
 
@@ -353,7 +353,7 @@ public final class _Strings {
                 Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),
                 false); // not parallel
     }
-    
+
     /**
      * Creates a stream from the given input sequence around matches of {@code delimiterPattern}. 
      * @param input
@@ -367,29 +367,29 @@ public final class _Strings {
         }
         return delimiterPattern.splitAsStream(input);
     }
-    
+
 
     public static void splitThenAccept(
-    		@Nullable final String input, 
-    		final String separator, 
-    		final BiConsumer<String, String> onNonEmptySplit,
-    		final Consumer<String> onNonEmptyLhs,
-    		final Consumer<String> onNonEmptyRhs) {
-    	
-    	_Strings_FastSplit.splitThenAccept(input, separator, onNonEmptySplit, onNonEmptyLhs, onNonEmptyRhs);
+            @Nullable final String input, 
+            final String separator, 
+            final BiConsumer<String, String> onNonEmptySplit,
+            final Consumer<String> onNonEmptyLhs,
+            final Consumer<String> onNonEmptyRhs) {
+
+        _Strings_FastSplit.splitThenAccept(input, separator, onNonEmptySplit, onNonEmptyLhs, onNonEmptyRhs);
     }
-    
+
     public static void splitThenAcceptEmptyAsNull(
-    		@Nullable final String input, 
-    		final String separator, 
-    		final BiConsumer<String, String> onSplit) {
-    	
-    	_Strings_FastSplit.splitThenAccept(input, separator, onSplit, 
-    			lhs->onSplit.accept(lhs, null), 
-    			rhs->onSplit.accept(null, rhs));
+            @Nullable final String input, 
+            final String separator, 
+            final BiConsumer<String, String> onSplit) {
+
+        _Strings_FastSplit.splitThenAccept(input, separator, onSplit, 
+                lhs->onSplit.accept(lhs, null), 
+                rhs->onSplit.accept(null, rhs));
     }
-    
-    
+
+
 
     // -- REPLACEMENT OPERATORS
 
@@ -404,9 +404,9 @@ public final class _Strings {
         requires(replacement, "replacement");
         return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
     }
-    
+
     // -- READ FROM INPUT STREAM
-    
+
     public static String read(@Nullable final InputStream input, Charset charset) {
         requires(charset, "charset");
         if(input==null) {
@@ -510,7 +510,7 @@ public final class _Strings {
         return suffix(fileName, prefix(fileExtension, "."));
     }
 
-    
+
 
 
 }

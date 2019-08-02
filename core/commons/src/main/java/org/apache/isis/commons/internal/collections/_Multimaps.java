@@ -144,7 +144,7 @@ public class _Multimaps {
 
     public static <K, V, S extends Set<V>> SetMultimap<K, V> newSetMultimap(
             final Supplier<? extends Map<K, S>> mapFactory,
-            final Supplier<S> elementCollectionFactory){
+                    final Supplier<S> elementCollectionFactory){
         requires(mapFactory, "mapFactory");
         requires(elementCollectionFactory, "elementCollectionFactory");
 
@@ -234,21 +234,21 @@ public class _Multimaps {
      * @return TreeMap of TreeSets
      */
     public static <K, V> SetMultimap<K, V> newSortedSetMultimap(
-    		@Nullable Comparator<K> keyComparator, 
-    		@Nullable Comparator<V> elementComparator){
-    	
+            @Nullable Comparator<K> keyComparator, 
+            @Nullable Comparator<V> elementComparator){
+
         final Supplier<SortedMap<K, SortedSet<V>>> mapFactory = ()->new TreeMap<K, SortedSet<V>>(keyComparator);
         final Supplier<SortedSet<V>> elementSetFactory = ()->new TreeSet<V>(elementComparator);
-		return newSetMultimap(mapFactory, elementSetFactory);
+        return newSetMultimap(mapFactory, elementSetFactory);
     }
-    
+
     /**
      * @return HashMap of HashMaps
      */
     public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(){
         return newMapMultimap(HashMap<K1, Map<K2, V>>::new, HashMap::new);
     }
-    
+
     /**
      * @return ConcurrentHashMap of HashMaps
      */

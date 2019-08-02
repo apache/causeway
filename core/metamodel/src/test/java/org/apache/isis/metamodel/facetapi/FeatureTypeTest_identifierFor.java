@@ -58,21 +58,21 @@ public class FeatureTypeTest_identifierFor {
         final Method method = SomeDomainClass.class.getMethod("getABigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(SomeDomainClass.class, method);
         assertThat(identifierFor.getMemberName(), is("ABigDecimal")); // very
-                                                                      // odd
-                                                                      // compared
-                                                                      // to
-                                                                      // anotherBigDecimal,
-                                                                      // but
-                                                                      // arises
-                                                                      // from
-                                                                      // Introspector
-                                                                      // class,
-                                                                      // so
-                                                                      // presumably
-                                                                      // part of
-                                                                      // the
-                                                                      // javabeans
-                                                                      // spec.
+        // odd
+        // compared
+        // to
+        // anotherBigDecimal,
+        // but
+        // arises
+        // from
+        // Introspector
+        // class,
+        // so
+        // presumably
+        // part of
+        // the
+        // javabeans
+        // spec.
     }
 
     @Test

@@ -107,11 +107,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                     final List<Object> selectedPojos = _Lists.transform(selectedMementos, stream->stream
                             .map((@Nullable final ObjectAdapterMemento input) -> {
-                                    if(input == null) {
-                                        return null;
-                                    }
-                                    final ObjectAdapter objectAdapter = input.getObjectAdapter();
-                                    return objectAdapter != null ? objectAdapter.getPojo() : null;
+                                if(input == null) {
+                                    return null;
+                                }
+                                final ObjectAdapter objectAdapter = input.getObjectAdapter();
+                                return objectAdapter != null ? objectAdapter.getPojo() : null;
                             })
                             .filter(_NullSafe::isPresent)
                             );

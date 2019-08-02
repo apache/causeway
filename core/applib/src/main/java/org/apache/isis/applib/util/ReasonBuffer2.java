@@ -50,7 +50,7 @@ public class ReasonBuffer2 {
         public static ConditionAndReason create(final Condition condition, final String reason) {
             return reason != null
                     ? new ConditionAndReason(condition, reason)
-                    : null;
+                            : null;
         }
 
         private ConditionAndReason(final Condition condition, final String reason) {
@@ -219,6 +219,7 @@ public class ReasonBuffer2 {
             return new ReasonBuffer2(mode, prefix);
         }
 
+        @Override
         public String toString() {
             return "ReasonBuffer2.ReasonBuffer2Builder(mode=" + this.mode + ", prefix=" + this.prefix + ")";
         }

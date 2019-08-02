@@ -39,17 +39,17 @@ import domainapp.modules.simple.dom.types.Name;
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "simple.SimpleObjects"
-)
+        )
 public class SimpleObjects {
 
     public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {
-		private static final long serialVersionUID = 1L;}
-    
+        private static final long serialVersionUID = 1L;}
+
     @Action(domainEvent = CreateDomainEvent.class)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public SimpleObject create(
             @Name final String name
-    ) {
+            ) {
         return repositoryService.persist(SimpleObject.ofName(name));
     }
 
@@ -57,22 +57,22 @@ public class SimpleObjects {
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, promptStyle = PromptStyle.DIALOG_SIDEBAR)
     public List<SimpleObject> findByName(
             @Name final String name
-    ) {
+            ) {
         JDOQLTypedQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject cand = QSimpleObject.candidate();
         q = q.filter(
                 cand.name.indexOf(q.stringParameter("name")).ne(-1)
-        );
+                );
         return q.setParameter("name", name)
                 .executeList();
     }
 
     public SimpleObject findByNameExact(final String name) {
-    	JDOQLTypedQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+        JDOQLTypedQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject cand = QSimpleObject.candidate();
         q = q.filter(
                 cand.name.eq(q.stringParameter("name"))
-        );
+                );
         return q.setParameter("name", name)
                 .executeUnique();
     }

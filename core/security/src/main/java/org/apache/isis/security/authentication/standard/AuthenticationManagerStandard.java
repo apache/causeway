@@ -47,14 +47,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     private final Map<String, String> userByValidationCode = _Maps.newHashMap();
     private final List<Authenticator> authenticators = _Lists.newArrayList();
     private RandomCodeGenerator randomCodeGenerator;
-    
+
     private @Inject ServiceRegistry serviceRegistry;
-    
+
     @PostConstruct
     public void preInit() {
         serviceRegistry.select(Authenticator.class).forEach(authenticators::add);
     }
-    
+
 
     // //////////////////////////////////////////////////////////
     // init
@@ -101,7 +101,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // Session Management (including authenticate)
     // //////////////////////////////////////////////////////////
 
-    
+
     @Override
     public synchronized final AuthenticationSession authenticate(final AuthenticationRequest request) {
         if (request == null) {
@@ -132,14 +132,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return code;
     }
 
-    
+
     @Override
     public final boolean isSessionValid(final AuthenticationSession session) {
         final String userName = userByValidationCode.get(session.getValidationCode());
         return session.hasUserNameOf(userName);
     }
 
-    
+
     @Override
     public void closeSession(final AuthenticationSession session) {
         List<Authenticator> authenticators = getAuthenticators();
@@ -153,23 +153,23 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // Authenticators
     // //////////////////////////////////////////////////////////
 
-    
+
     public final void addAuthenticator(final Authenticator authenticator) {
         authenticators.add(authenticator);
     }
 
-    
+
     public void addAuthenticatorToStart(final Authenticator authenticator) {
         authenticators.add(0, authenticator);
     }
 
-    
+
     public List<Authenticator> getAuthenticators() {
         return Collections.unmodifiableList(authenticators);
     }
 
 
-    
+
     @Override
     public boolean register(final RegistrationDetails registrationDetails) {
         for (final Registrar registrar : getRegistrars()) {
@@ -180,7 +180,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return false;
     }
 
-    
+
     @Override
     public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
         for (final Registrar registrar : getRegistrars()) {
@@ -191,7 +191,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return false;
     }
 
-    
+
     public List<Registrar> getRegistrars() {
         return asAuthenticators(getAuthenticators());
     }
@@ -225,7 +225,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
             ToString.<AuthenticationManagerStandard>toString("class", obj->obj.getClass().getSimpleName())
             .thenToString("authenticators", obj->""+obj.authenticators.size())
             .thenToString("users", obj->""+obj.userByValidationCode.size());
-    
+
     @Override
     public String toString() {
         return toString.toString(this);

@@ -31,13 +31,13 @@ import lombok.RequiredArgsConstructor;
 public class BlobDemo_downloadLogo  {
 
     private final BlobDemo holder;
-    
+
     // -- EDITABLE
-    
+
     @Action(associateWith = "logo")
     @ActionLayout(position = Position.PANEL)
     public Blob $$() {
         return holder.getLogo();
     }
-    
+
 }

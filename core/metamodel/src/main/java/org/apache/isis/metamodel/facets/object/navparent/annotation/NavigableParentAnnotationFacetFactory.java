@@ -157,6 +157,6 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
 
         }));
     }
-    
+
 
 }

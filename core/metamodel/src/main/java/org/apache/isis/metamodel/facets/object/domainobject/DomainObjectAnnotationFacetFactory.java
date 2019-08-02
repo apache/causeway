@@ -259,14 +259,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         // check from @DomainObject(objectType=...)
         Facet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjects, facetHolder);
 
-//FIXME [2033] removed here (module 'metamodel'), should be re-implemented in 'jdo-common'         
+        //FIXME [2033] removed here (module 'metamodel'), should be re-implemented in 'jdo-common'         
         // else check for @PersistenceCapable(schema=...)
-//        if(facet == null) {
-//            final JdoPersistenceCapableFacet jdoPersistenceCapableFacet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
-//            if(jdoPersistenceCapableFacet != null) {
-//                facet = ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder);
-//            }
-//        }
+        //        if(facet == null) {
+        //            final JdoPersistenceCapableFacet jdoPersistenceCapableFacet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
+        //            if(jdoPersistenceCapableFacet != null) {
+        //                facet = ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder);
+        //            }
+        //        }
 
         // then add
         FacetUtil.addFacet(facet);
@@ -471,7 +471,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
         .findFirst()
         .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent))
+                holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
 
     }
@@ -482,7 +482,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
         .findFirst()
         .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent))
+                holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -492,7 +492,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
         .findFirst()
         .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent))
+                holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 

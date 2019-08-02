@@ -67,7 +67,7 @@ enum Oid_State {
             throw _Exceptions.unmatchedCase(this);
         }
     }
-    
+
     public Bookmark bookmarkOf(RootOid rootOid) {
         final String objectType = asBookmarkObjectState().getCode() + rootOid.getObjectSpecId().asString();
         final String identifier = rootOid.getIdentifier();
@@ -89,5 +89,5 @@ enum Oid_State {
 
         return oidDto;
     }
-    
+
 }

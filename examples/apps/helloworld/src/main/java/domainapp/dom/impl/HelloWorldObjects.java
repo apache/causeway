@@ -38,7 +38,7 @@ import domainapp.dom.types.Name;
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "helloworld.HelloWorldObjects"
-)
+        )
 public class HelloWorldObjects {
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
@@ -56,11 +56,11 @@ public class HelloWorldObjects {
     @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
     public List<HelloWorldObject> findByName(
             @Name final String name) {
-    	JDOQLTypedQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
+        JDOQLTypedQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
         final QHelloWorldObject cand = QHelloWorldObject.candidate();
         q = q.filter(
                 cand.name.indexOf(q.stringParameter("name")).ne(-1)
-        );
+                );
         return q.setParameter("name", name)
                 .executeList();
     }

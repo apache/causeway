@@ -61,20 +61,20 @@ public class Dto_downloadXsd {
             )
     @MemberOrder(sequence = "500.2")
     public Object act(
-    		
-    		// PARAM 0
-    		@ParameterLayout(
-            		named = MixinConstants.FILENAME_PROPERTY_NAME,
-            		describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+
+            // PARAM 0
+            @ParameterLayout(
+                    named = MixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-            
+
             // PARAM 1
             final JaxbService.IsisSchemas isisSchemas) {
 
         val schemaMap = jaxbService.toXsd(holder, isisSchemas);
 
         if(schemaMap.isEmpty()) {
-        	val msg = String.format(
+            val msg = String.format(
                     "No schemas were generated for %s; programming error?", 
                     holder.getClass().getName());
             messageService.warnUser(msg);
@@ -87,39 +87,39 @@ public class Dto_downloadXsd {
         }
 
         val zipWriter = ZipWriter.newInstance();
-        
+
         for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
             val namespaceUri = entry.getKey();
             val schemaText = entry.getValue();
             zipWriter.nextEntry(zipEntryNameFor(namespaceUri), writer->{
-            	writer.write(schemaText);
+                writer.write(schemaText);
             });
         }
-            
+
         return BlobClobFactory.blobZip(fileName, zipWriter.toBytes());
 
     }
 
     // -- PARAM 0
-    
+
     public String default0Act() {
         return holder.getClass().getName();
     }
 
     // -- PARAM 1
-    
+
     public JaxbService.IsisSchemas default1Act() {
         return JaxbService.IsisSchemas.IGNORE;
     }
 
     // -- HELPER
-    
+
     private static String zipEntryNameFor(final String namespaceUri) {
         return namespaceUri + ".xsd";
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject MessageService messageService;
     @Inject JaxbService jaxbService;
 }

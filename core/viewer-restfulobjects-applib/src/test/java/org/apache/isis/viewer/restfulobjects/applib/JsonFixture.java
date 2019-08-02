@@ -35,9 +35,9 @@ public class JsonFixture {
 
     public static JsonNode readJson(final String resourceName) 
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         String json = _Resources.loadAsString(JsonFixture.class, resourceName, StandardCharsets.UTF_8);
-        
+
         return JsonMapper.instance().read(json, JsonNode.class);
     }
 

@@ -86,7 +86,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         super.onInitialize();
         buildGui();
     }
-    
+
     private void buildGui() {
 
         final List<IColumn<ObjectAdapter,String>> columns = _Lists.newArrayList();
@@ -110,14 +110,14 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
                 model.getParentObjectAdapterMemento(), 
                 getSettings().getMaxTitleLengthInParentedTables(), 
                 getSettings().getMaxTitleLengthInStandaloneTables());
-        
+
         addPropertyColumnsIfRequired(columns);
 
         final CollectionContentsSortableDataProvider dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
         dataTable.honourHints();
-        
+
         if(toggleboxColumn != null) {
             final OnConcurrencyExceptionHandler handler2 = new OnConcurrencyExceptionHandler() {
 
@@ -171,9 +171,9 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
     private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
         final ObjectSpecification typeOfSpec = getModel().getTypeOfSpecification();
 
-        
+
         final Comparator<String> propertyIdComparator;
-        
+
         // same code also appears in EntityPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
         // one object of that type has been rendered via EntityPage.
@@ -186,7 +186,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
             final ObjectAdapter objectAdapterIfAny = entityModel != null ? entityModel.getObject() : null;
             final Grid grid = gridFacet.getGrid(objectAdapterIfAny);
 
-            
+
             final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
             grid.getAllPropertiesById().forEach((propertyId, __)->{
                 propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
@@ -198,10 +198,10 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
             // propertyId (String) in natural order
             propertyIdComparator = Comparator
                     .<String>comparingInt(propertyId->
-                        propertyIdOrderWithinGrid.getOrDefault(propertyId, Integer.MAX_VALUE))
+                    propertyIdOrderWithinGrid.getOrDefault(propertyId, Integer.MAX_VALUE))
                     .thenComparing(Comparator.naturalOrder());
-            
-            
+
+
         } else {
             propertyIdComparator = null;
         }
@@ -216,51 +216,51 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
                 ? getModel().getParentObjectAdapterMemento().getObjectAdapter().getSpecification()
                         : null;
 
-        final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
-                .and((final ObjectAssociation association)->{
-                    final Stream<Facet> facets = association.streamFacets()
-                            .filter((final Facet facet)->
-                                facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
-                    return !facets
-                    .map(facet->(WhereValueFacet) facet)
-                    .anyMatch(wawF->wawF.where().includes(whereContext));
-                    
-                })
-                .and(associationDoesNotReferenceParent(parentSpecIfAny));
+                final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
+                        .and((final ObjectAssociation association)->{
+                            final Stream<Facet> facets = association.streamFacets()
+                                    .filter((final Facet facet)->
+                                    facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
+                            return !facets
+                                    .map(facet->(WhereValueFacet) facet)
+                                    .anyMatch(wawF->wawF.where().includes(whereContext));
 
-        final Stream<? extends ObjectAssociation> propertyList = 
-                typeOfSpec.streamAssociations(Contributed.INCLUDED)
-                .filter(predicate);
+                        })
+                        .and(associationDoesNotReferenceParent(parentSpecIfAny));
 
-        final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();
-        propertyList.forEach(property->
-            propertyById.put(property.getId(), property));
+                final Stream<? extends ObjectAssociation> propertyList = 
+                        typeOfSpec.streamAssociations(Contributed.INCLUDED)
+                        .filter(predicate);
 
-        List<String> propertyIds = _Lists.newArrayList(propertyById.keySet());
-        
-        if(propertyIdComparator!=null) {
-            propertyIds.sort(propertyIdComparator);   
-        }
-        
-        // optional SPI to reorder
-        final Bin<TableColumnOrderService> tableColumnOrderServices =
-                getServiceRegistry().select(TableColumnOrderService.class);
+                final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();
+                propertyList.forEach(property->
+                propertyById.put(property.getId(), property));
 
-        for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
-            final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
-            if(propertyReorderedIds != null) {
-                propertyIds = propertyReorderedIds;
-                break;
-            }
-        }
+                List<String> propertyIds = _Lists.newArrayList(propertyById.keySet());
 
-        for (final String propertyId : propertyIds) {
-            final ObjectAssociation property = propertyById.get(propertyId);
-            if(property != null) {
-                final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
-                columns.add(nopc);
-            }
-        }
+                if(propertyIdComparator!=null) {
+                    propertyIds.sort(propertyIdComparator);   
+                }
+
+                // optional SPI to reorder
+                final Bin<TableColumnOrderService> tableColumnOrderServices =
+                        getServiceRegistry().select(TableColumnOrderService.class);
+
+                for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
+                    final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
+                    if(propertyReorderedIds != null) {
+                        propertyIds = propertyReorderedIds;
+                        break;
+                    }
+                }
+
+                for (final String propertyId : propertyIds) {
+                    final ObjectAssociation property = propertyById.get(propertyId);
+                    if(property != null) {
+                        final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
+                        columns.add(nopc);
+                    }
+                }
     }
 
     private List<String> reordered(
@@ -311,7 +311,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         final String parentTypeName = property.getOnType().getSpecId().asString();
         final String describedAs = mapIfPresentElse(property.getFacet(DescribedAsFacet.class), 
                 DescribedAsFacet::value, null);
-        
+
         return new ObjectAdapterPropertyColumn(
                 getModel().getType(), 
                 Model.of(property.getName()), 

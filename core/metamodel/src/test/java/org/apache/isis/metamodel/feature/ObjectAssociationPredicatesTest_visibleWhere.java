@@ -50,7 +50,7 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
+
     @Mock
     private ObjectAssociation mockObjectAssociation;
 
@@ -66,29 +66,29 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
     // then
     private boolean expectedVisibility;
 
-    
+
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {Where.ANYWHERE, Where.ANYWHERE, false},
-                {Where.OBJECT_FORMS, Where.OBJECT_FORMS, false},
-                {Where.OBJECT_FORMS, Where.ALL_TABLES, true},
-                {Where.OBJECT_FORMS, Where.PARENTED_TABLES, true},
-                {Where.OBJECT_FORMS, Where.REFERENCES_PARENT, true},
-                {Where.OBJECT_FORMS, Where.STANDALONE_TABLES, true},
-                {Where.STANDALONE_TABLES, Where.OBJECT_FORMS, true},
-                {Where.STANDALONE_TABLES, Where.PARENTED_TABLES, true},
-                {Where.STANDALONE_TABLES, Where.REFERENCES_PARENT, true},
-                {Where.STANDALONE_TABLES, Where.STANDALONE_TABLES, false},
-                {Where.PARENTED_TABLES, Where.OBJECT_FORMS, true},
-                {Where.PARENTED_TABLES, Where.PARENTED_TABLES, false},
-                {Where.PARENTED_TABLES, Where.REFERENCES_PARENT, true},
-                {Where.PARENTED_TABLES, Where.STANDALONE_TABLES, true},
-                {Where.ALL_TABLES, Where.OBJECT_FORMS, true},
-                {Where.ALL_TABLES, Where.PARENTED_TABLES, false},
-                {Where.ALL_TABLES, Where.STANDALONE_TABLES, false},
-                {Where.ALL_TABLES, Where.REFERENCES_PARENT, true},
-                });
+            {Where.ANYWHERE, Where.ANYWHERE, false},
+            {Where.OBJECT_FORMS, Where.OBJECT_FORMS, false},
+            {Where.OBJECT_FORMS, Where.ALL_TABLES, true},
+            {Where.OBJECT_FORMS, Where.PARENTED_TABLES, true},
+            {Where.OBJECT_FORMS, Where.REFERENCES_PARENT, true},
+            {Where.OBJECT_FORMS, Where.STANDALONE_TABLES, true},
+            {Where.STANDALONE_TABLES, Where.OBJECT_FORMS, true},
+            {Where.STANDALONE_TABLES, Where.PARENTED_TABLES, true},
+            {Where.STANDALONE_TABLES, Where.REFERENCES_PARENT, true},
+            {Where.STANDALONE_TABLES, Where.STANDALONE_TABLES, false},
+            {Where.PARENTED_TABLES, Where.OBJECT_FORMS, true},
+            {Where.PARENTED_TABLES, Where.PARENTED_TABLES, false},
+            {Where.PARENTED_TABLES, Where.REFERENCES_PARENT, true},
+            {Where.PARENTED_TABLES, Where.STANDALONE_TABLES, true},
+            {Where.ALL_TABLES, Where.OBJECT_FORMS, true},
+            {Where.ALL_TABLES, Where.PARENTED_TABLES, false},
+            {Where.ALL_TABLES, Where.STANDALONE_TABLES, false},
+            {Where.ALL_TABLES, Where.REFERENCES_PARENT, true},
+        });
     }
 
     public ObjectAssociationPredicatesTest_visibleWhere(
@@ -97,7 +97,7 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
         this.whereContext = context;
         this.expectedVisibility = visible;
     }
-    
+
     @Before
     public void setUp() throws Exception {
         context.checking(new Expectations(){{
@@ -109,19 +109,19 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
         }});
     }
 
-//    private Matcher<Class<? extends Facet>> subclassOf(final Class<?> cls) {
-//        return new TypeSafeMatcher<Class<? extends Facet>>() {
-//            @Override
-//            protected boolean matchesSafely(final Class<? extends Facet> item) {
-//                return cls.isAssignableFrom(cls);
-//            }
-//
-//            @Override
-//            public void describeTo(final Description description) {
-//                description.appendText("subclass of " + cls.getName());
-//            }
-//        };
-//    }
+    //    private Matcher<Class<? extends Facet>> subclassOf(final Class<?> cls) {
+    //        return new TypeSafeMatcher<Class<? extends Facet>>() {
+    //            @Override
+    //            protected boolean matchesSafely(final Class<? extends Facet> item) {
+    //                return cls.isAssignableFrom(cls);
+    //            }
+    //
+    //            @Override
+    //            public void describeTo(final Description description) {
+    //                description.appendText("subclass of " + cls.getName());
+    //            }
+    //        };
+    //    }
 
     @Test
     public void test() {

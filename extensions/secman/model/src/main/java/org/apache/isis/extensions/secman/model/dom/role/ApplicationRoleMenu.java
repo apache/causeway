@@ -39,38 +39,38 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isissecurity.ApplicationRoleMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-)
+        )
 public class  ApplicationRoleMenu {
 
     // -- domain event classes
     public static class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationRoleMenu, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationRoleMenu, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationRoleMenu> {
-		private static final long serialVersionUID = 1L;}
-    
+        private static final long serialVersionUID = 1L;}
+
 
     // -- iconName
     public String iconName() {
         return "applicationRole";
     }
-    
+
 
     // -- findRoles
     public static class FindRolesDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = FindRolesDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @MemberOrder(sequence = "100.20.1")
     public List<? extends ApplicationRole> findRoles(
             @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
@@ -78,16 +78,16 @@ public class  ApplicationRoleMenu {
             final String search) {
         return applicationRoleRepository.findNameContaining(search);
     }
-    
+
 
     // -- newRole
     public static class NewRoleDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = NewRoleDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(sequence = "100.20.2")
     public ApplicationRole newRole(
             @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
@@ -98,21 +98,21 @@ public class  ApplicationRoleMenu {
             final String description) {
         return applicationRoleRepository.newRole(name, description);
     }
-    
+
 
     // -- allRoles
     public static class AllRolesDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllRolesDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @MemberOrder(sequence = "100.20.3")
     public List<? extends ApplicationRole> allRoles() {
         return applicationRoleRepository.allRoles();
     }
-    
+
     // -- DEPENDENCIES
 
     @Inject ApplicationRoleRepository applicationRoleRepository;

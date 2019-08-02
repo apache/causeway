@@ -28,16 +28,16 @@ public class StandaloneMarkupPanel extends PanelAbstract<ValueModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_STANDALONE_VALUE = "standaloneValue";
-      
+
     public StandaloneMarkupPanel(
             String id, 
             ValueModel valueModel, 
             MarkupComponentFactory markupComponentFactory) {
-        
+
         super(id, valueModel);
         val markupComponent = markupComponentFactory
                 .newMarkupComponent(ID_STANDALONE_VALUE, getModel());
         add(markupComponent);
     }
-    
+
 }

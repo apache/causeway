@@ -34,15 +34,15 @@ final class _Config_trim {
     static Map<String, String> trim(Map<String, String> map) {
 
         val trimmed = _Maps.<String, String> newHashMap();
-        
+
         map.forEach((k, v)->{
-            
+
             if(v!=null) {
                 trimmed.put(k, v.trim());
             }
-            
+
         });
-        
+
         return trimmed;
     }
 

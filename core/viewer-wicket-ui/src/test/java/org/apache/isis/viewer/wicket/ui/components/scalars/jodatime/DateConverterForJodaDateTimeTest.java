@@ -51,34 +51,34 @@ public class DateConverterForJodaDateTimeTest {
             }
         });
     }
-    
-    
+
+
     @Test
     public void roundtripWhenParsingDateFormat() {
         final DateConverterForJodaDateTime converter = new DateConverterForJodaDateTime(settings, 0);
         final DateTime dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(new DateTime(2013, 05, 11, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateTimeFormat() {
         final DateConverterForJodaDateTime converter = new DateConverterForJodaDateTime(settings, 0);
         final DateTime dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(new DateTime(2013, 05, 11, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateFormatWithAdjustBy() {
         final DateConverterForJodaDateTime converter = new DateConverterForJodaDateTime(settings, -1);
         final DateTime dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(new DateTime(2013, 05, 12, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
@@ -88,10 +88,10 @@ public class DateConverterForJodaDateTimeTest {
         final DateConverterForJodaDateTime converter = new DateConverterForJodaDateTime(settings, -1);
         final DateTime dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(new DateTime(2013, 05, 12, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
 
 }

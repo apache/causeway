@@ -26,7 +26,7 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRul
 
 public class IsisModuleSecurityAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-	private String[] adminStickyPackagePermissions;
+    private String[] adminStickyPackagePermissions;
 
     public IsisModuleSecurityAdminRoleAndPermissions(SecurityModuleConfig configBean) {
         super(configBean.getAdminRoleName(), "Administer security");
@@ -43,9 +43,9 @@ public class IsisModuleSecurityAdminRoleAndPermissions extends AbstractRoleAndPe
 
     public static boolean oneOf(SecurityModuleConfig configBean, String featureFqn) {
         for(String stickyPackage : configBean.getAdminStickyPackagePermissions()) {
-        	if(Objects.equals(featureFqn, stickyPackage)) {
-        		return true;
-        	}
+            if(Objects.equals(featureFqn, stickyPackage)) {
+                return true;
+            }
         }
         return false;
     }

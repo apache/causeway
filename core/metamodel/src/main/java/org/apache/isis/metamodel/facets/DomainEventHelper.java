@@ -53,22 +53,22 @@ public class DomainEventHelper {
         val eventService = serviceRegistry.lookupServiceElseFail(MetamodelEventService.class);
         return ofEventService(eventService);
     }
-    
+
     private final MetamodelEventService metamodelEventService;
 
     // -- postEventForAction, newActionDomainEvent
-    
+
     public <S> ActionDomainEvent<S> postEventForAction(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends ActionDomainEvent<S>> eventType,
-            final ActionDomainEvent<S> existingEvent,
-            final ObjectAction objectAction,
-            final IdentifiedHolder identified,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
-            final ManagedObject[] argumentAdapters,
-            final Command command,
-            final ObjectAdapter resultAdapter) {
+                    final ActionDomainEvent<S> existingEvent,
+                    final ObjectAction objectAction,
+                    final IdentifiedHolder identified,
+                    final ManagedObject targetAdapter,
+                    final ManagedObject mixedInAdapter,
+                    final ManagedObject[] argumentAdapters,
+                    final Command command,
+                    final ObjectAdapter resultAdapter) {
 
         try {
             final ActionDomainEvent<S> event;
@@ -93,7 +93,7 @@ public class DomainEventHelper {
                     event.setActionSemantics(objectAction.getSemantics());
 
                     final List<ObjectActionParameter> parameters = objectAction.getParameters();
-                    
+
                     final List<String> parameterNames = parameters.stream()
                             .map(ObjectActionParameter.Functions.GET_NAME)
                             .collect(Collectors.toList());
@@ -101,8 +101,8 @@ public class DomainEventHelper {
                     final List<Class<?>> parameterTypes = parameters.stream()
                             .map(ObjectActionParameter.Functions.GET_TYPE)
                             .collect(Collectors.toList());
-                    
-                    
+
+
                     event.setParameterNames(Collections.unmodifiableList(parameterNames));
                     event.setParameterTypes(Collections.unmodifiableList(parameterTypes));
                 }
@@ -176,12 +176,12 @@ public class DomainEventHelper {
     public <S, T> PropertyDomainEvent<S, T> postEventForProperty(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends PropertyDomainEvent<S, T>> eventType,
-            final PropertyDomainEvent<S, T> existingEvent,
-            final IdentifiedHolder identified,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
-            final T oldValue,
-            final T newValue) {
+                    final PropertyDomainEvent<S, T> existingEvent,
+                    final IdentifiedHolder identified,
+                    final ManagedObject targetAdapter,
+                    final ManagedObject mixedInAdapter,
+                    final T oldValue,
+                    final T newValue) {
 
         try {
             final PropertyDomainEvent<S, T> event;
@@ -272,12 +272,12 @@ public class DomainEventHelper {
     public <S, T> CollectionDomainEvent<S, T> postEventForCollection(
             AbstractDomainEvent.Phase phase,
             final Class<? extends CollectionDomainEvent<S, T>> eventType,
-            final CollectionDomainEvent<S, T> existingEvent,
-            final IdentifiedHolder identified,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
-            final CollectionDomainEvent.Of of,
-            final T reference) {
+                    final CollectionDomainEvent<S, T> existingEvent,
+                    final IdentifiedHolder identified,
+                    final ManagedObject targetAdapter,
+                    final ManagedObject mixedInAdapter,
+                    final CollectionDomainEvent.Of of,
+                    final T reference) {
         try {
             final CollectionDomainEvent<S, T> event;
             if (existingEvent != null && phase.isExecuted()) {

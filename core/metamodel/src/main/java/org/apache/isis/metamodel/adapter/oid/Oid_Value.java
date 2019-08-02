@@ -28,9 +28,9 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.OidDto;
 
 final class Oid_Value implements RootOid {
-    
+
     private final static long serialVersionUID = 1L;
-    
+
     static final Oid_Value INSTANCE = new Oid_Value();
 
     @Override
@@ -56,7 +56,7 @@ final class Oid_Value implements RootOid {
     public boolean isValue() { 
         return true; 
     }
-    
+
     @Override
     public boolean isTransient() {
         return false;
@@ -85,12 +85,12 @@ final class Oid_Value implements RootOid {
     public String getIdentifier() {
         return null;
     }
-    
+
     @Override
     public String toString() {
         return "VALUE_OID";
     }
-    
+
     @Override
     public int hashCode() {
         return 0;

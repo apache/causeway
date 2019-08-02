@@ -35,7 +35,7 @@ implements PropertySetterFacet {
                     final PropertySetterFacet setterFacet,
                     final PropertyDomainEventFacetAbstract propertyInteractionFacet,
                     final FacetHolder holder) {
-        
+
         super(PropertySetterFacet.class, eventType, getterFacet, setterFacet, null, propertyInteractionFacet,  holder);
     }
 }

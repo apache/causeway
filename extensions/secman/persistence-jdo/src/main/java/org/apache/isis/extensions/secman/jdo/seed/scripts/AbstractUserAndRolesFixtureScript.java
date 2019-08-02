@@ -73,12 +73,12 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
         if(applicationUser == null) {
             final boolean enabled = true;
             switch (accountType) {
-                case DELEGATED:
-                    applicationUser = applicationUserRepository.newDelegateUser(username, null , enabled);
-                    break;
-                case LOCAL:
-                    final Password pwd = new Password(password);
-                    applicationUser = applicationUserRepository.newLocalUser(username, pwd, pwd, null, enabled, emailAddress);
+            case DELEGATED:
+                applicationUser = applicationUserRepository.newDelegateUser(username, null , enabled);
+                break;
+            case LOCAL:
+                final Password pwd = new Password(password);
+                applicationUser = applicationUserRepository.newLocalUser(username, pwd, pwd, null, enabled, emailAddress);
             }
 
             // update tenancy (repository checks for null)
@@ -86,17 +86,17 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
             for (final String roleName : roleNames) {
                 final ApplicationRole securityRole = applicationRoleRepository.findByName(roleName);
-                
+
                 if(securityRole!=null) {
                     applicationUser.addRole(securityRole);    
                 } else {
-                    
+
                     System.err.println("role not found by name: "+roleName);
                     throw _Exceptions.unexpectedCodeReach();
-                    
+
                 }
-                
-               	
+
+
             }
         }
     }
@@ -115,6 +115,6 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
     ApplicationUserRepository applicationUserRepository;
     @Inject
     ApplicationRoleRepository applicationRoleRepository;
-    
+
 
 }

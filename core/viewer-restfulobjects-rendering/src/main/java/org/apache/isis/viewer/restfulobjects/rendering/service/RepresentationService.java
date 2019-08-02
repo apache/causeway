@@ -91,5 +91,5 @@ public interface RepresentationService {
     interface Context extends RendererContext {
         ObjectAdapterLinkTo getAdapterLinkTo();
     }
-    
+
 }

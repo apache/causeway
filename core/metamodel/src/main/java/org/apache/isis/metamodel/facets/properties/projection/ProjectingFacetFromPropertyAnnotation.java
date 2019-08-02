@@ -45,11 +45,11 @@ public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstra
         }
         final Projecting projecting = property.projecting();
         switch (projecting) {
-            case PROJECTED:
-                return new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder);
-            case NOT_SPECIFIED:
-            default:
-                return null;
+        case PROJECTED:
+            return new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder);
+        case NOT_SPECIFIED:
+        default:
+            return null;
         }
 
     }

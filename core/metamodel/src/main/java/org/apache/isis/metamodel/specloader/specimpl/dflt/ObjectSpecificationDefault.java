@@ -100,7 +100,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
         this.isManagedBean = isManagedBean;
-        
+
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
 
         facetProcessor.processObjectSpecId(correspondingClass, this);
@@ -109,10 +109,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     @Override
     protected void introspectTypeHierarchy() {
 
-            facetedMethodsBuilder.introspectClass();
+        facetedMethodsBuilder.introspectClass();
 
         // name
-            addNamedFacetAndPluralFacetIfRequired();
+        addNamedFacetAndPluralFacetIfRequired();
 
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
@@ -132,7 +132,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
 
         // superclass
-            final Class<?> superclass = getCorrespondingClass().getSuperclass();
+        final Class<?> superclass = getCorrespondingClass().getSuperclass();
         loadSpecOfSuperclass(superclass);
 
         // walk superinterfaces
@@ -156,10 +156,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             }
         }
 
-            updateAsSubclassTo(interfaceSpecList);
-            updateInterfaces(interfaceSpecList);
-        }
+        updateAsSubclassTo(interfaceSpecList);
+        updateInterfaces(interfaceSpecList);
+    }
 
+    @Override
     protected synchronized void introspectMembers() {
 
         if(this.containsFacet(ValueFacet.class)) {
@@ -167,14 +168,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 log.debug("skipping full introspection for value type {}", getFullIdentifier());
             }
             return;
-    }
+        }
 
         // associations and actions
-            final List<ObjectAssociation> associations = createAssociations();
-            sortAndUpdateAssociations(associations);
+        final List<ObjectAssociation> associations = createAssociations();
+        sortAndUpdateAssociations(associations);
 
-            final List<ObjectAction> actions = createActions();
-            sortCacheAndUpdateActions(actions);
+        final List<ObjectAction> actions = createActions();
+        sortCacheAndUpdateActions(actions);
 
         postProcess();
     }
@@ -305,18 +306,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final Stream<ObjectAction> candidateActions,
             final String actionName,
             final List<ObjectSpecification> parameters) {
-        
+
         return candidateActions
-            .filter(action->actionName == null || actionName.equals(action.getId()))
-            .filter(action->isMatchingSignature(parameters, action.getParameters()))
-            .findAny()
-            .orElse(null);
+                .filter(action->actionName == null || actionName.equals(action.getId()))
+                .filter(action->isMatchingSignature(parameters, action.getParameters()))
+                .findAny()
+                .orElse(null);
     }
-    
+
     private static  boolean isMatchingSignature(
             final List<ObjectSpecification> a,
             final List<ObjectActionParameter> b) {
-        
+
         if(a.size() != b.size()) {
             return false;
         }
@@ -331,11 +332,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private static ObjectAction firstAction(
             final Stream<ObjectAction> candidateActions,
             final String id) {
-        
+
         if (id == null) {
             return null;
         }
-        
+
         return candidateActions
                 .filter(action->{
                     final Identifier identifier = action.getIdentifier();
@@ -395,9 +396,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             });
         });
     }
-    
+
     // -- toString
-    
+
     @Override
     public String toString() {
         final ToString str = new ToString(this);
@@ -408,21 +409,21 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     // -- ELEMENT SPECIFICATION
-    
+
     private final _Lazy<ObjectSpecification> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
-    
+
     @Override
     public ObjectSpecification getElementSpecification() {
         return elementSpecification.get();
     }
-    
+
     private ObjectSpecification lookupElementSpecification() {
         return mapIfPresentElse(
                 getFacet(TypeOfFacet.class), 
                 typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType(), 
                 null);
     }
-    
+
     // --
 
 }

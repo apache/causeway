@@ -32,7 +32,7 @@ import lombok.val;
 @DomainService(nature=NatureOfService.VIEW)
 @DomainObjectLayout(named="Error Handling")
 public class ErrorMenu {
-    
+
     @Inject private FactoryService factoryService;
 
     @Action
@@ -42,5 +42,5 @@ public class ErrorMenu {
         demo.initDefaults();
         return demo;
     }
-    
+
 }

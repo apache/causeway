@@ -76,7 +76,7 @@ public class ExceptionRecognizerCompositeTest {
         context.ignoring(mockServiceRegistry);
         context.ignoring(mockTranslationService);
     }
-    
+
     @Test
     public void whenEmpty() {
         assertThat(composite.recognize(new RuntimeException()), is(nullValue()));

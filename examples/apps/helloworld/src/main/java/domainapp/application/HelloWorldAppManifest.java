@@ -67,17 +67,17 @@ import domainapp.dom.HelloWorldModule;
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class HelloWorldAppManifest {
-    
-   @Bean @Singleton
-   public WebAppConfigBean webAppConfigBean() {
-       return WebAppConfigBean.builder()
-               .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-               .brandLogoHeader("/images/apache-isis/logo-48x48.png")
-               .applicationCss("css/application.css")
-               .applicationJs("scripts/application.js")
-               .applicationName("Apache Isis Hello World App")
-               .faviconUrl("/images/favicon.png")
-               .build();
-   }
-   
+
+    @Bean @Singleton
+    public WebAppConfigBean webAppConfigBean() {
+        return WebAppConfigBean.builder()
+                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
+                .brandLogoHeader("/images/apache-isis/logo-48x48.png")
+                .applicationCss("css/application.css")
+                .applicationJs("scripts/application.js")
+                .applicationName("Apache Isis Hello World App")
+                .faviconUrl("/images/favicon.png")
+                .build();
+    }
+
 }

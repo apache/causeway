@@ -27,7 +27,7 @@ public class EncodableFacetFromConfiguration extends EncodableFacetAbstract {
     public EncodableFacetFromConfiguration(
             final String candidateEncoderDecoderName, 
             final FacetHolder holder) {
-        
+
         super(candidateEncoderDecoderName, null, holder);
     }
 }

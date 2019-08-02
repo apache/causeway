@@ -77,9 +77,9 @@ class IsisToWicketTreeAdapter {
         return new EntityTree(id, toITreeProvider(scalarModel), 
                 toIModelRepresentingCollapseExpandState(scalarModel));
     }
-    
+
     // -- FALLBACK
-    
+
     private static Component emptyTreeComponent(String id) {
         return new Label(id);
     }
@@ -386,7 +386,7 @@ class IsisToWicketTreeAdapter {
         @Override
         protected TreeModel load() {
 
-        	val rootOid = id;
+            val rootOid = id;
             val rootOidToAdapter = IsisContext.rootOidToAdapter();
 
             val objAdapter = rootOidToAdapter.apply(rootOid);

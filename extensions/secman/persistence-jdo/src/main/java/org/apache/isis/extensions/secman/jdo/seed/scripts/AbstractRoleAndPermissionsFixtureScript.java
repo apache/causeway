@@ -92,7 +92,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         newPermissions(rule, mode, ApplicationFeatureType.MEMBER, asFeatureFqns(cls, members));
     }
 
-    
+
 
 
     // -- helpers
@@ -114,10 +114,10 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
         for (String featureFqn : featureFqns) {
             // can't use role#addPackage because that does a check for existence of the package, which is
             // not guaranteed to exist yet (the SecurityFeatures#init() may not have run).
-        	
-        	((org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository)
-            applicationPermissionRepository)
-        	.newPermissionNoCheck(
+
+            ((org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository)
+                    applicationPermissionRepository)
+            .newPermissionNoCheck(
                     (org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole)securityRole,
                     rule,
                     mode,
@@ -127,24 +127,24 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
 
     private static List<String> asFeatureFqns(Class<?>[] classes) {
         return _NullSafe.stream(classes)
-        		.map(Class::getName)
-        		.collect(Collectors.toList());
+                .map(Class::getName)
+                .collect(Collectors.toList());
     }
 
     private static Iterable<String> asFeatureFqns(final Class<?> cls, final String[] members) {
-    	return _NullSafe.stream(members)
-        		.map(memberName->{
-        			val buf = new StringBuilder(cls.getName());
+        return _NullSafe.stream(members)
+                .map(memberName->{
+                    val buf = new StringBuilder(cls.getName());
                     if(!memberName.startsWith("#")) {
                         buf.append("#");
                     }
                     buf.append(memberName);
                     return buf.toString();
-        		})
-        		.collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
     }
 
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject ApplicationPermissionRepository applicationPermissionRepository;
-    
+
 }

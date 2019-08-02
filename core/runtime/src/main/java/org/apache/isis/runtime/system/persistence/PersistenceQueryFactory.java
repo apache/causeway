@@ -38,9 +38,9 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(staticName = "of") @Log4j2
 public class PersistenceQueryFactory {
 
-	private final Function<Object, ObjectAdapter> adapterProvider;
-	private final SpecificationLoader specificationLoader;
-    
+    private final Function<Object, ObjectAdapter> adapterProvider;
+    private final SpecificationLoader specificationLoader;
+
     /**
      * Converts the {@link org.apache.isis.applib.query.Query applib representation of a query} into the
      * {@link PersistenceQuery NOF-internal representation}.

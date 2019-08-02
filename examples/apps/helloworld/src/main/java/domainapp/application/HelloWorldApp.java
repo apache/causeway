@@ -37,15 +37,15 @@ import org.apache.isis.config.Presets;
 })
 public class HelloWorldApp extends SpringBootServletInitializer {
 
-	/**
-	 * 
-	 * @param args
-	 * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
-	 * entry point by searching for classes having a {@code main(...)}
-	 */
-	public static void main(String[] args) {
-	    Presets.prototyping();
-		SpringApplication.run(new Class[] { HelloWorldApp.class }, args);
-	}
+    /**
+     * 
+     * @param args
+     * @implNote this is to support the <em>Spring Boot Maven Plugin</em>, which auto-detects an 
+     * entry point by searching for classes having a {@code main(...)}
+     */
+    public static void main(String[] args) {
+        Presets.prototyping();
+        SpringApplication.run(new Class[] { HelloWorldApp.class }, args);
+    }
 
 }

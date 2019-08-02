@@ -29,36 +29,36 @@ import lombok.val;
 
 @ViewModel
 public class TreeDemo extends DemoStub {
-	
-	// this is the actual view model rendered by the framework
-	private final static TreeNode<FileNode> createTree() {
-    	val root = FileNodeFactory.defaultRoot();
-    	val tree = TreeNode.lazy(root, FileSystemTreeAdapter.class);
-    	tree.expand(TreePath.of(0)); // expand the root node
-    	return tree;
-	}
 
-	
-	/**
-	 * @return the demo tree view model as a property  
-	 */
-	public TreeNode<FileNode> getFileSystemTree() {
-    	return createTree();
-	}
-
-	/**
-	 * 
-	 * @return the demo tree view model for standalone rendering (as action result)
-	 */
-	@Action
-	@ActionLayout(cssClassFa="fa-tree")
-	public TreeNode<FileNode> standalone(){
-    	return createTree();
-	}
-	
-	@Override
-    public void initDefaults() {
-        
+    // this is the actual view model rendered by the framework
+    private final static TreeNode<FileNode> createTree() {
+        val root = FileNodeFactory.defaultRoot();
+        val tree = TreeNode.lazy(root, FileSystemTreeAdapter.class);
+        tree.expand(TreePath.of(0)); // expand the root node
+        return tree;
     }
-	
+
+
+    /**
+     * @return the demo tree view model as a property  
+     */
+    public TreeNode<FileNode> getFileSystemTree() {
+        return createTree();
+    }
+
+    /**
+     * 
+     * @return the demo tree view model for standalone rendering (as action result)
+     */
+    @Action
+    @ActionLayout(cssClassFa="fa-tree")
+    public TreeNode<FileNode> standalone(){
+        return createTree();
+    }
+
+    @Override
+    public void initDefaults() {
+
+    }
+
 }

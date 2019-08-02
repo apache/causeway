@@ -41,7 +41,7 @@ public interface Authorizor extends ApplicationScopedComponent {
     boolean isUsableInRole(final String role, final Identifier identifier);
 
     // -- NOP IMPLEMENTATIOn 
-    
+
     final static Authorizor NOP = new Authorizor() {
 
         @Override
@@ -72,7 +72,7 @@ public interface Authorizor extends ApplicationScopedComponent {
             return true;
         }
     };
-    
+
     public static Authorizor nop() {
         return NOP;
     }

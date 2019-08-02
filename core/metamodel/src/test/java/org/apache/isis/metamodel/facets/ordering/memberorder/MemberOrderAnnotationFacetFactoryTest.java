@@ -47,7 +47,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         context.checking(new Expectations() {{
             allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));
             will(new Action() {

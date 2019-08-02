@@ -57,7 +57,7 @@ public class EmailServiceDefault implements EmailService {
     }
 
     // -- CONSTANTS
-    
+
     private static final String ISIS_SERVICE_EMAIL_SENDER_USERNAME = "isis.service.email.sender.username";
     private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
     private static final String ISIS_SERVICE_EMAIL_SENDER_PASSWORD = "isis.service.email.sender.password";
@@ -85,7 +85,7 @@ public class EmailServiceDefault implements EmailService {
     private static final String ISIS_SERVICE_EMAIL_OVERRIDE_BCC = "isis.service.email.override.bcc";
 
     // -- INIT
-    
+
     private boolean initialized;
 
     /**

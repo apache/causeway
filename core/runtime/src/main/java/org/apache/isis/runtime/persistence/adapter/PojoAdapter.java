@@ -54,36 +54,36 @@ public final class PojoAdapter implements ObjectAdapter {
     private final Oid oid;
 
     // -- FACTORIES
-    
+
     public static PojoAdapter of(
             final Object pojo,
             final Oid oid) {
-        
+
         return of(pojo, oid, IsisSession.currentOrElseNull(), null);
     }
-    
+
     public static PojoAdapter ofValue(Serializable value) {
         val oid = Oid.Factory.value();
         return PojoAdapter.of(value, oid);
     }
-    
+
     public static ObjectAdapter ofTransient(Object pojo, ObjectSpecId specId) {
         val identifier = UUID.randomUUID().toString();
         return PojoAdapter.of(pojo, Oid.Factory.transientOf(specId, identifier));
     }
-    
+
     public static PojoAdapter of(
             final Object pojo,
             final Oid oid,
             final IsisSession isisSession,
             final PersistenceSession persistenceSession) {
-        
+
         val authenticationSession = isisSession.getAuthenticationSession(); 
         val specificationLoader = isisSession.getSpecificationLoader();
-        
+
         return new PojoAdapter(pojo, oid, authenticationSession, specificationLoader, persistenceSession);
     }
-    
+
     public static PojoAdapter of(
             final Object pojo,
             final Oid oid,
@@ -99,31 +99,31 @@ public final class PojoAdapter implements ObjectAdapter {
             final AuthenticationSession authenticationSession,
             final SpecificationLoader specificationLoader,
             final PersistenceSession persistenceSession) {
-        
+
         Objects.requireNonNull(pojo);
 
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
-        
+
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("ObjectAdapter can't be used to wrap an ObjectAdapter: " + pojo);
         }
         if (pojo instanceof Oid) {
             throw new IsisException("ObjectAdapter can't be used to wrap an Oid: " + pojo);
         }
-        
+
         this.pojo = pojo;
         this.oid = requires(oid, "oid");
     }
-    
+
     @Override
     public Object getPojo() {
         return pojo;
     }
-    
+
     // -- getSpecification
-    
+
     final _Lazy<ObjectSpecification> objectSpecification = _Lazy.of(this::loadSpecification);
 
     @Override
@@ -138,14 +138,14 @@ public final class PojoAdapter implements ObjectAdapter {
     }
 
     // -- getOid
-    
+
     @Override
     public Oid getOid() {
         return oid;
     }
 
     // -- PREDICATES
-    
+
     @Override
     public boolean isTransient() {
         val spec = getSpecification();
@@ -153,11 +153,11 @@ public final class PojoAdapter implements ObjectAdapter {
             // services and view models are treated as persistent objects
             return false;
         }
-        
+
         if(persistenceSession==null) {
             return false;
         }
-        
+
         val state = persistenceSession.stateOf(pojo);
         return state.isDetached();
     }

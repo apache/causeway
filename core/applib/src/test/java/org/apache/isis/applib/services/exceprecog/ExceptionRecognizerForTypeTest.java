@@ -36,7 +36,7 @@ public class ExceptionRecognizerForTypeTest {
         public FooException() {
             super("foo");
         }
-        
+
     }
     static class BarException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -44,14 +44,14 @@ public class ExceptionRecognizerForTypeTest {
             super("bar");
         }
     }
-    
+
     private Function<String,String> prepend = new Function<String, String>() {
         @Override
         public String apply(String input) {
             return "pre: " + input;
         }
     };
-    
+
     @Test
     public void whenRecognized() {
         ersForType = new ExceptionRecognizerForType(FooException.class);
@@ -70,5 +70,5 @@ public class ExceptionRecognizerForTypeTest {
         assertThat(ersForType.recognize(new FooException()), is("pre: foo"));
     }
 
-    
+
 }

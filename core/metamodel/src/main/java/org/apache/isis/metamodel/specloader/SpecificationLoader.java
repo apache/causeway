@@ -45,15 +45,15 @@ public interface SpecificationLoader {
             new ConfigPropertyEnum<>("isis.reflector.introspector.mode", IntrospectionMode.LAZY_UNLESS_PRODUCTION);
 
     // -- LIVE CYCLE 
-    
+
     void init();
-    
+
     void shutdown();
-    
+
     // -- LOOKUP
-    
-	/**
-	 * @ThreadSafe
+
+    /**
+     * @ThreadSafe
      * <p>
      *     Must be implemented thread-safe to avoid concurrent modification exceptions for if the caller
      *     iterates over all the specifications and performs an activity that might give rise to new
@@ -62,79 +62,79 @@ public interface SpecificationLoader {
      * 
      * @return snapshot of all the (currently) loaded specifications
      */
-	List<ObjectSpecification> currentSpecifications();
+    List<ObjectSpecification> currentSpecifications();
 
-	/**
-	 * Lookup a specification that has bean loaded before.
-	 * @param objectSpecId
-	 */
-	ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId);
-	
-//	default ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId) {
-//	    return lookupBySpecIdO(objectSpecId).orElseThrow(
-//	            ()->_Exceptions.unrecoverable(
-//	                    "Failed to lookup ObjectSpecification by its id '" + objectSpecId + "'"));
-//	}
-	
-	ValidationFailures validate();
+    /**
+     * Lookup a specification that has bean loaded before.
+     * @param objectSpecId
+     */
+    ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId);
 
-	void reloadSpecification(Class<?> domainType);
+    //	default ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId) {
+    //	    return lookupBySpecIdO(objectSpecId).orElseThrow(
+    //	            ()->_Exceptions.unrecoverable(
+    //	                    "Failed to lookup ObjectSpecification by its id '" + objectSpecId + "'"));
+    //	}
 
-	/**
-	 * Return the specification for the specified class of object.
-	 *
-	 * <p>
-	 * It is possible for this method to return <tt>null</tt>, for example if
-	 * the configured {@link org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor}
-	 * has filtered out the class.
-	 * 
-	 * @return {@code null} if {@code domainType==null}
-	 */
-	ObjectSpecification loadSpecification(@Nullable Class<?> domainType, IntrospectionState upTo);
-	
-//	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId, IntrospectionState upTo) {
-//		if(objectSpecId==null) {
-//			return null;
-//		}
-//		
-//		val className = objectSpecId.asString();
-//		
-//		if(_Strings.isNullOrEmpty(className)) {
-//			return null;
-//		}
-//		
-//		final Class<?> type = ClassUtil.forNameElseFail(className);
-//		return loadSpecification(type, upTo);
-//	}
-	
-	// -- SHORTCUTS
-	
-	default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
+    ValidationFailures validate();
+
+    void reloadSpecification(Class<?> domainType);
+
+    /**
+     * Return the specification for the specified class of object.
+     *
+     * <p>
+     * It is possible for this method to return <tt>null</tt>, for example if
+     * the configured {@link org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor}
+     * has filtered out the class.
+     * 
+     * @return {@code null} if {@code domainType==null}
+     */
+    ObjectSpecification loadSpecification(@Nullable Class<?> domainType, IntrospectionState upTo);
+
+    //	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId, IntrospectionState upTo) {
+    //		if(objectSpecId==null) {
+    //			return null;
+    //		}
+    //		
+    //		val className = objectSpecId.asString();
+    //		
+    //		if(_Strings.isNullOrEmpty(className)) {
+    //			return null;
+    //		}
+    //		
+    //		final Class<?> type = ClassUtil.forNameElseFail(className);
+    //		return loadSpecification(type, upTo);
+    //	}
+
+    // -- SHORTCUTS
+
+    default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
         return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
     }
- 
-//	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
-//		return loadSpecification(objectSpecId.asString(), IntrospectionState.TYPE_INTROSPECTED);
-//    }
 
-	default ObjectSpecification loadSpecification(
-	        @Nullable String className, 
-	        @Nullable IntrospectionState introspectionState) {
-	    
-	    if(_Strings.isNullOrEmpty(className)) {
-	        return null;
-	    }
-	    final Class<?> type = ClassUtil.forNameElseFail(className);
-	    return introspectionState!=null 
-	            ? loadSpecification(type, introspectionState)
-	                    : loadSpecification(type);
-	}
-	
-	default ObjectSpecification loadSpecification(@Nullable String className) {
+    //	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
+    //		return loadSpecification(objectSpecId.asString(), IntrospectionState.TYPE_INTROSPECTED);
+    //    }
+
+    default ObjectSpecification loadSpecification(
+            @Nullable String className, 
+            @Nullable IntrospectionState introspectionState) {
+
+        if(_Strings.isNullOrEmpty(className)) {
+            return null;
+        }
+        final Class<?> type = ClassUtil.forNameElseFail(className);
+        return introspectionState!=null 
+                ? loadSpecification(type, introspectionState)
+                        : loadSpecification(type);
+    }
+
+    default ObjectSpecification loadSpecification(@Nullable String className) {
         return loadSpecification(className, null);
     }
 
-    
-	
+
+
 
 }

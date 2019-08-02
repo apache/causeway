@@ -37,7 +37,7 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
  *
  */
 public interface ObjectAdapterProvider {
-    
+
     // -- INTERFACE
 
     /**
@@ -47,14 +47,14 @@ public interface ObjectAdapterProvider {
     default @Nullable Oid oidFor(@Nullable Object domainObject) {
         return mapIfPresentElse(adapterFor(domainObject), ObjectAdapter::getOid, null);
     }
-    
+
     /**
      * @return standalone (value) or root adapter
      */
     @Nullable ObjectAdapter adapterFor(@Nullable Object domainObject);
-    
+
     @Nullable ObjectAdapter adapterForBean(@Nullable BeanAdapter bean);
-    
+
     /**
      * @return collection adapter.
      */
@@ -75,14 +75,14 @@ public interface ObjectAdapterProvider {
      * @return  
      */
     ManagedObject disposableAdapterForViewModel(Object viewModelPojo);
-    
+
     ObjectSpecification specificationForViewModel(Object viewModelPojo);
 
     ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoStr);
-    
+
 
     // -- DOMAIN OBJECT CREATION SUPPORT
-    
+
     /**
      * <p>
      * Creates a new instance of the specified type and returns it.
@@ -97,69 +97,78 @@ public interface ObjectAdapterProvider {
      *
      */
     ObjectAdapter newTransientInstance(ObjectSpecification objectSpec);
-    
-//    @Nullable ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, @Nullable final String memento);
-    
+
+    //    @Nullable ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, @Nullable final String memento);
+
     // -- SERVICE LOOKUP 
-    
+
     Stream<ObjectAdapter> streamServices();
     ObjectAdapter lookupService(String serviceId);
-    
-    
+
+
     // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
-    
+
     public static interface Delegating extends ObjectAdapterProvider {
-        
+
         ObjectAdapterProvider getObjectAdapterProvider();
-        
+
+        @Override
         default ObjectAdapter adapterFor(Object domainObject) {
             return getObjectAdapterProvider().adapterFor(domainObject);
         }
-        
+
+        @Override
         default ObjectAdapter adapterForBean(BeanAdapter bean) {
             return getObjectAdapterProvider().adapterForBean(bean);
         }
-        
+
+        @Override
         default ObjectAdapter adapterForCollection(
                 final Object pojo,
                 final RootOid parentOid,
                 OneToManyAssociation collection) {
             return getObjectAdapterProvider().adapterForCollection(pojo, parentOid, collection);
         }
-        
+
+        @Override
         default ManagedObject disposableAdapterForViewModel(Object viewModelPojo) {
             return getObjectAdapterProvider().disposableAdapterForViewModel(viewModelPojo);
         }
-        
+
+        @Override
         default ObjectSpecification specificationForViewModel(Object viewModelPojo) {
             return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
         }
 
+        @Override
         default ObjectAdapter adapterForViewModel(final Object viewModelPojo, final String mementoString) {
             return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, mementoString);
         }
-        
-        
+
+
+        @Override
         default ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
             return getObjectAdapterProvider().newTransientInstance(objectSpec);
         }
-        
-        
-//        default ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
-//            return getObjectAdapterProvider().recreateViewModelInstance(objectSpec, memento);
-//        }
-        
-        
+
+
+        //        default ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
+        //            return getObjectAdapterProvider().recreateViewModelInstance(objectSpec, memento);
+        //        }
+
+
+        @Override
         default Stream<ObjectAdapter> streamServices() {
             return getObjectAdapterProvider().streamServices();
         }
-        
+
+        @Override
         default ObjectAdapter lookupService(String serviceId) {
             return getObjectAdapterProvider().lookupService(serviceId);
         }
-        
-        
+
+
     }
-    
+
 
 }

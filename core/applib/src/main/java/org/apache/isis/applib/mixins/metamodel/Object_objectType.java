@@ -48,10 +48,10 @@ public class Object_objectType {
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @ActionLayout(
-    		contributed = Contributed.AS_ASSOCIATION,
-    		hidden = Where.ALL_TABLES)
+            contributed = Contributed.AS_ASSOCIATION,
+            hidden = Where.ALL_TABLES)
     @Property()
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
     public String prop() {

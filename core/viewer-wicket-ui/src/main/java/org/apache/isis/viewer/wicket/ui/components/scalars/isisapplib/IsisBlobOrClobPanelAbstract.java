@@ -207,32 +207,32 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     private FileUploadField createFileUploadField(String componentId) {
         final BootstrapFileInputField fileUploadField = new BootstrapFileInputField(
-        		componentId, new IModel<List<FileUpload>>() {
+                componentId, new IModel<List<FileUpload>>() {
 
-            private static final long serialVersionUID = 1L;
+                    private static final long serialVersionUID = 1L;
 
-            @Override
-            public void setObject(final List<FileUpload> fileUploads) {
-                if (fileUploads == null || fileUploads.isEmpty()) {
-                    return;
-                }
+                    @Override
+                    public void setObject(final List<FileUpload> fileUploads) {
+                        if (fileUploads == null || fileUploads.isEmpty()) {
+                            return;
+                        }
 
-                val blob = getBlobOrClobFrom(fileUploads);
+                        val blob = getBlobOrClobFrom(fileUploads);
 
-                final ObjectAdapter adapter = PojoAdapter.ofValue(blob);
-                getModel().setObject(adapter);
-            }
+                        final ObjectAdapter adapter = PojoAdapter.ofValue(blob);
+                        getModel().setObject(adapter);
+                    }
 
-            @Override
-            public void detach() {
-            }
+                    @Override
+                    public void detach() {
+                    }
 
-            @Override
-            public List<FileUpload> getObject() {
-                return null;
-            }
+                    @Override
+                    public List<FileUpload> getObject() {
+                        return null;
+                    }
 
-        });
+                });
         fileUploadField.getConfig().showUpload(false).mainClass("input-group-sm");
         return fileUploadField;
     }
@@ -271,7 +271,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         final Component component = formComponent.get(ID_SCALAR_VALUE);
         final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE ?
                 InputFieldVisibility.VISIBLE :
-                InputFieldVisibility.NOT_VISIBLE;
+                    InputFieldVisibility.NOT_VISIBLE;
         sync(component, editingWidgetVisibility, null, disabledReason, target);
 
         addAcceptFilterTo(component);
@@ -309,20 +309,20 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
         if(editability != null) {
 
-//            // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
-//            //
-//            // Caused by: java.lang.IllegalStateException: ServletRequest does not contain multipart content.
-//            // One possible solution is to explicitly call Form.setMultipart(true), Wicket tries its best to
-//            // auto-detect multipart forms but there are certain situation where it cannot.
-//
-//            component.setEnabled(editability == InputFieldEditability.EDITABLE);
-//
-//            final AttributeModifier title = new AttributeModifier("title", Model.of(disabledReason != null ? disabledReason : ""));
-//            component.add(title);
-//
-//            if (target != null) {
-//                target.add(component);
-//            }
+            //            // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
+            //            //
+            //            // Caused by: java.lang.IllegalStateException: ServletRequest does not contain multipart content.
+            //            // One possible solution is to explicitly call Form.setMultipart(true), Wicket tries its best to
+            //            // auto-detect multipart forms but there are certain situation where it cannot.
+            //
+            //            component.setEnabled(editability == InputFieldEditability.EDITABLE);
+            //
+            //            final AttributeModifier title = new AttributeModifier("title", Model.of(disabledReason != null ? disabledReason : ""));
+            //            component.add(title);
+            //
+            //            if (target != null) {
+            //                target.add(component);
+            //            }
 
         }
     }

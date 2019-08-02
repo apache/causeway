@@ -22,7 +22,7 @@ package org.apache.isis.applib.value;
 import org.junit.Test;
 
 public class BlobTest_constructor {
-    
+
     @Test
     public void happyCase() throws Exception {
         new Blob("validName", "application", "xml", new byte[]{0,1});

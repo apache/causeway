@@ -149,23 +149,23 @@ public abstract class Parser<T> {
         };
     }
 
-//    @Deprecated // [ahuber] MediaType is in standard API! proposing removal
-//    public static Parser<com.google.common.net.MediaType> forGuavaMediaType() {
-//        return new Parser<com.google.common.net.MediaType>() {
-//            @Override
-//            public com.google.common.net.MediaType valueOf(final String str) {
-//                if (str == null) {
-//                    return null;
-//                }
-//                return com.google.common.net.MediaType.parse(str);
-//            }
-//
-//            @Override
-//            public String asString(final com.google.common.net.MediaType t) {
-//                return t.toString();
-//            }
-//        };
-//    }
+    //    @Deprecated // [ahuber] MediaType is in standard API! proposing removal
+    //    public static Parser<com.google.common.net.MediaType> forGuavaMediaType() {
+    //        return new Parser<com.google.common.net.MediaType>() {
+    //            @Override
+    //            public com.google.common.net.MediaType valueOf(final String str) {
+    //                if (str == null) {
+    //                    return null;
+    //                }
+    //                return com.google.common.net.MediaType.parse(str);
+    //            }
+    //
+    //            @Override
+    //            public String asString(final com.google.common.net.MediaType t) {
+    //                return t.toString();
+    //            }
+    //        };
+    //    }
 
     public static Parser<Boolean> forBoolean() {
         return new Parser<Boolean>() {
@@ -176,7 +176,7 @@ public abstract class Parser<T> {
                 }
                 return "yes".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str)
                         ? Boolean.TRUE
-                        : Boolean.FALSE;
+                                : Boolean.FALSE;
             }
 
             @Override
@@ -369,29 +369,29 @@ public abstract class Parser<T> {
         };
     }
 
-//    @Deprecated // [ahuber] MediaType is in standard API! proposing removal
-//    public static Parser<List<com.google.common.net.MediaType>> forListOfGuavaMediaTypes() {
-//        return new Parser<List<com.google.common.net.MediaType>>() {
-//
-//            @Override
-//            public List<com.google.common.net.MediaType> valueOf(final String str) {
-//                if (str == null) {
-//                    return Collections.emptyList();
-//                }
-//                final List<String> strings = _Lists.newArrayList(Splitter.on(",").split(str));
-//                return _Lists.map(strings, (final String input) -> {
-//                        return com.google.common.net.MediaType.parse(input);
-//                });
-//            }
-//
-//            @Override
-//            public String asString(final List<com.google.common.net.MediaType> listOfMediaTypes) {
-//                final List<String> strings = _Lists.map(listOfMediaTypes, 
-//                        (final com.google.common.net.MediaType input)->input.toString());
-//                return Joiner.on(",").join(strings);
-//            }
-//        };
-//    }
+    //    @Deprecated // [ahuber] MediaType is in standard API! proposing removal
+    //    public static Parser<List<com.google.common.net.MediaType>> forListOfGuavaMediaTypes() {
+    //        return new Parser<List<com.google.common.net.MediaType>>() {
+    //
+    //            @Override
+    //            public List<com.google.common.net.MediaType> valueOf(final String str) {
+    //                if (str == null) {
+    //                    return Collections.emptyList();
+    //                }
+    //                final List<String> strings = _Lists.newArrayList(Splitter.on(",").split(str));
+    //                return _Lists.map(strings, (final String input) -> {
+    //                        return com.google.common.net.MediaType.parse(input);
+    //                });
+    //            }
+    //
+    //            @Override
+    //            public String asString(final List<com.google.common.net.MediaType> listOfMediaTypes) {
+    //                final List<String> strings = _Lists.map(listOfMediaTypes, 
+    //                        (final com.google.common.net.MediaType input)->input.toString());
+    //                return Joiner.on(",").join(strings);
+    //            }
+    //        };
+    //    }
 
     @Deprecated // [ahuber] what is this? since it does nothing marking it deprecated
     public static Parser<String> forETag() {

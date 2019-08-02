@@ -90,20 +90,20 @@ public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
             transactionService.flushTransaction();
 
             // expect
-        	Throwable cause = assertThrows(Throwable.class, ()->{
-            
+            Throwable cause = assertThrows(Throwable.class, ()->{
+
                 // when
                 wrap(menu).create("Fizz");
                 transactionService.flushTransaction();
-            	
+
             });
-        	
-        	// also expect
-        	MatcherAssert.assertThat(cause, 
-        			ThrowableMatchers.causedBy(SQLIntegrityConstraintViolationException.class));
+
+            // also expect
+            MatcherAssert.assertThat(cause, 
+                    ThrowableMatchers.causedBy(SQLIntegrityConstraintViolationException.class));
 
         }
-        
+
     }
 
 

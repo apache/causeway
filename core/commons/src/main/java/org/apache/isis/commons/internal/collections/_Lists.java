@@ -166,9 +166,9 @@ public final class _Lists {
                 ()->Collectors.<T, CopyOnWriteArrayList<T>>toCollection(CopyOnWriteArrayList::new) );
     }
 
-    
+
     // -- TRANSFORMATIONS
-    
+
     public static <T, R> List<R> transform(@Nullable Collection<T> input, Function<Stream<T>, Stream<R>> transformation) {
         if(input==null) {
             return Collections.emptyList();

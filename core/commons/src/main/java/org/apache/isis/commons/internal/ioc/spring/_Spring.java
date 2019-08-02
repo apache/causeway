@@ -75,73 +75,73 @@ public class _Spring {
     public static boolean isContextAvailable() {
         return _Context.getIfAny(ApplicationContext.class)!=null;
     }
-    
+
     public static void init(ApplicationContext context) {
         _Context.putSingleton(ApplicationContext.class, context);
     }
-    
+
     public static ApplicationContext context() {
         return _Context.getElseFail(ApplicationContext.class);
     }
-    
+
     public static <T> Bin<T> select(final Class<T> requiredType) {
         requires(requiredType, "requiredType");
-        
+
         val allMatchingBeans = context().getBeanProvider(requiredType).orderedStream();
         return Bin.ofStream(allMatchingBeans);
     }
-    
+
     public static <T> Bin<T> select(
             final Class<T> requiredType, 
             @Nullable Set<Annotation> qualifiersRequired) {
-        
+
         requires(requiredType, "requiredType");
-        
+
         val allMatchingBeans = context().getBeanProvider(requiredType)
                 .orderedStream();
-        
+
         if(_NullSafe.isEmpty(qualifiersRequired)) {
             return Bin.ofStream(allMatchingBeans);
         }
-        
+
         final Predicate<T> hasAllQualifiers = t -> {
             val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
             return qualifiersPresent.containsAll(qualifiersRequired);
         };
-        
+
         return Bin.ofStream(allMatchingBeans
                 .filter(hasAllQualifiers));
     }
-    
+
     /**
      * 
      * @param classifier
      * @return
      */
     public static Stream<BeanAdapter> streamAllBeans(BeanSortClassifier classifier) {
-        
+
         val context = context();
         val beanFactory = ((ConfigurableApplicationContext)context).getBeanFactory();
-        
-        return Stream.of(context.getBeanDefinitionNames())
-        .map(name->{
-            
-            val type = context.getType(name);
-            val managedObjectSort = classifier.quickClassify(type);
-            val id = name; // just reuse the bean's name
-            
-            val scope = beanFactory.getBeanDefinition(name).getScope();
-            val lifecycleContext = LifecycleContext.parse(scope);
-            
-            val resolvableType = ResolvableType.forClass(type);
-            val bean = context.getBeanProvider(resolvableType);
-            
-            val beanAdapter = BeanAdapterSpring.of(id, lifecycleContext, type, bean, managedObjectSort);
-            
-            return beanAdapter;
-        });
 
-        
+        return Stream.of(context.getBeanDefinitionNames())
+                .map(name->{
+
+                    val type = context.getType(name);
+                    val managedObjectSort = classifier.quickClassify(type);
+                    val id = name; // just reuse the bean's name
+
+                    val scope = beanFactory.getBeanDefinition(name).getScope();
+                    val lifecycleContext = LifecycleContext.parse(scope);
+
+                    val resolvableType = ResolvableType.forClass(type);
+                    val bean = context.getBeanProvider(resolvableType);
+
+                    val beanAdapter = BeanAdapterSpring.of(id, lifecycleContext, type, bean, managedObjectSort);
+
+                    return beanAdapter;
+                });
+
+
     }
 
     /**
@@ -153,7 +153,7 @@ public class _Spring {
         }
         return select(type).getSingleton();
     }
-    
+
     /**
      * @return Spring managed singleton
      * @throws NoSuchElementException - if the singleton is not resolvable
@@ -161,13 +161,13 @@ public class _Spring {
     public static <T> T getSingletonElseFail(@Nullable Class<T> type) {
         return getSingleton(type)
                 .orElseThrow(()->_Exceptions.noSuchElement("Cannot resolve singleton '%s'", type));
-                        
+
     }
 
     public static <T> Event<T> event(ApplicationEventPublisher publisher) {
         return new EventSpring<T>(publisher);
     }
-    
+
     // -- QUALIFIER PROCESSING
 
     /**
@@ -181,10 +181,10 @@ public class _Spring {
             return Collections.emptySet();
         }
         return stream(annotations)
-        .filter(_CDI::isQualifier)
-        .collect(Collectors.toSet());
+                .filter(_CDI::isQualifier)
+                .collect(Collectors.toSet());
     }
-    
+
     /**
      * @param annotation
      * @return whether or not the annotation is a valid qualifier for CDI
@@ -203,47 +203,47 @@ public class _Spring {
      */
     public static Map<String, String> copySpringEnvironmentToMap(
             ConfigurableEnvironment configurableEnvironment) {
-        
+
         val map = _Maps.<String, String> newHashMap();
-        
+
         for(Iterator<PropertySource<?>> it = configurableEnvironment.getPropertySources().iterator(); it.hasNext(); ) {
             val propertySource = it.next();
             if (propertySource instanceof MapPropertySource) {
-                
+
                 val mapPropertySource = (MapPropertySource) propertySource;
-                
+
                 mapPropertySource.getSource().forEach((key, value) ->
-                    putIfNewValuePresent_warnIfKeyAlreadyExists(key, value, map));
-                
+                putIfNewValuePresent_warnIfKeyAlreadyExists(key, value, map));
+
             } else if(propertySource instanceof EnumerablePropertySource) {
-                
+
                 val enumPropertySource = (EnumerablePropertySource<?>) propertySource;
-                
+
                 for (String key : enumPropertySource.getPropertyNames()) {
                     val value = enumPropertySource.getProperty(key);
-                    
+
                     putIfNewValuePresent_warnIfKeyAlreadyExists(key, value, map);
                 }
-                
+
             } else {
-            
+
                 log.warn("Ignoring PropertySource type '{}', "
                         + "because we don't know how to iterate over its key/value pairs.",
                         propertySource);
             }
 
         }
-        
+
         return map;
     }
-    
+
     // -- HELPER
-    
+
     private static void putIfNewValuePresent_warnIfKeyAlreadyExists (
             String key,
             Object newValue,
             Map<String, String> dest) {
-        
+
         if(newValue==null) {
             return;
         }
@@ -251,7 +251,7 @@ public class _Spring {
         if(oldValue!=null) {
             log.warn("overriding exising config key {} with value {} -> {}", key, oldValue, newValue);    
         }
-        
+
     }
-    
+
 }

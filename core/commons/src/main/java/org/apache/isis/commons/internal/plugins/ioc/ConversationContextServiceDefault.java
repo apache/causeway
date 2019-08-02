@@ -30,9 +30,9 @@ package org.apache.isis.commons.internal.plugins.ioc;
 //@Singleton @Alternative @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
 public class ConversationContextServiceDefault implements ConversationContextService {
 
-	@Override
-	public ConversationContextHandle startTransientConversation() {
-		return null; // don't return a handle
-	}
+    @Override
+    public ConversationContextHandle startTransientConversation() {
+        return null; // don't return a handle
+    }
 
 }

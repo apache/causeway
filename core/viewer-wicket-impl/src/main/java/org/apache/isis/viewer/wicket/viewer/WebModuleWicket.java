@@ -49,7 +49,7 @@ public final class WebModuleWicket implements WebModule  {
             "org.apache.wicket.protocol.http.WicketFilter";
 
     private final static String WICKET_FILTER_NAME = "WicketFilter";
-    
+
     private String pathConfigValue;
     private String deploymentMode;
     private String appConfigValue;
@@ -58,25 +58,25 @@ public final class WebModuleWicket implements WebModule  {
     public String getName() {
         return "Wicket";
     }
-    
+
     @Override
     public void prepare(WebModuleContext ctx) {
-        
+
         if(!isAvailable()) {
             return;
         }
 
         pathConfigValue = 
                 ctx.getConfiguration().getString("isis.viewer.wicket.basePath", "/wicket");
-        
+
         deploymentMode = _Context.isPrototyping()
-                    ? "development" 
-                            : "deployment";
-        
+                ? "development" 
+                        : "deployment";
+
         appConfigValue = 
                 ctx.getConfiguration().getString("isis.viewer.wicket.app",
                         "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication");
-        
+
         ctx.setHasBootstrapper();
         ctx.addViewer("wicket");
         ctx.addProtectedPath(suffix(prefix(pathConfigValue, "/"), "/") + "*");
@@ -115,7 +115,7 @@ public final class WebModuleWicket implements WebModule  {
     }
 
     // -- HELPER
-    
+
     private static boolean isAvailable() {
         try {
             getDefaultClassLoader().loadClass(WICKET_FILTER_CLASS_NAME);

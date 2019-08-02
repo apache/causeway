@@ -22,10 +22,10 @@ import java.util.List;
 
 public interface ApplicationTenancyRepository {
 
-	List<? extends ApplicationTenancy> allTenancies();
+    List<? extends ApplicationTenancy> allTenancies();
 
-	List<? extends ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
+    List<? extends ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
 
-	ApplicationTenancy newTenancy(String name, String path, ApplicationTenancy parent);
+    ApplicationTenancy newTenancy(String name, String path, ApplicationTenancy parent);
 
 }

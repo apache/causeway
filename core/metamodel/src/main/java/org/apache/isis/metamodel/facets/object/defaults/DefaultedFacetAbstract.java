@@ -38,7 +38,7 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
             final String candidateEncoderDecoderName, 
             final Class<?> candidateEncoderDecoderClass, 
             final FacetHolder holder) {
-        
+
         super(DefaultedFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);

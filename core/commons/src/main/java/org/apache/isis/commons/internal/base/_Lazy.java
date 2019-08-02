@@ -34,9 +34,9 @@ import java.util.function.Supplier;
  * @since 2.0
  */
 public interface _Lazy<T> extends Supplier<T> {
-    
+
     // -- INTERFACE
-    
+
     /**
      * @return whether this lazy got initialized and holds a memoized value
      */
@@ -57,7 +57,7 @@ public interface _Lazy<T> extends Supplier<T> {
      */
     @Override
     public T get();
-    
+
     // -- FACTORIES
 
     /**
@@ -69,7 +69,7 @@ public interface _Lazy<T> extends Supplier<T> {
     public static <T> _Lazy<T> of(Supplier<? extends T> supplier) {
         return new _Lazy_Simple<T>(supplier);
     }
-    
+
     /**
      * Thread-safe variant to {@link _Lazy#of(Supplier)}.
      * Concurrent calls to this lazy's get() method will never result in concurrent calls to the 

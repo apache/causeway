@@ -44,7 +44,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
             ObjectSpecification collectionSpec,
             Stream<T> initData, 
             int elementCount) {
-        
+
         final Object[] array = initData
                 .map(ManagedObject::getPojo)
                 .collect(toArray(Object.class, elementCount));
@@ -57,14 +57,14 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
         if(isEmpty(array)) {
             return Stream.of();
         }
-        
+
         final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
-        
+
         return Stream.of(array)
                 .map(adapterProvider::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
                 .map(x->(T)x);
     }
-    
+
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
@@ -74,7 +74,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     }
 
     // -- HELPER
-    
+
     private Object[] pojoArray(final ManagedObject arrayAdapter) {
         return (Object[]) arrayAdapter.getPojo();
     }

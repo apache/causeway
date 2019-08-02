@@ -31,14 +31,14 @@ import javax.ws.rs.client.Entity;
 public class ActionParameterListBuilder {
 
     private final Map<String, String> actionParameters = new LinkedHashMap<>();
-    
+
     public ActionParameterListBuilder addActionParameter(String parameterName, String parameterValue) {
         actionParameters.put(parameterName, parameterValue != null 
                 ? value("\"" + parameterValue + "\"") 
                         : value(JSON_NULL_LITERAL));
         return this;
     }
-    
+
     public ActionParameterListBuilder addActionParameter(String parameterName, int parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         return this;
@@ -48,55 +48,55 @@ public class ActionParameterListBuilder {
         actionParameters.put(parameterName, value(""+parameterValue));
         return this;
     }
-    
+
     public ActionParameterListBuilder addActionParameter(String parameterName, byte parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         return this;
     }
-    
+
     public ActionParameterListBuilder addActionParameter(String parameterName, short parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         return this;
     }
-    
+
     public ActionParameterListBuilder addActionParameter(String parameterName, double parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         return this;
     }
-    
+
     public ActionParameterListBuilder addActionParameter(String parameterName, float parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         return this;
     }
-    
+
     public ActionParameterListBuilder addActionParameter(String parameterName, boolean parameterValue) {
         actionParameters.put(parameterName, value(""+parameterValue));
         return this;
     }
-    
+
     public Entity<String> build() {
-        
+
         final StringBuilder sb = new StringBuilder();
         sb.append("{\n")
         .append(actionParameters.entrySet().stream()
                 .map(this::toJson)
                 .collect(Collectors.joining(",\n")))
         .append("\n}");
-        
+
         return Entity.json(sb.toString());
     }
-    
+
     // -- HELPER
-    
+
     private final static String JSON_NULL_LITERAL = "null";
 
     private String value(String valueLiteral) {
         return "{\"value\" : " + valueLiteral + "}";
     }
-    
+
     private String toJson(Map.Entry<String, String> entry) {
         return "   \""+entry.getKey()+"\": "+entry.getValue();
     }
-   
-    
+
+
 }

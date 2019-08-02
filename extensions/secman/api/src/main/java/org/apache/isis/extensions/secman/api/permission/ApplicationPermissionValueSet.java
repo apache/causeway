@@ -39,19 +39,19 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
  */
 public class ApplicationPermissionValueSet implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
-	public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionValueSet, T> {
-		private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionValueSet, T> {
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermissionValueSet, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermissionValueSet> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
-    
+
 
     // -- values
     private final List<ApplicationPermissionValue> values;
@@ -88,10 +88,10 @@ public class ApplicationPermissionValueSet implements Serializable {
      * </p>
      */
     private final _Multimaps.SetMultimap<ApplicationFeatureId, ApplicationPermissionValue> permissionsByFeature = 
-    		_Multimaps.newSortedSetMultimap(
-    				Collections.reverseOrder(ApplicationFeatureId.Comparators.natural()),
-    				null // natural element order
-    				);
+            _Multimaps.newSortedSetMultimap(
+                    Collections.reverseOrder(ApplicationFeatureId.Comparators.natural()),
+                    null // natural element order
+                    );
 
     /**
      * Note that we require PermissionsEvaluationService to be serializable.
@@ -100,11 +100,11 @@ public class ApplicationPermissionValueSet implements Serializable {
 
 
     // -- constructor
-    
+
     public ApplicationPermissionValueSet(
-    		final List<ApplicationPermissionValue> permissionValues, 
-    		final PermissionsEvaluationService permissionsEvaluationService) {
-    	
+            final List<ApplicationPermissionValue> permissionValues, 
+            final PermissionsEvaluationService permissionsEvaluationService) {
+
         this.values = Collections.unmodifiableList(_Lists.newArrayList(permissionValues));
         for (final ApplicationPermissionValue permissionValue : permissionValues) {
             final ApplicationFeatureId featureId = permissionValue.getFeatureId();
@@ -112,7 +112,7 @@ public class ApplicationPermissionValueSet implements Serializable {
         }
         this.permissionsEvaluationService = permissionsEvaluationService;
     }
-    
+
 
     // -- grants, evaluate
 
@@ -180,7 +180,7 @@ public class ApplicationPermissionValueSet implements Serializable {
                 '}';
     }
 
-    
+
 
 
 }

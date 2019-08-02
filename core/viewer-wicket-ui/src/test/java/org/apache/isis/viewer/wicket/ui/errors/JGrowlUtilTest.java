@@ -30,7 +30,7 @@ public class JGrowlUtilTest {
 
         assertThat(JGrowlUtil.escape(
                 "double quotes \" and single quotes ' and <p>markup</p>"), equalTo(
-                "double quotes ' and single quotes ' and &lt;p&gt;markup&lt;/p&gt;"));
+                        "double quotes ' and single quotes ' and &lt;p&gt;markup&lt;/p&gt;"));
     }
 
 }

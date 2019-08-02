@@ -75,7 +75,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
             final Class<?> declaringType,
             final String actionName,
             final Class<?>... parameterTypes) {
-        
+
         try {
             final Method method = declaringType.getMethod(actionName, parameterTypes);
             return FacetedMethod.createForAction(declaringType, method);

@@ -34,7 +34,7 @@ import static org.apache.isis.commons.internal.resources._Resources.prependConte
 @Singleton 
 public class SwaggerServiceDefault implements SwaggerService {
 
-	@Inject SpecificationLoader specificationLoader;
+    @Inject SpecificationLoader specificationLoader;
 
     @Override
     public String generateSwaggerSpec(
@@ -47,7 +47,7 @@ public class SwaggerServiceDefault implements SwaggerService {
     }
 
     // -- HELPER
-	
+
     private _Lazy<String> basePath = _Lazy.threadSafe(this::lookupBasePath);
 
     private String lookupBasePath() {
@@ -56,6 +56,6 @@ public class SwaggerServiceDefault implements SwaggerService {
     }
 
 
-    
+
 
 }

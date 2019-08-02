@@ -78,7 +78,7 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
     public T objectFor(
             final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona,
             final FixtureScript.ExecutionContext ec) {
-        
+
         if(persona == null) {
             return null;
         }

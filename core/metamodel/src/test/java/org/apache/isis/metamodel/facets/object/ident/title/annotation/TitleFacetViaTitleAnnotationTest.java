@@ -57,7 +57,7 @@ public class TitleFacetViaTitleAnnotationTest {
 
     @Mock
     private ObjectAdapterProvider mockAdapterManager;
-    
+
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
 
         @Title
@@ -92,8 +92,8 @@ public class TitleFacetViaTitleAnnotationTest {
                 .objectAdapterProvider(mockAdapterManager)
                 .build());
     }
-    
-    
+
+
     @Test
     public void testTitle() throws Exception {
         final List<Annotations.Evaluator<Title>> evaluatorList = Annotations

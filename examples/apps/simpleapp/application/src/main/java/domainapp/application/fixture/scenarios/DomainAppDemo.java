@@ -32,10 +32,10 @@ public class DomainAppDemo extends FixtureScript {
     @Override
     protected void execute(final ExecutionContext ec) {
         //FIXME[2112] needs migration
-//        AppManifest2 appManifest2 = metaModelService.getAppManifest2();
-//        ec.executeChild(this, appManifest2.getTeardownFixture());
-//        ec.executeChild(this, appManifest2.getRefDataSetupFixture());
-//        ec.executeChild(this, new SimpleObject_persona.PersistAll());
+        //        AppManifest2 appManifest2 = metaModelService.getAppManifest2();
+        //        ec.executeChild(this, appManifest2.getTeardownFixture());
+        //        ec.executeChild(this, appManifest2.getRefDataSetupFixture());
+        //        ec.executeChild(this, new SimpleObject_persona.PersistAll());
     }
 
     @Inject

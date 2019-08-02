@@ -77,5 +77,5 @@ public class ExceptionRecognizerTranslate implements MethodRule {
     private ServiceRegistry getServiceRegistry() {
         return IsisContext.getServiceRegistry();
     }
-    
+
 }

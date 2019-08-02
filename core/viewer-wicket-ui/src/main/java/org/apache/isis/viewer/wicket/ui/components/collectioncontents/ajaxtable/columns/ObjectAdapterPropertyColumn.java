@@ -72,7 +72,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         this.escaped = escaped;
         this.parentTypeName = parentTypeName;
         this.describedAs = describedAs;
-        
+
     }
 
     @Override

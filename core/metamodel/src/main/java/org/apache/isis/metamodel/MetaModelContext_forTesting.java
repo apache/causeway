@@ -51,76 +51,76 @@ import lombok.val;
 
 @Builder @Getter
 final class MetaModelContext_forTesting implements MetaModelContext {
-	
-	private ObjectAdapterProvider objectAdapterProvider;
 
-	@Builder.Default
-	private ServiceInjector serviceInjector = new ServiceInjector_forTesting();
+    private ObjectAdapterProvider objectAdapterProvider;
 
-	@Builder.Default
-	private ServiceRegistry serviceRegistry = new ServiceRegistry_forTesting();
+    @Builder.Default
+    private ServiceInjector serviceInjector = new ServiceInjector_forTesting();
 
-	@Builder.Default
+    @Builder.Default
+    private ServiceRegistry serviceRegistry = new ServiceRegistry_forTesting();
+
+    @Builder.Default
     private MetamodelEventService metamodelEventService = 
-        MetamodelEventService.builder()
-        .build();
-	
-	private SpecificationLoader specificationLoader;
+    MetamodelEventService.builder()
+    .build();
 
-	private AuthenticationSessionProvider authenticationSessionProvider;
+    private SpecificationLoader specificationLoader;
 
-	private TranslationService translationService;
+    private AuthenticationSessionProvider authenticationSessionProvider;
 
-	private AuthenticationSession authenticationSession;
+    private TranslationService translationService;
 
-	private AuthorizationManager authorizationManager;
+    private AuthenticationSession authenticationSession;
 
-	private AuthenticationManager authenticationManager;
+    private AuthorizationManager authorizationManager;
 
-	private TitleService titleService;
-	
-	private HomePageAction homePageAction;
+    private AuthenticationManager authenticationManager;
 
-	private RepositoryService repositoryService;
+    private TitleService titleService;
 
-	private TransactionService transactionService;
+    private HomePageAction homePageAction;
 
-	private TransactionState transactionState;
+    private RepositoryService repositoryService;
 
-	private Map<String, ObjectAdapter> serviceAdaptersById;
-	
-	@Singular
-	private List<Object> singletons;
+    private TransactionService transactionService;
 
-	@Override
-	public ObjectSpecification getSpecification(Class<?> type) {
-		return specificationLoader.loadSpecification(type);
-	}
-	
-	@Override
-	public IsisConfiguration getConfiguration() {
-	    return _Config.getConfiguration();
-	}
+    private TransactionState transactionState;
 
-	@Override
-	public Stream<ObjectAdapter> streamServiceAdapters() {
+    private Map<String, ObjectAdapter> serviceAdaptersById;
 
-	    if(serviceAdaptersById==null) {
-			return Stream.empty();
-		}
-		return serviceAdaptersById.values().stream();
-	}
+    @Singular
+    private List<Object> singletons;
 
-	@Override
-	public ObjectAdapter lookupServiceAdapterById(String serviceId) {
-		if(serviceAdaptersById==null) {
-			return null;
-		}
-		return serviceAdaptersById.get(serviceId);
-	}
-	
+    @Override
+    public ObjectSpecification getSpecification(Class<?> type) {
+        return specificationLoader.loadSpecification(type);
+    }
+
+    @Override
+    public IsisConfiguration getConfiguration() {
+        return _Config.getConfiguration();
+    }
+
+    @Override
+    public Stream<ObjectAdapter> streamServiceAdapters() {
+
+        if(serviceAdaptersById==null) {
+            return Stream.empty();
+        }
+        return serviceAdaptersById.values().stream();
+    }
+
+    @Override
+    public ObjectAdapter lookupServiceAdapterById(String serviceId) {
+        if(serviceAdaptersById==null) {
+            return null;
+        }
+        return serviceAdaptersById.get(serviceId);
+    }
+
     public Stream<Object> streamSingletons() {
-        
+
         val fields = _Lists.of(
                 getConfiguration(),
                 objectAdapterProvider,
@@ -137,9 +137,9 @@ final class MetaModelContext_forTesting implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState);
-        
+
         return Stream.concat(fields.stream(), getSingletons().stream())
                 .filter(_NullSafe::isPresent);
     }
-	
+
 }

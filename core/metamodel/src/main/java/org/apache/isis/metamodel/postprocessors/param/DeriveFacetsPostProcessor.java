@@ -183,8 +183,8 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
                     new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
             objectSpecification.streamObjectActions(actionTypes, Contributed.INCLUDED)
-                    .filter(ObjectAction.Predicates.associatedWith(collection))
-                    .forEach(action->{
+            .filter(ObjectAction.Predicates.associatedWith(collection))
+            .forEach(action->{
 
                 final List<ObjectActionParameter> parameters = action.getParameters();
 
@@ -326,12 +326,12 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
                     final PropertyOrCollectionAccessorFacet getterFacetIfAny = null;
                     final PropertyDomainEventFacetForPropertyAnnotation propertyDomainEventFacet =
                             new PropertyDomainEventFacetForPropertyAnnotation(
-                                propertyDomainEventType, getterFacetIfAny, property);
+                                    propertyDomainEventType, getterFacetIfAny, property);
                     FacetUtil.addFacet(propertyDomainEventFacet);
                 }
             }
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
-                objectSpecification.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                    objectSpecification.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
             if(propertyDomainEventDefaultFacet != null) {
                 final PropertyDomainEventFacet propertyFacet = property.getFacet(PropertyDomainEventFacet.class);
                 if (propertyFacet instanceof PropertyDomainEventFacetAbstract) {
@@ -348,7 +348,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
     static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
         return facet.isImplicitlyImmutable() ?
                 DisabledFacetAbstract.Semantics.DISABLED :
-                DisabledFacetAbstract.Semantics.ENABLED;
+                    DisabledFacetAbstract.Semantics.ENABLED;
     }
 
     private FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
@@ -398,7 +398,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         }
         if (hasAtLeastOneDefault) {
             FacetUtil.addFacet(
-                new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
+                    new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, peerFor(parameter)));
         }
     }
 
@@ -413,8 +413,8 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final ChoicesFacet specFacet = paramSpec.getFacet(ChoicesFacet.class);
         if(existsAndIsDoOp(specFacet)) {
             FacetUtil.addFacet(
-                new ActionParameterChoicesFacetDerivedFromChoicesFacet(
-                    peerFor(parameter)));
+                    new ActionParameterChoicesFacetDerivedFromChoicesFacet(
+                            peerFor(parameter)));
         }
     }
 
@@ -475,8 +475,8 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final DefaultedFacet specFacet = propertySpec.getFacet(DefaultedFacet.class);
         if(existsAndIsDoOp(specFacet)) {
             FacetUtil.addFacet(
-                new PropertyDefaultFacetDerivedFromDefaultedFacet(
-                        specFacet, facetedMethodFor(property)));
+                    new PropertyDefaultFacetDerivedFromDefaultedFacet(
+                            specFacet, facetedMethodFor(property)));
         }
     }
 
@@ -589,7 +589,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             final OneToManyAssociation otma,
             final ObjectActionParameter scalarOrCollectionParam) {
         if (scalarOrCollectionParam.containsDoOpFacet(ActionParameterChoicesFacet.class) ||
-            scalarOrCollectionParam.containsDoOpFacet(ActionParameterAutoCompleteFacet.class)) {
+                scalarOrCollectionParam.containsDoOpFacet(ActionParameterAutoCompleteFacet.class)) {
             return;
         }
 

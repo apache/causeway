@@ -28,7 +28,7 @@ import lombok.extern.log4j.Log4j2;
 final class _CDI_Lifecycle implements AutoCloseable {
 
     private final CheckedRunnable onClose;
-    
+
     @Override
     public void close() {
         try {
@@ -36,9 +36,9 @@ final class _CDI_Lifecycle implements AutoCloseable {
         } catch (Exception e) {
             val note = "This implementation expects the IocPlugin to provide a CDIProvider "
                     + "that creates CDI instances that implement AutoClosable";
-            
+
             log.warn("Failed to properly close the CDI container. Note: {}", note, e);
         }
     }
-    
+
 }

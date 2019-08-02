@@ -29,37 +29,37 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import lombok.val;
 
 class IsisConfiguration_primingTest {
-    
+
     @BeforeEach
     void setUp() {
         _Config.clear();
     }
-    
+
     @Test
     void shouldReturnEmptyValue() {
-        
+
         val config = _Config.getConfiguration();
         assertEquals(null, config.getString("test"));
     }
-    
+
     @Test
     void shouldNotAllowChangeAfterFinalizedConfig() {
-        
+
         @SuppressWarnings("unused")
         val config = _Config.getConfiguration();
-        
+
         assertThrows(IllegalStateException.class, ()->{
             _Config.put("test", "Hello World!");    
         });
     }
-    
+
     @Test
     void shouldReturnPrimedValue() {
-        
+
         _Config.put("test", "Hello World!");
-        
+
         val config = _Config.getConfiguration();
-        
+
         assertEquals("Hello World!", config.getString("test"));
     }
 

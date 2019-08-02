@@ -65,7 +65,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     @Override
     ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy);
-    
+
     //Instance get(final Instance owner, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -163,11 +163,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 public boolean test(final ObjectAssociation association) {
                     final Stream<Facet> facets = association.streamFacets()
                             .filter((final Facet facet)->
-                                facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
-                    
+                            facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
+
                     return !facets
-                    .map(facet->(WhereValueFacet) facet)
-                    .anyMatch(wawF->wawF.where().includes(where));
+                            .map(facet->(WhereValueFacet) facet)
+                            .anyMatch(wawF->wawF.where().includes(where));
                 }
             };
         }
@@ -208,7 +208,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     @Vetoed
     public static class Util {
         private Util(){}
-        
+
         public final static String LAYOUT_DEFAULT_GROUP = "General";
 
         public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(

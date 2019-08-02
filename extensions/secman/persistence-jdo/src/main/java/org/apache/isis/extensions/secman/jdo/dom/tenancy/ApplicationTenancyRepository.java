@@ -36,14 +36,14 @@ import org.apache.isis.commons.internal.collections._Lists;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationTenancy.class
-)
+        )
 public class ApplicationTenancyRepository 
 implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository {
 
     // -- findByNameOrPathMatching
 
     @Override
-	public List<ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
+    public List<ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
         return queryResultsCache.execute(new Callable<List<ApplicationTenancy>>() {
             @Override public List<ApplicationTenancy> call() throws Exception {
                 return findByNameOrPathMatching(search);
@@ -59,7 +59,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     }
 
     // -- findByName
-    
+
     public ApplicationTenancy findByNameCached(final String name) {
         return queryResultsCache.execute(new Callable<ApplicationTenancy>() {
             @Override
@@ -72,7 +72,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     public ApplicationTenancy findByName(final String name) {
         return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByName", "name", name));
     }
-    
+
 
     // -- findByPath
 
@@ -91,7 +91,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         }
         return repository.uniqueMatch(new QueryDefault<>(ApplicationTenancy.class, "findByPath", "path", path));
     }
-    
+
 
     // -- autoComplete
 
@@ -102,7 +102,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         }
         return _Lists.newArrayList();
     }
-    
+
 
     // -- newTenancy
 
@@ -125,7 +125,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     // -- allTenancies
 
     @Override
-	public List<ApplicationTenancy> allTenancies() {
+    public List<ApplicationTenancy> allTenancies() {
         return queryResultsCache.execute(new Callable<List<ApplicationTenancy>>() {
             @Override
             public List<ApplicationTenancy> call() throws Exception {
@@ -139,7 +139,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject ApplicationTenancyFactory applicationTenancyFactory;
     @Inject RepositoryService repository;
     @Inject FactoryService factory;

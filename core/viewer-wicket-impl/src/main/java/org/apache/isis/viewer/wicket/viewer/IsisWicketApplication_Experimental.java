@@ -34,9 +34,9 @@ import org.apache.isis.commons.internal.collections._Sets;
  * to move experimental code out of IsisWicketApplication
  */
 final class IsisWicketApplication_Experimental {
-    
+
     private final IsisWicketApplication holder;
-    
+
     IsisWicketApplication_Experimental(IsisWicketApplication holder) {
         this.holder = holder;
     }
@@ -54,7 +54,7 @@ final class IsisWicketApplication_Experimental {
     // this listener firing and XmlPartialPageUpdate actually attempting to render the change components
     //
     boolean addListenerToStripRemovedComponentsFromAjaxTargetResponse() {
-        
+
         return holder.getAjaxRequestTargetListeners().add(new IListener(){
 
             @Override
@@ -79,7 +79,7 @@ final class IsisWicketApplication_Experimental {
             }
         });
     }
-    
+
     private Set<CssResourceReference> cssResourceReferencesForAllComponents() {
         // TODO mgrigorov: ISIS-537 temporary disabled to not mess up with Bootstrap styles
         //        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
@@ -103,5 +103,5 @@ final class IsisWicketApplication_Experimental {
                 IsisWicketApplication.class, "isis-wicket-viewer-bundle.css",
                 references.toArray(new CssResourceReference[]{}));
     }
-    
+
 }

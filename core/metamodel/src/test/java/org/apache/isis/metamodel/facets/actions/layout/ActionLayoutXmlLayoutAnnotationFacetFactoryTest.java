@@ -59,7 +59,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
                 return null;
             }
         }
-        
+
         final Method method = findMethod(Customer.class, "foz");
 
         context.checking(new Expectations() {

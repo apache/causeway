@@ -30,18 +30,18 @@ import org.apache.isis.applib.value.Markup;
 public class Markdown extends Markup {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static Markdown valueOfMarkdown(String asciiDoc) {
         return valueOfHtml(MarkdownConverter.mdToHtml(asciiDoc));
     }
-    
+
     public static Markdown valueOfHtml(String html) {
         return new Markdown(html);
     }
-    
+
     private Markdown(String html) {
         super(html);
     }
-     
-    
+
+
 }

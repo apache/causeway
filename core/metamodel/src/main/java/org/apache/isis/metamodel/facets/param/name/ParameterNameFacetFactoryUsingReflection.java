@@ -42,9 +42,9 @@ import lombok.val;
  * @since 2.0
  */
 public class ParameterNameFacetFactoryUsingReflection extends FacetFactoryAbstract {
-	
-	private final Pattern argXPattern = Pattern.compile("arg\\d+");
-	
+
+    private final Pattern argXPattern = Pattern.compile("arg\\d+");
+
     public ParameterNameFacetFactoryUsingReflection() {
         super(FeatureType.PARAMETERS_ONLY);
     }
@@ -63,7 +63,7 @@ public class ParameterNameFacetFactoryUsingReflection extends FacetFactoryAbstra
         if (argXMatcher.matches()){
             return;
         }
-        
+
         val naturalName = StringExtensions.asNaturalName2(parameterName);
         val facetHolder = processParameterContext.getFacetHolder();
 
@@ -73,5 +73,5 @@ public class ParameterNameFacetFactoryUsingReflection extends FacetFactoryAbstra
     private NamedFacet create(final String parameterName, final FacetHolder holder) {
         return new NamedFacetForParameterUsingReflection(parameterName, holder);
     }
-    
+
 }

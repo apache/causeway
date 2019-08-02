@@ -94,17 +94,17 @@ public interface CollectionFacet extends Facet {
             final CollectionFacet facet = getCollectionFacetFromSpec(collectionAdapter);
             return Utils.<T>downCast(facet.stream(collectionAdapter));
         }
-        
+
         public static <T extends ManagedObject> List<T> toAdapterList(final T collectionAdapter) {
             return streamAdapters(collectionAdapter)
                     .collect(Collectors.toList());
         }
-        
+
         private static <T extends ManagedObject> Stream<T> downCast(final Stream<ManagedObject> stream) {
             final Function<ManagedObject, T> uncheckedCast = _Casts::uncheckedCast;
             return stream.map(uncheckedCast);
         }
 
     }
-    
+
 }

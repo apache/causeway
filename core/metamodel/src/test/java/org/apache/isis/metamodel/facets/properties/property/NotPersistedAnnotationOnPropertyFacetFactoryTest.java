@@ -34,7 +34,7 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
     private PropertyAnnotationFacetFactory facetFactory;
 
     @Override
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         facetFactory = new PropertyAnnotationFacetFactory();
     }

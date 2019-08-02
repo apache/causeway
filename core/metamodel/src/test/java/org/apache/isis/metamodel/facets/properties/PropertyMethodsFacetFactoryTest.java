@@ -77,10 +77,10 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Mock
     private ObjectSpecification mockSpecification;
-    
+
 
     @Override
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
 
         // expecting
@@ -109,10 +109,10 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAccessorMethod));
     }
 
-   public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
+    public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
 
-       class Customer {
+        class Customer {
             @SuppressWarnings("unused")
             public String getFirstName() {
                 return null;
@@ -364,20 +364,20 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyChoicesMethod));
     }
-    
+
     public void testAutoCompleteFacetFoundAndMethodRemoved() {
 
         final PropertyAutoCompleteFacetMethodFactory facetFactory = new PropertyAutoCompleteFacetMethodFactory();
 
-//        context.checking(new Expectations(){{
-//            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-//            will(returnValue(mockAuthenticationSessionProvider));
-//
-//            final DeploymentCategory deploymentCategory = DeploymentCategory.PRODUCTION;
-//            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-//            will(returnValue(mockDeploymentCategoryProvider));
-//
-//        }});
+        //        context.checking(new Expectations(){{
+        //            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+        //            will(returnValue(mockAuthenticationSessionProvider));
+        //
+        //            final DeploymentCategory deploymentCategory = DeploymentCategory.PRODUCTION;
+        //            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+        //            will(returnValue(mockDeploymentCategoryProvider));
+        //
+        //        }});
 
 
         class Customer {
@@ -385,7 +385,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             public String getFirstName() {
                 return null;
             }
-            
+
             @SuppressWarnings("unused")
             public Object[] autoCompleteFirstName(String searchArg) {
                 return null;
@@ -393,15 +393,15 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyAutoCompleteMethod = findMethod(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
-        
+
         facetFactory.process(new ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-        
+
         final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyAutoCompleteFacetMethod);
         final PropertyAutoCompleteFacetMethod propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
         assertEquals(propertyAutoCompleteMethod, propertyAutoCompleteFacet.getMethods().get(0));
-        
+
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAutoCompleteMethod));
     }
 
@@ -490,7 +490,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDisableFacetNoArgsFoundAndMethodRemoved() {
-        
+
         final DisableForContextFacetViaMethodFactory facetFactory = new DisableForContextFacetViaMethodFactory();
 
         class Customer {

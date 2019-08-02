@@ -55,7 +55,7 @@ import lombok.val;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationPermission.class
-)
+        )
 public class ApplicationPermissionRepository 
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository {
 
@@ -76,7 +76,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                         ApplicationPermission.class, "findByRole",
                         "role", role));
     }
-    
+
 
     // -- findByUser (programmatic)
     public List<ApplicationPermission> findByUserCached(final ApplicationUser user) {
@@ -98,7 +98,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                         ApplicationPermission.class, "findByUser",
                         "username", username));
     }
-    
+
 
     // -- findByUserAndPermissionValue (programmatic)
     /**
@@ -106,39 +106,39 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
      * multiple lookups from <code>org.apache.isis.extensions.secman.jdo.app.user.UserPermissionViewModel</code>.
      */
     @Override
-	public ApplicationPermission findByUserAndPermissionValue(final String username, final ApplicationPermissionValue permissionValue) {
+    public ApplicationPermission findByUserAndPermissionValue(final String username, final ApplicationPermissionValue permissionValue) {
 
         // obtain all permissions for this user, map by its value, and
         // put into query cache (so that this method can be safely called in a tight loop)
         final Map<ApplicationPermissionValue, List<ApplicationPermission>> permissions =
-            queryResultsCache.execute(new Callable<Map<ApplicationPermissionValue, List<ApplicationPermission>>>() {
-                @Override
-                public Map<ApplicationPermissionValue, List<ApplicationPermission>> call() throws Exception {
+                queryResultsCache.execute(new Callable<Map<ApplicationPermissionValue, List<ApplicationPermission>>>() {
+                    @Override
+                    public Map<ApplicationPermissionValue, List<ApplicationPermission>> call() throws Exception {
 
-                    val permissions = findByUser(username);
-                    
-                    val permissionsByPermissionValue = 
-                    		_Multimaps.<ApplicationPermissionValue, ApplicationPermission>newListMultimap();
-                    
-                    _NullSafe.stream(permissions)
-                    .forEach(permission->{
-                    	val permissionValue = ApplicationPermission.Functions.AS_VALUE.apply(permission);
-                    	permissionsByPermissionValue.putElement(permissionValue, permission);
-                    });
-                    
-                    return permissionsByPermissionValue;
-                }
-                // note: it is correct that only username (and not permissionValue) is the key
-                // (we are obtaining all the perms for this user)
-            }, ApplicationPermissionRepository.class, "findByUserAndPermissionValue", username);
+                        val permissions = findByUser(username);
+
+                        val permissionsByPermissionValue = 
+                                _Multimaps.<ApplicationPermissionValue, ApplicationPermission>newListMultimap();
+
+                        _NullSafe.stream(permissions)
+                        .forEach(permission->{
+                            val permissionValue = ApplicationPermission.Functions.AS_VALUE.apply(permission);
+                            permissionsByPermissionValue.putElement(permissionValue, permission);
+                        });
+
+                        return permissionsByPermissionValue;
+                    }
+                    // note: it is correct that only username (and not permissionValue) is the key
+                    // (we are obtaining all the perms for this user)
+                }, ApplicationPermissionRepository.class, "findByUserAndPermissionValue", username);
 
         // now simply return the permission from the required value (if it exists)
         final List<ApplicationPermission> applicationPermissions = permissions.get(permissionValue);
         return applicationPermissions != null && !applicationPermissions.isEmpty()
-                    ? applicationPermissions.get(0)
-                    : null;
+                ? applicationPermissions.get(0)
+                        : null;
     }
-    
+
 
     // -- findByRoleAndRuleAndFeatureType (programmatic)
     public List<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
@@ -161,7 +161,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                         "rule", rule,
                         "featureType", type));
     }
-    
+
 
     // -- findByRoleAndRuleAndFeature (programmatic)
     public ApplicationPermission findByRoleAndRuleAndFeatureCached(
@@ -180,18 +180,18 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final ApplicationRole role,
             final ApplicationPermissionRule rule, final ApplicationFeatureType type, final String featureFqn) {
         return repository
-        		.uniqueMatch(
-                new QueryDefault<>(
-                        ApplicationPermission.class, "findByRoleAndRuleAndFeature",
-                        "role", role,
-                        "rule", rule,
-                        "featureType", type,
-                        "featureFqn", featureFqn ));
+                .uniqueMatch(
+                        new QueryDefault<>(
+                                ApplicationPermission.class, "findByRoleAndRuleAndFeature",
+                                "role", role,
+                                "rule", rule,
+                                "featureType", type,
+                                "featureFqn", featureFqn ));
     }
-    
+
 
     // -- findByFeature (programmatic)
-    
+
     @Override
     public List<ApplicationPermission> findByFeatureCached(final ApplicationFeatureId featureId) {
         return queryResultsCache.execute(new Callable<List<ApplicationPermission>>() {
@@ -208,7 +208,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                         "featureType", featureId.getType(),
                         "featureFqn", featureId.getFullyQualifiedName()));
     }
-    
+
 
     // -- newPermission (programmatic)
 
@@ -233,7 +233,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final ApplicationPermissionMode mode,
             final ApplicationFeatureType featureType,
             final String featureFqn) {
-    	
+
         ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureType, featureFqn);
         if (permission != null) {
             return permission;
@@ -255,14 +255,14 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final String featurePackage,
             final String featureClassName,
             final String featureMemberName) {
-    	
+
         val featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
         val featureType = featureId.getType();
         val featureFqn = featureId.getFullyQualifiedName();
 
         val feature = applicationFeatureRepository.findFeature(featureId);
         if(feature == null) {
-        	messages.warnUser("No such " + featureType.name().toLowerCase() + ": " + featureFqn);
+            messages.warnUser("No such " + featureType.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
 
@@ -276,19 +276,19 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
         return permission;
     }
-    
+
 
     // -- allPermission (programmatic)
     @Override
-	public List<ApplicationPermission> allPermissions() {
+    public List<ApplicationPermission> allPermissions() {
         return repository.allInstances(ApplicationPermission.class);
     }
-    
+
 
     // -- findOrphaned (programmatic)
 
     @Override
-	public List<ApplicationPermission> findOrphaned() {
+    public List<ApplicationPermission> findOrphaned() {
 
         final Collection<String> packageNames = applicationFeatureRepository.packageNames();
         final Set<String> availableClasses = _Sets.newTreeSet();
@@ -320,8 +320,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             case MEMBER:
 
                 final List<String> split = _Strings.splitThenStream(featureFqn, "#")
-                	.collect(Collectors.toList());
-                
+                .collect(Collectors.toList());
+
                 final String fqClassName = split.get(0);
                 final String memberName = split.get(1);
 
@@ -366,9 +366,9 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                 applicationFeatureRepository.memberNamesOf(packageName, className, applicationMemberType);
         memberNames.addAll(memberNamesOf);
     }
-    
+
     // -- DEPENDENCIES
-    
+
     @Inject RepositoryService repository;
     @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
     @Inject ApplicationPermissionFactory applicationPermissionFactory;

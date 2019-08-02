@@ -75,7 +75,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
             public void updateName(
                     @DomainObj(publishng = DomainObj.Publishng.YES)
                     String name
-            ) {}
+                    ) {}
         }
 
         Method method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -93,7 +93,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
             public void updateName(
                     @Published
                     String name
-            ) {}
+                    ) {}
         }
 
         Method method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -111,7 +111,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
             public void updateName(
                     @MetaPublished
                     String name
-            ) {}
+                    ) {}
         }
 
         Method method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -130,7 +130,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
                     @MetaPublished
                     @Published
                     String name
-            ) {}
+                    ) {}
         }
 
         Method method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -150,7 +150,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
                     @MetaPublished
                     @NotPublished
                     String name
-            ) {}
+                    ) {}
         }
 
         Method method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -171,7 +171,7 @@ public class Annotations_getAnnotations_on_Parameter_Test {
                     @Published
                     @DomainObj(publishng = DomainObj.Publishng.NO)
                     String name
-            ) {}
+                    ) {}
         }
 
         Method method = SomeDomainObject.class.getMethod("updateName", String.class);
@@ -190,11 +190,11 @@ public class Annotations_getAnnotations_on_Parameter_Test {
 
         class SomeDomainObject {
             public void updateName(
-                @MetaPublished
-                @NotPublished
-                @DomainObj(publishng = DomainObj.Publishng.YES)
+                    @MetaPublished
+                    @NotPublished
+                    @DomainObj(publishng = DomainObj.Publishng.YES)
                     String name
-            ) {}
+                    ) {}
         }
 
         Method method = SomeDomainObject.class.getMethod("updateName", String.class);

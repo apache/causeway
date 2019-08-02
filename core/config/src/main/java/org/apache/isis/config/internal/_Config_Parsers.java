@@ -31,9 +31,9 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 final class _Config_Parsers {
-    
+
     // -- BOOLEAN
-    
+
     static @Nullable Boolean parseBoolean(@Nullable String input) {
         if(input==null) {
             return null;
@@ -44,20 +44,20 @@ final class _Config_Parsers {
         case "0":
         case "no":
             return Boolean.FALSE;
-            
+
         case "true":
         case "1":
         case "yes":
             return Boolean.TRUE;
-            
+
         default:
             break;
         }
         return null;
     }
-    
+
     // -- INTEGER
-    
+
     static @Nullable Integer parseInteger(@Nullable String input) {
         if(input==null) {
             return null;
@@ -69,9 +69,9 @@ final class _Config_Parsers {
         }
         return null;
     }
-    
+
     // -- COLOR
-    
+
     static @Nullable Color parseColor(@Nullable String input) {
         if(input==null) {
             return null;
@@ -83,9 +83,9 @@ final class _Config_Parsers {
         }
         return null;
     }
-    
+
     // -- FONT
-    
+
     static @Nullable Font parseFont(@Nullable String input) {
         if(input==null) {
             return null;
@@ -97,9 +97,9 @@ final class _Config_Parsers {
         }
         return null;
     }
-    
+
     // -- LIST OF STRINGS
-    
+
     static @Nullable String[] parseList(@Nullable String input) {
         if(input==null) {
             return null;
@@ -113,5 +113,5 @@ final class _Config_Parsers {
         }
         return null;
     }
-    
+
 }

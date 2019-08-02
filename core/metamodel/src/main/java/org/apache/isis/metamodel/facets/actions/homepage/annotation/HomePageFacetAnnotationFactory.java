@@ -74,11 +74,11 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
                 final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
-                
+
                 objectActions
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
-                    
+
                     final String fullIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
 
                     // TODO: it would good to flag if the facet is found on any non-services, however
@@ -86,7 +86,7 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
                     // this ought to be improved upon at some point...
                     annotated.add(fullIdentifier);
                 });
- 
+
                 return true; // keep searching
             }
 
@@ -94,11 +94,11 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             public void summarize(ValidationFailures validationFailures) {
                 if(annotated.size()>1) {
                     for (String actionId : annotated) {
-                        
+
                         final String nonServiceNamesStr = annotated.stream()
-                            .filter(not(actionId::equals))
-                            .collect(Collectors.joining(", "));
-                        
+                                .filter(not(actionId::equals))
+                                .collect(Collectors.joining(", "));
+
                         validationFailures.add(
                                 "%s: other actions also specified as home page: %s ",
                                 actionId, nonServiceNamesStr);

@@ -38,9 +38,9 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
  * Interim class, expected to be removed with https://issues.apache.org/jira/browse/ISIS-1976 
  */
 public class ObjectAdapterLegacy {
-    
+
     // -- CommandExecutorServiceDefault --------------------------------------------------------
-    
+
     public static class __CommandExecutorServiceDefault {
 
         public static ObjectAdapter adapterFor(Object targetObject) {
@@ -69,7 +69,7 @@ public class ObjectAdapterLegacy {
             }
             return getPersistenceSession().adapterFor(targetObject);
         }
-        
+
         private static ObjectAdapter adapterFor(final OidDto oidDto) {
             final Bookmark bookmark = Bookmark.from(oidDto);
             return adapterFor(bookmark);
@@ -87,7 +87,7 @@ public class ObjectAdapterLegacy {
         private static PersistenceSession getPersistenceSession() {
             return IsisContext.getPersistenceSession().orElseThrow(_Exceptions::unexpectedCodeReach);
         }
-        
+
     }
-    
+
 }

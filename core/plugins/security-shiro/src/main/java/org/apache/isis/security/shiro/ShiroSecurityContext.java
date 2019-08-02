@@ -47,5 +47,5 @@ public final class ShiroSecurityContext {
         }
         return (RealmSecurityManager) securityManager;
     }
-    
+
 }

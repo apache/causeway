@@ -31,19 +31,19 @@ import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
 
 @Configuration
 @Import({
-	//TimestampService.class, //FIXME initializes too early 
-	MetricsServiceDefault.class,
-	IsisJdoSupportDN5.class,
-	IsisPlatformTransactionManagerForJdo.class,
+    //TimestampService.class, //FIXME initializes too early 
+    MetricsServiceDefault.class,
+    IsisJdoSupportDN5.class,
+    IsisPlatformTransactionManagerForJdo.class,
 })
 @ComponentScan(
-		basePackageClasses= {
-				// bring in the mixins
-				Persistable_datanucleusIdLong.class,
-		},
-		includeFilters= {
-				@ComponentScan.Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
-		})
+        basePackageClasses= {
+                // bring in the mixins
+                Persistable_datanucleusIdLong.class,
+        },
+        includeFilters= {
+                @ComponentScan.Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
 public class IsisBootDataNucleus {
 
 }

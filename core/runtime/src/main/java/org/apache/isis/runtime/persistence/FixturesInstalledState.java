@@ -25,35 +25,35 @@ package org.apache.isis.runtime.persistence;
  *
  */
 public enum FixturesInstalledState {
-	
-	/**
-	 * application scoped state indicating fixture scripts have not been run yet
-	 */
-	not_Installed,
-	
-	/**
-	 * application scoped state indicating fixture scripts are currently in the process 
-	 * of being installed (are running)
-	 */
-	Installing,
-	
-	/**
-	 * application scoped state indicating fixture scripts have been installed (have run)
-	 */
-	Installed
 
-	;
+    /**
+     * application scoped state indicating fixture scripts have not been run yet
+     */
+    not_Installed,
 
-	public boolean isNotInstalled() {
-		return this == not_Installed;
-	}
-	
-	public boolean isInstalling() {
-		return this == Installing;
-	}
-	
-	public boolean isInstalled() {
-		return this == Installed;
-	}
+    /**
+     * application scoped state indicating fixture scripts are currently in the process 
+     * of being installed (are running)
+     */
+    Installing,
+
+    /**
+     * application scoped state indicating fixture scripts have been installed (have run)
+     */
+    Installed
+
+    ;
+
+    public boolean isNotInstalled() {
+        return this == not_Installed;
+    }
+
+    public boolean isInstalling() {
+        return this == Installing;
+    }
+
+    public boolean isInstalled() {
+        return this == Installed;
+    }
 }
 

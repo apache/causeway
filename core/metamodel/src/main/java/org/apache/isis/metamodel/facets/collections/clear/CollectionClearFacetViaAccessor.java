@@ -37,7 +37,7 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     public CollectionClearFacetViaAccessor(
             final Method method,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
     }

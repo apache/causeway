@@ -28,26 +28,26 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @ViewModel
 public class InventoryManager {
 
-	// -- UPDATE PRODUCT PRICE
-	
-	public static class UpdateProductPriceEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
-	
+    // -- UPDATE PRODUCT PRICE
+
+    public static class UpdateProductPriceEvent extends ActionDomainEvent {
+        private static final long serialVersionUID = 1L;}
+
     @Action(domainEvent = UpdateProductPriceEvent.class)
     public Product updateProductPrice(Product product, double newPrice) {
         product.setPrice(newPrice);
         return product;
     }
-    
-	// -- COUNT PRODUCTS
-    
+
+    // -- COUNT PRODUCTS
+
     @Action
     public int countProducts() {
         return repository.allInstances(Product.class).size();
     }
-    
+
     // -- DEPENDENCIES
-    
+
     @Inject RepositoryService repository;
-    
+
 }

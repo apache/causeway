@@ -35,7 +35,7 @@ public class JavaUtilDatePanel extends ScalarPanelTextFieldDatePickerAbstract<ja
         super(id, scalarModel, java.util.Date.class);
         init(new DateConverterForJavaUtilDate(getSettings(), getAdjustBy()));
     }
-    
+
     @Override
     protected Integer getLengthAdjustHint() {
         return +3;

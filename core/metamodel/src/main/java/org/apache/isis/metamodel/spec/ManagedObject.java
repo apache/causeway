@@ -46,28 +46,28 @@ public interface ManagedObject {
      * represents with the framework.
      */
     Object getPojo();
-    
+
     // -- SIMPLE
-    
+
     @Value @RequiredArgsConstructor(staticName="of") 
     public final static class SimpleManagedObject implements ManagedObject {
         @Getter private final ObjectSpecification specification;
         @Getter private final Object pojo;
     }
-    
+
     // -- TITLE
-    
+
     public default String titleString() {
         return titleString(null);
     }
-    
+
     default String titleString(ObjectAdapter contextAdapterIfAny) {
         return TitleUtil.titleString(this, contextAdapterIfAny);
     }
-    
-    
+
+
     public static class TitleUtil {
-        
+
         public static String titleString(ManagedObject managedObject, ObjectAdapter contextAdapterIfAny) {
             if (managedObject.getSpecification().isParentedOrFreeCollection()) {
                 final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
@@ -117,15 +117,15 @@ public interface ManagedObject {
                 }
             }
         }
-        
+
         private static String getDefaultTitle(ManagedObject managedObject) {
             return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
         }
 
     }
-    
+
     // -- SHORTCUT - ELEMENT SPECIFICATION
-    
+
     /**
      * Used only for (standalone or parented) collections.
      * @deprecated use {@link ObjectSpecification#getElementSpecification()} instead, 
@@ -135,7 +135,7 @@ public interface ManagedObject {
     default public ObjectSpecification getElementSpecification() {
         return getSpecification().getElementSpecification();
     }
-    
+
     // -- SHORTCUT - ICON NAME
 
     /**
@@ -150,13 +150,13 @@ public interface ManagedObject {
     default public String getIconName() {
         return getSpecification().getIconName(this);
     }
-    
+
     // -- FACTORIES
-    
+
     public static ManagedObject of(
             final ObjectSpecification specification, 
             final Object pojo) {
-        
+
         return new ManagedObject() {
             @Override
             public ObjectSpecification getSpecification() {
@@ -168,14 +168,14 @@ public interface ManagedObject {
             }
         };
     }
-    
+
     public static ManagedObject of(
             final Supplier<ObjectSpecification> specificationSupplier, 
             final Object pojo) {
-        
+
         return new ManagedObject() {
             private final _Lazy<ObjectSpecification> specification = _Lazy.of(specificationSupplier);
-            
+
             @Override
             public ObjectSpecification getSpecification() {
                 return specification.get();
@@ -186,6 +186,6 @@ public interface ManagedObject {
             }
         };
     }
-    
+
 
 }

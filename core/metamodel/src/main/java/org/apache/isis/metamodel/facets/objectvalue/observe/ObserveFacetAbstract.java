@@ -51,7 +51,7 @@ public abstract class ObserveFacetAbstract extends SingleClassValueFacetAbstract
     public Class<? extends EventStreamSource> getEventStreamType() {
         return eventStreamType;
     }
-    
+
     @Override
     public ObjectSpecification valueSpec() {
         throw _Exceptions.notImplemented();

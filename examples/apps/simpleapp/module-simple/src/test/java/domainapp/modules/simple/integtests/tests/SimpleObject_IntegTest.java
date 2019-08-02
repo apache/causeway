@@ -65,13 +65,13 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 
         @Test
         public void not_editable() {
-        	
-        	// expect
+
+            // expect
             assertThrows(DisabledException.class, ()->{
-            
-            	// when
-            	wrap(simpleObject).setName("new name");
-            	
+
+                // when
+                wrap(simpleObject).setName("new name");
+
             });
         }
 
@@ -93,17 +93,17 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         @Test
         public void failsValidation() {
 
-        	// expect
-        	InvalidException cause = assertThrows(InvalidException.class, ()->{
-            
-            	// when
-        		wrap(simpleObject).updateName("new name!");
-            	
+            // expect
+            InvalidException cause = assertThrows(InvalidException.class, ()->{
+
+                // when
+                wrap(simpleObject).updateName("new name!");
+
             });
-        	
-        	// also expect
-        	assertThat(cause.getMessage(), containsString("Exclamation mark is not allowed."));
-        	
+
+            // also expect
+            assertThat(cause.getMessage(), containsString("Exclamation mark is not allowed."));
+
         }
     }
 

@@ -32,52 +32,52 @@ import lombok.val;
 
 @Singleton
 public class DemoBlobStore {
-	
-	@Inject HttpSession session;
-	
-	public void put(UUID uuid, Blob blob) {
-		if(blob==null) {
-			return;
-		}
-		session.setAttribute(uuid.toString(), blob);
-	}
 
-	public Blob get(UUID uuid) {
-		if(uuid==null) {
-			return null;
-		}
-		return (Blob) session.getAttribute(uuid.toString());
-	}
-	
-	private static DemoBlobStore current() {
-		return IsisContext.getServiceRegistry().lookupServiceElseFail(DemoBlobStore.class);
-	}
-	
-	// -- JAXB ADAPTER
-	
+    @Inject HttpSession session;
+
+    public void put(UUID uuid, Blob blob) {
+        if(blob==null) {
+            return;
+        }
+        session.setAttribute(uuid.toString(), blob);
+    }
+
+    public Blob get(UUID uuid) {
+        if(uuid==null) {
+            return null;
+        }
+        return (Blob) session.getAttribute(uuid.toString());
+    }
+
+    private static DemoBlobStore current() {
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(DemoBlobStore.class);
+    }
+
+    // -- JAXB ADAPTER
+
     public static final class BlobAdapter extends XmlAdapter<String, Blob> {
 
-    	
-		@Override
-		public Blob unmarshal(String data) throws Exception {
-		    if(data==null) {
+
+        @Override
+        public Blob unmarshal(String data) throws Exception {
+            if(data==null) {
                 return null;
             }
-		    val uuid = UUID.fromString(data);
-		    return DemoBlobStore.current().get(uuid);
-		}
-		
-		@Override
-		public String marshal(Blob blob) throws Exception {
-			if(blob==null) {
+            val uuid = UUID.fromString(data);
+            return DemoBlobStore.current().get(uuid);
+        }
+
+        @Override
+        public String marshal(Blob blob) throws Exception {
+            if(blob==null) {
                 return null;
             }
-		    val uuid = UUID.randomUUID();
-			DemoBlobStore.current().put(uuid, blob);
-			return uuid.toString();
-		}
-    	
+            val uuid = UUID.randomUUID();
+            DemoBlobStore.current().put(uuid, blob);
+            return uuid.toString();
+        }
+
     }
-	
-	
+
+
 }

@@ -43,7 +43,7 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
             final String value, 
             final Class<?> constructorType,
             final FacetHolder holder) {
-        
+
         super(type(), value, holder);
         this.mixinType = mixinType;
         this.constructorType = constructorType;

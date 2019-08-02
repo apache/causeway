@@ -44,103 +44,103 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
-		classes = { 
-				JdoTestDomainModule_withShiro.class, 
-		}, 
-		properties = {
-				"logging.config=log4j2-test.xml",
-				"smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
-		})
+        classes = { 
+                JdoTestDomainModule_withShiro.class, 
+        }, 
+        properties = {
+                "logging.config=log4j2-test.xml",
+                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
+        })
 @Import({
-	LdapServerService.class,
+    LdapServerService.class,
 })
 @Log4j2
 class ShiroLdapTest extends AbstractShiroTest {
-	
-	@Inject LdapServerService ldapServerService;
 
-	@BeforeAll
-	static void beforeClass() {
-		// Build and set the SecurityManager used to build Subject instances used in your tests
-		// This typically only needs to be done once per class if your shiro.ini doesn't change,
-		// otherwise, you'll need to do this logic in each test that is different
-		val factory = new IniSecurityManagerFactory("classpath:shiro-ldap.ini");
-		setSecurityManager(factory.getInstance());
-	}
+    @Inject LdapServerService ldapServerService;
 
-	@AfterAll
-	static void afterClass() {
-		tearDownShiro();
-	}
-	
-	@Test
-	void loginLogoutRoundtrip() {
-		
-		log.info("starting login/logout roundtrip");
+    @BeforeAll
+    static void beforeClass() {
+        // Build and set the SecurityManager used to build Subject instances used in your tests
+        // This typically only needs to be done once per class if your shiro.ini doesn't change,
+        // otherwise, you'll need to do this logic in each test that is different
+        val factory = new IniSecurityManagerFactory("classpath:shiro-ldap.ini");
+        setSecurityManager(factory.getInstance());
+    }
 
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
+    @AfterAll
+    static void afterClass() {
+        tearDownShiro();
+    }
 
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
+    @Test
+    void loginLogoutRoundtrip() {
 
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				LdapConstants.SVEN_PRINCIPAL,
-				"pass");
+        log.info("starting login/logout roundtrip");
 
-		subject.login(token);
-		assertTrue(subject.isAuthenticated());
+        val secMan = SecurityUtils.getSecurityManager();
+        assertNotNull(secMan);
 
-		subject.logout();
-		assertFalse(subject.isAuthenticated());
+        val subject = SecurityUtils.getSubject(); 
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
 
-	}
+        val token = (AuthenticationToken) new UsernamePasswordToken(
+                LdapConstants.SVEN_PRINCIPAL,
+                "pass");
 
-	@Test
-	void login_withInvalidPassword() {
+        subject.login(token);
+        assertTrue(subject.isAuthenticated());
 
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
+        subject.logout();
+        assertFalse(subject.isAuthenticated());
 
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
+    }
 
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				LdapConstants.SVEN_PRINCIPAL,
-				"invalid-pass");
-		
-		assertThrows(AuthenticationException.class, ()->{
-			subject.login(token);
-		});
-		
-		assertFalse(subject.isAuthenticated());
+    @Test
+    void login_withInvalidPassword() {
 
-	}
-	
-	@Test
-	void login_withNonExistentUser() {
+        val secMan = SecurityUtils.getSecurityManager();
+        assertNotNull(secMan);
 
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
+        val subject = SecurityUtils.getSubject(); 
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
 
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
+        val token = (AuthenticationToken) new UsernamePasswordToken(
+                LdapConstants.SVEN_PRINCIPAL,
+                "invalid-pass");
 
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				"non-existent-user",
-				"invalid-pass");
-		
-		assertThrows(AuthenticationException.class, ()->{
-			subject.login(token);
-		});
-		
-		assertFalse(subject.isAuthenticated());
-		
+        assertThrows(AuthenticationException.class, ()->{
+            subject.login(token);
+        });
 
-	}
+        assertFalse(subject.isAuthenticated());
+
+    }
+
+    @Test
+    void login_withNonExistentUser() {
+
+        val secMan = SecurityUtils.getSecurityManager();
+        assertNotNull(secMan);
+
+        val subject = SecurityUtils.getSubject(); 
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
+
+        val token = (AuthenticationToken) new UsernamePasswordToken(
+                "non-existent-user",
+                "invalid-pass");
+
+        assertThrows(AuthenticationException.class, ()->{
+            subject.login(token);
+        });
+
+        assertFalse(subject.isAuthenticated());
+
+
+    }
 
 
 }

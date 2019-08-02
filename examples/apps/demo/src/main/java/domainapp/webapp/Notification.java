@@ -23,14 +23,14 @@ import lombok.Setter;
 
 public class Notification {
 
-	@Getter @Setter private int id;
-	@Getter @Setter private String text;
-	@Getter @Setter private String username;
-	
-	public Notification(int id, String text, String username) {
-		this.id = id;
-		this.text = text;
-		this.username = username;
-	}
-	
+    @Getter @Setter private int id;
+    @Getter @Setter private String text;
+    @Getter @Setter private String username;
+
+    public Notification(int id, String text, String username) {
+        this.id = id;
+        this.text = text;
+        this.username = username;
+    }
+
 }

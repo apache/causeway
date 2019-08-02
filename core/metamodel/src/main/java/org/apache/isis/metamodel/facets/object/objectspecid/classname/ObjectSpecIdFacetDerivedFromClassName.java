@@ -31,5 +31,5 @@ public class ObjectSpecIdFacetDerivedFromClassName extends ObjectSpecIdFacetAbst
     public ObjectSpecIdFacetDerivedFromClassName(final String value, final FacetHolder holder) {
         super(value, holder, Derivation.DERIVED);
     }
-    
+
 }

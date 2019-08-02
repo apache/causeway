@@ -46,7 +46,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
     public CollectionDomainEventFacetAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
                     final FacetHolder holder) {
-        
+
         super(CollectionDomainEventFacet.class, holder, eventType);
         this.eventType = eventType;
 

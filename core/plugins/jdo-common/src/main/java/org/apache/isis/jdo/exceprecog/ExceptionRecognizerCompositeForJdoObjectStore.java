@@ -46,7 +46,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
     @Override
     @PostConstruct
     public void init() {
-        
+
         final boolean disabled = _Config.getConfiguration().getBoolean(KEY_DISABLE, false);
         if(disabled) {
             return;

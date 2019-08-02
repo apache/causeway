@@ -46,7 +46,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         holder = new FacetHolderImpl();
 
         _Config.put("isis.value.format.byte", null);
-        
+
         setValue(value = new ByteWrapperValueSemanticsProvider(holder));
     }
 

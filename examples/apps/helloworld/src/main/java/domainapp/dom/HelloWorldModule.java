@@ -19,5 +19,5 @@
 package domainapp.dom;
 
 public final class HelloWorldModule {
-    
+
 }

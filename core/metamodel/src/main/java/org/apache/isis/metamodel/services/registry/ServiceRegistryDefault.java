@@ -60,12 +60,12 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
 
     @Override
     public void setApplicationContext(ApplicationContext springContext) throws BeansException {
-        
+
         // disables concurrent Spec-Loading
         ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
                 ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD;
-        
-        
+
+
         // ensures a well defined precondition
         {
             val beanTypeRegistry = _Context.getIfAny(IsisBeanTypeRegistry.class);
@@ -79,16 +79,16 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
         _Config.putAll(_Spring.copySpringEnvironmentToMap(configurableEnvironment));
 
         log.info("Spring's context was passed over to Isis");
-        
+
         isisConfiguration = _Config.getConfiguration(); // finalize config
-        
+
         // dump config to log
         if(log.isInfoEnabled() && !isisConfiguration.getEnvironment().isUnitTesting()) {
             log.info("\n" + _Config.getConfiguration().toStringFormatted());
         }    
-        
+
     }
-    
+
     @Bean @Singleton
     public IsisConfiguration getConfiguration() {
         return isisConfiguration;
@@ -98,27 +98,27 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
     public Optional<BeanAdapter> lookupRegisteredBeanById(String id) {
         return Optional.ofNullable(registeredBeansById.get().get(id));
     }
-    
+
     @Override
     public Stream<BeanAdapter> streamRegisteredBeans() {
         return registeredBeansById.get().values().stream();
     }
-    
+
     // -- DEPS
-    
+
     @Autowired private ConfigurableEnvironment configurableEnvironment;
     private IsisConfiguration isisConfiguration;
-    
+
     // -- HELPER
-    
+
     private final _Lazy<Map<String, BeanAdapter>> registeredBeansById = 
             _Lazy.threadSafe(this::enumerateBeans);
-    
+
     private Map<String, BeanAdapter> enumerateBeans() {
-        
+
         val beanSortClassifier = IsisBeanTypeRegistry.current();
         val map = _Maps.<String, BeanAdapter>newHashMap();
-        
+
         _Spring.streamAllBeans(beanSortClassifier)
         .filter(_NullSafe::isPresent)
         .filter(x->!x.getManagedObjectSort().isUnknown()) // do not register unknown sort
@@ -126,14 +126,14 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
             val id = extractObjectType(bean.getBeanClass()).orElse(bean.getId());
             map.put(id, bean);
         });
-        
+
         return map;
     }
 
     //TODO[2112] this would be the responsibility of the specloader, but 
     // for now we use as very simple approach
     private Optional<String> extractObjectType(Class<?> type) {
-        
+
         val aDomainService = _Reflect.getAnnotation(type, DomainService.class);
         if(aDomainService!=null) {
             val objectType = aDomainService.objectType();
@@ -142,7 +142,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
             }
             return Optional.empty(); // stop processing
         }
-        
+
         val aDomainObject = _Reflect.getAnnotation(type, DomainObject.class);
         if(aDomainObject!=null) {
             val objectType = aDomainObject.objectType();
@@ -151,9 +151,9 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
             }
             return Optional.empty(); // stop processing
         }
-        
+
         return Optional.empty();
-        
+
     }
 
 

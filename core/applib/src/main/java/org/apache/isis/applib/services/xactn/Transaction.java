@@ -25,9 +25,9 @@ import org.apache.isis.applib.annotation.Programmatic;
  * Representation of the current transaction, which conceptually wraps the underlying transaction context's transaction.
  */
 public interface Transaction {
-    
-	@Programmatic
-	TransactionId getId();
+
+    @Programmatic
+    TransactionId getId();
 
     /**
      * Flush all changes to the object store.

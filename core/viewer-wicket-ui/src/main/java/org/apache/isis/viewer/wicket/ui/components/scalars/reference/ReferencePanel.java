@@ -409,9 +409,9 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
             }
 
             final ObjectAdapter adapter = convertedInput!=null
-            		? convertedInput.getObjectAdapter()
-            				:null;
-            getModel().setObject(adapter);
+                    ? convertedInput.getObjectAdapter()
+                            :null;
+                    getModel().setObject(adapter);
         }
 
         final ObjectAdapter pendingAdapter = getModel().getPendingAdapter();

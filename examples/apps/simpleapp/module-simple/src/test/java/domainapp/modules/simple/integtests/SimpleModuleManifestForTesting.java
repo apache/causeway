@@ -45,8 +45,8 @@ import domainapp.modules.simple.SimpleModule;
  */
 @Configuration
 @PropertySources({
-	//@PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
-	@PropertySource(name=Presets.HsqlDbInMemory, factory = Presets.Factory.class, value = { "" }),
+    //@PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
+    @PropertySource(name=Presets.HsqlDbInMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.DataNucleusAutoCreate, factory = Presets.Factory.class, value = { "" }),
 })
 @Import({
@@ -63,11 +63,11 @@ import domainapp.modules.simple.SimpleModule;
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class SimpleModuleManifestForTesting {
-    
-   @Bean @Singleton
-   public WebAppConfigBean webAppConfigBean() {
-       return WebAppConfigBean.builder()
-               .build();
-   }
-   
+
+    @Bean @Singleton
+    public WebAppConfigBean webAppConfigBean() {
+        return WebAppConfigBean.builder()
+                .build();
+    }
+
 }

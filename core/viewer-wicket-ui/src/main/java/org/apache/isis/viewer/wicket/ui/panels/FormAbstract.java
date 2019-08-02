@@ -74,7 +74,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     public SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-   
+
     protected ServiceRegistry getServiceRegistry() {
         return IsisContext.getServiceRegistry();
     }

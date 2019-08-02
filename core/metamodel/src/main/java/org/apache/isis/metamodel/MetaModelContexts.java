@@ -28,9 +28,9 @@ public final class MetaModelContexts {
     final static MetaModelContext usingCDI() {
         return new MetaModelContext_usingCDI();
     }
-    
+
     final static MetaModelContext usingSpring() {
         return new MetaModelContext_usingSpring();
     }
-    
+
 }

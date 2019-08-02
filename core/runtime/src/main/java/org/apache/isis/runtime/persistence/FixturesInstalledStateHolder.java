@@ -26,7 +26,7 @@ package org.apache.isis.runtime.persistence;
 public interface FixturesInstalledStateHolder {
 
     public FixturesInstalledState getFixturesInstalledState();
-    
+
     public void setFixturesInstalledState(FixturesInstalledState fixturesInstalledState);
 
 }

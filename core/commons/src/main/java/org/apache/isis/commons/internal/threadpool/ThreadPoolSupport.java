@@ -64,7 +64,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
     public static ThreadPoolExecutionMode HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
             ThreadPoolExecutionMode.PARALLEL;
-    
+
     private final static int KEEP_ALIVE_TIME_SECS = 5;
     private final static int QUEUE_CAPACITY = Integer.MAX_VALUE;
 
@@ -77,11 +77,11 @@ public final class ThreadPoolSupport implements AutoCloseable {
     public static ThreadPoolSupport getInstance() {
         return _Context.computeIfAbsent(ThreadPoolSupport.class, ThreadPoolSupport::new);
     }
-    
+
     ThreadPoolSupport() {
 
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
-        
+
         final ThreadPoolSizeAdvisor advisor = ThreadPoolSizeAdvisor.get();
 
         final ThreadFactory threadFactory = (Runnable r) -> new Thread(group, r);
@@ -89,15 +89,15 @@ public final class ThreadPoolSupport implements AutoCloseable {
         final Supplier<BlockingQueue<Runnable>> workQueueFactory =
                 ()->new LinkedBlockingQueue<>(QUEUE_CAPACITY);
 
-        concurrentExecutor = new ThreadPoolExecutor(
-                advisor.corePoolSize(),
-                advisor.maximumPoolSize(),
-                KEEP_ALIVE_TIME_SECS,
-                TimeUnit.SECONDS,
-                workQueueFactory.get(),
-                threadFactory);
+                concurrentExecutor = new ThreadPoolExecutor(
+                        advisor.corePoolSize(),
+                        advisor.maximumPoolSize(),
+                        KEEP_ALIVE_TIME_SECS,
+                        TimeUnit.SECONDS,
+                        workQueueFactory.get(),
+                        threadFactory);
     }
-    
+
     /*
      * Implementation Note: triggered by _Context.clear() when application shuts down.
      */
@@ -105,14 +105,14 @@ public final class ThreadPoolSupport implements AutoCloseable {
     public void close() throws Exception {
         concurrentExecutor.shutdown();
     }
-    
+
     /**
      * @return this thread-pool's underlying concurrent executor
      */
     public Executor getExecutor() {
         return concurrentExecutor;
     }
-    
+
     /**
      * Non-blocking call. 
      * <p>
@@ -165,9 +165,9 @@ public final class ThreadPoolSupport implements AutoCloseable {
         case SEQUENTIAL_WITHIN_CALLING_THREAD:
         {
             return callables.stream()
-            .map(FutureTask::new)
-            .peek(FutureTask::run) // immediately run task on submission
-            .collect(toList());
+                    .map(FutureTask::new)
+                    .peek(FutureTask::run) // immediately run task on submission
+                    .collect(toList());
         }
 
         default:
@@ -175,7 +175,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
         }
 
     }
-    
+
     /**
      * Executes specified {@code callables} on the default executor.  
      * See {@link ThreadPoolExecutor#invokeAll(java.util.Collection)}
@@ -195,7 +195,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
         if (futures == null) {
             return null;
         }
-        
+
         final long t0 = System.nanoTime();
         try{
             final List<Object> returnValues = _Lists.newArrayList();
@@ -252,18 +252,18 @@ public final class ThreadPoolSupport implements AutoCloseable {
             return null;
         }
     }
-    
+
     @Override
     public String toString() {
         return concurrentExecutor.toString();
     }
 
     // -- HELPERS
-    
+
     private <T> List<Future<T>> invokeAll(
             ThreadPoolExecutor executor, 
             @Nullable final List<? extends Callable<T>> callables) {
-        
+
         if(isEmpty(callables)) {
             return Collections.emptyList();
         }
@@ -277,7 +277,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
     private static <T> List<Callable<T>> timed(
             final ThreadPoolExecutor executor,
             final List<? extends Callable<T>> callables) {
-        
+
         final long queuedAt = System.currentTimeMillis();
         return callables.stream()
                 .map(callable -> timed(callable, executor.getQueue().size(), queuedAt))
@@ -319,7 +319,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
             return resultList;
         };
     }
-    
+
     private static boolean isEmpty(Collection<?> x) { return x==null || x.size() == 0; }
 
 }

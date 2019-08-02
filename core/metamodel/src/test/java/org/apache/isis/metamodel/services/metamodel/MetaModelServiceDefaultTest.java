@@ -64,25 +64,25 @@ class MetaModelServiceDefaultTest {
     ObjectSpecification mockSpec;
 
     FacetedMethod mockFacetedMethod;
-    
-    
+
+
     @BeforeEach
     void setUp() throws Exception {
-        
+
         _Context.clear();
         JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-        
-        
+
+
         mockFacetedMethod = context.mock(FacetedMethod.class);
         Matcher<Class<? extends Facet>> facetMatcher = _Casts.uncheckedCast(Matchers.any(Class.class));
         context.checking(new Expectations() {
             {
                 allowing(mockFacetedMethod).getIdentifier();
                 will(returnValue(Identifier.actionIdentifier("Customer", "reduceheadcount")));
-                
+
                 allowing(mockFacetedMethod).getFacet(with(facetMatcher));
                 will(returnValue(null));
-                
+
                 allowing(mockFacetedMethod).getParameters();
                 will(returnValue(Collections.emptyList()));
             }
@@ -93,26 +93,26 @@ class MetaModelServiceDefaultTest {
             {
                 allowing(mockSpec).getFullIdentifier();
                 will(returnValue("mocked"));
-                
+
                 allowing(mockSpec).subclasses(Depth.DIRECT);
                 will(returnValue(Collections.emptyList()));
-                
+
                 allowing(mockSpec).isManagedBean();
                 will(returnValue(true));
             }
         });
-        
+
         action = new ObjectActionDefault(mockFacetedMethod);
-        
+
         mockMetaModelService = context.mock(MetaModelServiceDefault.class);
         context.checking(new Expectations() {
             {
                 allowing(mockMetaModelService).getDomainModel();
                 will(returnValue(new DomainModelDefault(_Lists.of(new DomainMemberDefault(mockSpec, action)))));
-                
+
             }
         });
-        
+
     }
 
     @AfterEach
@@ -122,44 +122,44 @@ class MetaModelServiceDefaultTest {
     @Test @DisplayName("member to XML marshalling should not throw")
     void member_marshalling() throws JAXBException {
         DomainMember domainMember = new DomainMemberDefault(mockSpec, action);
-        
+
         JAXBContext jaxbContext = JAXBContext.newInstance(DomainMemberDefault.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        
+
         jaxbMarshaller.marshal(domainMember, noopOutput());
     }
-    
+
     @Test @DisplayName("model to XML marshalling should not throw")
     void model_marshalling() throws JAXBException {
         DomainModel domainMembers = mockMetaModelService.getDomainModel();
-        
+
         JAXBContext jaxbContext = JAXBContext.newInstance(DomainModelDefault.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        
+
         jaxbMarshaller.marshal(domainMembers, noopOutput());
     }
-    
-    
+
+
     @Test @DisplayName("example to XML marshalling should not throw")
     void example_marshalling() throws JAXBException {
-        
+
         JAXBContext jaxbContext = JAXBContext.newInstance(Employees.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-         
+
         jaxbMarshaller.marshal(createEmployees(), noopOutput());
     }
 
     // -- HELPER
-    
+
     private OutputStream noopOutput(){
         return new OutputStream() {
             @Override public void write(int b) throws IOException {}
         };  
     }
-    
+
     @XmlRootElement(name = "employee")
     @XmlAccessorType (XmlAccessType.FIELD)
     public static class Employee
@@ -168,9 +168,9 @@ class MetaModelServiceDefaultTest {
         private String firstName;
         private String lastName;
         private double income;
-        
+
         //Getters and Setters
-        
+
         public Integer getId() {
             return id;
         }
@@ -195,25 +195,25 @@ class MetaModelServiceDefaultTest {
         public void setIncome(double income) {
             this.income = income;
         }
-        
+
     }
-    
+
     @XmlRootElement(name = "employees")
     @XmlAccessorType (XmlAccessType.FIELD)
     public static class Employees
     {
         @XmlElement(name = "employee")
         private List<Employee> employees = null;
-     
+
         public List<Employee> getEmployees() {
             return employees;
         }
-     
+
         public void setEmployees(List<Employee> employees) {
             this.employees = employees;
         }
     }
-    
+
     private Employees createEmployees(){
         Employees employees = new Employees();
         employees.setEmployees(new ArrayList<Employee>());
@@ -223,20 +223,20 @@ class MetaModelServiceDefaultTest {
         emp1.setFirstName("Lokesh");
         emp1.setLastName("Gupta");
         emp1.setIncome(100.0);
-         
+
         Employee emp2 = new Employee();
         emp2.setId(2);
         emp2.setFirstName("John");
         emp2.setLastName("Mclane");
         emp2.setIncome(200.0);
-         
+
         //Add the employees in list
         employees.getEmployees().add(emp1);
         employees.getEmployees().add(emp2);
-        
+
         return employees;
     }
 
-    
-    
+
+
 }

@@ -29,10 +29,10 @@ public abstract class CollectionFacetAbstract extends FacetAbstract implements C
     public CollectionFacetAbstract(final FacetHolder holder) {
         super(CollectionFacet.class, holder, Derivation.NOT_DERIVED);
     }
-    
+
     @Override
     public final TypeOfFacet getTypeOfFacet() {
         return getFacetHolder().getFacet(TypeOfFacet.class);
     }
-    
+
 }

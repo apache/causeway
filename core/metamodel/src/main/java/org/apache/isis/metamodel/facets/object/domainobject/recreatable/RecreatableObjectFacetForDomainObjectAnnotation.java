@@ -67,7 +67,7 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
     private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final PostConstructMethodCache postConstructMethodCache) {
-        
+
         super(holder, RecreationMechanism.INITIALIZES, postConstructMethodCache);
     }
 

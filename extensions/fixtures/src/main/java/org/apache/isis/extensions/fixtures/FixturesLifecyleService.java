@@ -30,12 +30,12 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 @Singleton
 public class FixturesLifecyleService {
-	
-	@Inject IsisSessionFactory isisSessionFactory; // depends on  
-	
-	@PostConstruct
-	public void postConstruct() {
-		
+
+    @Inject IsisSessionFactory isisSessionFactory; // depends on  
+
+    @PostConstruct
+    public void postConstruct() {
+
         // a bit of a workaround, but required if anything in the metamodel (for example, a
         // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
         // we do this after loading the services to allow a service to prime a different clock
@@ -47,16 +47,16 @@ public class FixturesLifecyleService {
         //
         // installFixturesIfRequired
         //
-//        final FixturesInstallerFromConfiguration fixtureInstaller =
-//                new FixturesInstallerFromConfiguration();
-//        fixtureInstaller.installFixtures();  
+        //        final FixturesInstallerFromConfiguration fixtureInstaller =
+        //                new FixturesInstallerFromConfiguration();
+        //        fixtureInstaller.installFixtures();  
 
-		
-	}
 
-	@PreDestroy
-	public void preDestroy() {
-		
-	}
-	
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+
+    }
+
 }

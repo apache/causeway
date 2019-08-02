@@ -99,7 +99,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     }
 
     @Override
-	@After
+    @After
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -179,12 +179,12 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetDefault);
             final CollectionDomainEventFacetDefault domainEventFacetDefault = (CollectionDomainEventFacetDefault) domainEventFacet;
             assertThat(domainEventFacetDefault.getEventType(), classEqualTo(CollectionDomainEvent.Default.class)); // this
-                                                                                                                   // is
-                                                                                                                   // discarded
-                                                                                                                   // at
-                                                                                                                   // runtime,
-                                                                                                                   // see
-                                                                                                                   // PropertySetterFacetForPostsPropertyChangedEventAnnotation#verify(...)
+            // is
+            // discarded
+            // at
+            // runtime,
+            // see
+            // PropertySetterFacetForPostsPropertyChangedEventAnnotation#verify(...)
 
             // then
             final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
@@ -417,7 +417,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
                         editing = org.apache.isis.applib.annotation.Editing.DISABLED,
                         editingDisabledReason = "you cannot edit the orders collection"
                         )
-                        public List<Order> getOrders() {
+                public List<Order> getOrders() {
                     return null;
                 }
 

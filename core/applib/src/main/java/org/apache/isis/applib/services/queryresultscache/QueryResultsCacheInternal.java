@@ -140,13 +140,13 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
     }
 
     // -- HELPER
-    
+
     @Autowired(required = false)
     protected List<QueryResultCacheControl> cacheControl;
-    
+
     private boolean isIgnoreCache() {
-    	return _NullSafe.stream(cacheControl)
-    	.anyMatch(c->c.isIgnoreCache());
+        return _NullSafe.stream(cacheControl)
+                .anyMatch(c->c.isIgnoreCache());
     }
 
 }

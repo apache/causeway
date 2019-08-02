@@ -73,7 +73,7 @@ public class DomainMemberDefault implements DomainMember {
     DomainMemberDefault(){
         throw _Exceptions.unexpectedCodeReach();
     }
-    
+
     DomainMemberDefault(ObjectSpecification spec, OneToOneAssociation property) {
         this.spec = spec;
         this.member = property;
@@ -100,7 +100,7 @@ public class DomainMemberDefault implements DomainMember {
         }
         return service || spec.isManagedBean() ?"2 Service":spec.isValue()?"3 Value":spec.isParentedOrFreeCollection()?"4 Collection":"1 Object";
     }
-    
+
     @XmlElement @Override
     public String getClassName() {
         final String fullIdentifier = spec.getFullIdentifier();
@@ -109,24 +109,24 @@ public class DomainMemberDefault implements DomainMember {
                 ?fullIdentifier.substring(lastDot+1,fullIdentifier.length())
                         :fullIdentifier;
     }
-    
+
     @XmlElement @Override
     public String getPackageName() {
         final String fullIdentifier = spec.getFullIdentifier();
         final int lastDot = fullIdentifier.lastIndexOf(".");
         return lastDot>0?fullIdentifier.substring(0,lastDot):fullIdentifier;
     }
-    
+
     @XmlElement @Override
     public String getType() {
         return memberType.name().toLowerCase();
     }
-    
+
     @XmlElement @Override
     public String getMemberName() {
         return member.getId();
     }
-    
+
     @XmlElement @Override
     public String getNumParams() {
         return action!=null?""+action.getParameterCount():"";
@@ -166,12 +166,12 @@ public class DomainMemberDefault implements DomainMember {
     public String getHidden() {
         return interpret(HiddenFacet.class);
     }
-    
+
     @XmlElement @Override
     public String getDisabled() {
         return interpret(DisabledFacet.class);
     }
-    
+
     @XmlElement @Override
     public String getChoices() {
         switch (memberType) {
@@ -191,7 +191,7 @@ public class DomainMemberDefault implements DomainMember {
                         interpretRowAndFacet(ActionChoicesFacet.class);
         }
     }
-    
+
     @XmlElement @Override
     public String getAutoComplete() {
         if(memberType == MemberType.PROPERTY) {
@@ -208,7 +208,7 @@ public class DomainMemberDefault implements DomainMember {
             return interpretations.stream().collect(Collectors.joining(";"));
         }
     }
-    
+
     @XmlElement @Override
     public String getDefault() {
         if(memberType == MemberType.PROPERTY) {
@@ -227,7 +227,7 @@ public class DomainMemberDefault implements DomainMember {
                             : interpretRowAndFacet(ActionDefaultsFacet.class);
         }
     }
-    
+
     @XmlElement @Override
     public String getValidate() {
         if(memberType == MemberType.PROPERTY) {
@@ -243,12 +243,12 @@ public class DomainMemberDefault implements DomainMember {
     }
 
     // -- COMPARATOR
-    
+
     @Override
     public int compareTo(DomainMember o) {
         return comparator.compare(this, o);
     }
-    
+
     // -- HELPER
 
     private String interpretRowAndFacet(Class<? extends Facet> facetClass) {
@@ -278,10 +278,10 @@ public class DomainMemberDefault implements DomainMember {
         if (ignore(name)) {
             return "";
         }
-//[ahuber] not sure why abbreviated, so I disabled abbreviation        
-//        final String abbr = StringExtensions.toAbbreviation(name);
-//        return abbr.length()>0 ? abbr : name;
-        
+        //[ahuber] not sure why abbreviated, so I disabled abbreviation        
+        //        final String abbr = StringExtensions.toAbbreviation(name);
+        //        return abbr.length()>0 ? abbr : name;
+
         return name;
     }
 
@@ -289,12 +289,12 @@ public class DomainMemberDefault implements DomainMember {
         return Arrays.asList("PropertyValidateFacetDefault","PropertyDefaultFacetDerivedFromDefaultedFacet")
                 .contains(name);
     }
-    
+
     private final static Comparator<DomainMember> comparator = 
             Comparator.comparing(DomainMember::getClassType)
             .thenComparing(DomainMember::getClassName)
             .thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc
             .thenComparing(DomainMember::getMemberName);
 
-    
+
 }

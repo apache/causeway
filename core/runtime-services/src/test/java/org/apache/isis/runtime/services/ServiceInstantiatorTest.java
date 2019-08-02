@@ -25,6 +25,6 @@ public class ServiceInstantiatorTest {
 
     @Test @Ignore("all tests moved to core/detached-tests")
     public void info() {
-        
+
     }
 }

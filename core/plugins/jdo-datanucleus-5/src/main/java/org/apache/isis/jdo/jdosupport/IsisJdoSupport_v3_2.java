@@ -54,7 +54,7 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      */
     @Programmatic
     <T> List<T> executeQuery(final Class<T> cls, @Nullable final BooleanExpression filter);
-    
+
     @Programmatic
     default <T> List<T> executeQuery(final Class<T> cls) {
         return executeQuery(cls, null);
@@ -78,7 +78,7 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      */
     @Programmatic
     <T> T executeQueryUnique(final Class<T> cls, @Nullable final BooleanExpression filter);
-    
+
     @Programmatic
     default <T> T executeQueryUnique(final Class<T> cls) {
         return executeQueryUnique(cls, null);
@@ -95,9 +95,9 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      */
     @Programmatic
     <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls);
-    
+
     // -- UTILITY
-    
+
     /**
      * Fetch Optimization
      * <p>

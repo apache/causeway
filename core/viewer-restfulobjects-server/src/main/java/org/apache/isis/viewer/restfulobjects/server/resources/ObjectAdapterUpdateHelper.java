@@ -67,21 +67,21 @@ public class ObjectAdapterUpdateHelper {
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
 
         final boolean[] allOk = {true}; // simply a non-thread-safe value reference
-        
+
         properties.forEach(association->{
             allOk[0] &= copyOverProperty(association, propertiesMap, intent);
         });
 
         return allOk[0];
     }
-    
+
     private boolean copyOverProperty(
             final ObjectAssociation association, 
             final JsonRepresentation propertiesMap,
             final Intent intent) {
-        
+
         boolean allOk = true;
-        
+
         final OneToOneAssociation property = (OneToOneAssociation) association;
         final ObjectSpecification propertySpec = property.getSpecification();
         final String id = property.getId();
@@ -170,6 +170,6 @@ public class ObjectAdapterUpdateHelper {
         }
         return allOk;
     }
-    
+
 
 }

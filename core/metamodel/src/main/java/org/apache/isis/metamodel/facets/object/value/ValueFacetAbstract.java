@@ -73,7 +73,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             final Class<?> semanticsProviderClass, 
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid, 
             final FacetHolder holder) {
-        
+
         this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder);
     }
 
@@ -81,7 +81,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             final ValueSemanticsProvider<?> semanticsProvider, 
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid, 
             final FacetHolder holder) {
-        
+
         super(type(), holder);
 
         this.semanticsProvider = semanticsProvider;
@@ -156,7 +156,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     // /////////////////////////////
     // MultiTypedFacet impl
     // /////////////////////////////
-    
+
     @Override
     public Stream<Class<? extends Facet>> facetTypes() {
         return facetHolder.streamFacets()

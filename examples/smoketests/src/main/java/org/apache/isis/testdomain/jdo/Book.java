@@ -38,11 +38,12 @@ import lombok.ToString;
 @DomainObject(publishing=Publishing.ENABLED)
 @ToString(callSuper = true)
 public class Book extends Product {
-    
+
+    @Override
     public String title() {
         return toString();
     }
-    
+
     public static Book of(
             String name, 
             String description, 
@@ -50,24 +51,24 @@ public class Book extends Product {
             String author, 
             String isbn, 
             String publisher) {
-        
+
         return new Book(name, description, price, author, isbn, publisher);
     }
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "true")
     private String author;
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "true")
     private String isbn;
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "true")
     private String publisher;
 
     // -- CONSTRUCTOR
-    
+
     private Book(
             String name, 
             String description, 
@@ -75,7 +76,7 @@ public class Book extends Product {
             String author, 
             String isbn, 
             String publisher) {
-        
+
         super(name, description, price);
         this.author = author;
         this.isbn = isbn;

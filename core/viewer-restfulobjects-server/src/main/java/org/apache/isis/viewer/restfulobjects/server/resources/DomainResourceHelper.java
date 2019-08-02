@@ -170,56 +170,56 @@ class DomainResourceHelper {
         public ServiceInjector getServiceInjector() {
             return rendererContext.getServiceInjector();
         }
-        
-		@Override
-		public ServiceRegistry getServiceRegistry() {
-			return rendererContext.getServiceRegistry();
-		}
 
-		@Override
-		public ObjectAdapter adapterOfPojo(Object pojo) {
-			return rendererContext.adapterOfPojo(pojo);
-		}
-		
-		@Override
-		public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
-			return rendererContext.adapterOfMemento(spec, oid, data);
-		}
+        @Override
+        public ServiceRegistry getServiceRegistry() {
+            return rendererContext.getServiceRegistry();
+        }
 
-		@Override
-		public ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec) {
-			return rendererContext.newTransientInstance(domainTypeSpec);
-		}
+        @Override
+        public ObjectAdapter adapterOfPojo(Object pojo) {
+            return rendererContext.adapterOfPojo(pojo);
+        }
 
-		@Override
-		public void makePersistentInTransaction(ObjectAdapter objectAdapter) {
-			rendererContext.makePersistentInTransaction(objectAdapter);
-		}
+        @Override
+        public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
+            return rendererContext.adapterOfMemento(spec, oid, data);
+        }
 
-		@Override
-		public Object fetchPersistentPojoInTransaction(RootOid rootOid) {
-			return rendererContext.fetchPersistentPojoInTransaction(rootOid);
-		}
+        @Override
+        public ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec) {
+            return rendererContext.newTransientInstance(domainTypeSpec);
+        }
 
-		@Override
-		public ManagedObjectState stateOf(Object domainObject) {
-			return rendererContext.stateOf(domainObject);
-		}
+        @Override
+        public void makePersistentInTransaction(ObjectAdapter objectAdapter) {
+            rendererContext.makePersistentInTransaction(objectAdapter);
+        }
 
-		@Override
-		public void logoutAuthenticationSession() {
-			rendererContext.logoutAuthenticationSession();
-		}
+        @Override
+        public Object fetchPersistentPojoInTransaction(RootOid rootOid) {
+            return rendererContext.fetchPersistentPojoInTransaction(rootOid);
+        }
 
-		@Override
-		public HomePageAction getHomePageAction() {
-		    return rendererContext.getHomePageAction();
-		}
+        @Override
+        public ManagedObjectState stateOf(Object domainObject) {
+            return rendererContext.stateOf(domainObject);
+        }
 
-		@Override
-		public FixturesInstalledState getFixturesInstalledState() {
-			return rendererContext.getFixturesInstalledState();
-		}
+        @Override
+        public void logoutAuthenticationSession() {
+            rendererContext.logoutAuthenticationSession();
+        }
+
+        @Override
+        public HomePageAction getHomePageAction() {
+            return rendererContext.getHomePageAction();
+        }
+
+        @Override
+        public FixturesInstalledState getFixturesInstalledState() {
+            return rendererContext.getFixturesInstalledState();
+        }
 
 
     }

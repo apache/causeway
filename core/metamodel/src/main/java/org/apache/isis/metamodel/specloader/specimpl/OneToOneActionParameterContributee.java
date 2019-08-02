@@ -31,7 +31,7 @@ implements OneToOneActionParameter {
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
         super(FeatureType.ACTION_PARAMETER_SCALAR, servicePojo, 
-        		serviceActionParameter, contributeeParamNumber, contributeeAction);
+                serviceActionParameter, contributeeParamNumber, contributeeAction);
     }
 
 

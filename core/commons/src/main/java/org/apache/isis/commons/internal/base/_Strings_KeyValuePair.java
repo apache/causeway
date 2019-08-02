@@ -35,7 +35,7 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
     static KeyValuePair of(String key, String value) {
         return new _Strings_KeyValuePair(key, value);
     }
-    
+
     private final String key;
     private final String value;
 
@@ -58,18 +58,18 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
     public String setValue(String value) {
         throw notImplemented();
     }
-    
+
     /**
      * Parses a string assumed to be of the form <kbd>key=value</kbd> into its parts.
      *
      * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} does contain at least one '='
      */
     public static Optional<KeyValuePair> parse(String keyValueLiteral) {
-        
+
         if(_Strings.isNullOrEmpty(keyValueLiteral)) {
             return Optional.empty();
         }
-        
+
         final int equalsIndex = keyValueLiteral.indexOf('=');
         if (equalsIndex == -1) {
             return Optional.empty();

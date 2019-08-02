@@ -80,7 +80,7 @@ public final class _Resources {
         final InputStream is = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(is), charset);
     }
-    
+
     /**
      * Shortcut using Charset UTF-8, see {@link #loadAsString(Class, String, Charset)} 
      */
@@ -139,7 +139,7 @@ public final class _Resources {
             return "/" + contextPath + path;
         }
     }
-    
+
     public static String prependContextPathIfRequired(String url) {
         if(url==null) {
             return null; 
@@ -237,6 +237,6 @@ public final class _Resources {
     }
 
 
-    
+
 
 }

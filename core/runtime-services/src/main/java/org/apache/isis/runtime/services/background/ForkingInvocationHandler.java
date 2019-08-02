@@ -60,14 +60,14 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
         }
 
         val domainObject = mixedInIfAny != null
-        		? mixedInIfAny
-        				: target;
+                ? mixedInIfAny
+                        : target;
 
         val authenticationSession = 
                 IsisSession.current()
                 .map(IsisSession::getAuthenticationSession)
                 .orElse(new InitialisationSession());
-        
+
         val transactionLatch = IsisTransactionAspectSupport.transactionLatch();
 
         //unfortunately there is no easy way to make use of this future
@@ -75,14 +75,14 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
         val future = backgroundExecutorService.submit(()->{
 
             try {
-            	
-            	transactionLatch.await(); // wait for transaction of the calling thread to complete
+
+                transactionLatch.await(); // wait for transaction of the calling thread to complete
 
                 return IsisContext.getSessionFactory().doInSession(
-                		()->transactionService.executeWithinTransaction(
-                				uncheckedSupplier(()->proxyMethod.invoke(domainObject, args))
-                		),
-                    	authenticationSession);
+                        ()->transactionService.executeWithinTransaction(
+                                uncheckedSupplier(()->proxyMethod.invoke(domainObject, args))
+                                ),
+                        authenticationSession);
 
             } catch (Exception e) {
 
@@ -94,9 +94,9 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
                 return null;
             }
         });
-        
+
         return null;
-        
+
     }
 
 }

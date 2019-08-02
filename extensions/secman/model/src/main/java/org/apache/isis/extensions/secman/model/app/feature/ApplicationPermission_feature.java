@@ -42,22 +42,22 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationPermission_feature {
 
     public static class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission_feature> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     final ApplicationPermission holder;
 
     @Action(
             semantics = SemanticsOf.SAFE,
             domainEvent = ActionDomainEvent.class
-    )
+            )
     @ActionLayout(
             contributed = Contributed.AS_ASSOCIATION
-    )
+            )
     @Property(
-    )
+            )
     @PropertyLayout(
             hidden=Where.REFERENCES_PARENT
-    )
+            )
     @MemberOrder(name="Feature", sequence = "4")
     public ApplicationFeatureViewModel $$(final ApplicationPermission permission) {
         if(permission.getFeatureType() == null) {

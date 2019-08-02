@@ -26,7 +26,7 @@ public class RandomCodeGenerator10Chars implements RandomCodeGenerator {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
     private final Random random = new Random(); 
-    
+
     @Override
     public String generateRandomCode() {
         final StringBuilder buf = new StringBuilder(NUMBER_CHARACTERS);

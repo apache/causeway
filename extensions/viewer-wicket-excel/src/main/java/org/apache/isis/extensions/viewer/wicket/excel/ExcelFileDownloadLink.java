@@ -34,15 +34,15 @@ import org.apache.wicket.util.resource.IResourceStream;
 class ExcelFileDownloadLink extends DownloadLink {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final String xlsxFileName;
 
     public ExcelFileDownloadLink(String id, LoadableDetachableModel<File> model, String xlsxFileName) {
         super(id, model, xlsxFileName);
         this.xlsxFileName = xlsxFileName;
     }
-    
-    
+
+
 
     @Override
     public void onClick()
@@ -51,14 +51,14 @@ class ExcelFileDownloadLink extends DownloadLink {
         if (file == null)
         {
             throw new IllegalStateException(getClass().getName() +
-                " failed to retrieve a File object from model");
+                    " failed to retrieve a File object from model");
         }
 
         String fileName = encodedFileName();
 
         final IResourceStream resourceStream = new FileResourceStream(
-            new org.apache.wicket.util.file.File(file)) {
-            
+                new org.apache.wicket.util.file.File(file)) {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -66,25 +66,25 @@ class ExcelFileDownloadLink extends DownloadLink {
                 return "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
             }
         };
-        
+
         getRequestCycle().scheduleRequestHandlerAfterCurrent(
-            new ResourceStreamRequestHandler(resourceStream)
-            {
-                @Override
-                public void respond(IRequestCycle requestCycle)
+                new ResourceStreamRequestHandler(resourceStream)
                 {
-                    super.respond(requestCycle);
-                    Files.remove(file);
-                }
-            }.setFileName(fileName)
+                    @Override
+                    public void respond(IRequestCycle requestCycle)
+                    {
+                        super.respond(requestCycle);
+                        Files.remove(file);
+                    }
+                }.setFileName(fileName)
                 .setContentDisposition(ContentDisposition.ATTACHMENT));
     }
 
-	@Override
-	protected void onComponentTag(ComponentTag tag) {
-		super.onComponentTag(tag);
-		tag.put("download", encodedFileName());
-	}
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+        tag.put("download", encodedFileName());
+    }
 
     private String encodedFileName() {
         return encoded(this.xlsxFileName);

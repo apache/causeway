@@ -38,43 +38,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import lombok.val;
 
 @SpringBootTest(
-	classes = { 
-			JdoTestDomainModule.class, 
-	}, 
-	properties = {
-			"logging.config=log4j2-debug-persistence.xml",
-			"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG"
-})
+        classes = { 
+                JdoTestDomainModule.class, 
+        }, 
+        properties = {
+                "logging.config=log4j2-debug-persistence.xml",
+                "logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG"
+        })
 @Transactional
 class JdoBootstrappingTest_usingFixtures {
 
-	@Inject private FixtureScripts fixtureScripts;
-	@Inject private RepositoryService repository;
+    @Inject private FixtureScripts fixtureScripts;
+    @Inject private RepositoryService repository;
 
-	@BeforeEach
-	void setUp() {
-	    
+    @BeforeEach
+    void setUp() {
+
         // cleanup
         fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
 
         // given
         fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
-	}
+    }
 
-	@Test @Rollback(false)
-	void sampleInventoryShouldBeSetUp() {
-	    
-		val inventories = repository.allInstances(Inventory.class);
-		assertEquals(1, inventories.size());
+    @Test @Rollback(false)
+    void sampleInventoryShouldBeSetUp() {
 
-		val inventory = inventories.get(0);
-		assertNotNull(inventory);
-		assertNotNull(inventory.getProducts());
-		assertEquals(1, inventory.getProducts().size());
+        val inventories = repository.allInstances(Inventory.class);
+        assertEquals(1, inventories.size());
 
-		val product = inventory.getProducts().iterator().next();
-		assertEquals("Sample Book", product.getName());
+        val inventory = inventories.get(0);
+        assertNotNull(inventory);
+        assertNotNull(inventory.getProducts());
+        assertEquals(1, inventory.getProducts().size());
 
-	}
+        val product = inventory.getProducts().iterator().next();
+        assertEquals("Sample Book", product.getName());
+
+    }
 
 }

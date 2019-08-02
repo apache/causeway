@@ -65,11 +65,11 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
         final String named =
                 domainServiceLayouts.stream()
-                        .map(DomainServiceLayout::named)
-                        .map(_Strings::emptyToNull)
-                        .filter(Objects::nonNull)
-                        .findFirst()
-                        .orElse(null);
+                .map(DomainServiceLayout::named)
+                .map(_Strings::emptyToNull)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
         FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(named, facetHolder));
     }
 

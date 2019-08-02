@@ -52,13 +52,13 @@ public interface MessageService {
     @Programmatic
     String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
 
-    
+
     /**
      * Override of {@link MessageService#informUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
     @Programmatic
     String informUser(TranslatableString message, final String translationContext);
-    
+
     /**
      * Warn the user about a situation with the specified message. The container
      * should guarantee to display this warning to the user, and will typically
@@ -86,7 +86,7 @@ public interface MessageService {
      */
     @Programmatic
     String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
-    
+
     /**
      * Override of {@link MessageService#warnUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */

@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class VersionTest_differs {
-    
+
 
     private Version version1, version2;
 
@@ -38,7 +38,7 @@ public class VersionTest_differs {
         assertThat(version1.different(version2), is(false));
     }
 
-    
+
     @Test
     public void whenNotEqual() throws Exception {
         version1 = Version.of(123L, EMPTY_USERNAME);

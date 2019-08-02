@@ -605,24 +605,24 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
-//    /**
-//     * Internal API
-//     */
-//    @Override
-//    public void setupBulkActionInvocationContext(final ObjectAdapter targetAdapter) {
-//
-//        final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
-//
-//        final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
-//        if (bulkFacet != null) {
-//            final org.apache.isis.applib.services.actinvoc.ActionInvocationContext actionInvocationContext = getActionInvocationContext();
-//            if (actionInvocationContext != null && actionInvocationContext.getInvokedOn() == null) {
-//
-//                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
-//                actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
-//            }
-//        }
-//    }
+    //    /**
+    //     * Internal API
+    //     */
+    //    @Override
+    //    public void setupBulkActionInvocationContext(final ObjectAdapter targetAdapter) {
+    //
+    //        final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
+    //
+    //        final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
+    //        if (bulkFacet != null) {
+    //            final org.apache.isis.applib.services.actinvoc.ActionInvocationContext actionInvocationContext = getActionInvocationContext();
+    //            if (actionInvocationContext != null && actionInvocationContext.getInvokedOn() == null) {
+    //
+    //                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
+    //                actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
+    //            }
+    //        }
+    //    }
 
     @Override
     public boolean isPrototype() {

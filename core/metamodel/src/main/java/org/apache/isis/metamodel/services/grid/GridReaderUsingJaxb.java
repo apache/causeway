@@ -40,8 +40,8 @@ import org.apache.isis.commons.internal.collections._Arrays;
  */
 @Service
 public class GridReaderUsingJaxb {
-	
-	private JAXBContext jaxbContext;
+
+    private JAXBContext jaxbContext;
 
     @PostConstruct
     public void init(){
@@ -59,8 +59,8 @@ public class GridReaderUsingJaxb {
     public Grid loadGrid(String xml) {
         return (Grid) jaxbService.fromXml(jaxbContext, xml);
     }
-    
+
     @Inject JaxbService jaxbService;
     @Inject List<GridSystemService<?>> gridSystemServices;
-	
+
 }

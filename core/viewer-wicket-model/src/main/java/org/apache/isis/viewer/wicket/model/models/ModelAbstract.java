@@ -58,7 +58,7 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
     public SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-    
+
     protected ServiceRegistry getServiceRegistry() {
         return IsisContext.getServiceRegistry();
     }

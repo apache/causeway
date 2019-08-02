@@ -53,6 +53,7 @@ implements GridFacet {
         this.gridService = gridService;
     }
 
+    @Override
     public Grid getGrid(final ManagedObject objectAdapterIfAny) {
         if (!gridService.supportsReloading() && this.grid != null) {
             return this.grid;
@@ -60,11 +61,11 @@ implements GridFacet {
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
         final LayoutFacet layoutFacet = getFacetHolder().getFacet(LayoutFacet.class);
         final String layout = layoutFacet != null && objectAdapterIfAny != null
-                                ? layoutFacet.layout(objectAdapterIfAny)
-                                : null;
-        this.grid = load(domainClass, layout);
+                ? layoutFacet.layout(objectAdapterIfAny)
+                        : null;
+                this.grid = load(domainClass, layout);
 
-        return this.grid;
+                return this.grid;
     }
 
     private Grid load(final Class<?> domainClass, final String layout) {

@@ -28,17 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class IsisConfiguration_specialCharTest {
 
     IsisConfiguration configuration;
-    
+
     private final static String specialCharString =
             "jdbc:sqlserver://HALCHILLBLAST;instance=.;databaseName=estatio";
-    
+
     @BeforeEach
     void setUp() throws Exception {
 
         _Config.clear();
 
         _Config.put("properties.connectionString", specialCharString);
-        
+
         configuration = _Config.getConfiguration();
 
     }

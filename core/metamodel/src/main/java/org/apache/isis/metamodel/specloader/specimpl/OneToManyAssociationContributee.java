@@ -72,7 +72,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
             final BeanAdapter serviceBean,
             final ObjectActionDefault serviceAction,
             final ObjectSpecification contributeeType) {
-        
+
         super(serviceAction.getFacetedMethod(),
                 typeOfSpec(serviceAction));
         this.serviceBean = serviceBean;

@@ -36,20 +36,20 @@ final class BeanAdapterSpring implements BeanAdapter {
     private final Class<?> beanClass;
     private final ObjectProvider<?> beanProvider;
     private final BeanSort managedObjectSort;
-    
+
     @Override
     public Bin<?> getInstance() {
         val allMatchingBeans = beanProvider.stream(); 
         return Bin.ofStream(allMatchingBeans);
     }
-    
+
     @Override
     public boolean isCandidateFor(Class<?> requiredType) {
         return beanProvider.stream()
-        .map(Object::getClass)
-        .anyMatch(type->requiredType.isAssignableFrom(type));
+                .map(Object::getClass)
+                .anyMatch(type->requiredType.isAssignableFrom(type));
     }
-    
-    
-    
+
+
+
 }

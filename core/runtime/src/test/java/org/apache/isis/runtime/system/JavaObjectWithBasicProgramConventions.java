@@ -262,7 +262,7 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
     public String debugTwo(final String parameter) {
         return "action two";
     }
-    
+
 }
 
 interface Interface2 {

@@ -35,11 +35,11 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     public static class SomeDomainObject {
         public String foo(final int x, final String y) { return null; }
     }
-    
+
     public static class SomeDomainObjectFooInvokedDomainEvent extends ActionDomainEvent<SomeDomainObject> {
         private static final long serialVersionUID = 1L;
     }
-    
+
     @Test
     public void defaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
@@ -74,7 +74,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     public void customEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
         final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
-        
+
         Utils.domainEventHelper();
         final ActionDomainEvent<SomeDomainObject> ev = DomainEventHelper.newActionDomainEvent(
                 SomeDomainObjectFooInvokedDomainEvent.class, identifier, sdo, new Object[]{1, "bar"});
@@ -84,5 +84,5 @@ public class DomainEventHelperTest_newActionInteractionEvent {
         assertEquals(ev.getArguments().get(0), Integer.valueOf(1));
         assertEquals(ev.getArguments().get(1), "bar");
     }
-    
+
 }

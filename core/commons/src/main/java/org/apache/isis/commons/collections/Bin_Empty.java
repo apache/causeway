@@ -27,37 +27,37 @@ import lombok.Value;
 
 @Value(staticConstructor="of")
 final class Bin_Empty<T> implements Bin<T> {
-	
-	static final Bin_Empty<?> INSTANCE = new Bin_Empty<>(); 
-	
-	@Override
-	public Cardinality getCardinality() {
-		return Cardinality.ZERO;
-	}
 
-	@Override
-	public Stream<T> stream() {
-		return Stream.empty();
-	}
+    static final Bin_Empty<?> INSTANCE = new Bin_Empty<>(); 
 
-	@Override
-	public Optional<T> getSingleton() {
-		return Optional.empty();
-	}
+    @Override
+    public Cardinality getCardinality() {
+        return Cardinality.ZERO;
+    }
 
-	@Override
-	public Optional<T> getFirst() {
-		return Optional.empty();
-	}
+    @Override
+    public Stream<T> stream() {
+        return Stream.empty();
+    }
 
-	@Override
-	public int size() {
-		return 0;
-	}
+    @Override
+    public Optional<T> getSingleton() {
+        return Optional.empty();
+    }
 
-	@Override
-	public Iterator<T> iterator() {
-		return Collections.<T>emptyList().iterator();
-	}
+    @Override
+    public Optional<T> getFirst() {
+        return Optional.empty();
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return Collections.<T>emptyList().iterator();
+    }
 
 }

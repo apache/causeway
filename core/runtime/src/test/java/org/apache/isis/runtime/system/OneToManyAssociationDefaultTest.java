@@ -86,7 +86,7 @@ public class OneToManyAssociationDefaultTest {
 
     @Before
     public void setUp() {
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
@@ -128,7 +128,7 @@ public class OneToManyAssociationDefaultTest {
     public void canAddPersistable() {
         context.checking(new Expectations() {
             {
-            	oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
+                oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
                 will(returnValue(false));
 
                 oneOf(mockOwnerAdapter).isRepresentingPersistent();
@@ -168,7 +168,7 @@ public class OneToManyAssociationDefaultTest {
     private void allowingPeerToReturnIdentifier() {
         context.checking(new Expectations() {
             {
-            	oneOf(mockPeer).getIdentifier();
+                oneOf(mockPeer).getIdentifier();
                 will(returnValue(Identifier.propertyOrCollectionIdentifier(Customer.class, COLLECTION_ID)));
             }
         });
@@ -177,7 +177,7 @@ public class OneToManyAssociationDefaultTest {
     private void expectPeerToReturnNamedFacet() {
         context.checking(new Expectations() {
             {
-            	oneOf(mockPeer).getFacet(NamedFacet.class);
+                oneOf(mockPeer).getFacet(NamedFacet.class);
                 will(returnValue(mockNamedFacet));
 
                 oneOf(mockNamedFacet).value();

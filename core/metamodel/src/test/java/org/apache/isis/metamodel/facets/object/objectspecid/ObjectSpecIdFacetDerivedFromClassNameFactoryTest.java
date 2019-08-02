@@ -53,7 +53,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
         facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(CustomerAsProxiedByDataNucleus.class, facetHolder));
 
         final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
-        
+
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof ObjectSpecIdFacetDerivedFromClassName, is(true));
         assertThat(facet.value(), is(ObjectSpecId.of(Customer.class.getCanonicalName())));

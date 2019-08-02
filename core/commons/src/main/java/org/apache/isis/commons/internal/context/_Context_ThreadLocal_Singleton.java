@@ -45,55 +45,55 @@ import lombok.val;
 final class _Context_ThreadLocal_Singleton {
 
     // -- MIXINS
-    
-	static <T> void put(Class<? super T> type, T payload) {
-		requires(type, "type");
-    	requires(payload, "payload");
-    	THREAD_LOCAL_MAP.get().put(type, Payload.of(payload, null));
+
+    static <T> void put(Class<? super T> type, T payload) {
+        requires(type, "type");
+        requires(payload, "payload");
+        THREAD_LOCAL_MAP.get().put(type, Payload.of(payload, null));
     }
-	
+
     static <T> void put(Class<? super T> type, Object payload, Runnable onCleanup) {
-    	requires(type, "type");
-    	requires(payload, "payload");
-    	requires(onCleanup, "onCleanup");
-    	THREAD_LOCAL_MAP.get().put(type, Payload.of(payload, onCleanup));
+        requires(type, "type");
+        requires(payload, "payload");
+        requires(onCleanup, "onCleanup");
+        THREAD_LOCAL_MAP.get().put(type, Payload.of(payload, onCleanup));
     }
-    
+
     static <T> T get(Class<? super T> type) {
-    	val payload = THREAD_LOCAL_MAP.get().get(type);
-    	if(payload!=null) {
-    		return _Casts.uncheckedCast(payload.pojo);
-    	}
-    	return null;
+        val payload = THREAD_LOCAL_MAP.get().get(type);
+        if(payload!=null) {
+            return _Casts.uncheckedCast(payload.pojo);
+        }
+        return null;
     }
-    
+
     static void cleanupThread() {
-    	THREAD_LOCAL_MAP.get().forEach((key, payload)->payload.cleanUp());
-    	THREAD_LOCAL_MAP.remove();
+        THREAD_LOCAL_MAP.get().forEach((key, payload)->payload.cleanUp());
+        THREAD_LOCAL_MAP.remove();
     }
-    
+
     // -- HELPER
-    
+
     private _Context_ThreadLocal_Singleton(){}
-    
+
     @Value(staticConstructor="of")
     private final static class Payload {
-		final Object pojo;
-    	final Runnable onCleanup;
-    	void cleanUp() {
-			if(onCleanup!=null) {
-				onCleanup.run();
-			}
-		}
+        final Object pojo;
+        final Runnable onCleanup;
+        void cleanUp() {
+            if(onCleanup!=null) {
+                onCleanup.run();
+            }
+        }
     }
 
-	/**
-	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
-	 */
+    /**
+     * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
+     */
     private final static ThreadLocal<Map<Class<?>, Payload>> THREAD_LOCAL_MAP = 
-    		InheritableThreadLocal.withInitial(HashMap::new);
+            InheritableThreadLocal.withInitial(HashMap::new);
 
 
-    
-    
+
+
 }

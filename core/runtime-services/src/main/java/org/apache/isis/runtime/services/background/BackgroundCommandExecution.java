@@ -75,5 +75,5 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
     protected abstract List<? extends Command> findBackgroundCommandsToExecute();
 
     @Inject TransactionService transactionService;
-    
+
 }

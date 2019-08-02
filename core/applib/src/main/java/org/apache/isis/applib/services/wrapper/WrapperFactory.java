@@ -92,7 +92,7 @@ public interface WrapperFactory {
          * Validate all business rules but do not execute.
          */
         NO_EXECUTE(true, false, true);
-        
+
         private final boolean enforceRules;
         private final boolean execute;
         private final boolean failFast;
@@ -222,7 +222,7 @@ public interface WrapperFactory {
      */
     @Programmatic
     <T> T wrapTry(T domainObject);
-    
+
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#NO_EXECUTE},
      * to make this feature more discoverable.

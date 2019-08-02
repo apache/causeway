@@ -30,7 +30,7 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
     public RecreatableObjectFacetForXmlRootElementAnnotation(
             final FacetHolder holder,
             final PostConstructMethodCache postConstructMethodCache) {
-        
+
         super(holder, RecreationMechanism.INSTANTIATES, postConstructMethodCache);
     }
 

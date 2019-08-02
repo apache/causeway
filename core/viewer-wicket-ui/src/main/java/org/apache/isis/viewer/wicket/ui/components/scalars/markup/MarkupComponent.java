@@ -34,7 +34,7 @@ import lombok.val;
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final LocalResourcePath observing;
 
     public MarkupComponent(final String id, IModel<?> model, LocalResourcePath observing){
@@ -48,11 +48,11 @@ public class MarkupComponent extends WebComponent {
         replaceComponentTagBody(
                 markupStream, 
                 openTag, 
-                
+
                 observing!=null 
-                    ? MarkupComponent_observing.decorate(htmlContent, observing)
-                            : htmlContent
-                
+                ? MarkupComponent_observing.decorate(htmlContent, observing)
+                        : htmlContent
+
                 );
     }
 
@@ -89,5 +89,5 @@ public class MarkupComponent extends WebComponent {
 
     }
 
-    
+
 }

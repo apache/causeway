@@ -80,11 +80,11 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
 
         context.checking(new Expectations() {{
-//            allowing(mockServicesInjector).getSpecificationLoader();
-//            will(returnValue(mockSpecificationLoader));
-//
-//            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-//            will(returnValue(mockPersistenceSessionServiceInternal));
+            //            allowing(mockServicesInjector).getSpecificationLoader();
+            //            will(returnValue(mockSpecificationLoader));
+            //
+            //            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+            //            will(returnValue(mockPersistenceSessionServiceInternal));
         }});
 
         objectAssociation = new ObjectAssociationAbstract(

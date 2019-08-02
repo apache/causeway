@@ -49,7 +49,7 @@ implements PropertyOrCollectionAccessorFacet {
     }
 
     // //////////////////////////////////////
-    
+
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("onType", onType);

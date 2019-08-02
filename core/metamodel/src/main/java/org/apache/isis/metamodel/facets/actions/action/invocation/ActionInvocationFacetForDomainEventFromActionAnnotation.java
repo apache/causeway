@@ -34,7 +34,7 @@ extends ActionInvocationFacetForDomainEventAbstract {
                     final ObjectSpecification onType,
                     final ObjectSpecification returnType,
                     final FacetHolder holder) {
-        
+
         super(eventType, method, onType, returnType, holder);
     }
 }

@@ -81,7 +81,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
-    
+
     @Mock
     private ObjectAdapterProvider mockAdapterManager;
     @Mock
@@ -133,7 +133,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void setUp() {
 
         // PRODUCTION
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
@@ -142,7 +142,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 .singleton(mockCommandContext)
                 .singleton(mockCommandDtoServiceInternal)
                 .build());
-        
+
         employeeRepository = new EmployeeRepositoryImpl();
 
         employeeDO = new Employee();
@@ -151,17 +151,17 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         context.checking(new Expectations() {
             {
-//                allowing(mockIsisSessionFactory).getServicesInjector();
-//                will(returnValue(mockServicesInjector));
+                //                allowing(mockIsisSessionFactory).getServicesInjector();
+                //                will(returnValue(mockServicesInjector));
 
-//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-//                will(returnValue(mockPersistenceSessionServiceInternal));
+                //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                //                will(returnValue(mockPersistenceSessionServiceInternal));
 
                 allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
-//                allowing(mockServicesInjector).getAuthenticationSessionProvider();
-//                will(returnValue(mockAuthenticationSessionProvider));
+                //                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+                //                will(returnValue(mockAuthenticationSessionProvider));
 
                 allowing(mockEmployeeAdapter).getOid();
                 will(returnValue(Factory.persistentOf(ObjectSpecId.of("EMP"), "1")));
@@ -172,11 +172,11 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockStringSpec).getCorrespondingClass();
                 will(returnValue(String.class));
 
-//                allowing(mockServicesInjector).lookupService(CommandContext.class);
-//                will(returnValue(Optional.of(mockCommandContext)));
-//
-//                allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
-//                will(returnValue(Optional.of(mockCommandDtoServiceInternal)));
+                //                allowing(mockServicesInjector).lookupService(CommandContext.class);
+                //                will(returnValue(Optional.of(mockCommandContext)));
+                //
+                //                allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
+                //                will(returnValue(Optional.of(mockCommandDtoServiceInternal)));
 
                 allowing(mockCommandDtoServiceInternal).asCommandDto(with(any(List.class)), with(any(OneToOneAssociation.class)), with(any(ObjectAdapter.class)));
                 will(returnValue(new CommandDto()));
@@ -184,14 +184,14 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockCommandContext).getCommand();
                 will(returnValue(mockCommand));
 
-//                allowing(mockServicesInjector).lookupServiceElseFail(CommandDtoServiceInternal.class);
-//                will(returnValue(new CommandDtoServiceInternalDefault()));
-//
-//                allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
-//                will(returnValue(mockAuthenticationSessionProvider));
-//
-//                allowing(mockServicesInjector).getSpecificationLoader();
-//                will(returnValue(mockSpecificationLoader));
+                //                allowing(mockServicesInjector).lookupServiceElseFail(CommandDtoServiceInternal.class);
+                //                will(returnValue(new CommandDtoServiceInternalDefault()));
+                //
+                //                allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
+                //                will(returnValue(mockAuthenticationSessionProvider));
+                //
+                //                allowing(mockServicesInjector).getSpecificationLoader();
+                //                will(returnValue(mockSpecificationLoader));
 
                 allowing(mockSpecificationLoader).loadSpecification(String.class);
                 will(returnValue(mockStringSpec));
@@ -202,8 +202,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(session));
 
-//                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
-//                will(returnValue(mockEmployeeAdapter));
+                //                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
+                //                will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
@@ -247,8 +247,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         context.checking(new Expectations() {
             {
-//                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
-//                will(returnValue(wrapperFactory));
+                //                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
+                //                will(returnValue(wrapperFactory));
 
                 allowing(mockEmployeeSpec).getMember(employeeGetNameMethod);
                 will(returnValue(employeeNameMember));
@@ -294,16 +294,16 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         expectedException.expectMessage(
                 "Method 'getEmployeeRepository' being invoked does not correspond to any of the object's fields or actions.");
-        
+
         // then
         assertThat(employeeWO.getEmployeeRepository(), is(notNullValue()));
     }
-    
+
     @Test
     public void shouldBeAbleToReadVisibleProperty() {
 
         _Config.clear();
-        
+
         allowingEmployeeHasSmithAdapter();
 
         _Config.put("isis.reflector.facet.filterVisibility", true);
@@ -344,9 +344,9 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void shouldBeAbleToModifyEnabledPropertyUsingSetter() {
 
         _Config.clear();
-        
+
         allowingJonesStringValueAdapter();
-        
+
         _Config.put("isis.reflector.facet.filterVisibility", true);
 
         context.checking(new Expectations() {
@@ -414,7 +414,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         // then should throw exception
     }
 
-    
+
     // //////////////////////////////////////
 
     private FacetedMethod facetedMethodForProperty(
@@ -444,7 +444,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     }
 
     // //////////////////////////////////////
-    
+
     private void allowingEmployeeHasSmithAdapter() {
         context.checking(new Expectations() {
             {
@@ -462,10 +462,10 @@ public class WrapperFactoryDefaultTest_wrappedObject {
             {
                 allowing(mockAdapterManager).adapterFor("Jones");
                 will(returnValue(mockAdapterForStringJones));
-                
+
                 allowing(mockAdapterForStringJones).getPojo();
                 will(returnValue("Jones"));
-                
+
                 allowing(mockAdapterForStringJones).isTransient();
                 will(returnValue(false));
             }

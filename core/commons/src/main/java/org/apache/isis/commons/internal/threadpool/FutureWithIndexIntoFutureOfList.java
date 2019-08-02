@@ -28,7 +28,7 @@ import java.util.concurrent.TimeoutException;
 final class FutureWithIndexIntoFutureOfList<T> implements Future<T> {
     final Future<List<T>> commonFuture;
     final int index;
-    
+
     FutureWithIndexIntoFutureOfList(Future<List<T>> commonFuture, int index) {
         this.commonFuture = commonFuture;
         this.index = index;

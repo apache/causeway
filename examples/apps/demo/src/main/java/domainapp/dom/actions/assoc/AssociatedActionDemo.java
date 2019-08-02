@@ -44,10 +44,10 @@ import lombok.Getter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class AssociatedActionDemo extends DemoStub {
-    
+
     @XmlTransient
     @Inject MessageService messageService;
-    
+
     @Getter private final Set<DemoItem> items = new LinkedHashSet<>();
 
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
@@ -58,7 +58,7 @@ public class AssociatedActionDemo extends DemoStub {
         }
         return this;
     }
-    
+
     @Override
     public void initDefaults() {
         items.clear();

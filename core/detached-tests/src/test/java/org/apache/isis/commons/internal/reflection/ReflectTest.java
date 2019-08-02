@@ -39,50 +39,50 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 // if we provide some custom classes for hierarchy traversal here (could be nested); 
 // then move this test to the 'commons' module, where it belongs
 class ReflectTest {
-    
+
     @Test
     void typeHierarchy() {
-        
+
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
-        
+
         String typeListLiteral = _Reflect.streamTypeHierarchy(type, false)
-        .map(t->t.getName())
-        .collect(Collectors.joining(",\n"));
-        
+                .map(t->t.getName())
+                .collect(Collectors.joining(",\n"));
+
         assertEquals(""
                 + "org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
                 + "java.lang.Object", 
                 typeListLiteral);
-        
+
     }
 
     @Test
     void typeHierarchyAndInterfaces() {
-        
+
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
-        
+
         String typeListLiteral = _Reflect.streamTypeHierarchy(type, true)
-        .map(t->t.getName())
-        .collect(Collectors.joining(",\n"));
-        
+                .map(t->t.getName())
+                .collect(Collectors.joining(",\n"));
+
         assertEquals(
                 "org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
-                + "org.apache.isis.applib.services.sudo.SudoService$Spi,\n"
-                + "java.lang.Object", 
-                typeListLiteral);
-        
+                        + "org.apache.isis.applib.services.sudo.SudoService$Spi,\n"
+                        + "java.lang.Object", 
+                        typeListLiteral);
+
     }
-    
+
     @Test
     void allMethods() {
-        
+
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
-        
+
         String typeListLiteral = _Reflect.streamAllMethods(type, true)
-        .map(m->m.toString())
-        .sorted()
-        .collect(Collectors.joining(",\n"));
-        
+                .map(m->m.toString())
+                .sorted()
+                .collect(Collectors.joining(",\n"));
+
         assertEquals(""
                 + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs(),\n"
                 + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List),\n"
@@ -90,49 +90,49 @@ class ReflectTest {
                 + "public void org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"
                 ,
                 typeListLiteral);
-        
+
     }
-    
+
     @Test
     void annotationLookup() throws NoSuchMethodException, SecurityException {
-        
+
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
         Method method = type.getMethod("runAs", new Class[] {String.class, List.class});
-        
+
         Programmatic annot = _Reflect.getAnnotation(method, Programmatic.class, true, true);
-        
+
         assertNotNull(annot);
     }
-    
+
     @Test
     void typeHierarchyAndInterfaces2() {
-        
+
         Class<?> type = JaxbServiceDefault.class;
-        
+
         String typeListLiteral = _Reflect.streamTypeHierarchy(type, true)
-        .map(t->t.getName())
-        .collect(Collectors.joining(",\n"));
-        
+                .map(t->t.getName())
+                .collect(Collectors.joining(",\n"));
+
         assertEquals(
                 "org.apache.isis.applib.services.jaxb.JaxbServiceDefault,\n"
-                + "org.apache.isis.applib.services.jaxb.JaxbService$Simple,\n"
-                + "org.apache.isis.applib.services.jaxb.JaxbService,\n"
-                + "java.lang.Object", 
-                typeListLiteral);
-        
+                        + "org.apache.isis.applib.services.jaxb.JaxbService$Simple,\n"
+                        + "org.apache.isis.applib.services.jaxb.JaxbService,\n"
+                        + "java.lang.Object", 
+                        typeListLiteral);
+
     }
-    
-    
+
+
     @Test
     void annotationLookup2() throws NoSuchMethodException, SecurityException {
-        
+
         Class<?> type = JaxbServiceDefault.class;
         Method method = type.getMethod("fromXml", new Class[] {JAXBContext.class, String.class, Map.class});
-        
+
         Programmatic annot = _Reflect.getAnnotation(method, Programmatic.class, true, true);
-        
+
         assertNotNull(annot);
-        
+
     }
-    
+
 }

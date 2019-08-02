@@ -45,7 +45,7 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     public ValueFacetAnnotation(
             final Class<?> annotatedClass, 
             final FacetHolder holder) {
-        
+
         this(semanticsProviderName(annotatedClass), 
                 semanticsProviderClass(annotatedClass), holder);
     }
@@ -54,7 +54,7 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
             final String candidateSemanticsProviderName, 
             final Class<?> candidateSemanticsProviderClass, 
             final FacetHolder holder) {
-        
+
         super(ValueSemanticsProviderUtil
                 .valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), 
                 AddFacetsIfInvalidStrategy.DO_ADD, holder);

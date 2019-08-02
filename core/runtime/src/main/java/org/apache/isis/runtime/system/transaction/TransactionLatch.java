@@ -31,18 +31,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(staticName = "of")
 public final class TransactionLatch {
 
-	private final CountDownLatch countDownLatch;  
+    private final CountDownLatch countDownLatch;  
 
-	public static TransactionLatch unlocked() {
-		return of(new CountDownLatch(0));
-	}
-	
-	/**
-	 * {@link CountDownLatch#await()}
-	 * @throws InterruptedException
-	 */
+    public static TransactionLatch unlocked() {
+        return of(new CountDownLatch(0));
+    }
+
+    /**
+     * {@link CountDownLatch#await()}
+     * @throws InterruptedException
+     */
     public void await() throws InterruptedException {
-    	countDownLatch.await();
+        countDownLatch.await();
     }
 
     /**
@@ -50,7 +50,7 @@ public final class TransactionLatch {
      * @throws InterruptedException
      */
     public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
-    	return countDownLatch.await(timeout, unit);
+        return countDownLatch.await(timeout, unit);
     }
-	
+
 }

@@ -45,7 +45,7 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
     public void filter(ClientRequestContext requestContext) throws IOException {
         final String endpoint = requestContext.getUri().toString();
         final String method = requestContext.getMethod();
-        
+
         Exception acceptableMediaTypeParsingFailure;
         try {
             @SuppressWarnings("unused")
@@ -56,32 +56,32 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         }
         final String acceptHeaderParsing = acceptableMediaTypeParsingFailure != null
                 ? "Failed to parse accept header, cause: " + acceptableMediaTypeParsingFailure.getMessage()
-                    : "OK";
-        
-        final String headers = requestContext.getStringHeaders().entrySet().stream()
-                .map(entry->entry.toString())
-                .map(this::obscureAuthHeader)
-                .collect(Collectors.joining(",\n\t"));
-        
-        final String requestBody = requestContext.getEntity().toString();
-        
-        final StringBuilder sb = new StringBuilder();
-        sb.append("\n")
-        .append("---------- JAX-RS REQUEST -------------\n")
-        .append("uri: ").append(endpoint).append("\n")
-        .append("method: ").append(method).append("\n")
-        .append("accept-header-parsing: ").append(acceptHeaderParsing).append("\n")
-        .append("headers: \n\t").append(headers).append("\n")
-        .append("request-body: ").append(requestBody).append("\n")
-        .append("----------------------------------------\n")
-        ;
-        
-        log.info(sb.toString());
+                : "OK";
+
+                final String headers = requestContext.getStringHeaders().entrySet().stream()
+                        .map(entry->entry.toString())
+                        .map(this::obscureAuthHeader)
+                        .collect(Collectors.joining(",\n\t"));
+
+                final String requestBody = requestContext.getEntity().toString();
+
+                final StringBuilder sb = new StringBuilder();
+                sb.append("\n")
+                .append("---------- JAX-RS REQUEST -------------\n")
+                .append("uri: ").append(endpoint).append("\n")
+                .append("method: ").append(method).append("\n")
+                .append("accept-header-parsing: ").append(acceptHeaderParsing).append("\n")
+                .append("headers: \n\t").append(headers).append("\n")
+                .append("request-body: ").append(requestBody).append("\n")
+                .append("----------------------------------------\n")
+                ;
+
+                log.info(sb.toString());
     }
-    
+
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
-        
+
         final InputStream inputStream = responseContext.getEntityStream();
         final String responseBody;
         if(inputStream!=null) {
@@ -90,38 +90,38 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         } else {
             responseBody = "null";
         }
-        
+
         final StringBuilder sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS RESPONSE -------------\n")
         .append("response-body: ").append(responseBody).append("\n")
         .append("----------------------------------------\n")
         ;
-        
+
         log.info(sb.toString());
-        
+
     }
-       
+
     // -- HELPER
-    
+
     private final String basicAuthMagic = "Authorization=[Basic "; 
-    
+
     String obscureAuthHeader(String keyValueLiteral) {
         if(_Strings.isEmpty(keyValueLiteral)) {
             return keyValueLiteral;
         }
         if(keyValueLiteral.startsWith(basicAuthMagic)) {
-            
+
             final String obscured = _Strings.padEnd(basicAuthMagic, keyValueLiteral.length() - 1, '*') + "]";
             return obscured;
-            
+
         }
         return keyValueLiteral;
     }
 
 
-    
-    
-    
-    
+
+
+
+
 }

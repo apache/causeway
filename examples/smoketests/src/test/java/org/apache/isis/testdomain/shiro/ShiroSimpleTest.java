@@ -45,12 +45,12 @@ class ShiroSimpleTest extends AbstractShiroTest {
         val factory = new IniSecurityManagerFactory("classpath:shiro-simple.ini");
         setSecurityManager(factory.getInstance());
     }
-    
+
     @AfterAll
     static void tearDownSubject() {
         tearDownShiro();
     }
-    
+
     @BeforeEach
     void setUp() {
         //1.  Build the Subject instance for the test to run:
@@ -58,32 +58,32 @@ class ShiroSimpleTest extends AbstractShiroTest {
         //2. Bind the subject to the current thread:
         setSubject(subjectUnderTest);
     }
-    
+
     @AfterEach
     void cleanUp() {
         //3. Unbind the subject from the current thread:
         clearSubject();    	
     }
-    
+
 
     @Test
     void loginLogoutRoundtrip() {
-    	
+
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
 
         val subject = SecurityUtils.getSubject(); 
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
-        
+
         val token = (AuthenticationToken) new UsernamePasswordToken("sven", "pass");
-		subject.login(token);
-		assertTrue(subject.isAuthenticated());
-		
-		subject.logout();
-		assertFalse(subject.isAuthenticated());
-        
+        subject.login(token);
+        assertTrue(subject.isAuthenticated());
+
+        subject.logout();
+        assertFalse(subject.isAuthenticated());
+
     }
-    
+
 
 }

@@ -289,7 +289,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             if (mode.isRegular()) {
                 final Stream<ObjectAction> actions = objectAdapter.getSpecification()
                         .streamObjectActions(Contributed.INCLUDED);
-                
+
                 addActions(objectAdapter, actions, appendTo);
             }
         }
@@ -369,7 +369,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ObjectAdapter objectAdapter, 
             final Stream<ObjectAction> actions, 
             final JsonRepresentation members) {
-        
+
         actions
         .filter(action->{
             final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), rendererContext.getWhere());

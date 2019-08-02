@@ -71,7 +71,7 @@ public interface ImperativeFacet extends Facet {
      * </pre>
      */
     public List<Method> getMethods();
-    
+
     public static enum Intent {
         CHECK_IF_HIDDEN,
         CHECK_IF_DISABLED,
@@ -146,7 +146,7 @@ public interface ImperativeFacet extends Facet {
                 }
                 imperativeFacets.add(imperativeFacet);
             });
-            
+
             switch(imperativeFacets.size()) {
             case 0:
                 break;

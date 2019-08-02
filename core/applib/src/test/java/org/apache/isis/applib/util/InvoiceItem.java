@@ -43,7 +43,7 @@ class InvoiceItem implements Comparable<InvoiceItem> {
     public void setProductCode(String productCode) {
         this.productCode = productCode;
     }
-    
+
     private Integer quantity;
     public Integer getQuantity() {
         return quantity;
@@ -51,7 +51,7 @@ class InvoiceItem implements Comparable<InvoiceItem> {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
- 
+
     private Boolean rush;
     public Boolean isRush() {
         return rush;
@@ -59,9 +59,9 @@ class InvoiceItem implements Comparable<InvoiceItem> {
     public void setRush(Boolean rush) {
         this.rush = rush;
     }
-    
+
     private static final String KEY_PROPERTIES = "invoice desc, productCode asc, quantity asc nullsLast, rush desc nullsLast";
-    
+
     @Override
     public String toString() {
         return ObjectContracts.toString(this, KEY_PROPERTIES);

@@ -29,18 +29,18 @@ import org.apache.isis.webapp.modules.sse.WebModuleServerSentEvents;
 
 @Configuration
 @Import({
-	IsisWebAppContextListener.class,
+    IsisWebAppContextListener.class,
     IsisWebAppContextInitializer.class,
-    
+
     // default modules
     WebModuleLogOnExceptionLogger.class,
     WebModuleStaticResources.class,
     WebModuleServerSentEvents.class,
-    
+
     // h2 console
     WebModuleH2Console.class,
     H2ManagerMenu.class,
-    
+
 })
 public class IsisBootWebApp {
 

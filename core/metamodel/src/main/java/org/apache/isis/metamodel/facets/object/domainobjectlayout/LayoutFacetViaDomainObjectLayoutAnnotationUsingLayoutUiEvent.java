@@ -66,8 +66,8 @@ implements LayoutFacet {
 
     public LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
             final Class<? extends LayoutUiEvent<?>> layoutUiEventClass,
-            final MetamodelEventService metamodelEventService,
-            final FacetHolder holder) {
+                    final MetamodelEventService metamodelEventService,
+                    final FacetHolder holder) {
         super(holder);
         this.layoutUiEventClass = layoutUiEventClass;
         this.metamodelEventService = metamodelEventService;

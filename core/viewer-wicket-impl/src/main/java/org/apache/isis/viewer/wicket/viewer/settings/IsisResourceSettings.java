@@ -39,8 +39,8 @@ public class IsisResourceSettings extends ResourceSettings {
     /** Chain of string resource loaders to use */
     private final List<IStringResourceLoader> stringResourceLoaders = Generics.newArrayList(4);
 
-	@Getter(onMethod=@__({@Override}), lazy=true)
-	private final Localizer localizer = new Localizer();
+    @Getter(onMethod=@__({@Override}), lazy=true)
+    private final Localizer localizer = new Localizer();
 
     /**
      * Configures Wicket's default ResourceLoaders.

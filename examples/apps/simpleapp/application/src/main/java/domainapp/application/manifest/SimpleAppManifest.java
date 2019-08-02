@@ -48,7 +48,7 @@ import domainapp.modules.simple.SimpleModule;
  */
 @Configuration
 @PropertySources({
-	@PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
+    @PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
     @PropertySource(name=Presets.HsqlDbInMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.DataNucleusAutoCreate, factory = Presets.Factory.class, value = { "" }),
@@ -70,17 +70,17 @@ import domainapp.modules.simple.SimpleModule;
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class SimpleAppManifest {
-    
-   @Bean @Singleton
-   public WebAppConfigBean webAppConfigBean() {
-       return WebAppConfigBean.builder()
-               .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-               .brandLogoHeader("/images/gift_48.png")
-               .applicationCss("css/application.css")
-               .applicationJs("scripts/application.js")
-               .applicationName("Apache Isis Simple App")
-               .faviconUrl("/images/favicon.png")
-               .build();
-   }
-   
+
+    @Bean @Singleton
+    public WebAppConfigBean webAppConfigBean() {
+        return WebAppConfigBean.builder()
+                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
+                .brandLogoHeader("/images/gift_48.png")
+                .applicationCss("css/application.css")
+                .applicationJs("scripts/application.js")
+                .applicationName("Apache Isis Simple App")
+                .faviconUrl("/images/favicon.png")
+                .build();
+    }
+
 }

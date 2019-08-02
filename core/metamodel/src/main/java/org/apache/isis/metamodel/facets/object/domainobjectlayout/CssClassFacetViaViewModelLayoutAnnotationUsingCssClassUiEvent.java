@@ -37,7 +37,7 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.util.EventUtil;
 
 public class CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
-        CssClassFacet {
+CssClassFacet {
 
     public static Facet create(
             final List<ViewModelLayout> viewModelLayouts,
@@ -66,8 +66,8 @@ public class CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent exten
 
     public CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent(
             final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
-            final MetamodelEventService metamodelEventService,
-            final FacetHolder holder) {
+                    final MetamodelEventService metamodelEventService,
+                    final FacetHolder holder) {
         super(CssClassFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         this.cssClassUiEventClass = cssClassUiEventClass;
         this.metamodelEventService = metamodelEventService;

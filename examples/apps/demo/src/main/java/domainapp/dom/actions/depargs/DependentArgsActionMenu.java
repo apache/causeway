@@ -32,7 +32,7 @@ import lombok.val;
 @DomainService(nature=NatureOfService.VIEW)
 @DomainObjectLayout(named="Associated Action")
 public class DependentArgsActionMenu {
-    
+
     @Inject private FactoryService factoryService;
 
     @Action
@@ -42,6 +42,6 @@ public class DependentArgsActionMenu {
         demo.initDefaults();
         return demo;
     }
-    
+
 }
 

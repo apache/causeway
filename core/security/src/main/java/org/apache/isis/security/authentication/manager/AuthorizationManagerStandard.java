@@ -65,12 +65,12 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
         if (authorizor.isUsableInAnyRole(identifier)) {
             return true;
         }
-        
+
         if(session.streamRoles()
                 .anyMatch(roleName->authorizor.isUsableInRole(roleName, identifier)) ) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -106,12 +106,12 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
         return (identifier.getClassName().equals(""));
     }
 
-//[2112]    
-//    @EventListener(ProgrammingModel.class)
-//    public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
-//        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
-//        baseProgrammingModel.addFactory(facetFactory);
-//    }
+    //[2112]    
+    //    @EventListener(ProgrammingModel.class)
+    //    public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
+    //        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
+    //        baseProgrammingModel.addFactory(facetFactory);
+    //    }
 
     @Inject protected Authorizor authorizor;
 

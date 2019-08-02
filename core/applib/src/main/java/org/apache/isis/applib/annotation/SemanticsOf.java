@@ -35,7 +35,7 @@ public enum SemanticsOf {
      * </ul>
      */
     SAFE_AND_REQUEST_CACHEABLE,
-    
+
     /**
      * Safe, with no side-effects. In other words, a query-only action.
      * <ul>
@@ -46,7 +46,7 @@ public enum SemanticsOf {
      * </ul>
      */
     SAFE,
-    
+
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
      * <ul>
@@ -57,7 +57,7 @@ public enum SemanticsOf {
      * </ul>
      */
     IDEMPOTENT,
-    
+
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
      * <ul>
@@ -69,7 +69,7 @@ public enum SemanticsOf {
      * </ul>
      */
     NON_IDEMPOTENT,
-    
+
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
      * <p>
@@ -82,7 +82,7 @@ public enum SemanticsOf {
      * </ul>
      */
     IDEMPOTENT_ARE_YOU_SURE,
-    
+
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
      * <p>
@@ -95,7 +95,7 @@ public enum SemanticsOf {
      * <li>Example: Increasing the quantity of a line item in an Order by 1.</li>
      */
     NON_IDEMPOTENT_ARE_YOU_SURE,
-    
+
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).

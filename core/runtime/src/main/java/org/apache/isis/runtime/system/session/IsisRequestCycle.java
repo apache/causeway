@@ -70,9 +70,9 @@ public class IsisRequestCycle {
         }
 
         try {
-            
+
             transactionTemplate.getTransactionManager().commit(txStatus);
-            
+
         } finally {
             val isisSessionFactory = IsisContext.getSessionFactory();
             isisSessionFactory.closeSession();

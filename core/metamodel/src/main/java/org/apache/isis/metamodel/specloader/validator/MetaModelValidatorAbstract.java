@@ -30,10 +30,10 @@ public abstract class MetaModelValidatorAbstract implements MetaModelValidator, 
     @Override
     public void shutdown() {
     }
-    
+
     @Override
     public MetaModelContext getMetaModelContext() {
         return MetaModelContext.current();
     }
-    
+
 }

@@ -185,7 +185,7 @@ public final class _Sets {
         return _Collections.collectFromIterable(iterable, _Sets::newConcurrentHashSet,
                 ()->Collectors.<T, KeySetView<T, Boolean>>toCollection(ConcurrentHashMap::newKeySet) );
     }
-    
+
     // -- COPY ON WRITE ARRAY SET
 
     public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet() {
@@ -225,7 +225,7 @@ public final class _Sets {
                 .filter(b::contains)
                 .collect(Collectors.toSet()) );
     }
-    
+
     /**
      * Returns the intersection (set theory) of two given sets, retaining order.
      * @param a

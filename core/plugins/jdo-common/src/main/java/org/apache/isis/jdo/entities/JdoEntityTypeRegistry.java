@@ -49,18 +49,18 @@ public class JdoEntityTypeRegistry {
     public static JdoEntityTypeRegistry current() {
         return _Context.computeIfAbsent(JdoEntityTypeRegistry.class, JdoEntityTypeRegistry::new);
     }
-    
+
     // -- HELPER
 
     private Set<String> findEntityTypes() {
-        
+
         val serviceRegistry = IsisContext.getServiceRegistry();
         if(serviceRegistry == null) {
             throw new IllegalStateException("ServiceRegistry is required");
         }
-        
+
         val entityTypes = new LinkedHashSet<String>();
-        
+
         Set<Class<?>> persistenceCapableTypes = 
                 IsisBeanTypeRegistry.current().getEntityTypes();
 
@@ -80,7 +80,7 @@ public class JdoEntityTypeRegistry {
                     stream(classNamesNotEnhanced).collect(Collectors.joining("\n* "));
             throw new IllegalStateException("Non-enhanced @PersistenceCapable classes found, will abort.  The classes in error are:\n\n* " + classNamesNotEnhancedStr + "\n\nDid the DataNucleus enhancer run correctly?\n");
         }
-        
+
         return entityTypes;
     }
 

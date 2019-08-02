@@ -40,7 +40,7 @@ public class Tooltips {
     public static void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css"))); 
     }
-    
+
     public static void addTooltip(Component target, Model<String> tooltipTextModel) {
         if(tooltipTextModel==null) {
             return;
@@ -50,23 +50,23 @@ public class Tooltips {
     }
 
     public static void addTooltip(Component target, String tooltipText) {
-        
+
         if(_Strings.isNullOrEmpty(tooltipText)) {
             return;
         }
-        
+
         final TooltipBehavior tooltipBehavior = new TooltipBehavior(
                 Model.of(tooltipText), createTooltipConfig() );
-        
+
         target.add(new AttributeAppender("class", " isis-component-with-tooltip"));    
         target.add(tooltipBehavior);
     }
-    
+
     public static void clearTooltip(Component target) {
         target.getBehaviors(TooltipBehavior.class)
         .forEach(target::remove);
     }
-    
+
     // -- HELPER
 
     private static TooltipConfig createTooltipConfig() {
@@ -74,11 +74,11 @@ public class Tooltips {
                 .withTrigger(OpenTrigger.hover)
                 .withPlacement(Placement.bottom)
                 .withAnimation(true);
-        
+
 
     }
 
-   
+
 
 
 }

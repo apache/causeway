@@ -27,14 +27,14 @@ import lombok.Value;
 @Value(staticConstructor="of") @ToString(of = "eventType")
 public class SessionLifecycleEvent {
 
-	public static enum EventType {
-		
-		sessionOpened,
-		sessionClosing,
-		//sessionFlushing,
-	}
-	
-	@Getter IsisSession session;
-	@Getter EventType eventType;
-	
+    public static enum EventType {
+
+        sessionOpened,
+        sessionClosing,
+        //sessionFlushing,
+    }
+
+    @Getter IsisSession session;
+    @Getter EventType eventType;
+
 }

@@ -27,9 +27,9 @@ public class IsisModuleSecurityAdminUser extends AbstractUserAndRolesFixtureScri
 
     public IsisModuleSecurityAdminUser(SecurityModuleConfig configBean) {
         super(
-        		configBean.getAdminUserName(), 
-        		configBean.getAdminPassword(),
-        		null,
+                configBean.getAdminUserName(), 
+                configBean.getAdminPassword(),
+                null,
                 GlobalTenancy.TENANCY_PATH, 
                 AccountType.LOCAL,
                 Arrays.asList(configBean.getAdminRoleName()));

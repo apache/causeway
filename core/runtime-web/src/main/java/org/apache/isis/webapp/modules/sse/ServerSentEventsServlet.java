@@ -95,7 +95,7 @@ public class ServerSentEventsServlet extends HttpServlet {
         threadPool.submit(()->{fork(asyncContext, eventStream);});
 
     }
-    
+
     // -- HELPER
 
     private void fork(final AsyncContext asyncContext, final EventStream eventStream) {
@@ -110,22 +110,22 @@ public class ServerSentEventsServlet extends HttpServlet {
             }
 
             try {
-                
+
                 val writer = response.getWriter(); // don't close the writer, its likely to be reused
                 if(writer==null) {
                     return false; // stop listening
                 }
-                
+
                 val payload = marshaller.marshal(source.getPayload());
-                
+
                 writer
                 .append("data: ")
                 .append(payload)
                 .append("\n\n")
                 .flush();
-                
+
                 return true; // continue listening                
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return false; // stop listening

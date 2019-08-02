@@ -35,8 +35,8 @@ public class JsonRepresentationTest_streamArrayElements {
     public void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         final Iterator<JsonRepresentation> arrayIterator = 
-        		jsonRepresentation.streamArrayElements(JsonRepresentation.class)
-        		.iterator();
+                jsonRepresentation.streamArrayElements(JsonRepresentation.class)
+                .iterator();
         assertThat(arrayIterator.hasNext(), is(true));
         assertThat(arrayIterator.next().getString("a"), is("a1"));
         assertThat(arrayIterator.hasNext(), is(true));
@@ -48,8 +48,8 @@ public class JsonRepresentationTest_streamArrayElements {
     public void forString() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("listOfStrings.json"));
         final Iterator<String> arrayIterator = 
-        		jsonRepresentation.streamArrayElements(String.class)
-        		.iterator();
+                jsonRepresentation.streamArrayElements(String.class)
+                .iterator();
         assertThat(arrayIterator.hasNext(), is(true));
         assertThat(arrayIterator.next(), is("a"));
         assertThat(arrayIterator.hasNext(), is(true));

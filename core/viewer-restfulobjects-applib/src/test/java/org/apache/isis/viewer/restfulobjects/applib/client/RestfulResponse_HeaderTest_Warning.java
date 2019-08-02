@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 
 public class RestfulResponse_HeaderTest_Warning {
 
-    
+
     @Test
     public void nonEmptyString() throws Exception {
         assertThat(RestfulResponse.Header.WARNING.parse("199 RestfulObjects abc"), is("abc"));

@@ -48,36 +48,36 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
     private ValidationFailures validationFailures;
 
     private Sequence sequence;
-    
+
     @Before
     public void setUp() throws Exception {
         mockChildType = context.mock(ObjectSpecification.class, "mockChildtype");
         mockParentType = context.mock(ObjectSpecification.class, "mockParenttype");
         mockGrandParentType = context.mock(ObjectSpecification.class, "mockGrandParenttype");
-        
+
         sequence = context.sequence("inorder");
-        
+
         validationFailures = new ValidationFailures();
         newValidatorVisitor = new JdoVersionAnnotationFacetFactory().newValidatorVisitor();
     }
-    
+
     @Test
     public void whenNoFacet() {
-        
+
         class Child {}
-        
+
         context.checking(new Expectations() {
             {
                 oneOf(mockChildType).getCorrespondingClass();
                 will(returnValue(Child.class));
             }
         });
-        
+
         newValidatorVisitor.visit(mockChildType, validationFailures);
-        
+
         assertThat(validationFailures.getNumberOfMessages(), is(0));
     }
-    
+
     @Test
     public void whenHasFacetNoSuperType() {
 
@@ -89,21 +89,21 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 oneOf(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
-                
+
                 oneOf(mockChildType).superclass();
                 inSequence(sequence);
                 will(returnValue(null));
             }
         });
-        
+
         newValidatorVisitor.visit(mockChildType, validationFailures);
-        
+
         assertThat(validationFailures.getNumberOfMessages(), is(0));
     }
-    
+
     @Test
     public void whenHasFacetWithSuperTypeHasNoFacet() {
-        
+
         class Parent {}
 
         @Version
@@ -114,30 +114,30 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 oneOf(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
-                
+
                 oneOf(mockChildType).superclass();
                 inSequence(sequence);
                 will(returnValue(mockParentType));
-                
+
                 oneOf(mockParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Parent.class));
-                
+
                 oneOf(mockParentType).superclass();
                 inSequence(sequence);
                 will(returnValue(null));
             }
         });
-        
+
         newValidatorVisitor.visit(mockChildType, validationFailures);
-        
+
         assertThat(validationFailures.getNumberOfMessages(), is(0));
     }
 
 
     @Test
     public void whenHasFacetWithParentTypeHasFacet() {
-        
+
         @Version
         class Parent {}
 
@@ -149,28 +149,28 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 oneOf(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
-                
+
                 oneOf(mockChildType).superclass();
                 inSequence(sequence);
                 will(returnValue(mockParentType));
-                
+
                 oneOf(mockParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Parent.class));
-                
+
                 oneOf(mockChildType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockChildType"));
-                
+
                 oneOf(mockParentType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockParentType"));
-                
+
             }
         });
-        
+
         newValidatorVisitor.visit(mockChildType, validationFailures);
-        
+
         assertThat(validationFailures.getNumberOfMessages(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockParentType"));
     }
@@ -178,51 +178,51 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
     @Test
     public void whenHasFacetWithGrandParentTypeHasFacet() {
-        
+
         @Version
         class GrandParent {}
-        
+
         class Parent extends GrandParent {}
 
         @Version
         class Child extends Parent {}
 
-        
+
         context.checking(new Expectations() {
             {
                 oneOf(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
-                
+
                 oneOf(mockChildType).superclass();
                 inSequence(sequence);
                 will(returnValue(mockParentType));
-                
+
                 oneOf(mockParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Parent.class));
-                
+
                 oneOf(mockParentType).superclass();
                 inSequence(sequence);
                 will(returnValue(mockGrandParentType));
-                
+
                 oneOf(mockGrandParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(GrandParent.class));
-                
+
                 oneOf(mockChildType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockChildType"));
-                
+
                 oneOf(mockGrandParentType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockGrandParentType"));
-                
+
             }
         });
-        
+
         newValidatorVisitor.visit(mockChildType, validationFailures);
-        
+
         assertThat(validationFailures.getNumberOfMessages(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockGrandParentType"));
     }

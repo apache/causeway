@@ -135,10 +135,10 @@ class MetaModelExporter {
 
     private boolean shouldIgnore(final MetaModelService.Config config, final ObjectSpecification specification) {
         return notInPackagePrefixes(specification, config) ||
-           config.isIgnoreMixins() && specification.isMixin() ||
-           config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface() ||
-           config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers()) ||
-           config.isIgnoreBuiltInValueTypes() && isValueType(specification);
+                config.isIgnoreMixins() && specification.isMixin() ||
+                config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface() ||
+                config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers()) ||
+                config.isIgnoreBuiltInValueTypes() && isValueType(specification);
     }
 
     private static <T> List<T> remaining(final java.util.Collection<T> processed, final java.util.Collection<T> other) {
@@ -226,8 +226,8 @@ class MetaModelExporter {
 
         final List<Property> properties = domainClass.getProperties().getProp();
         specification.streamProperties(Contributed.INCLUDED)
-                .map(otoa -> asXsdType(otoa, domainClassByObjectSpec, config))
-                .forEach(properties::add);
+        .map(otoa -> asXsdType(otoa, domainClassByObjectSpec, config))
+        .forEach(properties::add);
 
         sortMembers(properties);
     }
@@ -244,8 +244,8 @@ class MetaModelExporter {
 
         final List<Collection> collections = domainClass.getCollections().getColl();
         specification.streamCollections(Contributed.INCLUDED)
-                .map(otma -> asXsdType(otma, domainClassByObjectSpec, config))
-                .forEach(collections::add);
+        .map(otma -> asXsdType(otma, domainClassByObjectSpec, config))
+        .forEach(collections::add);
 
         sortMembers(collections);
     }
@@ -262,8 +262,8 @@ class MetaModelExporter {
 
         final List<Action> actions = domainClass.getActions().getAct();
         specification.streamObjectActions(Contributed.INCLUDED)
-                .map(action ->asXsdType(action, domainClassByObjectSpec, config))
-                .forEach(actions::add);
+        .map(action ->asXsdType(action, domainClassByObjectSpec, config))
+        .forEach(actions::add);
 
         sortMembers(actions);
     }
@@ -341,17 +341,17 @@ class MetaModelExporter {
             final MetaModelService.Config config) {
 
         Param parameterType = parameter instanceof OneToOneActionParameter
-                                    ? new ScalarParam()
-                                    : new VectorParam();
-        parameterType.setId(parameter.getId());
-        parameterType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
+                ? new ScalarParam()
+                        : new VectorParam();
+                parameterType.setId(parameter.getId());
+                parameterType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
 
-        final ObjectSpecification specification = parameter.getSpecification();
-        final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
-        parameterType.setType(value);
+                final ObjectSpecification specification = parameter.getSpecification();
+                final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
+                parameterType.setType(value);
 
-        addFacets(parameter, parameterType.getFacets(), config);
-        return parameterType;
+                addFacets(parameter, parameterType.getFacets(), config);
+                return parameterType;
     }
 
     private void addFacets(
@@ -361,9 +361,9 @@ class MetaModelExporter {
 
         final List<org.apache.isis.schema.metamodel.v1.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-                .filter(facet -> !facet.isNoop() || !config.isIgnoreNoop())
-                .map(facet -> asXsdType(facet, config))
-                .forEach(facetList::add);
+        .filter(facet -> !facet.isNoop() || !config.isIgnoreNoop())
+        .map(facet -> asXsdType(facet, config))
+        .forEach(facetList::add);
 
         sortFacets(facetList);
     }

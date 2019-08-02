@@ -48,9 +48,9 @@ import org.apache.isis.security.authorization.manager.AuthorizationManager;
 public interface MetaModelContext {
 
     // -- INTERFACE
-    
+
     IsisConfiguration getConfiguration();
-    
+
     ObjectAdapterProvider getObjectAdapterProvider();
 
     ServiceInjector getServiceInjector();
@@ -72,46 +72,46 @@ public interface MetaModelContext {
     TitleService getTitleService();
 
     ObjectSpecification getSpecification(Class<?> type);
-    
+
     RepositoryService getRepositoryService();
-    
+
     TransactionService getTransactionService();
-    
+
     TransactionState getTransactionState();
-    
+
     HomePageAction getHomePageAction();
-    
-	Stream<ObjectAdapter> streamServiceAdapters();
-	
-	ObjectAdapter lookupServiceAdapterById(String serviceId);
+
+    Stream<ObjectAdapter> streamServiceAdapters();
+
+    ObjectAdapter lookupServiceAdapterById(String serviceId);
 
     // -- PRESET INSTANCES
-    
+
     static MetaModelContext current() {
         return _Context.computeIfAbsent(MetaModelContext.class, 
                 __->MetaModelContexts.usingSpring()); // default
     }
-    
+
     static void preset(MetaModelContext metaModelContext) {
         _Context.clear();
         _Context.putSingleton(MetaModelContext.class, metaModelContext);
     }
-    
+
     static MetaModelContext_forTestingBuilder builder() {
         return MetaModelContext_forTesting.builder();
     }
-    
+
     // -- DELEGATION - FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
-    
+
     public static interface Delegating extends MetaModelContext {
-        
+
         public MetaModelContext getMetaModelContext();
-        
+
         @Override
         public default IsisConfiguration getConfiguration() {
             return getMetaModelContext().getConfiguration();
         }
-        
+
         @Override
         public default ObjectAdapterProvider getObjectAdapterProvider() {
             return getMetaModelContext().getObjectAdapterProvider();
@@ -166,37 +166,37 @@ public interface MetaModelContext {
         public default ObjectSpecification getSpecification(Class<?> type) {
             return getMetaModelContext().getSpecification(type);
         }
-        
+
         @Override
         public default RepositoryService getRepositoryService() {
             return getMetaModelContext().getRepositoryService();
         }
-        
+
         @Override
         public default TransactionState getTransactionState() {
             return getMetaModelContext().getTransactionState();
         }
-        
+
         @Override
         public default HomePageAction getHomePageAction() {
             return getMetaModelContext().getHomePageAction();
         }
-        
+
         @Override
         public default TransactionService getTransactionService() {
             return getMetaModelContext().getTransactionService();
         }
-        
+
         @Override
         public default Stream<ObjectAdapter> streamServiceAdapters() {
-        	return streamServiceAdapters();
+            return streamServiceAdapters();
         }
-        
+
         @Override
         default ObjectAdapter lookupServiceAdapterById(String serviceId) {
-        	return lookupServiceAdapterById(serviceId);
+            return lookupServiceAdapterById(serviceId);
         }
-        
+
     }
-    
+
 }

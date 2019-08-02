@@ -517,7 +517,7 @@ extends AbstractViewModel {
         public void executeChild(
                 final FixtureScript callingFixtureScript,
                 final PersonaWithBuilderScript<?> personaWithBuilderScript) {
-            
+
             executeChildren(callingFixtureScript, personaWithBuilderScript);
         }
 

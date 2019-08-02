@@ -156,16 +156,16 @@ public class TranslationServicePo implements TranslationService {
     }
 
     // -- DEPENDENCIES
-    
+
     private _Lazy<Bin<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
-        IsisContext.getServiceRegistry().select(TranslationsResolver.class) );
+    IsisContext.getServiceRegistry().select(TranslationsResolver.class) );
 
     Bin<TranslationsResolver> getTranslationsResolver() {
         return translationsResolvers.get();
     }
 
     private _Lazy<Bin<LocaleProvider>> localeProviders = _Lazy.threadSafe(()->
-        IsisContext.getServiceRegistry().select(LocaleProvider.class) );
+    IsisContext.getServiceRegistry().select(LocaleProvider.class) );
 
     Bin<LocaleProvider> getLocaleProvider() {
         return localeProviders.get();

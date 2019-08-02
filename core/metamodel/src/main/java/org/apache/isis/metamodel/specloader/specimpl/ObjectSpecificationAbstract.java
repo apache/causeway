@@ -155,7 +155,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final String shortName;
     private final Identifier identifier;
     private final boolean isAbstract;
-    
+
     @Getter(onMethod=@__({@Override})) private final boolean excludedFromMetamodel;
     // derived lazily, cached since immutable
     protected ObjectSpecId specId;
@@ -180,19 +180,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
-        
+
         val exclusions = _Sets.of( //TODO[2133] make this configurable, or find an alternative, perhaps a specific type annotation?
-        		"org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult",
-        		"org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript",
-        		"org.apache.isis.applib.fixturescripts.FixtureResult",
-        		"org.apache.isis.applib.fixturescripts.FixtureScript"
-        		);
+                "org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult",
+                "org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript",
+                "org.apache.isis.applib.fixturescripts.FixtureResult",
+                "org.apache.isis.applib.fixturescripts.FixtureScript"
+                );
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
         this.excludedFromMetamodel = _Reflect
-        		.streamTypeHierarchy(introspectedClass, /*includeInterfaces*/ false)
+                .streamTypeHierarchy(introspectedClass, /*includeInterfaces*/ false)
                 .anyMatch(type->exclusions.contains(type.getName())); 
-        
+
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
         this.facetProcessor = facetProcessor;
@@ -349,8 +349,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 final List<ObjectAction> objectActionForType = objectActionsByType.get(type);
                 objectActionForType.clear();
                 objectActions.stream()
-                    .filter(ObjectAction.Predicates.ofType(type))
-                    .forEach(objectActionForType::add);
+                .filter(ObjectAction.Predicates.ofType(type))
+                .forEach(objectActionForType::add);
             }
         }
     }
@@ -440,7 +440,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final Class<?> correspondingClass = getCorrespondingClass();
         final Class<?> possibleSupertypeClass = specification.getCorrespondingClass();
         if(correspondingClass != null && possibleSupertypeClass != null &&
-            Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
+                Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
             if(possibleSupertypeClass.isAssignableFrom(correspondingClass)) {
                 return true;
             }
@@ -504,24 +504,24 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         // lookup facet holder's facet
         final Stream<Q> facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
-        
+
         // lookup all interfaces
         final Stream<Q> facets2 = _NullSafe.stream(interfaces)
                 .filter(_NullSafe::isPresent) // just in case
                 .map(interfaceSpec->interfaceSpec.getFacet(facetType));
-        
+
         // search up the inheritance hierarchy
         final Stream<Q> facets3 = _NullSafe.streamNullable(superclass()) 
                 .map(superSpec->superSpec.getFacet(facetType));
-        
+
         final Stream<Q> facetsCombined = Stream.concat(Stream.concat(facets1, facets2), facets3);
-        
+
         final NotANoopFacetFilter<Q> notANoopFacetFilter = new NotANoopFacetFilter<>();
-        
+
         return facetsCombined
-        .filter(notANoopFacetFilter)
-        .findFirst()
-        .orElse(notANoopFacetFilter.noopFacet);
+                .filter(notANoopFacetFilter)
+                .findFirst()
+                .orElse(notANoopFacetFilter.noopFacet);
     }
 
     @Vetoed
@@ -570,7 +570,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             final AuthenticationSession session, 
             final InteractionInitiatedBy interactionMethod, 
             final ManagedObject targetObjectAdapter) {
-        
+
         return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
                 interactionMethod);
     }
@@ -637,15 +637,15 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     // -- Associations
-    
+
     @Override
     public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         guardAgainstTooEarly_assoz(contributed);
-        
+
         return stream(this.associations)
-        .filter(ContributeeMember.Predicates.regularElse(contributed));
+                .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
 
     @Override
@@ -686,37 +686,37 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(oa != null) {
             return oa;
         }
-//TODO [2033] remove or replace        
-//        if(_Context.isPrototyping()) {
-//            // automatically refresh if not in production
-//            // (better support for jrebel)
-//
-//            LOG.warn("Could not find association with id '{}'; invalidating cache automatically", id);
-//            if(!invalidatingCache.get()) {
-//                // make sure don't go into an infinite loop, though.
-//                try {
-//                    invalidatingCache.set(true);
-//                    getSpecificationLoader().invalidateCache(getCorrespondingClass());
-//                } finally {
-//                    invalidatingCache.set(false);
-//                }
-//            } else {
-//                LOG.warn("... already invalidating cache earlier in stacktrace, so skipped this time");
-//            }
-//            oa = getAssociationWithId(id);
-//            if(oa != null) {
-//                return oa;
-//            }
-//        }
+        //TODO [2033] remove or replace        
+        //        if(_Context.isPrototyping()) {
+        //            // automatically refresh if not in production
+        //            // (better support for jrebel)
+        //
+        //            LOG.warn("Could not find association with id '{}'; invalidating cache automatically", id);
+        //            if(!invalidatingCache.get()) {
+        //                // make sure don't go into an infinite loop, though.
+        //                try {
+        //                    invalidatingCache.set(true);
+        //                    getSpecificationLoader().invalidateCache(getCorrespondingClass());
+        //                } finally {
+        //                    invalidatingCache.set(false);
+        //                }
+        //            } else {
+        //                LOG.warn("... already invalidating cache earlier in stacktrace, so skipped this time");
+        //            }
+        //            oa = getAssociationWithId(id);
+        //            if(oa != null) {
+        //                return oa;
+        //            }
+        //        }
         throw new ObjectSpecificationException(
                 String.format("No association called '%s' in '%s'", id, getSingularName()));
     }
 
     private ObjectAssociation getAssociationWithId(final String id) {
         return streamAssociations(Contributed.INCLUDED)
-            .filter(objectAssociation->objectAssociation.getId().equals(id))
-            .findFirst()
-            .orElse(null);
+                .filter(objectAssociation->objectAssociation.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -724,7 +724,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         guardAgainstTooEarly_contrib(contributed);
-        
+
         return stream(objectActionsByType.get(type))
                 .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
@@ -790,14 +790,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         final List<ObjectAssociation> contributeeAssociations = _Lists.newArrayList();
         streamServiceBeans()
-            .forEach(serviceBean->addContributeeAssociationsIfAny(serviceBean, contributeeAssociations));
+        .forEach(serviceBean->addContributeeAssociationsIfAny(serviceBean, contributeeAssociations));
         return contributeeAssociations;
     }
 
     private void addContributeeAssociationsIfAny(
             final BeanAdapter serviceBean, 
             final List<ObjectAssociation> contributeeAssociationsToAppendTo) {
-        
+
         final Class<?> serviceClass = serviceBean.getBeanClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
@@ -830,26 +830,26 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return true;
     }
-    
+
     private List<ObjectAssociation> createContributeeAssociations(final BeanAdapter serviceBean) {
         final Class<?> serviceClass = serviceBean.getBeanClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         final Stream<ObjectAction> serviceActions = specification
                 .streamObjectActions(ActionType.USER, Contributed.INCLUDED);
-        
+
         return serviceActions
-            .filter(this::canAdd)
-            .map(serviceAction->(ObjectActionDefault) serviceAction)
-            .map(createContributeeAssociationFunctor(serviceBean, this))
-            .collect(Collectors.toList());
-  
+                .filter(this::canAdd)
+                .map(serviceAction->(ObjectActionDefault) serviceAction)
+                .map(createContributeeAssociationFunctor(serviceBean, this))
+                .collect(Collectors.toList());
+
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createContributeeAssociationFunctor(
             final BeanAdapter serviceBean,
             final ObjectSpecification contributeeType) {
-        
+
         return new Function<ObjectActionDefault, ObjectAssociation>(){
             @Override
             public ObjectAssociation apply(ObjectActionDefault input) {
@@ -912,7 +912,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         final Stream<ObjectActionDefault> mixinActions = objectActionsOf(specification);
-        
+
         mixinActions
         .filter((ObjectActionDefault input) -> {
             final NotContributedFacet notContributedFacet = input.getFacet(NotContributedFacet.class);
@@ -979,7 +979,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         final List<ObjectAction> contributeeActions = _Lists.newArrayList();
         streamServiceBeans()
-            .forEach(serviceBean->addContributeeActionsIfAny(serviceBean, contributeeActions));
+        .forEach(serviceBean->addContributeeActionsIfAny(serviceBean, contributeeActions));
         return contributeeActions;
     }
 
@@ -996,7 +996,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return true;
     }
-    
+
     private void addContributeeActionsIfAny(
             final Object servicePojo,
             final List<ObjectAction> contributeeActionsToAppendTo) {
@@ -1009,27 +1009,27 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (specification == this) {
             return;
         }
-        
+
         final Stream<ObjectAction> serviceActions = specification
                 .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
-        
+
         serviceActions
         .filter(this::canAddContributee)
         .map(serviceAction->(ObjectActionDefault) serviceAction)
         .forEach(contributedAction->{
-            
+
             // see if qualifies by inspecting all parameters
             final int contributeeParam = contributeeParameterMatchOf(contributedAction);
             if(contributeeParam == -1) {
                 return;
             }
-            
+
             ObjectActionContributee contributeeAction =
                     new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, this);
             facetProcessor.processMemberOrder(contributeeAction);
             contributeeActionsToAppendTo.add(contributeeAction);
         });
-        
+
     }
 
     private boolean isAlwaysHidden(final FacetHolder holder) {
@@ -1065,7 +1065,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (isManagedBean() || isValue() || isMixin()) {
             return Collections.emptyList();
         }
-        
+
         val mixinTypes = IsisBeanTypeRegistry.current().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return Collections.emptyList();
@@ -1077,7 +1077,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return mixedInActions;
     }
-    
+
     private boolean canAddMixin(ObjectAction mixinTypeAction) {
         if (isAlwaysHidden(mixinTypeAction)) {
             return false;
@@ -1113,7 +1113,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         final Stream<ObjectAction> mixinActions = mixinSpec
                 .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
-        
+
         mixinActions
         .filter(this::canAddMixin)
         .forEach(mixinTypeAction->{
@@ -1122,7 +1122,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             facetProcessor.processMemberOrder(mixedInAction);
             mixedInActionsToAppendTo.add(mixedInAction);
         });
-        
+
     }
 
 
@@ -1154,13 +1154,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected BeanSort managedObjectSort; 
-    
+
     @Override
     public BeanSort getBeanSort() {
-    	if(managedObjectSort==null) {
-    		managedObjectSort = sortOf(this);
-    	}
-    	return managedObjectSort;
+        if(managedObjectSort==null) {
+            managedObjectSort = sortOf(this);
+        }
+        return managedObjectSort;
     }
 
     // -- convenience isXxx (looked up from facets)
@@ -1195,9 +1195,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         str.append("class", getFullIdentifier());
         return str.toString();
     }
-    
+
     // -- GUARDS
-    
+
     private boolean contributeeAndMixedInAssociationsAdded;
     private boolean contributeeAndMixedInActionsAdded;
 
@@ -1218,7 +1218,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
         }
     }
-    
+
     private void guardAgainstTooEarly_assoz(Contributed contributed) {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
@@ -1240,15 +1240,15 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected BeanSort sortOf(ObjectSpecification spec) {
-//TODO [2033] this is the way we want it to work in the future; 
-//	by now we do prime the #managedObjectSort in case its a service in the default service implementation        
-//        if(containsFacet(BeanFacet.class)) {
-//            return ManagedObjectSort.DOMAIN_SERVICE;
-//        }
+        //TODO [2033] this is the way we want it to work in the future; 
+        //	by now we do prime the #managedObjectSort in case its a service in the default service implementation        
+        //        if(containsFacet(BeanFacet.class)) {
+        //            return ManagedObjectSort.DOMAIN_SERVICE;
+        //        }
         if(isManagedBean()) {
             return BeanSort.MANAGED_BEAN;
         }
-//
+        //
 
         if(containsFacet(ValueFacet.class)) {
             return BeanSort.VALUE;

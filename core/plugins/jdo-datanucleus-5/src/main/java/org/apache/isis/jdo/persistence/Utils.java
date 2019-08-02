@@ -51,7 +51,7 @@ final class Utils {
             return Version.of(timestampVersion.getTime(), authenticationSession.getUserName());
         }
         return null;
-        
+
     }
 
 }

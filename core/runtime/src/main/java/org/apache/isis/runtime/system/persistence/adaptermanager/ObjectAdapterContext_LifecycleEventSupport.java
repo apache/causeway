@@ -33,14 +33,14 @@ import org.apache.isis.runtime.system.context.session.RuntimeContext;
  * @since 2.0
  */
 class ObjectAdapterContext_LifecycleEventSupport {
-    
+
     private final EventBusService eventBusService; 
-    
+
     ObjectAdapterContext_LifecycleEventSupport(RuntimeContext runtimeContext) {
         this.eventBusService = runtimeContext.getServiceRegistry()
                 .lookupServiceElseFail(EventBusService.class);
     }
-    
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     void postLifecycleEventIfRequired(
             final ManagedObject adapter,
@@ -53,9 +53,9 @@ class ObjectAdapterContext_LifecycleEventSupport {
             postEvent((AbstractLifecycleEvent) instance, pojo);
         }
     }
-    
+
     //  -- HELPER
-    
+
     private void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
         if(eventBusService!=null) {
             event.setSource(pojo);
@@ -63,5 +63,5 @@ class ObjectAdapterContext_LifecycleEventSupport {
         }
     }
 
-    
+
 }

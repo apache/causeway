@@ -129,11 +129,11 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
                 @Override
                 public void run() {
                     val userRegistrationService = IsisContext.getServiceRegistry()
-                    		.lookupServiceElseFail(UserRegistrationService.class);
+                            .lookupServiceElseFail(UserRegistrationService.class);
 
                     IsisContext.getTransactionService().executeWithinTransaction(() -> {
-                            userRegistrationService.registerUser(userDetails);
-                            removeAccountConfirmation();
+                        userRegistrationService.registerUser(userDetails);
+                        removeAccountConfirmation();
                     });
                 }
             });

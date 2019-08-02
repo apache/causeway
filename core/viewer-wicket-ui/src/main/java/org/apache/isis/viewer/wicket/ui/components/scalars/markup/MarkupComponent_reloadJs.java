@@ -36,7 +36,7 @@ public class MarkupComponent_reloadJs {
     public static CharSequence decorate(CharSequence htmlContent, JavaScriptResourceReference jsRef) {
 
         val targetId = UUID.randomUUID().toString();
-        
+
         val sb = new StringBuilder();
         sb
         .append("<div id=\"").append(targetId).append("\">\n")
@@ -44,10 +44,10 @@ public class MarkupComponent_reloadJs {
         .append("\n</div>\n")
         .append("<script type=\"text/javascript\" src=\""+getUrl(jsRef)+"\" defer>\n")
         .append("\n</script>\n");
-        
+
         return sb.toString();
     }
-    
+
     private static String getUrl(JavaScriptResourceReference jsRef) {
         IRequestHandler handler = new ResourceReferenceRequestHandler(jsRef, null);
         return RequestCycle.get().urlFor(handler).toString();

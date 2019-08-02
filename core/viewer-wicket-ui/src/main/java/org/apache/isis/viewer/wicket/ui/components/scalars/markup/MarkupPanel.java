@@ -40,11 +40,11 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
             String id, 
             ScalarModel scalarModel, 
             MarkupComponentFactory markupComponentFactory) {
-        
+
         super(id, scalarModel);
         this.markupComponentFactory = markupComponentFactory;
     }
-    
+
     @Override
     protected String getScalarPanelType() {
         return "markupPanel";
@@ -57,7 +57,7 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
             // fallback to text editor
             return super.createScalarIfRegularFormGroup();
         }
-        
+
         final MarkupComponent markupComponent = 
                 createMarkupComponent("scalarValueContainer");
 
@@ -73,7 +73,7 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
         return formGroup;
     }
-    
+
     @Override
     protected Component createComponentForCompact() {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);
@@ -82,6 +82,6 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
     protected MarkupComponent createMarkupComponent(String id) {
         return markupComponentFactory.newMarkupComponent(id, getModel());
     }
-    
+
 
 }

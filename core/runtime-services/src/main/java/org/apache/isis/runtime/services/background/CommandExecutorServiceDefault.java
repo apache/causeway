@@ -102,7 +102,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         } catch (Exception e) {
 
             val executeIn = commandWithDto.getExecuteIn();
-            
+
             log.warn("Exception when executing : {} {}", executeIn, commandWithDto.getMemberIdentifier(), e);
             afterCommit(commandWithDto, e);
         }
@@ -130,73 +130,73 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 ? currentExecution.getStartedAt()
                         : clockService.nowAsJavaSqlTimestamp();
 
-        commandWithDto.internal().setStartedAt(startedAt);
+                commandWithDto.internal().setStartedAt(startedAt);
 
-        final CommandDto dto = commandWithDto.asDto();
+                final CommandDto dto = commandWithDto.asDto();
 
-        final MemberDto memberDto = dto.getMember();
-        final String memberId = memberDto.getMemberIdentifier();
+                final MemberDto memberDto = dto.getMember();
+                final String memberId = memberDto.getMemberIdentifier();
 
-        final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
-        final List<OidDto> targetOidDtos = oidsDto.getOid();
+                final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
+                final List<OidDto> targetOidDtos = oidsDto.getOid();
 
-        final InteractionType interactionType = memberDto.getInteractionType();
-        if(interactionType == InteractionType.ACTION_INVOCATION) {
+                final InteractionType interactionType = memberDto.getInteractionType();
+                if(interactionType == InteractionType.ACTION_INVOCATION) {
 
-            final ActionDto actionDto = (ActionDto) memberDto;
+                    final ActionDto actionDto = (ActionDto) memberDto;
 
-            for (OidDto targetOidDto : targetOidDtos) {
+                    for (OidDto targetOidDto : targetOidDtos) {
 
-                final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
-                final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
+                        final ObjectAdapter targetAdapter = adapterFor(targetOidDto);
+                        final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
-                // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
-                // it will switch the targetAdapter to be the mixedInAdapter transparently
-                final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
-                final ObjectAdapter resultAdapter = objectAction.execute(
-                        targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                        // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
+                        // it will switch the targetAdapter to be the mixedInAdapter transparently
+                        final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
+                        final ObjectAdapter resultAdapter = objectAction.execute(
+                                targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                // flush any Isis PersistenceCommands pending
-                // (else might get transient objects for the return value)
-                transactionService.flushTransaction();
+                        // flush any Isis PersistenceCommands pending
+                        // (else might get transient objects for the return value)
+                        transactionService.flushTransaction();
 
-                //
-                // for the result adapter, we could alternatively have used...
-                // (priorExecution populated by the push/pop within the interaction object)
-                //
-                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                // Object unused = priorExecution.getReturned();
-                //
+                        //
+                        // for the result adapter, we could alternatively have used...
+                        // (priorExecution populated by the push/pop within the interaction object)
+                        //
+                        // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                        // Object unused = priorExecution.getReturned();
+                        //
 
-                // REVIEW: this doesn't really make sense if >1 action
-                if(resultAdapter != null) {
-                    Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                    commandWithDto.internal().setResult(resultBookmark);
+                        // REVIEW: this doesn't really make sense if >1 action
+                        if(resultAdapter != null) {
+                            Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                            commandWithDto.internal().setResult(resultBookmark);
+                        }
+                    }
+                } else {
+
+                    final PropertyDto propertyDto = (PropertyDto) memberDto;
+
+                    for (OidDto targetOidDto : targetOidDtos) {
+
+                        final Bookmark bookmark = Bookmark.from(targetOidDto);
+                        final Object targetObject = bookmarkService.lookup(bookmark, FieldResetPolicy.RESET);
+
+                        final ObjectAdapter targetAdapter = adapterFor(targetObject);
+
+                        final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+
+                        final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
+
+                        property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+
+                        // there is no return value for property modifications.
+                    }
                 }
-            }
-        } else {
-
-            final PropertyDto propertyDto = (PropertyDto) memberDto;
-
-            for (OidDto targetOidDto : targetOidDtos) {
-
-                final Bookmark bookmark = Bookmark.from(targetOidDto);
-                final Object targetObject = bookmarkService.lookup(bookmark, FieldResetPolicy.RESET);
-
-                final ObjectAdapter targetAdapter = adapterFor(targetObject);
-
-                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
-
-                final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
-
-                property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
-
-                // there is no return value for property modifications.
-            }
-        }
 
     }
-    
+
     protected void afterCommit(CommandWithDto commandWithDto, Exception exceptionIfAny) {
 
         val interaction = interactionContext.getInteraction();

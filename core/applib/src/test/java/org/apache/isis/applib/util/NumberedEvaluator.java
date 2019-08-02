@@ -20,6 +20,7 @@ import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
 
 public class NumberedEvaluator implements ToStringEvaluator {
 
+    @Override
     public boolean canEvaluate(Object o) {
         return o instanceof Numbered;
     }

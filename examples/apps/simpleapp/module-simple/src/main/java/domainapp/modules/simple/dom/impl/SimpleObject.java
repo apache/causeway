@@ -90,7 +90,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     private final static Comparator<SimpleObject> comparator = 
             Comparator.comparing(SimpleObject::getName);
-    
+
     @Override
     public int compareTo(final SimpleObject other) {
         return comparator.compare(this, other);
@@ -102,7 +102,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @Inject MessageService messageService;
 
     // FACTORY
-    
+
     public static SimpleObject ofName(String name) {
         val simpleObject = new SimpleObject();
         simpleObject.setName(name);

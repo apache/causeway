@@ -55,7 +55,7 @@ public interface ObjectAssociationContainer {
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
                 .map(x->(OneToOneAssociation)x);
     }
-    
+
     /**
      * All {@link ObjectAssociation association}s that represents
      * {@link OneToManyAssociation collections}.

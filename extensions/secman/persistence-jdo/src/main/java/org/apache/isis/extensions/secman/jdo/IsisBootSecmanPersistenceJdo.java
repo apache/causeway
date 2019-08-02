@@ -28,7 +28,7 @@ import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 @Configuration
 @ComponentScan(
         basePackageClasses= {
-        		IsisBootSecmanPersistenceJdo.class
+                IsisBootSecmanPersistenceJdo.class
         },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})

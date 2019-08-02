@@ -41,42 +41,42 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import lombok.val;
 
 @SpringBootTest(
-	classes = { 
-			JdoTestDomainModule.class, 
-	},
-	properties = {
-		"logging.config=log4j2-test.xml",
-		// "isis.reflector.introspector.parallelize=false",
-		// "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
-})
+        classes = { 
+                JdoTestDomainModule.class, 
+        },
+        properties = {
+                "logging.config=log4j2-test.xml",
+                // "isis.reflector.introspector.parallelize=false",
+                // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+        })
 @Disabled("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {
 
-	@BeforeEach
-	void beforeEach() {
-		
-	}
+    @BeforeEach
+    void beforeEach() {
 
-	@Test
-	void builtInServicesShouldBeSetUp() throws IOException {
+    }
 
-		val serviceRegistry = IsisContext.getServiceRegistry();
-		val managedServices = serviceRegistry.streamRegisteredBeans()
-				.map(BeanAdapter::getBeanClass)
-				.map(Class::getName)
-				.collect(Collectors.toCollection(TreeSet::new));
+    @Test
+    void builtInServicesShouldBeSetUp() throws IOException {
 
-		val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-IsisBoot.json", StandardCharsets.UTF_8);
-		val singletonSet = new TreeSet<>(_Json.readJsonList(String.class, singletonJson));
+        val serviceRegistry = IsisContext.getServiceRegistry();
+        val managedServices = serviceRegistry.streamRegisteredBeans()
+                .map(BeanAdapter::getBeanClass)
+                .map(Class::getName)
+                .collect(Collectors.toCollection(TreeSet::new));
 
-		// same as managedServices.containsAll(singletonSet) but more verbose in case of
-		// failure
-		assertEquals(toStringJoiningNewLine(singletonSet),
-				toStringJoiningNewLine(intersectSorted(managedServices, singletonSet)));
+        val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-IsisBoot.json", StandardCharsets.UTF_8);
+        val singletonSet = new TreeSet<>(_Json.readJsonList(String.class, singletonJson));
 
-		// TODO also test for request-scoped service (requires a means to mock a
-		// request-context)
+        // same as managedServices.containsAll(singletonSet) but more verbose in case of
+        // failure
+        assertEquals(toStringJoiningNewLine(singletonSet),
+                toStringJoiningNewLine(intersectSorted(managedServices, singletonSet)));
 
-	}
+        // TODO also test for request-scoped service (requires a means to mock a
+        // request-context)
+
+    }
 
 }

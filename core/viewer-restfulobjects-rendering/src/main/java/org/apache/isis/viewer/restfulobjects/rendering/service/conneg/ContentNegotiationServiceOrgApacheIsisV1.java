@@ -52,7 +52,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 @DomainService(nature = NatureOfService.DOMAIN)
 @Order(200) //in effect, is the relative priority (lower numbers have higher priority)
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
-    
+
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.isis/v1"</code>.
      *
@@ -106,7 +106,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         if(!canAccept) {
             return null;
         }
-        
+
         final EnumSet<SuppressionType> suppression = suppress(rendererContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
@@ -243,9 +243,9 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             rootRepresentation = JsonRepresentation.newArray();
 
             final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-            
+
             final Stream<ObjectAdapter> collectionAdapters = CollectionFacet.Utils.streamAdapters(returnedAdapter);
-            
+
             appendStreamTo(rendererContext, collectionAdapters, rootRepresentation, suppression);
 
             // $$ro representation will be an object in the list with a single property named "$$ro"
@@ -295,7 +295,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
         return SuppressionType.ParseUtil.parse(mediaTypeParameterList(acceptableMediaTypes, "suppress"));
     }
-    
+
     private void appendObjectTo(
             final RepresentationService.Context rendererContext,
             final ObjectAdapter objectAdapter,
@@ -307,7 +307,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         final Where where = rendererContext.getWhere();
         final Stream<OneToManyAssociation> collections = objectAdapter.getSpecification()
                 .streamCollections(Contributed.INCLUDED);
-        
+
         collections.forEach(collection->{
             final JsonRepresentation collectionRepresentation = JsonRepresentation.newArray();
 
@@ -321,7 +321,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
             appendCollectionTo(rendererContext, objectAdapter, collection, collectionRepresentation, suppression);
         });
-        
+
     }
 
     private void appendPropertiesTo(
@@ -333,7 +333,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         final Where where = rendererContext.getWhere();
         final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
                 .streamProperties(Contributed.INCLUDED);
-        
+
         properties.forEach(property->{
             final Consent visibility = property.isVisible(objectAdapter, interactionInitiatedBy, where);
             if (!visibility.isAllowed()) {
@@ -401,7 +401,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final Stream<ObjectAdapter> adapters,
             final JsonRepresentation collectionRepresentation, 
             final EnumSet<SuppressionType> suppression) {
-        
+
         adapters.forEach(elementAdapter->{
             JsonRepresentation elementRepresentation = JsonRepresentation.newMap();
             appendPropertiesTo(rendererContext, elementAdapter, elementRepresentation, suppression);

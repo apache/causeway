@@ -245,17 +245,17 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private Set<Class<? extends FixtureScript>> findFixtureScriptSubTypesInPackage() {
-    	
-    	val packagePrefix = getPackagePrefix();
-    	
-    	return serviceRegistry.streamRegisteredBeansOfType(FixtureScript.class)
-    	.map(beanAdapter->beanAdapter.getBeanClass())
-    	.map(type->_Casts.<Class<? extends FixtureScript>>uncheckedCast(type))
-    	.filter(type->type.getPackage().getName().startsWith(packagePrefix))
-    	.collect(Collectors.toCollection(HashSet::new));
+
+        val packagePrefix = getPackagePrefix();
+
+        return serviceRegistry.streamRegisteredBeansOfType(FixtureScript.class)
+                .map(beanAdapter->beanAdapter.getBeanClass())
+                .map(type->_Casts.<Class<? extends FixtureScript>>uncheckedCast(type))
+                .filter(type->type.getPackage().getName().startsWith(packagePrefix))
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
-    
+
 
     private FixtureScript newFixtureScript(final Class<? extends FixtureScript> fixtureScriptCls) {
         try {
@@ -351,16 +351,16 @@ public abstract class FixtureScripts extends AbstractService {
 
     @Programmatic
     public void runFixtureScript(final FixtureScript... fixtureScriptList) {
-    	
-    	val singleScript = toSingleScript(fixtureScriptList);
-    	val parameters = (String)null;
-    	
-    	transactionService.executeWithinTransaction(()->{
-    		runFixtureScript(singleScript, parameters);	
-    	});
+
+        val singleScript = toSingleScript(fixtureScriptList);
+        val parameters = (String)null;
+
+        transactionService.executeWithinTransaction(()->{
+            runFixtureScript(singleScript, parameters);	
+        });
 
     }
-    
+
     @Programmatic
     public <T> T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
         final BuilderScriptAbstract<T> fixtureScript = persona.builder();
@@ -373,13 +373,13 @@ public abstract class FixtureScripts extends AbstractService {
         serviceInjector.injectServicesInto(builderScript);
 
         return transactionService.executeWithinTransaction(()->{
-        
-        	builderScript.run(null);
-        	final T object = builderScript.getObject();
-        	return object;
-        	
+
+            builderScript.run(null);
+            final T object = builderScript.getObject();
+            return object;
+
         });
-        
+
     }
 
     @Programmatic
@@ -471,15 +471,15 @@ public abstract class FixtureScripts extends AbstractService {
         final Object object = fixtureResult.getObject();
         return object != null? titleService.titleOf(object): "(null)";
     }
-    
+
     // -- HELPERS - LOCAL
-    
+
     private static FixtureScript toSingleScript(FixtureScript[] fixtureScriptList) {
-    	
-    	if (fixtureScriptList.length == 1) {
+
+        if (fixtureScriptList.length == 1) {
             return fixtureScriptList[0];
         }
-    	
+
         return new FixtureScript() {
             @Override
             protected void execute(ExecutionContext executionContext) {
@@ -488,7 +488,7 @@ public abstract class FixtureScripts extends AbstractService {
                 }
             }
         };
-        
+
     }
 
     // -- DEPENDENCIES

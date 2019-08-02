@@ -119,9 +119,9 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     @Override
     @PostConstruct
     public void init() {
-      //FIXME[2039]        
-//        final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);
-//        this.logRecognizedExceptions = Boolean.parseBoolean(prop);
+        //FIXME[2039]        
+        //        final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);
+        //        this.logRecognizedExceptions = Boolean.parseBoolean(prop);
     }
 
     @Override
@@ -167,5 +167,5 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     }
 
     @Inject protected TranslationService translationService;
-    
+
 }

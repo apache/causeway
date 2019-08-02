@@ -25,9 +25,9 @@ import java.util.Collection;
  */
 public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvaluationServiceAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
+    /**
      * Returns the lists unchanged.
      *
      * <p>
@@ -41,7 +41,7 @@ public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvalu
     @Override
     protected Collection<ApplicationPermissionValue> ordered(
             final Collection<ApplicationPermissionValue> permissionValues) {
-    	
+
         return permissionValues;
     }
 

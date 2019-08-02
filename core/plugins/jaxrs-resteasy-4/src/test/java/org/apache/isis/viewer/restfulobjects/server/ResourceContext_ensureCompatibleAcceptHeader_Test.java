@@ -19,6 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.server;
 
 public class ResourceContext_ensureCompatibleAcceptHeader_Test extends
-        ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
+ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
 }

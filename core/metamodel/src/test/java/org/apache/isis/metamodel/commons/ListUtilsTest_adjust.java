@@ -29,36 +29,36 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class ListUtilsTest_adjust {
-    
-    
+
+
     @Test
     public void sameLength() throws Exception {
         final List<Integer> list = Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
         ListExtensions.adjust(list, 3);
-        
+
         assertThat(list.size(), is(3));
         assertThat(list.get(0), is(Integer.valueOf(0)));
         assertThat(list.get(1), is(Integer.MAX_VALUE));
         assertThat(list.get(2), is(Integer.MIN_VALUE));
     }
-    
+
     @Test
     public void ifLonger() throws Exception {
         final List<Integer> list = new ArrayList<>(Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.adjust(list, 4);
-        
+
         assertThat(list.size(), is(4));
         assertThat(list.get(0), is(Integer.valueOf(0)));
         assertThat(list.get(1), is(Integer.MAX_VALUE));
         assertThat(list.get(2), is(Integer.MIN_VALUE));
         assertThat(list.get(3), is(nullValue()));
     }
-    
+
     @Test
     public void ifShorter() throws Exception {
         final List<Integer> list = new ArrayList<>(Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.adjust(list, 2);
-        
+
         assertThat(list.size(), is(2));
         assertThat(list.get(0), is(Integer.valueOf(0)));
         assertThat(list.get(1), is(Integer.MAX_VALUE));

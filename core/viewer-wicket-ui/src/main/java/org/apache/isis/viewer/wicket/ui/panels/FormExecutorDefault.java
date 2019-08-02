@@ -167,8 +167,8 @@ implements FormExecutor {
             }
 
             if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet) ||
-                hasBlobsOrClobs(page)                                       ||
-                targetIfAny == null                                             ) {
+                    hasBlobsOrClobs(page)                                       ||
+                    targetIfAny == null                                             ) {
 
                 redirectTo(resultAdapter, targetIfAny);
 
@@ -230,7 +230,7 @@ implements FormExecutor {
                 // ... display as growl pop-up
                 final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
                 messageBroker.setApplicationError(message);
-                
+
                 //TODO [2089] hotfix to render the error on the same page instead of redirecting;
                 // previous behavior was to fall through and rethrow, which lead to the error never shown
                 return false;
@@ -465,7 +465,7 @@ implements FormExecutor {
             raiseWarning(target, feedbackForm, recognizedErrorIfAny);
 
             val txState = IsisContext.getTransactionService().currentTransactionState();
-            
+
             //FIXME[2125] what's the replacement for this?
             //txManager.getCurrentTransaction().clearAbortCause();
 
@@ -516,18 +516,18 @@ implements FormExecutor {
     }
 
     private MessageService getMessageService() {
-    	return getServiceRegistry().lookupServiceElseFail(MessageService.class);
+        return getServiceRegistry().lookupServiceElseFail(MessageService.class);
     }
-    
+
     protected WicketViewerSettings getSettings() {
-    	return getServiceRegistry().lookupServiceElseFail(WicketViewerSettings.class);
+        return getServiceRegistry().lookupServiceElseFail(WicketViewerSettings.class);
     }
 
     // request-scoped
     private Optional<CommandContext> currentCommandContext() {
-    	return getServiceRegistry().lookupService(CommandContext.class);
+        return getServiceRegistry().lookupService(CommandContext.class);
     }
-    
+
 
     ///////////////////////////////////////////////////////////////////////////////
 

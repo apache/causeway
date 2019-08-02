@@ -63,10 +63,10 @@ public class IsisWicketApplication_Defaults {
     @Ignore // 6.0.0 does it differently
     @Test
     public void providesCustomRequestCycle() {
-//        final WebRequest mockRequest = context.mock(WebRequest.class);
-//        final Response mockResponse = context.mock(Response.class);
-//        final RequestCycle newRequestCycle = application.newRequestCycle(mockRequest, mockResponse);
-//        assertThat(newRequestCycle, is(WebRequestCycleForIsis.class));
+        //        final WebRequest mockRequest = context.mock(WebRequest.class);
+        //        final Response mockResponse = context.mock(Response.class);
+        //        final RequestCycle newRequestCycle = application.newRequestCycle(mockRequest, mockResponse);
+        //        assertThat(newRequestCycle, is(WebRequestCycleForIsis.class));
     }
 
     @Test

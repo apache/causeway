@@ -27,20 +27,20 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
         objectType = "isissecurity.ApplicationClassProperty"
-)
+        )
 @ViewModelLayout(paged=100)
 public class ApplicationClassProperty extends ApplicationClassMember {
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassProperty, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassProperty, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassProperty> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
-    
+
 
     // -- constructors
     public ApplicationClassProperty() {
@@ -49,45 +49,45 @@ public class ApplicationClassProperty extends ApplicationClassMember {
     public ApplicationClassProperty(final ApplicationFeatureId featureId) {
         super(featureId);
     }
-    
+
 
     // -- returnType
 
     public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Property(
             domainEvent = ReturnTypeDomainEvent.class
-    )
+            )
     @MemberOrder(name="Data Type", sequence = "2.6")
     public String getReturnType() {
         return getFeature().getReturnTypeName();
     }
-    
+
 
     // -- derived
 
     public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Property(
             domainEvent = DerivedDomainEvent.class
-    )
+            )
     @MemberOrder(name="Detail", sequence = "2.7")
     public boolean isDerived() {
         return getFeature().isDerived();
     }
-    
+
 
 
     // -- maxLength
     public static class MaxLengthDomainEvent extends PropertyDomainEvent<Integer> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Property(
             domainEvent = MaxLengthDomainEvent.class,
             optionality = Optionality.OPTIONAL
-    )
+            )
     @MemberOrder(name="Detail", sequence = "2.8")
     public Integer getMaxLength() {
         return getFeature().getPropertyMaxLength();
@@ -97,17 +97,17 @@ public class ApplicationClassProperty extends ApplicationClassMember {
         return !String.class.getSimpleName().equals(getReturnType());
     }
 
-    
+
 
 
     // -- typicalLength
     public static class TypicalLengthDomainEvent extends PropertyDomainEvent<Integer> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Property(
             domainEvent = TypicalLengthDomainEvent.class,
             optionality = Optionality.OPTIONAL
-    )
+            )
     @MemberOrder(name="Detail", sequence = "2.9")
     public Integer getTypicalLength() {
         return getFeature().getPropertyTypicalLength();
@@ -117,7 +117,7 @@ public class ApplicationClassProperty extends ApplicationClassMember {
         return !String.class.getSimpleName().equals(getReturnType());
     }
 
-    
+
 
 }
 

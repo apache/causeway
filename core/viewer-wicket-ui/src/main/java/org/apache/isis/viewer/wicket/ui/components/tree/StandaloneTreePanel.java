@@ -33,10 +33,10 @@ public class StandaloneTreePanel extends PanelAbstract<ValueModel> {
 
     public StandaloneTreePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
-        
+
         final Component tree = IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel);
         final Behavior treeTheme = TreeThemeProvider.get().treeThemeFor(valueModel); 
-        
+
         add(tree.add(treeTheme));
     }
 

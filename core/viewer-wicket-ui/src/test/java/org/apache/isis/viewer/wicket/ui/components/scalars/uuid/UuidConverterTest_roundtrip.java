@@ -36,15 +36,15 @@ public class UuidConverterTest_roundtrip {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
-    
+
     @Before
     public void setUp() throws Exception {
         converter = newConverter();
     }
-    
+
     @Test
     public void happy_case() {
-        
+
         Assert.assertEquals(
                 valid, converter.convertToObject(valid.toString(), Locale.ENGLISH));
         Assert.assertEquals(

@@ -31,7 +31,7 @@ public interface MixedInMember extends ObjectMember {
      * The id if it was originally {@link Mixin#DEFAULT_METHOD_NAME the default member name}.
      */
     String getOriginalId();
-    
+
     ObjectSpecification getMixinType();
 
 }

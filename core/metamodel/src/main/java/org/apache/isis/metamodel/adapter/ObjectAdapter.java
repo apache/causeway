@@ -90,7 +90,7 @@ public interface ObjectAdapter extends ManagedObject {
     default public boolean isValue() {
         return getOid().isValue();
     }
-    
+
     default public ObjectAdapter injectServices(ServiceInjector serviceInjector) {
         if(isValue()) {
             return this; // guard against value objects
@@ -204,12 +204,12 @@ public interface ObjectAdapter extends ManagedObject {
         public static List<ObjectAdapter> visibleAdapters(
                 final Stream<ObjectAdapter> objectAdapters,
                 final InteractionInitiatedBy interactionInitiatedBy) {
-            
+
             return objectAdapters
-                .filter(adapter->isVisible(adapter, interactionInitiatedBy))
-                .collect(Collectors.toList());
+                    .filter(adapter->isVisible(adapter, interactionInitiatedBy))
+                    .collect(Collectors.toList());
         }
-        
+
 
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked
@@ -307,7 +307,7 @@ public interface ObjectAdapter extends ManagedObject {
                 final ManagedObject target, 
                 List<? extends ManagedObject> argumentsIfAvailable/*, 
                 final SpecificationLoader specLoader*/) {
-            
+
             final List<ManagedObject> args = _Lists.newArrayList();
             if(argumentsIfAvailable != null) {
                 args.addAll(argumentsIfAvailable);
@@ -321,7 +321,7 @@ public interface ObjectAdapter extends ManagedObject {
 
         private static void adjust(
                 final Method method, final List<ManagedObject> args /*, final SpecificationLoader specLoader*/) {
-            
+
             final Class<?>[] parameterTypes = method.getParameterTypes();
             ListExtensions.adjust(args, parameterTypes.length);
 
@@ -329,7 +329,7 @@ public interface ObjectAdapter extends ManagedObject {
                 final Class<?> cls = parameterTypes[i];
                 if(args.get(i) == null && cls.isPrimitive()) {
                     final Object object = ClassExtensions.toDefault(cls);
-                    
+
                     final ManagedObject adapter = ManagedObject.of((ObjectSpecification)null, object);
                     args.set(i, adapter);
                 }

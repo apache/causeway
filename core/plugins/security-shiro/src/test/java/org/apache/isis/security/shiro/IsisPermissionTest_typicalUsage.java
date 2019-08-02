@@ -39,7 +39,7 @@ public class IsisPermissionTest_typicalUsage {
     public void setUp() throws Exception {
         IsisPermission.resetVetoedPermissions();
     }
-    
+
     @After
     public void tearDown() throws Exception {
         IsisPermission.resetVetoedPermissions();
@@ -49,7 +49,7 @@ public class IsisPermissionTest_typicalUsage {
 
     @Test
     public void typicalUsageWithinIsis() throws Exception {
-        
+
         // these are the permissions that Isis will check
         WildcardPermission viewCustomerChangeAddress = new WildcardPermission("com.mycompany.myapp:Customer:changeAddress:r");
         WildcardPermission useCustomerChangeAddress = new WildcardPermission("com.mycompany.myapp:Customer:changeAddress:w");
@@ -76,7 +76,7 @@ public class IsisPermissionTest_typicalUsage {
         // and these are some counterexamples
         assertThat(viewCustomerChangeAddress, not(permittedBy("com.mycompany"))); // packages are NOT recursive
         assertThat(viewCustomerChangeAddress, not(permittedBy("com.mycompany.*"))); // can't use regex wildcards for packages either
-        
+
         assertThat(viewCustomerChangeAddress, not(permittedBy("com.mycompany.myapp:Customer:changeAddress:w")));
         assertThat(useCustomerChangeAddress, not(permittedBy("com.mycompany.myapp:Customer:changeAddress:r")));
 
@@ -86,10 +86,10 @@ public class IsisPermissionTest_typicalUsage {
         assertThat(viewCustomerChangeAddress, not(permittedBy("*:*:xxx")));
         assertThat(viewCustomerChangeAddress, not(permittedBy("*:xxx")));
         assertThat(viewCustomerChangeAddress, not(permittedBy("xxx")));
-        
+
         assertThat(viewCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:r")));
         assertThat(useCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:w")));
-        
+
         // and check that two wrongs don't make a right (ie the ! means veto, rather than "not") 
         assertThat(useCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:r")));
     }
@@ -97,13 +97,13 @@ public class IsisPermissionTest_typicalUsage {
 
     @Test
     public void vetoableDomains() throws Exception {
-        
+
         // these are the permissions that Isis will check
         WildcardPermission viewCustomerChangeAddress = new WildcardPermission("com.mycompany.myapp:Customer:changeAddress:r");
 
         // normally this would be permitted...
         assertThat(viewCustomerChangeAddress, permittedBy("foo/com.mycompany.myapp:Customer:*"));
-        
+
         // but if there's a veto
         assertThat(viewCustomerChangeAddress, not(permittedBy("!foo/com.mycompany.myapp:Customer:changeAddress:r")));
         // then no longer permitted if in the same vetoable domain
@@ -112,11 +112,11 @@ public class IsisPermissionTest_typicalUsage {
         assertThat(viewCustomerChangeAddress, permittedBy("bar/com.mycompany.myapp:Customer:*"));
     }
 
-    
-    
+
+
     @Test
     public void defaultPackage() throws Exception {
-        
+
         // these are the permissions that Isis will check
         WildcardPermission viewCustomerChangeAddress = new WildcardPermission(":Customer:changeAddress:r");
 
@@ -130,8 +130,8 @@ public class IsisPermissionTest_typicalUsage {
         assertThat(viewCustomerChangeAddress, permittedBy("*:*"));
         assertThat(viewCustomerChangeAddress, permittedBy("*"));
     }
-    
-    
+
+
     private static Matcher<? super Permission> permittedBy(final String permissionString) {
         return permittedBy(new IsisPermission(permissionString));
     }

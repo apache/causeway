@@ -22,7 +22,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class JeeDemoService {
-    
+
     public String getMessage() {
         return "Hello World from JEE";
     }

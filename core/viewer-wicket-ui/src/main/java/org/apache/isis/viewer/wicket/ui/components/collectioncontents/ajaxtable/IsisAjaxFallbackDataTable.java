@@ -81,7 +81,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         addTopToolbar(headersToolbar);
 
         navigationToolbar = new IsisAjaxNavigationToolbar(this, this.toggleboxColumn);
-        
+
         // implementation note: toolbars do decide for themselves, whether they are visible
         addBottomToolbar(navigationToolbar); 
         addBottomToolbar(new NoRecordsToolbar(this));

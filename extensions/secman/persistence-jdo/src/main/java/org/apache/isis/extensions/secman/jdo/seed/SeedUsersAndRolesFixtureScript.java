@@ -40,13 +40,13 @@ import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityRegu
  */
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
-	@Inject SecurityModuleConfig configBean;
+    @Inject SecurityModuleConfig configBean;
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject ApplicationUserRepository applicationUserRepository;
-    
+
     //@Override
     @Override
-	protected void execute(ExecutionContext executionContext) {
+    protected void execute(ExecutionContext executionContext) {
 
         // global tenancy
         executionContext.executeChild(this, new GlobalTenancy());
@@ -63,6 +63,6 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         executionContext.executeChild(this, new IsisApplibFixtureResultsRoleAndPermissions());
     }
 
-    
-    
+
+
 }

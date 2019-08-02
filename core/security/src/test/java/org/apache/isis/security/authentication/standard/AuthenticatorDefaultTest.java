@@ -37,7 +37,7 @@ public class AuthenticatorDefaultTest {
 
     @Before
     public void setUp() {
-        
+
         authenticator = new AuthenticatorAbstract() {
 
             @Override

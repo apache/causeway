@@ -359,16 +359,16 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
     protected static Stream<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
         @SuppressWarnings("rawtypes")
         Stream associations = objectSpec
-                .streamAssociations(Contributed.INCLUDED)
-                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        .streamAssociations(Contributed.INCLUDED)
+        .filter(ObjectAssociation.Predicates.PROPERTIES);
         return _Casts.uncheckedCast(associations);
     }
 
     protected static Stream<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
         @SuppressWarnings("rawtypes")
         Stream associations = objectSpec
-                .streamAssociations(Contributed.INCLUDED)
-                .filter(ObjectAssociation.Predicates.COLLECTIONS);
+        .streamAssociations(Contributed.INCLUDED)
+        .filter(ObjectAssociation.Predicates.COLLECTIONS);
         return _Casts.uncheckedCast(associations);
     }
 

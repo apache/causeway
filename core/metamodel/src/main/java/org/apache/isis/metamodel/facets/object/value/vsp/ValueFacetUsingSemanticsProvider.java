@@ -29,7 +29,7 @@ public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {
     public ValueFacetUsingSemanticsProvider(
             final ValueSemanticsProvider<?> adapter, 
             final Facet underlyingValueTypeFacet) {
-        
+
         super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, underlyingValueTypeFacet.getFacetHolder());
 
         // add the adapter in as its own facet (eg StringFacet).

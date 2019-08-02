@@ -41,20 +41,20 @@ public class CollectionContentsSelectorDropdownPanelTest {
 
     @Mock
     private ComponentFactory one;
-    
+
     @Mock
     private ComponentFactory two;
 
     private ComponentFactory ajaxTableComponentFactory;
-    
+
     @Before
     public void setUp() throws Exception {
         ajaxTableComponentFactory = new CollectionContentsAsAjaxTablePanelFactory();
     }
-    
+
     @Test
     public void testOrderAjaxTableToEnd() {
-        
+
         List<ComponentFactory> componentFactories = 
                 Arrays.<ComponentFactory>asList(
                         one,

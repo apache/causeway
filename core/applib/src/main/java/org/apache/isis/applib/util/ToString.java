@@ -40,7 +40,7 @@ public class ToString<T> {
         Objects.requireNonNull(getter);
         return new ToString<>(name, getter, false);
     }
-    
+
     public static <T> ToString<T> toStringOmmitIfAbsent(String name, Function<? super T, ?> getter) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
@@ -65,7 +65,7 @@ public class ToString<T> {
         getters.add(getter);
         return this;
     }
-    
+
     public ToString<T> thenToStringOmmitIfAbsent(String name, Function<? super T, ?> getter){
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
@@ -108,9 +108,9 @@ public class ToString<T> {
 
                 );
     }
-    
+
     // -- HELPER
-    
+
     private void addBit(boolean bit) {
         final int index = names.size();
         if(bit) {

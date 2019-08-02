@@ -54,65 +54,65 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
 public class ZipWriter {
 
-	@FunctionalInterface
-	public interface OnZipEntry {
-		public void accept(OutputStreamWriter writer) throws IOException;
-	}
+    @FunctionalInterface
+    public interface OnZipEntry {
+        public void accept(OutputStreamWriter writer) throws IOException;
+    }
 
-	public static ZipWriter newInstance() {
-		return ofFailureMessage("Unable to create zip");
-	}
+    public static ZipWriter newInstance() {
+        return ofFailureMessage("Unable to create zip");
+    }
 
-	public static ZipWriter ofFailureMessage(String failureMessage) {
-		val baos = new ByteArrayOutputStream();
-		val zos = new ZipOutputStream(baos);
-		val writer = new OutputStreamWriter(zos);
-		return new ZipWriter(baos, zos, writer, failureMessage);
-	}
+    public static ZipWriter ofFailureMessage(String failureMessage) {
+        val baos = new ByteArrayOutputStream();
+        val zos = new ZipOutputStream(baos);
+        val writer = new OutputStreamWriter(zos);
+        return new ZipWriter(baos, zos, writer, failureMessage);
+    }
 
-	private final ByteArrayOutputStream baos;
-	private final ZipOutputStream zos;
-	private final OutputStreamWriter writer;
-	private final String failureMessage;
-	private byte[] content;
+    private final ByteArrayOutputStream baos;
+    private final ZipOutputStream zos;
+    private final OutputStreamWriter writer;
+    private final String failureMessage;
+    private byte[] content;
 
-	/**
-	 * Adds a new zipEntry with given {@code zipEntryName}, and provides the
-	 * {@link OutputStreamWriter} via {@link OnZipEntry} for the consumer to 
-	 * write the actual (uncompressed) zip-entry content. 
-	 * @param zipEntryName
-	 * @param onZipEntry
-	 */
-	public void nextEntry(String zipEntryName, OnZipEntry onZipEntry) {
-		if(content!=null) {
-			throw new IllegalStateException("Cannot create a new ZipEntry an a closed ZipWriter");
-		}
-		try {
-			zos.putNextEntry(new ZipEntry(zipEntryName));
-			onZipEntry.accept(writer);
-			writer.flush();
-			zos.closeEntry();
-		} catch (final IOException e) {
-			throw _Exceptions.unrecoverable(failureMessage, e);
-		}
-	}
+    /**
+     * Adds a new zipEntry with given {@code zipEntryName}, and provides the
+     * {@link OutputStreamWriter} via {@link OnZipEntry} for the consumer to 
+     * write the actual (uncompressed) zip-entry content. 
+     * @param zipEntryName
+     * @param onZipEntry
+     */
+    public void nextEntry(String zipEntryName, OnZipEntry onZipEntry) {
+        if(content!=null) {
+            throw new IllegalStateException("Cannot create a new ZipEntry an a closed ZipWriter");
+        }
+        try {
+            zos.putNextEntry(new ZipEntry(zipEntryName));
+            onZipEntry.accept(writer);
+            writer.flush();
+            zos.closeEntry();
+        } catch (final IOException e) {
+            throw _Exceptions.unrecoverable(failureMessage, e);
+        }
+    }
 
-	/**
-	 * Terminal operation, closes the writer. 
-	 * Calling this operation multiple times, will return the same array instance object. 
-	 * @return the byte array created by the underlying ZipOutputStream
-	 */
-	public byte[] toBytes() {
-		if(content==null) {
-			try {
-				writer.close();
-			} catch (IOException e) {
-				throw _Exceptions.unrecoverable(failureMessage, e);
-			}
-			content = baos.toByteArray();
-		}
-		return content;
-	}
+    /**
+     * Terminal operation, closes the writer. 
+     * Calling this operation multiple times, will return the same array instance object. 
+     * @return the byte array created by the underlying ZipOutputStream
+     */
+    public byte[] toBytes() {
+        if(content==null) {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                throw _Exceptions.unrecoverable(failureMessage, e);
+            }
+            content = baos.toByteArray();
+        }
+        return content;
+    }
 
 
 }

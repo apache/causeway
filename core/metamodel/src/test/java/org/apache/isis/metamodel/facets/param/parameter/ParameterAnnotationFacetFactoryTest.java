@@ -81,7 +81,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
     }
 
     @Override
-	@After
+    @After
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -92,10 +92,10 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
         public void withAnnotation() {
 
             class Customer {
-				public void someAction(
+                public void someAction(
                         @Parameter(
                                 maxLength = 30
-                        )
+                                )
                         final String name) { }
             }
 
@@ -138,9 +138,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
                 public void someAction(
                         @Parameter(
                                 mustSatisfy = {NotTooHot.class, NotTooCold.class}
-                        )
+                                )
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -178,9 +178,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
                 public void someAction(
                         @Parameter(
                                 optionality = Optionality.OPTIONAL
-                        )
+                                )
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -204,9 +204,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
                 public void someAction(
                         @Parameter(
                                 optionality = Optionality.MANDATORY
-                        )
+                                )
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -230,9 +230,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
                 public void someAction(
                         @Parameter(
                                 optionality = Optionality.DEFAULT
-                        )
+                                )
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -254,7 +254,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             class Customer {
                 public void someAction(
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -283,9 +283,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
                         @Parameter(
                                 regexPattern = "[123].*",
                                 regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
-                        )
+                                )
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -311,9 +311,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             class Customer {
                 public void someAction(
                         @Parameter(
-                        )
+                                )
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -336,9 +336,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
                 public void someAction(
                         @Parameter(
                                 regexPattern = ""
-                        )
+                                )
                         final String name
-                ) {
+                        ) {
                 }
             }
 
@@ -360,12 +360,12 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             class Customer {
                 @SuppressWarnings("unused")
-				public void someAction(
+                public void someAction(
                         @Parameter(
                                 regexPattern = "[123].*"
-                        )
+                                )
                         final int name
-                ) {
+                        ) {
                 }
             }
 
@@ -374,15 +374,15 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext = 
-            		new FacetFactory.ProcessParameterContext(
-            				Customer.class, actionMethod, 0, null, facetedMethodParameter);
+                    new FacetFactory.ProcessParameterContext(
+                            Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 
             // then
             final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
             Assert.assertNotNull(regExFacet);
-            
+
         }
 
     }

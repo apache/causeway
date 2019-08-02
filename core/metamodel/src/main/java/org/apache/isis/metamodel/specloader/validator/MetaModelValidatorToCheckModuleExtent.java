@@ -83,39 +83,39 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
 
             @Override
             public void summarize(final ValidationFailures validationFailures) {
-//FIXME[2112]
-//                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
-//
-//                final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
-//                for (final String pkg : domainObjectPackageNames) {
-//                    List<String> domainObjectClassNames = domainObjectClassNamesByPackage.get(pkg);
-//                    boolean withinSomeModule = isWithinSomeModule(modulePackageNames, pkg);
-//                    if(!withinSomeModule) {
-//                        String csv = stream(domainObjectClassNames)
-//                                .collect(Collectors.joining(","));
-//                        validationFailures.add(
-//                                "Domain objects discovered in package '%s' are not in the set of modules obtained from "
-//                                        + "the AppManifest's top-level module '%s'.  Classes are: %s",
-//                                        pkg, topLevelModule.getClass().getName(), csv);
-//                    }
-//                }
+                //FIXME[2112]
+                //                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
+                //
+                //                final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
+                //                for (final String pkg : domainObjectPackageNames) {
+                //                    List<String> domainObjectClassNames = domainObjectClassNamesByPackage.get(pkg);
+                //                    boolean withinSomeModule = isWithinSomeModule(modulePackageNames, pkg);
+                //                    if(!withinSomeModule) {
+                //                        String csv = stream(domainObjectClassNames)
+                //                                .collect(Collectors.joining(","));
+                //                        validationFailures.add(
+                //                                "Domain objects discovered in package '%s' are not in the set of modules obtained from "
+                //                                        + "the AppManifest's top-level module '%s'.  Classes are: %s",
+                //                                        pkg, topLevelModule.getClass().getName(), csv);
+                //                    }
+                //                }
             }
-//FIXME[2112]
-//            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
-//                final List<Class<?>> modules = appManifest.getModules();
-//                return modules.stream()
-//                        .map(aClass->aClass.getPackage().getName())
-//                        .collect(Collectors.toCollection(HashSet::new));
-//            }
-//
-//            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
-//                for (final String modulePackageName : modulePackageNames) {
-//                    if(pkg.startsWith(modulePackageName)) {
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
+            //FIXME[2112]
+            //            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
+            //                final List<Class<?>> modules = appManifest.getModules();
+            //                return modules.stream()
+            //                        .map(aClass->aClass.getPackage().getName())
+            //                        .collect(Collectors.toCollection(HashSet::new));
+            //            }
+            //
+            //            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
+            //                for (final String modulePackageName : modulePackageNames) {
+            //                    if(pkg.startsWith(modulePackageName)) {
+            //                        return true;
+            //                    }
+            //                }
+            //                return false;
+            //            }
         };
 
         add(new MetaModelValidatorVisiting(visitor));

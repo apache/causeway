@@ -36,11 +36,11 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         public Set<SomeReferencedObject> getReferences() { return null; }
     }
     public static class SomeReferencedObject {}
-    
+
     public static class SomeDomainObjectCollectionDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
         private static final long serialVersionUID = 1L;
     }
-    
+
     @Test
     public void defaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
@@ -74,7 +74,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final SomeDomainObject sdo = new SomeDomainObject();
         final SomeReferencedObject other = new SomeReferencedObject();
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
-        
+
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 SomeDomainObjectCollectionDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
         assertThat(ev.getSource(), is(sdo));
@@ -82,5 +82,5 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
         assertThat(ev.getValue(), is(other));
     }
-    
+
 }

@@ -43,37 +43,37 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
     public MetaModelValidator get() {
         return metaModelValidator.get();
     }
-    
+
     // -- HELPER
-    
+
     @Inject private IsisConfiguration configuration;
     @Inject private ProgrammingModelService programmingModelService;
     @Inject private ServiceRegistry serviceRegistry; 
-    
+
     private _Lazy<MetaModelValidator> metaModelValidator = 
             _Lazy.threadSafe(this::createMetaModelValidator);
-            
+
     private MetaModelValidator createMetaModelValidator() {
-        
+
         final String metaModelValidatorClassName =
                 configuration.getString(
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
         val mmValidator = InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
         val mmValidatorComposite = MetaModelValidatorComposite.asComposite(mmValidator);
-        
+
         val programmingModel = programmingModelService.get();
         val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
-        
+
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);
             metaModelRefiner.refineMetaModelValidator(mmValidatorComposite);
         }
-        
+
         programmingModel.refineMetaModelValidator(mmValidatorComposite);
-        
+
         return mmValidator;
     }
-    
+
 }
 

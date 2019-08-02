@@ -34,7 +34,7 @@ public class NotPersistedAnnotationOnCollectionFacetFactoryTest extends Abstract
     private CollectionAnnotationFacetFactory facetFactory;
 
     @Override
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         facetFactory = new CollectionAnnotationFacetFactory();
     }

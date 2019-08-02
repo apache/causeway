@@ -101,7 +101,7 @@ public class AuditingServiceInternal {
         final String targetClass = CommandUtil.targetClassNameFor(adapter);
 
         val txId = transactionService.currentTransactionId();
-        
+
         final UUID transactionId = txId.getUniqueId();
         final int sequence = txId.getSequence();
 

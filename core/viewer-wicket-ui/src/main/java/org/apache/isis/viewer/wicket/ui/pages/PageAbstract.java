@@ -110,7 +110,7 @@ import lombok.extern.log4j.Log4j2;
 public abstract class PageAbstract extends WebPage implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE =
             new ConfigPropertyEnum<>("isis.viewer.wicket.dialogMode", DialogMode.SIDEBAR);
     public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE_FOR_MENUS =
@@ -188,19 +188,19 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                             : new EmptyPanel("debugBar").setVisible(false);
                     add(debugBar);
 
-            MarkupContainer header = createPageHeader("header");
-            themeDiv.add(header);
+                    MarkupContainer header = createPageHeader("header");
+                    themeDiv.add(header);
 
-            MarkupContainer footer = createPageFooter("footer");
-            themeDiv.add(footer);
+                    MarkupContainer footer = createPageFooter("footer");
+                    themeDiv.add(footer);
 
-            addActionPromptModalWindow(themeDiv);
-            addActionPromptSidebar(themeDiv);
+                    addActionPromptModalWindow(themeDiv);
+                    addActionPromptSidebar(themeDiv);
 
-            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+                    this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
 
-            // ensure that all collected JavaScript contributions are loaded at the page footer
-            add(new HeaderResponseContainer("footerJS", "footerJS"));
+                    // ensure that all collected JavaScript contributions are loaded at the page footer
+                    add(new HeaderResponseContainer("footerJS", "footerJS"));
 
         } catch(final RuntimeException ex) {
 
@@ -210,7 +210,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()
                     .select(ExceptionRecognizer.class)
                     .stream();
-                    
+
             final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             final ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
 
@@ -462,6 +462,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private ActionPromptModalWindow actionPromptModalWindow;
     private ActionPromptSidebar actionPromptSidebar;
 
+    @Override
     public ActionPrompt getActionPrompt(
             final PromptStyle promptStyle,
             final BeanSort sort) {
@@ -473,9 +474,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         case INLINE_AS_IF_EDIT:
         default:
             final ConfigPropertyEnum<DialogMode> configProp =
-                    sort == BeanSort.MANAGED_BEAN
-                            ? CONFIG_DIALOG_MODE_FOR_MENUS
-                            : CONFIG_DIALOG_MODE;
+            sort == BeanSort.MANAGED_BEAN
+            ? CONFIG_DIALOG_MODE_FOR_MENUS
+                    : CONFIG_DIALOG_MODE;
             final DialogMode dialogMode = configProp.from(getConfiguration());
             switch (dialogMode) {
             case SIDEBAR:

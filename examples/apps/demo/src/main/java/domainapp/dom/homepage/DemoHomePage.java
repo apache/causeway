@@ -46,7 +46,8 @@ import lombok.Setter;
 @DomainObject(nature=Nature.VIEW_MODEL)
 @HomePage
 public class DemoHomePage extends DemoStub {
-    
+
+    @Override
     public String title() {
         return "Demo Home Page";
     }
@@ -54,15 +55,15 @@ public class DemoHomePage extends DemoStub {
     @XmlElement @XmlJavaTypeAdapter(MarkupAdapter.class)
     @Getter @Setter 
     private Markup greetings; 
-    
+
     @XmlTransient
     public Markup getTime() {
-    	return new Markup("<i>" + LocalDateTime.now() + "</i>");
+        return new Markup("<i>" + LocalDateTime.now() + "</i>");
     }
-    
+
     @Override @Programmatic @PostConstruct
     public void initDefaults() {
         greetings = new Markup("Greetings! This is the Apache Isis Demo App.");
     }
-    
+
 }

@@ -44,37 +44,37 @@ import static org.apache.isis.commons.internal.resources._Resources.putRestfulPa
  */
 @Singleton @Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {
-    
+
     public static final String KEY_RESTFUL_BASE_PATH = "isis.viewer.restfulobjects.basePath";
     public static final String KEY_RESTFUL_BASE_PATH_DEFAULT = "/restful";
-    
+
     private final static String RESTEASY_BOOTSTRAPPER = 
             "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
-    
+
     private final static String RESTEASY_DISPATCHER = "RestfulObjectsRestEasyDispatcher";
-    
+
     String restfulPathConfigValue;
-    
+
     @Override
     public String getName() {
         return "RestEasy";
     }
-    
+
     @Override
     public void prepare(WebModuleContext ctx) {
-        
+
         if(!isApplicable(ctx)) {
             return;
         }
-        
+
         // try to fetch restfulPath from config else fallback to default
         final String restfulPath = ctx.getConfiguration()
                 .getString(KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
-                
+
         putRestfulPath(restfulPath);
-        
+
         this.restfulPathConfigValue = restfulPath; // store locally for reuse
-        
+
         // register this module as a viewer
         ctx.addViewer("restfulobjects");
         ctx.addProtectedPath(suffix(prefix(restfulPath, "/"), "/") + "*" );
@@ -84,7 +84,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
         // add IsisSessionFilters
-        
+
         {
             final Dynamic filter = ctx.addFilter("IsisSessionFilterForRestfulObjects", IsisRestfulObjectsSessionFilter.class);
 
@@ -93,7 +93,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
             // "notice" if the session filter has already been
             // executed for the request pipeline, and if so will do nothing
             filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
-            
+
             filter.setInitParameter(
                     "authenticationSessionStrategy", 
                     "org.apache.isis.webapp.auth.AuthenticationSessionStrategyBasicAuth");
@@ -103,31 +103,31 @@ public final class WebModuleRestfulObjects implements WebModule  {
             filter.setInitParameter(
                     "passThru", 
                     String.join(",", getRestfulPath()+"swagger", getRestfulPath()+"health"));
-            
+
         }
-        
+
         {
             final Dynamic filter = ctx.addFilter("RestfulObjectsRestEasyDispatcher", 
                     "org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects");
             filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
         }
-        
-        
+
+
 
         // add RestEasy
-        
+
         // used by RestEasy to determine the JAX-RS resources and other related configuration
         ctx.setInitParameter(
                 "javax.ws.rs.Application", 
                 "org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication");
-        
+
         ctx.setInitParameter("resteasy.servlet.mapping.prefix", getRestfulPath());
-        
+
         ctx.addServlet(RESTEASY_DISPATCHER, 
                 "org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher");
         ctx.getServletRegistration(RESTEASY_DISPATCHER)
         .addMapping(getUrlPattern());
-        
+
         try {
             final Class<?> listenerClass = getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
             return ctx.createListener(uncheckedCast(listenerClass));
@@ -147,9 +147,9 @@ public final class WebModuleRestfulObjects implements WebModule  {
             return false;
         }
     }
-    
+
     // -- HELPER
-    
+
     private String getUrlPattern() {
         return getRestfulPath() + "*";
     }
@@ -159,8 +159,8 @@ public final class WebModuleRestfulObjects implements WebModule  {
         final String restfulPathEnclosedWithSlashes = suffix(prefix(restfulPathConfigValue, "/"), "/");
         return restfulPathEnclosedWithSlashes;
     }
-    
-    
 
-    
+
+
+
 }

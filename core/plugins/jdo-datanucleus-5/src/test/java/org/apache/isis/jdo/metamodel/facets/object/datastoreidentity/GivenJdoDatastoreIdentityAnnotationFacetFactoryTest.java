@@ -35,7 +35,7 @@ import junit.framework.Assert;
 
 
 public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
-        AbstractFacetFactoryTest {
+AbstractFacetFactoryTest {
 
     private JdoDatastoreIdentityAnnotationFacetFactory facetFactory;
 

@@ -61,12 +61,12 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     private static final long serialVersionUID = 1L;
 
     // -- CONSTANTS
-    
+
     public static final ApplicationFeatureId PACKAGE_DEFAULT = 
-    		new ApplicationFeatureId(ApplicationFeatureType.PACKAGE, "default");
-    
+            new ApplicationFeatureId(ApplicationFeatureType.PACKAGE, "default");
+
     // -- factory methods
-    
+
     public static ApplicationFeatureId newFeature(final ApplicationFeatureType featureType, final String fullyQualifiedName) {
         switch (featureType) {
         case PACKAGE:
@@ -441,7 +441,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             comparing(ApplicationFeatureId::getClassName, nullsFirst(naturalOrder()));
     private final static Comparator<ApplicationFeatureId> byMemberName =
             comparing(ApplicationFeatureId::getMemberName, nullsFirst(naturalOrder()));
-    
+
     private final static Comparator<ApplicationFeatureId> applicationFeatureIdOrdering =
             Comparator.nullsFirst(byType)
             .thenComparing(byPackageName)
@@ -454,19 +454,19 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             .thenCheckEquals(ApplicationFeatureId::getClassName)
             .thenCheckEquals(ApplicationFeatureId::getMemberName);
 
-     private final static Hashing<ApplicationFeatureId> hashing =
+    private final static Hashing<ApplicationFeatureId> hashing =
             ObjectContracts.hashing(ApplicationFeatureId::getType)
             .thenHashing(ApplicationFeatureId::getPackageName)
             .thenHashing(ApplicationFeatureId::getClassName)
             .thenHashing(ApplicationFeatureId::getMemberName);
 
-     private final static ToString<ApplicationFeatureId> toString =
+    private final static ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("type", ApplicationFeatureId::getType)
             .thenToString("packageName", ApplicationFeatureId::getPackageName)
             .thenToStringOmmitIfAbsent("className", ApplicationFeatureId::getClassName)
             .thenToStringOmmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
 
-    
+
     @Override
     public int compareTo(final ApplicationFeatureId other) {
         return applicationFeatureIdOrdering.compare(this, other);

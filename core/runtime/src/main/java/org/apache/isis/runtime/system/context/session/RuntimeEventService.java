@@ -35,42 +35,42 @@ import org.apache.isis.runtime.system.session.IsisSession;
 public class RuntimeEventService {
 
     @Inject JdoPersistenceLifecycleService listener; // dependsOn
-    
-	@Inject Event<AppLifecycleEvent> appLifecycleEvents;
-	@Inject Event<SessionLifecycleEvent> sessionLifecycleEvents;
-		
-	// -- APP
 
-	public void fireAppPreMetamodel() {
-		//appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
-		listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
-	}
-	
-	public void fireAppPostMetamodel() {
-		//appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
-	    listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
-	}
-	
-	public void fireAppPreDestroy() {
-		//appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
-		listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
-	}
-	
-	// -- SESSION
-	
-	public void fireSessionOpened(IsisSession session) {
-		//sessionLifecycleEvents.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
-		listener.onSessionLifecycleEvent(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
-	}
-	
-	public void fireSessionClosing(IsisSession session) {
-		//sessionLifecycleEvents.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
-		listener.onSessionLifecycleEvent(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
-	}
-	
-//	public void fireSessionFlushing(IsisSession session) {
-//		sessionLifecycleEvent.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
-//	}
-		
+    @Inject Event<AppLifecycleEvent> appLifecycleEvents;
+    @Inject Event<SessionLifecycleEvent> sessionLifecycleEvents;
+
+    // -- APP
+
+    public void fireAppPreMetamodel() {
+        //appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
+        listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
+    }
+
+    public void fireAppPostMetamodel() {
+        //appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
+        listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
+    }
+
+    public void fireAppPreDestroy() {
+        //appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
+        listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
+    }
+
+    // -- SESSION
+
+    public void fireSessionOpened(IsisSession session) {
+        //sessionLifecycleEvents.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
+        listener.onSessionLifecycleEvent(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
+    }
+
+    public void fireSessionClosing(IsisSession session) {
+        //sessionLifecycleEvents.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
+        listener.onSessionLifecycleEvent(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
+    }
+
+    //	public void fireSessionFlushing(IsisSession session) {
+    //		sessionLifecycleEvent.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
+    //	}
+
 
 }

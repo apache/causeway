@@ -22,8 +22,8 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 
 public class RestfulObjectsApplicationException
-        extends RuntimeException
-        implements ExceptionWithHttpStatusCode, ExceptionWithBody {
+extends RuntimeException
+implements ExceptionWithHttpStatusCode, ExceptionWithBody {
 
     private static final long serialVersionUID = 1L;
 

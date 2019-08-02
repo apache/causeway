@@ -34,27 +34,27 @@ import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
  */
 @Singleton
 public class FixturesEventService {
-	
-	@Inject Event<FixturesInstallingEvent> fixturesInstallingEvents;
+
+    @Inject Event<FixturesInstallingEvent> fixturesInstallingEvents;
     @Inject Event<FixturesInstalledEvent> fixturesInstalledEvents;
 
-	// -- FIXTURES
-	
-	public void fireFixturesInstalling(FixturesInstallingEvent fixturesInstallingEvent) {
-		fixturesInstallingEvents.fire(fixturesInstallingEvent);
-	}
+    // -- FIXTURES
 
-	public void fireFixturesInstalled(FixturesInstalledEvent fixturesInstalledEvent) {
-		fixturesInstalledEvents.fire(fixturesInstalledEvent);
-	}
-	
-	// -- TODO[2133] IS THIS STILL REQUIRED?
-	
+    public void fireFixturesInstalling(FixturesInstallingEvent fixturesInstallingEvent) {
+        fixturesInstallingEvents.fire(fixturesInstallingEvent);
+    }
+
+    public void fireFixturesInstalled(FixturesInstalledEvent fixturesInstalledEvent) {
+        fixturesInstalledEvents.fire(fixturesInstalledEvent);
+    }
+
+    // -- TODO[2133] IS THIS STILL REQUIRED?
+
     @Bean
     public Event<FixturesInstallingEvent> fixturesInstallingEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
-    
+
     @Bean
     public Event<FixturesInstalledEvent> fixturesInstalledEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);

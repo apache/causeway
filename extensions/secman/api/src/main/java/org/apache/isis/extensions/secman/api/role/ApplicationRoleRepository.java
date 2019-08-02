@@ -22,14 +22,14 @@ import java.util.List;
 
 public interface ApplicationRoleRepository {
 
-	List<? extends ApplicationRole> allRoles();
+    List<? extends ApplicationRole> allRoles();
 
-	ApplicationRole newRole(String name, String description);
+    ApplicationRole newRole(String name, String description);
 
-	List<? extends ApplicationRole> findNameContaining(String search);
+    List<? extends ApplicationRole> findNameContaining(String search);
 
-	ApplicationRole findByName(String roleName);
+    ApplicationRole findByName(String roleName);
 
-	ApplicationRole findByNameCached(String roleName);
+    ApplicationRole findByNameCached(String roleName);
 
 }

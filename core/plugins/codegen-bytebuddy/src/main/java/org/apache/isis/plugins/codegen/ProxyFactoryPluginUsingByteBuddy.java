@@ -41,9 +41,9 @@ import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 
 public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
-    
+
     private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor(); 
-    
+
     @Override
     public <T> ProxyFactory<T> factory(
             Class<T> base,
@@ -117,7 +117,7 @@ public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
     }
 
     // -- HELPER
-    
+
     private static <T> ImplementationDefinition<T> nextProxyDef(
             Class<T> base,
             Class<?>[] interfaces) {

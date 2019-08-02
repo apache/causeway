@@ -36,27 +36,27 @@ public enum LifecycleContext {
     public boolean isApplicationScoped() {
         return this == ApplicationScoped;
     }
-    
+
     public boolean isSingleton() {
         return this == Singleton;
     }
-    
+
     public boolean isRequestScoped() {
         return this == RequestScoped;
     }
 
     public static LifecycleContext parse(String scope) {
-        
+
         if(_Strings.isNullOrEmpty(scope)) {
             return LifecycleContext.NotSpecified;
         }
-        
+
         for(LifecycleContext candidate : LifecycleContext.values()) {
             if(candidate.name().equalsIgnoreCase(scope)) {
                 return candidate;
             }
         }
-        
+
         log.warn("unrecogniced scope '{}'", scope);
         return LifecycleContext.NotSpecified;
 

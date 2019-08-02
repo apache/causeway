@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
 public final class ConfigurationConstants {
-    
+
     public static final String ROOT = "isis.";
 
     public static final String LIST_SEPARATOR = ",";
@@ -35,45 +35,45 @@ public final class ConfigurationConstants {
     public static final String DEFAULT_CONFIG_DIRECTORY = "config";
     public static final String WEBINF_DIRECTORY = "WEB-INF";
     public static final String WEBINF_FULL_DIRECTORY = "src/main/webapp/" + WEBINF_DIRECTORY;
-    
+
     public static final String DEFAULT_CONFIG_FILE = "isis.properties";
     public static final String WEB_CONFIG_FILE = "web.properties";
 
     public static final class Keys {
-        
+
         public static final class Reflector {
-        
+
             public static final String explicitAnnotationsForActions = 
                     ROOT + "reflector.explicitAnnotations.action";
-            
+
             public static final String viewModelSemanticCheckingFacetFactoryEnable = 
                     ROOT + "reflector.facets.ViewModelSemanticCheckingFacetFactory.enable";
-            
+
         }
-    
+
     }
-    
+
     public static final List<String> PROTECTED_KEYS =
             _Lists.of("password", "apiKey", "authToken");
 
     public static String maskIfProtected(final String key, final String value) {
         return isProtected(key) ? "********" : value;
     }
-    
+
     public static Map<String, String> maskIfProtected(
             final Map<String, String> inMap, 
             final Supplier<Map<String, String>> mapFactory) {
         final Map<String, String> result = mapFactory.get();
-        
+
         inMap.forEach((k, v)->{
             result.put(k, maskIfProtected(k, v));
         });
-        
+
         return result;
     }
-    
+
     // -- HELPER
-    
+
     private ConfigurationConstants() {}
 
     static boolean isProtected(final String key) {
@@ -89,6 +89,6 @@ public final class ConfigurationConstants {
         return false;
     }
 
-    
-    
+
+
 }

@@ -56,7 +56,7 @@ implements CollectionAddToFacet {
                     final CollectionDomainEventFacetAbstract collectionDomainEventFacet,
                     final ServiceRegistry serviceRegistry,
                     final FacetHolder holder) {
-    	
+
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.collectionAddToFacet = collectionAddToFacet;
@@ -90,7 +90,7 @@ implements CollectionAddToFacet {
         final ObjectAdapter mixedInAdapter = null;
 
         // ... post the executing event
-        
+
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,

@@ -27,7 +27,7 @@ public class TreeThemeProviderDefault implements TreeThemeProvider {
 
     // other options as provided by wicket-extensions: WindowsTheme, HumanTheme
     private final Behavior bootstrapTheme = new IsisBootstrapTreeTheme();
-    
+
     @Override
     public Behavior treeThemeFor(Object model) {
         return bootstrapTheme;

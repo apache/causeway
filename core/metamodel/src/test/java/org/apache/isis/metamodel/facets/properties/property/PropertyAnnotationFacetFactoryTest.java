@@ -102,10 +102,10 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             allowing(mockSpecificationLoader).loadSpecification(returnType);
             will(returnValue(mockReturnTypeSpec));
-            
+
             allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
             will(returnValue(null));
-            
+
         }});
     }
 
@@ -116,7 +116,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     }
 
     @Override
-	@After
+    @After
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -181,7 +181,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
             context.checking(new Expectations() {{
-				//[ahuber] never called during this test ...             	
+                //[ahuber] never called during this test ...             	
                 //oneOf(mockConfiguration).getBoolean("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
                 //will(returnValue(true));
 
@@ -343,7 +343,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // given
             _Config.put("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
-            
+
             final Class<?> cls = Customer.class;
             propertyMethod = findMethod(Customer.class, "getName");
 
@@ -428,7 +428,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         editing = org.apache.isis.applib.annotation.Editing.DISABLED,
                         editingDisabledReason = "you cannot edit the name property"
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -463,7 +463,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         maxLength = 30
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -511,7 +511,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         mustSatisfy = {NotTooHot.class, NotTooCold.class}
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -585,7 +585,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         optionality = Optionality.OPTIONAL
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -614,7 +614,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         optionality = Optionality.MANDATORY
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -643,7 +643,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         optionality = Optionality.DEFAULT
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -670,7 +670,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 @Property(
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -702,7 +702,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         regexPattern = "[123].*",
                         regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -732,7 +732,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 @Property(
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -760,7 +760,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         regexPattern = ""
-                )
+                        )
                 public String getName() {
                     return null;
                 }
@@ -782,13 +782,13 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             Assert.assertNull(regExFacet);
         }
 
-         @Test
+        @Test
         public void whenNotAnnotatedOnStringProperty() {
 
             class Customer {
                 @Property(
                         regexPattern = "[abc].*"
-                )
+                        )
                 public int getName() {
                     return 0;
                 }

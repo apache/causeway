@@ -26,6 +26,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
  *
  */
 public interface ObjectAdapterService extends ObjectAdapterProvider {
-    
+
 
 }

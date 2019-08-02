@@ -41,7 +41,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
  */
 public class AssociatedWithActionsHelper implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private final EntityCollectionModel collectionModel;
 
     public AssociatedWithActionsHelper(final EntityCollectionModel collectionModel) {

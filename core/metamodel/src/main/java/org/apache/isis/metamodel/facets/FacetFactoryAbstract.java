@@ -51,7 +51,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, MetaModelCon
     }
 
     // -- dependencies
-    
+
     @Override
     public MetaModelContext getMetaModelContext() {
         return MetaModelContext.current();

@@ -28,8 +28,8 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
  */
 class EntityFacetSimple extends FacetAbstract implements EntityFacet {
 
-	public EntityFacetSimple(FacetHolder holder) {
-		super(EntityFacet.class, holder, Derivation.NOT_DERIVED);
-	}
+    public EntityFacetSimple(FacetHolder holder) {
+        super(EntityFacet.class, holder, Derivation.NOT_DERIVED);
+    }
 
 }

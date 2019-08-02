@@ -38,20 +38,20 @@ import lombok.val;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject
 public class EventLogEntry {
-	
-	@javax.jdo.annotations.Column(allowsNull = "false")
-    @Property(editing = Editing.DISABLED)
-	@Getter @Setter
-	private String event;
 
-	public static EventLogEntry of(AbstractDomainEvent<?> ev) {
-		val x = new EventLogEntry();
-		x.setEvent(LocalDateTime.now().toString()+" - "+ev.getClass().getSimpleName());
-		return x;
-	}
-	
-	public static String version() {
-		return "1.0.0";
-	}
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    @Property(editing = Editing.DISABLED)
+    @Getter @Setter
+    private String event;
+
+    public static EventLogEntry of(AbstractDomainEvent<?> ev) {
+        val x = new EventLogEntry();
+        x.setEvent(LocalDateTime.now().toString()+" - "+ev.getClass().getSimpleName());
+        return x;
+    }
+
+    public static String version() {
+        return "1.0.0";
+    }
 
 }

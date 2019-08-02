@@ -48,11 +48,11 @@ public final class _Assert {
             throw new IsisAssertException(message + (target == null ? "" : (": " + target)));
         }
     }
-    
+
     public static void assertEquals(final String message, Object left, Object right) {
         if (!Objects.equals(left, right)) {
             throw new IsisAssertException(message + String.format(": '%s' != '%s' ", ""+left, ""+right));
         }
     }
-    
+
 }

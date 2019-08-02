@@ -27,39 +27,39 @@ package org.apache.isis.mavenplugin;
 //        )
 public class IsisMojoValidate extends IsisMojoAbstract {
 
-//    private final MetaModelProcessor metaModelProcessor;
-//
-//    protected IsisMojoValidate() {
-//        this.metaModelProcessor = new ValidateMetaModelProcessor();
-//    }
-//
-//    @Override
-//    protected void doExecute(
-//            final ContextForMojo context)
-//                    throws MojoFailureException {
-//        
-//        metaModelProcessor.process(context, IsisContext.getSpecificationLoader());
-//    }
-//
-//    static class ValidateMetaModelProcessor implements MetaModelProcessor {
-//
-//
-//        @Override
-//        public void process(
-//                final Context context, 
-//                final SpecificationLoader specificationLoader)
-//                        throws MojoFailureException {
-//
-//            final ValidationFailures validationFailures = specificationLoader.validate();
-//
-//            final Collection<ObjectSpecification> objectSpecifications = specificationLoader.currentSpecifications();
-//            for (ObjectSpecification objectSpecification : objectSpecifications) {
-//                context.getLog().debug("loaded: " + objectSpecification.getFullIdentifier());
-//            }
-//            if (validationFailures.occurred()) {
-//                context.throwFailureException(validationFailures.getNumberOfMessages() + " problems found.", validationFailures.getMessages());
-//            }
-//        }
-//    }
+    //    private final MetaModelProcessor metaModelProcessor;
+    //
+    //    protected IsisMojoValidate() {
+    //        this.metaModelProcessor = new ValidateMetaModelProcessor();
+    //    }
+    //
+    //    @Override
+    //    protected void doExecute(
+    //            final ContextForMojo context)
+    //                    throws MojoFailureException {
+    //        
+    //        metaModelProcessor.process(context, IsisContext.getSpecificationLoader());
+    //    }
+    //
+    //    static class ValidateMetaModelProcessor implements MetaModelProcessor {
+    //
+    //
+    //        @Override
+    //        public void process(
+    //                final Context context, 
+    //                final SpecificationLoader specificationLoader)
+    //                        throws MojoFailureException {
+    //
+    //            final ValidationFailures validationFailures = specificationLoader.validate();
+    //
+    //            final Collection<ObjectSpecification> objectSpecifications = specificationLoader.currentSpecifications();
+    //            for (ObjectSpecification objectSpecification : objectSpecifications) {
+    //                context.getLog().debug("loaded: " + objectSpecification.getFullIdentifier());
+    //            }
+    //            if (validationFailures.occurred()) {
+    //                context.throwFailureException(validationFailures.getNumberOfMessages() + " problems found.", validationFailures.getMessages());
+    //            }
+    //        }
+    //    }
 
 }

@@ -30,7 +30,7 @@ import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW)
 public class JeeMenu {
-    
+
     @Inject private FactoryService factoryService;
 
     @Action
@@ -40,5 +40,5 @@ public class JeeMenu {
         demo.initDefaults();
         return demo;
     }
-    
+
 }

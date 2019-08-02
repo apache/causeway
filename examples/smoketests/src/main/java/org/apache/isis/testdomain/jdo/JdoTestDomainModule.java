@@ -40,32 +40,32 @@ import org.apache.isis.security.IsisBootSecurityBypass;
 
 @Configuration
 @Import({
-	IsisBoot.class,
-	IsisBootSecurityBypass.class,
-	IsisBootDataNucleus.class,
-	IsisBootFixtures.class
+    IsisBoot.class,
+    IsisBootSecurityBypass.class,
+    IsisBootDataNucleus.class,
+    IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {        		
-        		JdoTestDomainModule.class
+                JdoTestDomainModule.class
         },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})}
         )
 @PropertySources({
-	@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
+    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
 //by default disable shiro specific config to be picked up by Spring 
 @ConditionalOnProperty(value = "smoketest.withShiro", havingValue = "false", matchIfMissing = true)
 public class JdoTestDomainModule {
-    
-   @Bean @Singleton
-   public WebAppConfigBean webAppConfigBean() {
-       return WebAppConfigBean.builder()
-               //.menubarsLayoutXml(new ClassPathResource(path, clazz))
-               .build();
-   }
-    
+
+    @Bean @Singleton
+    public WebAppConfigBean webAppConfigBean() {
+        return WebAppConfigBean.builder()
+                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
+                .build();
+    }
+
 }

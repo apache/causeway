@@ -61,7 +61,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
 
     private CollectionClearFacet createCollectionClearFacet(
             final Method clearMethodIfAny, final Method accessorMethod, final FacetHolder collection) {
-        
+
         if (clearMethodIfAny != null) {
             return new CollectionClearFacetViaClearMethod(clearMethodIfAny, collection);
         } else {

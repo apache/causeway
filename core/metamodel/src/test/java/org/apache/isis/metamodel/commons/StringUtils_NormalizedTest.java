@@ -36,16 +36,16 @@ public class StringUtils_NormalizedTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] { { null, null, }, // null
-                { "", "", }, // empty string
-                { "yada Foobar", "yada Foobar", }, // alreadyNormalized
-                { "Yada\tFoobar", "Yada Foobar", }, // tab
-                { "Yada\t Foobar", "Yada Foobar", }, // tab and space
-                { "Yada  foobar", "Yada foobar", }, // two spaces
-                { "Yada\nfoobar", "Yada foobar", }, // new line
-                { "Yada\n Foobar", "Yada Foobar", }, // newline and space
-                { "Yada\r\n Foobar", "Yada Foobar", }, // windows newline
-                { "Yada\r Foobar", "Yada Foobar", }, // macos newline
-                { "Yada\r \tFoo \n\tbar  Baz", "Yada Foo bar Baz", }, // multiple
+            { "", "", }, // empty string
+            { "yada Foobar", "yada Foobar", }, // alreadyNormalized
+            { "Yada\tFoobar", "Yada Foobar", }, // tab
+            { "Yada\t Foobar", "Yada Foobar", }, // tab and space
+            { "Yada  foobar", "Yada foobar", }, // two spaces
+            { "Yada\nfoobar", "Yada foobar", }, // new line
+            { "Yada\n Foobar", "Yada Foobar", }, // newline and space
+            { "Yada\r\n Foobar", "Yada Foobar", }, // windows newline
+            { "Yada\r Foobar", "Yada Foobar", }, // macos newline
+            { "Yada\r \tFoo \n\tbar  Baz", "Yada Foo bar Baz", }, // multiple
         });
     }
 

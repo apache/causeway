@@ -30,7 +30,7 @@ import org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEv
  * for any actions as a fallback/default.
  */
 public class CollectionDomainEventDefaultFacetForDomainObjectAnnotation
-                    extends SingleClassValueFacetAbstract  {
+extends SingleClassValueFacetAbstract  {
 
     private final Class<? extends CollectionDomainEvent<?, ?>> eventType;
     public Class<? extends CollectionDomainEvent<?, ?>> getEventType() {

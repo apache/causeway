@@ -42,7 +42,7 @@ final class OidUtils {
             final RendererContext rendererContext,
             final String domainType, 
             final String instanceIdEncoded) {
-    	
+
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
         String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
         return getObjectAdapter(rendererContext, oidStrUnencoded);
@@ -54,27 +54,27 @@ final class OidUtils {
     public static ObjectAdapter getObjectAdapterElseNull(
             final RendererContext rendererContext,
             final String oidStrEncoded) {
-    	
+
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidStrEncoded);
         return getObjectAdapter(rendererContext, oidStrUnencoded);
     }
-    
+
     // -- HELPER
 
     private static ObjectAdapter getObjectAdapter(
             final RendererContext rendererContext,
             final String oidStrUnencoded) {
-    	
+
         final RootOid rootOid = RootOid.deString(oidStrUnencoded);
         final Object domainObject = domainObjectForAny(rendererContext, rootOid);
-        
+
         return rendererContext.adapterOfPojo(domainObject);
     }
-    
+
     private static Object domainObjectForAny(final RendererContext rendererContext, final RootOid rootOid) {
-        
+
         final MetaModelContext context = MetaModelContext.current();
-        
+
         final ObjectSpecId specId = rootOid.getObjectSpecId();
         final ObjectSpecification spec = context.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
         if(spec == null) {
@@ -87,10 +87,10 @@ final class OidUtils {
             try {
                 final RootOid fixedRootOid = ensureConsistentOidState(rootOid);
                 final ObjectAdapter adapter = rendererContext.adapterOfPojo(fixedRootOid);
-                
+
                 final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
                 return pojo;
-                
+
             } catch(final ObjectNotFoundException | PojoRecreationException ex) {
                 return null;
             }
@@ -99,14 +99,14 @@ final class OidUtils {
                 final Object domainObject = rendererContext.fetchPersistentPojoInTransaction(rootOid);
                 //TODO[ISIS-1976] changed behavior: predicate was objectAdapter.isTransient();
                 return rendererContext.stateOf(domainObject).isDetached()
-                		? null 
-                				: domainObject;
+                        ? null 
+                                : domainObject;
             } catch(final ObjectNotFoundException ex) {
                 return null;
             }
         }
     }
-    
+
     private static RootOid ensureConsistentOidState(RootOid rootOid) {
         // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
         // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
@@ -116,5 +116,5 @@ final class OidUtils {
         }
         return rootOid;
     }
-    
+
 }

@@ -214,14 +214,14 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         add(aboutLink);
 
         String applicationVersion = webAppConfigBean.getApplicationVersion();
-        
+
         final Label aboutLabel =
-                 applicationVersion != null && !applicationVersion.isEmpty()?
-                    new Label(ID_ABOUT_MESSAGE,  applicationVersion) :
-                    new Label(ID_ABOUT_MESSAGE,  new ResourceModel("aboutLabel"))
-                    ;
-        aboutLink.add(aboutLabel);
-        addDevModeWarning(aboutLink);
+                applicationVersion != null && !applicationVersion.isEmpty()?
+                        new Label(ID_ABOUT_MESSAGE,  applicationVersion) :
+                            new Label(ID_ABOUT_MESSAGE,  new ResourceModel("aboutLabel"))
+                            ;
+                        aboutLink.add(aboutLabel);
+                        addDevModeWarning(aboutLink);
     }
 
     /**
@@ -238,7 +238,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         final ThemeChooser themeChooser = new ThemeChooser(ID_THEME_PICKER);
         addOrReplace(themeChooser);
     }
-    
+
     @Inject private WebAppConfigBean webAppConfigBean;
-    
+
 }

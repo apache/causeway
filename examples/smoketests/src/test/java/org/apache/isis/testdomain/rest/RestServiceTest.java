@@ -36,40 +36,40 @@ import static org.junit.jupiter.api.Assertions.fail;
 import lombok.val;
 
 @SpringBootTest(
-		classes = {RestService.class},
-		properties = {
-				"logging.config=log4j2-test.xml",
-		},
-		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        classes = {RestService.class},
+        properties = {
+                "logging.config=log4j2-test.xml",
+        },
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
-	JdoTestDomainModule.class,
-	IsisBootWebRestfulObjects.class
+    JdoTestDomainModule.class,
+    IsisBootWebRestfulObjects.class
 })
 class RestServiceTest {
 
-	@LocalServerPort int port; // just for reference (not used)
-	@Inject RestService restService;
+    @LocalServerPort int port; // just for reference (not used)
+    @Inject RestService restService;
 
-	@Test
-	void bookOfTheWeek_viaRestEndpoint() {
-		
-		assertNotNull(restService.getPort());
-		assertTrue(restService.getPort()>0);
+    @Test
+    void bookOfTheWeek_viaRestEndpoint() {
 
-		val useRequestDebugLogging = false;
-		val restfulClient = restService.newClient(useRequestDebugLogging);
-		
-		val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
+        assertNotNull(restService.getPort());
+        assertTrue(restService.getPort()>0);
 
-		if(!digest.isSuccess()) {
-			fail(digest.getFailureCause());
-		}
-		
-		val bookOfTheWeek = digest.get();
-		
-		assertNotNull(bookOfTheWeek);
-		assertEquals("Book of the week", bookOfTheWeek.getName());
+        val useRequestDebugLogging = false;
+        val restfulClient = restService.newClient(useRequestDebugLogging);
 
-	}
+        val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
+
+        if(!digest.isSuccess()) {
+            fail(digest.getFailureCause());
+        }
+
+        val bookOfTheWeek = digest.get();
+
+        assertNotNull(bookOfTheWeek);
+        assertEquals("Book of the week", bookOfTheWeek.getName());
+
+    }
 
 }

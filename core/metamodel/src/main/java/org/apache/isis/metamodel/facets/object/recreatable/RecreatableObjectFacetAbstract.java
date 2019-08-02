@@ -125,5 +125,5 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
         super.appendAttributesTo(attributeMap);
         attributeMap.put("recreationMechanism", recreationMechanism);
     }
-    
+
 }

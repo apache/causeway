@@ -42,34 +42,34 @@ public class ObjectContractsTest_compareTo extends ComparableContractTest_compar
     @Override
     protected List<List<org.apache.isis.applib.util.InvoiceItem>> orderedTuples() {
         return listOf(
-                   listOf(
-                           // invoice desc, ...
-                           InvoiceItem.newInvoiceItem(null, null, null, null)
-                          ,InvoiceItem.newInvoiceItem(inv456, null, null, null)
-                          ,InvoiceItem.newInvoiceItem(inv456, null, null, null)
-                          ,InvoiceItem.newInvoiceItem(inv123, null, null, null)
-                           )
-                   ,listOf(
-                           // ..., productCode asc, ...
-                           InvoiceItem.newInvoiceItem(inv123, null, null, null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "B", null, null)
-                           )
-                   ,listOf(
-                           // ..., quantity asc nullsLast,...
-                           InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2), null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2), null)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
-                           )
-                   ,listOf(
-                           // ..., rush desc nullsLast
-                           InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), true)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), false)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), false)
-                           ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
-                           )
+                listOf(
+                        // invoice desc, ...
+                        InvoiceItem.newInvoiceItem(null, null, null, null)
+                        ,InvoiceItem.newInvoiceItem(inv456, null, null, null)
+                        ,InvoiceItem.newInvoiceItem(inv456, null, null, null)
+                        ,InvoiceItem.newInvoiceItem(inv123, null, null, null)
+                        )
+                ,listOf(
+                        // ..., productCode asc, ...
+                        InvoiceItem.newInvoiceItem(inv123, null, null, null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "B", null, null)
+                        )
+                ,listOf(
+                        // ..., quantity asc nullsLast,...
+                        InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2), null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(2), null)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", null, null)
+                        )
+                ,listOf(
+                        // ..., rush desc nullsLast
+                        InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), true)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), false)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), false)
+                        ,InvoiceItem.newInvoiceItem(inv123, "A", new Integer(1), null)
+                        )
                 );
     }
 }

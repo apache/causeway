@@ -157,9 +157,9 @@ public class BS3GridTest {
             println(entry.getValue());
         }
     }
-    
+
     private void println(String string) {
         //for test debugging only
     }
-    
+
 }

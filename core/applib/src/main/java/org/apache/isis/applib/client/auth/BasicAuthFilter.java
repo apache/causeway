@@ -62,15 +62,15 @@ public class BasicAuthFilter implements ClientRequestFilter {
             return "" + user + ":" + pass;
         }
     }
-    
+
     public static BasicAuthFilter of(Credentials credentials) {
         BasicAuthFilter filter = new BasicAuthFilter();
         filter.setCredentials(credentials);
         return filter;
     }
-    
+
     private Credentials credentials = Credentials.empty();
-    
+
     public Credentials getCredentials() {
         return credentials;
     }
@@ -85,7 +85,7 @@ public class BasicAuthFilter implements ClientRequestFilter {
     }
 
     // -- HELPER
-    
+
     private String getAuthorizationValue() {
         try {
             return "Basic " + DatatypeConverter.printBase64Binary(credentials.toString().getBytes("UTF-8"));
@@ -93,5 +93,5 @@ public class BasicAuthFilter implements ClientRequestFilter {
             throw new IllegalStateException("Cannot encode with UTF-8", ex);
         }
     }
-    
+
 }

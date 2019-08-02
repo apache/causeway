@@ -51,30 +51,30 @@ public class BlobDemo extends DemoStub {
     public void initDefaults() {
 
         log.info("BlobDemo::initDefaults");
-        
+
         try {
-	        val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "isis-logo-568x286.png"));
-	        logo = new Blob("isis-logo-568x286.png", "image/png", bytes);
+            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "isis-logo-568x286.png"));
+            logo = new Blob("isis-logo-568x286.png", "image/png", bytes);
         } catch (Exception e) {
-			// TODO: handle exception
-		}
-        
+            // TODO: handle exception
+        }
+
     }
-    
+
     // -- EDITABLE
-    
+
     @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout
     @XmlElement @XmlJavaTypeAdapter(DemoBlobStore.BlobAdapter.class)
     @Getter @Setter private Blob logo;
-    
+
     // -- READONLY
-    
-//    @Property(editing=Editing.DISABLED)
-//    @XmlElement @Getter @Setter private Blob blobReadonly;
-//    
-//    @Property(editing=Editing.DISABLED)
-//    @PropertyLayout(multiLine=3)
-//    @XmlElement @Getter @Setter private String stringMultilineReadonly;
-    
+
+    //    @Property(editing=Editing.DISABLED)
+    //    @XmlElement @Getter @Setter private Blob blobReadonly;
+    //    
+    //    @Property(editing=Editing.DISABLED)
+    //    @PropertyLayout(multiLine=3)
+    //    @XmlElement @Getter @Setter private String stringMultilineReadonly;
+
 }

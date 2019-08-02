@@ -66,9 +66,9 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                     return "Joe";
                 }
             }
-            
+
             context.checking(new Expectations() {{
-            	
+
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -83,7 +83,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
-            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -118,7 +118,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
-            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final NotContributedFacet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -140,7 +140,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	
+
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -155,7 +155,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
-            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -180,7 +180,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	
+
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -195,7 +195,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
-            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -232,7 +232,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
-            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -243,85 +243,85 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
         }
 
-//TODO[2142] NatureOfService.VIEW_CONTRIBUTIONS_ONLY was deprecated, remove ?        
-//        @Test
-//        public void onDomainServiceForViewContributionsOnly() {
-//
-//            // given
-//            @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
-//            class CustomerService {
-//
-//                @ActionLayout(contributed = Contributed.AS_NEITHER)
-//                public String name() {
-//                    return "Joe";
-//                }
-//            }
-//
-//            context.checking(new Expectations() {{
-//                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-//                will(returnValue(mockObjSpec));
-//
-//                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-//                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-//                }));
-//            }});
-//
-//            expectNoMethodsRemoved();
-//
-//            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
-//
-//            // when
-//            facetFactory.process(new FacetFactory.ProcessMethodContext(
-//            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-//
-//            // then
-//            final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-//            assertThat(facet, CoreMatchers.is(not(nullValue())));
-//            assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
-//            final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-//            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_NEITHER));
-//
-//        }
+        //TODO[2142] NatureOfService.VIEW_CONTRIBUTIONS_ONLY was deprecated, remove ?        
+        //        @Test
+        //        public void onDomainServiceForViewContributionsOnly() {
+        //
+        //            // given
+        //            @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
+        //            class CustomerService {
+        //
+        //                @ActionLayout(contributed = Contributed.AS_NEITHER)
+        //                public String name() {
+        //                    return "Joe";
+        //                }
+        //            }
+        //
+        //            context.checking(new Expectations() {{
+        //                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
+        //                will(returnValue(mockObjSpec));
+        //
+        //                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+        //                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
+        //                }));
+        //            }});
+        //
+        //            expectNoMethodsRemoved();
+        //
+        //            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        //
+        //            // when
+        //            facetFactory.process(new FacetFactory.ProcessMethodContext(
+        //            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        //
+        //            // then
+        //            final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
+        //            assertThat(facet, CoreMatchers.is(not(nullValue())));
+        //            assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
+        //            final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
+        //            assertThat(facetImpl.contributed(), CoreMatchers.equalTo(Contributed.AS_NEITHER));
+        //
+        //        }
 
-//TODO[2142] NatureOfService.VIEW_MENU_ONLY was deprecated, remove ? 
-//        @Test
-//        public void onDomainServiceForViewMenuOnly() {
-//
-//            // given
-//            @DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
-//            class CustomerService {
-//
-//                @ActionLayout(contributed = Contributed.AS_NEITHER)
-//                public String name() {
-//                    return "Joe";
-//                }
-//            }
-//
-//            context.checking(new Expectations() {{
-//                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-//                will(returnValue(mockObjSpec));
-//
-//                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-//                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) { }));
-//
-//                allowing(mockObjSpec).getFacet(MixinFacet.class);
-//                will(returnValue(null));
-//
-//            }});
-//
-//            expectNoMethodsRemoved();
-//
-//            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
-//
-//            // when
-//            facetFactory.process(new FacetFactory.ProcessMethodContext(
-//            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-//
-//            // then
-//            final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-//            assertThat(facet, CoreMatchers.is(nullValue()));
-//
-//        }
+        //TODO[2142] NatureOfService.VIEW_MENU_ONLY was deprecated, remove ? 
+        //        @Test
+        //        public void onDomainServiceForViewMenuOnly() {
+        //
+        //            // given
+        //            @DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
+        //            class CustomerService {
+        //
+        //                @ActionLayout(contributed = Contributed.AS_NEITHER)
+        //                public String name() {
+        //                    return "Joe";
+        //                }
+        //            }
+        //
+        //            context.checking(new Expectations() {{
+        //                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
+        //                will(returnValue(mockObjSpec));
+        //
+        //                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+        //                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) { }));
+        //
+        //                allowing(mockObjSpec).getFacet(MixinFacet.class);
+        //                will(returnValue(null));
+        //
+        //            }});
+        //
+        //            expectNoMethodsRemoved();
+        //
+        //            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        //
+        //            // when
+        //            facetFactory.process(new FacetFactory.ProcessMethodContext(
+        //            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        //
+        //            // then
+        //            final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
+        //            assertThat(facet, CoreMatchers.is(nullValue()));
+        //
+        //        }
 
         @Test
         public void onDomainServiceForDomainWithBoth() {
@@ -337,7 +337,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	
+
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -355,7 +355,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
-            		CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                    CustomerService.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -377,7 +377,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-           	
+
                 allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                 will(returnValue(mockObjSpec));
 
@@ -394,7 +394,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
-            		Customer.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+                    Customer.class, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);

@@ -80,10 +80,10 @@ public class ObjectAssociationAbstractTest {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
 
         context.checking(new Expectations() {{
-//            allowing(mockServicesInjector).getSpecificationLoader();
-//            will(returnValue(mockSpecificationLoader));
-//            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-//            will(returnValue(mockPersistenceSessionServiceInternal));
+            //            allowing(mockServicesInjector).getSpecificationLoader();
+            //            will(returnValue(mockSpecificationLoader));
+            //            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+            //            will(returnValue(mockPersistenceSessionServiceInternal));
         }});
 
         objectAssociation = new ObjectAssociationAbstract(
@@ -95,7 +95,7 @@ public class ObjectAssociationAbstractTest {
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
-            
+
             @Override
             public boolean isEmpty(final ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy) {
                 return false;

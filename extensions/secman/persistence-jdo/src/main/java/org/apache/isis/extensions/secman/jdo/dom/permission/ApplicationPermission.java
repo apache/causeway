@@ -96,49 +96,49 @@ import lombok.Setter;
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
 @javax.jdo.annotations.Queries( {
-        @javax.jdo.annotations.Query(
-                name = "findByRole", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                        + "WHERE role == :role"),
-        @javax.jdo.annotations.Query(
-                name = "findByUser", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                        + "WHERE (u.roles.contains(role) && u.username == :username) "
-                        + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
-        @javax.jdo.annotations.Query(
-                name = "findByFeature", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                        + "WHERE featureType == :featureType "
-                        + "   && featureFqn == :featureFqn"),
-        @javax.jdo.annotations.Query(
-                name = "findByRoleAndRuleAndFeature", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                        + "WHERE role == :role "
-                        + "   && rule == :rule "
-                        + "   && featureType == :featureType "
-                        + "   && featureFqn == :featureFqn "),
-        @javax.jdo.annotations.Query(
-                name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                        + "WHERE role == :role "
-                        + "   && rule == :rule "
-                        + "   && featureType == :featureType "),
+    @javax.jdo.annotations.Query(
+            name = "findByRole", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+                    + "WHERE role == :role"),
+    @javax.jdo.annotations.Query(
+            name = "findByUser", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+                    + "WHERE (u.roles.contains(role) && u.username == :username) "
+                    + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
+    @javax.jdo.annotations.Query(
+            name = "findByFeature", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+                    + "WHERE featureType == :featureType "
+                    + "   && featureFqn == :featureFqn"),
+    @javax.jdo.annotations.Query(
+            name = "findByRoleAndRuleAndFeature", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+                    + "WHERE role == :role "
+                    + "   && rule == :rule "
+                    + "   && featureType == :featureType "
+                    + "   && featureFqn == :featureFqn "),
+    @javax.jdo.annotations.Query(
+            name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+                    + "WHERE role == :role "
+                    + "   && rule == :rule "
+                    + "   && featureType == :featureType "),
 })
 @javax.jdo.annotations.Uniques({
-        @javax.jdo.annotations.Unique(
-                name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
+    @javax.jdo.annotations.Unique(
+            name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
 })
 @DomainObject(
         objectType = "isissecurity.ApplicationPermission"
-)
+        )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
-)
+        )
 //@MemberGroupLayout(
 //        columnSpans = {3,3,6,12},
 //        left={"Role", "Metadata"},
@@ -152,15 +152,15 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     // -- domain events
 
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermission, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermission, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermission> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
-    
+
 
     // -- identification
     /**
@@ -170,61 +170,61 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     public String title() {
         final StringBuilder buf = new StringBuilder();
         buf.append(getRole().getName()).append(":")  // admin:
-           .append(" ").append(getRule().toString()) // Allow|Veto
-           .append(" ").append(getMode().toString()) // Viewing|Changing
-           .append(" of ");
+        .append(" ").append(getRule().toString()) // Allow|Veto
+        .append(" ").append(getMode().toString()) // Viewing|Changing
+        .append(" of ");
 
         final ApplicationFeatureId featureId = getFeatureId();
         switch (getFeatureType()) {
-            case PACKAGE:
-                buf.append(getFeatureFqn());              // com.mycompany
-                break;
-            case CLASS:
-                // abbreviate if required because otherwise title overflows on action prompt.
-                if(getFeatureFqn().length() < 30) {
-                    buf.append(getFeatureFqn());          // com.mycompany.Bar
-                } else {
-                    buf.append(featureId.getClassName()); // Bar
-                }
-                break;
-            case MEMBER:
-                buf.append(featureId.getClassName())
-                   .append("#")
-                   .append(featureId.getMemberName());   // com.mycompany.Bar#foo
-                break;
+        case PACKAGE:
+            buf.append(getFeatureFqn());              // com.mycompany
+            break;
+        case CLASS:
+            // abbreviate if required because otherwise title overflows on action prompt.
+            if(getFeatureFqn().length() < 30) {
+                buf.append(getFeatureFqn());          // com.mycompany.Bar
+            } else {
+                buf.append(featureId.getClassName()); // Bar
+            }
+            break;
+        case MEMBER:
+            buf.append(featureId.getClassName())
+            .append("#")
+            .append(featureId.getMemberName());   // com.mycompany.Bar#foo
+            break;
         }
         return buf.toString();
     }
-    
+
 
     // -- role (property)
 
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(name = "roleId", allowsNull="false")
     @Property(
             domainEvent = RoleDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden=Where.REFERENCES_PARENT
-    )
+            )
     @MemberOrder(name="Role", sequence = "1")
     @Getter @Setter
     private ApplicationRole role;
 
-    
+
 
     // -- updateRole (action)
     public static class UpdateRoleDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = UpdateRoleDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="Role", sequence = "1")
     public ApplicationPermission updateRole(final ApplicationRole applicationRole) {
         setRole(applicationRole);
@@ -235,32 +235,32 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         return getRole();
     }
 
-    
+
 
     // -- rule (property)
     public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="Permissions", sequence = "2")
     @Getter @Setter
     private ApplicationPermissionRule rule;
 
-    
+
 
     // -- allow (action)
     public static class AllowDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllowDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Rule", sequence = "1")
     public ApplicationPermission allow() {
         setRule(ApplicationPermissionRule.ALLOW);
@@ -270,16 +270,16 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         return getRule() == ApplicationPermissionRule.ALLOW? "Rule is already set to ALLOW": null;
     }
 
-    
+
 
     // -- veto (action)
     public static class VetoDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = VetoDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Rule", sequence = "1")
     public ApplicationPermission veto() {
         setRule(ApplicationPermissionRule.VETO);
@@ -289,33 +289,33 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         return getRule() == ApplicationPermissionRule.VETO? "Rule is already set to VETO": null;
     }
 
-    
+
 
     // -- mode (property)
     public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
 
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="Permissions", sequence = "3")
     @Getter @Setter
     private ApplicationPermissionMode mode;
 
-    
+
 
     // -- viewing(action)
 
     public static class ViewingDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = ViewingDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Mode", sequence = "1")
     public ApplicationPermission viewing() {
         setMode(ApplicationPermissionMode.VIEWING);
@@ -325,17 +325,17 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         return getMode() == ApplicationPermissionMode.VIEWING ? "Mode is already set to VIEWING": null;
     }
 
-    
+
 
     // -- changing (action)
 
     public static class ChangingDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = ChangingDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Mode", sequence = "2")
     public ApplicationPermission changing() {
         setMode(ApplicationPermissionMode.CHANGING);
@@ -344,7 +344,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     public String disableChanging() {
         return getMode() == ApplicationPermissionMode.CHANGING ? "Mode is already set to CHANGING": null;
     }
-    
+
 
     // -- featureId (derived property)
 
@@ -361,12 +361,12 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         return applicationFeatureRepository.findFeature(getFeatureId());
     }
 
-    
+
 
     // region > type (derived, memberType of associated feature)
 
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     /**
      * Combines {@link #getFeatureType() feature type} and member type.
@@ -374,7 +374,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     @Property(
             domainEvent = TypeDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
     @MemberOrder(name="Feature", sequence = "5")
     public String getType() {
@@ -387,7 +387,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         final ApplicationFeature feature = getFeature();
         return feature != null? feature.getMemberType(): null;
     }
-    
+
 
     // -- featureType
 
@@ -407,17 +407,17 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     private ApplicationFeatureType featureType;
 
     @Override
-	@Programmatic
+    @Programmatic
     public ApplicationFeatureType getFeatureType() {
         return featureType;
     }
 
-    
+
 
     // -- featureFqn
 
     public static class FeatureFqnDomainEvent extends PropertyDomainEvent<String> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     /**
      * The {@link ApplicationFeatureId#getFullyQualifiedName() fully qualified name}
@@ -432,25 +432,25 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
      */
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
-        domainEvent = FeatureFqnDomainEvent.class,
-        editing = Editing.DISABLED
-    )
+            domainEvent = FeatureFqnDomainEvent.class,
+            editing = Editing.DISABLED
+            )
     @MemberOrder(name="Feature", sequence = "5.1")
     @Getter @Setter
     private String featureFqn;
-    
 
 
-    
+
+
 
     // -- delete (action)
     public static class DeleteDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE,
             domainEvent = DeleteDomainEvent.class
-    )
+            )
     @MemberOrder(sequence = "1")
     public ApplicationRole delete() {
         final ApplicationRole owningRole = getRole();
@@ -459,13 +459,13 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     }
 
     // -- CONTRACT
-    
+
     private final static ObjectContract<ApplicationPermission> contract	= 
-    		ObjectContracts.contract(ApplicationPermission.class)
-    		.thenUse("role", ApplicationPermission::getRole)
-    		.thenUse("featureType", ApplicationPermission::getFeatureType)
-    		.thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
-    		.thenUse("mode", ApplicationPermission::getMode);
+            ObjectContracts.contract(ApplicationPermission.class)
+            .thenUse("role", ApplicationPermission::getRole)
+            .thenUse("featureType", ApplicationPermission::getFeatureType)
+            .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
+            .thenUse("mode", ApplicationPermission::getMode);
 
     @Override
     public int compareTo(final ApplicationPermission other) {
@@ -479,14 +479,14 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     @Override
     public int hashCode() {
-    	return contract.hashCode(this);
+        return contract.hashCode(this);
     }
 
     @Override
     public String toString() {
         return contract.toString(this);
     }
-    
+
     // --
 
     public static class DefaultComparator implements Comparator<ApplicationPermission> {
@@ -495,7 +495,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             return Objects.compare(o1, o2, (a, b) -> a.compareTo(b) );
         }
     }
-    
+
 
     // -- Functions
 
@@ -504,13 +504,13 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         private Functions(){}
 
         public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
-        		(ApplicationPermission input) ->
-                	new ApplicationPermissionValue(input.getFeatureId(), input.getRule(), input.getMode());
+                (ApplicationPermission input) ->
+        new ApplicationPermissionValue(input.getFeatureId(), input.getRule(), input.getMode());
 
         public static final Function<ApplicationPermission, String> GET_FQN = ApplicationPermission::getFeatureFqn;
 
     }
-    
+
     @Inject RepositoryService repository;
     @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 

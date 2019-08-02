@@ -20,13 +20,13 @@ package org.apache.isis.commons.internal.plugins.ioc;
 
 public interface ConversationContextService {
 
-	ConversationContextHandle startTransientConversation();
-	
+    ConversationContextHandle startTransientConversation();
+
     static void closeHandle(ConversationContextHandle conversationContextHandle) {
         if(conversationContextHandle!=null) {
             conversationContextHandle.close();
         }
     }
-	
+
 
 }

@@ -45,18 +45,20 @@ implements PersonaWithBuilderScript<SimpleObjectBuilder>, PersonaWithFinder<Simp
 
     private final String name;
 
+    @Override
     public SimpleObjectBuilder builder() {
         return new SimpleObjectBuilder().setName(name);
     }
 
+    @Override
     public SimpleObject findUsing(final ServiceRegistry serviceRegistry) {
         SimpleObjects simpleObjects = serviceRegistry.lookupService(SimpleObjects.class).orElse(null);
         return simpleObjects.findByNameExact(name);
     }
 
     public static class PersistAll
-            extends PersonaEnumPersistAll<SimpleObject_persona, SimpleObject> {
-        
+    extends PersonaEnumPersistAll<SimpleObject_persona, SimpleObject> {
+
         public PersistAll() {
             super(SimpleObject_persona.class);
         }

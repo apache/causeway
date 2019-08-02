@@ -24,10 +24,11 @@ import java.util.Map;
 import org.apache.isis.config.IsisConfiguration;
 
 public class ConfigPropertyEnum<E extends Enum<E>> extends
-        ConfigPropertyAbstract<E> {
+ConfigPropertyAbstract<E> {
     public ConfigPropertyEnum(final String key, final E defaultValue) {
         super(key, defaultValue);
     }
+    @Override
     public E from(final IsisConfiguration configuration) {
         return Enum.valueOf(defaultValue.getDeclaringClass(), configuration.getString(key, defaultValue.name()).toUpperCase());
     }

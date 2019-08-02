@@ -127,14 +127,14 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
                 final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(Contributed.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
-                
+
                 associations
                 // skip checks if annotated with JDO @NotPersistent
                 .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
                 .forEach(association->{
                     validateBigDecimalValueFacet(association, validationFailures);
                 });
-                
+
             }
 
             private void validateBigDecimalValueFacet(ObjectAssociation association, ValidationFailures validationFailures) {

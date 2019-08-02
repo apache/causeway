@@ -29,31 +29,31 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class ListUtilsTest_mutableCopy {
-    
+
     @Test
     public void mutableCopyOfList_whenNotNull() throws Exception {
         List<Integer> input = Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
-        
+
         final List<Integer> list = ListExtensions.mutableCopy(input);
-        
+
         assertThat(list.size(), is(3));
         assertThat(list.get(0), is(Integer.valueOf(0)));
         assertThat(list.get(1), is(Integer.MAX_VALUE));
         assertThat(list.get(2), is(Integer.MIN_VALUE));
-        
+
         // is mutable
         list.add(Integer.valueOf(-1));
     }
-    
+
     @Test
     public void mutableCopyOfList_whenNull() throws Exception {
         List<Integer> input = null;
-        
+
         final List<Integer> list = ListExtensions.mutableCopy(input);
-        
+
         assertThat(list, is(not(nullValue())));
         assertThat(list.size(), is(0));
-        
+
         // is mutable
         list.add(Integer.valueOf(-1));
     }
@@ -61,29 +61,29 @@ public class ListUtilsTest_mutableCopy {
     @Test
     public void mutableCopyOfArray_whenNotNull() throws Exception {
         Integer[] input = {Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE};
-        
+
         final List<Integer> list = ListExtensions.mutableCopy(input);
-        
+
         assertThat(list.size(), is(3));
         assertThat(list.get(0), is(Integer.valueOf(0)));
         assertThat(list.get(1), is(Integer.MAX_VALUE));
         assertThat(list.get(2), is(Integer.MIN_VALUE));
-        
+
         // is mutable
         list.add(Integer.valueOf(-1));
     }
-    
+
     @Test
     public void mutableCopyOfArray_whenNull() throws Exception {
         Integer[] input = null;
-        
+
         final List<Integer> list = ListExtensions.mutableCopy(input);
-        
+
         assertThat(list, is(not(nullValue())));
         assertThat(list.size(), is(0));
-        
+
         // is mutable
         list.add(Integer.valueOf(-1));
     }
-    
+
 }

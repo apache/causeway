@@ -71,7 +71,7 @@ implements ImperativeFacet {
         if(collectionOrArray == null) {
             return null;
         }
-        
+
         final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
         boolean filterForVisibility = _Config.getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);

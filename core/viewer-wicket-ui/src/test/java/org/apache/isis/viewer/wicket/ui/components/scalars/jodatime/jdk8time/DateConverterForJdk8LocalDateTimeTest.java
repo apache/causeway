@@ -53,33 +53,33 @@ public class DateConverterForJdk8LocalDateTimeTest {
             }
         });
     }
-    
+
     @Test
     public void roundtripWhenParsingDateFormat() {
         final DateConverterForJdk8LocalDateTime converter = new DateConverterForJdk8LocalDateTime(settings, 0);
         final LocalDateTime dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(LocalDateTime.of(2013, 05, 11, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateTimeFormat() {
         final DateConverterForJdk8LocalDateTime converter = new DateConverterForJdk8LocalDateTime(settings, 0);
         final LocalDateTime dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(LocalDateTime.of(2013, 05, 11, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
     @Test
     public void roundtripWhenParsingDateFormatWithAdjustBy() {
         final DateConverterForJdk8LocalDateTime converter = new DateConverterForJdk8LocalDateTime(settings, -1);
         final LocalDateTime dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(LocalDateTime.of(2013, 05, 12, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
@@ -89,10 +89,10 @@ public class DateConverterForJdk8LocalDateTimeTest {
         final DateConverterForJdk8LocalDateTime converter = new DateConverterForJdk8LocalDateTime(settings, -1);
         final LocalDateTime dt = converter.convertToObject("2013-05-11 00:00", null);
         assertThat(dt, is(LocalDateTime.of(2013, 05, 12, 0, 0)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11 00:00"));
     }
-    
+
 
 }

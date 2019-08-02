@@ -48,7 +48,7 @@ public abstract class CommandExecutionAbstract extends AbstractIsisSessionTempla
 
             // the executor service will handle any exceptions thrown.
             commandExecutorService.executeCommand(sudoPolicy, commandWithDto);
-            
+
         });
     }
 

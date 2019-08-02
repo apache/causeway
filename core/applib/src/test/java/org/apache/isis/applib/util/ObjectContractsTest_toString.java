@@ -34,7 +34,7 @@ public class ObjectContractsTest_toString {
     public void setUp() throws Exception {
         inv = new Invoice();
         inv2 = new Invoice2();
-        
+
         inv.setNumber("123");
         inv2.setNumber("123");
     }
@@ -62,8 +62,9 @@ public class ObjectContractsTest_toString {
 @SuppressWarnings("deprecation")
 class Invoice2 implements Comparable<Invoice2>, Numbered {
     private static final String KEY_PROPERTIES = "number";
-    
+
     private String number;
+    @Override
     public String getNumber() {
         return number;
     }
@@ -107,7 +108,7 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     public void setProductCode(String productCode) {
         this.productCode = productCode;
     }
-    
+
     private Integer quantity;
     public Integer getQuantity() {
         return quantity;
@@ -115,7 +116,7 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
- 
+
     private Boolean rush;
     public Boolean isRush() {
         return rush;
@@ -123,17 +124,17 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     public void setRush(Boolean rush) {
         this.rush = rush;
     }
-    
+
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
-    
+
     private static final ObjectContract<InvoiceItem2> contract = 
-    		ObjectContracts.parse(InvoiceItem2.class, KEY_PROPERTIES)
-    		.withValueToStringFunction(ToStringEvaluator.combineToFunction(new NumberedEvaluator()));
-    
+            ObjectContracts.parse(InvoiceItem2.class, KEY_PROPERTIES)
+            .withValueToStringFunction(ToStringEvaluator.combineToFunction(new NumberedEvaluator()));
+
     @Override
     public String toString() {
-    	return contract.toString(this);
-    	//legacy of ...
+        return contract.toString(this);
+        //legacy of ...
         //return new ObjectContracts().with(new NumberedEvaluator()).toStringOf(this, KEY_PROPERTIES);
     }
     @Override

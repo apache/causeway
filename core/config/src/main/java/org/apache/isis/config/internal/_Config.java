@@ -30,15 +30,15 @@ import lombok.val;
  * @since 2.0
  */
 public class _Config {
-    
+
     // -- CONFIG ACCESS
-    
+
     public static IsisConfiguration getConfiguration() {
         return getLifecycleResource().getConfiguration();
     }
-   
+
     // -- CLEAR
-    
+
     /**
      * Most likely used for testing.
      * <p>
@@ -48,61 +48,61 @@ public class _Config {
     public static void clear() {
         _Context.remove(_Config_LifecycleResource.class);
     }
-    
+
     // -- PROPERTY ACCESS BEFORE FINALIZING CONFIG
-    
+
     public static void putAll(Map<String, String> map) {
         properties().putAll(map);
     }
-    
+
     public static void put(String key, String value) {
         properties().put(key, value);
     }
-    
+
     public static void put(String key, boolean value) {
         properties().put(key, ""+value);
     }
-    
+
     // -- PROPERTY PEEKING
-    
+
     public static String peekAtString(String key) {
         return properties().get(key);
     }
-    
+
     public static String peekAtString(String key, String defaultValue) {
         val stringValue = properties().get(key);
         return stringValue!=null
                 ? stringValue
                         : defaultValue;
     }
-    
+
     public static Boolean peekAtBoolean(String key) {
         return _Config_Parsers.parseBoolean(properties().get(key));
     }
-    
+
     public static boolean peekAtBoolean(String key, boolean defaultValue) {
         val booleanValue = _Config_Parsers.parseBoolean(properties().get(key));
         return booleanValue!=null
                 ? booleanValue
                         : defaultValue;
     }
-    
+
     // -- HELPER - PROPERTIES
-    
+
     private static Map<String, String> properties() {
         _Config_LifecycleResource lifecycle = getLifecycleResource();
         val properties = lifecycle.getMutableProperties()
                 .orElseThrow(lifecycle::configurationAlreadyInUse);
         return properties;
     }
-    
+
     private static Map<String, String> defaultProperties() {
         val properties = _Maps.<String, String>newHashMap(); 
         return properties;
     }
-    
+
     // -- HELPER - LIFECYCLE
-    
+
     private static _Config_LifecycleResource getLifecycleResource() {
         final _Config_LifecycleResource lifecycle = 
                 _Context.computeIfAbsent(_Config_LifecycleResource.class, ()->createLifecycleResource());
@@ -114,6 +114,6 @@ public class _Config {
     }
 
 
-    
-    
+
+
 }

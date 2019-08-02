@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-	SecurityRealmServiceUsingShiro.class
+    SecurityRealmServiceUsingShiro.class
 })
 public class IsisBootSecmanRealmShiro {
 

@@ -104,7 +104,7 @@ public class JsonRepresentationTest_getLink_isLink {
 
         jsonRepresentation = JsonRepresentation.newMap();
         jsonRepresentation.mapPut("links", linkListRepr);
-        
+
         // when, then
         assertThat(jsonRepresentation.isLink("links[rel=self]"), is(true));
         assertThat(jsonRepresentation.getLink("links[rel=self]"), is(not(nullValue())));

@@ -32,33 +32,33 @@ import lombok.RequiredArgsConstructor;
 @DomainObject(nature=Nature.INMEMORY_ENTITY, editing=Editing.DISABLED) 
 @RequiredArgsConstructor(staticName="of")
 public class DemoTask implements EventStreamSource {
-	
+
     public String title() {
         return String.format("DemoTask '%s'", Integer.toHexString(hashCode()));
     }
-    
-	private final int totalSteps;
+
+    private final int totalSteps;
     private TaskProgress taskProgress;
 
 
     @Override
     public void run(EventStream eventStream) {
-        
+
         taskProgress = TaskProgress.of(new LongAdder(), totalSteps);
-        
+
         for(int i=0;i<totalSteps;++i) {
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 return;
             }
-                        
+
             taskProgress.getStepsProgressed().increment();
-            
+
             eventStream.fire(this);
-            
+
         }
     }
 

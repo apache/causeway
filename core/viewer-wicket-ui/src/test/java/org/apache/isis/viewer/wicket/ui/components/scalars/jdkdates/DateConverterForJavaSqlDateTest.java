@@ -48,23 +48,23 @@ public class DateConverterForJavaSqlDateTest {
             }
         });
     }
-    
+
     @Test
     public void roundtrip() {
         final DateConverterForJavaSqlDate converter = new DateConverterForJavaSqlDate(settings, 0);
         final java.sql.Date dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(newJavaSqlDate(2013, 5, 11)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11"));
     }
-    
+
     @Test
     public void roundtripWithAdjustBy() {
         final DateConverterForJavaSqlDate converter = new DateConverterForJavaSqlDate(settings, -1);
         final java.sql.Date dt = converter.convertToObject("2013-05-11", null);
         assertThat(dt, is(newJavaSqlDate(2013, 5, 12)));
-        
+
         final String str = converter.convertToString(dt, null);
         assertThat(str, is("2013-05-11"));
     }

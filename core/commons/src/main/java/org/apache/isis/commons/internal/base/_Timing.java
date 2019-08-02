@@ -53,54 +53,54 @@ public final class _Timing {
     public static StopWatch atSystemNanos(long startedAtSystemNanos) {
         return new StopWatch(startedAtSystemNanos);
     }
-    
-    
+
+
     /**
      * Non thread safe start/stop watch utilizing the currently running
      * JVM's high-resolution time source.
      */
     public static final class StopWatch {
-        
+
         private long t0 = 0;
         private long t1 = 0;
         private boolean stopped;
-        
+
         private StopWatch(long startedAtSystemNanos) {
             t0 = startedAtSystemNanos;
         }
-        
+
         private StopWatch() {
             start();
         }
-        
+
         public StopWatch start() {
             t0 = System.nanoTime();
             stopped = false;
             return this;
         }
-        
+
         public StopWatch stop() {
             t1 = System.nanoTime();
             stopped  = true;
             return this;
         }
-        
+
         public double getSeconds() {
             return 0.000_000_001 * getNanos();
         }
-        
+
         public double getMillis() {
             return 0.000_001 * getNanos();
         }
-        
+
         public double getMicros() {
             return 0.001 * getNanos();
         }
-        
+
         public long getNanos() {
             return stopped ? t1 - t0 : System.nanoTime() - t0 ;
         }
-        
+
     }
 
     public static StopWatch run(Runnable runnable) {
@@ -108,12 +108,12 @@ public final class _Timing {
         runnable.run();
         return watch.stop();
     }
-    
+
     public static void runVerbose(String label, Runnable runnable) {
         final StopWatch watch = run(runnable);
         info(String.format(Locale.US, "Running '%s' took %.2f ms", label, watch.getMillis()));
     }
-    
+
     public static <T> T callVerbose(String label, Supplier<T> callable) {
         final StopWatch watch = now();
         T result = callable.get();
@@ -123,7 +123,7 @@ public final class _Timing {
     }
 
     // -- HELPER
-    
+
     private static void info(String msg) {
         System.out.println(msg);
     }

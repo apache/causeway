@@ -42,7 +42,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
     @Override
     public void registerUser(
-        final UserDetails userDetails) {
+            final UserDetails userDetails) {
 
         final Password password = new Password(userDetails.getPassword());
         final ApplicationRole initialRole = getInitialRole();

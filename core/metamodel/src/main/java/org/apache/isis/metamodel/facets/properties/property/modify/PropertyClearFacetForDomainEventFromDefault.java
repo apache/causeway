@@ -30,12 +30,12 @@ implements PropertyClearFacet {
 
 
     public PropertyClearFacetForDomainEventFromDefault(
-                    final Class<? extends PropertyDomainEvent<?, ?>> eventType,
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
                     final PropertyClearFacet clearFacet,
                     final PropertyDomainEventFacetAbstract propertyInteractionFacet,
                     final FacetHolder holder) {
-        
+
         super(PropertyClearFacet.class, eventType, getterFacet, null, clearFacet, propertyInteractionFacet, holder);
     }
 }

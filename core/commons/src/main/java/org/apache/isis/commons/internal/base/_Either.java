@@ -52,98 +52,98 @@ public final class _Either<L, R> {
     private final L left;
     private final R right;
     private final boolean isLeft;
-    
+
     // -- FACTORIES
-    
+
     public static <L, R> _Either<L, R> left(L left) {
-    	requires(left, "left");
+        requires(left, "left");
         return of(left, null, true);
     }
-    
+
     public static <L, R> _Either<L, R> right(R right) {
-    	requires(right, "right");
+        requires(right, "right");
         return of(null, right, false);
     }
-    
+
     public static <L, R> _Either<L, R> leftNullable(@Nullable L left) {
         return of(left, null, true);
     }
-    
+
     public static <L, R> _Either<L, R> rightNullable(@Nullable R right) {
         return of(null, right, false);
     }
-    
+
     // -- ACCESSORS
-    
+
     public Optional<L> left() {
-    	return Optional.ofNullable(left); 
-    }
-    
-    public Optional<R> right() {
-    	return Optional.ofNullable(right); 
-    }
-    
-    public L leftIfAny() {
-    	return left; 
-    }
-    
-    public R rightIfAny() {
-    	return right; 
-    }
-    
-    // -- PREDICATES
-    
-    public boolean isLeft() {
-    	return isLeft;
-    }
-    
-    public boolean isRight() {
-    	return !isLeft;
-    }
-    
-    public boolean isPresentLeft() {
-    	return left!=null;
-    }
-    
-    public boolean isPresentRight() {
-    	return right!=null;
-    }
-    
-    // -- COMPOSITION
-    
-    public <X, Y> _Either<X, Y> map(Function<L, X> leftMapper, Function<R, Y> rightMapper){
-    	return isLeft()
-    			? left(leftMapper.apply(left))
-    					: right(rightMapper.apply(right));
-    }
-    
-    public <X, Y> _Either<X, Y> mapNullable(Function<L, X> leftMapper, Function<R, Y> rightMapper){
-    	return isLeft()
-    			? leftNullable(leftMapper.apply(left))
-    					: rightNullable(rightMapper.apply(right));
-    }
-    
-    // -- REDUCTION
-    
-    public <X> X get(BiFunction<L, R, X> reduction){
-    	return reduction.apply(left, right);
-    }
-    
-    public <X> X get(Function<L, X> leftMapper, Function<R, X> rightMapper){
-    	return isLeft()
-    			? leftMapper.apply(left)
-    					: rightMapper.apply(right);
+        return Optional.ofNullable(left); 
     }
 
-	// -- TERMINALS
-    
+    public Optional<R> right() {
+        return Optional.ofNullable(right); 
+    }
+
+    public L leftIfAny() {
+        return left; 
+    }
+
+    public R rightIfAny() {
+        return right; 
+    }
+
+    // -- PREDICATES
+
+    public boolean isLeft() {
+        return isLeft;
+    }
+
+    public boolean isRight() {
+        return !isLeft;
+    }
+
+    public boolean isPresentLeft() {
+        return left!=null;
+    }
+
+    public boolean isPresentRight() {
+        return right!=null;
+    }
+
+    // -- COMPOSITION
+
+    public <X, Y> _Either<X, Y> map(Function<L, X> leftMapper, Function<R, Y> rightMapper){
+        return isLeft()
+                ? left(leftMapper.apply(left))
+                        : right(rightMapper.apply(right));
+    }
+
+    public <X, Y> _Either<X, Y> mapNullable(Function<L, X> leftMapper, Function<R, Y> rightMapper){
+        return isLeft()
+                ? leftNullable(leftMapper.apply(left))
+                        : rightNullable(rightMapper.apply(right));
+    }
+
+    // -- REDUCTION
+
+    public <X> X get(BiFunction<L, R, X> reduction){
+        return reduction.apply(left, right);
+    }
+
+    public <X> X get(Function<L, X> leftMapper, Function<R, X> rightMapper){
+        return isLeft()
+                ? leftMapper.apply(left)
+                        : rightMapper.apply(right);
+    }
+
+    // -- TERMINALS
+
     public void accept(Consumer<L> leftConsumer, Consumer<R> rightConsumer) {
-    	if(isLeft()) {
-    		leftConsumer.accept(left);
-    	} else {
-    		rightConsumer.accept(right);
-    	}
-	}
-    
-    
+        if(isLeft()) {
+            leftConsumer.accept(left);
+        } else {
+            rightConsumer.accept(right);
+        }
+    }
+
+
 }

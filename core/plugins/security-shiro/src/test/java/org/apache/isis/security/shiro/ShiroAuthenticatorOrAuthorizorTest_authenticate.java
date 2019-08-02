@@ -54,15 +54,15 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
     @Before
     public void setUp() throws Exception {
-        
+
         // PRODUCTION
 
         _Config.clear();
         _Config.put("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
-    	
+
         authenticator = new ShiroAuthenticator();
         authorizor = new ShiroAuthorizor();
-        
+
         authenticator.init();
         authorizor.init();
     }
@@ -90,7 +90,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         SecurityManager securityManager = factory.getInstance();
         SecurityUtils.setSecurityManager(securityManager);
 
-        
+
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");

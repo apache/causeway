@@ -57,7 +57,7 @@ public class JsonRepresentationTest_getBigDecimal {
     public void happyCaseConvertingAnIntToBigDecimal() throws IOException {
         assertThat(jsonRepresentation.getBigDecimal("anInt"), is(new BigDecimal("123")));
     }
-    
+
     @Test
     public void happyCaseForFormatJustFits() throws IOException {
         assertThat(jsonRepresentation.getBigDecimal("aBigDecimal", "big-decimal(24,4)"), is(new BigDecimal("12345678901234567890.1234")));

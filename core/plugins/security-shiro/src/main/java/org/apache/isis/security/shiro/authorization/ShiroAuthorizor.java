@@ -48,7 +48,7 @@ public class ShiroAuthorizor implements Authorizor {
     public void shutdown() {
     }
 
-   
+
     @Override
     public boolean isVisibleInAnyRole(Identifier identifier) {
         return isPermitted(identifier, "r");
@@ -60,7 +60,7 @@ public class ShiroAuthorizor implements Authorizor {
     }
 
     private boolean isPermitted(Identifier identifier, String qualifier) {
-        
+
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
             // since a security manager will always be present for regular web requests, presumably the user

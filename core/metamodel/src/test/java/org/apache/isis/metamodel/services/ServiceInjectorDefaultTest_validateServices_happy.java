@@ -41,41 +41,41 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         ServiceInjectorDefaultTest.Producers.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithSomeId.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithDifferentId.class
-        },
-    properties = {
-            "isis.services.injector.setPrefix=true"
-    }
-)
+},
+properties = {
+        "isis.services.injector.setPrefix=true"
+}
+        )
 class ServiceInjectorDefaultTest_validateServices_happy {
-    
+
     // -- SCENARIO
 
     @DomainService @Component("someId") @Profile("test")
     public static class DomainServiceWithSomeId {
-     
+
     }
 
     @DomainService @Component("otherId") @Profile("test")
     public static class DomainServiceWithDifferentId {
-     
+
     }
 
     // -- TESTS
-    
+
     @Inject private ServiceRegistry serviceRegistry;
-    
+
     @BeforeEach
     void setup() {
     }
 
     @Test
     public void validate_DomainServicesWithoutDuplicateIds() {
-        
+
         // ensure we actually test a ServiceRegistryDefault 
         assertEquals(ServiceRegistryDefault.class, serviceRegistry.getClass());
-        
+
         // nothing else to check
     }
-    
-    
+
+
 }

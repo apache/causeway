@@ -71,9 +71,9 @@ implements ObjectAdapterMementoSupport {
     static class ObjectAdapterMementoDelegator implements ObjectAdapterMemento {
 
         private static final long serialVersionUID = 1L;
-        
+
         private final ObjectAdapterMemento_LastKnownGood delegate;
-        
+
         @Override
         public UUID getStoreKey() {
             return null;
@@ -118,7 +118,7 @@ implements ObjectAdapterMementoSupport {
         public void resetVersion() {
             delegate.resetVersion(persistenceSession(), specificationLoader());
         }
-        
+
         private PersistenceSession persistenceSession() {
             return IsisContext.getPersistenceSession().get();
         }
@@ -126,7 +126,7 @@ implements ObjectAdapterMementoSupport {
         private SpecificationLoader specificationLoader() {
             return IsisContext.getSpecificationLoader();
         }
-        
+
     }
 
 }

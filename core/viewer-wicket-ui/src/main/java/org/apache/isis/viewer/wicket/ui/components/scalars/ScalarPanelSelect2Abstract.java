@@ -70,11 +70,11 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
         final String labelCaption = getRendering().getLabelCaption(select2.component());
         final Label scalarName = createScalarName(nameId, labelCaption);
-        
+
         if(describedAs != null) {
             Tooltips.addTooltip(scalarName, describedAs);
         }
-        
+
         formGroup.addOrReplace(scalarName);
         return formGroup;
     }

@@ -30,55 +30,55 @@ import lombok.val;
  * @param <T>
  */
 public class _Inbox<T> implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	private final Object $lock = new Object[0]; // serializable lock
-	
-	final List<T> list = _Lists.newArrayList();
 
-	public void add(T element) {
-		synchronized($lock) {
-			list.add(element);
-		}
-	}
-	
-	public void remove(T element) {
-		synchronized($lock) {
-			list.remove(element);
-		}
-	}
-	
-	public List<T> snapshot() {
-		synchronized($lock) {
-			val defensiveCopy = _Lists.newArrayList(list);
-			return defensiveCopy;
-		}
-	}
-	
-	public List<T> snapshotThenClear() {
-		synchronized($lock) {
-			val defensiveCopy = _Lists.newArrayList(list);
-			list.clear();
-			return defensiveCopy;
-		}
-	}
-	
-	public boolean isEmpty() {
-		synchronized($lock) {
-			return list.isEmpty();
-		} 
-	}
-	
-	public void clear() {
-		synchronized($lock) {
-			list.clear();
-		} 
-	}
-	
-	public int size() {
-		synchronized($lock) {
-			return list.size();
-		} 
-	}
-	
+    private static final long serialVersionUID = 1L;
+    private final Object $lock = new Object[0]; // serializable lock
+
+    final List<T> list = _Lists.newArrayList();
+
+    public void add(T element) {
+        synchronized($lock) {
+            list.add(element);
+        }
+    }
+
+    public void remove(T element) {
+        synchronized($lock) {
+            list.remove(element);
+        }
+    }
+
+    public List<T> snapshot() {
+        synchronized($lock) {
+            val defensiveCopy = _Lists.newArrayList(list);
+            return defensiveCopy;
+        }
+    }
+
+    public List<T> snapshotThenClear() {
+        synchronized($lock) {
+            val defensiveCopy = _Lists.newArrayList(list);
+            list.clear();
+            return defensiveCopy;
+        }
+    }
+
+    public boolean isEmpty() {
+        synchronized($lock) {
+            return list.isEmpty();
+        } 
+    }
+
+    public void clear() {
+        synchronized($lock) {
+            list.clear();
+        } 
+    }
+
+    public int size() {
+        synchronized($lock) {
+            return list.size();
+        } 
+    }
+
 }

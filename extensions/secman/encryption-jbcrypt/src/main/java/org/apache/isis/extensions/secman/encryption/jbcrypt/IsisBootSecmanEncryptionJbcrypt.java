@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-	PasswordEncryptionServiceUsingJBcrypt.class
+    PasswordEncryptionServiceUsingJBcrypt.class
 })
 public class IsisBootSecmanEncryptionJbcrypt {
 

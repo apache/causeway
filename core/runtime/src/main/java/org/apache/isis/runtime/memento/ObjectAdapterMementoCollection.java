@@ -42,20 +42,20 @@ import lombok.val;
  */
 @Value(staticConstructor = "of")
 final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
-    
+
     private static final long serialVersionUID = 1L;
 
     private final ArrayList<ObjectAdapterMemento> container; 
     @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
-    
+
     @Override
     public void resetVersion() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
-    
+
     @Override
     public ObjectAdapter getObjectAdapter() {
-        
+
         //TODO[2112] we don't need the persistence layer to do that!
         val listOfPojos = getContainer().stream()
                 .map(ObjectAdapterMemento::getObjectAdapter)
@@ -65,22 +65,22 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
                 .collect(Collectors.toCollection(ArrayList::new));
         return IsisContext.getPersistenceSession().get().adapterFor(listOfPojos);
     }
-    
+
     @Override
     public String asString() {
         return getContainer().toString();
     }
-    
+
     @Override
     public Bookmark asHintingBookmarkIfSupported() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
-    
+
     @Override
     public Bookmark asBookmarkIfSupported() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }    
-    
+
     public ArrayList<ObjectAdapterMemento> unwrapList() {
         return getContainer();
     }
@@ -101,5 +101,5 @@ final class ObjectAdapterMementoCollection implements ObjectAdapterMemento {
         // TODO Auto-generated method stub
         return null;
     }
-    
+
 }

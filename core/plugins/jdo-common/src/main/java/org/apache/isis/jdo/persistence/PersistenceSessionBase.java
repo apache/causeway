@@ -73,12 +73,12 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected final MetricsService metricsService;
     protected final ClockService clockService;
     protected final UserService userService;
-    
+
     /**
      * Set to System.nanoTime() when session opens.
      */
     protected long openedAtSystemNanos = -1L;
-    
+
     /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
      */
@@ -161,7 +161,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     public IsisConfiguration getConfiguration() {
         return configuration;
     }
-    
+
     @Override
     public long getLifecycleStartedAtSystemNanos() {
         return openedAtSystemNanos;

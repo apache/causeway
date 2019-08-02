@@ -86,7 +86,7 @@ public class ResourceContext extends RuntimeContextBase implements RendererConte
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         super();
 
         this.httpHeaders = httpHeaders;

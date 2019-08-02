@@ -138,19 +138,19 @@ public enum ActionResultResponseType {
             // will only be a single element
             final List<Object> pojoList = asList(resultAdapter);
             final Object pojo = pojoList.get(0);
-            
+
             val pojoToAdapter = IsisContext.pojoToAdapter();
             val actualAdapter = pojoToAdapter.apply(pojo);
-            
+
             return actualAdapter;
         }
     }
 
     private static ActionResultResponse toEntityPage(
-    		final ActionModel model, 
-    		final ObjectAdapter actualAdapter, 
-    		final ConcurrencyException exIfAny) {
-    	
+            final ActionModel model, 
+            final ObjectAdapter actualAdapter, 
+            final ConcurrencyException exIfAny) {
+
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
         final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);

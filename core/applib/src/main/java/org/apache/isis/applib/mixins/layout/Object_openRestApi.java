@@ -63,12 +63,12 @@ public class Object_openRestApi {
         val objType = bookmark.getObjectType();
         val objId = bookmark.getIdentifier();
         val restfulPathIfAny = _Resources.getRestfulPathIfAny();
-        
+
         return restfulPathIfAny!=null
-        		? new LocalResourcePath(String.format(
-        				"/%s/objects/%s/%s", restfulPathIfAny, objType, objId))
-        				: new LocalResourcePath(String.format(
-                				"/objects/%s/%s", objType, objId));
+                ? new LocalResourcePath(String.format(
+                        "/%s/objects/%s/%s", restfulPathIfAny, objType, objId))
+                        : new LocalResourcePath(String.format(
+                                "/objects/%s/%s", objType, objId));
     }
 
     @Inject BookmarkService bookmarkService;

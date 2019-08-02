@@ -46,16 +46,16 @@ public class CollectionData extends Data {
     @Override
     public String toString() {
         return "(" + streamElements()
-            .map(data->""+data)
-            .collect(Collectors.joining(",")) + ")";
+        .map(data->""+data)
+        .collect(Collectors.joining(",")) + ")";
     }
-    
+
     public Stream<Data> streamElements() {
         return _NullSafe.stream(elements);
     }
-    
+
     public int getElementCount() {
         return _NullSafe.size(elements);
     }
-    
+
 }

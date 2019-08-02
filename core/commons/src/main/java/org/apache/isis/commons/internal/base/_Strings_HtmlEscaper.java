@@ -36,20 +36,20 @@ final class _Strings_HtmlEscaper {
             _Strings.pair("&", "&amp;"),
             _Strings.pair("<", "&lt;"),
             _Strings.pair(">", "&gt;"),
-            
+
     }; 
-    
+
     static String htmlEscape(String input) {
         if(_Strings.isEmpty(input)) {
             return input;
         }
-        
+
         String output = input;
-        
+
         for(KeyValuePair replacement : replacements) {
             output = output.replace(replacement.getKey(), replacement.getValue());
         }
-        
+
         return output;
     }
 

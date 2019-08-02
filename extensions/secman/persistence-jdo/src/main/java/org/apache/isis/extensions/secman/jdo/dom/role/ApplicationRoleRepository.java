@@ -35,23 +35,23 @@ import org.apache.isis.commons.internal.collections._Lists;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationRole.class
-)
+        )
 public class ApplicationRoleRepository 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository {
-    
+
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
     @Inject QueryResultsCache queryResultsCache;
     @Inject ApplicationRoleFactory applicationRoleFactory;
 
     @Override
-	public ApplicationRole findByNameCached(final String name) {
+    public ApplicationRole findByNameCached(final String name) {
         return queryResultsCache.execute(()->findByName(name),
                 ApplicationRoleRepository.class, "findByNameCached", name);
     }
 
     @Override
-	public ApplicationRole findByName(final String name) {
+    public ApplicationRole findByName(final String name) {
         if(name == null) {
             return null;
         }
@@ -59,7 +59,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     }
 
     @Override
-	public List<ApplicationRole> findNameContaining(final String search) {
+    public List<ApplicationRole> findNameContaining(final String search) {
         if(search != null && search.length() > 0) {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
             return repository.allMatches(new QueryDefault<>(ApplicationRole.class, "findByNameContaining", "nameRegex", nameRegex));
@@ -68,7 +68,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     }
 
     @Override
-	public ApplicationRole newRole(
+    public ApplicationRole newRole(
             final String name,
             final String description) {
         ApplicationRole role = findByName(name);
@@ -82,7 +82,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     }
 
     @Override
-	public List<ApplicationRole> allRoles() {
+    public List<ApplicationRole> allRoles() {
         return repository.allInstances(ApplicationRole.class);
     }
 

@@ -40,38 +40,38 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepositor
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isissecurity.ApplicationTenancyMenu"
-)
+        )
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-)
+        )
 public class ApplicationTenancyMenu {
 
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationTenancyMenu, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationTenancyMenu, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationTenancyMenu> {
-		private static final long serialVersionUID = 1L;}
-    
+        private static final long serialVersionUID = 1L;}
+
 
     // -- iconName
     public String iconName() {
         return "applicationTenancy";
     }
-    
+
 
     // -- findTenancies
     public static class FindTenanciesDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = FindTenanciesDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @MemberOrder(sequence = "100.30.1")
     public List<? extends ApplicationTenancy> findTenancies(
             @Parameter(optionality = Optionality.OPTIONAL)
@@ -80,16 +80,16 @@ public class ApplicationTenancyMenu {
             final String partialNameOrPath) {
         return applicationTenancyRepository.findByNameOrPathMatchingCached(partialNameOrPath);
     }
-    
+
 
     // -- newTenancy
     public static class NewTenancyDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = NewTenancyDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(sequence = "100.30.3")
     public ApplicationTenancy newTenancy(
             @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
@@ -103,25 +103,25 @@ public class ApplicationTenancyMenu {
             final ApplicationTenancy parent) {
         return applicationTenancyRepository.newTenancy(name, path, parent);
     }
-    
+
 
     // -- allTenancies
     public static class AllTenanciesDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = AllTenanciesDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @MemberOrder(sequence = "100.30.4")
     public List<? extends ApplicationTenancy> allTenancies() {
         return applicationTenancyRepository.allTenancies();
     }
-    
+
     // -- DEPENDENCIES
-    
+
     @Inject ApplicationTenancyRepository applicationTenancyRepository;
-    
+
 
 }

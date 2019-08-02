@@ -31,7 +31,7 @@ public class InteractionDefaultTest_next {
     @Test
     public void test() {
         final Interaction interaction = new Interaction();
-        
+
         assertThat(interaction.next("foo"), is(0));
         assertThat(interaction.next("foo"), is(1));
         assertThat(interaction.next("bar"), is(0));

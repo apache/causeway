@@ -58,7 +58,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
             final BeanAdapter serviceBean,
             final ObjectActionDefault serviceAction,
             final ObjectSpecification contributeeType) {
-        
+
         super(serviceAction.getFacetedMethod(), serviceAction.getReturnType());
 
         this.serviceBean = serviceBean;

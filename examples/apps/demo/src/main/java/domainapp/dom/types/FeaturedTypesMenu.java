@@ -35,7 +35,7 @@ import lombok.val;
 @DomainService(nature=NatureOfService.VIEW)
 @DomainObjectLayout(named="Featured Types")
 public class FeaturedTypesMenu {
-    
+
     @Inject private FactoryService factoryService;
 
     @Action
@@ -45,7 +45,7 @@ public class FeaturedTypesMenu {
         demo.initDefaults();  
         return demo;
     }
-    
+
     @Action
     @ActionLayout(cssClassFa="fa-clock-o")
     public TemporalDemo temporals(){
@@ -53,7 +53,7 @@ public class FeaturedTypesMenu {
         demo.initDefaults();  
         return demo;
     }
-    
+
     @Action
     @ActionLayout(cssClassFa="fa-cloud")
     public BlobDemo blobs(){
@@ -61,5 +61,5 @@ public class FeaturedTypesMenu {
         demo.initDefaults();  
         return demo;
     }
-    
+
 }

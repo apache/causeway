@@ -57,7 +57,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
 
     @Mock
     private ServiceInjector mockServicesInjector;
-    
+
     @Mock
     private ServiceRegistry mockServiceRegistry;
 
@@ -72,7 +72,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     private SpecificationRequiresFirstLetterToBeUpperCase requiresFirstLetterToBeUpperCase;
 
     public static class Customer {}
-    
+
     @Before
     public void setUp() throws Exception {
 
@@ -86,10 +86,10 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
         requiresFirstLetterToBeUpperCase = new SpecificationRequiresFirstLetterToBeUpperCase();
 
         facetForSpecificationFirstLetterUpperCase = 
-        		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
-        				Collections.singletonList(requiresFirstLetterToBeUpperCase), 
-        				identifiedHolder, 
-        				mockServicesInjector);
+                new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
+                        Collections.singletonList(requiresFirstLetterToBeUpperCase), 
+                        identifiedHolder, 
+                        mockServicesInjector);
 
         mockProposedObjectAdapter = context.mock(ObjectAdapter.class, "proposed");
     }
@@ -115,7 +115,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     public void validatesUsingSpecificationIfProposedOkay() {
         context.checking(new Expectations() {
             {
-            	oneOf(mockContext).getProposed();
+                oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
                 oneOf(mockProposedObjectAdapter).getPojo();
@@ -131,7 +131,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     public void invalidatesUsingSpecificationIfProposedNotOkay() {
         context.checking(new Expectations() {
             {
-            	oneOf(mockContext).getProposed();
+                oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
                 oneOf(mockProposedObjectAdapter).getPojo();

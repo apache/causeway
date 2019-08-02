@@ -37,64 +37,64 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class RestService {
 
-	public int getPort() {
-		if(port==null) {
-			init();
-		}
-		return port;
-	}
+    public int getPort() {
+        if(port==null) {
+            init();
+        }
+        return port;
+    }
 
-	public RestfulClient newClient(boolean useRequestDebugLogging) {
-		
-		val restRootPath = 
-				"http://localhost:" + getPort() + "/" + 
-				_Resources.prependContextPathIfPresent(_Resources.getRestfulPathOrThrow());
+    public RestfulClient newClient(boolean useRequestDebugLogging) {
 
-		log.info("new restful client created for {}", restRootPath);
-		
-		RestfulClientConfig clientConfig = new RestfulClientConfig();
-		clientConfig.setRestfulBase(restRootPath);
-		// setup basic-auth
-		clientConfig.setUseBasicAuth(true); // default = false
-		clientConfig.setRestfulAuthUser(LdapConstants.SVEN_PRINCIPAL);
-		clientConfig.setRestfulAuthPassword("pass");
-		// setup request/response debug logging
-		clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
+        val restRootPath = 
+                "http://localhost:" + getPort() + "/" + 
+                        _Resources.prependContextPathIfPresent(_Resources.getRestfulPathOrThrow());
 
-		RestfulClient client = RestfulClient.ofConfig(clientConfig);
+        log.info("new restful client created for {}", restRootPath);
 
-		return client;
-	}
-	
-	public ResponseDigest<Book> getRecommendedBookOfTheWeek(RestfulClient client) {
-		val request = client.request(
-				"services/testdomain.InventoryRepository/actions/recommendedBookOfTheWeek/invoke", 
-				SuppressionType.ALL);
-		
-		val args = client.arguments()
-				.build();
+        RestfulClientConfig clientConfig = new RestfulClientConfig();
+        clientConfig.setRestfulBase(restRootPath);
+        // setup basic-auth
+        clientConfig.setUseBasicAuth(true); // default = false
+        clientConfig.setRestfulAuthUser(LdapConstants.SVEN_PRINCIPAL);
+        clientConfig.setRestfulAuthPassword("pass");
+        // setup request/response debug logging
+        clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
 
-		val response = request.post(args);
-		val digest = client.digest(response, Book.class);
-		
-		return digest;
-	}
-	
+        RestfulClient client = RestfulClient.ofConfig(clientConfig);
 
-	// -- HELPER
+        return client;
+    }
 
-	private Integer port;
+    public ResponseDigest<Book> getRecommendedBookOfTheWeek(RestfulClient client) {
+        val request = client.request(
+                "services/testdomain.InventoryRepository/actions/recommendedBookOfTheWeek/invoke", 
+                SuppressionType.ALL);
 
-	private void init() {
-		port = Integer.parseInt(environment.getProperty("local.server.port"));
-	}
+        val args = client.arguments()
+                .build();
 
-	// -- DEPENDENCIES
+        val response = request.post(args);
+        val digest = client.digest(response, Book.class);
 
-	@Inject Environment environment;
+        return digest;
+    }
 
-	
 
-	
+    // -- HELPER
+
+    private Integer port;
+
+    private void init() {
+        port = Integer.parseInt(environment.getProperty("local.server.port"));
+    }
+
+    // -- DEPENDENCIES
+
+    @Inject Environment environment;
+
+
+
+
 
 }

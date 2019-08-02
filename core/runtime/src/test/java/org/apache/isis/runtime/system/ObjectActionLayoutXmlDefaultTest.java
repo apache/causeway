@@ -46,10 +46,10 @@ public class ObjectActionLayoutXmlDefaultTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
-    
+
+
     private ObjectActionDefault action;
-    
+
     @Mock
     private FacetedMethod mockFacetedMethod;
 
@@ -87,7 +87,7 @@ public class ObjectActionLayoutXmlDefaultTest {
         };
         context.checking(new Expectations() {
             {
-            	oneOf(mockFacetedMethod).getFacet(NamedFacet.class);
+                oneOf(mockFacetedMethod).getFacet(NamedFacet.class);
                 will(returnValue(facet));
             }
         });

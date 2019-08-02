@@ -375,7 +375,7 @@ implements MetaModelValidatorRefiner {
 
         FacetUtil.addFacet(facet);
     }
-    
+
     void processObserve(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();

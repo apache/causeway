@@ -48,9 +48,9 @@ public class SpecificationCacheDefaultTest {
     private ObjectSpecification customerSpec;
     @Mock
     private ObjectSpecification orderSpec;
-    
+
     private SpecificationCacheDefault specificationCache;
-    
+
     @Before
     public void setUp() throws Exception {
         specificationCache = new SpecificationCacheDefault();
@@ -71,7 +71,7 @@ public class SpecificationCacheDefaultTest {
 
     static class Customer {}
     static class Order {}
-    
+
     @Test
     public void get_whenNotCached() {
         assertNull(specificationCache.get(Customer.class.getName()));
@@ -81,9 +81,9 @@ public class SpecificationCacheDefaultTest {
     public void get_whenCached() {
         final String customerClassName = Customer.class.getName();
         specificationCache.cache(customerClassName, customerSpec);
-        
+
         final ObjectSpecification objectSpecification = specificationCache.get(customerClassName);
-        
+
         assertSame(objectSpecification, customerSpec);
     }
 
@@ -94,7 +94,7 @@ public class SpecificationCacheDefaultTest {
         specificationCache.cache(Order.class.getName(), orderSpec);
 
         final Collection<ObjectSpecification> allSpecs = specificationCache.allSpecifications();
-        
+
         assertThat(allSpecs.size(), is(2));
     }
 
@@ -107,10 +107,10 @@ public class SpecificationCacheDefaultTest {
     public void getByObjectType_whenSet() {
         Map<ObjectSpecId, ObjectSpecification> specByObjectType = _Maps.newHashMap();
         specByObjectType.put(ObjectSpecId.of("CUS"), customerSpec);
-        
+
         specificationCache.internalInit(specByObjectType);
         final ObjectSpecification objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
-        
+
         assertSame(objectSpec, customerSpec);
     }
 

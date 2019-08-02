@@ -31,33 +31,33 @@ import static java.util.Objects.requireNonNull;
 import lombok.val;
 
 class ServiceInjector_forTesting implements ServiceInjector {
-    
+
     private ServiceInjector delegate;
 
     @Override
     public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
-        
+
         if(delegate==null) {
-            
+
             // lookup the MetaModelContextBean's list of singletons
             val mmc = MetaModelContext.current();
             if(!(mmc instanceof MetaModelContext_forTesting)) {
                 return null;
             }
-            
+
             val mmcb = (MetaModelContext_forTesting) mmc;
-            
+
             val configuration = requireNonNull(mmcb.getConfiguration());
             val serviceRegistry = requireNonNull(mmcb.getServiceRegistry());
             val injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
-            
+
             //Note: when testing we don't report un-resolvable injection points.
-            
+
             delegate = ServiceInjectorDefault.getInstanceAndInit(
                     configuration, serviceRegistry, injectorMethodEvaluator);
-            
+
         }
-        
+
         return delegate.injectServicesInto(domainObject);
     }
 

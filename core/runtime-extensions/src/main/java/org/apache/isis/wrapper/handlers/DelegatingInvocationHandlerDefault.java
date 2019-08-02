@@ -45,7 +45,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     public DelegatingInvocationHandlerDefault(
             final T delegate,
             final ExecutionMode executionMode) {
-        
+
         if (delegate == null) {
             throw new IllegalArgumentException("delegate must not be null");
         }

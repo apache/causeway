@@ -52,62 +52,62 @@ import lombok.val;
 abstract class SpecificationLoaderTestAbstract {
 
     static class Producers {
-        
+
         //@Produces
         AuthenticationSessionProvider mockAuthenticationSessionProvider() {
             return Mockito.mock(AuthenticationSessionProvider.class);
         }
-        
+
         //@Produces
         GridService mockGridService() {
             return Mockito.mock(GridService.class);
         }
-        
+
         //@Produces
         ObjectAdapterService mockPersistenceSessionServiceInternal() {
             return Mockito.mock(ObjectAdapterService.class);
         }
-        
+
         //@Produces
         MessageService mockMessageService() {
             return Mockito.mock(MessageService.class);
         }
-        
+
         //@Produces
         TranslationService mockTranslationService() {
             val mock = Mockito.mock(TranslationService.class);
             when(mock.getMode()).thenReturn(Mode.DISABLED);
             return mock;
         }
-        
+
         //@Produces
         SpecificationLoader getSpecificationLoader() {
             return SpecificationLoaderDefault.getInstance(
                     new ProgrammingModelFacetsJava8(DeprecatedPolicy.HONOUR),
                     new MetaModelValidatorDefault());
         }
-        
+
     }
-    
+
     protected SpecificationLoader specificationLoader;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected GridService mockGridService;
     protected ObjectAdapterService mockPersistenceSessionServiceInternal;
     protected MessageService mockMessageService;
-    
-    
-    
+
+
+
     // is loaded by subclasses
     protected ObjectSpecification specification;
 
 
     @BeforeEach
     public void setUp() throws Exception {
-        
+
         // PRODUCTION
-        
+
         val producers = new Producers();
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .specificationLoader(specificationLoader = producers.getSpecificationLoader())
                 .translationService(producers.mockTranslationService())
@@ -119,12 +119,12 @@ abstract class SpecificationLoaderTestAbstract {
 
 
         _Timing.runVerbose("specificationLoader.init()", specificationLoader::init);
-        
+
         //specificationLoader.init();
-        
+
         specification = loadSpecification(specificationLoader);
-        
-        
+
+
     }
 
     @AfterEach
@@ -140,7 +140,7 @@ abstract class SpecificationLoaderTestAbstract {
         assertNull(facet);
     }
 
-    
+
     @Test
     public void testTypeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);

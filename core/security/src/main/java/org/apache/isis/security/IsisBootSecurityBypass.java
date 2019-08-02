@@ -38,8 +38,8 @@ import org.apache.isis.security.authorization.standard.Authorizor;
  */
 @Configuration
 @Import({
-        AuthorizationManagerStandard.class,
-        AuthenticationManagerStandard.class
+    AuthorizationManagerStandard.class,
+    AuthenticationManagerStandard.class
 })
 public class IsisBootSecurityBypass {
 

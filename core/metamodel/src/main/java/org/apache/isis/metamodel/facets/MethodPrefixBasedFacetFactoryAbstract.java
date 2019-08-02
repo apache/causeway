@@ -94,17 +94,17 @@ implements MethodPrefixBasedFacetFactory {
                                     + "' config property)"
                                     : "";
 
-                            final String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
-                            validationFailures.add(
-                                    message,
-                                    objectSpec.getIdentifier().getClassName(),
-                                    actionId,
-                                    prefix,
-                                    explanation);
+                                    final String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
+                                    validationFailures.add(
+                                            message,
+                                            objectSpec.getIdentifier().getClassName(),
+                                            actionId,
+                                            prefix,
+                                            explanation);
                         }
                     }
                 });
-               
+
                 return true;
             }
         }));

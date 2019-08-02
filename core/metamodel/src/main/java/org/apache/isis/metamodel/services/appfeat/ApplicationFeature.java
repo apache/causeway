@@ -284,10 +284,10 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         public static Predicate<ApplicationFeature> packageContainingClasses(
                 final ApplicationMemberType memberType, 
                 final ApplicationFeatureRepositoryDefault applicationFeatures) {
-            
+
             return (final ApplicationFeature input) ->
-                    input.getContents().stream() // all the classes in this package
-                    .anyMatch(ApplicationFeatureId.Predicates.isClassContaining(memberType, applicationFeatures));
+            input.getContents().stream() // all the classes in this package
+            .anyMatch(ApplicationFeatureId.Predicates.isClassContaining(memberType, applicationFeatures));
         }
     }
 

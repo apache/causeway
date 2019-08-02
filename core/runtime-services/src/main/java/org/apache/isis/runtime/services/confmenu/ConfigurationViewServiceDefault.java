@@ -40,18 +40,18 @@ import org.apache.isis.config.internal._Config;
         nature = NatureOfService.DOMAIN
         )
 public class ConfigurationViewServiceDefault implements ConfigurationViewService {
-    
+
     @Override
     public Set<ConfigurationProperty> allProperties() {
         return new TreeSet<>(config.get().values());
     }
 
     // -- HELPER
-    
+
     private _Lazy<Map<String, ConfigurationProperty>> config = _Lazy.of(this::loadConfiguration);
 
     private Map<String, ConfigurationProperty> loadConfiguration() {
-        
+
         final Map<String, ConfigurationProperty> map = new HashMap<>();
 
         _Config.getConfiguration().copyToMap().forEach((k, v)->add(k, v, map));
@@ -60,15 +60,15 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
         add("[ Isis Version ]", IsisConfiguration.getVersion(), map);
         add("[ Deployment Type ]", _Context.getEnvironment().getDeploymentType().name(), map);
         add("[ Unit Testing ]", ""+_Context.getEnvironment().isUnitTesting(), map);
-        
+
         return map;
     }
-    
+
     private static void add(String key, String value, Map<String, ConfigurationProperty> map) {
-        
+
         value = ConfigurationConstants.maskIfProtected(key, value);
-        
+
         map.put(key, new ConfigurationProperty(key, value));
     }
-    
+
 }

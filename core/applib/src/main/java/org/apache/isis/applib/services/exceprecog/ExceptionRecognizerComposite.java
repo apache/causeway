@@ -59,7 +59,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
             add(er);
         }
     }
-    
+
     public ExceptionRecognizerComposite(final Stream<? extends ExceptionRecognizer> exceptionRecognizers) {
         exceptionRecognizers.forEach(this::add);
     }

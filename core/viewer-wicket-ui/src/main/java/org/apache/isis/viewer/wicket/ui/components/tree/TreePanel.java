@@ -56,8 +56,8 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
 
         final Component treeComponent = createTreeComponent("scalarValueContainer");
         final Behavior treeTheme = TreeThemeProvider.get().treeThemeFor(super.getModel());
-        
-        
+
+
         getTextField().setLabel(Model.of(getModel().getName()));
 
         final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, getTextField());
@@ -74,7 +74,7 @@ public class TreePanel extends ScalarPanelTextFieldParseableAbstract {
     @Override
     protected Component createComponentForCompact() {
         final Component tree = createTreeComponent(ID_SCALAR_IF_COMPACT);
-        
+
         // adds the tree-theme behavior to the tree component 
         //TODO [2088] not tested yet: if tree renders without applying the theme, behavior needs 
         // to go to a container up the hierarchy 

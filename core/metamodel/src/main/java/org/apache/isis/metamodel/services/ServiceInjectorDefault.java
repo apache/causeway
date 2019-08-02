@@ -48,31 +48,31 @@ import lombok.extern.log4j.Log4j2;
 
 @Singleton @Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
-    
+
     private static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
     private static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
-    
+
     @Inject IsisConfiguration configuration;
     @Inject ServiceRegistry serviceRegistry;
     @Inject InjectorMethodEvaluator injectorMethodEvaluator;
-    
+
     private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newHashMap();
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
-    
+
     @Override
     public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
         injectServices(domainObject, onNotResolvable);
         return domainObject;
     }
-    
+
     @PostConstruct
     public void init() {
         autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, false);
         autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, true);
     }
-    
+
     // -- HELPERS
-    
+
     boolean autowireSetters;
     boolean autowireInject;    
 
@@ -118,29 +118,29 @@ public class ServiceInjectorDefault implements ServiceInjector {
             injectToField_nonScalar(targetPojo, field, elementType, onNotResolvable);
             return;
         }
-        
+
         val beans = serviceRegistry.select(typeToBeInjected, field.getAnnotations());
-        
+
         if(beans.isEmpty()) {
             onNotResolvable.accept(new InjectionPoint(field));
             return;
         }
-        
+
         val bean = beans.getFirst().get();
         invokeInjectorField(field, targetPojo, bean);
 
     }
-    
+
     @SuppressWarnings("unchecked")
     private void injectToField_nonScalar(
             final Object targetPojo, 
             final Field field, 
             final Class<?> elementType, 
             final Consumer<InjectionPoint> onNotResolvable) {
-        
+
         final Class<? extends Collection<Object>> collectionTypeToBeInjected =
                 (Class<? extends Collection<Object>>) field.getType();
-        
+
         val beans = serviceRegistry.select(elementType, field.getAnnotations());
         if(!beans.isEmpty()) {
             final Collection<Object> collectionOfServices = beans.stream()
@@ -153,7 +153,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
         } else {
             onNotResolvable.accept(new InjectionPoint(field));
         }
-        
+
     }
 
     private void injectViaPrefixedMethods(
@@ -171,12 +171,12 @@ public class ServiceInjectorDefault implements ServiceInjector {
             final Object targetPojo,
             final Method setter, 
             final Consumer<InjectionPoint> onNotResolvable) {
-        
+
         final Class<?> typeToBeInjected = injectorMethodEvaluator.getTypeToBeInjected(setter);
         if(typeToBeInjected == null) {
             return;
         }
-        
+
         val instance = serviceRegistry.select(typeToBeInjected, setter.getAnnotations());
         if(instance.isCardinalityOne()) {
             val bean = instance.getSingleton().get();
@@ -184,7 +184,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
         } else {
             onNotResolvable.accept(new InjectionPoint(new MethodParameter(setter, 0)));
         }
-        
+
     }
 
     private static void invokeMethod(final Method method, final Object target, final Object[] parameters) {
@@ -239,9 +239,9 @@ public class ServiceInjectorDefault implements ServiceInjector {
     private static final Predicate<Field> isAnnotatedForInjection() {
         return field->field.getAnnotation(javax.inject.Inject.class) != null;
     }
-    
+
     // -- TESTING
-    
+
     /**
      * JUnit Test support. 
      */
@@ -250,13 +250,13 @@ public class ServiceInjectorDefault implements ServiceInjector {
             ServiceRegistry serviceRegistry,
             InjectorMethodEvaluator injectorMethodEvaluator) {
         val instance = new ServiceInjectorDefault();
-        
+
         instance.configuration = configuration;
         instance.serviceRegistry = serviceRegistry;
         instance.injectorMethodEvaluator = injectorMethodEvaluator;
-        
+
         instance.init();
-        
+
         return instance;
     }
 

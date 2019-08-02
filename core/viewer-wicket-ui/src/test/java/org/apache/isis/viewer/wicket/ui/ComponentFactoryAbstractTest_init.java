@@ -28,7 +28,7 @@ public class ComponentFactoryAbstractTest_init {
 
     @Rule
     public ExpectedException thrown= ExpectedException.none();
-    
+
     @Test
     public void canInstantiateComponentFactoryWithNoComponentClass() {
         class ComponentFactoryWithNoComponentClass extends ComponentFactoryAbstract {
@@ -48,42 +48,42 @@ public class ComponentFactoryAbstractTest_init {
             public Component createComponent(String id, IModel<?> model) {
                 return null;
             }
-            
+
         }
-        
+
         new ComponentFactoryWithNoComponentClass();
     }
-    
+
     @Test
     public void canInstantiateComponentFactoryWithComponentClass() {
         class ComponentClass {};
         class ComponentFactoryWithComponentClass extends ComponentFactoryAbstract {
-            
+
             private static final long serialVersionUID = 1L;
 
             public ComponentFactoryWithComponentClass() {
                 super(null, ComponentClass.class);
             }
-            
+
             @Override
             protected ApplicationAdvice appliesTo(IModel<?> model) {
                 return null;
             }
-            
+
             @Override
             public Component createComponent(String id, IModel<?> model) {
                 return null;
             }
-            
+
         }
-        
+
         new ComponentFactoryWithComponentClass();
     }
 
     @Test
     public void cannotInstantiateComponentFactoryWithIncorrectComponentClass() {
         thrown.expect(IllegalArgumentException.class);
-        
+
         class ComponentFactoryWithIncorrectComponentClass extends ComponentFactoryAbstract {
 
             private static final long serialVersionUID = 1L;
@@ -101,9 +101,9 @@ public class ComponentFactoryAbstractTest_init {
             public Component createComponent(String id, IModel<?> model) {
                 return null;
             }
-            
+
         }
-        
+
         new ComponentFactoryWithIncorrectComponentClass();
     }
 

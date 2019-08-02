@@ -35,20 +35,20 @@ public final class Log4j {
     }
 
     private static boolean isConfigured() {
-    	return LoggerContext.getContext().isInitialized();
-    	
-//log4j v1    	
-//        Enumeration<?> appenders = LogManager.getRootLogger(). getAllAppenders();
-//        if (appenders.hasMoreElements()) {
-//            return true;
-//        }
-//        Enumeration<?> loggers = LogManager.getCurrentLoggers();
-//        while (loggers.hasMoreElements()) {
-//            Logger c = (Logger) loggers.nextElement();
-//            if (c.getAllAppenders().hasMoreElements())
-//                return true;
-//        }
-//        return false;
+        return LoggerContext.getContext().isInitialized();
+
+        //log4j v1    	
+        //        Enumeration<?> appenders = LogManager.getRootLogger(). getAllAppenders();
+        //        if (appenders.hasMoreElements()) {
+        //            return true;
+        //        }
+        //        Enumeration<?> loggers = LogManager.getCurrentLoggers();
+        //        while (loggers.hasMoreElements()) {
+        //            Logger c = (Logger) loggers.nextElement();
+        //            if (c.getAllAppenders().hasMoreElements())
+        //                return true;
+        //        }
+        //        return false;
     }
 
 

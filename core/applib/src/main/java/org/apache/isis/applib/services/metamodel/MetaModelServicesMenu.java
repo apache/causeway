@@ -112,36 +112,36 @@ public class MetaModelServicesMenu {
 
 
     public static class DownloadMetaModelXmlEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
     }
 
     @Action(
             domainEvent = DownloadMetaModelXmlEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Meta Model (XML)"
-    )
+            )
     @MemberOrder(sequence="500.500.2")
     public Clob downloadMetaModelXml(
             @ParameterLayout(named = ".xml file name")
             final String fileName,
             @ParameterLayout(named = "Packages",
-                    describedAs="Subset of the complete meta model, only including packages starting with given prefix.")
+            describedAs="Subset of the complete meta model, only including packages starting with given prefix.")
             final List<String> packages,
             @ParameterLayout(named = "Ignore Interfaces")
             @Parameter(optionality=Optionality.MANDATORY)
             final boolean ignoreInterfaces
-    ) {
+            ) {
 
         MetaModelService.Config config =
                 new MetaModelService.Config()
-                        .withIgnoreNoop()
-                        .withIgnoreAbstractClasses()
-                        .withIgnoreInterfaces()
-                        .withIgnoreBuiltInValueTypes();
+                .withIgnoreNoop()
+                .withIgnoreAbstractClasses()
+                .withIgnoreInterfaces()
+                .withIgnoreBuiltInValueTypes();
         for (final String pkg : packages) {
             config = config.withPackagePrefix(pkg);
         }

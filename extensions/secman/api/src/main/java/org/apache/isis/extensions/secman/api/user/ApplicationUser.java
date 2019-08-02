@@ -27,7 +27,7 @@ import org.apache.isis.extensions.secman.api.tenancy.HasAtPath;
 
 
 public interface ApplicationUser extends HasUsername, HasAtPath {
-	
+
     // -- constants
     public static final int MAX_LENGTH_USERNAME = 30;
     public static final int MAX_LENGTH_FAMILY_NAME = 50;
@@ -37,18 +37,19 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     public static final int MAX_LENGTH_PHONE_NUMBER = 25;
 
 
-	String getName();
+    String getName();
 
-	String getEncryptedPassword();
+    String getEncryptedPassword();
 
-	AccountType getAccountType();
+    AccountType getAccountType();
 
-	ApplicationPermissionValueSet getPermissionSet();
+    ApplicationPermissionValueSet getPermissionSet();
 
-	SortedSet<? extends ApplicationRole> getRoles();
+    SortedSet<? extends ApplicationRole> getRoles();
 
-	ApplicationUserStatus getStatus();
+    ApplicationUserStatus getStatus();
 
-	String getUsername();
+    @Override
+    String getUsername();
 
 }

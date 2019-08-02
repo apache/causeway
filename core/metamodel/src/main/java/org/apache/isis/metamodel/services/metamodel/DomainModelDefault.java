@@ -37,13 +37,13 @@ public class DomainModelDefault implements DomainModel {
     DomainModelDefault(){
         throw _Exceptions.unexpectedCodeReach();
     }
-    
+
     public DomainModelDefault(List<DomainMember> memberList) {
         this.memberList = memberList;
     }
-    
+
     // --
-    
+
     private List<DomainMember> memberList;
 
     @XmlElement(name="domain-member", type=DomainMemberDefault.class)
@@ -51,8 +51,8 @@ public class DomainModelDefault implements DomainModel {
     public List<DomainMember> getDomainMembers() {
         return memberList;
     }
-    
+
     // --
-   
+
 
 }

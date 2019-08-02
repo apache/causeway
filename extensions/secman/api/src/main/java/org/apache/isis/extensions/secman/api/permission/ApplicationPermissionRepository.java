@@ -24,13 +24,13 @@ import org.apache.isis.metamodel.services.appfeat.ApplicationFeatureId;
 
 public interface ApplicationPermissionRepository {
 
-	ApplicationPermission findByUserAndPermissionValue(String username,
-			ApplicationPermissionValue changingPermissionValue);
+    ApplicationPermission findByUserAndPermissionValue(String username,
+            ApplicationPermissionValue changingPermissionValue);
 
-	List<? extends ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId);
+    List<? extends ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId);
 
-	List<? extends ApplicationPermission> findOrphaned();
+    List<? extends ApplicationPermission> findOrphaned();
 
-	List<? extends ApplicationPermission> allPermissions();
+    List<? extends ApplicationPermission> allPermissions();
 
 }

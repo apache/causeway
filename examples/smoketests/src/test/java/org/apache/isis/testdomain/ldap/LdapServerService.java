@@ -31,21 +31,21 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class LdapServerService {
 
-	private CountDownLatch serverLatch;
+    private CountDownLatch serverLatch;
 
-	@PostConstruct
-	public void start() throws InitializationError, InterruptedException {
-		serverLatch = LdapEmbeddedServer.run();
-		log.info("Embedded LDAP Server started at port {}.", LdapConstants.PORT);
-	}
-	
-	@PreDestroy
-	public void stop() {
-		if(serverLatch!=null) {
-			serverLatch.countDown();
-			serverLatch = null;
-			log.info("Embedded LDAP Server issued STOP.");
-		}
-	}
-	
+    @PostConstruct
+    public void start() throws InitializationError, InterruptedException {
+        serverLatch = LdapEmbeddedServer.run();
+        log.info("Embedded LDAP Server started at port {}.", LdapConstants.PORT);
+    }
+
+    @PreDestroy
+    public void stop() {
+        if(serverLatch!=null) {
+            serverLatch.countDown();
+            serverLatch = null;
+            log.info("Embedded LDAP Server issued STOP.");
+        }
+    }
+
 }

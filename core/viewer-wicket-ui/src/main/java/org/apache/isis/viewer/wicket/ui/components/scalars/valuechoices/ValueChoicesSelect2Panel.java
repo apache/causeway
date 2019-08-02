@@ -129,7 +129,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         val target = getComponentForRegular();
         Tooltips.clearTooltip(target);
     }
-    
+
     private void setTitleAttribute(final String titleAttribute) {
         if(_Strings.isNullOrEmpty(titleAttribute)) {
             clearTitleAttribute();

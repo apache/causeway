@@ -37,55 +37,55 @@ import lombok.val;
 @DomainObject(nature=Nature.VIEW_MODEL)
 @ToString
 public class FileNode {
-	
-	public static enum Type {
-		FileSystemRoot,
-		Folder,
-		File
-	}
-	
-	@Getter @Setter protected String path;
-	@Getter @Setter protected Type type;
-	
-	public String title() {
-		if(path==null) {
-			return null;
-		}
-		val file = asFile();
-		return file.getName().length()!=0 ? file.getName() : file.toString();
-	}
-	
-	public String iconName() {
-		return type!=null ? type.name() : "";
-	}
-	
-	// -- BREADCRUMB SUPPORT
-	
-	@PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE)
-	public FileNode getParent() {
-	    val parentFile = asFile().getParentFile();
-	    return parentFile!=null ? FileNodeFactory.toFileNode(parentFile) : null;
-	}
 
-	// -- INIT
-	
-	void init(File file) {
-		this.path = file.getAbsolutePath();
-		if(file.isDirectory()) {
-			type = isRoot(file) ? Type.FileSystemRoot : Type.Folder; 
-		} else {
-			type = Type.File;
-		}
-	}
-	
-	// -- HELPER
-	
-	File asFile() {
-		return new File(path);
-	}
-	
-	private static boolean isRoot(File file) {
-		return file.getParent()==null;
-	}
-	
+    public static enum Type {
+        FileSystemRoot,
+        Folder,
+        File
+    }
+
+    @Getter @Setter protected String path;
+    @Getter @Setter protected Type type;
+
+    public String title() {
+        if(path==null) {
+            return null;
+        }
+        val file = asFile();
+        return file.getName().length()!=0 ? file.getName() : file.toString();
+    }
+
+    public String iconName() {
+        return type!=null ? type.name() : "";
+    }
+
+    // -- BREADCRUMB SUPPORT
+
+    @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE)
+    public FileNode getParent() {
+        val parentFile = asFile().getParentFile();
+        return parentFile!=null ? FileNodeFactory.toFileNode(parentFile) : null;
+    }
+
+    // -- INIT
+
+    void init(File file) {
+        this.path = file.getAbsolutePath();
+        if(file.isDirectory()) {
+            type = isRoot(file) ? Type.FileSystemRoot : Type.Folder; 
+        } else {
+            type = Type.File;
+        }
+    }
+
+    // -- HELPER
+
+    File asFile() {
+        return new File(path);
+    }
+
+    private static boolean isRoot(File file) {
+        return file.getParent()==null;
+    }
+
 }

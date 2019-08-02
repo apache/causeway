@@ -42,9 +42,9 @@ public class WelcomePanel extends PanelAbstract<WelcomeModel> {
 
     public WelcomePanel(final String id, final WelcomeModel model) {
         super(id, model);
-        
+
         String welcomeMessage = webAppConfigBean.getWelcomeMessage();
-        
+
         model.setObject(welcomeMessage);
         final Label label = new Label(ID_MESSAGE, welcomeMessage);
         // safe to not escape, welcome message is read from file (part of deployed WAR)

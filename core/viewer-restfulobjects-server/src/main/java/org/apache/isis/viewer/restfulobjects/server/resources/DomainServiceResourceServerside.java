@@ -59,15 +59,15 @@ import lombok.val;
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
     private final static Predicate<ObjectAdapter> NATURE_OF_MENU = (final ObjectAdapter input) -> {
-            final ObjectSpecification specification = input.getSpecification();
-            final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
-            if (facet == null) {
-                // not expected, because we know these are domain services.
-                return false;
-            }
-            final NatureOfService natureOfService = facet.getNatureOfService();
-            return  natureOfService == NatureOfService.VIEW ||
-                    natureOfService == NatureOfService.VIEW_REST_ONLY;
+        final ObjectSpecification specification = input.getSpecification();
+        final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
+        if (facet == null) {
+            // not expected, because we know these are domain services.
+            return false;
+        }
+        final NatureOfService natureOfService = facet.getNatureOfService();
+        return  natureOfService == NatureOfService.VIEW ||
+                natureOfService == NatureOfService.VIEW_REST_ONLY;
     };
 
     @Override
@@ -78,7 +78,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         init(RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
         val metaModelContext = MetaModelContext.current();
-        
+
         final Stream<ObjectAdapter> serviceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(NATURE_OF_MENU);
 

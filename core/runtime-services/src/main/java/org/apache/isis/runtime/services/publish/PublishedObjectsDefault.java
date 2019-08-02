@@ -86,7 +86,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     public UUID getUniqueId() {
         return transactionUuid;
     }
-    
+
     @Programmatic
     @Override
     public int getSequence() {
@@ -157,7 +157,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
      */
     private _Lazy<ListMultimap<PublishingChangeKind, ObjectAdapter>> adaptersByChange = 
             _Lazy.of(this::initAdaptersByChange);
-    
+
     private ListMultimap<PublishingChangeKind, ObjectAdapter> initAdaptersByChange(){
         return _Maps.invertToListMultimap(changesByAdapter);
     }
@@ -190,8 +190,8 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
         if(adapters != null) {
             final List<OidDto> oidDtos = _Lists.map(adapters, 
                     (final ObjectAdapter objectAdapter) -> {
-                            final RootOid rootOid = (RootOid) objectAdapter.getOid();
-                            return rootOid.asOidDto();
+                        final RootOid rootOid = (RootOid) objectAdapter.getOid();
+                        return rootOid.asOidDto();
                     });
             oidsDto.getOid().addAll(oidDtos);
         }

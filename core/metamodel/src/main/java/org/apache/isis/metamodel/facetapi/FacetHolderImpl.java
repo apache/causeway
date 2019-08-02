@@ -42,7 +42,7 @@ public class FacetHolderImpl implements FacetHolder {
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return facetsByClass.containsKey(facetType);
     }
-    
+
     @Override
     public boolean containsFacetWithInterface(final Class<? extends Facet> facetType) {
         return implementedFacetInterfaces.contains(facetType);
@@ -97,9 +97,9 @@ public class FacetHolderImpl implements FacetHolder {
     public int getFacetCount() {
         return facetsByClass.size();
     }
-    
+
     // -- HELPER
-    
+
     private void addFacet(final Class<? extends Facet> facetType, final Facet facet) {
         final Facet existingFacet = getFacet(facetType);
         if (existingFacet == null || existingFacet.isNoop()) {
@@ -115,15 +115,15 @@ public class FacetHolderImpl implements FacetHolder {
         facet.setUnderlyingFacet(existingFacet);
         put(facetType, facet);
     }
-    
+
     private void put(final Class<? extends Facet> facetType, final Facet facet) {
-    	facetsByClass.put(facetType, facet);
-    	
-    	_NullSafe.stream(facetType.getInterfaces())
-    	.filter(intfc->Facet.class.isAssignableFrom(intfc))
-    	.map(intfc-> _Casts.<Class<? extends Facet>>uncheckedCast(intfc))
-    	.forEach(implementedFacetInterfaces::add);
-    	
+        facetsByClass.put(facetType, facet);
+
+        _NullSafe.stream(facetType.getInterfaces())
+        .filter(intfc->Facet.class.isAssignableFrom(intfc))
+        .map(intfc-> _Casts.<Class<? extends Facet>>uncheckedCast(intfc))
+        .forEach(implementedFacetInterfaces::add);
+
     }
-    
+
 }

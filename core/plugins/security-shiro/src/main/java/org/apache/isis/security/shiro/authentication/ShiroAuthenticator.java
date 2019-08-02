@@ -163,14 +163,14 @@ public class ShiroAuthenticator implements Authenticator {
             String code, 
             AuthenticationToken token, 
             Subject currentSubject) {
-        
+
         final Stream<String> roles = Stream.concat(
                 streamRoles(currentSubject, token),
-                
+
                 // copy over any roles passed in
                 // (this is used by the Wicket viewer, for example).
                 request.streamRoles());
-        
+
         return new SimpleSession(request.getName(), roles, code);
     }
 
@@ -226,6 +226,6 @@ public class ShiroAuthenticator implements Authenticator {
     protected RealmSecurityManager getSecurityManager() {
         return ShiroSecurityContext.getSecurityManager();
     }
-    
+
 
 }

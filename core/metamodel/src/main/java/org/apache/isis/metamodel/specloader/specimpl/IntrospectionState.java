@@ -28,7 +28,7 @@ public enum IntrospectionState implements Comparable<IntrospectionState> {
      * Interim stage, to avoid infinite loops while on way to being {@link #TYPE_INTROSPECTED}
      */
     TYPE_BEING_INTROSPECTED,
-    
+
     /**
      * Type has been introspected (but not its members).
      */
@@ -38,7 +38,7 @@ public enum IntrospectionState implements Comparable<IntrospectionState> {
      * Interim stage, to avoid infinite loops while on way to being {@link #TYPE_AND_MEMBERS_INTROSPECTED}
      */
     MEMBERS_BEING_INTROSPECTED,
-    
+
     /**
      * Fully introspected... class and also its members.
      */

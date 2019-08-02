@@ -119,11 +119,11 @@ class AuditerServiceTest {
         assertEquals(1, books.size());
         val book = books.listIterator().next();
         auditerService.clearHistory();
-        
+
         // when - running within its own background task
         backgroundService.execute(book)
         .setName("Book #2");
-        
+
         Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
 
         // then - after the commit

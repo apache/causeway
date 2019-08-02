@@ -26,6 +26,6 @@ package org.apache.isis.metamodel.services.metamodel;
  */
 public interface MetaModelExportSupport {
 
-	public String toMetamodelString();
-	
+    public String toMetamodelString();
+
 }

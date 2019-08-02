@@ -37,10 +37,10 @@ public class ExceptionRecognizerGeneralTest {
             super("foo");
         }
     }
-    
+
     private final static Predicate<Throwable> ALWAYS_TRUE = __->true;
     private final static Predicate<Throwable> ALWAYS_FALSE = __->false;
-    
+
     @Test
     public void whenRecognized() {
         ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_TRUE){};

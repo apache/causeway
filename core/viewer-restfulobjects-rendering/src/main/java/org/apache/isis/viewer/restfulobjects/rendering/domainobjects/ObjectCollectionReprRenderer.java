@@ -93,9 +93,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
         final Stream<ObjectAdapter> elementAdapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
-        
+
         final List<JsonRepresentation> list = _Lists.newArrayList();
-        
+
         elementAdapters.forEach(elementAdapter->{
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {

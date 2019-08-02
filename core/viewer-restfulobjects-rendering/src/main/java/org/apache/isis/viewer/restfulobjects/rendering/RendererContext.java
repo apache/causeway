@@ -34,7 +34,7 @@ public interface RendererContext extends RuntimeContext {
     String urlFor(final String url);
 
     List<MediaType> getAcceptableMediaTypes();
-    
+
     InteractionInitiatedBy getInteractionInitiatedBy();
 
     Where getWhere();
@@ -62,20 +62,20 @@ public interface RendererContext extends RuntimeContext {
      * @return whether this adapter has already been rendered (implying the caller should not render the value).
      */
     boolean canEagerlyRender(ObjectAdapter objectAdapter);
-    
+
     /**
      * Applies only when rendering a domain object.
      */
     RepresentationService.Intent getIntent();
 
     // -- TEMPORARY FOR REFACTORING
-    
-	default ObjectAdapter getObjectAdapterElseNull(String oidFromHref) {
-		return OidUtils.getObjectAdapterElseNull(this, oidFromHref);
-	}
-	
-	default ObjectAdapter getObjectAdapterElseNull(String domainType, String instanceIdEncoded) {
-		return OidUtils.getObjectAdapterElseNull(this, domainType, instanceIdEncoded);
-	}
+
+    default ObjectAdapter getObjectAdapterElseNull(String oidFromHref) {
+        return OidUtils.getObjectAdapterElseNull(this, oidFromHref);
+    }
+
+    default ObjectAdapter getObjectAdapterElseNull(String domainType, String instanceIdEncoded) {
+        return OidUtils.getObjectAdapterElseNull(this, domainType, instanceIdEncoded);
+    }
 
 }

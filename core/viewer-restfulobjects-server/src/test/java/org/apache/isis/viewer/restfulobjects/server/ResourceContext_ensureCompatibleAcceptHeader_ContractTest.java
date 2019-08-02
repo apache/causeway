@@ -68,14 +68,14 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
     @Before
     public void setUp() throws Exception {
-            
+
         // PRODUCTION
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .specificationLoader(mockSpecificationLoader)
-//                .translationService(mockTranslationService)
-//                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
-//                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                //                .translationService(mockTranslationService)
+                //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                //                .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .authenticationSession(mockAuthenticationSession)
                 .singleton(mockIsisSessionFactory)
                 .build());
@@ -85,22 +85,22 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
                 //[ISIS-1976] IsisSessionFactory does no longer live on the ServletContext
-//              allowing(mockHttpServletRequest).getServletContext();
-//              will(returnValue(mockServletContext));
-//              allowing(mockServletContext).getAttribute("org.apache.isis.webapp.isisSessionFactory");
-//              will(returnValue(mockIsisSessionFactory));
-//                allowing(mockIsisSessionFactory).getServiceInjector();
-//                will(returnValue(mockServicesInjector));
-//                allowing(mockIsisSessionFactory).getConfiguration();
-//                will(returnValue(mockConfiguration));
+                //              allowing(mockHttpServletRequest).getServletContext();
+                //              will(returnValue(mockServletContext));
+                //              allowing(mockServletContext).getAttribute("org.apache.isis.webapp.isisSessionFactory");
+                //              will(returnValue(mockIsisSessionFactory));
+                //                allowing(mockIsisSessionFactory).getServiceInjector();
+                //                will(returnValue(mockServicesInjector));
+                //                allowing(mockIsisSessionFactory).getConfiguration();
+                //                will(returnValue(mockConfiguration));
                 allowing(mockIsisSessionFactory).getCurrentSession();
                 will(returnValue(mockIsisSession));
                 allowing(mockIsisSession).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
-//                allowing(mockIsisSessionFactory).getSpecificationLoader();
-//                will(returnValue(mockSpecificationLoader));
-//                allowing(mockIsisSession).getPersistenceSession();
-//                will(returnValue(mockPersistenceSession));
+                //                allowing(mockIsisSessionFactory).getSpecificationLoader();
+                //                will(returnValue(mockSpecificationLoader));
+                //                allowing(mockIsisSession).getPersistenceSession();
+                //                will(returnValue(mockPersistenceSession));
             }
         });
     }

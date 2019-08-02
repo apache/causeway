@@ -26,7 +26,7 @@ import static org.apache.isis.commons.internal.resources._Resources.prependConte
 public class CreditImage extends WebComponent {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final String imageUrl;
 
     public CreditImage(final String id, final String imageUrl) {

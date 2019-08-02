@@ -35,7 +35,7 @@ import junit.framework.Assert;
 
 
 public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
-        AbstractFacetFactoryTest {
+AbstractFacetFactoryTest {
 
     private JdoPersistenceCapableAnnotationFacetFactory facetFactory;
 
@@ -56,14 +56,14 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         final List<FeatureType> featureTypes = facetFactory
                 .getFeatureTypes();
         Assert
-                .assertTrue(contains(featureTypes,
+        .assertTrue(contains(featureTypes,
                 FeatureType.OBJECT));
         assertFalse(contains(featureTypes,
                 FeatureType.PROPERTY));
         assertFalse(contains(featureTypes,
                 FeatureType.COLLECTION));
         Assert
-                .assertFalse(contains(featureTypes,
+        .assertFalse(contains(featureTypes,
                 FeatureType.ACTION));
         assertFalse(contains(featureTypes,
                 FeatureType.ACTION_PARAMETER_SCALAR));

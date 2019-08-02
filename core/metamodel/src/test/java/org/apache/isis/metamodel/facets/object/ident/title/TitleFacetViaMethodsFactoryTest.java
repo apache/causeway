@@ -39,7 +39,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
     private TitleFacetViaMethodsFactory facetFactory;
 
     @Override
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
 
         facetFactory = new TitleFacetViaMethodsFactory();

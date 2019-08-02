@@ -86,9 +86,9 @@ public class ResourceServlet extends HttpServlet {
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
         log.debug("request: {}", servletPath);
-        
+
         val inputStream = ifPresentElseGet(
-        		loadFromFileSystem(request), // try to load from file-system first 
+                loadFromFileSystem(request), // try to load from file-system first 
                 ()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path  
 
         if (inputStream != null) {
@@ -103,30 +103,30 @@ public class ResourceServlet extends HttpServlet {
 
         log.warn("failed to load resource from classpath or file system: {}", servletPath);
     }
-    
-    private InputStream loadFromFileSystem(HttpServletRequest request) {
-    	val inputStream = ResourceUtil.getResourceAsStream(request);
-    	
-    	if(log.isDebugEnabled()) {
-    		val realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
-        	if(inputStream!=null) {
-        		log.debug("request: {} loaded from fileSystem {}", request.getServletPath(), realPath);
-        	} else {
-        		log.debug("request: {} not found in fileSystem {}", request.getServletPath(), realPath);
-        	}
-    	}
 
-    	return inputStream;
+    private InputStream loadFromFileSystem(HttpServletRequest request) {
+        val inputStream = ResourceUtil.getResourceAsStream(request);
+
+        if(log.isDebugEnabled()) {
+            val realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
+            if(inputStream!=null) {
+                log.debug("request: {} loaded from fileSystem {}", request.getServletPath(), realPath);
+            } else {
+                log.debug("request: {} not found in fileSystem {}", request.getServletPath(), realPath);
+            }
+        }
+
+        return inputStream;
     }
-    
+
     private InputStream loadFromClassPath(String path) {
-    	val inputStream = ResourceUtil.getResourceAsStream(path);
-    	if(log.isDebugEnabled()) {
-    		if(inputStream!=null) {
-        		log.debug("request: {} loaded from classpath", path);
-        	}	
-    	}
-    	return inputStream;
+        val inputStream = ResourceUtil.getResourceAsStream(path);
+        if(log.isDebugEnabled()) {
+            if(inputStream!=null) {
+                log.debug("request: {} loaded from classpath", path);
+            }	
+        }
+        return inputStream;
     }
 
     private void processContent(

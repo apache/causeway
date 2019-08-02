@@ -215,7 +215,7 @@ public final class Annotations  {
         if (annotation != null) {
             return annotation;
         }
-        
+
         final Class<?> methodDeclaringClass = method.getDeclaringClass();
 
         // search for field
@@ -228,7 +228,7 @@ public final class Annotations  {
                     return fieldAnnotation;
                 }
             }
-            
+
         }
 
         // search superclasses
@@ -236,7 +236,7 @@ public final class Annotations  {
         if (superclass != null) {
             final Method parentClassMethod = 
                     firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method)); 
-            
+
             if(parentClassMethod!=null) {
                 final T methodAnnotation = getAnnotation(parentClassMethod, annotationClass);
                 if(methodAnnotation != null) {
@@ -250,7 +250,7 @@ public final class Annotations  {
         for (final Class<?> iface : interfaces) {
             final Method ifaceMethod = 
                     firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
-         
+
             if(ifaceMethod!=null) {
                 final T methodAnnotation = getAnnotation(ifaceMethod, annotationClass);
                 if(methodAnnotation != null) {
@@ -258,7 +258,7 @@ public final class Annotations  {
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -299,7 +299,7 @@ public final class Annotations  {
         if (superclass != null) {
             final Method parentClassMethod = 
                     firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method)); 
-            
+
             if(parentClassMethod!=null) {
                 final List<T> annotationsFromSuperclass = 
                         getAnnotations(parentClassMethod, annotationClass);
@@ -308,13 +308,13 @@ public final class Annotations  {
                 }
             }
         }
-        
+
         // search implemented interfaces
         final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
         for (final Class<?> iface : interfaces) {
             final Method ifaceMethod = 
                     firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
-         
+
             if(ifaceMethod!=null) {
                 final List<T> annotationsFromInterfaces = getAnnotations(ifaceMethod, annotationClass);
                 if(!annotationsFromInterfaces.isEmpty()) {
@@ -322,7 +322,7 @@ public final class Annotations  {
                 }
             }
         }
-        
+
         return Collections.emptyList();
     }
 
@@ -537,8 +537,8 @@ public final class Annotations  {
                     XmlJavaTypeAdapter.class,
                     XmlTransient.class,
                     javax.jdo.annotations.Column.class
-            );
-    
+                    );
+
     private static boolean shouldSearchForField(final Class<?> annotationClass) {
         return fieldAnnotationClasses.contains(annotationClass);
     }
@@ -611,47 +611,47 @@ public final class Annotations  {
 
         return Collections.emptyList();
     }
-    
+
     // -- HELPER
 
     private static Method firstDeclaredMethod_matching(
             Method method,
             Class<?> type, 
             Predicate<Method> filter) {
-        
+
         return stream(type.getDeclaredMethods())
                 .filter(filter)
                 .findFirst()
                 .orElse(null);
     }
-    
+
     private static Field firstDeclaredField_matching(
             Class<?> type, 
             Predicate<Field> filter) {
-        
+
         return stream(type.getDeclaredFields())
                 .filter(filter)
                 .findFirst()
                 .orElse(null);
     }
-    
+
     private static void declaredFields_matching(
             Class<?> type, 
             Predicate<Field> filter, 
             Consumer<Field> onField) {
-        
+
         stream(type.getDeclaredFields())
         .filter(filter)
         .forEach(onField);
-        
+
     }
-    
+
     // -- HELPER - PREDICATES
-    
+
     private static Predicate<Method> isSuperMethodFor(final Method method) {
         return m->_Reflect.same(method, m);
     }
-    
+
     private static Predicate<Field> isFieldForGetter(final Method getter) {
         return field->{
             int beginIndex;

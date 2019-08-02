@@ -42,7 +42,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             final Method method, 
             final Class<?> choicesClass, 
             final FacetHolder holder) {
-        
+
         super(holder);
         this.method = method;
         this.choicesClass = choicesClass;
@@ -66,7 +66,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     public Object[] getChoices(
             final ObjectAdapter owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         final Object options = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
             return null;

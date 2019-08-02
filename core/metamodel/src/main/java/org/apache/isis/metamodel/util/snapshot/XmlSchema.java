@@ -47,7 +47,7 @@ public final class XmlSchema {
      * in the constructor.
      */
     public final static String DEFAULT_PREFIX = "app";
-    
+
     public static interface ExtensionData<T> {
         public int size();
         public void visit(BiConsumer<Class<T>, T> elementConsumer);
@@ -176,7 +176,7 @@ public final class XmlSchema {
 
         addNamespace(xsSchemaElement, getPrefix(), getUri());
     }
-    
+
 
 
     /**
@@ -377,9 +377,9 @@ public final class XmlSchema {
     }
 
     private <T> void addExtensionElements(final Element parentElement, final ExtensionData<T> extensions) {
-        
+
         extensions.visit((final Class<T> extensionClass, final T extensionObject)->{
-            
+
             // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
             // name="%extensionClassShortName%"
             final Element xsExtensionElementElement = xsMeta.createXsElementElement(
@@ -394,7 +394,7 @@ public final class XmlSchema {
             // indeed won't)
             parentElement.appendChild(xsExtensionElementElement);
         });
-       
+
     }
 
     /**

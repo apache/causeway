@@ -32,7 +32,7 @@ public final class PropertyResource {
     public static PropertyResource ofClassContext(final Class<?> resourceContext, final String resourceName) {
         return new PropertyResource(resourceContext, resourceName);
     }
-    
+
     PropertyResource(final Class<?> resourceContext, final String resourceName) {
         this.resourceContext = resourceContext;
         this.resourceName = resourceName;
@@ -53,7 +53,7 @@ public final class PropertyResource {
     }
 
     void loadPropsInto(final Map<String, String> props) {
-        
+
         final Properties properties = new Properties();
         try {
             try (final InputStream stream = resourceContext.getResourceAsStream(resourceName)) {

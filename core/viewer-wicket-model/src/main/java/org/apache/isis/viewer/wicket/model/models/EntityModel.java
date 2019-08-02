@@ -318,7 +318,7 @@ implements ObjectAdapterModel, UiHintContainer {
     // //////////////////////////////////////////////////////////
     // loadObject, load, setObject
     // //////////////////////////////////////////////////////////
-    
+
     /**
      * Callback from {@link #getObject()}.
      */
@@ -330,11 +330,11 @@ implements ObjectAdapterModel, UiHintContainer {
         final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter();
         return objectAdapter;
     }
-    
+
     @Deprecated //removed with ISIS-2154
-	public ObjectAdapter loadWithConcurrencyChecking() {
-		return load();
-	}
+    public ObjectAdapter loadWithConcurrencyChecking() {
+        return load();
+    }
 
     @Override
     public void setObject(final ObjectAdapter adapter) {

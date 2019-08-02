@@ -49,7 +49,7 @@ public final class _Arrays {
     private _Arrays(){}
 
     // -- PREDICATES
-    
+
     /**
      * Whether given {@code test} predicate evaluates 'true' for any given pair of elements 
      * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n} 
@@ -65,7 +65,7 @@ public final class _Arrays {
             @Nullable final T[] array1, 
             @Nullable final T[] array2, 
             final BiPredicate<T, T> test) {
-        
+
         final int s1 = _NullSafe.size(array1);
         final int s2 = _NullSafe.size(array2);
         if(s1!=s2) {
@@ -75,7 +75,7 @@ public final class _Arrays {
             return false;
         }
         requires(test, "test");
-        
+
         for(int i=0; i<s1; ++i) {
             if(test.test(array1[i], array2[i])) {
                 return true;
@@ -83,7 +83,7 @@ public final class _Arrays {
         }
         return false;
     }
-    
+
 
     /**
      * Whether given {@code test} predicate evaluates 'true' for all given pairs of elements 
@@ -103,7 +103,7 @@ public final class _Arrays {
         requires(test, "test");
         return !testAnyMatch(array1, array2, test.negate());
     }
-            
+
 
     /**
      * @param cls

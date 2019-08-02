@@ -35,9 +35,9 @@ public final class HomePageAction {
 
     @NonNull private final ObjectAdapter objectAdapter;
     @NonNull private final ObjectAction objectAction;
-    
+
     public Object getHomePagePojo() {
-        
+
         final ObjectAdapter mixedInAdapter = null;
         final ObjectAdapter[] parameters = {};
 
@@ -48,14 +48,14 @@ public final class HomePageAction {
 
         val homePageObject = resultAdapter != null ? resultAdapter.getPojo(): null;
         return homePageObject;
-        
+
     }
-    
+
     // REVIEW: should provide this rendering context, rather than hardcoding.
     // the net effect currently is that class members annotated with
     // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
     // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
     // for any other value for Where
     private static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
-    
+
 }

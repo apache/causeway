@@ -28,19 +28,19 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
  * @since 2.0
  */
 public interface OidFactory {
-    
+
     RootOid oidFor(Object pojo);
-    
+
     public interface OidProvider {
         boolean isHandling(Object pojo, ObjectSpecification spec);
         RootOid oidFor(Object pojo, ObjectSpecification spec);
     }
-    
+
     public interface OidFactoryBuilder {
         OidFactoryBuilder add(OidProvider handler);
         OidFactory build();
     }
-    
+
     public static OidFactoryBuilder builder(Function<Object, ObjectSpecification> specProvider) {
         return new OidFactory_Builder(specProvider);
     }

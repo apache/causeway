@@ -143,7 +143,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         }
         return false;
     }
-    
+
     protected List<String> mediaTypeParameterList(
             final List<MediaType> acceptableMediaTypes,
             final String parameter) {
@@ -156,7 +156,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         }
         return paramList;
     }
-    
+
 
     /**
      * Remove any single quotes.

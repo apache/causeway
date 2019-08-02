@@ -65,12 +65,12 @@ public class MetaModelService_IntegTest {
         MetamodelDto metamodelDto =
                 metaModelService.exportMetaModel(
                         new MetaModelService.Config()
-                                .withIgnoreNoop()
-                                .withIgnoreAbstractClasses()
-                                .withIgnoreBuiltInValueTypes()
-                                .withIgnoreInterfaces()
-                                .withPackagePrefix("domainapp")
-                );
+                        .withIgnoreNoop()
+                        .withIgnoreAbstractClasses()
+                        .withIgnoreBuiltInValueTypes()
+                        .withIgnoreInterfaces()
+                        .withPackagePrefix("domainapp")
+                        );
 
         // then
         final List<DomainClassDto> domainClassDto = metamodelDto.getDomainClassDto();
@@ -99,12 +99,12 @@ public class MetaModelService_IntegTest {
         MetamodelDto metamodelDto =
                 metaModelService.exportMetaModel(
                         new MetaModelService.Config()
-                                .withIgnoreNoop()
-                                .withIgnoreAbstractClasses()
-                                .withIgnoreBuiltInValueTypes()
-                                .withIgnoreInterfaces()
-                                .withPackagePrefix("domainapp")
-                );
+                        .withIgnoreNoop()
+                        .withIgnoreAbstractClasses()
+                        .withIgnoreBuiltInValueTypes()
+                        .withIgnoreInterfaces()
+                        .withPackagePrefix("domainapp")
+                        );
 
         // then
         final List<DomainClassDto> domainClassDto = metamodelDto.getDomainClassDto();

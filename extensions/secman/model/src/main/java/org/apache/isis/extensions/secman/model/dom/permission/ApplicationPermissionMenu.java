@@ -36,60 +36,60 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRep
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isissecurity.ApplicationPermissionMenu"
-)
+        )
 @DomainServiceLayout(
         named="Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
-)
+        )
 public class ApplicationPermissionMenu {
 
-        // -- domain event classes
-        public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionMenu, T> {
-			private static final long serialVersionUID = 1L;}
+    // -- domain event classes
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<ApplicationPermissionMenu, T> {
+        private static final long serialVersionUID = 1L;}
 
-        public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermissionMenu, T> {
-			private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<ApplicationPermissionMenu, T> {
+        private static final long serialVersionUID = 1L;}
 
-        public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermissionMenu> {
-			private static final long serialVersionUID = 1L;}
-        
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<ApplicationPermissionMenu> {
+        private static final long serialVersionUID = 1L;}
 
-        // -- iconName
-        public String iconName() {
-            return "applicationPermission";
-        }
-        
 
-        // -- findOrphanedPermissions (action)
-        public static class FindOrphanedPermissionsDomainEvent extends ActionDomainEvent {
-			private static final long serialVersionUID = 1L;}
+    // -- iconName
+    public String iconName() {
+        return "applicationPermission";
+    }
 
-        @Action(
-                domainEvent=FindOrphanedPermissionsDomainEvent.class,
-                semantics = SemanticsOf.SAFE
-        )
-        @MemberOrder(sequence = "100.50.1")
-        public List<? extends ApplicationPermission> findOrphanedPermissions() {
-                return applicationPermissionRepository.findOrphaned();
-        }
-        
 
-        // -- allPermissions (action)
-        public static class AllPermissionsDomainEvent extends ActionDomainEvent {
-			private static final long serialVersionUID = 1L;}
+    // -- findOrphanedPermissions (action)
+    public static class FindOrphanedPermissionsDomainEvent extends ActionDomainEvent {
+        private static final long serialVersionUID = 1L;}
 
-        @Action(
-                domainEvent=AllPermissionsDomainEvent.class,
-                semantics = SemanticsOf.SAFE,
-                restrictTo = RestrictTo.PROTOTYPING
-        )
-        @MemberOrder(sequence = "100.50.2")
-        public List<? extends ApplicationPermission> allPermissions() {
-                return applicationPermissionRepository.allPermissions();
-        }
-        
-        // -- DEPENDENCIES
-        @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-        
+    @Action(
+            domainEvent=FindOrphanedPermissionsDomainEvent.class,
+            semantics = SemanticsOf.SAFE
+            )
+    @MemberOrder(sequence = "100.50.1")
+    public List<? extends ApplicationPermission> findOrphanedPermissions() {
+        return applicationPermissionRepository.findOrphaned();
+    }
+
+
+    // -- allPermissions (action)
+    public static class AllPermissionsDomainEvent extends ActionDomainEvent {
+        private static final long serialVersionUID = 1L;}
+
+    @Action(
+            domainEvent=AllPermissionsDomainEvent.class,
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+            )
+    @MemberOrder(sequence = "100.50.2")
+    public List<? extends ApplicationPermission> allPermissions() {
+        return applicationPermissionRepository.allPermissions();
+    }
+
+    // -- DEPENDENCIES
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+
 
 }

@@ -30,21 +30,21 @@ import static org.junit.Assert.assertThat;
 public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
 
     public static class SomeDomainObject {}
-    
+
     public static class SomeDatePropertyChangedDomainEvent extends PropertyDomainEvent<SomeDomainObject, LocalDate> {
     }
 
     @Test
     public void defaultEventType() throws Exception {
-        
+
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "someDateProperty");
         LocalDate oldValue = new LocalDate(2013,4,1);
         LocalDate newValue = new LocalDate(2013,5,2);
-        
+
         Utils.domainEventHelper();
-		final PropertyDomainEvent<Object, Object> ev =
-        		DomainEventHelper.newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
+        final PropertyDomainEvent<Object, Object> ev =
+                DomainEventHelper.newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is((Object)oldValue));
@@ -59,14 +59,14 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "someDateProperty");
         LocalDate oldValue = new LocalDate(2013,4,1);
         LocalDate newValue = new LocalDate(2013,5,2);
-        
+
         Utils.domainEventHelper();
-		final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
-        		DomainEventHelper.newPropertyDomainEvent(SomeDatePropertyChangedDomainEvent.class, identifier, sdo, oldValue, newValue);
+        final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
+                DomainEventHelper.newPropertyDomainEvent(SomeDatePropertyChangedDomainEvent.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is(oldValue));
         assertThat(ev.getNewValue(), is(newValue));
     }
-    
+
 }

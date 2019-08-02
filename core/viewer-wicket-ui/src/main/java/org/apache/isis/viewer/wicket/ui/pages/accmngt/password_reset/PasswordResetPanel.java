@@ -50,7 +50,7 @@ import lombok.val;
  */
 public class PasswordResetPanel extends Panel {
 
-	private static final long serialVersionUID = -2072394926411738664L;
+    private static final long serialVersionUID = -2072394926411738664L;
 
     /**
      * Constructor
@@ -75,7 +75,7 @@ public class PasswordResetPanel extends Panel {
         form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 
         Button signUpButton = new Button("passwordResetSubmit") {
-			private static final long serialVersionUID = -6355836432811022200L;
+            private static final long serialVersionUID = -6355836432811022200L;
 
             @Override
             public void onSubmit() {
@@ -86,8 +86,8 @@ public class PasswordResetPanel extends Panel {
                 final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
                 val userRegistrationService = 
-                		IsisContext.getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
-                
+                        IsisContext.getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
+
                 Boolean passwordUpdated = getIsisSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {

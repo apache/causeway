@@ -64,7 +64,7 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
         final String hideName = MethodPrefixConstants.DISABLE_PREFIX + param + capitalizedName;
 
         final int numParamTypes = paramTypes.size();
-        
+
         final TranslationService translationService = getMetaModelContext().getTranslationService();
 
         for(int i=0; i< numParamTypes+1; i++) {

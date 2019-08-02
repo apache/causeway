@@ -62,7 +62,7 @@ public final class ClassExtensions {
                             + "args '%s' then trying no args.",
                             extendee.getName(),
                             _Lists.of(constructorParamTypes).toString());
-                    
+
                     throw _Exceptions.unrecoverable(msg, e);
                 }
             }

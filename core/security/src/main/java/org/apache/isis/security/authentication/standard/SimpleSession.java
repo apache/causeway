@@ -49,7 +49,7 @@ public class SimpleSession extends AuthenticationSessionAbstract {
     public SimpleSession(final String name, final Iterable<String> roles) {
         this(name, stream(roles), DEFAULT_VALIDATION_CODE);
     }
-    
+
     /**
      * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
      */

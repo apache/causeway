@@ -38,45 +38,45 @@ import lombok.RequiredArgsConstructor;
 @Mixin
 @RequiredArgsConstructor
 public class DependentArgsActionDemo_useAutoComplete {
-    
+
     @Inject MessageService messageService;
-    
-    
+
+
     private final DependentArgsActionDemo holder;
-    
+
     @ActionLayout(named="Auto Complete", promptStyle = PromptStyle.DIALOG_MODAL)
     @Action(semantics = SemanticsOf.SAFE)
     public DependentArgsActionDemo $$(
-            
+
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY)
             Parity parity,
-            
+
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
             DemoItem item
-            
+
             ) {
-        
+
         messageService.informUser(item.getName());
         return holder;
     }
-    
+
     // -- PARAM 1 (DemoItem)
-    
+
     public Collection<DemoItem> autoComplete1$$(
-            
+
             Parity parity, 
-            
+
             @MinLength(3) String search) {
-        
+
         if(parity == null) {
             return holder.getItems()
                     .stream()
                     .filter(item->item.getName().toLowerCase().contains(search.toLowerCase()))
                     .collect(Collectors.toList());
         }
-        
+
         return holder.getItems()
                 .stream()
                 .filter(item->parity == item.getParity())

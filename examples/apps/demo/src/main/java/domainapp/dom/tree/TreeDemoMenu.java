@@ -35,13 +35,13 @@ import lombok.val;
 public class TreeDemoMenu {
 
     @Inject private FactoryService factoryService;
-    
-	@Action
-	@ActionLayout(cssClassFa="fa-tree")
-	public DemoStub fileSystemTree(){
-    	val demo = factoryService.instantiate(TreeDemo.class);
+
+    @Action
+    @ActionLayout(cssClassFa="fa-tree")
+    public DemoStub fileSystemTree(){
+        val demo = factoryService.instantiate(TreeDemo.class);
         demo.initDefaults();  
         return demo;
-	}
-	
+    }
+
 }

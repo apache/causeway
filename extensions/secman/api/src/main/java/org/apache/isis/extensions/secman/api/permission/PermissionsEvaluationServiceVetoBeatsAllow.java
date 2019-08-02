@@ -30,9 +30,9 @@ import lombok.val;
  */
 public class PermissionsEvaluationServiceVetoBeatsAllow extends PermissionsEvaluationServiceAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
+    /**
      * Reverses the natural order of the {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue}s.
      *
      * <p>
@@ -45,8 +45,8 @@ public class PermissionsEvaluationServiceVetoBeatsAllow extends PermissionsEvalu
      */
     @Override
     protected Collection<ApplicationPermissionValue> ordered(
-    		final Collection<ApplicationPermissionValue> permissionValues) {
-    	
+            final Collection<ApplicationPermissionValue> permissionValues) {
+
         val reversed = _Lists.<ApplicationPermissionValue>newArrayList(permissionValues);
         Collections.reverse(reversed);
         return reversed;

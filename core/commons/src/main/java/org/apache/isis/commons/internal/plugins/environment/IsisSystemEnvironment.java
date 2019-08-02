@@ -29,16 +29,16 @@ import org.apache.isis.commons.internal.base._Lazy;
 public interface IsisSystemEnvironment {
 
     // -- INTERFACE
-    
+
     public DeploymentType getDeploymentType();
     public boolean isUnitTesting();
-    
+
     // -- FACTORIES
-    
+
     public static IsisSystemEnvironment getDefault() {
         return DEFAULT;
     }
-    
+
     // -- INIT
 
     /**
@@ -50,7 +50,7 @@ public interface IsisSystemEnvironment {
     public static void setUnitTesting(boolean isUnitTesting) {
         System.setProperty("UNITTESTING", ""+isUnitTesting);
     }
-    
+
     /**
      * To set the framework's deployment-type programmatically.<p>
      * Must be set prior to configuration bootstrapping.
@@ -59,11 +59,11 @@ public interface IsisSystemEnvironment {
     public static void setPrototyping(boolean isPrototyping) {
         System.setProperty("PROTOTYPING", ""+isPrototyping);
     }
-    
+
     // -- DEFAULT IMPLEMENTATION
-    
+
     public static final IsisSystemEnvironment DEFAULT = new IsisSystemEnvironment() {
-        
+
         @Override
         public DeploymentType getDeploymentType() {
             return deploymentType.get();
@@ -73,50 +73,50 @@ public interface IsisSystemEnvironment {
         public boolean isUnitTesting() {
             return "true".equalsIgnoreCase(System.getProperty("UNITTESTING"));
         }
-        
+
         // -- HELPER
-        
+
         private _Lazy<DeploymentType> deploymentType = _Lazy.threadSafe(this::decideDeploymentType); 
-        
+
         private DeploymentType decideDeploymentType() {
             boolean anyVoteForPrototyping = false;
             boolean anyVoteForProduction = false;
-            
+
             // system environment priming (lowest prio)
-            
+
             anyVoteForPrototyping|=
                     "true".equalsIgnoreCase(System.getenv("PROTOTYPING"));
-            
+
             // system property priming (medium prio)
-            
+
             anyVoteForPrototyping|=
                     "true".equalsIgnoreCase(System.getProperty("PROTOTYPING"));
-            
+
             anyVoteForPrototyping|=
                     "PROTOTYPING".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
-            
+
             // system property override (highest prio)
-            
+
             anyVoteForProduction|=
                     "false".equalsIgnoreCase(System.getProperty("PROTOTYPING"));
-            
+
             anyVoteForProduction|=
                     "PRODUCTION".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
-            
+
             final boolean isPrototyping = anyVoteForPrototyping && !anyVoteForProduction;
-            
+
             final DeploymentType deploymentType =
                     isPrototyping
-                        ? DeploymentType.PROTOTYPING
-                                : DeploymentType.PRODUCTION;
-            
+                    ? DeploymentType.PROTOTYPING
+                            : DeploymentType.PRODUCTION;
+
             return deploymentType;
         }
 
-        
+
     };
-        
-    
+
+
 }
 
 

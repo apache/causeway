@@ -46,7 +46,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
             final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
         final ManagedObject adapter = context.getTarget();
-        
+
         adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .filter(property->property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) // ignore hidden properties

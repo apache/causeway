@@ -32,22 +32,22 @@ public class OidVersionTest  {
 
     private ObjectSpecId cusObjectSpecId = ObjectSpecId.of("CUS");
     private ObjectSpecId ordObjectSpecId = ObjectSpecId.of("ORD");
-    
+
     private RootOid oid1, oid2;
-    
+
     @Test
     public void whenEquivalentAndSameVersion() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
         oid2 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
-        
+
         assertThat(oid1, is(equalTo(oid2)));
     }
-    
+
     @Test
     public void whenEquivalentAndDifferentVersions() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
         oid2 = Factory.persistentOf(cusObjectSpecId, "123", 90808L);
-        
+
         assertThat(oid1, is(equalTo(oid2)));
     }
 
@@ -55,7 +55,7 @@ public class OidVersionTest  {
     public void whenEquivalentAndNoVersionInfoForLeftHand() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123");
         oid2 = Factory.persistentOf(cusObjectSpecId, "123", 90808L);
-        
+
         assertThat(oid1, is(equalTo(oid2)));
     }
 
@@ -63,7 +63,7 @@ public class OidVersionTest  {
     public void whenEquivalentAndNoVersionInfoForRightHand() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123", 90807L);
         oid2 = Factory.persistentOf(cusObjectSpecId, "123");
-        
+
         assertThat(oid1, is(equalTo(oid2)));
     }
 
@@ -71,7 +71,7 @@ public class OidVersionTest  {
     public void whenEquivalentAndNoVersionInfoForEither() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123");
         oid2 = Factory.persistentOf(cusObjectSpecId, "123");
-        
+
         assertThat(oid1, is(equalTo(oid2)));
     }
 
@@ -79,7 +79,7 @@ public class OidVersionTest  {
     public void whenNotEquivalentById() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123");
         oid2 = Factory.persistentOf(cusObjectSpecId, "124");
-        
+
         assertThat(oid1, is(not(equalTo(oid2))));
     }
 
@@ -87,7 +87,7 @@ public class OidVersionTest  {
     public void whenNotEquivalentByObjectSpecId() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123");
         oid2 = Factory.persistentOf(ordObjectSpecId, "123");
-        
+
         assertThat(oid1, is(not(equalTo(oid2))));
     }
 
@@ -95,7 +95,7 @@ public class OidVersionTest  {
     public void whenNotEquivalentByState() throws Exception {
         oid1 = Factory.persistentOf(cusObjectSpecId, "123");
         oid2 = Factory.transientOf(cusObjectSpecId, "123");
-        
+
         assertThat(oid1, is(not(equalTo(oid2))));
     }
 

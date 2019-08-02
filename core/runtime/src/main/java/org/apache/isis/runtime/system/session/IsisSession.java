@@ -45,94 +45,94 @@ import lombok.Getter;
  */
 public class IsisSession extends RuntimeContextBase {
 
-	private RuntimeEventService runtimeEventService;
-	
-	/**
+    private RuntimeEventService runtimeEventService;
+
+    /**
      * Set to System.nanoTime() when session opens.
      */
-	@Getter private long openedAtSystemNanos = -1L;
-    
-	/**
-	 * 
-	 * @param runtimeEventService
-	 * @param authenticationSession
-	 * @implNote package private constructor, to let only IsisSessionFactory have access to it, 
-	 * since it must keep track of all opened sessions
-	 */
-	IsisSession(
-			final RuntimeEventService runtimeEventService,
-			final AuthenticationSession authenticationSession) {
-		
-		super(IsisContext.getConfiguration(),
-				IsisContext.getServiceInjector(),
-				IsisContext.getServiceRegistry(),
-				IsisContext.getSpecificationLoader(),
-				authenticationSession,
-				IsisContext.getObjectAdapterProvider(),
-				IsisContext.getTransactionService(),
-				()->IsisContext.getServiceRegistry()
-				    .lookupServiceElseFail(HomePageResolverService.class)
-				    .getHomePageAction()
-				);
-		
-		this.runtimeEventService = runtimeEventService;
-        
-	}
-	
-	// -- CURRENT
-	
-	public static IsisSession currentOrElseNull() {
-		return current().orElse(null);
-	}
-	
-	public static Optional<IsisSession> current() {
-		return _Context.threadLocalGet(IsisSession.class)
-				.getSingleton();
-	}
-	
-	public static boolean isInSession() {
-		return currentOrElseNull() != null;
-	}
-	
-	// -- SHORTCUTS
-	
-	public static Optional<AuthenticationSession> authenticationSession() {
-		return current()
-				.map(IsisSession::getAuthenticationSession);
-	}
-	
-	public static Optional<MessageBroker> messageBroker() {
-		return authenticationSession()
-				.map(AuthenticationSession::getMessageBroker);
-	}
-	
-	// -- OPEN
-	
-	private Runnable cleanupHandle;  
-    
+    @Getter private long openedAtSystemNanos = -1L;
+
+    /**
+     * 
+     * @param runtimeEventService
+     * @param authenticationSession
+     * @implNote package private constructor, to let only IsisSessionFactory have access to it, 
+     * since it must keep track of all opened sessions
+     */
+    IsisSession(
+            final RuntimeEventService runtimeEventService,
+            final AuthenticationSession authenticationSession) {
+
+        super(IsisContext.getConfiguration(),
+                IsisContext.getServiceInjector(),
+                IsisContext.getServiceRegistry(),
+                IsisContext.getSpecificationLoader(),
+                authenticationSession,
+                IsisContext.getObjectAdapterProvider(),
+                IsisContext.getTransactionService(),
+                ()->IsisContext.getServiceRegistry()
+                .lookupServiceElseFail(HomePageResolverService.class)
+                .getHomePageAction()
+                );
+
+        this.runtimeEventService = runtimeEventService;
+
+    }
+
+    // -- CURRENT
+
+    public static IsisSession currentOrElseNull() {
+        return current().orElse(null);
+    }
+
+    public static Optional<IsisSession> current() {
+        return _Context.threadLocalGet(IsisSession.class)
+                .getSingleton();
+    }
+
+    public static boolean isInSession() {
+        return currentOrElseNull() != null;
+    }
+
+    // -- SHORTCUTS
+
+    public static Optional<AuthenticationSession> authenticationSession() {
+        return current()
+                .map(IsisSession::getAuthenticationSession);
+    }
+
+    public static Optional<MessageBroker> messageBroker() {
+        return authenticationSession()
+                .map(AuthenticationSession::getMessageBroker);
+    }
+
+    // -- OPEN
+
+    private Runnable cleanupHandle;  
+
     void open() {
-    	openedAtSystemNanos = System.nanoTime();
-    	cleanupHandle = _Context.threadLocalPut(IsisSession.class, this);
-    	runtimeEventService.fireSessionOpened(this);
+        openedAtSystemNanos = System.nanoTime();
+        cleanupHandle = _Context.threadLocalPut(IsisSession.class, this);
+        runtimeEventService.fireSessionOpened(this);
     }
 
     // -- CLOSE
-    
+
     /**
      * Closes session.
      */
     void close() {
         runtimeEventService.fireSessionClosing(this);
         if(cleanupHandle!=null) {
-        	cleanupHandle.run();
+            cleanupHandle.run();
         }
     }
 
     // -- FLUSH
-//    void flush() {
-//    	runtimeEventService.fireSessionFlushing(this);
-//    }
-    
+    //    void flush() {
+    //    	runtimeEventService.fireSessionFlushing(this);
+    //    }
+
     // -- TRANSACTION
 
     public TransactionId getCurrentTransactionId() {
@@ -142,7 +142,7 @@ public class IsisSession extends RuntimeContextBase {
     public TransactionState getCurrentTransactionState() {
         return transactionService.currentTransactionState();
     }
-    
+
 
     // -- toString
     @Override

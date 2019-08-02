@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Singleton @Log4j2
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
-    
+
     @Override
     public boolean supportsReloading() {
         return _Context.isPrototyping();
@@ -47,22 +47,22 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     @Override
     public BS3MenuBars menuBars() {
-        
+
         val menubarsLayoutResource = Optional.ofNullable(webAppConfigBean)
-        		.map(WebAppConfigBean::getMenubarsLayoutXml)
-        		.orElse(null);
-        
+                .map(WebAppConfigBean::getMenubarsLayoutXml)
+                .orElse(null);
+
         if(menubarsLayoutResource==null) {
-        	 warnNotFound();
-             return null;
+            warnNotFound();
+            return null;
         }
-        
+
         val xmlString = loadMenubarsLayoutResource(menubarsLayoutResource);
         if(xmlString==null) {
             warnNotFound();
             return null;
         }
-        
+
         try {
             return jaxbService.fromXml(BS3MenuBars.class, xmlString);
         } catch (Exception e) {
@@ -70,9 +70,9 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
             return null;
         }
     }
-    
+
     private String loadMenubarsLayoutResource(AbstractResource menubarsLayoutResource) {
-    	try {
+        try {
             final String xml = 
                     _Strings.read(menubarsLayoutResource.getInputStream(), StandardCharsets.UTF_8); 
             return xml;
@@ -81,26 +81,26 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
             return null;
         }
 
-	}
+    }
 
-	// -- HELPER
+    // -- HELPER
 
     private boolean warnedOnce = false;
-    
+
     private void warnNotFound() {
         if(warnedOnce) {
             return;
         }
-        
+
         log.warn( 
                 String.format("Configured '%s' failes to provide a readable resource for "
                         + "the Menubars-Layout.", 
                         WebAppConfigBean.class.getName()));
         warnedOnce = true; 
     }
-    
+
     private void severeCannotLoad(Exception cause) {
-        
+
         log.error(
                 String.format("Configured '%s' failes to provide a readable resource for "
                         + "the Menubars-Layout.", 

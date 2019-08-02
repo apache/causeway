@@ -35,7 +35,7 @@ public class LowestCommonSuperclassClosureTest {
     static class Vegetable {}
     static class Mammal extends Animal {}
     static class Lion extends Mammal {}
-    
+
     @Test
     public void nothingInCommon() {
         assertLowestCommonOfListIs(Arrays.asList(new Animal(), new Mineral(), new Vegetable()), Object.class);
@@ -45,15 +45,15 @@ public class LowestCommonSuperclassClosureTest {
     public void superclassInCommon() {
         assertLowestCommonOfListIs(Arrays.asList(new Animal(), new Mammal()), Animal.class);
     }
-    
+
     @Test
     public void subclassInCommon() {
         assertLowestCommonOfListIs(Arrays.asList(new Lion(), new Lion()), Lion.class);
     }
-    
+
     private static void assertLowestCommonOfListIs(List<Object> list, Class<?> expected) {
         Util.LowestCommonSuperclassFinder finder = 
-        		new Util.LowestCommonSuperclassFinder();
+                new Util.LowestCommonSuperclassFinder();
         list.forEach(finder::collect);
         assertThat(finder.getLowestCommonSuperclass().get(), IsisMatchers.classEqualTo(expected));
     }

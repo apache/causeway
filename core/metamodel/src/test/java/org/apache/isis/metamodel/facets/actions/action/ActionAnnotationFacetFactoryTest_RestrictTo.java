@@ -44,7 +44,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processRestrictTo(processMethodContext);
 
         // then
@@ -67,7 +67,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processRestrictTo(processMethodContext);
 
         // then
@@ -90,7 +90,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processRestrictTo(processMethodContext);
 
         // then

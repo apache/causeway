@@ -37,13 +37,14 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL)
 public class TabDemo extends DemoStub {
-    
+
+    @Override
     public String title() {
         return "Tab Demo";
     }
 
     // -- HIDE
-    
+
     @Action
     public TabDemo doHideField(){
         hidden = true;        
@@ -55,23 +56,23 @@ public class TabDemo extends DemoStub {
         hidden = false;        
         return this;
     }
-        
+
     // -- DEMO FIELD 1
-    
+
     @Getter @Setter private String field1 = "field 1";
-    
+
     public boolean hideField1() {
         return hidden;
     }
-    
+
     // -- DEMO FIELD 2
-    
+
     @Getter @Setter private String field2 = "field 2";
-    
+
     // ---
-        
+
     private boolean hidden = false;
-    
+
     @Override @Programmatic
     public void initDefaults() {
         hidden = false;

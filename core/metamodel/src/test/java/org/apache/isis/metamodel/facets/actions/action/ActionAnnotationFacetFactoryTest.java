@@ -60,15 +60,15 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     @Before
     public void setUp() throws Exception {
-        
+
         // PRODUCTION
-        
+
         facetFactory = new ActionAnnotationFacetFactory();
 
         context.checking(new Expectations() {{
             allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
-            
+
             allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
             will(returnValue(null));
 
@@ -78,7 +78,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     }
 
     @Override
-	@After
+    @After
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -97,7 +97,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             return null;
         }
 
-        
+
     }
 
     void allowingCommandConfigurationToReturn(final String value) {

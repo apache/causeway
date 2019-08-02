@@ -62,13 +62,13 @@ import domainapp.dom.DemoModule;
     IsisBootSecurityShiro.class,
     IsisBootDataNucleus.class,
     IsisBootWebWicket.class,
-    
+
     // Security Manager Extension (secman)
     IsisBootSecmanModel.class,
     IsisBootSecmanRealmShiro.class,
     IsisBootSecmanPersistenceJdo.class,
     IsisBootSecmanEncryptionJbcrypt.class,
-    
+
     IsisBootFixtures.class
 
 })
@@ -80,29 +80,29 @@ import domainapp.dom.DemoModule;
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class DemoAppManifest {
-    
-   @Bean @Singleton
-   public WebAppConfigBean webAppConfigBean() {
-       return WebAppConfigBean.builder()
-               .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-               .brandLogoHeader("/images/gift_48.png")
-               .applicationCss("css/application.css")
-               .applicationJs("scripts/application.js")
-               .applicationName("Isis Demo App")
-               .faviconUrl("/images/favicon.png")
-               .build();
-   }
-   
-   @Bean @Singleton
-   public SecurityModuleConfig securityModuleConfigBean() {
-	   return SecurityModuleConfig.builder()
-			   .build();
-   }
-   
-   @Bean @Singleton
-   public PermissionsEvaluationService permissionsEvaluationService() {
-	   return new PermissionsEvaluationServiceAllowBeatsVeto();
-   }
-   
+
+    @Bean @Singleton
+    public WebAppConfigBean webAppConfigBean() {
+        return WebAppConfigBean.builder()
+                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
+                .brandLogoHeader("/images/gift_48.png")
+                .applicationCss("css/application.css")
+                .applicationJs("scripts/application.js")
+                .applicationName("Isis Demo App")
+                .faviconUrl("/images/favicon.png")
+                .build();
+    }
+
+    @Bean @Singleton
+    public SecurityModuleConfig securityModuleConfigBean() {
+        return SecurityModuleConfig.builder()
+                .build();
+    }
+
+    @Bean @Singleton
+    public PermissionsEvaluationService permissionsEvaluationService() {
+        return new PermissionsEvaluationServiceAllowBeatsVeto();
+    }
+
 
 }

@@ -60,11 +60,11 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     public AuthenticationSessionAbstract(final String name, final Stream<String> roleStream, final String validationCode) {
         this.name = name;
-        
+
         stream(roleStream)
         .filter(_Strings::isNotEmpty)
         .forEach(this.roles::add);
-        
+
         this.validationCode = validationCode;
         this.messageBroker = new MessageBroker();
         // nothing to do
@@ -110,7 +110,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     public boolean hasRole(String role) {
         return roles.contains(role);
     }
-    
+
     // -- Validation Code
 
     @Override
@@ -149,7 +149,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     }
 
     // -- toString
-    
+
     private final static ToString<AuthenticationSessionAbstract> toString = ToString
             .toString("name", AuthenticationSessionAbstract::getUserName)
             .thenToString("code", AuthenticationSessionAbstract::getValidationCode);

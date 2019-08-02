@@ -115,11 +115,11 @@ class PublisherServiceTest {
         // given
         val book = repository.allInstances(Book.class).listIterator().next();
         publisherService.clearHistory();
-        
+
         // when - running within its own background task
         backgroundService.execute(book)
         .setName("Book #2");
-        
+
         Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
 
         // then - after the commit

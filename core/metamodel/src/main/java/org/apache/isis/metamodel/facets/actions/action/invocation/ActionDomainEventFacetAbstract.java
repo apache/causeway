@@ -136,13 +136,13 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
 
     private static ManagedObject[] argumentAdaptersFrom(final InteractionContext<? extends InteractionEvent> ic) {
         final Tuple2<Integer, ManagedObject> contributee = ic.getContributeeWithParamIndex();
-        
+
         if(contributee!=null) {
             int paramIndex = contributee.get_1(); 
             ManagedObject adapter = contributee.get_2();
             return new ManagedObject[]{paramIndex==0 ? adapter : null};
         }
-        
+
         return null;
     }
 

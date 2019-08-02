@@ -20,11 +20,11 @@ package org.apache.isis.commons.internal.plugins.ioc;
 
 public interface ConversationContextHandle extends AutoCloseable {
 
-	void resume(String cid);
-	
-	/**
-	 * Refined to not throw a catched exception
-	 */
-	@Override void close();
-	
+    void resume(String cid);
+
+    /**
+     * Refined to not throw a catched exception
+     */
+    @Override void close();
+
 }

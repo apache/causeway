@@ -186,7 +186,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             if(pendingArg != null & scalarModel.hasChoices()) {
                 // make sure the object is one of the choices, else blank it out.
                 final List<ObjectAdapter> choices = scalarModel
-                            .getChoices(pendingArguments, getAuthenticationSession());
+                        .getChoices(pendingArguments, getAuthenticationSession());
 
                 if(pendingArg.isValue()) {
                     // we have to do this if the ObjectAdapters are value type (eg a string)
@@ -203,11 +203,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                         actionArgumentModel.setObject(null);
                     }
                 } else {
-                if(!choices.contains(pendingArg)) {
-                    scalarModel.setObject(null);
-                    scalarModel.setPending(null);
-                    actionArgumentModel.setObject(null);
-                }
+                    if(!choices.contains(pendingArg)) {
+                        scalarModel.setObject(null);
+                        scalarModel.setPending(null);
+                        actionArgumentModel.setObject(null);
+                    }
 
                 }
 
@@ -227,7 +227,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         // also repaint the param if its pending arg has changed.
         return scalarModel.getObject() != pendingArg
                 ? Repaint.PARAM_ONLY
-                : Repaint.NOTHING;
+                        : Repaint.NOTHING;
     }
 
 
@@ -297,7 +297,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         setOutputMarkupId(true);
 
     }
-    
+
     private void buildGuiAndCallHooks() {
 
         try {
@@ -331,7 +331,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 onInitializeWhenEnabled();
             }
         }
-        
+
 
     }
 
@@ -852,8 +852,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final PromptStyle promptStyle = scalarModel.getPromptStyle();
         if(  scalarModel.canEnterEditMode() &&
-            (promptStyle.isDialog() ||
-            !getInlinePromptConfig().isSupported())) {
+                (promptStyle.isDialog() ||
+                        !getInlinePromptConfig().isSupported())) {
 
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
             editProperty.setOutputMarkupId(true);

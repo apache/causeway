@@ -81,6 +81,6 @@ public interface FacetFactorySet {
                 programmingModel.removeFactory(facetFactory);
             }
         }
-        
+
     }
 }

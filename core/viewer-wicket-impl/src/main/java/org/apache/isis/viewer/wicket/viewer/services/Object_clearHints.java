@@ -41,7 +41,7 @@ public class Object_clearHints {
     }
 
     public static class ActionDomainEvent extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> {
-		private static final long serialVersionUID = 1L; }
+        private static final long serialVersionUID = 1L; }
 
     @Action(
             domainEvent = ActionDomainEvent.class,

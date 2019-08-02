@@ -252,7 +252,7 @@ public interface ObjectAction extends ObjectMember {
             final SemanticsOf semantics = semanticsOf(objectAction);
             return semantics.isIdempotentInNature() || semantics.isSafeAndRequestCacheable();
         }
-        
+
         public static boolean isNoParameters(ObjectAction objectAction) {
             return objectAction.getParameterCount()==0;
         }
@@ -338,7 +338,7 @@ public interface ObjectAction extends ObjectMember {
         public static List<ObjectAction> findForAssociation(
                 final ObjectAdapter adapter,
                 final ObjectAssociation association) {
-            
+
             final List<ObjectAction> associatedActions = _Lists.newArrayList();
 
             addActions(adapter, ActionType.USER, association, associatedActions);
@@ -365,8 +365,8 @@ public interface ObjectAction extends ObjectMember {
             final ObjectSpecification objectSpecification = adapter.getSpecification();
 
             Predicate<ObjectAction> predicate = 
-                ObjectAction.Predicates.memberOrderOf(association)
-                .and(ObjectAction.Predicates.excludeWizardActions(objectSpecification));
+                    ObjectAction.Predicates.memberOrderOf(association)
+                    .and(ObjectAction.Predicates.excludeWizardActions(objectSpecification));
 
             final Stream<ObjectAction> userActions = 
                     objectSpecification.streamObjectActions(type, Contributed.INCLUDED)
@@ -388,17 +388,17 @@ public interface ObjectAction extends ObjectMember {
             }
             return promptStyle;
         }
-        
+
         public static Optional<String> targetNameFor(
                 final ObjectAction owningAction,
                 final @Nullable ObjectAdapter mixedInAdapter) {
-            
+
             if(mixedInAdapter != null) {
                 final ObjectSpecification onType = owningAction.getOnType();
                 final ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
                 final Optional<String> mixinName = mixedInSpec.getMixedInMember(onType)
                         .map(MixedInMember::getName);
-                
+
                 return mixinName;
             }
             return Optional.empty();
@@ -470,50 +470,50 @@ public interface ObjectAction extends ObjectMember {
             return (ObjectAction oa) -> oa.getType() == type;
         }
 
-//        public static Predicate<ObjectAction> bulk() {
-//            return new Predicate<ObjectAction>() {
-//
-//                @Override
-//                public boolean test(ObjectAction oa) {
-//
-//                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
-//                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
-//                        return false;
-//                    }
-//                    if (oa.getParameterCount() != 0) {
-//                        return false;
-//                    }
-//
-//                    // currently don't support returning Blobs or Clobs
-//                    // (because haven't figured out how to rerender the current page, but also to do a download)
-//                    ObjectSpecification returnSpec = oa.getReturnType();
-//                    if (returnSpec != null) {
-//                        Class<?> returnType = returnSpec.getCorrespondingClass();
-//                        if (returnType == Blob.class || returnType == Clob.class) {
-//                            return false;
-//                        }
-//                    }
-//                    return true;
-//                }
-//            };
-//        }
+        //        public static Predicate<ObjectAction> bulk() {
+        //            return new Predicate<ObjectAction>() {
+        //
+        //                @Override
+        //                public boolean test(ObjectAction oa) {
+        //
+        //                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
+        //                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
+        //                        return false;
+        //                    }
+        //                    if (oa.getParameterCount() != 0) {
+        //                        return false;
+        //                    }
+        //
+        //                    // currently don't support returning Blobs or Clobs
+        //                    // (because haven't figured out how to rerender the current page, but also to do a download)
+        //                    ObjectSpecification returnSpec = oa.getReturnType();
+        //                    if (returnSpec != null) {
+        //                        Class<?> returnType = returnSpec.getCorrespondingClass();
+        //                        if (returnType == Blob.class || returnType == Clob.class) {
+        //                            return false;
+        //                        }
+        //                    }
+        //                    return true;
+        //                }
+        //            };
+        //        }
 
         public static Predicate<ObjectAction> dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
             return (ObjectAction objectAction) -> {
-                    final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
-                    return visible.isAllowed();
+                final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
+                return visible.isAllowed();
             };
         }
 
-//        public static Predicate<ObjectAction> notBulkOnly() {
-//            return (ObjectAction t) -> {
-//                    BulkFacet facet = t.getFacet(BulkFacet.class);
-//                    return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
-//            };
-//        }
+        //        public static Predicate<ObjectAction> notBulkOnly() {
+        //            return (ObjectAction t) -> {
+        //                    BulkFacet facet = t.getFacet(BulkFacet.class);
+        //                    return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
+        //            };
+        //        }
 
         public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
             return wizardActions(objectSpecification).negate();
@@ -521,11 +521,11 @@ public interface ObjectAction extends ObjectMember {
 
         private static Predicate<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
             return (ObjectAction input) -> {
-                    if (objectSpecification == null) {
-                        return false;
-                    }
-                    final WizardFacet wizardFacet = objectSpecification.getFacet(WizardFacet.class);
-                    return wizardFacet != null && wizardFacet.isWizardAction(input);
+                if (objectSpecification == null) {
+                    return false;
+                }
+                final WizardFacet wizardFacet = objectSpecification.getFacet(WizardFacet.class);
+                return wizardFacet != null && wizardFacet.isWizardAction(input);
             };
         }
 
@@ -533,22 +533,22 @@ public interface ObjectAction extends ObjectMember {
             final String assocName = association.getName();
             final String assocId = association.getId();
             return (ObjectAction t) -> {
-                    final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                    if (memberOrderFacet == null || _Strings.isNullOrEmpty(memberOrderFacet.name())) {
-                        return false;
-                    }
-                    final String memberOrderName = memberOrderFacet.name().toLowerCase();
-                    if (_Strings.isNullOrEmpty(memberOrderName)) {
-                        return false;
-                    }
-                    return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
+                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
+                if (memberOrderFacet == null || _Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                    return false;
+                }
+                final String memberOrderName = memberOrderFacet.name().toLowerCase();
+                if (_Strings.isNullOrEmpty(memberOrderName)) {
+                    return false;
+                }
+                return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
             };
         }
 
         public static Predicate<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
 
             final Set<String> associationNamesAndIds = _Sets.newHashSet(); 
-            
+
             adapterSpec.streamAssociations(Contributed.INCLUDED)
             .forEach(ass->{
                 associationNamesAndIds.add(_Strings.lower(ass.getName()));

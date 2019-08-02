@@ -35,123 +35,123 @@ import org.apache.isis.commons.internal.collections._Lists;
 import static org.hamcrest.CoreMatchers.is;
 
 public class ComparatorsTest {
-	
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 
-	@Test
-	public void nullArgumentLeftAndRigth() throws Exception {
-		Assert.assertThat(
-				_Comparators.deweyOrderCompare(null, null), 
-				is(0));
-	}
-	
-	@Test
-	public void nullArgumentLeft() throws Exception {
-		Assert.assertThat(
-				_Comparators.deweyOrderCompare(null, "any"), 
-				is(1));
-	}
-	
-	@Test
-	public void nullArgumentRight() throws Exception {
-		Assert.assertThat(
-				_Comparators.deweyOrderCompare("any", null), 
-				is(-1));
-	}
-	
-	@Test
-	public void inOrderMixed() throws Exception {
-		assertThatSorting(
-				ofS("1", "a"),
-				ofL("1", "a")
-				);
-	}
-	
-	@Test
-	public void notInOrderMixed() throws Exception {
-		assertThatSorting(
-				ofS("b", "1"),
-				ofL("1", "b")
-				);
-	}
-	
-	
-	@Test
-	public void emptySet() throws Exception {
-		assertThatSorting(
-				ofS(),
-				ofL());
-	}
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
-	@Test
-	public void singleElement() throws Exception {
-		assertThatSorting(
-				ofS("1"),
-				ofL("1")
-				);
-	}
+    @Test
+    public void nullArgumentLeftAndRigth() throws Exception {
+        Assert.assertThat(
+                _Comparators.deweyOrderCompare(null, null), 
+                is(0));
+    }
 
-	@Test
-	public void inOrder() throws Exception {
-		assertThatSorting(
-				ofS("1", "2"),
-				ofL("1", "2")
-				);
-	}
+    @Test
+    public void nullArgumentLeft() throws Exception {
+        Assert.assertThat(
+                _Comparators.deweyOrderCompare(null, "any"), 
+                is(1));
+    }
 
-	@Test
-	public void notInOrder() throws Exception {
-		assertThatSorting(
-				ofS("2", "1"),
-				ofL("1", "2")
-				);
-	}
+    @Test
+    public void nullArgumentRight() throws Exception {
+        Assert.assertThat(
+                _Comparators.deweyOrderCompare("any", null), 
+                is(-1));
+    }
 
-	@Test
-	public void notInOrderDepth2() throws Exception {
-		assertThatSorting(
-				ofS("1.2", "1.1"),
-				ofL("1.1", "1.2")
-				);
-	}
+    @Test
+    public void inOrderMixed() throws Exception {
+        assertThatSorting(
+                ofS("1", "a"),
+                ofL("1", "a")
+                );
+    }
 
-	@Test
-	public void differentDepths() throws Exception {
-		assertThatSorting(
-				ofS("2", "1.3", "1.2", "1.2.2", "1.2.1", "1.1"),
-				ofL("1.1", "1.2", "1.2.1", "1.2.2", "1.3", "2")
-				);
-	}
+    @Test
+    public void notInOrderMixed() throws Exception {
+        assertThatSorting(
+                ofS("b", "1"),
+                ofL("1", "b")
+                );
+    }
 
-	@Test
-	public void mismatchedDepth3() throws Exception {
-		assertThatSorting(
-				ofS("1.2.2", "1.2.1", "1.1"),
-				ofL("1.1", "1.2.1", "1.2.2")
-				);
-	}
 
-	@Test
-	public void X() throws Exception {
-		assertThatSorting(
-				ofS("45.1", "10.10"),
-				ofL("10.10", "45.1")
-				);
-	}
+    @Test
+    public void emptySet() throws Exception {
+        assertThatSorting(
+                ofS(),
+                ofL());
+    }
 
-	private static Collection<String> ofS(String... str) {
-		return Arrays.asList(str);
-	}
+    @Test
+    public void singleElement() throws Exception {
+        assertThatSorting(
+                ofS("1"),
+                ofL("1")
+                );
+    }
 
-	private static List<String> ofL(String... str) {
-		return _Lists.newArrayList(ofS(str));
-	}
+    @Test
+    public void inOrder() throws Exception {
+        assertThatSorting(
+                ofS("1", "2"),
+                ofL("1", "2")
+                );
+    }
 
-	private static void assertThatSorting(Collection<String> input, List<String> expected) {
-		final SortedSet<String> treeSet = new TreeSet<String>(_Comparators.deweyOrderComparator);
-		treeSet.addAll(input);
-		final List<String> strings = _Lists.newArrayList(treeSet); 
-		Assert.assertThat(strings, is(expected));
-	}
+    @Test
+    public void notInOrder() throws Exception {
+        assertThatSorting(
+                ofS("2", "1"),
+                ofL("1", "2")
+                );
+    }
+
+    @Test
+    public void notInOrderDepth2() throws Exception {
+        assertThatSorting(
+                ofS("1.2", "1.1"),
+                ofL("1.1", "1.2")
+                );
+    }
+
+    @Test
+    public void differentDepths() throws Exception {
+        assertThatSorting(
+                ofS("2", "1.3", "1.2", "1.2.2", "1.2.1", "1.1"),
+                ofL("1.1", "1.2", "1.2.1", "1.2.2", "1.3", "2")
+                );
+    }
+
+    @Test
+    public void mismatchedDepth3() throws Exception {
+        assertThatSorting(
+                ofS("1.2.2", "1.2.1", "1.1"),
+                ofL("1.1", "1.2.1", "1.2.2")
+                );
+    }
+
+    @Test
+    public void X() throws Exception {
+        assertThatSorting(
+                ofS("45.1", "10.10"),
+                ofL("10.10", "45.1")
+                );
+    }
+
+    private static Collection<String> ofS(String... str) {
+        return Arrays.asList(str);
+    }
+
+    private static List<String> ofL(String... str) {
+        return _Lists.newArrayList(ofS(str));
+    }
+
+    private static void assertThatSorting(Collection<String> input, List<String> expected) {
+        final SortedSet<String> treeSet = new TreeSet<String>(_Comparators.deweyOrderComparator);
+        treeSet.addAll(input);
+        final List<String> strings = _Lists.newArrayList(treeSet); 
+        Assert.assertThat(strings, is(expected));
+    }
 }

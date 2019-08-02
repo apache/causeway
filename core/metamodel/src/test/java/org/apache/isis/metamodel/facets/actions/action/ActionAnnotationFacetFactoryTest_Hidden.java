@@ -48,7 +48,7 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
-        		cls, null, actionMethod, mockMethodRemover, facetedMethod);
+                cls, null, actionMethod, mockMethodRemover, facetedMethod);
         facetFactory.processHidden(processMethodContext);
 
         // then

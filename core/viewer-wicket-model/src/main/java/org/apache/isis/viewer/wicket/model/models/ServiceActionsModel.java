@@ -63,15 +63,15 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 
     private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
         return (ObjectAdapter input) -> {
-                final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
-                        (DomainServiceLayoutFacet.class);
-                return (facet != null && facet.getMenuBar() == menuBar) ||
-                        (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
+            final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
+                    (DomainServiceLayoutFacet.class);
+            return (facet != null && facet.getMenuBar() == menuBar) ||
+                    (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
         };
     }
 
     protected Stream<ObjectAdapter> streamServiceAdapters() {
-    	val metaModelContext = MetaModelContext.current();
+        val metaModelContext = MetaModelContext.current();
         return metaModelContext.streamServiceAdapters();
     }
 

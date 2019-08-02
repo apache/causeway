@@ -104,7 +104,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
         public static TypeOfFacet inferFromArrayType(
                 final FacetHolder holder,
                 final Class<?> type) {
-            
+
             final Class<?> elementType = _Arrays.inferComponentTypeIfAny(type);
             return elementType != null
                     ? new TypeOfFacetInferredFromArray(elementType, holder)

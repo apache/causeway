@@ -51,24 +51,24 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByIdProvider {
-    
+
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
-    
+
     ObjectAdapterContext_ObjectAdapterByIdProvider(
             ObjectAdapterContext objectAdapterContext,
             PersistenceSession persistenceSession, 
             RuntimeContext runtimeContext) {
-        
+
         this.objectAdapterContext = objectAdapterContext;
         this.persistenceSession = persistenceSession;
         this.specificationLoader = runtimeContext.getSpecificationLoader();
         this.authenticationSession = runtimeContext.getAuthenticationSession();
 
     }
-    
+
     /**
      * Either returns an existing {@link ObjectAdapter adapter} (as per
      * {@link #lookupAdapterFor(Oid)}), otherwise re-creates an adapter with the
@@ -98,7 +98,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
      */
     @Override
     public ObjectAdapter adapterFor(final RootOid rootOid) {
-                
+
         /* FIXME[ISIS-1976] SPI for adapterFor(RootOid)
          * https://github.com/apache/isis/pull/121#discussion_r215889748
          * 
@@ -116,14 +116,14 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
          * into some other datastore. So really my "PersistenceProvider" is a
          * generalization of that concept).
          */
-        
+
         //FIXME[ISIS-1976] remove guard
         final ObjectAdapter serviceAdapter = objectAdapterContext.lookupServiceAdapterFor(rootOid);
         if (serviceAdapter != null) {
             //throw _Exceptions.unexpectedCodeReach();
             return serviceAdapter;
         }
-        
+
         final ObjectAdapter adapter;
         {
             // else recreate
@@ -146,18 +146,18 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         syncVersion(adapter, rootOid);
 
         return adapter;
-        
+
     }
-    
+
     @Override
     public Map<RootOid,ObjectAdapter> adaptersFor(final Stream<RootOid> rootOids) {
 
         final Map<RootOid, ObjectAdapter> adapterByOid = _Maps.newLinkedHashMap();
 
         List<RootOid> notYetLoadedOids = _Lists.newArrayList();
-        
+
         rootOids.forEach(rootOid->{
-         // attempt to locate adapter for the Oid
+            // attempt to locate adapter for the Oid
             ObjectAdapter adapter = null;
             // handle view models or transient
             if (rootOid.isTransient() || rootOid.isViewModel()) {
@@ -172,7 +172,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
                 notYetLoadedOids.add(rootOid);
             }
         });
-        
+
         // recreate, in bulk, all those not yet loaded
         final Map<RootOid, Object> pojoByOid = persistenceSession.fetchPersistentPojos(notYetLoadedOids);
         for (Map.Entry<RootOid, Object> entry : pojoByOid.entrySet()) {
@@ -197,9 +197,9 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
 
         return adapterByOid;
     }
-    
+
     // -- HELPER
-    
+
     private Object recreatePojoTransientOrViewModel(final RootOid rootOid) {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecIdElseLoad(rootOid.getObjectSpecId());
@@ -210,12 +210,12 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         } else {
             pojo = objectAdapterContext.instantiateAndInjectServices(spec);
         }
-        
+
         _Ensure.ensure("unlikely", !(pojo instanceof Oid));
-        
+
         return pojo;
     }
-    
+
     private Object recreateViewModel(final ObjectSpecification spec, final String memento) {
         final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
         if(facet == null) {
@@ -231,7 +231,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         }
         return viewModelPojo;
     }
-    
+
     @Deprecated // no-op
     private void syncVersion(final ObjectAdapter adapter, final RootOid rootOid) {
         // sync versions of original, with concurrency checking if required
@@ -241,24 +241,24 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             final RootOid originalOid = rootOid;
 
             try {
-//                if(concurrencyChecking.isChecking()) {
-//
-//                    // check for exception, but don't throw if suppressed through thread-local
-//                    final Version otherVersion = originalOid.getVersion();
-//                    final Version thisVersion = recreatedOid.getVersion();
-//                    if( thisVersion != null &&
-//                            otherVersion != null &&
-//                            thisVersion.different(otherVersion)) {
-//
-//                        if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
-//                            log.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
-//                            final String currentUser = authenticationSession.getUserName();
-//                            throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
-//                        } else {
-//                            log.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
-//                        }
-//                    }
-//                }
+                //                if(concurrencyChecking.isChecking()) {
+                //
+                //                    // check for exception, but don't throw if suppressed through thread-local
+                //                    final Version otherVersion = originalOid.getVersion();
+                //                    final Version thisVersion = recreatedOid.getVersion();
+                //                    if( thisVersion != null &&
+                //                            otherVersion != null &&
+                //                            thisVersion.different(otherVersion)) {
+                //
+                //                        if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
+                //                            log.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
+                //                            final String currentUser = authenticationSession.getUserName();
+                //                            throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
+                //                        } else {
+                //                            log.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
+                //                        }
+                //                    }
+                //                }
             } finally {
                 final Version originalVersion = originalOid.getVersion();
                 final Version recreatedVersion = recreatedOid.getVersion();
@@ -274,6 +274,6 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             }
         }
     }
-    
-    
+
+
 }

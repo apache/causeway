@@ -41,9 +41,9 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  * the non-encrypted data.
  */
 public class EmailVerificationUrlServiceDefault implements EmailVerificationUrlService {
-	
-	private static final long serialVersionUID = 1L;
-	private final PageClassRegistry pageClassRegistry;
+
+    private static final long serialVersionUID = 1L;
+    private final PageClassRegistry pageClassRegistry;
 
     @Inject // strangely, this isn't a @com.google.inject.Inject
     public EmailVerificationUrlServiceDefault(PageClassRegistry pageClassRegistry) {

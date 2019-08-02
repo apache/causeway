@@ -32,7 +32,7 @@ public class RootOidDefaultTest_valueSemantics_whenTransient extends ValueTypeCo
                 Oid.Factory.transientOf(ObjectSpecId.of("CUS"), "123"),
                 Oid.Factory.transientOf(ObjectSpecId.of("CUS"), "123"),
                 Oid.Factory.transientOf(ObjectSpecId.of("CUS"), "123")
-            );
+                );
     }
 
     @Override

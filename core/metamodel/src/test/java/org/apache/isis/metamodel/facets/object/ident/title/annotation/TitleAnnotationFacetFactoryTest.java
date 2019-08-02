@@ -58,7 +58,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     @Before
     public void setUp() throws Exception {
-        
+
         // PRODUCTION
 
         context.allowing(mockSpecificationLoader);
@@ -73,11 +73,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
 
-//                allowing(mockServicesInjector).getSpecificationLoader();
-//                will(returnValue(mockSpecificationLoader));
-//
-//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-//                will(returnValue(mockPersistenceSessionServiceInternal));
+                //                allowing(mockServicesInjector).getSpecificationLoader();
+                //                will(returnValue(mockSpecificationLoader));
+                //
+                //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                //                will(returnValue(mockPersistenceSessionServiceInternal));
             }
         });
 
@@ -246,7 +246,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 
-    
+
     public static class Customer5 {
 
         @Title(sequence = "1")
@@ -259,5 +259,5 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         }
     }
 
-    
+
 }

@@ -56,10 +56,10 @@ public class FilesTest_deleteFiles {
         });
 
         Files.deleteFiles(
-        		new File("xml/objects").getAbsoluteFile(), 
-        		Files.filterFileNameExtension(".xml"), 
-        		Recursion.DO_RECURSE, 
-        		deleter);
+                new File("xml/objects").getAbsoluteFile(), 
+                Files.filterFileNameExtension(".xml"), 
+                Recursion.DO_RECURSE, 
+                deleter);
     }
 
 

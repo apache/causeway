@@ -54,7 +54,7 @@ public interface IsisSessionFactory {
 
     @Deprecated //TODO [2033] replace with IsisSession.current()
     default public IsisSession getCurrentSession() {
-    	return IsisSession.currentOrElseNull();
+        return IsisSession.currentOrElseNull();
     }
 
 
@@ -85,7 +85,7 @@ public interface IsisSessionFactory {
      * @param authenticationSession
      */
     public default void doInSession(final Runnable runnable, final AuthenticationSession authenticationSession) {
-    	final Callable<Void> callable = ()->{runnable.run(); return null;};
+        final Callable<Void> callable = ()->{runnable.run(); return null;};
         doInSession(callable, authenticationSession);
     }
 

@@ -34,16 +34,16 @@ package org.apache.isis.commons.internal.base;
 public final class _Tuples {
 
     private _Tuples(){}
-    
+
     public static class Tuple2<T1, T2>{
         private final T1 _1;
         private final T2 _2;
-        
+
         private Tuple2(T1 _1, T2 _2) {
             this._1 = _1;
             this._2 = _2;
         }
-        
+
         /**
          * @return first element of this tuple
          */
@@ -53,7 +53,7 @@ public final class _Tuples {
          */
         public T2 get_2() { return _2; }
     }
-    
+
     public static <T1, T2> Tuple2<T1, T2> pair(T1 _1, T2 _2) {
         return new Tuple2<T1, T2>(_1, _2);
     }

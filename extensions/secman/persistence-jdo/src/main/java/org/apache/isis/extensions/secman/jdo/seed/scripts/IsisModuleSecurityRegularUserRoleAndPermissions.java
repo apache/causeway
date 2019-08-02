@@ -48,7 +48,7 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,
                 ApplicationUser.class);
-        
+
         newMemberPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
@@ -58,7 +58,7 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 "updateEmailAddress",
                 "updatePhoneNumber",
                 "updateFaxNumber");
-        
+
         newMemberPermissions(
                 ApplicationPermissionRule.VETO,
                 ApplicationPermissionMode.VIEWING,
@@ -70,7 +70,7 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 "unlock", // renamed as 'disable' in the UI
                 "addRole",
                 "removeRole");
-        
+
         newMemberPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,
@@ -78,14 +78,14 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 "name",
                 "description");
 
-//        // for adhoc testing of #42
-//        newMemberPermissions(
-//                ApplicationPermissionRule.ALLOW,
-//                ApplicationPermissionMode.CHANGING,
-//                ApplicationUser.class,
-//                "orphanedUpdateEmailAddress",
-//                "orphanedUpdatePhoneNumber",
-//                "orphanedUpdateFaxNumber");
+        //        // for adhoc testing of #42
+        //        newMemberPermissions(
+        //                ApplicationPermissionRule.ALLOW,
+        //                ApplicationPermissionMode.CHANGING,
+        //                ApplicationUser.class,
+        //                "orphanedUpdateEmailAddress",
+        //                "orphanedUpdatePhoneNumber",
+        //                "orphanedUpdateFaxNumber");
 
     }
 

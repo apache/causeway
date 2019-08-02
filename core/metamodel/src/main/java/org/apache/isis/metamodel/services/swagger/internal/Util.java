@@ -117,7 +117,7 @@ public final class Util {
     private static <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
             final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
-        
+
         final List<ObjectAssociation> list =
                 objectSpecification.streamAssociations(Contributed.INCLUDED)
                 .filter(associationPredicate.and(associationsWith(visibility)))
@@ -134,9 +134,9 @@ public final class Util {
 
         return objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED)
                 .filter(objectAction->
-                    !classExcluder.exclude(objectAction) &&
-                            !visibility.isPublic() || isVisibleForPublic(objectAction)
-                )
+                !classExcluder.exclude(objectAction) &&
+                !visibility.isPublic() || isVisibleForPublic(objectAction)
+                        )
                 .collect(Collectors.toList());
     }
 

@@ -37,7 +37,7 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
             final String candidateEncoderDecoderName, 
             final Class<?> candidateEncoderDecoderClass, 
             final FacetHolder holder) {
-        
+
         super(EncodableFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.encoderDecoderClass = EncoderDecoderUtil.encoderDecoderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
@@ -81,5 +81,5 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     public String toEncodedString(final ObjectAdapter object) {
         return encodeableFacetUsingEncoderDecoder.toEncodedString(object);
     }
-    
+
 }

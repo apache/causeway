@@ -41,7 +41,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
 
         final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
-        
+
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         final Class<?> cls = specification.getCorrespondingClass();
 
@@ -51,10 +51,10 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         if (log.isDebugEnabled()) {
             log.debug("allInstances(): class={}", specification.getFullIdentifier());
         }
-        
+
         final List<?> pojos = isisJdoSupport.executeQuery(cls);
         return loadAdapters(pojos);
 
     }
-    
+
 }

@@ -43,7 +43,7 @@ public abstract class AuthenticationRequestAbstract implements AuthenticationReq
     public Stream<String> streamRoles() {
         return roles.stream();
     }
-    
+
     @Override
     public void addRole(String role) {
         if(_Strings.isNullOrEmpty(role)) {

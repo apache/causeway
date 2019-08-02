@@ -139,11 +139,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return null;
     }
 
-	@Override
-	public Object getNavigableParent(Object object) {
-		return null;
-	}
-    
+    @Override
+    public Object getNavigableParent(Object object) {
+        return null;
+    }
+
     @Override
     public String getCssClass(final ManagedObject reference) {
         return null;
@@ -332,14 +332,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return elementSpecification;
     }
 
-	@Override
-	public BeanSort getBeanSort() {
-		return BeanSort.UNKNOWN; // [2033] not implemented yet
-	}
+    @Override
+    public BeanSort getBeanSort() {
+        return BeanSort.UNKNOWN; // [2033] not implemented yet
+    }
 
-	@Override
-	public boolean isExcludedFromMetamodel() {
-		return false; // [2133] not implemented yet
-	}
+    @Override
+    public boolean isExcludedFromMetamodel() {
+        return false; // [2133] not implemented yet
+    }
 
 }

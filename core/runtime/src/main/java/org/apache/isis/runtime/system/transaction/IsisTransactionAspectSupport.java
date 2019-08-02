@@ -23,32 +23,32 @@ import java.util.Optional;
 import org.apache.isis.commons.internal.context._Context;
 
 public final class IsisTransactionAspectSupport {
-	
-	public static void clearTransactionObject() {
-		_Context.threadLocalClear(IsisTransactionObject.class);
-	}
-	
-	public static void putTransactionObject(IsisTransactionObject txStatus) {
-		_Context.threadLocalPut(IsisTransactionObject.class, txStatus);
-	}
-	
-	public static Optional<IsisTransactionObject> currentTransactionObject() {
-		return _Context.threadLocalGet(IsisTransactionObject.class)
-		.getFirst();
-	}
 
-	public static boolean isTransactionInProgress() {
-		return currentTransactionObject()
-		.map(IsisTransactionObject::getCountDownLatch)
-		.map(latch->latch.getCount()>0)
-		.orElse(false);
-	}
+    public static void clearTransactionObject() {
+        _Context.threadLocalClear(IsisTransactionObject.class);
+    }
 
-	public static TransactionLatch transactionLatch() {
-		return currentTransactionObject()
-		.map(IsisTransactionObject::getCountDownLatch)
-		.map(TransactionLatch::of)
-		.orElseGet(TransactionLatch::unlocked);
-	}
-	
+    public static void putTransactionObject(IsisTransactionObject txStatus) {
+        _Context.threadLocalPut(IsisTransactionObject.class, txStatus);
+    }
+
+    public static Optional<IsisTransactionObject> currentTransactionObject() {
+        return _Context.threadLocalGet(IsisTransactionObject.class)
+                .getFirst();
+    }
+
+    public static boolean isTransactionInProgress() {
+        return currentTransactionObject()
+                .map(IsisTransactionObject::getCountDownLatch)
+                .map(latch->latch.getCount()>0)
+                .orElse(false);
+    }
+
+    public static TransactionLatch transactionLatch() {
+        return currentTransactionObject()
+                .map(IsisTransactionObject::getCountDownLatch)
+                .map(TransactionLatch::of)
+                .orElseGet(TransactionLatch::unlocked);
+    }
+
 }

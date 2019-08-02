@@ -35,13 +35,13 @@ public class PermissionToRoleMapperFromIni implements PermissionToRoleMapper {
     public PermissionToRoleMapperFromIni(Ini ini) {
         final Map<String, String> section = ini.getSection(IniRealm.ROLES_SECTION_NAME);
         this.permissionsByRole = Collections.unmodifiableMap(
-                
+
                 section.entrySet()
                 .stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey, 
                         entry->PermissionUtils.toPermissionStrings(entry.getValue())))
-                
+
                 );
     }
 

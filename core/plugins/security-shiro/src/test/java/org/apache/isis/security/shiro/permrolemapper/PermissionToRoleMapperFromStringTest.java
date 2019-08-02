@@ -33,9 +33,9 @@ public class PermissionToRoleMapperFromStringTest {
     public void test() {
         final Map<String, Set<String>> permissionsByRole = new PermissionToRoleMapperFromString(
                 "role1 = foo,bar;"
-                + "role2 = fiz:x,bip:bop:* ;"
-                + "role3 = *").getPermissionsByRole();
-        
+                        + "role2 = fiz:x,bip:bop:* ;"
+                        + "role3 = *").getPermissionsByRole();
+
         assertThat(permissionsByRole.get("role1"), is(equalTo((Set<String>)_Sets.of("foo","bar"))));
         assertThat(permissionsByRole.get("role2"), is(equalTo((Set<String>)_Sets.of("fiz:x","bip:bop:*"))));
         assertThat(permissionsByRole.get("role3"), is(equalTo((Set<String>)_Sets.of("*"))));

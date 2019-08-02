@@ -31,9 +31,9 @@ public enum DeploymentType {
     public boolean isPrototyping() {
         return this == PROTOTYPING;
     }
-    
+
     public boolean isProduction() {
         return this == PRODUCTION;
     }
-    
+
 }

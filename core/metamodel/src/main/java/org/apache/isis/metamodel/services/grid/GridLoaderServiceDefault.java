@@ -92,7 +92,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
             if (domainClassAndLayout != null ?
                     !domainClassAndLayout.equals(that.domainClassAndLayout) :
-                    that.domainClassAndLayout != null)
+                        that.domainClassAndLayout != null)
                 return false;
             return xml != null ? xml.equals(that.xml) : that.xml == null;
         }

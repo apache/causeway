@@ -40,25 +40,25 @@ import org.apache.isis.security.authentication.AuthenticationSession;
  */
 public interface RuntimeContext {
 
-	AuthenticationSession getAuthenticationSession();
+    AuthenticationSession getAuthenticationSession();
     IsisConfiguration getConfiguration();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();
     ServiceRegistry getServiceRegistry();
     HomePageAction getHomePageAction();
-	
-	ObjectAdapter adapterOfPojo(Object pojo);
-	ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
-	
-	ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec);
-	
-	void makePersistentInTransaction(ObjectAdapter objectAdapter);
-	Object fetchPersistentPojoInTransaction(RootOid rootOid);
-	
-	ManagedObjectState stateOf(Object domainObject);
-	FixturesInstalledState getFixturesInstalledState();
-	
-	void logoutAuthenticationSession();
-	
-	
+
+    ObjectAdapter adapterOfPojo(Object pojo);
+    ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
+
+    ObjectAdapter newTransientInstance(ObjectSpecification domainTypeSpec);
+
+    void makePersistentInTransaction(ObjectAdapter objectAdapter);
+    Object fetchPersistentPojoInTransaction(RootOid rootOid);
+
+    ManagedObjectState stateOf(Object domainObject);
+    FixturesInstalledState getFixturesInstalledState();
+
+    void logoutAuthenticationSession();
+
+
 }

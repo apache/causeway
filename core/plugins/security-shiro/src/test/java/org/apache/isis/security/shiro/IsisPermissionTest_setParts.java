@@ -46,12 +46,12 @@ public class IsisPermissionTest_setParts {
         assertThat(ip.toString(), is("!foo/com.mycompany.myapp:customer:changeaddress:r"));
     }
 
-    
+
     @Test
     public void xxx() throws Exception {
         IsisPermission ip = new IsisPermission("schwartz/com.mycompany.myapp:Order:submit:*");
         IsisPermission ip2 = new IsisPermission("com.mycompany.myapp:Customer:remove:r");
-        
+
         assertThat(ip2.implies(ip), is(false));
         assertThat(ip.implies(ip2), is(false));
     }

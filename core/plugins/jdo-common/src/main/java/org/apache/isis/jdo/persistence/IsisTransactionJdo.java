@@ -164,7 +164,7 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
             final UUID interactionId,
             final int sequence) {
 
-    	id = TransactionId.of(interactionId, sequence);
+        id = TransactionId.of(interactionId, sequence);
         //        this.authenticationSession = authenticationSession;
 
         val serviceRegistry = IsisContext.getServiceRegistry();
@@ -230,7 +230,7 @@ public class IsisTransactionJdo implements TransactionScopedComponent, Transacti
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
                 if (log.isDebugEnabled()) {
-                	log.debug("ignored both create and destroy command {}", command);
+                    log.debug("ignored both create and destroy command {}", command);
                 }
                 return;
             }

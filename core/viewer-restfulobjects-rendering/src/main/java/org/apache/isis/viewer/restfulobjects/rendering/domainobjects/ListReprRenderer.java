@@ -53,10 +53,10 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Str
     public ListReprRenderer with(final Stream<ObjectAdapter> objectAdapters) {
         this.objectAdapters = objectAdapters!=null 
                 ? objectAdapters
-                .filter(adapter->!adapter.getSpecification().isHidden())
-                .collect(Collectors.toList())
-                    : null;
-        return this;
+                        .filter(adapter->!adapter.getSpecification().isHidden())
+                        .collect(Collectors.toList())
+                        : null;
+                        return this;
     }
 
     public ListReprRenderer withElementRel(Rel elementRel) {
@@ -111,7 +111,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Str
                 linkToObject.mapPut("value", domainObject);
             }            
         });
-        
+
         representation.mapPut("value", values);
     }
 

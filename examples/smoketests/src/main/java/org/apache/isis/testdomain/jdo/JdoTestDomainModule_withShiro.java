@@ -43,45 +43,45 @@ import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 
 @Configuration
 @Import({
-	IsisBoot.class,
-	
-	IsisBootSecurityShiro.class,
-    
-	IsisBootDataNucleus.class,
-	IsisBootFixtures.class
+    IsisBoot.class,
+
+    IsisBootSecurityShiro.class,
+
+    IsisBootDataNucleus.class,
+    IsisBootFixtures.class
 })
 @ComponentScan(
         basePackageClasses= {        		
-        		JdoTestDomainModule_withShiro.class
+                JdoTestDomainModule_withShiro.class
         },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 @PropertySources({
-	@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
+    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
     @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
 // enable shiro specific config to be picked up by Spring
 @ConditionalOnProperty(value = "smoketest.withShiro", havingValue = "true", matchIfMissing = false)
 public class JdoTestDomainModule_withShiro {
-    
-   @Bean @Singleton
-   public WebAppConfigBean webAppConfigBean() {
-       return WebAppConfigBean.builder()
-               //.menubarsLayoutXml(new ClassPathResource(path, clazz))
-               .build();
-   }
-   
-   @Bean @Singleton
-   public SecurityModuleConfig securityModuleConfigBean() {
-	   return SecurityModuleConfig.builder()
-			   .build();
-   }
-   
-   @Bean @Singleton
-   public PermissionsEvaluationService permissionsEvaluationService() {
-	   return new PermissionsEvaluationServiceAllowBeatsVeto();
-   }
-    
+
+    @Bean @Singleton
+    public WebAppConfigBean webAppConfigBean() {
+        return WebAppConfigBean.builder()
+                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
+                .build();
+    }
+
+    @Bean @Singleton
+    public SecurityModuleConfig securityModuleConfigBean() {
+        return SecurityModuleConfig.builder()
+                .build();
+    }
+
+    @Bean @Singleton
+    public PermissionsEvaluationService permissionsEvaluationService() {
+        return new PermissionsEvaluationServiceAllowBeatsVeto();
+    }
+
 }

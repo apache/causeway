@@ -42,14 +42,14 @@ public class IsisWicketApplication_Pages {
 
     @Mock
     private PageClassRegistry mockPageClassRegistry;
-    
+
     private IsisWicketApplication application;
 
     @Test
     public void delegatesToPageClassRegistryToObtainPageTypes() {
         final PageType pageType = PageType.HOME;
         final Class<HomePage> expectedPageClass = HomePage.class;
-        
+
         application = new IsisWicketApplication() {
             private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class IsisWicketApplication_Pages {
         };
         context.checking(new Expectations() {
             {
-            	oneOf(mockPageClassRegistry).getPageClass(pageType);
+                oneOf(mockPageClassRegistry).getPageClass(pageType);
                 will(returnValue(expectedPageClass));
             }
         });
@@ -86,7 +86,7 @@ public class IsisWicketApplication_Pages {
         };
         context.checking(new Expectations() {
             {
-            	oneOf(mockPageClassRegistry).getPageClass(pageType);
+                oneOf(mockPageClassRegistry).getPageClass(pageType);
                 will(returnValue(expectedPageClass));
             }
         });

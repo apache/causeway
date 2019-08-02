@@ -114,7 +114,7 @@ public class ResourceCachingFilter implements Filter {
 
     /** The cache time in seconds. */
     private long cacheTime = 0L;
-    
+
     private final static DateFormat httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
 
     /**
@@ -150,7 +150,7 @@ public class ResourceCachingFilter implements Filter {
     public void destroy() {
         // nothing to do
     }
-    
+
     /**
      * Do filter.
      *
@@ -185,7 +185,7 @@ public class ResourceCachingFilter implements Filter {
             httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime * MILLISECONDS_IN_SECOND))));
         }
         httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
-        
+
         // try to suppress java.io.IOException of kind 'client connection abort'
         // 1) the TCP protocol (by design) does not provide a means to check, whether a
         //    connection has been closed by the client

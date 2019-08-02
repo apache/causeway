@@ -45,22 +45,22 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.Transactional
 
 public interface PersistenceSession 
 extends 
-    ObjectAdapterProvider.Delegating,
-    ObjectAdapterByIdProvider.Delegating,
-    TransactionalResource, 
-    SessionScopedComponent {
+ObjectAdapterProvider.Delegating,
+ObjectAdapterByIdProvider.Delegating,
+TransactionalResource, 
+SessionScopedComponent {
 
     // -------------------------------------------------------------------------------------------------
     // -- STABLE API (DRAFT)
     // -------------------------------------------------------------------------------------------------
-    
+
     IsisConfiguration getConfiguration();
     ServiceInjector getServiceInjector();
     TransactionService getTransactionService();
-    
+
     void open();
     void close();
-    
+
     default void flush() {
         getTransactionService().flushTransaction();
     }
@@ -80,23 +80,23 @@ extends
     default void refreshRootInTransaction(final Object domainObject) {
         getTransactionService().executeWithinTransaction(()->refreshRoot(domainObject));
     }
-    
+
     /**
      * @param pojo a persistable object
      * @return String representing an object's id.
      * @since 2.0
      */
     String identifierFor(Object pojo);
-    
+
     /**
      * @since 2.0
      */
     ManagedObjectState stateOf(Object pojo);
-    
+
     /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
      * @since 2.0*/
     boolean isRecognized(Object pojo);
-    
+
     /**@since 2.0*/
     Object fetchPersistentPojo(RootOid rootOid);
 
@@ -114,7 +114,7 @@ extends
     // -------------------------------------------------------------------------------------------------
     // -- JDO SPECIFIC
     // -------------------------------------------------------------------------------------------------
-    
+
     PersistenceManager getPersistenceManager();
     /**
      * Convenient equivalent to {@code getPersistenceManager()}.
@@ -123,7 +123,7 @@ extends
     default PersistenceManager pm() {
         return getPersistenceManager();
     }
-    
+
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
      * @param cls
@@ -152,7 +152,7 @@ extends
     default <T> javax.jdo.Query newJdoQuery(Class<T> cls, String filter){
         return pm().newQuery(cls, filter);
     }
-    
+
     // -------------------------------------------------------------------------------------------------
     // -- API NOT STABLE YET - SUBJECT TO REFACTORING
     // -------------------------------------------------------------------------------------------------
@@ -164,7 +164,7 @@ extends
      */
     static final String INSTALL_FIXTURES_KEY = "isis.persistor.datanucleus.install-fixtures";
     static final boolean INSTALL_FIXTURES_DEFAULT = false;
-    
+
     /**
      * Determine if the object store has been initialized with its set of start
      * up objects.
@@ -184,29 +184,30 @@ extends
      * @see FixturesInstalledStateHolder
      */
     FixturesInstalledState getFixturesInstalledState();
-    
+
     // -- MEMENTO SUPPORT
-    
+
     ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
-    
+
     // -- TODO remove ObjectAdapter references from API
-    
+
+    @Override
     ObjectAdapter adapterFor(RootOid rootOid);
-    
+
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
     <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
-    
+
     void destroyObjectInTransaction(ObjectAdapter adapter);
     void makePersistentInTransaction(ObjectAdapter adapter);
-    
+
     // -- OTHERS
-    
+
     void execute(List<PersistenceCommand> persistenceCommandList);
-    
+
     long getLifecycleStartedAtSystemNanos();
-    
+
     // -- LOOKUP
-    
+
     static <T extends PersistenceSession> Bin<T> current(Class<T> requiredType) {
         return _Context.threadLocalSelect(PersistenceSession.class, requiredType);
     }

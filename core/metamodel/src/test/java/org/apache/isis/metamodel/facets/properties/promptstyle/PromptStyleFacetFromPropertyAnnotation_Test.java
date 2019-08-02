@@ -55,7 +55,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
     @Mock
     PropertyLayout mockPropertyLayout;
 
-   public static class Create_Test extends PromptStyleFacetFromPropertyAnnotation_Test {
+    public static class Create_Test extends PromptStyleFacetFromPropertyAnnotation_Test {
 
         @Test
         public void when_annotated_with_dialog() throws Exception {

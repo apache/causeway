@@ -161,7 +161,7 @@ public class FacetedMethodsBuilder {
 
         this.explicitAnnotationsForActions = _Config.getConfiguration()
                 .getBoolean(ConfigurationConstants.Keys.Reflector.explicitAnnotationsForActions);
-                
+
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -239,7 +239,7 @@ public class FacetedMethodsBuilder {
             specificationTraverser.traverseTypes(method, typesToLoad);
         }
         typesToLoad.remove(introspectedClass);
-        
+
         val specLoader = getSpecificationLoader();
         val upTo = IntrospectionState.TYPE_INTROSPECTED;
         typesToLoad.forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo));
@@ -443,13 +443,13 @@ public class FacetedMethodsBuilder {
 
         final Set<Class<?>> typesToLoad = _Sets.newHashSet();
         specificationTraverser.traverseTypes(actionMethod, typesToLoad);
-        
+
         val specLoader = getSpecificationLoader();
         val upTo = IntrospectionState.TYPE_INTROSPECTED;
-        
+
         val anyLoadedAsNull = typesToLoad.stream()
-        .map(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo))
-        .anyMatch(spec->spec==null);
+                .map(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo))
+                .anyMatch(spec->spec==null);
 
         if (anyLoadedAsNull) {
             return false;

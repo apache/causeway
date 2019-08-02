@@ -53,118 +53,118 @@ import lombok.val;
 
 class MetaModelContext_usingSpring implements MetaModelContext {
 
-        @Getter(lazy=true) 
-        private final IsisConfiguration configuration = 
-                _Config.getConfiguration();
+    @Getter(lazy=true) 
+    private final IsisConfiguration configuration = 
+    _Config.getConfiguration();
 
-        @Getter(lazy=true) 
-        private final ObjectAdapterProvider objectAdapterProvider =
-                _Spring.getSingletonElseFail(PersistenceSessionServiceInternal.class);
+    @Getter(lazy=true) 
+    private final ObjectAdapterProvider objectAdapterProvider =
+    _Spring.getSingletonElseFail(PersistenceSessionServiceInternal.class);
 
-        @Getter(lazy=true) 
-        private final ServiceInjector serviceInjector =
-                _Spring.getSingletonElseFail(ServiceInjector.class);
+    @Getter(lazy=true) 
+    private final ServiceInjector serviceInjector =
+    _Spring.getSingletonElseFail(ServiceInjector.class);
 
-        @Getter(lazy=true) 
-        private final ServiceRegistry serviceRegistry =
-                _Spring.getSingletonElseFail(ServiceRegistry.class);
+    @Getter(lazy=true) 
+    private final ServiceRegistry serviceRegistry =
+    _Spring.getSingletonElseFail(ServiceRegistry.class);
 
-        @Getter(lazy=true) 
-        private final SpecificationLoader specificationLoader = 
-                _Spring.getSingletonElseFail(SpecificationLoader.class);
+    @Getter(lazy=true) 
+    private final SpecificationLoader specificationLoader = 
+    _Spring.getSingletonElseFail(SpecificationLoader.class);
 
-        @Getter(lazy=true) 
-        private final AuthenticationSessionProvider authenticationSessionProvider =
-                _Spring.getSingletonElseFail(AuthenticationSessionProvider.class);
+    @Getter(lazy=true) 
+    private final AuthenticationSessionProvider authenticationSessionProvider =
+    _Spring.getSingletonElseFail(AuthenticationSessionProvider.class);
 
-        @Getter(lazy=true) 
-        private final TranslationService translationService =
-                _Spring.getSingletonElseFail(TranslationService.class);
+    @Getter(lazy=true) 
+    private final TranslationService translationService =
+    _Spring.getSingletonElseFail(TranslationService.class);
 
-        @Getter(lazy=true) 
-        private final AuthorizationManager authorizationManager =
-                _Spring.getSingletonElseFail(AuthorizationManager.class); 
+    @Getter(lazy=true) 
+    private final AuthorizationManager authorizationManager =
+    _Spring.getSingletonElseFail(AuthorizationManager.class); 
 
-        @Getter(lazy=true) 
-        private final AuthenticationManager authenticationManager =
-                _Spring.getSingletonElseFail(AuthenticationManager.class);
+    @Getter(lazy=true) 
+    private final AuthenticationManager authenticationManager =
+    _Spring.getSingletonElseFail(AuthenticationManager.class);
 
-        @Getter(lazy=true) 
-        private final TitleService titleService =
-                _Spring.getSingletonElseFail(TitleService.class);
+    @Getter(lazy=true) 
+    private final TitleService titleService =
+    _Spring.getSingletonElseFail(TitleService.class);
 
-//        @Getter(lazy=true) 
-//        private final ObjectAdapterService objectAdapterService =
-//        _CDI.getSingletonElseFail(ObjectAdapterService.class);
+    //        @Getter(lazy=true) 
+    //        private final ObjectAdapterService objectAdapterService =
+    //        _CDI.getSingletonElseFail(ObjectAdapterService.class);
 
-        @Getter(lazy=true) 
-        private final RepositoryService repositoryService =
-                _Spring.getSingletonElseFail(RepositoryService.class);
-        
-        @Getter(lazy=true) 
-        private final TransactionService transactionService =
-                _Spring.getSingletonElseFail(TransactionService.class);
-        
-        @Getter(lazy=true) 
-        private final HomePageResolverService homePageResolverService =
-                _Spring.getSingletonElseFail(HomePageResolverService.class);
+    @Getter(lazy=true) 
+    private final RepositoryService repositoryService =
+    _Spring.getSingletonElseFail(RepositoryService.class);
 
-        @Override
-        public final AuthenticationSession getAuthenticationSession() {
-            return getAuthenticationSessionProvider().getAuthenticationSession();
-        }
+    @Getter(lazy=true) 
+    private final TransactionService transactionService =
+    _Spring.getSingletonElseFail(TransactionService.class);
 
-        @Override
-        public final ObjectSpecification getSpecification(final Class<?> type) {
-            return type != null ? getSpecificationLoader().loadSpecification(type) : null;
-        }
+    @Getter(lazy=true) 
+    private final HomePageResolverService homePageResolverService =
+    _Spring.getSingletonElseFail(HomePageResolverService.class);
 
-        @Override
-        public final TransactionState getTransactionState() {
-            return getTransactionService().currentTransactionState();
-        }
-        
-        @Override
-        public final HomePageAction getHomePageAction() {
-            return getHomePageResolverService().getHomePageAction();
-        }
-        
-        // -- SERVICE SUPPORT
-        
-        @Override
-        public Stream<ObjectAdapter> streamServiceAdapters() {
-            return objectAdaptersForBeansOfKnownSort.get().values().stream();
-        }
-        
-        @Override
-        public ObjectAdapter lookupServiceAdapterById(final String serviceId) {
-            return objectAdaptersForBeansOfKnownSort.get().get(serviceId);
-        }
-        
-        
-        // -- HELPER
-        
-        private final _Lazy<Map<String, ObjectAdapter>> objectAdaptersForBeansOfKnownSort = 
-                _Lazy.threadSafe(this::collectBeansOfKnownSort);
-        
-        private Map<String, ObjectAdapter> collectBeansOfKnownSort() {
-            
-            val objectAdapterProvider = getObjectAdapterProvider();
-            
-            return getServiceRegistry().streamRegisteredBeans()
-            .filter(registeredBean->!registeredBean.getManagedObjectSort().isUnknown())        
-            .map(objectAdapterProvider::adapterForBean) 
-            .peek(objectAdapter->{
-                val oid = objectAdapter.getOid();
-                if(oid.isTransient()) {
-                    val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
-                    throw _Exceptions.unrecoverable(msg);
-                }
-            })
-            .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
-        }
-
-        // -------------------------------------------------------------------------------
-
-
+    @Override
+    public final AuthenticationSession getAuthenticationSession() {
+        return getAuthenticationSessionProvider().getAuthenticationSession();
     }
+
+    @Override
+    public final ObjectSpecification getSpecification(final Class<?> type) {
+        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
+    }
+
+    @Override
+    public final TransactionState getTransactionState() {
+        return getTransactionService().currentTransactionState();
+    }
+
+    @Override
+    public final HomePageAction getHomePageAction() {
+        return getHomePageResolverService().getHomePageAction();
+    }
+
+    // -- SERVICE SUPPORT
+
+    @Override
+    public Stream<ObjectAdapter> streamServiceAdapters() {
+        return objectAdaptersForBeansOfKnownSort.get().values().stream();
+    }
+
+    @Override
+    public ObjectAdapter lookupServiceAdapterById(final String serviceId) {
+        return objectAdaptersForBeansOfKnownSort.get().get(serviceId);
+    }
+
+
+    // -- HELPER
+
+    private final _Lazy<Map<String, ObjectAdapter>> objectAdaptersForBeansOfKnownSort = 
+            _Lazy.threadSafe(this::collectBeansOfKnownSort);
+
+    private Map<String, ObjectAdapter> collectBeansOfKnownSort() {
+
+        val objectAdapterProvider = getObjectAdapterProvider();
+
+        return getServiceRegistry().streamRegisteredBeans()
+                .filter(registeredBean->!registeredBean.getManagedObjectSort().isUnknown())        
+                .map(objectAdapterProvider::adapterForBean) 
+                .peek(objectAdapter->{
+                    val oid = objectAdapter.getOid();
+                    if(oid.isTransient()) {
+                        val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
+                        throw _Exceptions.unrecoverable(msg);
+                    }
+                })
+                .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
+    }
+
+    // -------------------------------------------------------------------------------
+
+
+}

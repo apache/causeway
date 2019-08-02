@@ -35,26 +35,26 @@ import static org.apache.isis.commons.internal.base._With.requires;
 final class ResourceServlet_HtmlTemplateVariables {
 
     final Map<String, String> placeholders = new HashMap<>();
-    
+
     public ResourceServlet_HtmlTemplateVariables(KeyValuePair ... kvPairs) {
         requires(kvPairs, "placeholders");
-        
+
         stream(kvPairs)
         .forEach(kvPair->placeholders.put(kvPair.getKey(), kvPair.getValue()));
     }
-    
+
     /**
      * @param template HTML template containing placeholders
      * @return HTML post-processed template with all the placeholders replaced by their values
      */
     public String applyTo(final String template) {
-        
+
         String acc = template;        
-        
+
         for ( Entry<String, String> entry : placeholders.entrySet()) {
             final String placeholderLiteral = "${" + entry.getKey() + "}";  
             final String placeholderValue = entry.getValue();
-            
+
             acc = acc.replace(placeholderLiteral, placeholderValue);
         }
 

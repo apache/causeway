@@ -68,47 +68,47 @@ public class MustSatisfySpecificationValidatingInteractionTest {
     private SpecificationNeverSatisfied specificationNeverSatisfied;
 
     public static class ProposedObject {}
-    
+
     public static class Customer {}
 
     @Before
     public void setUp() throws Exception {
-        
+
         MetaModelContext mmc;
-        
+
         MetaModelContext.preset(mmc = MetaModelContext.builder()
                 .singleton(mockTranslationService)
                 .build());
-        
+
         val serviceInjector = mmc.getServiceInjector();
-        
+
         identifiedHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "lastName"));
         context.checking(new Expectations() {{
-//            allowing(mockServiceRegistry).lookupService(TranslationService.class);
-//            will(returnValue(Optional.of(mockTranslationService)));
+            //            allowing(mockServiceRegistry).lookupService(TranslationService.class);
+            //            will(returnValue(Optional.of(mockTranslationService)));
         }});
 
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();
         specificationNeverSatisfied = new SpecificationNeverSatisfied();
-        
+
         facetForSpecificationAlwaysSatisfied = 
-        		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
-        				Collections.singletonList(specificationAlwaysSatisfied), 
-        				identifiedHolder, 
-        				serviceInjector);
-        
+                new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
+                        Collections.singletonList(specificationAlwaysSatisfied), 
+                        identifiedHolder, 
+                        serviceInjector);
+
         facetForSpecificationNeverSatisfied = 
-        		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
-        				Collections.singletonList(specificationNeverSatisfied), 
-        				identifiedHolder, 
-        				serviceInjector);
+                new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
+                        Collections.singletonList(specificationNeverSatisfied), 
+                        identifiedHolder, 
+                        serviceInjector);
 
         mockProposedObjectAdapter = context.mock(ObjectAdapter.class, "proposed");
         mockProposedObject = context.mock(ProposedObject.class, "proposedObject");
 
         context.checking(new Expectations() {
             {
-            	oneOf(mockContext).getProposed();
+                oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
                 oneOf(mockProposedObjectAdapter).getPojo();

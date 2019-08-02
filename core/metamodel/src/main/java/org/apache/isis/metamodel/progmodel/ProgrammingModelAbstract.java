@@ -47,12 +47,12 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             return ignoreDep ? IGNORE : HONOUR;
         }
 
-//[2112]        
-//        public static DeprecatedPolicy parse(final IsisConfigurationBuilder configuration) {
-//            boolean ignoreDep = configuration.peekAtBoolean(KEY_IGNORE_DEPRECATED, false);
-//            return ignoreDep ? IGNORE : HONOUR;
-//        }
-        
+        //[2112]        
+        //        public static DeprecatedPolicy parse(final IsisConfigurationBuilder configuration) {
+        //            boolean ignoreDep = configuration.peekAtBoolean(KEY_IGNORE_DEPRECATED, false);
+        //            return ignoreDep ? IGNORE : HONOUR;
+        //        }
+
     }
 
     protected final DeprecatedPolicy deprecatedPolicy;

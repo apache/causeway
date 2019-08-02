@@ -23,21 +23,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "module")
 public class SimpleModule /*extends ModuleAbstract*/ {
 
-  //FIXME[2112] needs migration
-//    @Override
-//    public FixtureScript getTeardownFixture() {
-//        return new TeardownFixtureAbstract2() {
-//            @Override
-//            protected void execute(ExecutionContext executionContext) {
-//                deleteFrom(SimpleObject.class);
-//            }
-//        };
-//    }
+    //FIXME[2112] needs migration
+    //    @Override
+    //    public FixtureScript getTeardownFixture() {
+    //        return new TeardownFixtureAbstract2() {
+    //            @Override
+    //            protected void execute(ExecutionContext executionContext) {
+    //                deleteFrom(SimpleObject.class);
+    //            }
+    //        };
+    //    }
 
     public static class PropertyDomainEvent<S,T>
-            extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
+    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
     public static class CollectionDomainEvent<S,T>
-            extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {}
+    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {}
     public static class ActionDomainEvent<S> extends
-            org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
+    org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
 }

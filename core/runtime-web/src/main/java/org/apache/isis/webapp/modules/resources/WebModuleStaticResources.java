@@ -36,19 +36,19 @@ import org.apache.isis.webapp.modules.WebModuleContext;
  */
 @Singleton @Order(-100)
 public final class WebModuleStaticResources implements WebModule  {
-    
+
     private final static String[] urlPatterns = { 
-          "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" };
-    
+            "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" };
+
     private final static int cacheTimeSeconds = 86400;
-    
+
     private final static String RESOURCE_SERVLET_NAME = "ResourceServlet";
-    
+
     @Override
     public String getName() {
         return "StaticResources";
     }
-    
+
     @Override
     public void prepare(WebModuleContext ctx) {
         // nothing special required
@@ -66,11 +66,11 @@ public final class WebModuleStaticResources implements WebModule  {
                 "CacheTime", 
                 ""+cacheTimeSeconds);
         filter.addMappingForUrlPatterns(null, true, urlPatterns);
-        
+
         ctx.addServlet(RESOURCE_SERVLET_NAME, ResourceServlet.class);
         ctx.getServletRegistration(RESOURCE_SERVLET_NAME)
         .addMapping(urlPatterns);
-        
+
         return null; // does not provide a listener
     }
 
@@ -79,5 +79,5 @@ public final class WebModuleStaticResources implements WebModule  {
         return true;
     }
 
-    
+
 }

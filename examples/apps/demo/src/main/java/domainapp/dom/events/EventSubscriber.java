@@ -41,42 +41,42 @@ import lombok.extern.log4j.Log4j2;
 public class EventSubscriber {
 
     @Inject private BackgroundService backgroundService;
-	@Inject private EventBusService eventBusService;
-	@Inject private EventLogRepository eventLogRepository;
-	@Inject private TransactionService transactionService;
+    @Inject private EventBusService eventBusService;
+    @Inject private EventLogRepository eventLogRepository;
+    @Inject private TransactionService transactionService;
 
-	public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {
-		private static final long serialVersionUID = 1L;
-	}
-	
-	@PostConstruct
-	public void init() {
-		log.info(emphasize("EventSubscriber - PostConstruct"));
-		eventBusService.post(new EventSubscriberEvent());
-	}
+    public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
 
-	@EventListener(EventTestProgrammaticEvent.class)
-	public void on(EventTestProgrammaticEvent ev) {
-	    
-		if(ev.getEventPhase() != null && !ev.getEventPhase().isExecuted()) {
-			return;
-		}
-		
-		log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
-		
-		//backgroundService.execute(this).storeEvent(EventLogEntry.of(ev));
-		
-		// store in event log
-		//eventLog.add(EventLogEntry.of(ev));
-		
-		transactionService.executeWithinTransaction(()->{
-		    storeEvent(ev);
-		});
-		
-	}
-	
-	public void storeEvent(EventTestProgrammaticEvent ev) {
-	    eventLogRepository.add(EventLogEntry.of(ev));
-	}
+    @PostConstruct
+    public void init() {
+        log.info(emphasize("EventSubscriber - PostConstruct"));
+        eventBusService.post(new EventSubscriberEvent());
+    }
+
+    @EventListener(EventTestProgrammaticEvent.class)
+    public void on(EventTestProgrammaticEvent ev) {
+
+        if(ev.getEventPhase() != null && !ev.getEventPhase().isExecuted()) {
+            return;
+        }
+
+        log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
+
+        //backgroundService.execute(this).storeEvent(EventLogEntry.of(ev));
+
+        // store in event log
+        //eventLog.add(EventLogEntry.of(ev));
+
+        transactionService.executeWithinTransaction(()->{
+            storeEvent(ev);
+        });
+
+    }
+
+    public void storeEvent(EventTestProgrammaticEvent ev) {
+        eventLogRepository.add(EventLogEntry.of(ev));
+    }
 
 }

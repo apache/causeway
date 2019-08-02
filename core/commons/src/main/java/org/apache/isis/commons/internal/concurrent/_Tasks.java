@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public final class _Tasks {
-    
+
     public static _Tasks create() {
         return new _Tasks();
     }
@@ -60,7 +60,7 @@ public final class _Tasks {
         requires(runnable, "runnable");
         addRunnable(runnable, null);
     }
-    
+
     public void addRunnable(Runnable runnable, @Nullable Supplier<String> name) {
         requires(runnable, "runnable");
         callables.add(new NamedCallable<Object>(name) {
@@ -70,121 +70,121 @@ public final class _Tasks {
                 runnable.run();
                 return null;
             }
-            
+
         });
     }
-    
+
     public void addRunnable(String name, Runnable runnable) {
         requires(runnable, "runnable");
         addRunnable(runnable, ()->name);
     }
-    
+
     public List<Callable<Object>> getCallables() {
         return Collections.unmodifiableList(callables);
     }
-    
+
     public void invokeAndWait(boolean concurrent) {
-    	
-    	val t0 = System.nanoTime();
-    	val tasksExecuted = new LongAdder();
-    	
-    	try {
-    	
-			if(concurrent) {
-				
-//				val forkJoinPool = new ForkJoinPool();
-//				val anyErrorRef = new AtomicReference<RuntimeException>();
-//				
-//				forkJoinPool.submit(()->{
-					val anyError = callables.parallelStream()
-							.map(_Tasks::call)
-							.peek(__->tasksExecuted.increment())
-							.filter(_Either::isRight)
-							.findAny()
-							.map(_Either::rightIfAny)
-							.orElse(null);
-					
-//					anyErrorRef.set(anyError);
-//				});
-//				
-//				forkJoinPool.shutdown();
-//				
-//				try {
-//					System.err.println("wait for ForkJoinPool " + forkJoinPool);
-//					forkJoinPool.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-//					System.err.println("done waiting for ForkJoinPool " + forkJoinPool);
-//				} catch (InterruptedException e) {
-//					throw _Exceptions.unrecoverable("exception while waiting on the ForkJoinPool to terminate", e);
-//				}
-//				
-//				val anyError = anyErrorRef.get();
-				if(anyError!=null) {
-					throw anyError;
-				}
-				
-			} else {
-				
-				for(Callable<?> callable : getCallables()) {
-					val eitherResultOrError = call(callable);
-					tasksExecuted.increment();
-					
-					if(eitherResultOrError.isRight()) {
-						throw eitherResultOrError.rightIfAny();	
-					}
-				}
-				
-			}
-			
-    	} finally {
-    		
-    		if(log.isDebugEnabled()) {
-    			val t1 = System.nanoTime();
-    			log.printf(Level.DEBUG, 
-    					"running %d/%d tasks %s, took %.3f milliseconds ",
-    					tasksExecuted.longValue(),
-                		callables.size(),
-                		concurrent ? "concurrent" : "sequential",
-                		0.000_001 * (t1-t0));	
-    		}
-            
-    		callables.clear();
-		}
-    	
+
+        val t0 = System.nanoTime();
+        val tasksExecuted = new LongAdder();
+
+        try {
+
+            if(concurrent) {
+
+                //				val forkJoinPool = new ForkJoinPool();
+                //				val anyErrorRef = new AtomicReference<RuntimeException>();
+                //				
+                //				forkJoinPool.submit(()->{
+                val anyError = callables.parallelStream()
+                        .map(_Tasks::call)
+                        .peek(__->tasksExecuted.increment())
+                        .filter(_Either::isRight)
+                        .findAny()
+                        .map(_Either::rightIfAny)
+                        .orElse(null);
+
+                //					anyErrorRef.set(anyError);
+                //				});
+                //				
+                //				forkJoinPool.shutdown();
+                //				
+                //				try {
+                //					System.err.println("wait for ForkJoinPool " + forkJoinPool);
+                //					forkJoinPool.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+                //					System.err.println("done waiting for ForkJoinPool " + forkJoinPool);
+                //				} catch (InterruptedException e) {
+                //					throw _Exceptions.unrecoverable("exception while waiting on the ForkJoinPool to terminate", e);
+                //				}
+                //				
+                //				val anyError = anyErrorRef.get();
+                if(anyError!=null) {
+                    throw anyError;
+                }
+
+            } else {
+
+                for(Callable<?> callable : getCallables()) {
+                    val eitherResultOrError = call(callable);
+                    tasksExecuted.increment();
+
+                    if(eitherResultOrError.isRight()) {
+                        throw eitherResultOrError.rightIfAny();	
+                    }
+                }
+
+            }
+
+        } finally {
+
+            if(log.isDebugEnabled()) {
+                val t1 = System.nanoTime();
+                log.printf(Level.DEBUG, 
+                        "running %d/%d tasks %s, took %.3f milliseconds ",
+                        tasksExecuted.longValue(),
+                        callables.size(),
+                        concurrent ? "concurrent" : "sequential",
+                                0.000_001 * (t1-t0));	
+            }
+
+            callables.clear();
+        }
+
     }
-    
+
     // -- IMPLEMENTATION DETAILS
 
     private static <T> _Either<T, RuntimeException> call(Callable<T> callable) {
-    	
-		try {
-			val result = callable.call();
-			return _Either.leftNullable(result);
-		} catch (Throwable cause) {
-			
-			val name = callable instanceof NamedCallable
-					? callable.toString()
-							: "unnamend";
-			
-			val msg = String.format("failure while executing callable '%s'", name);
-			log.error(msg, cause);
-			return _Either.right(_Exceptions.unrecoverable(msg, cause));
-		}
-			
+
+        try {
+            val result = callable.call();
+            return _Either.leftNullable(result);
+        } catch (Throwable cause) {
+
+            val name = callable instanceof NamedCallable
+                    ? callable.toString()
+                            : "unnamend";
+
+                    val msg = String.format("failure while executing callable '%s'", name);
+                    log.error(msg, cause);
+                    return _Either.right(_Exceptions.unrecoverable(msg, cause));
+        }
+
     }
-    
+
     private final List<Callable<Object>> callables = _Lists.newArrayList();
-    
+
     @RequiredArgsConstructor
     private abstract static class NamedCallable<T> implements Callable<T> {
-        
+
         private final Supplier<String> name;
-                
+
         @Override
         public String toString() {
             return mapIfPresentElse(name, Supplier::get, super.toString());
         }
-        
+
     }
-    
+
 
 }

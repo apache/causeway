@@ -46,7 +46,7 @@ import static java.util.regex.Pattern.quote;
         nature = NatureOfService.DOMAIN
         )
 public class EmailNotificationServiceDefault implements EmailNotificationService {
-    
+
     private static final long serialVersionUID = 1L;
 
     // -- CONSTANTS

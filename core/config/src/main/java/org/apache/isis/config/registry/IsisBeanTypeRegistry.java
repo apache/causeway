@@ -77,13 +77,13 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
     @Getter private final Set<Class<?>> beanTypes = new HashSet<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
-//    @Getter private final Set<Class<? extends FixtureScript>> fixtureScriptTypes = new HashSet<>();
+    //    @Getter private final Set<Class<? extends FixtureScript>> fixtureScriptTypes = new HashSet<>();
     @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
-//    @Getter private final Set<Class<?>> xmlElementTypes = new HashSet<>();
-    
+    //    @Getter private final Set<Class<?>> xmlElementTypes = new HashSet<>();
+
     //@Getter private final Set<Class<?>> iocManaged = new HashSet<>();
     //@Getter private final Set<Class<?>> domainObjectTypes = new HashSet<>();
-//
+    //
     private final List<Set<? extends Class<? extends Object>>> allTypeSets = _Lists.of(
             beanTypes,
             entityTypes,
@@ -93,13 +93,13 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
     @Override
     public void close() {
-        
+
         if(!_Spring.isContextAvailable()) {
             // this instance needs to survive a _Context.clear() call when Spring's context 
             // gets passed over to Isis
             return;
         }
-        
+
         inbox.clear();
         allTypeSets.forEach(Set::clear);
     }
@@ -161,7 +161,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
         val type = typeMetaData.getUnderlyingClass();
         val beanSort = quickClassify(type);
-        
+
         if(beanSort.isEntity()) {
             // event though passed to the inbox for introspection we populate this 
             // for the persistence layer not having to wait on the spec -loader for 
@@ -180,25 +180,25 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             if(isToBeInspected || isToBeProvisioned) {
                 log.debug("{} {} [{}]",
                         isToBeProvisioned ? "provision" : beanSort.isEntity() ? "entity" : "skip",
-                        type,
-                        beanSort.name());
+                                type,
+                                beanSort.name());
             }
         }
 
         return isToBeProvisioned;
 
     }
-    
+
     // the SpecLoader does a better job at this
     @Override
     public BeanSort quickClassify(Class<?> type) {
 
         requires(type, "type");
-        
+
         if(getAnnotation(type, Vetoed.class)!=null) {
             return BeanSort.UNKNOWN; // exclude from provisioning
         }
-        
+
         if(Collection.class.isAssignableFrom(type)) {
             return BeanSort.COLLECTION;
         }
@@ -207,7 +207,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         if(aDomainService!=null) {
             return BeanSort.MANAGED_BEAN;
         }
-        
+
         //this takes precedence over whatever @DomainObject has to say
         if(containsAnnotation(type, "javax.jdo.annotations.PersistenceCapable")) {
             return BeanSort.ENTITY;
@@ -233,13 +233,13 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
                     return BeanSort.VIEW_MODEL;
                 }
                 // fall through
-                
+
             default:
                 // continue
                 break; 
             } 
         }
-        
+
         if(getAnnotation(type, Mixin.class)!=null) {
             return BeanSort.MIXIN;
         }
@@ -271,15 +271,15 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         if(getAnnotation(type, Singleton.class)!=null) {
             return BeanSort.MANAGED_BEAN;
         }
-        
+
         if(getAnnotation(type, Service.class)!=null) {
             return BeanSort.MANAGED_BEAN;
         }
-        
+
         if(getAnnotation(type, Component.class)!=null) {
             return BeanSort.MANAGED_BEAN;
         }
-        
+
         if(Serializable.class.isAssignableFrom(type)) {
             return BeanSort.VALUE;
         }
@@ -287,21 +287,21 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         return BeanSort.UNKNOWN;
     }
 
-// if we ever want to ever implement an alternative solution to the autoclose hack above ...
-//    public IsisBeanTypeRegistry copy() {
-//        
-//        val copy = new IsisBeanTypeRegistry();
-//        
-//        val it1 = this.allTypeSets.iterator();
-//        val it2 = copy.allTypeSets.iterator();
-//        
-//        it1.forEachRemaining(src->{
-//            val dst = it2.next();
-//            dst.addAll((Collection) src);    
-//        });
-//        
-//        return copy;
-//    }
+    // if we ever want to ever implement an alternative solution to the autoclose hack above ...
+    //    public IsisBeanTypeRegistry copy() {
+    //        
+    //        val copy = new IsisBeanTypeRegistry();
+    //        
+    //        val it1 = this.allTypeSets.iterator();
+    //        val it2 = copy.allTypeSets.iterator();
+    //        
+    //        it1.forEachRemaining(src->{
+    //            val dst = it2.next();
+    //            dst.addAll((Collection) src);    
+    //        });
+    //        
+    //        return copy;
+    //    }
 
 
 }

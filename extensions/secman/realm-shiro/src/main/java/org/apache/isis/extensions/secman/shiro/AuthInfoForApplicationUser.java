@@ -31,9 +31,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInfo {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private final PrincipalForApplicationUser principal;
     private final String realmName;
     @Getter private final Object credentials;

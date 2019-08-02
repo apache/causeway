@@ -49,17 +49,17 @@ public class Product {
     public String title() {
         return toString();
     }
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "true")
     private String name;
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "true")
     private String description;
-    
+
     @Property
     @Getter @Setter @Column(allowsNull = "false")
     private double price;
-    
+
 }

@@ -73,7 +73,7 @@ public interface IsisContext {
     public static ClassLoader getClassLoader() {
         return _Context.getDefaultClassLoader();
     }
-    
+
     /**
      * Non-blocking call.
      * <p>
@@ -88,7 +88,7 @@ public interface IsisContext {
     public static <T> CompletableFuture<T> compute(Supplier<T> computation){
         return CompletableFuture.supplyAsync(computation);
     }
-    
+
     // -- LIFE-CYCLING
 
     /**
@@ -100,14 +100,14 @@ public interface IsisContext {
     }
 
     // -- CONVENIENT SHORTCUTS
-    
+
     /**
      * @return new instance of ManagedObjectContext
      */
     public static RuntimeContext newManagedObjectContext() {
         return new RuntimeContextBase() {}; 
     }
-    
+
     /**
      * @return framework's IsisConfiguration
      * @throws NoSuchElementException - if IsisConfiguration not managed
@@ -116,7 +116,7 @@ public interface IsisContext {
         return MetaModelContext.current().getConfiguration();
         //return _Config.getConfiguration(); 
     }
-    
+
     /**
      * @return framework's SpecificationLoader
      * @throws NoSuchElementException - if SpecificationLoader not managed
@@ -134,7 +134,7 @@ public interface IsisContext {
         return MetaModelContext.current().getServiceInjector();
         //return _Spring.getSingletonElseFail(ServiceInjector.class);
     }
-    
+
     /**
      * @return framework's ServiceRegistry
      * @throws NoSuchElementException - if ServiceRegistry not managed
@@ -143,7 +143,7 @@ public interface IsisContext {
         return MetaModelContext.current().getServiceRegistry();
         //return _Spring.getSingletonElseFail(ServiceRegistry.class);
     }
-    
+
     /**
      * @return framework's IsisSessionFactory 
      * @throws NoSuchElementException - if IsisSessionFactory not resolvable
@@ -159,7 +159,7 @@ public interface IsisContext {
     public static TransactionService getTransactionService() {
         return _Spring.getSingletonElseFail(TransactionService.class);
     }
-    
+
     /**
      * @return framework's current IsisSession (if any)
      * @throws IllegalStateException - if IsisSessionFactory not resolvable
@@ -173,16 +173,16 @@ public interface IsisContext {
      * @return framework's currently resolvable PersistenceSessions
      */
     public static Optional<PersistenceSession> getPersistenceSession() {
-    	return PersistenceSession.current(PersistenceSession.class)
-    	.getFirst();
+        return PersistenceSession.current(PersistenceSession.class)
+                .getFirst();
     }
-    
+
     // likely to be extended to support multiple PlatformTransactionManagers, by selecting one by its name
     public static TransactionTemplate createTransactionTemplate() {
-    	val txMan = _Spring.getSingletonElseFail(PlatformTransactionManager.class);
-    	return new TransactionTemplate(txMan);
+        val txMan = _Spring.getSingletonElseFail(PlatformTransactionManager.class);
+        return new TransactionTemplate(txMan);
     }
-    
+
     /**
      * @return framework's ServiceRegistry
      * @throws NoSuchElementException - if ServiceRegistry not managed
@@ -190,11 +190,11 @@ public interface IsisContext {
     public static ObjectAdapterProvider getObjectAdapterProvider() {
         return _Spring.getSingletonElseFail(ObjectAdapterService.class);
     }
-    
+
     public static Function<Object, ObjectAdapter> pojoToAdapter() {
         return getObjectAdapterProvider()::adapterFor;
     }
-    
+
     public static Function<RootOid, ObjectAdapter> rootOidToAdapter() {
         return rootOid -> {
             val ps = IsisContext.getPersistenceSession()
@@ -203,7 +203,7 @@ public interface IsisContext {
             return ps.getObjectAdapterByIdProvider().adapterFor(rootOid);
         }; 
     }
-    
+
     /**
      * @return framework's current AuthenticationSession (if any)
      * @throws IllegalStateException - if IsisSessionFactory not resolvable
@@ -220,6 +220,6 @@ public interface IsisContext {
     public static AuthorizationManager getAuthorizationManager() {
         return _Spring.getSingletonElseFail(AuthorizationManager.class);
     }
- 
+
 
 }

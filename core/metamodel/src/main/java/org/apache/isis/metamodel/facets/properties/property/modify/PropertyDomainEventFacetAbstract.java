@@ -56,9 +56,9 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
      */
     public PropertyDomainEventFacetAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-            final FacetHolder holder ) {
-        
+                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
+                    final FacetHolder holder ) {
+
         super(PropertyDomainEventFacet.class, holder, eventType);
         this.eventType = eventType;
         this.getterFacetIfAny = getterFacetIfAny;

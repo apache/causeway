@@ -47,25 +47,25 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 class ObjectAdapterContext_ObjectCreation {
-    
+
     private final ObjectAdapterContext objectAdapterContext;
     @SuppressWarnings("unused")
-	private final PersistenceSession persistenceSession;
+    private final PersistenceSession persistenceSession;
     @SuppressWarnings("unused")
-	private final SpecificationLoader specificationLoader;
+    private final SpecificationLoader specificationLoader;
     private ServiceInjector serviceInjector;
-    
+
     ObjectAdapterContext_ObjectCreation(
             ObjectAdapterContext objectAdapterContext,
             PersistenceSession persistenceSession,
             RuntimeContext runtimeContext) {
-        
+
         this.objectAdapterContext = objectAdapterContext;
         this.persistenceSession = persistenceSession;
         this.serviceInjector = runtimeContext.getServiceInjector();
         this.specificationLoader = runtimeContext.getSpecificationLoader();
     }
-    
+
     public ObjectAdapter newInstance(ObjectSpecification objectSpec) {
         return newInstance(objectSpec, Variant.TRANSIENT, null);
     }
@@ -73,14 +73,14 @@ class ObjectAdapterContext_ObjectCreation {
     public ObjectAdapter recreateInstance(ObjectSpecification objectSpec, @Nullable String memento) {
         return newInstance(objectSpec, Variant.VIEW_MODEL, memento);
     }
-    
+
     //  -- HELPER
-    
+
     private enum Variant {
         TRANSIENT,
         VIEW_MODEL
     }
-    
+
     private ObjectAdapter newInstance(ObjectSpecification spec, Variant variant, String memento) {
         if (log.isDebugEnabled()) {
             log.debug("creating {} instance of {}", variant, spec);
@@ -97,7 +97,7 @@ class ObjectAdapterContext_ObjectCreation {
         final ObjectAdapter adapter = objectAdapterContext.getObjectAdapterProvider().adapterFor(pojo);
         return initializePropertiesAndDoCallback(adapter);
     }
-    
+
     private Object recreateViewModel(final ObjectSpecification spec, final String memento) {
         final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
         if(facet == null) {
@@ -113,15 +113,15 @@ class ObjectAdapterContext_ObjectCreation {
         }
         return viewModelPojo;
     }
-    
+
     private ObjectAdapter initializePropertiesAndDoCallback(final ObjectAdapter adapter) {
 
         // initialize new object
         final Stream<ObjectAssociation> fields = adapter.getSpecification()
                 .streamAssociations(Contributed.EXCLUDED);
         fields
-            .forEach(field->field.toDefault(adapter));
-            
+        .forEach(field->field.toDefault(adapter));
+
         final Object pojo = adapter.getPojo();
         serviceInjector.injectServicesInto(pojo);
 
@@ -154,5 +154,5 @@ class ObjectAdapterContext_ObjectCreation {
         return adapter;
     }
 
-    
+
 }

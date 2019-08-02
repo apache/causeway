@@ -98,7 +98,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         final JsonRepresentation membersList = JsonRepresentation.newArray();
         representation.mapPut("members", membersList);
         final Stream<ObjectAssociation> associations = objectSpecification.streamAssociations(Contributed.EXCLUDED);
-        
+
         associations.forEach(association->{
             if (association.isOneToOneAssociation()) {
                 final OneToOneAssociation property = (OneToOneAssociation) association;
@@ -110,15 +110,15 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
                 membersList.arrayAdd(linkBuilder.build());
             }
         });
-        
+
         final Stream<ObjectAction> actions = objectSpecification.streamObjectActions(Contributed.INCLUDED);
-        
+
         actions.forEach(action->{
             final LinkBuilder linkBuilder = ActionDescriptionReprRenderer
                     .newLinkToBuilder(getRendererContext(), Rel.ACTION, objectSpecification, action);
             membersList.arrayAdd(linkBuilder.build());            
         });
-       
+
     }
 
     private JsonRepresentation getTypeActions() {

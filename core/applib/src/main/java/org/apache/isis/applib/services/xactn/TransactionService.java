@@ -23,13 +23,13 @@ import java.util.function.Supplier;
 
 public interface TransactionService {
 
-	public enum Policy {
+    public enum Policy {
         UNLESS_MARKED_FOR_ABORT,
         ALWAYS
     }
-	
-	TransactionId currentTransactionId();
-	
+
+    TransactionId currentTransactionId();
+
     /**
      * Flush all changes to the object store.
      *

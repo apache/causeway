@@ -27,6 +27,7 @@ public class ConfigPropertyString extends ConfigPropertyAbstract<String> {
     public ConfigPropertyString(final String key, final String defaultValue) {
         super(key, defaultValue);
     }
+    @Override
     public String from(final IsisConfiguration configuration) {
         return configuration.getString(key, defaultValue);
     }

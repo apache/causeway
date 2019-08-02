@@ -25,7 +25,7 @@ import org.apache.isis.metamodel.MetaModelContext;
 import lombok.val;
 
 public enum IntrospectionMode {
-    
+
     /**
      * Lazy (don't introspect members for most classes unless required), 
      * irrespective of the deployment mode.
@@ -36,7 +36,7 @@ public enum IntrospectionMode {
             return false;
         }
     },
-    
+
     /**
      * If production deployment mode, then full, otherwise lazy.
      */
@@ -46,7 +46,7 @@ public enum IntrospectionMode {
             return deploymentType.isProduction();
         }
     },
-    
+
     /**
      * Full introspection, irrespective of deployment mode.
      */
@@ -62,14 +62,14 @@ public enum IntrospectionMode {
      * deployment mode and configuration
      */
     public static boolean isFullIntrospect() {
-        
+
         val config = MetaModelContext.current().getConfiguration();
         val introspectionMode = SpecificationLoader.CONFIG_PROPERTY_MODE.from(config);
         val deploymentMode = _Context.getEnvironment().getDeploymentType();
-        
+
         return introspectionMode.isFullIntrospect(deploymentMode);
     }
-    
+
     protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
-    
+
 }

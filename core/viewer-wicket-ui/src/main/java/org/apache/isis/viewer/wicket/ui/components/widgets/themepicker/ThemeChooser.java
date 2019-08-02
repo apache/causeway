@@ -63,7 +63,7 @@ public class ThemeChooser extends Panel {
      * The name of the cookie that stores the last user selection
      */
     private static final String ISIS_THEME_COOKIE_NAME = "isis.viewer.wicket.themes.selected";
-    
+
     /**
      * Constructor
      *
@@ -79,10 +79,10 @@ public class ThemeChooser extends Panel {
             // if anything other than the default, then we do NOT initialize
             // (on the assumption that it is a persistent store and we don't want to overwrite).
         }
-        
+
         ListView<String> themesView = new ListView<String>("themes", getThemeSupport().getEnabledThemeNames()) {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             protected void populateItem(ListItem<String> item) {
                 final String themeName = item.getModelObject();
@@ -155,7 +155,7 @@ public class ThemeChooser extends Panel {
     private IsisWicketThemeSupport getThemeSupport() {
         return IsisWicketThemeSupport.getInstance();
     }
-    
+
     private IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }

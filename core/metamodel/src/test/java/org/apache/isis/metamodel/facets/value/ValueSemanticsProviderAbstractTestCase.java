@@ -70,24 +70,24 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
     protected ObjectAdapter mockAdapter;
-    
+
     @Before
     public void setUp() throws Exception {
-        
+
         _Config.clear();
         Locale.setDefault(Locale.UK);
-        
+
         MetaModelContext.preset(MetaModelContext.builder()
                 .specificationLoader(mockSpecificationLoader)
-//                .translationService(mockTranslationService)
-//                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                //                .translationService(mockTranslationService)
+                //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .build());
-        
+
         context.checking(new Expectations() {
             {
-//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-//                will(returnValue(mockSessionServiceInternal));
+                //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                //                will(returnValue(mockSessionServiceInternal));
 
                 never(mockAuthenticationSessionProvider);
                 never(mockSessionServiceInternal);
@@ -154,7 +154,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Test
     public void testDecodeNULL() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getEncoderDecoder(), is(not(nullValue())));
-        
+
         final Object newValue = encodeableFacet.fromEncodedString(EncodableFacetUsingEncoderDecoder.ENCODED_NULL);
         assertNull(newValue);
     }

@@ -73,9 +73,9 @@ public class ObjectMemberAbstractTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
+
     private ObjectMemberAbstractImpl testMember;
-    
+
     private ObjectAdapter persistentAdapter;
     private ObjectAdapter transientAdapter;
 

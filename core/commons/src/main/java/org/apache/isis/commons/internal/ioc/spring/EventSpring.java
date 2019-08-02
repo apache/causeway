@@ -37,17 +37,17 @@ import lombok.extern.log4j.Log4j2;
 class EventSpring<T> implements Event<T> {
 
     private final ApplicationEventPublisher publisher;
-    
+
     @Override
     public void fire(T event) {
-        
+
         if(log.isDebugEnabled()) {
             log.debug("{} fire({} ... {})",
-                Thread.currentThread().getName(),
-                event.getClass().getSimpleName(), 
-                event.toString());
+                    Thread.currentThread().getName(),
+                    event.getClass().getSimpleName(), 
+                    event.toString());
         }
-        
+
         publisher.publishEvent(event);
     }
 
@@ -71,5 +71,5 @@ class EventSpring<T> implements Event<T> {
     @Override
     public <U extends T> Event<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
         throw _Exceptions.notImplemented();    }
-    
+
 }

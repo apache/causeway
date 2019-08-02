@@ -30,12 +30,12 @@ import static org.junit.Assert.assertThat;
 public class OidMarshallerTest_marshall {
 
     private Oid_Marshaller oidMarshaller;
-    
+
     @Before
     public void setUp() throws Exception {
         oidMarshaller = Oid_Marshaller.INSTANCE;
     }
-    
+
     @Test
     public void rootOid() {
         final String marshal = oidMarshaller.marshal(Factory.persistentOf(ObjectSpecId.of("CUS"),  "123"));
@@ -47,7 +47,7 @@ public class OidMarshallerTest_marshall {
         final String marshal = oidMarshaller.marshal(Factory.transientOf(ObjectSpecId.of("CUS"),  "123"));
         assertThat(marshal, equalTo("!CUS:123"));
     }
-    
+
     @Test
     public void rootOid_versionSequence() {
         final String marshal = oidMarshaller.marshal(Factory.persistentOf(ObjectSpecId.of("CUS"),  "123", 90807L));

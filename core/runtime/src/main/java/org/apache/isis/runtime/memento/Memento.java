@@ -85,11 +85,11 @@ public class Memento implements Serializable {
     }
 
     private Data createCollectionData(final ObjectAdapter adapter) {
-        
+
         final Data[] collData = CollectionFacet.Utils.streamAdapters(adapter)
-            .map(ref->createReferenceData(ref))
-            .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
-        
+                .map(ref->createReferenceData(ref))
+                .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
+
         final String elementTypeSpecName = adapter.getSpecification().getFullIdentifier();
         return new CollectionData(clone(adapter.getOid()), elementTypeSpecName, collData);
     }
@@ -99,9 +99,9 @@ public class Memento implements Serializable {
         transientObjects.add(adapterOid);
         final ObjectSpecification cls = adapter.getSpecification();
         final ObjectData data = new ObjectData(adapterOid, cls.getFullIdentifier());
-        
+
         final Stream<ObjectAssociation> associations = cls.streamAssociations(Contributed.EXCLUDED);
-        
+
         associations
         .filter(association->{
             if (association.isNotPersisted()) {
@@ -119,7 +119,7 @@ public class Memento implements Serializable {
         .forEach(association->{
             createAssociationData(adapter, data, association);
         });
-        
+
         return data;
     }
 
@@ -194,13 +194,13 @@ public class Memento implements Serializable {
         }
         final ObjectSpecification spec =
                 getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
-        
+
         final Oid oid = getOid();
 
         return IsisContext.getPersistenceSession().get().
                 adapterOfMemento(spec, oid, data);
         //return IsisSession.currentOrElseNull().adapterOfMemento(spec, oid, data);
-                
+
     }
 
 

@@ -44,14 +44,14 @@ public class ExceptionRecognizerDocDefault_recognizes_Test {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private Exception ex;
-    
+
     private ExceptionRecognizerDocDefault excepRecognizer;
-    
+
     @Before
     public void setUp() throws Exception {
         excepRecognizer = new ExceptionRecognizerDocDefault();
     }
-    
+
     @Test
     public void whenConcurrencyException_is_recognized() throws Exception {
         ex = new ConcurrencyException("foo", Factory.persistentOf(ObjectSpecId.of("CUS"), "123"));
@@ -63,5 +63,5 @@ public class ExceptionRecognizerDocDefault_recognizes_Test {
         ex = new SomeRandomException();
         assertThat(excepRecognizer.recognize(ex), is(nullValue()));
     }
-    
+
 }

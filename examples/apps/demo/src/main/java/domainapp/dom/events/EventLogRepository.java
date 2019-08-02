@@ -29,14 +29,14 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @DomainService(nature=NatureOfService.DOMAIN, repositoryFor=EventLogEntry.class)
 public class EventLogRepository {
 
-	@Inject private RepositoryService repository;
-	
-	public List<EventLogEntry> listAll(){
-		return repository.allInstances(EventLogEntry.class);
-	}
+    @Inject private RepositoryService repository;
 
-	public void add(EventLogEntry entry) {
-		repository.persist(entry);
-	}
-	
+    public List<EventLogEntry> listAll(){
+        return repository.allInstances(EventLogEntry.class);
+    }
+
+    public void add(EventLogEntry entry) {
+        repository.persist(entry);
+    }
+
 }

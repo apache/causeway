@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 
 public abstract class ActionParameterHiddenFacetAbstract extends FacetAbstract implements
-        ActionParameterHiddenFacet {
+ActionParameterHiddenFacet {
 
     public static Class<? extends Facet> type() {
         return ActionParameterHiddenFacet.class;

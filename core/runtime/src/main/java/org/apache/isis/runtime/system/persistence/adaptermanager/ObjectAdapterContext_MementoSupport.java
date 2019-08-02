@@ -59,11 +59,11 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSupport {
-    
-    
+
+
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
-    
+
     ObjectAdapterContext_MementoSupport(ObjectAdapterContext objectAdapterContext,
             PersistenceSession persistenceSession) {
         this.objectAdapterContext = objectAdapterContext;
@@ -73,16 +73,16 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     @Override
     public ObjectAdapter recreateObject(ObjectSpecification spec, Oid oid, Data data) {
         ObjectAdapter adapter;
-        
+
         if (spec.isParentedOrFreeCollection()) {
 
             final Supplier<Object> emptyCollectionPojoFactory = 
                     ()->objectAdapterContext.instantiateAndInjectServices(spec);
-            
-            final Object collectionPojo = populateCollection(emptyCollectionPojoFactory, spec, (CollectionData) data);
-            adapter = objectAdapterContext.recreatePojo(oid, collectionPojo);
 
-            
+                    final Object collectionPojo = populateCollection(emptyCollectionPojoFactory, spec, (CollectionData) data);
+                    adapter = objectAdapterContext.recreatePojo(oid, collectionPojo);
+
+
         } else {
             _Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
@@ -99,7 +99,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     }
 
     private ObjectAdapter recreateReference(Data data) {
-     // handle values
+        // handle values
         if (data instanceof StandaloneData) {
             final StandaloneData standaloneData = (StandaloneData) data;
             return standaloneData.getAdapter();
@@ -120,7 +120,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         }
         return referencedAdapter;
     }
-    
+
     private void updateObject(final ObjectAdapter adapter, final Data data) {
         final Object oid = adapter.getOid();
         if (oid != null && !oid.equals(data.getOid())) {
@@ -136,19 +136,19 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             log.debug("object updated {}", adapter.getOid());
         }
     }
-    
+
     private Object populateCollection(
             final Supplier<Object> emptyCollectionPojoFactory, 
             final ObjectSpecification collectionSpec, 
             final CollectionData state) {
-        
+
         final Stream<ObjectAdapter> initData = state.streamElements()
-            .map((final Data elementData) -> recreateReference(elementData));
-        
+                .map((final Data elementData) -> recreateReference(elementData));
+
         final CollectionFacet facet = collectionSpec.getFacet(CollectionFacet.class);
         return facet.populatePojo(emptyCollectionPojoFactory, collectionSpec, initData, state.getElementCount());
     }
-    
+
     private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
 
         boolean dataIsTransient = data.getOid().isTransient();
@@ -170,11 +170,11 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             }
         }
     }
-    
+
     private void updateFields(final ObjectAdapter object, final Data state) {
         final ObjectData od = (ObjectData) state;
         final Stream<ObjectAssociation> fields = object.getSpecification().streamAssociations(Contributed.EXCLUDED);
-        
+
         fields
         .filter(field->{
             if (field.isNotPersisted()) {
@@ -189,7 +189,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             return true;
         })
         .forEach(field->updateField(object, od, field));
-        
+
     }
 
     private void updateField(final ObjectAdapter objectAdapter, final ObjectData objectData, final ObjectAssociation objectAssoc) {
@@ -212,14 +212,14 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             final ObjectAdapter objectAdapter, 
             final OneToManyAssociation otma, 
             final CollectionData collectionData) {
-        
+
         final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
         final Set<ObjectAdapter> original = CollectionFacet.Utils.streamAdapters(collection)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         final Set<ObjectAdapter> incoming = collectionData.streamElements()
                 .map(this::recreateReference)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
-                
+
         incoming.stream()
         .filter(original::contains)
         .forEach(elementAdapter->{
@@ -228,7 +228,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             }
             otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
-        
+
         original.stream()
         .filter(not(incoming::contains))
         .forEach(elementAdapter->{
@@ -253,5 +253,5 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             }
         }
     }
-   
+
 }

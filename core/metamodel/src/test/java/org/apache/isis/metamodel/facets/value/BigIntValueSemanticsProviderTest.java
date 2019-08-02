@@ -39,7 +39,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     private FacetHolder holder;
 
     @Override
-	@Before
+    @Before
     public void setUp() throws Exception {
         super.setUp();
         bigInt = new BigInteger("132199");

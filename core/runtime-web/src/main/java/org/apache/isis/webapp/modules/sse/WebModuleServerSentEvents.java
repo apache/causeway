@@ -39,12 +39,12 @@ import lombok.val;
 public final class WebModuleServerSentEvents implements WebModule  {
 
     private final static String SERVLET_NAME = "ServerSentEventsServlet";
-    
+
     @Override
     public String getName() {
         return "ServerSentEvents";
     }
-    
+
     @Override
     public void prepare(WebModuleContext ctx) {
         // nothing special required
@@ -55,10 +55,10 @@ public final class WebModuleServerSentEvents implements WebModule  {
 
         val servlet = ctx.addServlet(SERVLET_NAME, ServerSentEventsServlet.class);
         servlet.setAsyncSupported(true);
-        
+
         ctx.getServletRegistration(SERVLET_NAME)
         .addMapping("/sse");
-        
+
         return null; // does not provide a listener
     }
 

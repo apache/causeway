@@ -39,9 +39,9 @@ final class InvocationHandlerFactoryUsingBackgroundCommandService implements Inv
 
     @Override
     public <T> InvocationHandler newMethodHandler(
-    		T target, 
-    		Object mixedInIfAny) {
-        
+            T target, 
+            Object mixedInIfAny) {
+
         return new CommandInvocationHandler<T>(
                 backgroundCommandService,
                 target,

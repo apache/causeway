@@ -42,7 +42,7 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     public void setUpObjects() throws Exception {
 
         _Config.put("isis.value.format.short", null);
-        
+
         short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);
 

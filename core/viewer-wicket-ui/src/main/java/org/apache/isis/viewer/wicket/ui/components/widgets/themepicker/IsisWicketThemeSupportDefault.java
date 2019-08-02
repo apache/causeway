@@ -47,15 +47,15 @@ import lombok.extern.log4j.Log4j2;
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     private static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
-    
+
     private final _Lazy<ThemeProvider> themeProvider = _Lazy.of(this::createThemeProvider); 
-    
-    
+
+
     @Override
     public ThemeProvider getThemeProvider() {
         return themeProvider.get();
     }
-    
+
     @Override
     public List<String> getEnabledThemeNames() {
         final BootstrapThemeTheme bootstrapTheme = new BootstrapThemeTheme();
@@ -77,12 +77,12 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
         return allThemes;
     }
-    
-    
+
+
     // -- HELPER
-    
+
     private ThemeProvider createThemeProvider() {
-        
+
         final String themeName = getConfiguration().getString(
                 DEFAULT_THEME_KEY, BOOTSWATCH_THEME_DEFAULT.name());
         BootswatchTheme bootswatchTheme;
@@ -95,7 +95,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
                     bootswatchTheme);
 
         }
-        
+
         return new BootswatchThemeProvider(bootswatchTheme);/* {
             @Override
             public ITheme byName(String name) {
@@ -105,25 +105,25 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
         };*/
     }
 
-// legacy code ...    
-//    private ITheme getThemeByName(String themeName) {
-//        ITheme theme;
-//        try {
-//            if ("bootstrap-theme".equals(themeName)) {
-//                theme = new BootstrapThemeTheme();
-//            } else if (themeName.startsWith("veg")) {
-//                theme = VegibitTheme.valueOf(themeName);
-//            } else {
-//                theme = BootswatchTheme.valueOf(themeName);
-//            }
-//        } catch (Exception x) {
-//            LOG.warn("Cannot find a theme with name '{}' in all available theme providers: {}", themeName, x.getMessage());
-//            // fallback to Bootstrap default theme if the parsing by name failed somehow
-//            theme = new BootstrapThemeTheme();
-//        }
-//        return theme;
-//    }
-    
+    // legacy code ...    
+    //    private ITheme getThemeByName(String themeName) {
+    //        ITheme theme;
+    //        try {
+    //            if ("bootstrap-theme".equals(themeName)) {
+    //                theme = new BootstrapThemeTheme();
+    //            } else if (themeName.startsWith("veg")) {
+    //                theme = VegibitTheme.valueOf(themeName);
+    //            } else {
+    //                theme = BootswatchTheme.valueOf(themeName);
+    //            }
+    //        } catch (Exception x) {
+    //            LOG.warn("Cannot find a theme with name '{}' in all available theme providers: {}", themeName, x.getMessage());
+    //            // fallback to Bootstrap default theme if the parsing by name failed somehow
+    //            theme = new BootstrapThemeTheme();
+    //        }
+    //        return theme;
+    //    }
+
     /**
      * Filters which themes to show in the drop up by using the provided values
      * in {@value #ENABLED_THEMES_KEY}
@@ -153,7 +153,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
         return enabledThemes;
     }
-    
+
     private IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }

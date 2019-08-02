@@ -44,26 +44,26 @@ public class BooleanWrapperValueSemanticsProvider extends BooleanValueSemanticsP
     // BooleanValueFacet impl
     // //////////////////////////////////////////////////////////////////
 
-//    @Override
-//    public void reset(final ObjectAdapter adapter) {
-//        adapter.replacePojo(Boolean.FALSE);
-//    }
-//
-//    @Override
-//    public void set(final ObjectAdapter adapter) {
-//        adapter.replacePojo(Boolean.TRUE);
-//    }
-//
-//    @Override
-//    public void toggle(final ObjectAdapter adapter) {
-//        final Object currentObj = adapter.getObject();
-//        if (currentObj == null) {
-//            set(adapter);
-//            return;
-//        }
-//        final boolean current = ((Boolean) currentObj).booleanValue();
-//        final boolean toggled = !current;
-//        adapter.replacePojo(Boolean.valueOf(toggled));
-//    }
+    //    @Override
+    //    public void reset(final ObjectAdapter adapter) {
+    //        adapter.replacePojo(Boolean.FALSE);
+    //    }
+    //
+    //    @Override
+    //    public void set(final ObjectAdapter adapter) {
+    //        adapter.replacePojo(Boolean.TRUE);
+    //    }
+    //
+    //    @Override
+    //    public void toggle(final ObjectAdapter adapter) {
+    //        final Object currentObj = adapter.getObject();
+    //        if (currentObj == null) {
+    //            set(adapter);
+    //            return;
+    //        }
+    //        final boolean current = ((Boolean) currentObj).booleanValue();
+    //        final boolean toggled = !current;
+    //        adapter.replacePojo(Boolean.valueOf(toggled));
+    //    }
 
 }

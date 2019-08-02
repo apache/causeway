@@ -54,7 +54,7 @@ public class BS3MenuBarsTest {
             println(entry.getValue());
         }
     }
-    
+
     private void println(String string) {
         //for test debugging only
     }

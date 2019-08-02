@@ -53,47 +53,47 @@ class CDITest {
     }
 
     // -- STAGED TEST CLASS
-    
+
     static class Customer {
-        
+
         @Inject  
         String stringField1;
-        
+
         @Inject @CheckForNull //arbitrary non qualifier
         String stringField2;
-        
+
         @Inject @ValidQualifierForTesting
         String stringField3;
     }
-    
+
     // ---
-    
+
     @Test
     void qualifierDetection() {
-        
+
         //when
         ValidQualifierForTesting[] annotations = stringField3.getAnnotationsByType(ValidQualifierForTesting.class);
 
         //then
         assertNotNull(annotations);
         assertEquals(1, annotations.length);
-        
+
         //when 
         ValidQualifierForTesting annotation = annotations[0];
-        
+
         //then
         assertNotNull(annotation);
         assertTrue(_CDI.isQualifier(annotation));
 
     }
-    
-    
+
+
     @Test
     void noQualifier() {
-        
+
         //when
         List<Annotation> qualifiers = _CDI.filterQualifiers(stringField1.getAnnotations());
-        
+
         //then
         assertNotNull(qualifiers);
         assertEquals(0, qualifiers.size());
@@ -102,26 +102,26 @@ class CDITest {
 
     @Test
     void noQualifier_arbitraryAnnotation() {
-        
+
         //when
         List<Annotation> qualifiers = _CDI.filterQualifiers(stringField2.getAnnotations());
-        
+
         //then
         assertNotNull(qualifiers);
         assertEquals(0, qualifiers.size());
 
     }
-    
+
     @Test
     void singleQualifier() {
-        
+
         //when
         List<Annotation> qualifiers = _CDI.filterQualifiers(stringField3.getAnnotations());
-        
+
         //then
         assertNotNull(qualifiers);
         assertEquals(1, qualifiers.size());
 
     }
-    
+
 }

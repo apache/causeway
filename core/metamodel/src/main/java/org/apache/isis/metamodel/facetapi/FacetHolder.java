@@ -41,17 +41,17 @@ public interface FacetHolder {
      * Whether there is a facet registered of the specified type.
      */
     boolean containsFacet(Class<? extends Facet> facetType);
-    
+
     /**
      * @param facetType
      * @return whether there is a facet registered that implements the specified facet interface.
      * @since 2.0
      */
     default boolean containsFacetWithInterface(Class<? extends Facet> facetType) {
-    	return streamFacets()
-    	.flatMap(type->_NullSafe.stream(type.facetType().getInterfaces()))
-    	.anyMatch(intfc-> intfc == facetType)
-    	;
+        return streamFacets()
+                .flatMap(type->_NullSafe.stream(type.facetType().getInterfaces()))
+                .anyMatch(intfc-> intfc == facetType)
+                ;
     }
 
     /**
@@ -106,7 +106,7 @@ public interface FacetHolder {
      */
     void removeFacet(Class<? extends Facet> facetType);
 
-	
-    
+
+
 
 }

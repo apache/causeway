@@ -55,7 +55,7 @@ public enum ActionResultResponseHandlingStrategy {
             // in the case of an object being returned, this should cause our page mementos
             // (eg EntityModel) to hold the correct state.  I hope.
 
-        	IsisContext.getTransactionService().flushTransaction();
+            IsisContext.getTransactionService().flushTransaction();
 
             // "redirect-after-post"
             final RequestCycle requestCycle = RequestCycle.get();

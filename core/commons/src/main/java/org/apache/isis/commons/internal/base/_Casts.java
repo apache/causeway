@@ -77,50 +77,50 @@ public final class _Casts {
      * @return
      */
     public static <T, R, U, V> R castThenApply(
-    		@Nullable U left, 
-    		@Nullable V right,
-    		Class<T> cls, 
-    		BiFunction<T, T, R> onBothCast,
-    		BiFunction<T, V, R> onLeftCast,
-    		BiFunction<U, T, R> onRightCast,
-    		BiFunction<U, V, R> onNonCast) {
+            @Nullable U left, 
+            @Nullable V right,
+            Class<T> cls, 
+            BiFunction<T, T, R> onBothCast,
+            BiFunction<T, V, R> onLeftCast,
+            BiFunction<U, T, R> onRightCast,
+            BiFunction<U, V, R> onNonCast) {
 
-    	requires(cls, "cls");
-    	
-    	T left_casted=null, right_casted=null;
-    	boolean left_not_casted=false, right_not_casted=false;
-    	
-    	if(left==null) {
-    		left_casted = null;
-    	} else if(cls.isAssignableFrom(left.getClass())) {
-    		left_casted = cls.cast(left);
-    	} else {
-    		left_not_casted = true;
-    	}
-    	
-    	if(right==null) {
-    		right_casted = null;
-    	} else if(cls.isAssignableFrom(right.getClass())) {
-    		right_casted = cls.cast(right);
-    	} else {
-    		right_not_casted = true;
-    	}
-    	
-    	if(left_not_casted && right_not_casted) {
-    		return onNonCast.apply(left, right);
-    	}
+        requires(cls, "cls");
 
-    	if(!left_not_casted && !right_not_casted) {
-    		return onBothCast.apply(left_casted, right_casted);
-    	}
-    	
-    	if(left_not_casted) {
-    		return onRightCast.apply(left, right_casted);
-    	}
-    	
-    	return onLeftCast.apply(left_casted, right);
-    	
+        T left_casted=null, right_casted=null;
+        boolean left_not_casted=false, right_not_casted=false;
+
+        if(left==null) {
+            left_casted = null;
+        } else if(cls.isAssignableFrom(left.getClass())) {
+            left_casted = cls.cast(left);
+        } else {
+            left_not_casted = true;
+        }
+
+        if(right==null) {
+            right_casted = null;
+        } else if(cls.isAssignableFrom(right.getClass())) {
+            right_casted = cls.cast(right);
+        } else {
+            right_not_casted = true;
+        }
+
+        if(left_not_casted && right_not_casted) {
+            return onNonCast.apply(left, right);
+        }
+
+        if(!left_not_casted && !right_not_casted) {
+            return onBothCast.apply(left_casted, right_casted);
+        }
+
+        if(left_not_casted) {
+            return onRightCast.apply(left, right_casted);
+        }
+
+        return onLeftCast.apply(left_casted, right);
+
     }
-    
-    
+
+
 }

@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 public interface ElementSpecificationProvider {
 
     public ObjectSpecification getElementType();
-    
+
     /** for convenience */
     public static ElementSpecificationProvider of(final TypeOfFacet typeOfFacet) {
         if (typeOfFacet == null) {

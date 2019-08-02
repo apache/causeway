@@ -89,31 +89,31 @@ public class FactoryServiceInternalDefault implements FactoryService {
         throw new NonRecoverableException( String.format(
                 "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
-    
-    @Override
-	public <T> T viewModel(Class<T> viewModelClass, String mementoStr) {
-    	requires(viewModelClass, "viewModelClass");
-    	
-    	val spec = specificationLoader.loadSpecification(viewModelClass);
-		if (!spec.containsFacet(ViewModelFacet.class)) {
-			val msg = String.format("Type '%s' must be recogniced as a ViewModel, that is the type's meta-model "
-					+ "must have an associated ViewModelFacet: ", viewModelClass.getName());
-			throw new IllegalArgumentException(msg);
-		}
-		
-		if(ViewModel.class.isAssignableFrom(viewModelClass)) {
-			//FIXME[2152] is this execution branch required, or does the below code suffice for all cases?
-			val viewModel = (ViewModel) instantiate(viewModelClass);
-			viewModel.viewModelInit(mementoStr);
-			return _Casts.uncheckedCast(viewModel);
-		}
-		
-		val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-		val viewModel = viewModelFacet.createViewModelPojo(spec, mementoStr, __->instantiate(viewModelClass));
 
-		return _Casts.uncheckedCast(viewModel);
+    @Override
+    public <T> T viewModel(Class<T> viewModelClass, String mementoStr) {
+        requires(viewModelClass, "viewModelClass");
+
+        val spec = specificationLoader.loadSpecification(viewModelClass);
+        if (!spec.containsFacet(ViewModelFacet.class)) {
+            val msg = String.format("Type '%s' must be recogniced as a ViewModel, that is the type's meta-model "
+                    + "must have an associated ViewModelFacet: ", viewModelClass.getName());
+            throw new IllegalArgumentException(msg);
+        }
+
+        if(ViewModel.class.isAssignableFrom(viewModelClass)) {
+            //FIXME[2152] is this execution branch required, or does the below code suffice for all cases?
+            val viewModel = (ViewModel) instantiate(viewModelClass);
+            viewModel.viewModelInit(mementoStr);
+            return _Casts.uncheckedCast(viewModel);
+        }
+
+        val viewModelFacet = spec.getFacet(ViewModelFacet.class);
+        val viewModel = viewModelFacet.createViewModelPojo(spec, mementoStr, __->instantiate(viewModelClass));
+
+        return _Casts.uncheckedCast(viewModel);
     }
-    
+
 
     @Inject IsisSessionFactory isisSessionFactory; // dependsOn
     @Inject SpecificationLoader specificationLoader;
@@ -121,6 +121,6 @@ public class FactoryServiceInternalDefault implements FactoryService {
     @Inject ServiceInjector serviceInjector;
     @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
-	
+
 
 }

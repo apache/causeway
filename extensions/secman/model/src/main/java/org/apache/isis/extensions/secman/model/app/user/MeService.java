@@ -38,20 +38,20 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isissecurity.MeService"
-)
+        )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
-)
+        )
 public class MeService {
 
     public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<MeService, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<MeService, T> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<MeService> {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     // -- iconName
     public String iconName() {
@@ -60,16 +60,16 @@ public class MeService {
 
     // -- me (action)
     public static class MeDomainEvent extends ActionDomainEvent {
-		private static final long serialVersionUID = 1L;}
+        private static final long serialVersionUID = 1L;}
 
     @Action(
             domainEvent = MeDomainEvent.class,
             semantics = SemanticsOf.SAFE
-    )
+            )
     @ActionLayout(
             cssClassFa = "fa-user",
             describedAs = "Looks up ApplicationUser entity corresponding to your user account"
-    )
+            )
     @MemberOrder(name = "Security", sequence = "100")
     public ApplicationUser me() {
         return queryResultsCache.execute(new Callable<ApplicationUser>() {
@@ -93,6 +93,6 @@ public class MeService {
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject UserService userService;
     @Inject QueryResultsCache queryResultsCache;
-    
+
 
 }

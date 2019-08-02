@@ -86,51 +86,51 @@ import lombok.val;
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
 @javax.jdo.annotations.Uniques({
-        @javax.jdo.annotations.Unique(
-                name = "ApplicationUser_username_UNQ", members = { "username" })
+    @javax.jdo.annotations.Unique(
+            name = "ApplicationUser_username_UNQ", members = { "username" })
 })
 @javax.jdo.annotations.Queries( {
-        @javax.jdo.annotations.Query(
-                name = "findByUsername", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                        + "WHERE username == :username"),
-        @javax.jdo.annotations.Query(
+    @javax.jdo.annotations.Query(
+            name = "findByUsername", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
+                    + "WHERE username == :username"),
+    @javax.jdo.annotations.Query(
             name = "findByEmailAddress", language = "JDOQL",
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
                     + "WHERE emailAddress == :emailAddress"),
-        @javax.jdo.annotations.Query(
+    @javax.jdo.annotations.Query(
             name = "findByAtPath", language = "JDOQL",
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
                     + "WHERE atPath == :atPath"),
-        @javax.jdo.annotations.Query(
-                name = "findByName", language = "JDOQL",
-                value = "SELECT "
-                        + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                        + "WHERE username.matches(:nameRegex)"
-                        + "   || familyName.matches(:nameRegex)"
-                        + "   || givenName.matches(:nameRegex)"
-                        + "   || knownAs.matches(:nameRegex)"),
-        @javax.jdo.annotations.Query(
-        name = "find", language = "JDOQL",
-        value = "SELECT "
-                + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-                + "WHERE username.matches(:regex)"
-                + " || familyName.matches(:regex)"
-                + " || givenName.matches(:regex)"
-                + " || knownAs.matches(:regex)"
-                + " || emailAddress.matches(:regex)")
+    @javax.jdo.annotations.Query(
+            name = "findByName", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
+                    + "WHERE username.matches(:nameRegex)"
+                    + "   || familyName.matches(:nameRegex)"
+                    + "   || givenName.matches(:nameRegex)"
+                    + "   || knownAs.matches(:nameRegex)"),
+    @javax.jdo.annotations.Query(
+            name = "find", language = "JDOQL",
+            value = "SELECT "
+                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
+                    + "WHERE username.matches(:regex)"
+                    + " || familyName.matches(:regex)"
+                    + " || givenName.matches(:regex)"
+                    + " || knownAs.matches(:regex)"
+                    + " || emailAddress.matches(:regex)")
 })
 @DomainObject(
         objectType = "isissecurity.ApplicationUser",
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteAction = "findMatching"
-)
+        )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
-)
+        )
 //@MemberGroupLayout(columnSpans = {4,4,4,12},
 //    left = {"Id", "Name", "Metadata"},
 //    middle= {"Contact Details"},
@@ -162,7 +162,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return getName();
     }
 
-    
+
 
     // -- name (derived property)
 
@@ -170,14 +170,14 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         private static final long serialVersionUID = 1L;}
 
     @Override
-	@javax.jdo.annotations.NotPersistent
+    @javax.jdo.annotations.NotPersistent
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden=Where.OBJECT_FORMS
-    )
+            )
     @MemberOrder(name="Id", sequence = "1")
     public String getName() {
         final StringBuilder buf = new StringBuilder();
@@ -188,14 +188,14 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
                 buf.append(getGivenName());
             }
             buf.append(' ')
-                    .append(getFamilyName())
-                    .append(" (").append(getUsername()).append(')');
+            .append(getFamilyName())
+            .append(" (").append(getUsername()).append(')');
         } else {
             buf.append(getUsername());
         }
         return buf.toString();
     }
-    
+
 
     // -- username (property)
 
@@ -207,15 +207,15 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = UsernameDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden=Where.PARENTED_TABLES
-    )
+            )
     @MemberOrder(name="Id", sequence = "1")
     @Getter @Setter
     private String username;
 
-    
+
 
     // -- updateUsername (action)
 
@@ -225,7 +225,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdateUsernameDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="username", sequence = "1")
     public ApplicationUser updateUsername(
             @Parameter(maxLength = MAX_LENGTH_USERNAME)
@@ -238,7 +238,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public String default0UpdateUsername() {
         return getUsername();
     }
-    
+
 
     // -- familyName (property)
 
@@ -250,14 +250,14 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = FamilyNameDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden=Where.ALL_TABLES
-    )
+            )
     @MemberOrder(name="Name",sequence = "2.1")
     @Getter @Setter
     private String familyName;
-    
+
 
     // -- givenName (property)
 
@@ -269,15 +269,15 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = GivenNameDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden=Where.ALL_TABLES
-    )
+            )
     @MemberOrder(name="Name", sequence = "2.2")
     @Getter @Setter
     private String givenName;
 
-    
+
 
     // -- knownAs (property)
 
@@ -289,14 +289,14 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = KnownAsDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden=Where.ALL_TABLES
-    )
+            )
     @MemberOrder(name="Name",sequence = "2.3")
     @Getter @Setter
     private String knownAs;
-    
+
 
     // -- updateName (action)
 
@@ -306,7 +306,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdateNameDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="knownAs", sequence = "1")
     public ApplicationUser updateName(
             @Parameter(maxLength = MAX_LENGTH_FAMILY_NAME, optionality = Optionality.OPTIONAL)
@@ -318,7 +318,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             @Parameter(maxLength = MAX_LENGTH_KNOWN_AS, optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Known As")
             final String knownAs
-    ) {
+            ) {
         setFamilyName(familyName);
         setGivenName(givenName);
         setKnownAs(knownAs);
@@ -350,7 +350,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         }
         return null;
     }
-    
+
 
     // -- emailAddress (property)
 
@@ -363,12 +363,12 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = EmailAddressDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="Contact Details", sequence = "3.1")
     @Getter @Setter
     private String emailAddress;
 
-    
+
 
     // -- updateEmailAddress (action)
 
@@ -378,7 +378,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdateEmailAddressDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="emailAddress", sequence = "1")
     public ApplicationUser updateEmailAddress(
             @Parameter(maxLength = MAX_LENGTH_EMAIL_ADDRESS)
@@ -395,7 +395,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public String disableUpdateEmailAddress() {
         return isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
-    
+
 
     // -- phoneNumber (property)
 
@@ -407,12 +407,12 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = PhoneNumberDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="Contact Details", sequence = "3.2")
     @Getter @Setter
     private String phoneNumber;
 
-    
+
 
     // -- phoneNumber (property)
 
@@ -422,7 +422,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdatePhoneNumberDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="phoneNumber", sequence = "1")
     public ApplicationUser updatePhoneNumber(
             @ParameterLayout(named="Phone")
@@ -439,7 +439,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return getPhoneNumber();
     }
 
-    
+
 
     // -- faxNumber (property)
 
@@ -452,15 +452,15 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = FaxNumberDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @PropertyLayout(
             hidden=Where.PARENTED_TABLES
-    )
+            )
     @MemberOrder(name="Contact Details", sequence = "3.3")
     @Getter @Setter
     private String faxNumber;
 
-    
+
 
     // -- updateFaxNumber (action)
 
@@ -470,7 +470,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdateFaxNumberDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="faxNumber", sequence = "1")
     public ApplicationUser updateFaxNumber(
             @Parameter(maxLength = MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
@@ -488,7 +488,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
-    
+
 
     // -- atPath (property)
 
@@ -500,12 +500,12 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = AtPathDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="atPath", sequence = "3.4")
     @Getter @Setter
     private String atPath;
 
-    
+
 
     // -- updateAtPath (action)
 
@@ -515,7 +515,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdateAtPathDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="atPath", sequence = "1")
     public ApplicationUser updateAtPath(
             @Parameter(optionality = Optionality.OPTIONAL)
@@ -528,7 +528,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public String default0UpdateAtPath() {
         return getAtPath();
     }
-    
+
 
     // -- accountType (property)
 
@@ -540,12 +540,12 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = AccountTypeDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="Status", sequence = "3")
     @Getter @Setter
     private AccountType accountType;
 
-    
+
 
     // -- updateAccountType (action)
 
@@ -555,7 +555,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdateAccountTypeDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name = "Account Type", sequence = "1")
     public ApplicationUser updateAccountType(
             final AccountType accountType) {
@@ -565,7 +565,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public String disableUpdateAccountType() {
         return isAdminUser()
                 ? "Cannot change account type for admin user"
-                : null;
+                        : null;
     }
     public AccountType default0UpdateAccountType() {
         return getAccountType();
@@ -579,7 +579,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return getAccountType() == AccountType.LOCAL && passwordEncryptionService != null;
     }
 
-    
+
 
     // -- status (property), visible (action), usable (action)
 
@@ -591,12 +591,12 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = StatusDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="Status", sequence = "4")
     @Getter @Setter
     private ApplicationUserStatus status;
 
-    
+
 
     // -- unlock (action)
 
@@ -606,7 +606,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UnlockDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(named="Enable") // symmetry with lock (disable)
     @MemberOrder(name = "Status", sequence = "1")
     public ApplicationUser unlock() {
@@ -617,7 +617,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
     }
 
-    
+
 
     // -- lock (action)
 
@@ -627,7 +627,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = LockDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(named="Disable") // method cannot be called 'disable' as that would clash with Isis' naming conventions
     @MemberOrder(name = "Status", sequence = "2")
     public ApplicationUser lock() {
@@ -641,7 +641,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
     }
 
-    
+
 
     // -- encryptedPassword (hidden property)
 
@@ -654,7 +654,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public boolean hideEncryptedPassword() {
         return isDelegateAccountOrPasswordEncryptionNotAvailable();
     }
-    
+
 
     // -- hasPassword (derived property)
 
@@ -664,7 +664,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Property(
             domainEvent = HasPasswordDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @MemberOrder(name="Status", sequence = "4")
     public boolean isHasPassword() {
         return !_Strings.isNullOrEmpty(getEncryptedPassword());
@@ -674,7 +674,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return isDelegateAccountOrPasswordEncryptionNotAvailable();
     }
 
-    
+
 
     // -- updatePassword (action)
 
@@ -684,7 +684,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = UpdatePasswordDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="hasPassword", sequence = "10")
     public ApplicationUser updatePassword(
             @ParameterLayout(named="Existing password")
@@ -744,7 +744,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         setEncryptedPassword(encryptedPassword);
     }
 
-    
+
 
     // -- resetPassword (action)
 
@@ -754,7 +754,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent =ResetPasswordDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @MemberOrder(name="hasPassword", sequence = "20")
     public ApplicationUser resetPassword(
             @ParameterLayout(named="New password")
@@ -792,7 +792,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return Objects.equals(newPassword.getPassword(), newPasswordRepeat.getPassword());
     }
 
-    
+
 
     // -- roles (collection)
     public static class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {
@@ -804,10 +804,10 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Collection(
             domainEvent = RolesDomainEvent.class,
             editing = Editing.DISABLED
-    )
+            )
     @CollectionLayout(
             defaultView="table"
-    )
+            )
     @MemberOrder(sequence = "20")
     @Getter @Setter
     private SortedSet<ApplicationRole> roles = new TreeSet<>();
@@ -823,7 +823,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public void removeFromRoles(final ApplicationRole applicationRole) {
         getRoles().remove(applicationRole);
     }
-    
+
 
     // -- addRole (action)
 
@@ -833,10 +833,10 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = AddRoleDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(
             named="Add"
-    )
+            )
     @MemberOrder(name="roles", sequence = "1")
     public ApplicationUser addRole(final ApplicationRole role) {
         addToRoles(role);
@@ -853,7 +853,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     public String disableAddRole() {
         return choices0AddRole().isEmpty()? "All roles added": null;
     }
-    
+
 
     // -- removeRole (action)
 
@@ -863,10 +863,10 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = RemoveRoleDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
-    )
+            )
     @ActionLayout(
             named="Remove"
-    )
+            )
     @MemberOrder(name="roles", sequence = "2")
     public ApplicationUser removeRole(final ApplicationRole role) {
         removeFromRoles(role);
@@ -889,7 +889,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return null;
     }
 
-    
+
 
     // -- delete (action)
 
@@ -899,24 +899,24 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Action(
             domainEvent = DeleteDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
-    )
+            )
     @MemberOrder(sequence = "1")
     public List<ApplicationUser> delete() {
-    	repository.removeAndFlush(this);
+        repository.removeAndFlush(this);
         return applicationUserRepository.allUsers();
     }
 
     public String disableDelete() {
         return isAdminUser()? "Cannot delete the admin user": null;
     }
-    
+
 
     // -- PermissionSet (programmatic)
 
     // short-term caching
     private transient ApplicationPermissionValueSet cachedPermissionSet;
     @Override
-	@Programmatic
+    @Programmatic
     public ApplicationPermissionValueSet getPermissionSet() {
         if(cachedPermissionSet != null) {
             return cachedPermissionSet;
@@ -927,7 +927,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
                         _Lists.map(permissions, ApplicationPermission.Functions.AS_VALUE),
                         permissionsEvaluationService);
     }
-    
+
 
     // -- isAdminUser (programmatic)
     @Programmatic
@@ -947,9 +947,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     boolean isRunAsAdministrator() {
         final UserMemento currentUser = userService.getUser();
         final List<RoleMemento> roles = currentUser.getRoles();
-        
+
         val adminRoleSuffix = ":" + configBean.getAdminRoleName();
-        
+
         for (final RoleMemento role : roles) {
             final String roleName = role.getName();
             // format is realmName:roleName.
@@ -961,14 +961,14 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         }
         return false;
     }
-    
+
 
     // -- equals, hashCode, compareTo, toString
     private final static String propertyNames = "username";
-    
+
     private final static ObjectContract<ApplicationUser> contract = 
-    		ObjectContracts.parse(ApplicationUser.class, propertyNames);
-    
+            ObjectContracts.parse(ApplicationUser.class, propertyNames);
+
 
     @Override
     public int compareTo(final ApplicationUser o) {
@@ -1004,5 +1004,5 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
      */
     @Inject PermissionsEvaluationService permissionsEvaluationService;
     @Inject SecurityModuleConfig configBean;
-    
+
 }

@@ -41,33 +41,33 @@ import lombok.val;
  */
 //@Log4j2
 class ObjectAdapterContext_ServiceLookup {
-    
+
     private final ObjectAdapterContext objectAdapterContext;
     private final ServiceRegistry serviceRegistry;
-    
+
     ObjectAdapterContext_ServiceLookup(
             ObjectAdapterContext objectAdapterContext,
             ServiceRegistry serviceRegistry) {
-        
+
         this.objectAdapterContext = objectAdapterContext;
         this.serviceRegistry = serviceRegistry;
     }
 
     ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
-        
+
         final ServicesByIdResource servicesByIdResource =
                 _Context.computeIfAbsent(ServicesByIdResource.class, this::initLookupResource);
-        
+
         final Object serviceInstance = servicesByIdResource.lookupServiceInstance(rootOid);
         if(serviceInstance==null) {
             return null;
         }
         return objectAdapterContext.getFactories().createRootAdapter(serviceInstance, rootOid);
-        
+
     }
-    
+
     // -- HELPER
-    
+
     /**
      *  Application scoped resource to hold a map for looking up services by id.
      */
@@ -83,16 +83,16 @@ class ObjectAdapterContext_ServiceLookup {
             return servicesById.get(serviceRootOid);
         }
     }
-    
+
     private ServicesByIdResource initLookupResource() {
-        
+
         objectAdapterContext.printContextInfo("INIT SERVICE ID LOOKUP RESOURCE");
-        
+
         StopWatch watch = _Timing.now();
-        
+
         val servicesByIdResource = new ServicesByIdResource();
         val adapterProvider = objectAdapterContext.getObjectAdapterProvider();
-        
+
         serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
         .map(adapterProvider::adapterForBean)
         .forEach(serviceAdapter->{
@@ -101,11 +101,11 @@ class ObjectAdapterContext_ServiceLookup {
                     (RootOid)serviceAdapter.getOid(),
                     serviceAdapter.getPojo());
         });
-        
+
         objectAdapterContext.printContextInfo("took (µs) "+watch.stop().getMicros());
-        
+
         return servicesByIdResource;
     }
-    
+
 
 }

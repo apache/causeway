@@ -63,7 +63,7 @@ public class ActionArgumentVisibilityEvent extends VisibilityEvent {
 
     @Override
     public String getReasonMessage() {
-    	return String.format("Invalid action argument. Position: %s. Reason: %s", this.getPosition(), super.getReasonMessage());
+        return String.format("Invalid action argument. Position: %s. Reason: %s", this.getPosition(), super.getReasonMessage());
     }
-    
+
 }

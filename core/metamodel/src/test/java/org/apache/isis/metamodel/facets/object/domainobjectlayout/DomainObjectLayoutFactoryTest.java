@@ -54,7 +54,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     DomainObjectLayoutFacetFactory facetFactory;
 
     // -- TEST LIFE CYCLING
-    
+
     @Before
     public void setUp() throws Exception {
         _Config.clear();
@@ -62,14 +62,14 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     }
 
     @Override
-	@After
+    @After
     public void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
     }
 
     // -- DOMAIN OBJECTS FOR TESTING
-    
+
     @DomainObjectLayout(
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
@@ -79,9 +79,9 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             named = "Name override",
             paged = 20,
             plural = "Customers Plural Form"
-    )
+            )
     class Customer { }
-    
+
     @DomainObjectLayout 
     class CustomerWithDefaults { }
 
@@ -94,12 +94,12 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             named = "Name override",
             paged = 20,
             plural = "Customers Plural Form"
-    )
+            )
     class CustomerViewModel { }
-    
+
     @ViewModelLayout
     class CustomerViewModelWithDefaults { }
-    
+
     // -- LAYOUT TESTS
 
     public static class Bookmarking extends DomainObjectLayoutFactoryTest {
@@ -123,8 +123,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof BookmarkPolicyFacetForDomainObjectLayoutAnnotation);
 
                 final BookmarkPolicyFacetForDomainObjectLayoutAnnotation facetImpl = 
-                		(BookmarkPolicyFacetForDomainObjectLayoutAnnotation) facet;
-                
+                        (BookmarkPolicyFacetForDomainObjectLayoutAnnotation) facet;
+
                 Assert.assertThat(facetImpl.value(), is(BookmarkPolicy.AS_ROOT));
 
                 expectNoMethodsRemoved();
@@ -145,7 +145,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         }
 
         public static class ForViewModelLayout extends Bookmarking {
-            
+
             @Before
             public void setUp2() throws Exception {
                 _Config.clear();
@@ -184,7 +184,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         }
 
     }
-    
+
     // --
 
     public static class CssClass extends DomainObjectLayoutFactoryTest {
@@ -200,7 +200,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             }
 
             @Override
-			@Before
+            @Before
             public void setUp() throws Exception {
                 _Config.clear();
                 super.setUp();

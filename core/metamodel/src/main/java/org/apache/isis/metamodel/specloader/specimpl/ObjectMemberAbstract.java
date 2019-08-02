@@ -76,7 +76,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelCon
     protected ObjectMemberAbstract(
             final FacetedMethod facetedMethod,
             final FeatureType featureType) {
-        
+
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
             throw new IllegalArgumentException("Id must always be set");

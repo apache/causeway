@@ -73,7 +73,7 @@ public final class _Reflect {
         return _Arrays.testAllMatch(method.getParameters(), superMethod.getParameters(), 
                 (p1, p2)->p1.getType().equals(p2.getType()));
     }
-    
+
     /**
      * Returns whether a {@link Member} is accessible.
      * @param m Member to check
@@ -82,7 +82,7 @@ public final class _Reflect {
     public static boolean isAccessible(final Member m) {
         return m != null && Modifier.isPublic(m.getModifiers()) && !m.isSynthetic();
     }
-    
+
     /**
      * Whether member name equals given {@code memberName}
      * @param memberName
@@ -133,7 +133,7 @@ public final class _Reflect {
     public static Stream<Field> streamFields(
             @Nullable Class<?> type,
             final boolean ignoreAccess) {
-        
+
         if(type==null) {
             return Stream.empty();
         }
@@ -152,7 +152,7 @@ public final class _Reflect {
     public static Stream<Field> streamAllFields(
             @Nullable Class<?> type,
             final boolean ignoreAccess) {
-        
+
         return streamTypeHierarchy(type, /*includeInterfaces*/ false) // interfaces don't have fields
                 .filter(Object.class::equals) // do not process Object class.
                 .flatMap(t->streamFields(t, ignoreAccess));
@@ -168,7 +168,7 @@ public final class _Reflect {
     public static Stream<Method> streamMethods(
             @Nullable Class<?> type,
             final boolean ignoreAccess) {
-        
+
         if(type==null) {
             return Stream.empty();
         }
@@ -188,7 +188,7 @@ public final class _Reflect {
             @Nullable Class<?> type,
             final boolean ignoreAccess
             ) {
-        
+
         return streamTypeHierarchy(type, /*includeInterfaces*/ true)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.
                 .flatMap(t->streamMethods(t, ignoreAccess));
@@ -224,17 +224,17 @@ public final class _Reflect {
                         current = current.getSuperclass();
                         return true;
                     }
-                    
+
                     private void recur(Class<?> iface, Consumer<? super Class<?>> action) {
                         action.accept(iface);
                         for(Class<?> subIface : iface.getInterfaces()) {
                             recur(subIface, action);
                         }
                     }
-                    
+
                 }, false);
     }
-    
+
     // -- ANNOTATIONS
 
     /**
@@ -248,7 +248,7 @@ public final class _Reflect {
     public static <T extends Annotation> T getAnnotation(
             final Class<?> cls, 
             final Class<T> annotationClass) {
-        
+
         if (cls == null) {
             return null;
         }
@@ -280,7 +280,7 @@ public final class _Reflect {
         }
         return null;
     }
-    
+
     /**
      * <p>Gets the annotation object with the given annotation type that is present on the given method
      * or optionally on any equivalent method in super classes and interfaces. Returns null if the annotation
@@ -314,22 +314,22 @@ public final class _Reflect {
         if (!ignoreAccess && !isAccessible(method)) {
             return null;
         }
-        
+
         final Stream<Method> methods;
-        
+
         if(searchSupers) {
             methods = streamAllMethods(method.getDeclaringClass(), ignoreAccess);    
         } else {
             methods = streamMethods(method.getDeclaringClass(), ignoreAccess);
         }
-        
+
         return methods
-        .filter(m->same(method, m))
-        .map(m->m.getAnnotation(annotationCls))
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(null);
-        
+                .filter(m->same(method, m))
+                .map(m->m.getAnnotation(annotationCls))
+                .filter(_NullSafe::isPresent)
+                .findFirst()
+                .orElse(null);
+
     }
 
     /**
@@ -349,7 +349,7 @@ public final class _Reflect {
         }
         return false;
     }
-    
+
     // -- METHOD/FIELD HANDLES
 
     public static MethodHandle handleOf(Method method) throws IllegalAccessException {
@@ -371,9 +371,9 @@ public final class _Reflect {
         }
         return MethodHandles.lookup().unreflectGetter(field);
     }
-    
+
     // -- FIND GETTER
-    
+
     public static Method getGetter(Class<?> cls, String propertyName) throws IntrospectionException {
         final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
         for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){

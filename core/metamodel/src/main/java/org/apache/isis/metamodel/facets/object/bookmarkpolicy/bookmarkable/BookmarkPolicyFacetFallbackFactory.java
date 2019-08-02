@@ -63,7 +63,7 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
 
                 final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
-                
+
                 objectActions
                 .filter(objectAction->{
                     final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
@@ -82,7 +82,7 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
                                         objectAction.getIdentifier().toClassAndNameIdentityString());
                     }
                 });
-                
+
                 return true;
             }
         }));

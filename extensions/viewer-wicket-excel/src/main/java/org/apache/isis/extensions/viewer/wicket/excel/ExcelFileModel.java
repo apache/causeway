@@ -50,224 +50,224 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 class ExcelFileModel extends LoadableDetachableModel<File> {
 
-        private static final long serialVersionUID = 1L;
-        
-        private final EntityCollectionModel model;
+    private static final long serialVersionUID = 1L;
 
-        public ExcelFileModel(EntityCollectionModel model) {
-            this.model = model;
+    private final EntityCollectionModel model;
+
+    public ExcelFileModel(EntityCollectionModel model) {
+        this.model = model;
+    }
+
+    static class RowFactory {
+        private final Sheet sheet;
+        private int rowNum;
+
+        RowFactory(Sheet sheet) {
+            this.sheet = sheet;
         }
 
-        static class RowFactory {
-            private final Sheet sheet;
-            private int rowNum;
-
-            RowFactory(Sheet sheet) {
-                this.sheet = sheet;
-            }
-
-            public Row newRow() {
-                return sheet.createRow((short) rowNum++);
-            }
+        public Row newRow() {
+            return sheet.createRow((short) rowNum++);
         }
-        
-        @Override
-        protected File load() {
-            
-            try {
-                return createFile();
-                
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+    }
+
+    @Override
+    protected File load() {
+
+        try {
+            return createFile();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private File createFile() throws IOException, FileNotFoundException {
+        final Workbook wb = new XSSFWorkbook();
+        String sheetName = model.getName();
+        final File tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
+        final FileOutputStream fos = new FileOutputStream(tempFile);
+        final Sheet sheet = wb.createSheet(sheetName);
+
+        final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
+
+
+        //XXX legacy of 1.15.1
+        //            @SuppressWarnings("unchecked")
+        //            final Filter<ObjectAssociation> filter = Filters.and(
+        //                    ObjectAssociationFilters.PROPERTIES, 
+        //                    ObjectAssociationFilters.staticallyVisible(model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES));
+        //            
+        final Predicate<ObjectAssociation> filter = oa->{
+            if(!oa.isPropertyOrCollection())
+                return false;
+            //            	if(model.getEntityModel()!=null && model.getEntityModel().getObject()!=null &&
+            //            		oa.isVisible(
+            //            			model.getEntityModel().getObject(), 
+            //            			InteractionInitiatedBy.USER, 
+            //            			model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES).isVetoed() )
+            //            			return false;
+            return true;
+        };            
+
+        final List<? extends ObjectAssociation> propertyList = typeOfSpec
+                .streamAssociations(Contributed.INCLUDED)
+                .filter(filter)
+                .collect(Collectors.toList());
+
+        final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
+        Row row = rowFactory.newRow();
+
+
+        // header row
+        int i=0;
+        for (ObjectAssociation property : propertyList) {
+            final Cell cell = row.createCell((short) i++);
+            cell.setCellValue(property.getName());
         }
 
-        private File createFile() throws IOException, FileNotFoundException {
-            final Workbook wb = new XSSFWorkbook();
-            String sheetName = model.getName();
-            final File tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
-            final FileOutputStream fos = new FileOutputStream(tempFile);
-            final Sheet sheet = wb.createSheet(sheetName);
-            
-            final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-            
+        final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
 
-//XXX legacy of 1.15.1
-//            @SuppressWarnings("unchecked")
-//            final Filter<ObjectAssociation> filter = Filters.and(
-//                    ObjectAssociationFilters.PROPERTIES, 
-//                    ObjectAssociationFilters.staticallyVisible(model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES));
-//            
-            final Predicate<ObjectAssociation> filter = oa->{
-            	if(!oa.isPropertyOrCollection())
-            		return false;
-//            	if(model.getEntityModel()!=null && model.getEntityModel().getObject()!=null &&
-//            		oa.isVisible(
-//            			model.getEntityModel().getObject(), 
-//            			InteractionInitiatedBy.USER, 
-//            			model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES).isVetoed() )
-//            			return false;
-            	return true;
-            };            
-            
-            final List<? extends ObjectAssociation> propertyList = typeOfSpec
-                    .streamAssociations(Contributed.INCLUDED)
-                    .filter(filter)
-                    .collect(Collectors.toList());
-
-            final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
-            Row row = rowFactory.newRow();
-
-
-            // header row
-            int i=0;
-            for (ObjectAssociation property : propertyList) {
+        // detail rows
+        final List<ObjectAdapter> adapters = model.getObject();
+        for (final ObjectAdapter objectAdapter : adapters) {
+            row = rowFactory.newRow();
+            i=0;
+            for (final ObjectAssociation property : propertyList) {
                 final Cell cell = row.createCell((short) i++);
-                cell.setCellValue(property.getName());
-            }
-            
-            final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
-            
-            // detail rows
-            final List<ObjectAdapter> adapters = model.getObject();
-            for (final ObjectAdapter objectAdapter : adapters) {
-                row = rowFactory.newRow();
-                i=0;
-                for (final ObjectAssociation property : propertyList) {
-                    final Cell cell = row.createCell((short) i++);
-                    setCellValue(objectAdapter, property, cell, dateCellStyle);
-                }
-            }
-            
-            // freeze panes
-            sheet.createFreezePane(0, 1);
-
-            wb.write(fos);
-            fos.close();
-            return tempFile;
-        }
-
-        protected void autoSize(final Sheet sh, int numProps) {
-            for(int prop=0; prop<numProps; prop++) {
-                sh.autoSizeColumn(prop);
+                setCellValue(objectAdapter, property, cell, dateCellStyle);
             }
         }
 
-        protected CellStyle createDateFormatCellStyle(final Workbook wb) {
-            CreationHelper createHelper = wb.getCreationHelper();
-            short dateFormat = createHelper.createDataFormat().getFormat("yyyy-mm-dd");
-            CellStyle dateCellStyle = wb.createCellStyle();
-            dateCellStyle.setDataFormat(dateFormat);
-            return dateCellStyle;
+        // freeze panes
+        sheet.createFreezePane(0, 1);
+
+        wb.write(fos);
+        fos.close();
+        return tempFile;
+    }
+
+    protected void autoSize(final Sheet sh, int numProps) {
+        for(int prop=0; prop<numProps; prop++) {
+            sh.autoSizeColumn(prop);
         }
+    }
 
-        private void setCellValue(
-                final ObjectAdapter objectAdapter, 
-                final ObjectAssociation property, 
-                final Cell cell, 
-                CellStyle dateCellStyle) {
-            
-            final ObjectAdapter valueAdapter = property.get(objectAdapter);
-            
-            // null
-            if (valueAdapter == null) {
-                cell.setCellType(CellType.BLANK);
-                return;
-            } 
-            final Object valueAsObj = valueAdapter.getPojo();
-            if(valueAsObj == null) {
-                cell.setCellType(CellType.BLANK);
-                return;
-            }
-            
-            // boolean
-            if(valueAsObj instanceof Boolean) {
-                Boolean value = (Boolean) valueAsObj;
-                cell.setCellValue(value);
-                cell.setCellType(CellType.BOOLEAN);
-                return;
-            } 
+    protected CellStyle createDateFormatCellStyle(final Workbook wb) {
+        CreationHelper createHelper = wb.getCreationHelper();
+        short dateFormat = createHelper.createDataFormat().getFormat("yyyy-mm-dd");
+        CellStyle dateCellStyle = wb.createCellStyle();
+        dateCellStyle.setDataFormat(dateFormat);
+        return dateCellStyle;
+    }
 
-            // date
-            if(valueAsObj instanceof Date) {
-                Date value = (Date) valueAsObj;
-                setCellValueForDate(cell, value, dateCellStyle);
-                return;
-            } 
-            if(valueAsObj instanceof LocalDate) {
-                LocalDate value = (LocalDate) valueAsObj;
-                Date date = Util_TimeConversion.toDate(value); 
-                setCellValueForDate(cell, date, dateCellStyle);
-                return;
-            } 
-            if(valueAsObj instanceof LocalDateTime) {
-                LocalDateTime value = (LocalDateTime) valueAsObj;
-                Date date = Util_TimeConversion.toDate(value);
-                setCellValueForDate(cell, date, dateCellStyle);
-                return;
-            } 
-            if(valueAsObj instanceof OffsetDateTime) {
-                OffsetDateTime value = (OffsetDateTime) valueAsObj;
-                Date date = Util_TimeConversion.toDate(value); 
-                setCellValueForDate(cell, date, dateCellStyle);
-                return;
-            }
-            
-            // number
-            if(valueAsObj instanceof Double) {
-                Double value = (Double) valueAsObj;
-                setCellValueForDouble(cell, (double)value);
-                return;
-            }
-            if(valueAsObj instanceof Float) {
-                Float value = (Float) valueAsObj;
-                setCellValueForDouble(cell, (double)value);
-                return;
-            } 
-            if(valueAsObj instanceof BigDecimal) {
-                BigDecimal value = (BigDecimal) valueAsObj;
-                setCellValueForDouble(cell, value.doubleValue());
-                return;
-            } 
-            if(valueAsObj instanceof BigInteger) {
-                BigInteger value = (BigInteger) valueAsObj;
-                setCellValueForDouble(cell, value.doubleValue());
-                return;
-            } 
-            if(valueAsObj instanceof Long) {
-                Long value = (Long) valueAsObj;
-                setCellValueForDouble(cell, (double)value);
-                return;
-            } 
-            if(valueAsObj instanceof Integer) {
-                Integer value = (Integer) valueAsObj;
-                setCellValueForDouble(cell, (double)value);
-                return;
-            } 
-            if(valueAsObj instanceof Short) {
-                Short value = (Short) valueAsObj;
-                setCellValueForDouble(cell, (double)value);
-                return;
-            } 
-            if(valueAsObj instanceof Byte) {
-                Byte value = (Byte) valueAsObj;
-                setCellValueForDouble(cell, (double)value);
-                return;
-            } 
-            
-            final String objectAsStr = valueAdapter.titleString(null);
-            cell.setCellValue(objectAsStr);
-            cell.setCellType(CellType.STRING);
+    private void setCellValue(
+            final ObjectAdapter objectAdapter, 
+            final ObjectAssociation property, 
+            final Cell cell, 
+            CellStyle dateCellStyle) {
+
+        final ObjectAdapter valueAdapter = property.get(objectAdapter);
+
+        // null
+        if (valueAdapter == null) {
+            cell.setCellType(CellType.BLANK);
+            return;
+        } 
+        final Object valueAsObj = valueAdapter.getPojo();
+        if(valueAsObj == null) {
+            cell.setCellType(CellType.BLANK);
             return;
         }
 
-        private static void setCellValueForDouble(final Cell cell, double value2) {
-            cell.setCellValue(value2);
-            cell.setCellType(CellType.NUMERIC);
+        // boolean
+        if(valueAsObj instanceof Boolean) {
+            Boolean value = (Boolean) valueAsObj;
+            cell.setCellValue(value);
+            cell.setCellType(CellType.BOOLEAN);
+            return;
+        } 
+
+        // date
+        if(valueAsObj instanceof Date) {
+            Date value = (Date) valueAsObj;
+            setCellValueForDate(cell, value, dateCellStyle);
+            return;
+        } 
+        if(valueAsObj instanceof LocalDate) {
+            LocalDate value = (LocalDate) valueAsObj;
+            Date date = Util_TimeConversion.toDate(value); 
+            setCellValueForDate(cell, date, dateCellStyle);
+            return;
+        } 
+        if(valueAsObj instanceof LocalDateTime) {
+            LocalDateTime value = (LocalDateTime) valueAsObj;
+            Date date = Util_TimeConversion.toDate(value);
+            setCellValueForDate(cell, date, dateCellStyle);
+            return;
+        } 
+        if(valueAsObj instanceof OffsetDateTime) {
+            OffsetDateTime value = (OffsetDateTime) valueAsObj;
+            Date date = Util_TimeConversion.toDate(value); 
+            setCellValueForDate(cell, date, dateCellStyle);
+            return;
         }
 
-        private static void setCellValueForDate(final Cell cell, Date date, CellStyle dateCellStyle) {
-            cell.setCellValue(date);
-            cell.setCellStyle(dateCellStyle);
+        // number
+        if(valueAsObj instanceof Double) {
+            Double value = (Double) valueAsObj;
+            setCellValueForDouble(cell, (double)value);
+            return;
         }
+        if(valueAsObj instanceof Float) {
+            Float value = (Float) valueAsObj;
+            setCellValueForDouble(cell, (double)value);
+            return;
+        } 
+        if(valueAsObj instanceof BigDecimal) {
+            BigDecimal value = (BigDecimal) valueAsObj;
+            setCellValueForDouble(cell, value.doubleValue());
+            return;
+        } 
+        if(valueAsObj instanceof BigInteger) {
+            BigInteger value = (BigInteger) valueAsObj;
+            setCellValueForDouble(cell, value.doubleValue());
+            return;
+        } 
+        if(valueAsObj instanceof Long) {
+            Long value = (Long) valueAsObj;
+            setCellValueForDouble(cell, (double)value);
+            return;
+        } 
+        if(valueAsObj instanceof Integer) {
+            Integer value = (Integer) valueAsObj;
+            setCellValueForDouble(cell, (double)value);
+            return;
+        } 
+        if(valueAsObj instanceof Short) {
+            Short value = (Short) valueAsObj;
+            setCellValueForDouble(cell, (double)value);
+            return;
+        } 
+        if(valueAsObj instanceof Byte) {
+            Byte value = (Byte) valueAsObj;
+            setCellValueForDouble(cell, (double)value);
+            return;
+        } 
+
+        final String objectAsStr = valueAdapter.titleString(null);
+        cell.setCellValue(objectAsStr);
+        cell.setCellType(CellType.STRING);
+        return;
     }
+
+    private static void setCellValueForDouble(final Cell cell, double value2) {
+        cell.setCellValue(value2);
+        cell.setCellType(CellType.NUMERIC);
+    }
+
+    private static void setCellValueForDate(final Cell cell, Date date, CellStyle dateCellStyle) {
+        cell.setCellValue(date);
+        cell.setCellStyle(dateCellStyle);
+    }
+}

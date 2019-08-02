@@ -73,7 +73,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
-    
+
     public static class IdentifiedHolderImpl extends FacetHolderImpl implements IdentifiedHolder {
 
         private Identifier identifier;
@@ -91,27 +91,27 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         // PRODUCTION
-        
+
         facetHolder = new IdentifiedHolderImpl(
                 Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
-        );
+                );
 
         methodRemover = new ProgrammableMethodRemover();
 
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        
+
         mockTranslationService = context.mock(TranslationService.class);
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
         mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
-        
+
         mockObjectAdapterProvider = context.mock(ObjectAdapterProvider.class);
 
         MetaModelContext.preset(MetaModelContext.builder()
