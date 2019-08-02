@@ -38,7 +38,6 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
@@ -113,7 +112,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
                 case OK:
                     break;
                 case BAD_PASSWORD:
-                    throw new IncorrectCredentialsException("Unknown user/password combination");
+                    throw credentialsException();
                 case NO_PASSWORD_ENCRYPTION_SERVICE_CONFIGURED:
                     throw new AuthenticationException("No password encryption service is installed");
                 default:

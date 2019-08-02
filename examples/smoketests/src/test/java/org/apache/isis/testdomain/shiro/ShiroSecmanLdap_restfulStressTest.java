@@ -18,11 +18,7 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import javax.inject.Inject;
 
@@ -33,15 +29,12 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
+import org.apache.isis.security.shiro.WebModuleShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
-import org.apache.isis.testdomain.ldap.LdapEmbeddedServer;
+import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.CredentialsException;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.isis.testdomain.rest.RestService;
+import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,14 +46,19 @@ import lombok.val;
 
 @SpringBootTest(
 		classes = { 
-				JdoTestDomainModule_withShiro.class, 
+			JdoTestDomainModule_withShiro.class
 		}, 
 		properties = {
 				"logging.config=log4j2-test.xml",
 				"smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
-		})
+		},
+		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
-
+	
+	// Restful server
+	IsisBootWebRestfulObjects.class,
+	RestService.class,
+	
 	// Embedded LDAP server for testing
 	LdapServerService.class,
 	
@@ -70,8 +68,9 @@ import lombok.val;
     IsisBootSecmanPersistenceJdo.class,
     IsisBootSecmanEncryptionJbcrypt.class,
 })
-class ShiroSecmanLdapTest extends AbstractShiroTest {
+class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
+	@Inject RestService restService;
 	@Inject LdapServerService ldapServerService;
 	@Inject ApplicationUserRepository applicationUserRepository;
 	@Inject ApplicationRoleRepository applicationRoleRepository;
@@ -82,8 +81,10 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 		//    Build and set the SecurityManager used to build Subject instances used in your tests
 		//    This typically only needs to be done once per class if your shiro.ini doesn't change,
 		//    otherwise, you'll need to do this logic in each test that is different
-		val factory = new IniSecurityManagerFactory("classpath:shiro-secman-ldap.ini");
-		setSecurityManager(factory.getInstance());
+		//val factory = new IniSecurityManagerFactory("classpath:shiro-secman-ldap.ini");
+		//setSecurityManager(factory.getInstance());
+		WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
+		
 	}
 
 	@AfterAll
@@ -93,10 +94,11 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 	
 	@BeforeEach
 	void setupSvenInDb() {
+		// only setup once per test run, consecutive calls have no effect
 		val regularUserRoleName = securityConfig.getRegularUserRoleName();
 		val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
 		val enabled = true;
-		val username = LdapEmbeddedServer.SVEN_PRINCIPAL;
+		val username = LdapConstants.SVEN_PRINCIPAL;
 		val svenUser = applicationUserRepository.findByUsername(username);
 		if(svenUser==null) {
 			applicationUserRepository
@@ -104,102 +106,20 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 		}
 	}
 	
-	
-	@Test //@Order(1)
-	void loginLogoutRoundtrip() {
-		
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
-
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
-
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				LdapEmbeddedServer.SVEN_PRINCIPAL,
-				"pass");
-
-		subject.login(token);
-		assertTrue(subject.isAuthenticated());
-
-		subject.logout();
-		assertFalse(subject.isAuthenticated());
-
-	}
-	
 	@Test
-	void login_withAccountOnlyKnownToLdap() {
-
-		val secMan = getSecurityManager();
-		assertNotNull(secMan);
+	void bookOfTheWeek_viaRestEndpoint() {
 		
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
-
-		val username = LdapEmbeddedServer.OLAF_PRINCIPAL;
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				username,
-				"pass");
-
-		// default behavior is to create the account within the DB but leave it disabled 
-		assertThrows(DisabledAccountException.class, ()->{
-			subject.login(token);
-		});
+		//TODO not very stressfull yet
 		
-		val olafUser = applicationUserRepository.findByUsername(username);
-		assertNotNull(olafUser);
-		assertNotNull(olafUser.getStatus());
-		assertFalse(olafUser.getStatus().isEnabled());
-	}
-
-	@Test
-	void login_withInvalidPassword() {
-
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
-
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
-
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				LdapEmbeddedServer.SVEN_PRINCIPAL,
-				"invalid-pass");
+		val useRequestDebugLogging = false;
+		val restfulClient = restService.newClient(useRequestDebugLogging);
 		
-		assertThrows(CredentialsException.class, ()->{
-			subject.login(token);
-		});
-		
-		assertFalse(subject.isAuthenticated());
+		val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
+
+		if(!digest.isSuccess()) {
+			fail(digest.getFailureCause());
+		}
 
 	}
-	
-	@Test
-	void login_withNonExistentUser() {
-
-		val secMan = SecurityUtils.getSecurityManager();
-		assertNotNull(secMan);
-
-		val subject = SecurityUtils.getSubject(); 
-		assertNotNull(subject);
-		assertFalse(subject.isAuthenticated());
-
-		val username = "non-existent-user";
-		val token = (AuthenticationToken) new UsernamePasswordToken(
-				username,
-				"invalid-pass");
-		
-		assertThrows(CredentialsException.class, ()->{
-			subject.login(token);
-		});
-		
-		assertFalse(subject.isAuthenticated());
-		
-		val nonUser = applicationUserRepository.findByUsername(username);
-		assertNull(nonUser);
-
-	}
-
 
 }

@@ -48,10 +48,10 @@ class LdapEmbeddedServerTest {
     	
         val env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapEmbeddedServer.PORT);
+        env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapConstants.PORT);
 
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
-        env.put(Context.SECURITY_PRINCIPAL, LdapEmbeddedServer.SVEN_PRINCIPAL);
+        env.put(Context.SECURITY_PRINCIPAL, LdapConstants.SVEN_PRINCIPAL);
         env.put(Context.SECURITY_CREDENTIALS, "pass");
         
         try {
@@ -78,7 +78,7 @@ class LdapEmbeddedServerTest {
     	
         val env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapEmbeddedServer.PORT);
+        env.put(Context.PROVIDER_URL, "ldap://localhost:" + LdapConstants.PORT);
 
         env.put( Context.SECURITY_AUTHENTICATION, "simple" );
         env.put( Context.SECURITY_PRINCIPAL, "uid=admin,ou=system" );

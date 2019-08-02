@@ -21,9 +21,9 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>smoketest</artifactId>
+	<artifactId>smoketests</artifactId>
 
-	<name>Apache Isis - Smoketest</name>
+	<name>Apache Isis - Smoketests</name>
 
 	<properties>
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>

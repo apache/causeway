@@ -19,12 +19,14 @@
 package org.apache.isis.testdomain.rest;
 
 import javax.inject.Inject;
-import javax.ws.rs.client.Invocation.Builder;
 
+import org.apache.isis.applib.client.ResponseDigest;
 import org.apache.isis.applib.client.RestfulClient;
 import org.apache.isis.applib.client.RestfulClientConfig;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.testdomain.jdo.Book;
+import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,7 @@ public class RestService {
 		return port;
 	}
 
-	public RestfulClient newClient() {
+	public RestfulClient newClient(boolean useRequestDebugLogging) {
 		
 		val restRootPath = 
 				"http://localhost:" + getPort() + "/" + 
@@ -53,21 +55,30 @@ public class RestService {
 		clientConfig.setRestfulBase(restRootPath);
 		// setup basic-auth
 		clientConfig.setUseBasicAuth(true); // default = false
-		clientConfig.setRestfulAuthUser("sven");
+		clientConfig.setRestfulAuthUser(LdapConstants.SVEN_PRINCIPAL);
 		clientConfig.setRestfulAuthPassword("pass");
 		// setup request/response debug logging
-		clientConfig.setUseRequestDebugLogging(true); // default = false
+		clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
 
 		RestfulClient client = RestfulClient.ofConfig(clientConfig);
 
 		return client;
 	}
 	
-	public Builder newRecommendedBookOfTheWeekRequest(RestfulClient client) {
-		return client.request(
+	public ResponseDigest<Book> getRecommendedBookOfTheWeek(RestfulClient client) {
+		val request = client.request(
 				"services/testdomain.InventoryRepository/actions/recommendedBookOfTheWeek/invoke", 
 				SuppressionType.ALL);
+		
+		val args = client.arguments()
+				.build();
+
+		val response = request.post(args);
+		val digest = client.digest(response, Book.class);
+		
+		return digest;
 	}
+	
 
 	// -- HELPER
 
@@ -80,6 +91,8 @@ public class RestService {
 	// -- DEPENDENCIES
 
 	@Inject Environment environment;
+
+	
 
 	
 

@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import javax.inject.Inject;
 
-import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 import org.junit.jupiter.api.Test;
@@ -56,27 +55,19 @@ class RestServiceTest {
 		assertNotNull(restService.getPort());
 		assertTrue(restService.getPort()>0);
 
-		val restfulClient = restService.newClient();
-		val request = restService.newRecommendedBookOfTheWeekRequest(restfulClient);
-
-		val args = restfulClient.arguments()
-				.build();
-
-		val response = request.post(args);
-		val digest = restfulClient.digest(response, Book.class);
-
-		if(digest.isSuccess()) {
+		val useRequestDebugLogging = false;
+		val restfulClient = restService.newClient(useRequestDebugLogging);
 		
-			val bookOfTheWeek = digest.get();
-			
-			assertNotNull(bookOfTheWeek);
-			assertEquals("Book of the week", bookOfTheWeek.getName());
+		val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
 
-		} else {
-			
+		if(!digest.isSuccess()) {
 			fail(digest.getFailureCause());
-			
 		}
+		
+		val bookOfTheWeek = digest.get();
+		
+		assertNotNull(bookOfTheWeek);
+		assertEquals("Book of the week", bookOfTheWeek.getName());
 
 	}
 

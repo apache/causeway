@@ -25,11 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
-import org.apache.isis.testdomain.ldap.LdapEmbeddedServer;
-import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -39,7 +43,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
 		classes = { 
@@ -50,19 +53,22 @@ import lombok.extern.log4j.Log4j2;
 				"smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
 		})
 @Import({
-	LdapServerService.class,
+    // Security Manager Extension (secman)
+    IsisBootSecmanModel.class,
+    IsisBootSecmanRealmShiro.class,
+    IsisBootSecmanPersistenceJdo.class,
+    IsisBootSecmanEncryptionJbcrypt.class,
 })
-@Log4j2
-class ShiroLdapTest extends AbstractShiroTest {
+class ShiroSecmanTest extends AbstractShiroTest {
 	
-	@Inject LdapServerService ldapServerService;
+	@Inject SecurityModuleConfig securityConfig;
 
 	@BeforeAll
 	static void beforeClass() {
-		// Build and set the SecurityManager used to build Subject instances used in your tests
-		// This typically only needs to be done once per class if your shiro.ini doesn't change,
-		// otherwise, you'll need to do this logic in each test that is different
-		val factory = new IniSecurityManagerFactory("classpath:shiro-ldap.ini");
+		//    Build and set the SecurityManager used to build Subject instances used in your tests
+		//    This typically only needs to be done once per class if your shiro.ini doesn't change,
+		//    otherwise, you'll need to do this logic in each test that is different
+		val factory = new IniSecurityManagerFactory("classpath:shiro-secman.ini");
 		setSecurityManager(factory.getInstance());
 	}
 
@@ -73,19 +79,17 @@ class ShiroLdapTest extends AbstractShiroTest {
 	
 	@Test
 	void loginLogoutRoundtrip() {
-		
-		log.info("starting login/logout roundtrip");
 
-		val secMan = SecurityUtils.getSecurityManager();
+		val secMan = getSecurityManager();
 		assertNotNull(secMan);
-
+		
 		val subject = SecurityUtils.getSubject(); 
 		assertNotNull(subject);
 		assertFalse(subject.isAuthenticated());
 
 		val token = (AuthenticationToken) new UsernamePasswordToken(
-				LdapEmbeddedServer.SVEN_PRINCIPAL,
-				"pass");
+				securityConfig.getAdminUserName(),
+				securityConfig.getAdminPassword());
 
 		subject.login(token);
 		assertTrue(subject.isAuthenticated());
@@ -106,10 +110,10 @@ class ShiroLdapTest extends AbstractShiroTest {
 		assertFalse(subject.isAuthenticated());
 
 		val token = (AuthenticationToken) new UsernamePasswordToken(
-				LdapEmbeddedServer.SVEN_PRINCIPAL,
+				securityConfig.getAdminUserName(),
 				"invalid-pass");
 		
-		assertThrows(Exception.class, ()->{
+		assertThrows(CredentialsException.class, ()->{
 			subject.login(token);
 		});
 		
@@ -131,7 +135,7 @@ class ShiroLdapTest extends AbstractShiroTest {
 				"non-existent-user",
 				"invalid-pass");
 		
-		assertThrows(Exception.class, ()->{
+		assertThrows(CredentialsException.class, ()->{
 			subject.login(token);
 		});
 		

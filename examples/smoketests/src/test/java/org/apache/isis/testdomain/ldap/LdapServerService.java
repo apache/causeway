@@ -36,7 +36,7 @@ public class LdapServerService {
 	@PostConstruct
 	public void start() throws InitializationError, InterruptedException {
 		serverLatch = LdapEmbeddedServer.run();
-		log.info("Embedded LDAP Server started at port {}.", LdapEmbeddedServer.PORT);
+		log.info("Embedded LDAP Server started at port {}.", LdapConstants.PORT);
 	}
 	
 	@PreDestroy

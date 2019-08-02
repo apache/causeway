@@ -41,15 +41,10 @@ import lombok.val;
         @CreatePartition(name = "mojo", suffix = "o=mojo")
     })
 @CreateLdapServer(transports = { 
-		@CreateTransport(protocol = "LDAP", address = "localhost", port = LdapEmbeddedServer.PORT)})
+		@CreateTransport(protocol = "LDAP", address = "localhost", port = LdapConstants.PORT)})
 @ApplyLdifFiles({"ldap-users.ldif"})
 public class LdapEmbeddedServer extends AbstractLdapTestUnit {
 	
-	/** IP port for the LDAP server to listen on */
-    public static final int PORT = 10389;
-	public static final String SVEN_PRINCIPAL = "cn=Sven Mojo,o=mojo";
-	public static final String OLAF_PRINCIPAL = "cn=Olaf Mojo,o=mojo";
-
 	@Test
     public void authenticateAgainstLdap() {
     	// when test runs with the FrameworkRunner, at this stage the LDAP server is setup and listening
