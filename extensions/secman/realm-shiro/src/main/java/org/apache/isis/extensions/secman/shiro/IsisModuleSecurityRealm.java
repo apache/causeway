@@ -45,10 +45,15 @@ import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 public class IsisModuleSecurityRealm extends AuthorizingRealm implements SecurityRealm {
 
+	@Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
+    @Getter @Setter private boolean autoCreateUser = true;
+	
     /**
      * Configures a {@link org.apache.shiro.authz.permission.PermissionResolver} that knows how to process the
      * permission strings that are provided by Isis'
@@ -57,7 +62,6 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     public IsisModuleSecurityRealm() {
         setPermissionResolver(new PermissionResolverForIsisShiroAuthorizor());
     }
-
 
     /**
      * In order to provide an attacker with additional information, the exceptions thrown here deliberately have
@@ -79,7 +83,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         // lookup from database, for roles/perms
         val principal = lookupPrincipal_inApplicationUserRepository(username);
         
-        val autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && getAutoCreateUser();
+        val autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && isAutoCreateUser();
         if (principal == null && autoCreateUserWhenDelegatedAuthentication) {
         	// When using delegated authentication, desired behavior is to auto-create user accounts in the 
         	// DB only if these do successfully authenticate with the delegated authentication mechanism,
@@ -94,8 +98,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         }
         
         if (principal == null) {
-            // if no delegate authentication
-            throw new CredentialsException("Unknown user/password combination");
+            throw credentialsException();
         }
 
         if (principal.isDisabled()) {
@@ -132,8 +135,22 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         return urp;
     }
 
+	@Override
+	public EnumSet<SecurityRealmCharacteristic> getCharacteristics() {
+		if(hasDelegateAuthenticationRealm()) {
+			return EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
+		}
+		return EnumSet.noneOf(SecurityRealmCharacteristic.class);
+	}
+
+	// -- HELPER
+    
     private DisabledAccountException disabledAccountException(String username) {
     	return new DisabledAccountException(String.format("username='%s'", username));
+    }
+    
+    private CredentialsException credentialsException() {
+    	return new CredentialsException("Unknown user/password combination");
     }
     
     private void authenticateElseThrow_usingDelegatedMechanism(AuthenticationToken token) {
@@ -144,7 +161,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         	// fall through
         }
 		if(delegateAccount == null) {
-            throw new CredentialsException("Unknown user/password combination");
+            throw credentialsException();
         }
     }
     
@@ -195,28 +212,10 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         });
     }
 
-    private AuthenticatingRealm delegateAuthenticationRealm;
-    public AuthenticatingRealm getDelegateAuthenticationRealm() {
-        return delegateAuthenticationRealm;
-    }
-    public void setDelegateAuthenticationRealm(AuthenticatingRealm delegateRealm) {
-        this.delegateAuthenticationRealm = delegateRealm;
-    }
-
-    public boolean hasDelegateAuthenticationRealm() {
+	private boolean hasDelegateAuthenticationRealm() {
         return delegateAuthenticationRealm != null;
     }
-
-    private boolean autoCreateUser = true;
-
-    public boolean getAutoCreateUser() {
-        return autoCreateUser;
-    }
-
-    public void setAutoCreateUser(boolean autoCreateUser) {
-        this.autoCreateUser = autoCreateUser;
-    }
-
+	
     <V> V execute(final Supplier<V> closure) {
         return getSessionFactory().doInSession(
                 new Callable<V>() {
@@ -234,7 +233,9 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         val txTemplate = IsisContext.createTransactionTemplate();
         return txTemplate.execute(status->closure.get());
     }
-
+	
+	// -- DEPENDENCIES
+	
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession().orElse(null);
     }
@@ -243,14 +244,5 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     protected IsisSessionFactory getSessionFactory() {
         return IsisContext.getSessionFactory();
     }
-
-
-	@Override
-	public EnumSet<SecurityRealmCharacteristic> getCharacteristics() {
-		if(hasDelegateAuthenticationRealm()) {
-			return EnumSet.of(SecurityRealmCharacteristic.DELEGATING);
-		}
-		return EnumSet.noneOf(SecurityRealmCharacteristic.class);
-	}
 
 }
