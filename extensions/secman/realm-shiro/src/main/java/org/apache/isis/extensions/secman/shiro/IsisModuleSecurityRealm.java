@@ -61,7 +61,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
 
     /**
      * In order to provide an attacker with additional information, the exceptions thrown here deliberately have
-     * few (or no) details in their exception message.  Similarly, the generic
+     * few (or no) details in their exception message. Similarly, the generic
      * {@link org.apache.shiro.authc.CredentialsException} is thrown for both a non-existent user and also an
      * invalid password.
      */
@@ -76,10 +76,8 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         val username = usernamePasswordToken.getUsername();
         val password = usernamePasswordToken.getPassword();
 
-        // lookup from database, for roles/perms, but also
-        // determine how to authenticate (delegate or local), whether disabled
-        val autoCreateUser = hasDelegateAuthenticationRealm() && getAutoCreateUser(); 
-        val principal = lookupPrincipal(username, autoCreateUser);
+        // lookup from database, for roles/perms
+        val principal = lookupPrincipal(username);
         if (principal == null) {
             // if no delegate authentication
             throw new CredentialsException("Unknown user/password combination");
@@ -130,13 +128,11 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         return urp;
     }
 
-    /**
-     * @param username
-     * @param autoCreateUser
-     */
-    private PrincipalForApplicationUser lookupPrincipal(
-    		final String username, 
-    		final boolean autoCreateUser) {
+    private PrincipalForApplicationUser lookupPrincipal(final String username) {
+    	
+    	//FIXME[2157] do not auto-create if user cannot authenticate
+    	// determine how to authenticate (delegate or local), whether disabled
+        val autoCreateUser = hasDelegateAuthenticationRealm() && getAutoCreateUser();
     	
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
