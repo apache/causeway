@@ -35,5 +35,9 @@ public enum ApplicationUserStatus {
     public String toString() {
         return StringExtensions.capitalize(name());
     }
-
+    
+    public boolean isEnabled() {
+    	return this == ENABLED;
+    }
+    
 }

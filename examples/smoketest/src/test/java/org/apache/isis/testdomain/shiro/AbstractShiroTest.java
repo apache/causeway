@@ -27,6 +27,8 @@ import org.apache.shiro.util.LifecycleUtils;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
 
+/** This class was initially copied over from the ApacheDS user Guide, 
+ * however it has/had some glitches with inconsistent LocalThread (subjectThreadState) context.*/
 class AbstractShiroTest {
 
 	private static ThreadState subjectThreadState;
