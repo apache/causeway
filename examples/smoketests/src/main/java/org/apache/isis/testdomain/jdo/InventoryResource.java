@@ -19,18 +19,25 @@
 package org.apache.isis.testdomain.jdo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.base._NullSafe;
+
+import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW_REST_ONLY,
-        objectType = "testdomain.InventoryRepository")
-public class InventoryRepository {
+        objectType = "testdomain.InventoryResource")
+public class InventoryResource {
 
     @Action
     public List<Product> listProducts() {
@@ -47,6 +54,24 @@ public class InventoryRepository {
         return Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
     }
 
+    @Action
+    public String httpSessionInfo() {
+        
+        // when running with basic-auth strategy, we don't want to create HttpSessions at all
+        
+        val servletRequestAttributes = 
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        val httpSession = servletRequestAttributes.getRequest().getSession(false);
+        if(httpSession==null) {
+            return "no http-session";
+        }
+        val sessionAttributeNames = _NullSafe.stream(httpSession.getAttributeNames())
+        .collect(Collectors.joining(","));
+        
+        return String.format("http-session attribute names: {%s}", sessionAttributeNames);
+    }
+    
+    
     // -- DEPENDENCIES
 
     @Inject RepositoryService repository;

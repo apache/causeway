@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.client.log;
+package org.apache.isis.extensions.restclient.log;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

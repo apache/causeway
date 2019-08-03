@@ -25,46 +25,36 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.manager.AuthenticationManager;
+
+import lombok.val;
 
 public abstract class AuthenticationSessionStrategyAbstract implements AuthenticationSessionStrategy {
 
     public static final int STATUS_UNAUTHORIZED = 401;
 
     protected HttpSession getHttpSession(final ServletRequest servletRequest) {
-        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        val httpServletRequest = (HttpServletRequest) servletRequest;
         return httpServletRequest.getSession();
     }
 
     protected ServletContext getServletContext(final ServletRequest servletRequest) {
-        final HttpSession httpSession = getHttpSession(servletRequest);
+        val httpSession = getHttpSession(servletRequest);
         return httpSession.getServletContext();
     }
 
     @Override
-    public void bind(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final AuthenticationSession authSession) {
-        // no-op
-    }
-
-    @Override
-    public void invalidate(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
+    public final void invalidate(
+            final HttpServletRequest httpServletRequest, 
+            final HttpServletResponse httpServletResponse) {
+        
         bind(httpServletRequest, httpServletResponse, null);
         httpServletResponse.setStatus(STATUS_UNAUTHORIZED);
     }
 
-
-    // -- Dependencies (from request)
-    protected AuthenticationManager authenticationManagerFrom(final HttpServletRequest httpServletRequest) {
-        return isisSessionFactoryFrom(httpServletRequest).getAuthenticationManager();
+    protected AuthenticationManager authenticationManager() {
+        return IsisContext.getAuthenticationManager();
     }
-
-    // TODO
-    protected IsisSessionFactory isisSessionFactoryFrom(final HttpServletRequest httpServletRequest) {
-        return IsisContext.getSessionFactory();
-    }
-
-
-
+        
+    
 }

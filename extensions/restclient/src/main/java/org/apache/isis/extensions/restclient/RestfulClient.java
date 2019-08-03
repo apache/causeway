@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.client;
+package org.apache.isis.extensions.restclient;
 
 import java.util.EnumSet;
 import java.util.concurrent.CompletableFuture;
@@ -28,11 +28,12 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.client.auth.BasicAuthFilter;
-import org.apache.isis.applib.client.auth.BasicAuthFilter.Credentials;
-import org.apache.isis.applib.client.log.RestfulLoggingFilter;
+import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.extensions.restclient.auth.BasicAuthFilter;
+import org.apache.isis.extensions.restclient.auth.BasicAuthFilter.Credentials;
+import org.apache.isis.extensions.restclient.log.RestfulLoggingFilter;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 

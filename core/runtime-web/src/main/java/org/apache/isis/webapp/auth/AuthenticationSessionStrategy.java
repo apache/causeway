@@ -32,13 +32,25 @@ import org.apache.isis.security.authentication.manager.AuthenticationManager;
 public interface AuthenticationSessionStrategy {
 
     /**
-     * Returns a
-     * {@link AuthenticationManager#isSessionValid(AuthenticationSession)
-     * still-valid} {@link AuthenticationSession}.
+     * Returns a still-valid {@link AuthenticationSession} or {@code null}
+     * @see {@link AuthenticationManager#isSessionValid(AuthenticationSession)
      */
-    AuthenticationSession lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse);
+    AuthenticationSession lookupValid(
+            HttpServletRequest httpServletRequest, 
+            HttpServletResponse httpServletResponse);
 
-    void bind(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final AuthenticationSession authSession);
+    /**
+     * Binds the request to a still-valid {@link AuthenticationSession} if applicable
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param authSession
+     */
+    void bind(
+            HttpServletRequest httpServletRequest, 
+            HttpServletResponse httpServletResponse, 
+            AuthenticationSession authSession);
 
-    void invalidate(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse);
+    void invalidate(
+            HttpServletRequest httpServletRequest, 
+            HttpServletResponse httpServletResponse);
 }

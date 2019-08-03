@@ -19,14 +19,12 @@
 
 package org.apache.isis.security.authentication.manager;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 /**
  * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; 
- * all public methods must be annotated using {@link Programmatic}.
  */
 public interface AuthenticationManager extends ApplicationScopedComponent {
 
@@ -40,7 +38,6 @@ public interface AuthenticationManager extends ApplicationScopedComponent {
      * {@link AuthenticationRequest request} is valid; otherwise returns
      * <tt>null</tt>.
      */
-
     AuthenticationSession authenticate(AuthenticationRequest request);
 
     boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass);
@@ -50,7 +47,6 @@ public interface AuthenticationManager extends ApplicationScopedComponent {
     /**
      * Whether the provided {@link AuthenticationSession} is still valid.
      */
-
     boolean isSessionValid(AuthenticationSession authenticationSession);
 
     void closeSession(AuthenticationSession authenticationSession);

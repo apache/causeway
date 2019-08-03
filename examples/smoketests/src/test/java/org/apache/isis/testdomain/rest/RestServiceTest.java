@@ -71,5 +71,26 @@ class RestServiceTest {
         assertEquals("Book of the week", bookOfTheWeek.getName());
 
     }
+    
+    @Test
+    void httpSessionInfo() {
+
+        val useRequestDebugLogging = false;
+        val restfulClient = restService.newClient(useRequestDebugLogging);
+
+        val digest = restService.getHttpSessionInfo(restfulClient);
+
+        if(!digest.isSuccess()) {
+            fail(digest.getFailureCause());
+        }
+
+        val httpSessionInfo = digest.get();
+
+        assertNotNull(httpSessionInfo);
+        assertEquals("no http-session", httpSessionInfo);
+
+    }
+    
+    
 
 }

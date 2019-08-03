@@ -28,14 +28,23 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 
 import org.apache.isis.commons.internal.base._Lazy;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInfo {
 
     private static final long serialVersionUID = 1L;
+    
+    static AuthenticationInfo of(
+            PrincipalForApplicationUser principal, 
+            String realmName,
+            Object credentials) {
+        
+        return new AuthInfoForApplicationUser(principal, realmName, credentials);
+    }
 
     @NonNull private final PrincipalForApplicationUser principal;
     @NonNull private final String realmName;
@@ -67,7 +76,11 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
             _Lazy.threadSafe(this::createPrincipalCollection);
     
     private PrincipalCollection createPrincipalCollection() {
-        return new SimplePrincipalCollection(principal, realmName);
+        return ShiroUtils.isSingleRealm()
+                ? PrincipalCollectionForApplicationUserOnSingleRealm.of(principal, realmName)
+                        : new SimplePrincipalCollection(principal, realmName);
     }
+
+
     
 }

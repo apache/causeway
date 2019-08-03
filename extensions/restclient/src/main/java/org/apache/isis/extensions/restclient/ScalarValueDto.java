@@ -16,25 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.client;
+package org.apache.isis.extensions.restclient;
 
-public class RestfulClientException extends RuntimeException {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-    private static final long serialVersionUID = 1L;
+import lombok.Getter;
+import lombok.Setter;
 
-    public RestfulClientException() {
+@JsonIgnoreProperties({"links", "resulttype"})
+class ScalarValueDto {
+    
+    @JsonIgnoreProperties({"links", "extensions"})
+    public static class ScalarValue {
+        @Getter @Setter private Object value;
     }
 
-    public RestfulClientException(final String message) {
-        super(message);
+    @Getter @Setter private ScalarValue result;
+    
+    @JsonIgnore
+    public Object getValue() {
+        return result!=null ? result.getValue() : null;
     }
-
-    public RestfulClientException(final Throwable cause) {
-        super(cause);
-    }
-
-    public RestfulClientException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
+    
 }

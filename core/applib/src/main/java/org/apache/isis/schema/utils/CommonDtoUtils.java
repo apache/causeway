@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.joda.time.DateTime;
@@ -69,7 +70,6 @@ public final class CommonDtoUtils {
     private final static Map<Class<?>, ValueType> valueTypeByClass =
             _Maps.unmodifiableEntries(
                     entry(String.class, ValueType.STRING),
-                    entry(String.class, ValueType.STRING),
                     entry(byte.class, ValueType.BYTE),
                     entry(Byte.class, ValueType.BYTE),
                     entry(short.class, ValueType.SHORT),
@@ -97,7 +97,7 @@ public final class CommonDtoUtils {
                     entry(Clob.class, ValueType.CLOB)
                     );
 
-    public static Collection<Class<?>> VALUE_TYPES = valueTypeByClass.keySet();
+    public static Set<Class<?>> VALUE_TYPES = valueTypeByClass.keySet();
 
     public static ValueType asValueType(final Class<?> type) {
         final ValueType valueType = valueTypeByClass.get(type);

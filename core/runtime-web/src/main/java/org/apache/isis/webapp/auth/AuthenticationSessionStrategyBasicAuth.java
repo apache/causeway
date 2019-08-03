@@ -20,7 +20,6 @@ package org.apache.isis.webapp.auth;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +30,8 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.authentication.AuthenticationSession;
+
+import lombok.val;
 
 /**
  * Implements the HTTP Basic Auth protocol; does not bind the
@@ -44,41 +45,64 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
     private static Pattern USER_AND_PASSWORD_REGEX = Pattern.compile("^(.+):(.+)$");
 
     @Override
-    public AuthenticationSession lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
+    public AuthenticationSession lookupValid(
+            final HttpServletRequest httpServletRequest, 
+            final HttpServletResponse httpServletResponse) {
 
-        final String digest = getBasicAuthDigest(httpServletRequest);
+        
+        // Basic auth should never create sessions! 
+        // However, telling this Shiro here, is a fragile approach.
+        httpServletRequest.setAttribute(
+                "org.apache.shiro.subject.support.DefaultSubjectContext.SESSION_CREATION_ENABLED", 
+                Boolean.FALSE);
+
+        
+        val digest = getBasicAuthDigest(httpServletRequest);
         if (digest == null) {
             return null;
         }
 
-        final String userAndPassword = unencoded(digest);
-        final Matcher matcher = USER_AND_PASSWORD_REGEX.matcher(userAndPassword);
+        val userAndPassword = unencoded(digest);
+        val matcher = USER_AND_PASSWORD_REGEX.matcher(userAndPassword);
         if (!matcher.matches()) {
             return null;
         }
 
-        final String user = matcher.group(1);
-        final String password = matcher.group(2);
+        val user = matcher.group(1);
+        val password = matcher.group(2);
 
-        final AuthenticationRequestPassword request = new AuthenticationRequestPassword(user, password);
-        final AuthenticationSession authSession =
-                authenticationManagerFrom(httpServletRequest).authenticate(request);
-        return authSession;
+        val authenticationRequestPwd = new AuthenticationRequestPassword(user, password);
+        val authenticationSession = authenticationManager().authenticate(authenticationRequestPwd);
+        return authenticationSession;
     }
 
+    @Override
+    public void bind(
+            HttpServletRequest httpServletRequest, 
+            HttpServletResponse httpServletResponse,
+            AuthenticationSession authSession) {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    // -- HELPER
+    
     // value should be in the form:
     // Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-    String getBasicAuthDigest(final HttpServletRequest httpServletRequest) {
-        final String authStr = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
+    private String getBasicAuthDigest(final HttpServletRequest httpServletRequest) {
+        val authStr = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
         return authStr != null &&
                 authStr.startsWith(BASIC_AUTH_PREFIX)
                 ? authStr.substring(BASIC_AUTH_PREFIX.length())
                         : null;
     }
 
-
     protected String unencoded(final String encodedDigest) {
-        return _Strings.ofBytes(_Bytes.decodeBase64(Base64.getUrlDecoder(), encodedDigest.getBytes()), StandardCharsets.UTF_8);
+        return _Strings.ofBytes(
+                _Bytes.decodeBase64(
+                        Base64.getUrlDecoder(),
+                        encodedDigest.getBytes()),
+                StandardCharsets.UTF_8);
     }
 
 

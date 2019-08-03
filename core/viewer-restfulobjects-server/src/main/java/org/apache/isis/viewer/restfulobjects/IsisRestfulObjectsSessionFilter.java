@@ -46,7 +46,6 @@ import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.runtime.system.SystemConstants;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.webapp.auth.AuthenticationSessionStrategyDefault;
 import org.apache.isis.webapp.modules.resources.ResourceCachingFilter;
@@ -330,12 +329,12 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
 
         ensureMetamodelIsValid();
 
-        final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        val httpServletRequest = (HttpServletRequest) request;
+        val httpServletResponse = (HttpServletResponse) response;
 
-        final IsisSessionFactory sessionFactory = isisSessionFactoryFrom(httpServletRequest);
+        val isisSessionFactory = isisSessionFactory();
         try {
-            final String queryString = httpServletRequest.getQueryString();
+            val queryString = httpServletRequest.getQueryString();
             if (queryString != null && queryString
                     .contains(SystemConstants.ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
 
@@ -353,15 +352,17 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
                 chain.doFilter(request, response);
                 return;
             }
-
+            
             // authenticate
-            final AuthenticationSession authSession =
+            val authenticationSession =
                     authSessionStrategy.lookupValid(httpServletRequest, httpServletResponse);
-            if (authSession != null) {
-                authSessionStrategy.bind(httpServletRequest, httpServletResponse, authSession);
+            if (authenticationSession != null) {
+               
+                authSessionStrategy.bind(httpServletRequest, httpServletResponse, authenticationSession);
 
-                sessionFactory.openSession(authSession);
+                isisSessionFactory.openSession(authenticationSession);
                 chain.doFilter(request, response);
+                
                 return;
             }
 
@@ -378,7 +379,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             }
 
         } finally {
-            sessionFactory.closeSession();
+            isisSessionFactory.closeSession();
         }
 
     }
@@ -408,8 +409,11 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return false;
     }
 
-    private boolean requestIsIgnoreExtension(final IsisRestfulObjectsSessionFilter filter, final HttpServletRequest httpRequest) {
-        final String servletPath = httpRequest.getServletPath();
+    private boolean requestIsIgnoreExtension(
+            final IsisRestfulObjectsSessionFilter filter, 
+            final HttpServletRequest httpRequest) {
+        
+        val servletPath = httpRequest.getServletPath();
         for (final Pattern extension : filter.ignoreExtensions) {
             if (extension.matcher(servletPath).matches()) {
                 return true;
@@ -418,8 +422,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return false;
     }
 
-    // REVIEW: it ought to be possible to remove this static lookup by binding the IsisSessionFactory to the request in an earlier filter
-    private IsisSessionFactory isisSessionFactoryFrom(final HttpServletRequest httpServletRequest) {
+    private IsisSessionFactory isisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 

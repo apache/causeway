@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.client.auth;
+package org.apache.isis.extensions.restclient.auth;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.client;
+package org.apache.isis.extensions.restclient;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
@@ -27,7 +28,15 @@ import java.util.function.Function;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Json;
+import org.apache.isis.schema.utils.CommonDtoUtils;
+
+import lombok.val;
 
 /**
  * 
@@ -119,6 +128,17 @@ public class ResponseDigest<T> {
             return this;
         }
 
+        if(isValueType(entityType)) {
+            try {
+                val responseBody = response.readEntity(String.class);
+                entity = parseValueTypeBody(responseBody);
+            } catch (Exception e) {
+                entity = null;
+                failureCause = new RestfulClientException("failed to read JAX-RS response content", e);
+            }
+            return this;
+        }
+
         try {
             entity = response.readEntity(entityType);
         } catch (Exception e) {
@@ -132,7 +152,6 @@ public class ResponseDigest<T> {
     private ResponseDigest<T> digestAsyncFailure(boolean isCancelled, Exception failure) {
 
         entity = null;
-
 
         if(isCancelled) {
             failureCause = new RestfulClientException("Async JAX-RS request was canceled", failure);
@@ -168,7 +187,17 @@ public class ResponseDigest<T> {
         return failureMessage;
     }
 
+    // -- VALUE TYPE HANDLING
 
+    private boolean isValueType(Class<T> entityType) {
+        return CommonDtoUtils.VALUE_TYPES.contains(entityType);
+    }
 
+    private T parseValueTypeBody(String body) 
+            throws JsonParseException, JsonMappingException, IOException {
+
+        val scalarValueDto = _Json.readJson(ScalarValueDto.class, body);
+        return _Casts.uncheckedCast(scalarValueDto.getValue());
+    }
 
 }

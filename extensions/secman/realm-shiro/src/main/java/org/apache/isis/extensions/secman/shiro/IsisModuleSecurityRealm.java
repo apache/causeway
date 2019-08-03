@@ -65,7 +65,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     }
 
     /**
-     * In order to provide an attacker with additional information, the exceptions thrown here deliberately have
+     * In order to not provide an attacker with additional information, the exceptions thrown here deliberately have
      * few (or no) details in their exception message. Similarly, the generic
      * {@link org.apache.shiro.authc.CredentialsException} is thrown for both a non-existent user and also an
      * invalid password.
@@ -89,7 +89,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
             if(alreadyAuthenticatedPrincipal!=null) {
                 val credentials = token.getCredentials();
                 val realmName = getName();
-                return new AuthInfoForApplicationUser(alreadyAuthenticatedPrincipal, realmName, credentials);
+                return AuthInfoForApplicationUser.of(alreadyAuthenticatedPrincipal, realmName, credentials);
             }
         }
         
@@ -136,16 +136,12 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
 
         val credentials = token.getCredentials();
         val realmName = getName();
-        return new AuthInfoForApplicationUser(principal, realmName, credentials);
+        return AuthInfoForApplicationUser.of(principal, realmName, credentials);
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        final PrincipalForApplicationUser urp = principals.oneByType(PrincipalForApplicationUser.class);
-        if (urp == null) {
-            return null;
-        }
-        return urp;
+        return principals.oneByType(PrincipalForApplicationUser.class);
     }
 
     @Override
@@ -159,6 +155,7 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     // -- HELPER
     
     /**
+     * @implNote
      * This is just an optimization, entirely optional.
      * <p>
      * We reuse principal information on subjects that are already authenticated, 

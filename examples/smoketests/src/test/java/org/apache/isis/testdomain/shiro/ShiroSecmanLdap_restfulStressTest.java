@@ -41,6 +41,10 @@ import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 
+import static java.time.Duration.ofMillis;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
@@ -51,7 +55,8 @@ import lombok.val;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
+                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring
+                "server.servlet.session.persistent=false", // defaults to false
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
@@ -77,6 +82,7 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
 
+    
     @BeforeAll
     static void beforeClass() {
         //WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap-cached.ini");
@@ -108,12 +114,24 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        for(int i=0; i<100; ++i) {
-            val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
-            if(!digest.isSuccess()) {
-                fail(digest.getFailureCause());
+        assertTimeout(ofMillis(5000), ()->{
+            
+            for(int i=0; i<100; ++i) {
+                val digest = restService.getHttpSessionInfo(restfulClient);
+                if(!digest.isSuccess()) {
+                    fail(digest.getFailureCause());
+                }
+                
+                val httpSessionInfo = digest.get();
+
+                assertNotNull(httpSessionInfo);
+                assertEquals("no http-session", httpSessionInfo);
+                
             }
-        }
+            
+        });
+        
+        
     }
 
 }

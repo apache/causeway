@@ -25,7 +25,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.manager.AuthenticationManager;
+
+import lombok.val;
 
 /**
  * Returns a valid {@link AuthenticationSession} through a number of mechanisms;
@@ -49,15 +50,18 @@ import org.apache.isis.security.authentication.manager.AuthenticationManager;
 public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
 
     @Override
-    public AuthenticationSession lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
+    public AuthenticationSession lookupValid(
+            final HttpServletRequest httpServletRequest, 
+            final HttpServletResponse httpServletResponse) {
 
-        final AuthenticationManager authenticationManager = authenticationManagerFrom(httpServletRequest);
-        final HttpSession httpSession = getHttpSession(httpServletRequest);
+        val authenticationManager = authenticationManager();
+        val httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available
-        AuthenticationSession authSession = (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
+        val authSession = (AuthenticationSession) 
+                httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authSession != null) {
-            final boolean sessionValid = authenticationManager.isSessionValid(authSession);
+            val sessionValid = authenticationManager.isSessionValid(authSession);
             if (sessionValid) {
                 return authSession;
             }
@@ -71,9 +75,11 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final AuthenticationSession authSession) {
-        final HttpSession httpSession = getHttpSession(httpServletRequest);
+        
+        val httpSession = getHttpSession(httpServletRequest);
         if(authSession != null) {
-            httpSession.setAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
+            httpSession.setAttribute(
+                    WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
         } else {
             httpSession.removeAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         }

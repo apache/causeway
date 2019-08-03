@@ -119,6 +119,12 @@
 		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-restclient</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-model</artifactId>
 			<version>${isis.version}</version>
 		</dependency>

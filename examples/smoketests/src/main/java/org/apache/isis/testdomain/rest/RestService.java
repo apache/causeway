@@ -23,11 +23,11 @@ import javax.inject.Inject;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.client.ResponseDigest;
-import org.apache.isis.applib.client.RestfulClient;
-import org.apache.isis.applib.client.RestfulClientConfig;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.extensions.restclient.ResponseDigest;
+import org.apache.isis.extensions.restclient.RestfulClient;
+import org.apache.isis.extensions.restclient.RestfulClientConfig;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
@@ -43,6 +43,8 @@ public class RestService {
         }
         return port;
     }
+    
+    // -- NEW CLIENT
 
     public RestfulClient newClient(boolean useRequestDebugLogging) {
 
@@ -65,10 +67,12 @@ public class RestService {
 
         return client;
     }
+    
+    // -- ENDPOINTS
 
     public ResponseDigest<Book> getRecommendedBookOfTheWeek(RestfulClient client) {
         val request = client.request(
-                "services/testdomain.InventoryRepository/actions/recommendedBookOfTheWeek/invoke", 
+                "services/testdomain.InventoryResource/actions/recommendedBookOfTheWeek/invoke", 
                 SuppressionType.ALL);
 
         val args = client.arguments()
@@ -79,13 +83,28 @@ public class RestService {
 
         return digest;
     }
+    
+    public ResponseDigest<String> getHttpSessionInfo(RestfulClient client) {
+        val request = client.request(
+                "services/testdomain.InventoryResource/actions/httpSessionInfo/invoke", 
+                SuppressionType.ALL);
 
+        val args = client.arguments()
+                .build();
 
+        val response = request.post(args);
+        val digest = client.digest(response, String.class);
+
+        return digest;
+    }
+    
+    
     // -- HELPER
 
     private Integer port;
 
     private void init() {
+        // spring embedded web server port
         port = Integer.parseInt(environment.getProperty("local.server.port"));
     }
 

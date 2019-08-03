@@ -27,11 +27,18 @@ import java.util.stream.Collectors;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
 
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 
 /**
@@ -50,6 +57,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
  * TODO: this should probably implement java.security.Principal so that it doesn't get wrapped in a
  * ShiroHttpServletRequest.ObjectPrincipal.  Such a change would need some testing to avoid regressions, though.
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class PrincipalForApplicationUser implements AuthorizationInfo {
 
     private static final long serialVersionUID = 1L;
@@ -58,87 +66,38 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
         if(applicationUser == null) {
             return null;
         }
-        final String username = applicationUser.getName();
-        final String encryptedPassword = applicationUser.getEncryptedPassword();
-        final AccountType accountType = applicationUser.getAccountType();
-        final Set<String> roles = applicationUser.getRoles()
+        val username = applicationUser.getName();
+        val encryptedPassword = applicationUser.getEncryptedPassword();
+        val accountType = applicationUser.getAccountType();
+        val roles = applicationUser.getRoles()
                 .stream()
                 .map(ApplicationRole::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
-        final ApplicationPermissionValueSet permissionSet = applicationUser.getPermissionSet();
+        val permissionSet = applicationUser.getPermissionSet();
+        
         return new PrincipalForApplicationUser(username, encryptedPassword, accountType, 
                 applicationUser.getStatus(), roles, permissionSet);
     }
 
-    private final String username;
-    private final Set<String> roles;
-    private final String encryptedPassword;
-    private final ApplicationUserStatus status;
-    private final AccountType accountType;
-    private final ApplicationPermissionValueSet permissionSet;
-
-    PrincipalForApplicationUser(
-            final String username,
-            final String encryptedPassword,
-            final AccountType accountType,
-            final ApplicationUserStatus status,
-            final Set<String> roles,
-            final ApplicationPermissionValueSet applicationPermissionValueSet) {
-        this.username = username;
-        this.encryptedPassword = encryptedPassword;
-        this.accountType = accountType;
-        this.roles = roles;
-        this.status = status;
-        this.permissionSet = applicationPermissionValueSet;
-    }
-
+    @Getter(value = AccessLevel.PACKAGE) private final String username;
+    @Getter(value = AccessLevel.PACKAGE) private final String encryptedPassword;
+    @Getter(value = AccessLevel.PUBLIC)  private final AccountType accountType;
+    @Getter(value = AccessLevel.PACKAGE) private final ApplicationUserStatus status;
+    @Getter(value = AccessLevel.PUBLIC)  private final Set<String> roles;
+    @Getter(value = AccessLevel.PACKAGE) private final ApplicationPermissionValueSet permissionSet;
+    
     public boolean isDisabled() {
         return getStatus() == ApplicationUserStatus.DISABLED;
-    }
-
-    @Override
-    public Set<String> getRoles() {
-        return roles;
     }
 
     @Override
     public Collection<String> getStringPermissions() {
         return Collections.emptyList();
     }
-
+    
     @Override
     public Collection<Permission> getObjectPermissions() {
-        final Permission o = new Permission() {
-            @Override
-            public boolean implies(Permission p) {
-                if (!(p instanceof PermissionForMember)) {
-                    return false;
-                }
-                final PermissionForMember pfm = (PermissionForMember) p;
-                return getPermissionSet().grants(pfm.getFeatureId(), pfm.getMode());
-            }
-        };
-        return Collections.singleton(o);
-    }
-
-    ApplicationUserStatus getStatus() {
-        return status;
-    }
-
-    String getUsername() {
-        return username;
-    }
-
-    String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-
-    ApplicationPermissionValueSet getPermissionSet() {
-        return permissionSet;
-    }
-
-    public AccountType getAccountType() {
-        return accountType;
+        return objectPermissions.get();
     }
 
     /**
@@ -152,4 +111,32 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
     public String toString() {
         return getUsername();
     }
+    
+    // -- HELPER
+    
+    private final transient _Lazy<Collection<Permission>> objectPermissions = 
+            _Lazy.threadSafe(this::createObjectPermissions);
+    
+    private Collection<Permission> createObjectPermissions() {
+        val permission = Permission_backedByPermissionSet.of(getPermissionSet());
+        return Collections.singleton(permission);
+    }
+    
+    @RequiredArgsConstructor(staticName = "of")
+    private static class Permission_backedByPermissionSet implements Permission {
+        
+        @NonNull private final ApplicationPermissionValueSet permissionSet;
+        
+        @Override
+        public boolean implies(Permission p) {
+            if (!(p instanceof PermissionForMember)) {
+                return false;
+            }
+            val permissionForMember = (PermissionForMember) p;
+            return permissionSet.grants(
+                    permissionForMember.getFeatureId(), 
+                    permissionForMember.getMode());
+        }
+    }
+    
 }

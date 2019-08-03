@@ -224,6 +224,7 @@
 
 		<module>viewer-wicket-excel</module>
 		<module>secman</module>
+		<module>restclient</module>
 	</modules>
 
 </project>
