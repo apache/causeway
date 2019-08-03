@@ -19,8 +19,8 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -48,22 +48,44 @@ public final class _Casts {
     }
 
     /**
-     * Returns the casts of {@code value} to {@code cls}, or if this fails returns the result of {@code orElse}
+     * Casts an object to the class or interface represented by given {@code cls} Class object, 
+     * then wraps the result in an {@link Optional}. The {@link Optional} is empty if the cast 
+     * fails or provided {@code value} is {@code null}.
+     * @param <T>
      * @param value
      * @param cls
-     * @param orElse
-     * @return
+     * @return non-null
      */
-    public static <T> T castToOrElseGet(@Nullable Object value, Class<T> cls, Supplier<T> orElse) {
-
-        try {
-            return requires(cls, "cls").cast(value);
-        } catch (Exception e) {
-            return requires(orElse, "orElse").get();
+    public static <T> Optional<T> castTo(@Nullable Object value, Class<T> cls) {
+        if(value==null) {
+            return Optional.empty();
         }
-
+        requires(cls, "cls");
+        if(cls.isAssignableFrom(value.getClass())) {
+            return Optional.of(cls.cast(value)); 
+        }
+        return Optional.empty();
     }
-
+    
+    /**
+     * Casts an object to the class or interface represented by given {@code cls} Class object. 
+     * Returns {@code null}, if the cast fails or provided {@code value} is {@code null}.
+     * @param <T>
+     * @param value
+     * @param cls
+     * @return casted value, or null
+     */
+    public static @Nullable <T> T castToOrElseNull(@Nullable Object value, Class<T> cls) {
+        if(value==null) {
+            return null;
+        }
+        requires(cls, "cls");
+        if(cls.isAssignableFrom(value.getClass())) {
+            return cls.cast(value); 
+        }
+        return null;
+    }
+    
     /**
      * Dependent on whether left or right can be cast to {@code cls}, the appropriate functional 
      * interface is chosen to produce the result.
@@ -121,6 +143,8 @@ public final class _Casts {
         return onLeftCast.apply(left_casted, right);
 
     }
+
+
 
 
 }

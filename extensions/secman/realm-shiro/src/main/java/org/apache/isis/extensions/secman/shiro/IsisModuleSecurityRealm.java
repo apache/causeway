@@ -83,24 +83,16 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
         
 
         // this code block is just an optimization, entirely optional
-        // we reuse principal information on subjects that are already authenticated
         {
-            val currentSubject = SecurityUtils.getSubject();
-            if(currentSubject!=null && currentSubject.isAuthenticated()) {
-                val authenticatedPrincipalObject = currentSubject.getPrincipal();
-                if(authenticatedPrincipalObject instanceof PrincipalForApplicationUser) {
-                    val authenticatedPrincipal = (PrincipalForApplicationUser) authenticatedPrincipalObject;
-                    val authenticatedUsername = authenticatedPrincipal.getUsername();
-                    val isAuthenticatedWithThisRealm = username.equals(authenticatedUsername);
-                    if(isAuthenticatedWithThisRealm) {
-                        val credentials = token.getCredentials();
-                        val realmName = getName();
-                        return new AuthInfoForApplicationUser(authenticatedPrincipal, realmName, credentials);                        
-                    }
-                }
+            val alreadyAuthenticatedPrincipal = 
+                    getPrincipal_fromAlreadyAuthenticatedSubjectIfApplicable(token);
+            if(alreadyAuthenticatedPrincipal!=null) {
+                val credentials = token.getCredentials();
+                val realmName = getName();
+                return new AuthInfoForApplicationUser(alreadyAuthenticatedPrincipal, realmName, credentials);
             }
         }
-
+        
         // lookup from database, for roles/perms
         val principal = lookupPrincipal_inApplicationUserRepository(username);
 
@@ -165,6 +157,39 @@ public class IsisModuleSecurityRealm extends AuthorizingRealm implements Securit
     }
 
     // -- HELPER
+    
+    /**
+     * This is just an optimization, entirely optional.
+     * <p>
+     * We reuse principal information on subjects that are already authenticated, 
+     * provided we are in a single realm authentication scenario.
+     * @param token
+     * @return {@code null} if not applicable
+     */
+    private PrincipalForApplicationUser getPrincipal_fromAlreadyAuthenticatedSubjectIfApplicable(
+            AuthenticationToken token) {
+        
+        // this optimization is only implemented for the simple case of a single realm setup
+        if(!ShiroUtils.isSingleRealm()) {
+            return null;   
+        }
+        
+        val currentSubject = SecurityUtils.getSubject();
+        if(currentSubject!=null && currentSubject.isAuthenticated()) {
+            val authenticatedPrincipalObject = currentSubject.getPrincipal();
+            if(authenticatedPrincipalObject instanceof PrincipalForApplicationUser) {
+                val authenticatedPrincipal = (PrincipalForApplicationUser) authenticatedPrincipalObject;
+                val authenticatedUsername = authenticatedPrincipal.getUsername();
+                val usernamePasswordToken = (UsernamePasswordToken) token;
+                val username = usernamePasswordToken.getUsername();
+                val isAuthenticatedWithThisRealm = username.equals(authenticatedUsername);
+                if(isAuthenticatedWithThisRealm) {
+                    return authenticatedPrincipal;
+                }
+            }
+        }
+        return null;
+    }
 
     private DisabledAccountException disabledAccountException(String username) {
         return new DisabledAccountException(String.format("username='%s'", username));

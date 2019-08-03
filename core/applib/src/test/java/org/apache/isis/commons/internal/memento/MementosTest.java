@@ -64,7 +64,7 @@ public class MementosTest {
 
             @Override
             public <T> T read(Class<T> cls, Serializable value) {
-                return _Casts.castToOrElseGet(value, cls, ()->null);
+                return _Casts.castToOrElseNull(value, cls);
             }
         };
 

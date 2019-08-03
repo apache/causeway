@@ -18,6 +18,9 @@
  */
 package org.apache.isis.security.shiro;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Singleton;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
@@ -27,6 +30,7 @@ import javax.servlet.ServletException;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.env.WebEnvironment;
+import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
@@ -77,6 +81,13 @@ public final class WebModuleShiro implements WebModule  {
                 return ini;	
             } 
             return null;
+        }
+        // see https://issues.apache.org/jira/browse/SHIRO-610
+        @Override
+        protected Map<String, Object> getDefaults() {
+            Map<String, Object> defaults = new HashMap<String, Object>();
+            defaults.put(FILTER_CHAIN_RESOLVER_NAME, new PathMatchingFilterChainResolver());
+            return defaults;
         }
     }
 

@@ -56,4 +56,9 @@ final class ShiroUtils {
         return null;
     }
 
+    public static boolean isSingleRealm() {
+        final RealmSecurityManager securityManager = getSecurityManager();
+        return securityManager.getRealms().size() == 1;
+    }
+    
 }

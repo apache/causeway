@@ -26,7 +26,10 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
+import org.apache.isis.commons.internal.base._Lazy;
+
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -34,13 +37,13 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
 
     private static final long serialVersionUID = 1L;
 
-    private final PrincipalForApplicationUser principal;
-    private final String realmName;
-    @Getter private final Object credentials;
+    @NonNull private final PrincipalForApplicationUser principal;
+    @NonNull private final String realmName;
+    @NonNull @Getter private final Object credentials;
 
     @Override
     public PrincipalCollection getPrincipals() {
-        return new SimplePrincipalCollection(principal, realmName);
+        return principalCollection.get();
     }
 
     @Override
@@ -57,4 +60,14 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
     public Collection<Permission> getObjectPermissions() {
         return principal.getObjectPermissions();
     }
+    
+    // -- HELPER
+    
+    private final transient _Lazy<PrincipalCollection> principalCollection = 
+            _Lazy.threadSafe(this::createPrincipalCollection);
+    
+    private PrincipalCollection createPrincipalCollection() {
+        return new SimplePrincipalCollection(principal, realmName);
+    }
+    
 }
