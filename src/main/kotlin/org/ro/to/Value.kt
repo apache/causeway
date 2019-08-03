@@ -78,7 +78,7 @@ data class Value(
         }
 
         private fun asString(decoder: Decoder): String? {
-            var result: String? = null
+            var result: String?
             try {
                 result = decoder.decodeString()
             } catch (jpe: JsonParsingException) {

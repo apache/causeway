@@ -5,33 +5,42 @@ abstract class AbstractLayout {
     cssClass
     fromObject()
     build()
+} 
+together {
+  class DomainObjectLayout
+  class ColLayout
+  class Layout
+  class MemberLayout
+  class RowLayout
+  class TabLayout
 }
+AbstractLayout <|-- DomainObjectLayout 
+AbstractLayout <|-- ColLayout
+AbstractLayout <|-- FieldSetLayout
+AbstractLayout <|-- Layout
+AbstractLayout <|-- MemberLayout
+AbstractLayout <|-- RowLayout
+AbstractLayout <|-- TabLayout
 
 abstract class MemberLayout {
-    named
-    describedAs
     metadataError
     link
-    id
     hidden
-    namedEscaped
     promptStyle
 }
 
 class Layout {
-    row 
+    row
 }
 
 class RowLayout {
     cols
     metadataError
-    id
 }
 
 class ColLayout {
     metadataError
     size
-    id
     span
     unreferencedActions
     unreferencedCollections
@@ -40,16 +49,10 @@ class ColLayout {
 }
 
 class DomainObjectLayout {
-    named
-    describedAs
     plural
     metadataError
     link
     bookmarking
-    cssClass
-    cssClassFa
-    cssClassFaPosition
-    namedEscaped
 }
 ColLayout -> DomainObjectLayout : domainObject
 
@@ -58,14 +61,13 @@ class FieldSetLayout {
     action
     property
     metadataError
-    id
     unreferencedActions
     unreferencedCollections
 }
 
 class TabLayout {
     name
-    row 
+    row
 }
 
 class PropertyLayout {
@@ -80,18 +82,10 @@ class PropertyLayout {
 class ActionLayout {
     bookmarking
     position
-    cssClassFa
-    cssClassFaPosition
 }
 
 MemberLayout <|-- ActionLayout
-AbstractLayout <|-- ColLayout
-AbstractLayout <|-- FieldSetLayout
-AbstractLayout <|-- Layout
-AbstractLayout <|-- MemberLayout
 MemberLayout <|-- PropertyLayout
-AbstractLayout <|-- RowLayout
-AbstractLayout <|-- TabLayout
 
 Layout -> RowLayout
 TabLayout -> RowLayout
@@ -101,4 +95,36 @@ ColLayout -> TabLayout
 
 FieldSetLayout -> ActionLayout
 FieldSetLayout -> PropertyLayout
+
+interface Named {
+    named
+    namedEscaped
+    describedAs
+}
+MemberLayout -up-|> Named
+DomainObjectLayout -up-|> Named
+
+interface Identifyable {
+    id
+}
+MemberLayout -up-|> Identifyable
+FieldSetLayout -up-|> Identifyable
+ColLayout -up-|> Identifyable
+RowLayout -up-|> Identifyable
+ 
+
+interface Styleable {
+    cssClassFa
+    cssClassFaPosition
+}
+Styleable <|-- ActionLayout
+Styleable <|-- DomainObjectLayout
+
+interface Errorprone {
+    metadataError
+}
+Errorprone <|-- ColLayout
+Errorprone <|-- FieldSetLayout
+Errorprone <|-- MemberLayout
+Errorprone <|-- RowLayout
 --

@@ -26,15 +26,15 @@ class ListObserver : BaseObserver() {
     private var isRendered = false;
 
     // Handlers should set object into le after successful parsing
-    override fun update(le: LogEntry) {
-        val obj = le.getObj()
+    override fun update(logEntry: LogEntry) {
+        val obj = logEntry.getObj()
 
         when (obj) {
             is ResultList -> handleList(obj)
             is TObject -> handleObject(obj)
             is Layout -> list.layout = obj
             is Property -> handleProperty(obj)
-            else -> log(le)
+            else -> log(logEntry)
         }
 
         if (list.hasLayout() && !isRendered) {

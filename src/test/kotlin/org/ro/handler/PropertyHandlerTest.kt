@@ -89,7 +89,7 @@ class PropertyHandlerTest : IntegrationTest() {
 
             ol.initPropertyDescription()
             assertNotNull(property.id)  //6
-            val lbl: String? = ol.getPropertyLabel(property.id)
+//            val lbl: String? = ol.getPropertyLabel(property.id)
 //FIXME            assertNotNull(lbl)  //7
         }
     }

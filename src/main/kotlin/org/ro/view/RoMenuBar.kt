@@ -37,7 +37,6 @@ object RoMenuBar {
 
         val title = "Log Entries"
         val log = createLink(title).onClick {
-            //@kotlin.ExperimentalUnsignedTypes
             val model = EventStore.log
             RoView.addTab(tr(title), EventLogTable(model))
         }

@@ -8,7 +8,7 @@ object Utils {
 
     fun debug(value: Any?, throwable: Throwable? = null) {
         //var st = kotlin.test.cu
-        var message = ""
+        val message: String?
         if (value is String) {
             message = value
         } else {

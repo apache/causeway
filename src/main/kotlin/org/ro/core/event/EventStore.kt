@@ -1,8 +1,8 @@
 package org.ro.core.event
 
-import com.lightningkite.kotlin.observable.list.observableListOf
 import org.ro.Application
 import org.ro.handler.ResponseHandler
+import pl.treksoft.kvision.utils.observableListOf
 import kotlin.js.Date
 
 /**
@@ -12,7 +12,6 @@ import kotlin.js.Date
  *
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
  */
-@ExperimentalUnsignedTypes
 object EventStore {
     var log = observableListOf<LogEntry>()
 

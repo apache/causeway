@@ -1,5 +1,6 @@
 package org.ro.core.model
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.handler.TObjectHandler
 import org.ro.to.FR_OBJECT_BAZ
 import org.ro.to.Link
@@ -9,6 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@UnstableDefault
 class FixtureResultTest {
 
     @Test
@@ -29,7 +31,7 @@ class FixtureResultTest {
         assertTrue(tObj.hasOwnProperty("domainType"))    //3
         assertTrue(tObj.hasOwnProperty("instanceId"))       //4
 
-        //Expectations: 
+        //Expectations:
         // 1:  has members (memberList?) mapped onto (dynamic) ObjectAdapter properties
         assertTrue(tObj.hasOwnProperty("members"))   //5 only internal (Object) attributes are 'adapted'
         val members = tObj.members

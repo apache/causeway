@@ -1,11 +1,13 @@
 package org.ro.to
 
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.ro.handler.MemberHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+@UnstableDefault
 class MemberTest() {
 
     @Test

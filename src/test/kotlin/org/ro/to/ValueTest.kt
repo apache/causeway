@@ -1,5 +1,6 @@
 package org.ro.to
 
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -10,6 +11,7 @@ import kotlin.test.assertEquals
 // Passing the same strings indirectly via Member(Test) works, so there is no additional coverage.
 // Left in here for further inspection.
 // IIRC ValueTest used to work when Value.content type was JsonObject.
+@UnstableDefault
 class ValueTest {
 
     @Test

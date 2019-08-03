@@ -13,7 +13,7 @@ import org.w3c.xhr.XMLHttpRequest
 
 // subclasses expect a running backend, here SimpleApp localhost:8080/restful*
 open class IntegrationTest {
-    
+
     fun isSimpleAppAvailable(): Boolean {
         val url = "http://sven:pass@localhost:8080/restful/"
         val user = "sven"
@@ -52,5 +52,5 @@ open class IntegrationTest {
             console.log("[TestUtil.wait] $milliseconds")
         }
     }
-    
+
 }

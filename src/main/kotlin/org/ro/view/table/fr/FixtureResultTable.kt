@@ -17,7 +17,7 @@ class FixtureResultTable(val model: List<ObjectAdapter>) : VPanel() {
 
     private val columns = listOf(
             ColumnDefinition<ObjectAdapter>("", field = "iconName", width = "40",
-                    formatterComponentFunction = { cell, onRendered, data ->
+                    formatterComponentFunction = { _, _, data ->
                         Button(text = "", icon = data.iconName).onClick {
                             console.log(data.result)
                         }
@@ -29,7 +29,7 @@ class FixtureResultTable(val model: List<ObjectAdapter>) : VPanel() {
     )
 
     init {
-        val hPanel = HPanel(
+        HPanel(
                 FlexWrap.NOWRAP,
                 alignItems = FlexAlignItems.CENTER,
                 spacing = 20) {
@@ -43,7 +43,7 @@ class FixtureResultTable(val model: List<ObjectAdapter>) : VPanel() {
                 persistenceMode = false
         )
 
-        val tabulator = tabulator(
+        tabulator(
                 model, options = options) {
             marginTop = 0.px
             marginBottom = 0.px

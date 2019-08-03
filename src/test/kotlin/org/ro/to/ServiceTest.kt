@@ -1,5 +1,6 @@
 package org.ro.to
 
+import org.ro.core.Utils
 import org.ro.handler.ResultHandler
 import org.ro.handler.ServiceHandler
 import org.ro.urls.RESTFUL_SERVICES
@@ -22,8 +23,8 @@ class ServiceTest : ToTest() {
         assertTrue(includesId(actions, "findByName"))
         assertTrue(includesId(actions, "create"))
 
-        // jsonObj contains '"members": {}' not '"members": []' 
-        // in AS this results in an unordered list (Object{}), 
+        // jsonObj contains '"members": {}' not '"members": []'
+        // in AS this results in an unordered list (Object{}),
         // but intended is an ordered list (Array[])
         // or is it a Map?
         //TODO use object-layout / menu layout instead
@@ -44,6 +45,7 @@ class ServiceTest : ToTest() {
         val services = ResultHandler().parse(jsonStr) as Result
         val values = services.value
         assertNotNull(values)
+        Utils.debug(services)
         assertEquals(8, values.size)
     }
 

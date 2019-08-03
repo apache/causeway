@@ -14,12 +14,11 @@ class EventStoreTest {
         val myFirst = "1"
         val myLast = "n"
         val method = Method.GET.operation
-        //val myEveryThing: String = ".."
 
         val selfStr = RESTFUL_SERVICES.str
         val selfUrl = "http://localhost:8080/restful/services"
-        val upStr: String = RESTFUL.str
-        val upUrl: String = "http://localhost:8080/restful/"
+        val upStr = RESTFUL.str
+        val upUrl = "http://localhost:8080/restful/"
 
         // when
         EventStore.start(selfUrl, method, myFirst)

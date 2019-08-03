@@ -7,12 +7,14 @@ buildscript {
         maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url = 'https://plugins.gradle.org/m2/' }
         maven { url = 'https://kotlin.bintray.com/kotlinx' }
+        mavenCentral()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
         classpath "org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}"
         classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:${frontendPluginVersion}"
+        classpath "gradle.plugin.com.javagen:schema-gen:0.9.0"
     }
 }
 
@@ -21,12 +23,28 @@ plugins {
 }
 
 apply plugin: 'kotlin2js'
-
 if (production) {
     apply plugin: 'kotlin-dce-js'
 }
 apply plugin: 'org.jetbrains.kotlin.frontend'
 apply plugin: 'kotlinx-serialization'
+//apply plugin: 'kotlin'
+//apply plugin: 'com.javagen.schema-gen'
+
+/*
+schemaGen {
+    kotlin {
+        schemaURL = new URL('file:src/main/resources/bootstrap3.xsd')
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/kotlin-gen'
+        }
+    }
+} */
 
 repositories {
     jcenter()
@@ -37,6 +55,7 @@ repositories {
     maven { url = 'https://dl.bintray.com/rjaros/kotlin' }
     maven { url = 'https://plugins.gradle.org/m2/' }
     mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
@@ -55,37 +74,60 @@ dependencies {
     compile "pl.treksoft:kvision-moment:${kvisionVersion}"
     compile "pl.treksoft:kvision-tabulator:${kvisionVersion}"
     testCompile "org.jetbrains.kotlin:kotlin-test-js:${kotlinVersion}"
+/*
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}"
+    compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.2'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.2'
+    compile 'com.fasterxml.jackson.module:jackson-modules-java8:2.9.2'
+    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.2'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.0'
+    compile 'org.hibernate.validator:hibernate-validator:6.0.2.Final'   */
 }
 
 kotlinFrontend {
     sourceMaps = true // CHANGE HERE
-
     webpackBundle {
         bundleName = "main"
         sourceMapEnabled = false // CHANGE HERE (it must be false!)
         contentPath = file('src/main/web')
         mode = production ? "production" : "development"
     }
-
     define "PRODUCTION", production
-
 }
 
 compileKotlin2Js {
-    kotlinOptions.metaInfo = true
-    kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
-    kotlinOptions.sourceMap = !production
-    kotlinOptions.sourceMapEmbedSources = "always"
-    kotlinOptions.moduleKind = 'umd'
+    kotlinOptions {
+        metaInfo = true
+        outputFile = "$project.buildDir.path/js/${project.name}.js"
+        sourceMap = !production
+        sourceMapEmbedSources = "always"
+        moduleKind = 'umd'
+    }
 }
 
 compileTestKotlin2Js {
-    kotlinOptions.metaInfo = true
-    kotlinOptions.outputFile = "$project.buildDir.path/js-tests/${project.name}-tests.js"
-    kotlinOptions.sourceMap = !production
-    kotlinOptions.sourceMapEmbedSources = "always"
-    kotlinOptions.moduleKind = 'umd'
+    kotlinOptions {
+        metaInfo = true
+        outputFile = "$project.buildDir.path/js-tests/${project.name}-tests.js"
+        sourceMap = !production
+        sourceMapEmbedSources = "always"
+        moduleKind = 'umd'
+    }
 }
+/*
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        javaParameters = true
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        javaParameters = true
+    }
+} */
 
 task pot(type: GruntTask) {
     args = ["pot"]

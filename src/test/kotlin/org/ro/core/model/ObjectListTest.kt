@@ -1,5 +1,6 @@
 package org.ro.core.model
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.handler.LayoutHandler
 import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
@@ -11,6 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+@UnstableDefault
 class ObjectListTest {
 
     @Test

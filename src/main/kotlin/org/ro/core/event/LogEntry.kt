@@ -8,20 +8,18 @@ import kotlin.js.Date
 enum class EventState(val id: String, val iconName: String) {
     INITIAL("INITIAL", "fa-power-off"),
     RUNNING("RUNNING", "fa-play-circle"),
-    ERROR("ERROR", "fa-times-circle"),
+    ERROR("ERROR", "fa-exclamation-circle"),
     SUCCESS("SUCCESS", "fa-check-circle"),
     VIEW("VIEW", "fa-info-circle"),
-    CLOSED("CLOSED", "fa-times-circle") //TODO should be different from ERROR?
+    CLOSED("CLOSED", "fa-times-circle")
 }
 
-@ExperimentalUnsignedTypes
 @Serializable
 data class LogEntry(
         val url: String,
         val method: String? = "",
         val request: String = "") {
     var state = EventState.INITIAL
-    var iconName: String? = "/resources/img/crow.gif"//TODO "fa-ellipsis-h"
     var title: String = ""
     var requestLength: Int = 0
     var response = ""
@@ -37,7 +35,7 @@ data class LogEntry(
     var createdAt = Date()
 
     @ContextualSerialization
-    var start: ULong = createdAt.getMilliseconds().toULong()
+    var start: Int = createdAt.getMilliseconds()
 
     @ContextualSerialization
     var updatedAt: Date? = null
@@ -48,10 +46,10 @@ data class LogEntry(
     private var fault: String? = null
 
     @ContextualSerialization
-    var offset: ULong = 0u        //FIXME  sometimes is nagtive
+    var offset: Int = 0
 
     @ContextualSerialization
-    var duration: ULong = 0u      //FIXME  sometimes is nagtive
+    var duration: Int = 0
 
     var cacheHits = 0             // FIXME always 0
     var observer: IObserver? = null
@@ -64,8 +62,10 @@ data class LogEntry(
     }
 
     private fun calculate() {
-        duration = updatedAt!!.getMilliseconds().toULong() - start
-        val logStartTime = EventStore.getLogStartTime()?.toULong()
+        // FIXME duration and offset are sometimes ouseide expected range
+
+        duration = updatedAt!!.getMilliseconds() - start
+        val logStartTime = EventStore.getLogStartTime()
         if (logStartTime != null) {
             offset = start - logStartTime
         }

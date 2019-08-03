@@ -8,6 +8,7 @@ import org.ro.view.RoView
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.dropdown.Header.Companion.header
 import pl.treksoft.kvision.html.Button
+import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.html.Link.Companion.link
 import pl.treksoft.kvision.i18n.I18n
 import pl.treksoft.kvision.panel.FlexAlignItems
@@ -19,6 +20,7 @@ import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 
+@ExperimentalUnsignedTypes
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
     private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true; tickElement = "<i class='fa fa-ellipsis-h'></i>"; crossElement = "<i class='fa fa-ellipsis-h'></i>" }
@@ -26,13 +28,14 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     private val columns = listOf(
             ColumnDefinition<LogEntry>("Title", "title",
                     headerFilter = Editor.INPUT,
-                    formatterComponentFunction = { cell, onRendered, data ->
-                        Button(data.title ?: "", icon = data.state.iconName).onClick {
+                    formatterComponentFunction = { _, _, data ->
+                        Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
                             console.log(data.title)
                         }
-                    },
-                    width = "400"),
-            ColumnDefinition("Method", "method", width = "80"),
+                    }),
+            ColumnDefinition("Method", "method", width = "100"),
+            ColumnDefinition("req.len", field = "requestLength", width = "100", align = Align.RIGHT),
+            ColumnDefinition("resp.len", field = "responseLength", width = "100", align = Align.RIGHT),
             ColumnDefinition(
                     title = "Created",
                     field = "createdAt",
@@ -47,17 +50,15 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     formatter = Formatter.DATETIME,
                     formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
                     width = "100"),
-            ColumnDefinition("req.len", field = "requestLength", align = Align.RIGHT),
-            ColumnDefinition("offset", field = "offset", align = Align.RIGHT),
-            ColumnDefinition("duration", field = "duration", align = Align.RIGHT),
-            ColumnDefinition("resp.len", field = "responseLength", align = Align.RIGHT),
-            ColumnDefinition("cacheHits", field = "cacheHits", align = Align.RIGHT),
-            ColumnDefinition("",
-                    field = "iconName",
+            ColumnDefinition("offset", field = "offset", width = "100", align = Align.RIGHT),
+            ColumnDefinition("duration", field = "duration", width = "100", align = Align.RIGHT),
+            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", align = Align.RIGHT),
+            ColumnDefinition("Details",
+                    field = "title", // any existing field can be used
                     formatter = Formatter.TICKCROSS,
                     formatterParams = faFormatterParams,
                     align = Align.CENTER,
-                    width = "40",
+                    width = "100",
                     headerSort = false,
                     cellClick = { evt, cell ->
                         evt.stopPropagation()
@@ -77,13 +78,13 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 persistenceMode = false
         )
 
-        val tabulator = tabulator(
+        tabulator(
                 model, options = options
         ) {
             marginTop = 0.px
             marginBottom = 0.px
             setEventListener<Tabulator<LogEntry>> {
-                tabulatorRowClick = { e ->
+                tabulatorRowClick = { _ ->
                     //                    EditPanel.edit((e.detail as pl.treksoft.kvision.tabulator.js.Tabulator.RowComponent).getIndex() as Int)
                 }
             }

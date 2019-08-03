@@ -15,7 +15,8 @@ class ActionObserver : BaseObserver() {
             if (l.isInvokeAction()) {
                 when (l.method) {
                     Method.GET.name -> {
-                        l.invoke(logEntry.observer)
+                        //val obs = logEntry.observer!! ? this==obs?
+                        this.invoke(l)
                     }
                     Method.POST.name -> {
                         ActionPrompt(action).open()

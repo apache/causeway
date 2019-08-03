@@ -4,6 +4,7 @@ import com.github.snabbdom._set
 import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
 import org.ro.handler.IntegrationTest
+import org.ro.org.ro.core.observer.ActionObserver
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -15,13 +16,13 @@ class LinkTest : IntegrationTest() {
     fun testInvokeAction() {
         val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript/invoke"
         val fingerPrint = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PHBhdGg-PC9wYXRoPjwvbWVtZW50bz4="
-        val body = """{
+/*        val body = """{
                 "script": {
                     "value": {
                         "href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/$fingerPrint"}
                         },
                 "parameters": {"value": ""}
-            }  """
+            }  """   */
         val href = """"href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/$fingerPrint""""
         //TODO construct link, invoke and check response
         if (isSimpleAppAvailable()) {
@@ -33,7 +34,7 @@ class LinkTest : IntegrationTest() {
             val arguments = link.arguments
             val arg = Argument(href)
             arguments._set("script", arg)
-            link.invoke()
+            ActionObserver().invoke(link)
             val le = EventStore.find(url)
             assertNotNull(le)
             assertTrue(!le.isError())

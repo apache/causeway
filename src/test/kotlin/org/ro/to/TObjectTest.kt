@@ -1,5 +1,6 @@
 package org.ro.to
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.handler.TObjectHandler
@@ -7,6 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+@UnstableDefault
 class TObjectTest {
 
     @Test

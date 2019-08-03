@@ -1,9 +1,11 @@
 package org.ro.to
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.handler.ResultListHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@UnstableDefault
 class ListTest {
 
     @Test

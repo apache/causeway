@@ -7,8 +7,8 @@ import org.ro.view.ErrorAlert
 
 class ErrorObserver : BaseObserver() {
 
-    override fun update(le: LogEntry) {
-        val e = le.getObj() as HttpError
+    override fun update(logEntry: LogEntry) {
+        val e = logEntry.getObj() as HttpError
         ErrorAlert(e).open()
     }
 }

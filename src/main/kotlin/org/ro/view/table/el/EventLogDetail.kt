@@ -5,6 +5,7 @@ import org.ro.view.Command
 import org.ro.view.RoDialog
 import org.ro.view.uicomp.FormItem
 
+@ExperimentalUnsignedTypes
 class EventLogDetail(val logEntry: LogEntry) : Command {
 
     fun open() {

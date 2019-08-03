@@ -24,13 +24,13 @@ class TObjectHandlerTest : IntegrationTest() {
             assertNotNull(ol)
             assertEquals(1, ol.list.size)
 
-            // WHEN 
-            //      SimpleApp is available at http://localhost:8080/restful 
+            // WHEN
+            //      SimpleApp is available at http://localhost:8080/restful
             // AND
             //      a couple of other URL's (3 top menu items) are invoked automatically from SO_LIST_ALL.
-            // THEN 
+            // THEN
             //      the expected number is 5 (for SimpleApp and not 2!
-            //assertTrue(5 == EventLog.log.size)      
+            //assertTrue(5 == EventLog.log.size)
             // }
         }
     }

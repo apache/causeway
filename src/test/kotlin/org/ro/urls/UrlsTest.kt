@@ -1,6 +1,7 @@
 package org.ro.urls
 
 import org.ro.core.Session
+import org.ro.org.ro.core.observer.ActionObserver
 import org.ro.to.*
 import kotlin.test.BeforeTest
 
@@ -38,7 +39,7 @@ class UrlsTest {
         for (entry in urls) {
             val href = entry.key
             val link = Link(method = Method.GET.operation, href = href)
-            link.invoke()
+            ActionObserver().invoke(link)
         }
     }
 
