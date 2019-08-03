@@ -96,6 +96,7 @@ public class DemoAppManifest {
     @Bean @Singleton
     public SecurityModuleConfig securityModuleConfigBean() {
         return SecurityModuleConfig.builder()
+                .adminUserName("sven")
                 .build();
     }
 

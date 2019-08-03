@@ -49,7 +49,7 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
             final HttpServletRequest httpServletRequest, 
             final HttpServletResponse httpServletResponse) {
 
-        
+        //FIXME[2156] do this somewhere else (more coupled with shiro) 
         // Basic auth should never create sessions! 
         // However, telling this Shiro here, is a fragile approach.
         httpServletRequest.setAttribute(

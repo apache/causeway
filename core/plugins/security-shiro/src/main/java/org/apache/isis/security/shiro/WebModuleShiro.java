@@ -107,6 +107,14 @@ public final class WebModuleShiro implements WebModule  {
     public String getName() {
         return "Shiro";
     }
+    
+    @Override
+    public void prepare(WebModuleContext ctx) {
+        val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
+        if(_Strings.isEmpty(customShiroEnvironmentClassName)) {
+            setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
+        }
+    }
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
