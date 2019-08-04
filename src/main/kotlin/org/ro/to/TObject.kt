@@ -50,6 +50,7 @@ data class TObject(val links: List<Link> = emptyList(),
         if (value == "[object Object]") {
             val link = Link(value)
             //here the magic of recursive OA's take place
+            //FIXME
             val attribute = ObjectAdapter(link as TObject) //, link.title, "Link")
             val key: String = member.id
             val dynObj = this.asDynamic()

@@ -48,6 +48,7 @@ class RoDialog(
                         add(TextArea(label = fi.label, value = fi.content as String, rows = rowCnt))
                     }
                     "Select" -> {
+                        @Suppress("UNCHECKED_CAST")
                         val list = fi.content as List<StringPair>
                         val preSelectedValue = list.first().first
                         add(Select(label = fi.label, options = list, value = preSelectedValue))

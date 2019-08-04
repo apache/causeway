@@ -2,6 +2,7 @@ package org.ro.view.table.fr
 
 import org.ro.core.model.ObjectAdapter
 import pl.treksoft.kvision.html.Button
+import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel
@@ -15,17 +16,24 @@ import pl.treksoft.kvision.utils.px
 
 class FixtureResultTable(val model: List<ObjectAdapter>) : VPanel() {
 
+    // private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true; tickElement = "<i class='fa fa-star'></i>"; crossElement = "<i class='fa fa-star'></i>" }
+
     private val columns = listOf(
             ColumnDefinition<ObjectAdapter>("", field = "iconName", width = "40",
                     formatterComponentFunction = { _, _, data ->
-                        Button(text = "", icon = data.iconName).onClick {
+                        Button(text = "", icon = data.iconName, style = ButtonStyle.LINK).onClick {
                             console.log(data.result)
                         }
                     }),
             ColumnDefinition("Result Class", "resultClass"),
             ColumnDefinition("Fixture Script", "fixtureScript"),
             ColumnDefinition("Result Key", field = "resultKey"),
-            ColumnDefinition("Result", field = "result")
+            ColumnDefinition("Result", "result",
+                    formatterComponentFunction = { _, _, data ->
+                        Button(data.result, icon = "fa-star", style = ButtonStyle.LINK).onClick {
+                            console.log(data.result)
+                        }
+                    })
     )
 
     init {

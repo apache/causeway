@@ -1,11 +1,12 @@
 package org.ro.handler
 
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
-import org.ro.to.TransferObject
 import org.ro.core.event.NavigationObserver
 import org.ro.to.Result
+import org.ro.to.TransferObject
 
-/** handles services result */
+@UnstableDefault
 class ResultHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {

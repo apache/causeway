@@ -1,15 +1,17 @@
 package org.ro.handler
 
 
-import org.ro.to.TransferObject
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.Utils
 import org.ro.core.event.LogEntry
+import org.ro.to.TransferObject
 
 /**
  *  Common 'abstract' superclass of Response Handlers.
  *  Constructor should not be called.
  */
 
+@UnstableDefault
 abstract class BaseHandler : IResponseHandler {
     var successor: IResponseHandler? = null
     protected var logEntry = LogEntry("")

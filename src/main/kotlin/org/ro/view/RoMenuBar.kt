@@ -3,6 +3,7 @@ package org.ro.view
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
 import org.ro.core.event.EventStore
+import org.ro.org.ro.core.observer.ActionObserver
 import org.ro.view.table.el.EventLogTable
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
@@ -13,6 +14,7 @@ import pl.treksoft.kvision.navbar.Nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
 
+@ExperimentalUnsignedTypes
 object RoMenuBar {
     val leftMargin = CssSize(-12, UNIT.px)
     var navbar: Navbar
@@ -59,7 +61,7 @@ object RoMenuBar {
                 val execLink = me.action.getInvokeLink()!!
                 menuLink.onClick {
                     console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
-                    execLink.invoke()
+                    ActionObserver().invoke(execLink)
                 }
                 dd.add(menuLink)
             }
