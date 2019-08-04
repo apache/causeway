@@ -1,10 +1,20 @@
 package org.ro.view.table
 
 import org.ro.core.event.LogEntry
+import org.ro.core.model.ObjectAdapter
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n
-import pl.treksoft.kvision.panel.SimplePanel
+import pl.treksoft.kvision.panel.FlexAlignItems
+import pl.treksoft.kvision.panel.FlexWrap
+import pl.treksoft.kvision.panel.HPanel
+import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.tabulator.ColumnDefinition
+import pl.treksoft.kvision.tabulator.Layout
+import pl.treksoft.kvision.tabulator.Tabulator
+import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
+import pl.treksoft.kvision.tabulator.TabulatorOptions
+import pl.treksoft.kvision.utils.px
 
 /**
  * access attributes from dynamic (JS) objects with varying
@@ -12,10 +22,37 @@ import pl.treksoft.kvision.panel.SimplePanel
  * - attribute types (can only be determined at runtime) and
  * - accessor names are not fixed
  */
-class DynamicTable(private val tableSpec:List<Any>) : SimplePanel() {
+class DynamicTable(val model: List<ObjectAdapter>) : VPanel() {
 
-    //TODO see EventLogTable
-    //button(tr("Link button"), style = ButtonStyle.LINK) { width = 200.px }
+    private val columns = listOf(
+            ColumnDefinition<ObjectAdapter>("Col1", "var1")
+    )
+
+    init {
+        HPanel(
+                FlexWrap.NOWRAP,
+                alignItems = FlexAlignItems.CENTER,
+                spacing = 20) {
+            padding = 10.px
+        }
+
+        val options = TabulatorOptions(
+                height = "calc(100vh - 250px)",
+                layout = Layout.FITCOLUMNS,
+                columns = columns,
+                persistenceMode = false
+        )
+
+        tabulator(
+                model, options = options) {
+            marginTop = 0.px
+            marginBottom = 0.px
+            setEventListener<Tabulator<ObjectAdapter>> {
+                tabulatorRowClick = {
+                }
+            }
+        }
+    }
 
     fun build(logEntry: LogEntry): DropDown {
         val menu = buildMenuEntry("Action(s) ...", iconName = "fa-ellipsis-h")

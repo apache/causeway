@@ -16,9 +16,7 @@ import pl.treksoft.kvision.utils.px
 
 class FixtureResultTable(val model: List<ObjectAdapter>) : VPanel() {
 
-    // private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true; tickElement = "<i class='fa fa-star'></i>"; crossElement = "<i class='fa fa-star'></i>" }
-
-    private val columns = listOf(
+     private val columns = listOf(
             ColumnDefinition<ObjectAdapter>("", field = "iconName", width = "40",
                     formatterComponentFunction = { _, _, data ->
                         Button(text = "", icon = data.iconName, style = ButtonStyle.LINK).onClick {
