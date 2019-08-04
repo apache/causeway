@@ -24,7 +24,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.Presets;
+import org.apache.isis.config.IsisPresets;
 
 /**
  * Bootstrap the application.
@@ -44,7 +44,7 @@ public class HelloWorldApp extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
-        Presets.prototyping();
+        IsisPresets.prototyping();
         SpringApplication.run(new Class[] { HelloWorldApp.class }, args);
     }
 

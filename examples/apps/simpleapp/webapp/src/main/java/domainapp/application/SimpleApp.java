@@ -24,7 +24,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
-import org.apache.isis.config.Presets;
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
@@ -49,7 +49,7 @@ public class SimpleApp extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
-        Presets.prototyping();
+        IsisPresets.prototyping();
         SpringApplication.run(new Class[] { SimpleApp.class }, args);
     }
 

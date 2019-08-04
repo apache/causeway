@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import org.apache.isis.config.Presets;
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
@@ -59,8 +59,8 @@ import org.apache.isis.security.shiro.IsisBootSecurityShiro;
         })
 @PropertySources({
     @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
-    @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
-    @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(IsisPresets.H2InMemory),
+    @PropertySource(IsisPresets.NoTranslations),
 })
 // enable shiro specific config to be picked up by Spring
 @ConditionalOnProperty(value = "smoketest.withShiro", havingValue = "true", matchIfMissing = false)

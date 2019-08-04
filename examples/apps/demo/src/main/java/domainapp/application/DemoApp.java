@@ -23,7 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.Presets;
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.webapp.modules.resources.ResourceServlet;
 
 /**
@@ -42,10 +42,10 @@ public class DemoApp extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
-        Presets.prototyping();
+        IsisPresets.prototyping();
         //Presets.logging(IsisBeanScanInterceptorForSpring.class, "DEBUG");
         //Presets.logging(IsisBeanTypeRegistry.class, "DEBUG");
-        Presets.logging(ResourceServlet.class, "DEBUG");
+        IsisPresets.logging(ResourceServlet.class, "DEBUG");
         SpringApplication.run(new Class[] { DemoApp.class }, args);
     }
 }

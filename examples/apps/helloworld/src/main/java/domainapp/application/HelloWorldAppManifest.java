@@ -30,7 +30,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 
-import org.apache.isis.config.Presets;
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.jdo.IsisBootDataNucleus;
@@ -47,9 +47,9 @@ import domainapp.dom.HelloWorldModule;
 @Configuration
 @PropertySources({
     @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
-    @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
-    @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
-    @PropertySource(name=Presets.DataNucleusAutoCreate, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(IsisPresets.H2InMemory),
+    @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.DataNucleusAutoCreate),
 })
 @Import({
     IsisBoot.class,
