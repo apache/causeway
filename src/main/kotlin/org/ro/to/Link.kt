@@ -2,8 +2,6 @@ package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import org.ro.core.event.IObserver
-import org.ro.core.event.RoXmlHttpRequest
 
 @Serializable
 data class Link(val rel: String = "",
@@ -13,12 +11,6 @@ data class Link(val rel: String = "",
                 @Optional val args: Map<String, Argument> = emptyMap(),
                 @Optional val arguments: Map<String, Argument> = emptyMap(),
                 @Optional val title: String = "") : TransferObject {
-
-    //TODO move to observer
-    @Deprecated("use IObserver.invoke(Link)")
-    fun invoke(obs: IObserver? = null) {
-        RoXmlHttpRequest().invoke(this, obs)
-    }
 
     private fun argMap(): Map<String, Argument>? {
         if (args.isNotEmpty()) {

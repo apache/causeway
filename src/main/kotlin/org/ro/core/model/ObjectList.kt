@@ -2,6 +2,7 @@ package org.ro.core.model
 
 import kotlinx.serialization.Serializable
 import org.ro.layout.Layout
+import org.ro.org.ro.core.observer.ActionObserver
 import org.ro.to.Extensions
 import org.ro.to.Property
 
@@ -29,7 +30,7 @@ class ObjectList : Visible {
             val pls = layout!!.properties
             for (pl in pls) {
                 val l = pl.link
-                l!!.invoke()
+                ActionObserver().invoke(l!!)
             }
         }
     }
