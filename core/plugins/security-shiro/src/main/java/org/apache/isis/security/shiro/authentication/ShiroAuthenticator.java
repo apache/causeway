@@ -105,6 +105,7 @@ public class ShiroAuthenticator implements Authenticator {
         if(securityManager == null) {
             return null;
         }
+        
         final AuthenticationToken token = asAuthenticationToken(request);
 
         final Subject currentSubject = SecurityUtils.getSubject();

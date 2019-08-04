@@ -19,7 +19,6 @@
 
 package org.apache.isis.security.authentication.standard;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.security.authentication.AuthenticationRequest;
@@ -104,25 +104,30 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
 
     @Override
     public synchronized final AuthenticationSession authenticate(final AuthenticationRequest request) {
+        
         if (request == null) {
             return null;
         }
 
-        final Collection<Authenticator> compatibleAuthenticators = 
-                _Lists.filter(authenticators, AuthenticatorFuncs.compatibleWith(request));
+        val compatibleAuthenticators = _NullSafe.stream(authenticators)
+                .filter(authenticator->authenticator.canAuthenticate(request.getClass()))
+                .collect(Collectors.toList());
+                
         if (compatibleAuthenticators.size() == 0) {
             throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
         }
+        
         for (final Authenticator authenticator : compatibleAuthenticators) {
-            final AuthenticationSession authSession = authenticator.authenticate(request, getUnusedRandomCode());
+            val authSession = authenticator.authenticate(request, getUnusedRandomCode());
             if (authSession != null) {
                 userByValidationCode.put(authSession.getValidationCode(), authSession.getUserName());
                 return authSession;
             }
         }
+        
         return null;
     }
-
+    
     private String getUnusedRandomCode() {
         String code;
         do {
