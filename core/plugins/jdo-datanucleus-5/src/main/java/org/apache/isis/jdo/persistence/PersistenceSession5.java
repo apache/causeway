@@ -584,42 +584,21 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (adapter.isRepresentingPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
-        final ObjectSpecification specification = adapter.getSpecification();
-        if (specification.isManagedBean()) {
+        if (adapter.isParentedCollection()) {
+            //or should we just ignore this?
+            throw new NotPersistableException("Cannot persist parented collection: " + adapter);
+        }
+        val spec = adapter.getSpecification();
+        if (spec.isManagedBean()) {
             throw new NotPersistableException("Can only persist entity beans: " + adapter);
         }
-
         transactionService.executeWithinTransaction(()->{
-            makePersistentTransactionAssumed(adapter);
+            log.debug("persist {}", adapter);               
+            val createObjectCommand = newCreateObjectCommand(adapter);
+            transactionManager.addCommand(createObjectCommand);
         });
     }
 
-    private void makePersistentTransactionAssumed(final ObjectAdapter adapter) {
-        if (alreadyPersistedOrNotPersistable(adapter)) {
-            return;
-        }
-        log.debug("persist {}", adapter);				
-        addCreateObjectCommand(adapter);
-    }
-
-    /**
-     * {@link #newCreateObjectCommand(ObjectAdapter) Create}s a {@link CreateObjectCommand}, 
-     * and adds to the {@link IsisTransactionManagerJdo}.
-     */
-    private void addCreateObjectCommand(final ObjectAdapter object) {
-        val createObjectCommand = newCreateObjectCommand(object);
-        transactionManager.addCommand(createObjectCommand);
-    }
-
-
-    private static boolean alreadyPersistedOrNotPersistable(final ObjectAdapter adapter) {
-        return adapter.isRepresentingPersistent() || objectSpecNotPersistable(adapter);
-    }
-
-
-    private static boolean objectSpecNotPersistable(final ObjectAdapter adapter) {
-        return adapter.isParentedCollection();
-    }
 
     // -- destroyObjectInTransaction
 

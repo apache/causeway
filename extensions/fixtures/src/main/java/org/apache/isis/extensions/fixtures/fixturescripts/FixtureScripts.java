@@ -350,7 +350,7 @@ public abstract class FixtureScripts extends AbstractService {
     // -- programmatic API
 
     @Programmatic
-    public void runFixtureScript(final FixtureScript... fixtureScriptList) {
+    public void run(final FixtureScript... fixtureScriptList) {
 
         val singleScript = toSingleScript(fixtureScriptList);
         val parameters = (String)null;
@@ -362,24 +362,40 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     @Programmatic
-    public <T> T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
-        final BuilderScriptAbstract<T> fixtureScript = persona.builder();
-        return runBuilderScript(fixtureScript);
+    public <T> T runPersona(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
+        val builderScript = persona.builder();
+        return runBuilderScript(builderScript);
     }
 
+    /**
+     * Runs the builderScript within its own transactional boundary.
+     * @param <T>
+     * @param builderScript
+     * @return
+     */
     @Programmatic
     public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
 
+        return transactionService.executeWithinTransaction(()->{
+            return runBuilderScriptNonTransactional(builderScript);
+        });
+    }
+    
+    /**
+     * Runs the builderScript without its own transactional boundary.<br>
+     * The caller is responsible to provide a transactional context/boundary.
+     * @param <T>
+     * @param builderScript
+     * @return
+     */
+    @Programmatic
+    public <T> T runBuilderScriptNonTransactional(final BuilderScriptAbstract<T> builderScript) {
+
         serviceInjector.injectServicesInto(builderScript);
 
-        return transactionService.executeWithinTransaction(()->{
-
-            builderScript.run(null);
-            final T object = builderScript.getObject();
-            return object;
-
-        });
-
+        builderScript.run(null);
+        final T object = builderScript.getObject();
+        return object;
     }
 
     @Programmatic
@@ -502,5 +518,24 @@ public abstract class FixtureScripts extends AbstractService {
     @Inject RepositoryService repositoryService;
     @Inject TransactionService transactionService;
     @Inject ExecutionParametersService executionParametersService;
+    
+    // -- DEPRECATIONS
+ 
+    /**
+     * @deprecated renamed to {@link #runPersona(PersonaWithBuilderScript)}
+     */
+    @Programmatic @Deprecated
+    public <T> T fixtureScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
+        return runPersona(persona);
+    }
+    
+    /**
+     * @deprecated renamed to {@link #run(FixtureScript...)}
+     */
+    @Programmatic
+    public void runFixtureScript(final FixtureScript... fixtureScriptList) {
+        run(fixtureScriptList);
+    }
+    
 
 }

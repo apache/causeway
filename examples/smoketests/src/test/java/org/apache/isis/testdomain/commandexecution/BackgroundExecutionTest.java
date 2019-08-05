@@ -58,16 +58,19 @@ import lombok.val;
         })
 class BackgroundExecutionTest {
 
-    @Inject private FixtureScripts fixtureScripts;
-    @Inject private RepositoryService repository;
+    @Inject FixtureScripts fixtureScripts;
+    @Inject RepositoryService repository;
+    @Inject BackgroundService backgroundService;
+    @Inject FactoryService facoryService;
+    @Inject ActionDomainEventListener actionDomainEventListener;
 
     @BeforeEach
     void setUp() {
         // cleanup
-        fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
         // given
-        fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @Test
@@ -122,10 +125,5 @@ class BackgroundExecutionTest {
 
     }
 
-    // -- DEPS
-
-    @Inject BackgroundService backgroundService;
-    @Inject FactoryService facoryService;
-    @Inject ActionDomainEventListener actionDomainEventListener;
 
 }

@@ -883,7 +883,8 @@ extends AbstractViewModel {
     private ExecutionContext executionContext;
 
     /**
-     * Entry point for {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts} service to call.
+     * Entry point for {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts} 
+     * service to call.
      *
      * <p>
      *     Package-visibility only, not public API.
@@ -914,7 +915,9 @@ extends AbstractViewModel {
      * Subclasses should <b>implement this</b> but SHOULD <i>NOT</i> CALL DIRECTLY.
      *
      * <p>
-     *  Instead call sub fixture scripts using {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript)} or {@link org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript, String, org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript)}.
+     *  Instead call sub fixture scripts using 
+     *  {@link FixtureScript.ExecutionContext#executeChild(FixtureScript, FixtureScript)} 
+     *  or {@link FixtureScript.ExecutionContext#executeChild(FixtureScript, String, FixtureScript)}.
      * </p>
      */
     @Programmatic

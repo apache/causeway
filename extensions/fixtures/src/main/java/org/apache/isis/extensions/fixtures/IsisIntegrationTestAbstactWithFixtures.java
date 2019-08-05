@@ -35,7 +35,7 @@ import org.apache.isis.integtestsupport.IsisIntegrationTestAbstact;
 public abstract class IsisIntegrationTestAbstactWithFixtures extends IsisIntegrationTestAbstact {
 
     protected void runFixtureScript(final FixtureScript... fixtureScriptList) {
-        this.fixtureScripts.runFixtureScript(fixtureScriptList);
+        this.fixtureScripts.run(fixtureScriptList);
     }
 
     protected <T> T runBuilderScript(final BuilderScriptAbstract<T> fixtureScript) {

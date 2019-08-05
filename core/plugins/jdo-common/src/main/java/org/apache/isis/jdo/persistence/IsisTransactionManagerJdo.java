@@ -308,6 +308,7 @@ class IsisTransactionManagerJdo implements SessionScopedComponent {
     public void abortTransaction(IsisTransactionObject txObject) {
         val transaction = (IsisTransactionJdo) txObject.getCurrentTransaction();
         if (transaction != null) {
+            System.out.println("!!!!!!!!!!! " + transaction.getState());
             transaction.markAsAborted();
             persistenceSession.abortTransaction();
             txObject.clear();

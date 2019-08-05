@@ -95,7 +95,8 @@ public class TransactionServiceSpring implements TransactionService {
     }
 
     @Override
-    public void executeWithinTransaction(Runnable task) {
+    public void executeWithinNewTransaction(Runnable task) {
+        
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             // the code in this method executes in a transactional context
             @Override
@@ -106,7 +107,8 @@ public class TransactionServiceSpring implements TransactionService {
     }
 
     @Override
-    public <T> T executeWithinTransaction(Supplier<T> task) {
+    public <T> T executeWithinNewTransaction(Supplier<T> task) {
+        
         return transactionTemplate.execute(new TransactionCallback<T>() {
             // the code in this method executes in a transactional context
             @Override
@@ -114,6 +116,34 @@ public class TransactionServiceSpring implements TransactionService {
                 return task.get();
             }
         });
+    }
+    
+    @Override
+    public void executeWithinTransaction(Runnable task) {
+        
+        val txState = currentTransactionState();
+        if(txState != TransactionState.NONE) {
+            task.run();
+            flushTransaction();
+            return;
+        }
+        
+        executeWithinNewTransaction(task);
+        
+    }
+
+    @Override
+    public <T> T executeWithinTransaction(Supplier<T> task) {
+        
+        val txState = currentTransactionState();
+        if(txState != TransactionState.NONE) {
+            val result = task.get();
+            flushTransaction();
+            return result;
+        }
+        
+        return executeWithinNewTransaction(task);
+        
     }
 
     // -- HELPER

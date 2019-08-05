@@ -19,12 +19,14 @@
 package org.apache.isis.testdomain.jdo;
 
 import java.util.HashSet;
-import java.util.Set;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
-import org.apache.isis.runtime.system.context.IsisContext;
+
+import lombok.val;
 
 public enum JdoTestDomainPersona 
 implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
@@ -36,10 +38,6 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
 
                 @Override
                 protected void execute(ExecutionContext ec) {
-
-                    //XXX lombok issue, cannot use val here (https://github.com/rzwitserloot/lombok/issues/434)
-                    RepositoryService repository = IsisContext.getServiceRegistry()
-                            .lookupServiceElseFail(RepositoryService.class);
 
                     repository.allInstances(Inventory.class)
                     .forEach(repository::remove);
@@ -56,6 +54,8 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 public Inventory getObject() {
                     return null;
                 }
+                
+                @Inject private RepositoryService repository;
 
             };
         }    
@@ -71,17 +71,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 @Override
                 protected void execute(ExecutionContext ec) {
 
-                    //don't use lombok's val here (https://github.com/rzwitserloot/lombok/issues/434)
-                    RepositoryService repository = IsisContext.getServiceRegistry()
-                            .lookupServiceElseFail(RepositoryService.class);
-
-                    Set<Product> products = new HashSet<>();
-
-                    products.add(Book.of(
-                            "Sample Book", "A sample book for testing.", 99.,
-                            "Sample Author", "Sample ISBN", "Sample Publisher"));
-
-                    inventory = Inventory.of("Sample Inventory", products);
+                    inventory = sampleInventoryWith1Book();
                     repository.persist(inventory);
 
                 }
@@ -90,6 +80,8 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 public Inventory getObject() {
                     return inventory;
                 }
+                
+                @Inject private RepositoryService repository;
 
             };
         }    
@@ -97,6 +89,15 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
 
     ;
 
+    private static Inventory sampleInventoryWith1Book() {
+        val products = new HashSet<Product>();
+
+        products.add(Book.of(
+                "Sample Book", "A sample book for testing.", 99.,
+                "Sample Author", "Sample ISBN", "Sample Publisher"));
+
+        return Inventory.of("Sample Inventory", products);
+    }
 
 
 }

@@ -72,10 +72,10 @@ class PublisherServiceTest {
         transactionTemplate.execute(status -> {
 
             // cleanup
-            fixtureScripts.runBuilderScript(JdoTestDomainPersona.PurgeAll.builder());
+            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
             // given
-            fixtureScripts.runBuilderScript(JdoTestDomainPersona.InventoryWith1Book.builder());
+            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
             return null;
 

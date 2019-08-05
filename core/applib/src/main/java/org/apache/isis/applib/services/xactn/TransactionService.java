@@ -21,13 +21,16 @@ package org.apache.isis.applib.services.xactn;
 
 import java.util.function.Supplier;
 
+/**
+ * @since 2.0
+ */
 public interface TransactionService {
 
-    public enum Policy {
-        UNLESS_MARKED_FOR_ABORT,
-        ALWAYS
-    }
-
+    /**
+     * When called within an existing transactional boundary returns an unique id, 
+     * {@code null} otherwise.
+     * @return nullable
+     */
     TransactionId currentTransactionId();
 
     /**
@@ -50,7 +53,30 @@ public interface TransactionService {
      */
     TransactionState currentTransactionState();
 
+    /**
+     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a 
+     * boundary creates a new one.
+     * @param task
+     */
     void executeWithinTransaction(Runnable task);
+    
+    /**
+     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a 
+     * boundary creates a new one.
+     * @param task
+     */
     <T> T executeWithinTransaction(Supplier<T> task);
-
+    
+    /**
+     * Runs given {@code task} within its own (new) transactional boundary.
+     * @param task
+     */
+    void executeWithinNewTransaction(Runnable task);
+    
+    /**
+     * Runs given {@code task} within its own (new) transactional boundary.
+     * @param task
+     */
+    <T> T executeWithinNewTransaction(Supplier<T> task);
+    
 }
