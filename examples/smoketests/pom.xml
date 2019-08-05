@@ -147,27 +147,6 @@
 			<version>${isis.version}</version>
 		</dependency>
 
-		<!-- OTHER DEPENDENCIES -->
-		<!-- <dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 
-			</dependency> -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.isis.mavendeps</groupId> -->
-<!-- 			<artifactId>isis-mavendeps-webapp</artifactId> -->
-<!-- 			<type>pom</type> -->
-<!-- 			<exclusions> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>org.slf4j</groupId> -->
-<!-- 					<artifactId>slf4j-api</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 			</exclusions> -->
-<!-- 		</dependency> -->
-
-
 		<!-- TEST DEPENDENCIES -->
 		
 		<dependency>

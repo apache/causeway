@@ -213,6 +213,22 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
         }
         return _Lists.newArrayList();
     }
+    
+    // -- UPDATE USER STATE
+    
+    @Override
+    public void enable(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+        if(user.getStatus() != ApplicationUserStatus.ENABLED) {
+            ((ApplicationUser) user).unlock();
+        }
+    }
+
+    @Override
+    public void disable(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+        if(user.getStatus() != ApplicationUserStatus.DISABLED) {
+            ((ApplicationUser) user).lock();
+        }
+    }
 
     // -- DEPENDENCIES
 
@@ -222,6 +238,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     @Inject ApplicationUserFactory applicationUserFactory;
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
+
 
 
 

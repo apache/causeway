@@ -41,4 +41,7 @@ public interface ApplicationUserRepository {
 
     ApplicationUser newDelegateUser(String username, ApplicationRole initialRole, Boolean enabled);
 
+    void enable(ApplicationUser svenUser);
+    void disable(ApplicationUser svenUser);
+
 }

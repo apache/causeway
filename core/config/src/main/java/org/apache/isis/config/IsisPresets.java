@@ -95,6 +95,9 @@ public final class IsisPresets  {
     public static final String HsqlDbInMemory = "classpath:/presets/HsqlDbInMemory.properties";
     public static final String DataNucleusAutoCreate = "classpath:/presets/DataNucleusAutoCreate.properties";
     
+    public static final String DebugPersistence = "classpath:/presets/DebugPersistence.properties";
+    
+    
     /**
      * @deprecated seems no longer required anyway
      */

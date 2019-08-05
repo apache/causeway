@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
+import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
@@ -27,8 +28,17 @@ import org.apache.shiro.util.LifecycleUtils;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
 
-/** This class was initially copied over from the ApacheDS user Guide, 
- * however it has/had some glitches with inconsistent LocalThread (subjectThreadState) context.*/
+import lombok.val;
+
+/**
+ * 
+ * This class was initially copied over from the ApacheDS user Guide, however it has/had 
+ * some glitches with inconsistent LocalThread (subjectThreadState) context.
+ * <p>
+ * IniSecurityManagerFactory was deprecated in Shiro 1.4, but we could not find a migration guide yet.
+ *
+ */
+@SuppressWarnings("deprecation")
 class AbstractShiroTest {
 
     private static ThreadState subjectThreadState;
@@ -76,6 +86,11 @@ class AbstractShiroTest {
         }
     }
 
+    protected static void setSecurityManager(String iniResource) {
+        val factory = new IniSecurityManagerFactory(iniResource);
+        setSecurityManager(factory.getInstance());
+    }
+    
     protected static void setSecurityManager(SecurityManager securityManager) {
         try {
             // guard against SecurityManager already being set

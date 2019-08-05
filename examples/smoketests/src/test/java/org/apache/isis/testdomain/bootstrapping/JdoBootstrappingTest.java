@@ -35,6 +35,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -51,11 +52,7 @@ import lombok.val;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                "logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
-                "logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
-                "logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
-                // "isis.reflector.introspector.parallelize=false",
-                //"logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+                IsisPresets.DebugPersistence,
         })
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoBootstrappingTest {

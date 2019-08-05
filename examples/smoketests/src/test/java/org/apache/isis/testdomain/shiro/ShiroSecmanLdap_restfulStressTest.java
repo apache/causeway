@@ -27,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.config.IsisPresets;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -36,7 +38,7 @@ import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.security.shiro.WebModuleShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
-import org.apache.isis.testdomain.ldap.LdapConstants;
+import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
@@ -54,8 +56,11 @@ import lombok.val;
                 JdoTestDomainModule_withShiro.class
         }, 
         properties = {
-                "logging.config=log4j2-test.xml",
+                //"logging.config=log4j2-test.xml",
+                "logging.config=log4j2-debug-persistence.xml",
                 "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring
+                IsisPresets.DataNucleusAutoCreate,
+                "datanucleus.schema.autoCreateDatabase=true",
                 "server.servlet.session.persistent=false", // defaults to false
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -76,12 +81,12 @@ import lombok.val;
 })
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
+    @Inject FixtureScripts fixtureScripts;
     @Inject RestService restService;
     @Inject LdapServerService ldapServerService;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
-
     
     @BeforeAll
     static void beforeClass() {
@@ -96,16 +101,8 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @BeforeEach
     void setupSvenInDb() {
-        // only setup once per test run, consecutive calls have no effect
-        val regularUserRoleName = securityConfig.getRegularUserRoleName();
-        val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
-        val enabled = true;
-        val username = LdapConstants.SVEN_PRINCIPAL;
-        val svenUser = applicationUserRepository.findByUsername(username);
-        if(svenUser==null) {
-            applicationUserRepository
-            .newDelegateUser(username, regularUserRole, enabled);
-        }
+        // given
+        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
 
     @Test

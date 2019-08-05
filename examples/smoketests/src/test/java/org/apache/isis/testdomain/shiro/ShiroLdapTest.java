@@ -24,13 +24,13 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
@@ -49,7 +49,8 @@ import lombok.extern.log4j.Log4j2;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
+                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring
+                IsisPresets.DebugPersistence,
         })
 @Import({
     LdapServerService.class,
@@ -64,8 +65,7 @@ class ShiroLdapTest extends AbstractShiroTest {
         // Build and set the SecurityManager used to build Subject instances used in your tests
         // This typically only needs to be done once per class if your shiro.ini doesn't change,
         // otherwise, you'll need to do this logic in each test that is different
-        val factory = new IniSecurityManagerFactory("classpath:shiro-ldap.ini");
-        setSecurityManager(factory.getInstance());
+        setSecurityManager("classpath:shiro-ldap.ini");
     }
 
     @AfterAll

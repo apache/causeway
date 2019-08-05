@@ -25,6 +25,10 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.testdomain.ldap.LdapConstants;
 
 import lombok.val;
 
@@ -71,7 +75,13 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 @Override
                 protected void execute(ExecutionContext ec) {
 
-                    inventory = sampleInventoryWith1Book();
+                    val products = new HashSet<Product>();
+
+                    products.add(Book.of(
+                            "Sample Book", "A sample book for testing.", 99.,
+                            "Sample Author", "Sample ISBN", "Sample Publisher"));
+
+                    inventory = Inventory.of("Sample Inventory", products);
                     repository.persist(inventory);
 
                 }
@@ -85,19 +95,49 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
 
             };
         }    
-    }
+    },
+    
+    SvenApplicationUser {
+        @Override
+        public BuilderScriptAbstract<Inventory> builder() {
+            return new BuilderScriptAbstract<Inventory>() {
+
+                private Inventory inventory;
+
+                @Override
+                protected void execute(ExecutionContext ec) {
+
+                    val regularUserRoleName = securityConfig.getRegularUserRoleName();
+                    val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
+                    val enabled = true;
+                    val username = LdapConstants.SVEN_PRINCIPAL;
+                    val svenUser = applicationUserRepository.findByUsername(username);
+                    if(svenUser==null) {
+                        applicationUserRepository
+                        .newDelegateUser(username, regularUserRole, enabled);
+                    } else {
+                        applicationUserRepository.enable(svenUser);
+                    }
+
+                }
+
+                @Override
+                public Inventory getObject() {
+                    return inventory;
+                }
+                
+                @Inject private ApplicationUserRepository applicationUserRepository;
+                @Inject private ApplicationRoleRepository applicationRoleRepository;
+                @Inject private SecurityModuleConfig securityConfig;
+
+            };
+        }    
+        
+        
+    },
+
 
     ;
-
-    private static Inventory sampleInventoryWith1Book() {
-        val products = new HashSet<Product>();
-
-        products.add(Book.of(
-                "Sample Book", "A sample book for testing.", 99.,
-                "Sample Author", "Sample ISBN", "Sample Publisher"));
-
-        return Inventory.of("Sample Inventory", products);
-    }
 
 
 }

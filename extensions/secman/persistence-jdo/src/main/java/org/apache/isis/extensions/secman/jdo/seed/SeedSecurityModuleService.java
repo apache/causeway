@@ -22,12 +22,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.springframework.transaction.TransactionStatus;
-
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
-import org.apache.isis.runtime.system.context.IsisContext;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Singleton @Log4j2
@@ -40,12 +36,7 @@ public class SeedSecurityModuleService {
 
         log.info("SEED");
 
-        val txTemplate = IsisContext.createTransactionTemplate();
-
-        txTemplate.execute((TransactionStatus status) -> {
-            fixtureScripts.runFixtureScript(new SeedUsersAndRolesFixtureScript(), null);
-            return null;
-        });
+        fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
 
     }
 

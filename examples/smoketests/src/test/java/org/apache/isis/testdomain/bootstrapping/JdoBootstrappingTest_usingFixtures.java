@@ -23,10 +23,10 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -43,7 +43,7 @@ import lombok.val;
         }, 
         properties = {
                 "logging.config=log4j2-debug-persistence.xml",
-                "logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG"
+                IsisPresets.DebugPersistence,
         })
 @Transactional
 class JdoBootstrappingTest_usingFixtures {
@@ -61,7 +61,7 @@ class JdoBootstrappingTest_usingFixtures {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test @Rollback(false)
+    @Test
     void sampleInventoryShouldBeSetUp() {
 
         val inventories = repository.allInstances(Inventory.class);

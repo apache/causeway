@@ -24,7 +24,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -69,8 +68,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
         //    Build and set the SecurityManager used to build Subject instances used in your tests
         //    This typically only needs to be done once per class if your shiro.ini doesn't change,
         //    otherwise, you'll need to do this logic in each test that is different
-        val factory = new IniSecurityManagerFactory("classpath:shiro-secman.ini");
-        setSecurityManager(factory.getInstance());
+        setSecurityManager("classpath:shiro-secman.ini");
     }
 
     @AfterAll

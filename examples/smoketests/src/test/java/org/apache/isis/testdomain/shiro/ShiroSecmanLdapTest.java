@@ -25,7 +25,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,14 +32,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.config.IsisPresets;
+import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
+import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 
@@ -57,8 +60,11 @@ import lombok.val;
                 JdoTestDomainModule_withShiro.class, 
         }, 
         properties = {
-                "logging.config=log4j2-test.xml",
-                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
+                //"logging.config=log4j2-test.xml",
+                "logging.config=log4j2-debug-persistence.xml",
+                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring
+                IsisPresets.DebugPersistence,
+                "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
         })
 @Import({
 
@@ -73,6 +79,7 @@ import lombok.val;
 })
 class ShiroSecmanLdapTest extends AbstractShiroTest {
 
+    @Inject FixtureScripts fixtureScripts;
     @Inject LdapServerService ldapServerService;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
@@ -83,8 +90,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         //    Build and set the SecurityManager used to build Subject instances used in your tests
         //    This typically only needs to be done once per class if your shiro.ini doesn't change,
         //    otherwise, you'll need to do this logic in each test that is different
-        val factory = new IniSecurityManagerFactory("classpath:shiro-secman-ldap.ini");
-        setSecurityManager(factory.getInstance());
+        setSecurityManager("classpath:shiro-secman-ldap.ini");
     }
 
     @AfterAll
@@ -94,16 +100,8 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 
     @BeforeEach
     void setupSvenInDb() {
-        // only setup once per test run, consecutive calls have no effect
-        val regularUserRoleName = securityConfig.getRegularUserRoleName();
-        val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
-        val enabled = true;
-        val username = LdapConstants.SVEN_PRINCIPAL;
-        val svenUser = applicationUserRepository.findByUsername(username);
-        if(svenUser==null) {
-            applicationUserRepository
-            .newDelegateUser(username, regularUserRole, enabled);
-        }
+        // given
+        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
 
 
