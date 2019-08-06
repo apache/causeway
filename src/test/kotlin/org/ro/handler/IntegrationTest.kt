@@ -3,6 +3,7 @@ package org.ro.handler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.Session
 import org.ro.core.event.EventStore
 import org.ro.core.event.IObserver
@@ -12,6 +13,8 @@ import org.ro.urls.Response
 import org.w3c.xhr.XMLHttpRequest
 
 // subclasses expect a running backend, here SimpleApp localhost:8080/restful*
+
+@UnstableDefault
 open class IntegrationTest {
 
     fun isSimpleAppAvailable(): Boolean {

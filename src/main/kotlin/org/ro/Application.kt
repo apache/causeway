@@ -17,13 +17,12 @@ object Application : ApplicationBase {
     var statusBar = RoStatusBar()
 
     override fun start(state: Map<String, Any>) {
-
         root = Root("showcase") {
             vPanel(spacing = 0) {
                 padding = 0.px
                 this.add(menuBar.navbar)
-                this.add(view) 
-                this.add(statusBar) 
+                this.add(view)
+                this.add(statusBar)
             }
         }
     }

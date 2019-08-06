@@ -1,11 +1,13 @@
 package org.ro.handler
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.event.NavigationObserver
 import org.ro.to.Result
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@UnstableDefault
 class ServiceHandlerTest : IntegrationTest() {
 
     @Test

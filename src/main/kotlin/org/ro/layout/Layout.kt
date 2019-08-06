@@ -10,6 +10,7 @@ import org.ro.view.uicomp.VBox
  * In case of non-menu layout, build a UIComponent.
  */
 @Serializable
+@Suppress("DEPRECATION")
 data class Layout(val cssClass: String? = null,
                   val row: List<RowLayout> = emptyList()) : TransferObject {
 

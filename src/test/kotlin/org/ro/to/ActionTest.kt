@@ -1,11 +1,13 @@
 package org.ro.to
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.handler.ActionHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@UnstableDefault
 class ActionTest {
 
     @Test

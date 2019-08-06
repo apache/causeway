@@ -1,20 +1,20 @@
 package org.ro.handler
 
 import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.JSON
-import org.ro.to.TransferObject
+import kotlinx.serialization.json.Json
 import org.ro.to.TObject
+import org.ro.to.TransferObject
 
-@UnstableDefault
+
 class TObjectHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
         update()
     }
 
-    //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
+    @UnstableDefault
     override fun parse(jsonStr: String): TransferObject? {
-        return JSON.parse(TObject.serializer(), jsonStr)
+        return Json.parse(TObject.serializer(), jsonStr)
     }
 
 }

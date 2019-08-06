@@ -1,5 +1,6 @@
 package org.ro.handler
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.Utils
 import org.ro.core.event.EventStore
 import org.ro.core.event.ListObserver
@@ -11,6 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@UnstableDefault
 class PropertyHandlerTest : IntegrationTest() {
 
     @Test

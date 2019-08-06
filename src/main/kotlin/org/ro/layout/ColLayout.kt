@@ -7,6 +7,7 @@ import org.ro.view.uicomp.HBox
 import org.ro.view.uicomp.UIComponent
 
 @Serializable
+@Suppress("DEPRECATION")
 data class ColLayout(@Optional val domainObject: DomainObjectLayout? = null,
                      @Optional val action: List<ActionLayout> = emptyList(),  // org.ro.authors
                      @Optional val named: String? = "",

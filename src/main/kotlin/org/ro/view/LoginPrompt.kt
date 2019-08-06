@@ -52,4 +52,5 @@ class LoginPrompt() : Command {
             }
         }
     }
+
 }

@@ -1,7 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.core.model.ObjectAdapter
+import org.ro.core.model.Revealator
 
 @Serializable
 data class TObject(val links: List<Link> = emptyList(),
@@ -51,7 +51,7 @@ data class TObject(val links: List<Link> = emptyList(),
             val link = Link(value)
             //here the magic of recursive OA's take place
             //FIXME
-            val attribute = ObjectAdapter(link as TObject) //, link.title, "Link")
+            val attribute = Revealator(link as TObject) //, link.title, "Link")
             val key: String = member.id
             val dynObj = this.asDynamic()
             dynObj[key] = attribute

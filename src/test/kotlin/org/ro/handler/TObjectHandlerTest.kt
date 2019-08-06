@@ -1,5 +1,6 @@
 package org.ro.handler
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.event.EventStore
 import org.ro.core.event.ListObserver
 import org.ro.to.SO_0
@@ -8,6 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+@UnstableDefault
 class TObjectHandlerTest : IntegrationTest() {
 
     @Test

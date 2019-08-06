@@ -6,7 +6,6 @@ import org.ro.org.ro.core.observer.ActionObserver
 import org.ro.to.Action
 import org.ro.to.TransferObject
 
-@UnstableDefault
 class ActionHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
@@ -14,7 +13,7 @@ class ActionHandler : BaseHandler(), IResponseHandler {
         update()
     }
 
-    //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
+    @UnstableDefault
     override fun parse(jsonStr: String): TransferObject? {
         return Json.parse(Action.serializer(), jsonStr)
     }

@@ -1,6 +1,7 @@
 package org.ro.to
 
 import com.github.snabbdom._set
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
 import org.ro.handler.IntegrationTest
@@ -9,6 +10,7 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@UnstableDefault
 class LinkTest : IntegrationTest() {
 
     @Test

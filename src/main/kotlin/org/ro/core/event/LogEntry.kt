@@ -2,6 +2,7 @@ package org.ro.core.event
 
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UnstableDefault
 import org.ro.to.TransferObject
 import kotlin.js.Date
 
@@ -90,6 +91,7 @@ data class LogEntry(
         state = EventState.SUCCESS
     }
 
+    @UnstableDefault
     override fun toString(): String {
         var s = "\n"
         s += "url:= $url\n"

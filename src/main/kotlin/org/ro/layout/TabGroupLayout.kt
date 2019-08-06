@@ -6,8 +6,9 @@ import org.ro.view.uicomp.TabNavigator
 import org.ro.view.uicomp.UIComponent
 
 @Serializable
-data class TabGroupLayout(val cssClass: String? = "",        
-                          val metadataError: String? = "",   
+@Suppress("DEPRECATION")
+data class TabGroupLayout(val cssClass: String? = "",
+                          val metadataError: String? = "",
                           @Optional val tab: List<TabLayout> = emptyList(),
                           val unreferencedCollections: Boolean? = false) {
 

@@ -3,8 +3,8 @@ package org.ro.core.event
 import kotlinx.serialization.Serializable
 import org.ro.core.UiManager
 import org.ro.core.Utils
-import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
+import org.ro.core.model.Revealator
 import org.ro.core.observer.BaseObserver
 import org.ro.layout.Layout
 import org.ro.to.Link
@@ -18,7 +18,7 @@ import org.ro.view.table.fr.FixtureResultTable
  * (1) FR_OBJECT                TObjectHandler -> invoke()
  * (2) FR_OBJECT_LAYOUT         layoutHandler -> invoke(layout.getProperties()[].getLink()) link can be null?
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
- * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
+ * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler      //FIXME PropertyDescription to be used for table layout
  */
 @Serializable
 class ListObserver : BaseObserver() {
@@ -54,7 +54,7 @@ class ListObserver : BaseObserver() {
         val title: String = this::class.simpleName.toString()
         val model = list.list
         val panel = FixtureResultTable(model)
-        UiManager.addView(title, panel)
+        UiManager.add(title, panel)
         isRendered = true
     }
 
@@ -76,7 +76,7 @@ class ListObserver : BaseObserver() {
     }
 
     private fun handleObject(obj: TObject) {
-        list.list.add(ObjectAdapter(obj))
+        list.list.add(Revealator(obj))
         if (!list.hasLayout()) {
             val link = obj.getLayoutLink()
             if (link != null) {

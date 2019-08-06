@@ -16,7 +16,6 @@ package org.ro.core.event
  *
  * Could be named collector or assembler as well.
  */
-
 interface IObserver {
     fun update(logEntry: LogEntry)
 }

@@ -2,6 +2,7 @@ package org.ro.view
 
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
+import org.ro.core.UiManager
 import org.ro.core.event.EventStore
 import org.ro.org.ro.core.observer.ActionObserver
 import org.ro.org.ro.view.table.TableFactory
@@ -16,7 +17,6 @@ import pl.treksoft.kvision.navbar.Nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
 
-@ExperimentalUnsignedTypes
 object RoMenuBar {
     val leftMargin = CssSize(-12, UNIT.px)
     var navbar: Navbar
@@ -42,14 +42,14 @@ object RoMenuBar {
         val title = "Log Entries"
         val log = createLink(title).onClick {
             val model = EventStore.log
-            RoView.addTab(tr(title), EventLogTable(model))
+            UiManager.add(title, EventLogTable(model))
         }
         mainMenu.add(log)
 
         val sample = "Dynamic Table"
-        val dynTable = createLink(title).onClick {
+        val dynTable = createLink(sample).onClick {
             val model = TableFactory().testData()
-            RoView.addTab(tr(sample), DynamicTable(model))
+            UiManager.add(sample, DynamicTable(model))
         }
         mainMenu.add(dynTable)
 

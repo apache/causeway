@@ -4,6 +4,7 @@ import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Suppress("DEPRECATION")
 data class Argument(@Optional var key: String = "",
                     var value: String? = null,
                     @Optional val potFileName: String = "") : TransferObject {

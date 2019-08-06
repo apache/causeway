@@ -7,6 +7,7 @@ import org.ro.view.uicomp.FormItem
 import org.ro.view.uicomp.HBox
 
 @Serializable
+@Suppress("DEPRECATION")
 data class FieldSetLayout(val name: String? = null,
                           @Optional val action: List<ActionLayout> = emptyList(),
                           @Optional val property: List<PropertyLayout> = emptyList(),

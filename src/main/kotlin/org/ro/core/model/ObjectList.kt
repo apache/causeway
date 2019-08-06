@@ -12,7 +12,7 @@ class ObjectList : Visible {
         return " "
     }
 
-    var list = mutableListOf<ObjectAdapter>()
+    var list = mutableListOf<Revealator>()
     var layout: Layout? = null
     var propertyLabels = mutableMapOf<String, String>()
 
@@ -24,7 +24,7 @@ class ObjectList : Visible {
         return it
     }
 
-    //TODO move
+    //TODO move to Observer
     fun initPropertyDescription() {
         if (arePropertyLabelsToBeSet()) {
             val pls = layout!!.properties
@@ -56,7 +56,7 @@ class ObjectList : Visible {
         return (labelSize < propsSize)
     }
 
-    fun last(): ObjectAdapter? {
+    fun last(): Revealator? {
        return list.lastOrNull()
     }
 

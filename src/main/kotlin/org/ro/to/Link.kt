@@ -4,6 +4,7 @@ import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Suppress("DEPRECATION")
 data class Link(val rel: String = "",
                 val method: String = Method.GET.operation,
                 val href: String = "",

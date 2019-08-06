@@ -1,7 +1,7 @@
 package org.ro.handler
 
-import org.ro.to.TransferObject
 import org.ro.core.event.LogEntry
+import org.ro.to.TransferObject
 
 /**
  * Interface for handling asynchronous XHR responses.
@@ -16,7 +16,6 @@ import org.ro.core.event.LogEntry
  *
  * @see org.ro.handler.BaseHandler for more details
  */
-
 interface IResponseHandler {
 
     fun handle(logEntry: LogEntry)

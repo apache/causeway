@@ -4,6 +4,7 @@ import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Suppress("DEPRECATION")
 data class Member(val id: String,
                   val memberType: String,
                   @Optional val links: List<Link> = emptyList(),

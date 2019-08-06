@@ -21,8 +21,14 @@ import pl.treksoft.kvision.panel.VPanel
  */
 object UiManager {
 
-    fun addView(title: String, panel: VPanel) {
+    fun add(title: String, panel: VPanel) {
         RoView.addTab(title, panel)
+        EventStore.addView(title)
+    }
+
+    fun remove(tab: VPanel) {
+         RoView.removeTab(tab)
+      // EventStore.close(tab.get)
     }
 
     fun addView(viewable: Visible) {
@@ -44,10 +50,6 @@ object UiManager {
         RoView.addTab(I18n.tr(title), EventLogTable(model), icon/*, closable = true*/)
     }
 
-    fun removeView(title: String) {
-        EventStore.close(title)
-    }
-
     /**
      * Keeps a list of closed/minmized/docked views in order to recreate them.
      * When a tab is 'docked' it can be looked up here.
@@ -59,10 +61,6 @@ object UiManager {
 
     fun amendMenu() {
         Application.menuBar.amendMenu()
-    }
-
-    fun getMenuItems(): List<MenuEntry> {
-        return Menu.list
     }
 
 }

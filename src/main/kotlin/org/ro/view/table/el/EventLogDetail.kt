@@ -5,7 +5,6 @@ import org.ro.view.Command
 import org.ro.view.RoDialog
 import org.ro.view.uicomp.FormItem
 
-@ExperimentalUnsignedTypes
 class EventLogDetail(val logEntry: LogEntry) : Command {
 
     fun open() {
@@ -23,7 +22,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
 
     private fun toString(jsonStr: String): String {
         val s1 = JSON.parse<String>(jsonStr)
-        val answer = JSON.stringify(s1, null, 2)
-        return answer
+        return  JSON.stringify(s1, null, 2)
     }
+
 }

@@ -1,8 +1,10 @@
 package org.ro.core.event
 
+import kotlinx.serialization.UnstableDefault
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
+@UnstableDefault
 class LogEntryTest {
 
     @Test

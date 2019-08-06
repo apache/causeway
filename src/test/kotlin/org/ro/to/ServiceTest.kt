@@ -1,5 +1,6 @@
 package org.ro.to
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.Utils
 import org.ro.handler.ResultHandler
 import org.ro.handler.ServiceHandler
@@ -9,6 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@UnstableDefault
 class ServiceTest : ToTest() {
 
     @Test

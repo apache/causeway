@@ -9,6 +9,7 @@ import org.w3c.xhr.XMLHttpRequest
 /**
  * The name is somewhat misleading, see: https://en.wikipedia.org/wiki/XMLHttpRequest
  */
+
 class RoXmlHttpRequest {
     private var url = ""
 

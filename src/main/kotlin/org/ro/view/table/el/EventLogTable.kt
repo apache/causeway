@@ -20,7 +20,6 @@ import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 
-@ExperimentalUnsignedTypes
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
     private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true; tickElement = "<i class='fa fa-ellipsis-h'></i>"; crossElement = "<i class='fa fa-ellipsis-h'></i>" }
@@ -110,7 +109,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     }
 
     private fun removeTab() {
-        RoView.remove(this)
+        RoView.removeTab(this)
     }
 
     private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {

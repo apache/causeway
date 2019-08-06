@@ -1,7 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.model.ObjectAdapter
+import org.ro.core.model.Revealator
 import org.ro.core.model.ObjectList
 import org.ro.handler.TObjectHandler
 import kotlin.test.Test
@@ -32,10 +32,10 @@ class TObjectTest {
 
         val objectList = ObjectList()
         to.addMembersAsProperties()  //FIXME move fun from TObject to OA?
-        val oa1 = ObjectAdapter(to)
+        val oa1 = Revealator(to)
         objectList.list.add(oa1)
 
-        val oa: ObjectAdapter = objectList.last()!!
+        val oa: Revealator = objectList.last()!!
         val actualDnId =  oa.get("datanucleusIdLong") as Value
         assertEquals(0, actualDnId.content)
 

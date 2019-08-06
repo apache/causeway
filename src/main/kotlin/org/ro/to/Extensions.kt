@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Suppress("DEPRECATION")
 data class Extensions(@Optional val oid: String = "",
                       @Optional val isService: Boolean = false,
                       @Optional val isPersistent: Boolean = false,

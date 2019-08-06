@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Suppress("DEPRECATION")
 class Parameter(val id: String,
                 val num: Int = 0,
                 val description: String,

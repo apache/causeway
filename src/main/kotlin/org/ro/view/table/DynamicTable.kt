@@ -1,7 +1,7 @@
 package org.ro.view.table
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.ObjectAdapter
+import org.ro.core.model.Revealator
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n
@@ -22,13 +22,18 @@ import pl.treksoft.kvision.utils.px
  * - attribute types (can only be determined at runtime) and
  * - accessor names are not fixed
  */
-class DynamicTable(val model: List<ObjectAdapter>) : VPanel() {
-
-    private val columns = listOf(
-            ColumnDefinition<ObjectAdapter>("Col1", "var1")
-    )
+class DynamicTable(
+        val model: List<Revealator>,
+        var columns: List<ColumnDefinition<Revealator>>? = null) : VPanel() {
 
     init {
+        if (columns == null) {
+            columns = listOf(
+                    ColumnDefinition<Revealator>("Col1", "var1"),
+                    ColumnDefinition("Col2", "var2")
+            )
+        }
+
         HPanel(
                 FlexWrap.NOWRAP,
                 alignItems = FlexAlignItems.CENTER,
@@ -47,7 +52,7 @@ class DynamicTable(val model: List<ObjectAdapter>) : VPanel() {
                 model, options = options) {
             marginTop = 0.px
             marginBottom = 0.px
-            setEventListener<Tabulator<ObjectAdapter>> {
+            setEventListener<Tabulator<Revealator>> {
                 tabulatorRowClick = {
                 }
             }
@@ -56,12 +61,10 @@ class DynamicTable(val model: List<ObjectAdapter>) : VPanel() {
 
     fun build(logEntry: LogEntry): DropDown {
         val menu = buildMenuEntry("Action(s) ...", iconName = "fa-ellipsis-h")
-
         val link = Link(I18n.tr("Details"), icon = "fa-server").onClick {
             console.log("[ActionMenu.build] $logEntry")
         }
         menu.add(link)
-
         return menu
     }
 
@@ -70,13 +73,5 @@ class DynamicTable(val model: List<ObjectAdapter>) : VPanel() {
         val icon = iconName ?: "fa-bolt"
         return DropDown(label, icon = icon, forNavbar = true)
     }
-
-    private fun buildMenuAction(action: String, iconName: String? = null): Link {
-        val label = I18n.tr(action)
-        val icon = iconName ?: "fa-bolt"
-        return Link(label, icon = icon)
-    }
-
-
 
 }

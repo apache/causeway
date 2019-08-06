@@ -1,11 +1,13 @@
 package org.ro.to
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.core.Menu
 import org.ro.handler.ServiceHandler
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@UnstableDefault
 class MenuTest : ToTest() {
 
     @Test

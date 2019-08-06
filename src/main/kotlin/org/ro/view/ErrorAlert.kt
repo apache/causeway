@@ -17,12 +17,13 @@ class ErrorAlert(val error: HttpError) : Command {
     override fun execute() {
         //do nothing
     }
-    
-    private fun toString(stackTrace: List<String>):String {
-        var answer =""
+
+    private fun toString(stackTrace: List<String>): String {
+        var answer = ""
         for (s in stackTrace) {
             answer += s + "\n"
         }
         return answer
     }
+
 }

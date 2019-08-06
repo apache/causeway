@@ -6,7 +6,6 @@ import org.ro.core.event.NavigationObserver
 import org.ro.to.Result
 import org.ro.to.TransferObject
 
-@UnstableDefault
 class ResultHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
@@ -14,7 +13,7 @@ class ResultHandler : BaseHandler(), IResponseHandler {
         update()
     }
 
-    //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
+    @UnstableDefault
     override fun parse(jsonStr: String): TransferObject? {
         return Json.parse(Result.serializer(), jsonStr)
     }

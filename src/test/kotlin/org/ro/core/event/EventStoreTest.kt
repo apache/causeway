@@ -1,10 +1,12 @@
 package org.ro.core.event
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.to.Method
 import org.ro.to.RESTFUL
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.*
 
+@UnstableDefault
 class EventStoreTest {
 
     @Test

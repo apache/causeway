@@ -1,13 +1,11 @@
 package org.ro.handler
 
-import kotlinx.serialization.UnstableDefault
 import org.ro.core.event.LogEntry
 
 /**
  * Delegates responses to handlers, acts as Facade.
  * @see: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
-@UnstableDefault
 object ResponseHandler {
     private var delegate: IResponseHandler;
 
@@ -40,4 +38,5 @@ object ResponseHandler {
     fun handle(logEntry: LogEntry) {
         delegate.handle(logEntry)
     }
+
 }

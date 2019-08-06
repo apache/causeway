@@ -7,7 +7,8 @@ import org.ro.view.uicomp.UIComponent
 import org.ro.view.uicomp.VBox
 
 @Serializable
-data class TabLayout(val cssClass: String? = null,     
+@Suppress("DEPRECATION")
+data class TabLayout(val cssClass: String? = null,
                      val name: String? = null,
                      @Optional val row: List<RowLayout> = emptyList()) {
 

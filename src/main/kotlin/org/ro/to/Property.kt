@@ -4,6 +4,7 @@ import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 @Serializable  // TODO are Property and Action subclasses of Member?
+@Suppress("DEPRECATION")
 data class Property(val id: String = "",
                     val memberType: String = "",
                     val links: List<Link> = emptyList(),

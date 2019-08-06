@@ -29,8 +29,8 @@ class ObjectListTest {
         val lyt = LayoutHandler().parse(jsonStr) as Layout
 
         val ol = ObjectList()
-        ol.list.add(ObjectAdapter(ro0))
-        ol.list.add(ObjectAdapter(ro1))
+        ol.list.add(Revealator(ro0))
+        ol.list.add(Revealator(ro1))
 
         ol.layout = lyt
         assertEquals(2, ol.list.size)

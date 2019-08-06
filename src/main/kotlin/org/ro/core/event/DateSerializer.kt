@@ -11,14 +11,14 @@ object DateSerializer : KSerializer<Date> {
     override val descriptor: SerialDescriptor =
             StringDescriptor.withName("Date")
 
-    override fun serialize(output: Encoder, obj: Date) {
-        output.encodeString(obj.toDateString())
+    override fun serialize(encoder: Encoder, obj: Date) {
+        encoder.encodeString(obj.toDateString())
     }
 
-    override fun deserialize(input: Decoder): Date {
-        val input = input.decodeString()
+    override fun deserialize(decoder: Decoder): Date {
+        val input = decoder.decodeString()
         val double = Date.parse(input)
-        val long = double as Long
+        val long = double as Long  //FIXME
         val result = Date(milliseconds = long)
         return result
     }
