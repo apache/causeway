@@ -9,7 +9,7 @@ import pl.treksoft.kvision.navbar.NavbarType
 import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
 
-class RoStatusBar : Navbar() {
+object RoStatusBar : Navbar() {
 
     private var urlLabel = Span()
     private var userLabel = Span()

@@ -1,7 +1,6 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.core.model.Revealator
 
 @Serializable
 data class TObject(val links: List<Link> = emptyList(),
@@ -30,32 +29,6 @@ data class TObject(val links: List<Link> = emptyList(),
             }
         }
         return null
-    }
-
-    /**
-     * Post-Constructor fun using dynamic nature of class.
-     */
-    fun addMembersAsProperties() {
-        val members: MutableList<Member> = getProperties()
-        console.log("[TObject.addMembersAsProperties] $members")
-        for (m in members) {
-            if (m.memberType == MemberType.PROPERTY.type) {
-                addAsProperty(m)
-            }
-        }
-    }
-
-    fun addAsProperty(member: Member) {
-        val value = "//TODO members of type property can be either null|String|Link"
-        if (value == "[object Object]") {
-            val link = Link(value)
-            //here the magic of recursive OA's take place
-            //FIXME
-            val attribute = Revealator(link as TObject) //, link.title, "Link")
-            val key: String = member.id
-            val dynObj = this.asDynamic()
-            dynObj[key] = attribute
-        }
     }
 
     fun selfLink(): Link? {

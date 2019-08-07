@@ -1,7 +1,7 @@
 package org.ro.view.table
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.Revealator
+import org.ro.core.model.Exposer
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n
@@ -23,17 +23,10 @@ import pl.treksoft.kvision.utils.px
  * - accessor names are not fixed
  */
 class DynamicTable(
-        val model: List<Revealator>,
-        var columns: List<ColumnDefinition<Revealator>>? = null) : VPanel() {
+        val model: List<Exposer>,
+        var columns: List<ColumnDefinition<Exposer>>) : VPanel() {
 
     init {
-        if (columns == null) {
-            columns = listOf(
-                    ColumnDefinition<Revealator>("Col1", "var1"),
-                    ColumnDefinition("Col2", "var2")
-            )
-        }
-
         HPanel(
                 FlexWrap.NOWRAP,
                 alignItems = FlexAlignItems.CENTER,
@@ -52,7 +45,7 @@ class DynamicTable(
                 model, options = options) {
             marginTop = 0.px
             marginBottom = 0.px
-            setEventListener<Tabulator<Revealator>> {
+            setEventListener<Tabulator<Exposer>> {
                 tabulatorRowClick = {
                 }
             }

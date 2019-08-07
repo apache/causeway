@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/joerg-rade/kroviz.svg?branch=master)](https://travis-ci.com/joerg-rade/kroviz.svg?branch=master)
+
 # About
 
 kroViz is a viewer for [Restful Objects](http://www.restfulobjects.org) written in Kotlin/JS, using [kvision](https://rjaros.github.io/kvision) for the UI part. 
@@ -9,7 +11,8 @@ A [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml) application
 
 ## How will the UI look like?
 
-CAUTION: Screenshots are partly from a previous version (roViz, written in ActionScript)  
+It will be similar to the well known Wicket-UI of Apache Isis, but will make use of Tabs for Lists and Objects instead of Bookmarking URLs.
+The table widget will allow filtering/sorting on the client and scrolling behavior will be more like in tradition Desktop applications.  
 
 TIP: After entering url, userId, password in the Connect Dialog (Main -> Connect), the menu gets populated. Actions (here: SimpleObjects.listAll) can be selected and a Tab with a table is displayed:
 

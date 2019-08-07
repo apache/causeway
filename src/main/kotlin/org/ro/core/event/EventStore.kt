@@ -1,6 +1,6 @@
 package org.ro.core.event
 
-import org.ro.Application
+import org.ro.core.UiManager
 import org.ro.handler.ResponseHandler
 import pl.treksoft.kvision.utils.observableListOf
 import kotlin.js.Date
@@ -70,7 +70,7 @@ object EventStore {
     }
 
     private fun updateStatus(entry: LogEntry) {
-        Application.statusBar.update(entry)
+        UiManager.updateStatus(entry)
     }
 
     /**

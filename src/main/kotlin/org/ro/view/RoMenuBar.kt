@@ -17,18 +17,16 @@ import pl.treksoft.kvision.navbar.Nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
 
-object RoMenuBar {
-    val leftMargin = CssSize(-12, UNIT.px)
-    var navbar: Navbar
-    var nav: Nav
+object RoMenuBar : Navbar() {
+    val nav = Nav()
 
     init {
-        navbar = Navbar(type = NavbarType.FIXEDTOP)
-        navbar.marginLeft = leftMargin
-        nav = Nav()
-        navbar.add(nav)
-        val mainEntry = buildMainEntry()
-        nav.add(mainEntry)
+        navbar(type = NavbarType.FIXEDTOP) {
+            marginLeft = CssSize(-12, UNIT.px)
+            add(nav)
+            val mainEntry = buildMainEntry()
+            nav.add(mainEntry)
+        }
     }
 
     private fun buildMainEntry(): DropDown {
@@ -49,7 +47,9 @@ object RoMenuBar {
         val sample = "Dynamic Table"
         val dynTable = createLink(sample).onClick {
             val model = TableFactory().testData()
-            UiManager.add(sample, DynamicTable(model))
+            val members = TableFactory().testMap()
+            val columns = TableFactory().buildColumns(members)
+            UiManager.add(sample, DynamicTable(model, columns))
         }
         mainMenu.add(dynTable)
 
@@ -69,7 +69,7 @@ object RoMenuBar {
                 val menuLink = buildMenuAction(me.action.id)
                 val execLink = me.action.getInvokeLink()!!
                 menuLink.onClick {
-                    console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
+                    // console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
                     ActionObserver().invoke(execLink)
                 }
                 dd.add(menuLink)

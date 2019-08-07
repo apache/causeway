@@ -11,32 +11,29 @@ import org.ro.to.TObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @UnstableDefault
 class ObjectListTest {
 
     @Test
     fun testParse() {
-        var jsonStr = SO_0.str
-        val ro0 = TObjectHandler().parse(jsonStr) as TObject
-        ro0.addMembersAsProperties()
-
-        jsonStr = SO_1.str
-        val ro1 = TObjectHandler().parse(jsonStr) as TObject
-        ro1.addMembersAsProperties()
-
-        jsonStr = SO_OBJECT_LAYOUT.str
-        val lyt = LayoutHandler().parse(jsonStr) as Layout
+        val ro0 = TObjectHandler().parse(SO_0.str) as TObject
+        val ro1 = TObjectHandler().parse(SO_1.str) as TObject
+        val lyt = LayoutHandler().parse(SO_OBJECT_LAYOUT.str) as Layout
 
         val ol = ObjectList()
-        ol.list.add(Revealator(ro0))
-        ol.list.add(Revealator(ro1))
+        ol.list.add(Exposer(ro0))
+        ol.list.add(Exposer(ro1))
 
         ol.layout = lyt
         assertEquals(2, ol.list.size)
 
         assertNotNull(ol.layout)
         assertNotNull(ol.layout!!.properties)
+
+        ol.initPropertyDescription()
+        assertTrue(ol.hasLayout())
     }
 
 }

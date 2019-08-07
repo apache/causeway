@@ -5,7 +5,6 @@ import org.ro.core.event.EventStore
 import org.ro.handler.IntegrationTest
 import org.ro.org.ro.core.observer.ActionObserver
 import org.ro.to.*
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
@@ -18,7 +17,7 @@ import kotlin.test.assertEquals
 @UnstableDefault
 class UrlsTest : IntegrationTest() {
 
-    @Test
+    //@Test
     fun testUrls() {
         if (isSimpleAppAvailable()) {
             // given
@@ -36,10 +35,17 @@ class UrlsTest : IntegrationTest() {
             urls.put(SO_OBJECT_LAYOUT.url, SO_OBJECT_LAYOUT.str)
             urls.put(RESTFUL_SERVICES.url, RESTFUL_SERVICES.str)
 
+            //when
             for (entry in urls) {
                 val href = entry.key
                 val link = Link(method = Method.GET.operation, href = href)
                 ActionObserver().invoke(link)
+            }
+
+            // then
+            wait(1000)
+            for (entry in urls) {
+                val href = entry.key
                 val actual = EventStore.find(href)!!.getResponse()
                 assertEquals(entry.value, actual)
             }

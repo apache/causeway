@@ -1,7 +1,5 @@
 package org.ro.core
 
-import org.ro.Application
-
 /**
  * Keep track of connected server.
  */
@@ -14,7 +12,7 @@ object Session {
         this.user = user
         this.pw = pw
         this.url = url
-        Application.statusBar.updateUser(user)
+        UiManager.updateUser(user)
     }
 
     fun getCredentials(): String {

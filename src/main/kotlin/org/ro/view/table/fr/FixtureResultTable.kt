@@ -1,6 +1,6 @@
 package org.ro.view.table.fr
 
-import org.ro.core.model.Revealator
+import org.ro.core.model.Exposer
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.FlexAlignItems
@@ -14,10 +14,10 @@ import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.tabulator.TabulatorOptions
 import pl.treksoft.kvision.utils.px
 
-class FixtureResultTable(val model: List<Revealator>) : VPanel() {
+class FixtureResultTable(val model: List<Exposer>) : VPanel() {
 
      private val columns = listOf(
-            ColumnDefinition<Revealator>("", field = "iconName", width = "40",
+            ColumnDefinition<Exposer>("", field = "iconName", width = "40",
                     formatterComponentFunction = { _, _, data ->
                         Button(text = "", icon = data.iconName, style = ButtonStyle.LINK).onClick {
                             console.log(data.result)
@@ -53,7 +53,7 @@ class FixtureResultTable(val model: List<Revealator>) : VPanel() {
                 model, options = options) {
             marginTop = 0.px
             marginBottom = 0.px
-            setEventListener<Tabulator<Revealator>> {
+            setEventListener<Tabulator<Exposer>> {
                 tabulatorRowClick = {
                 }
             }

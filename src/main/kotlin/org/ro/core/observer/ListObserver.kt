@@ -3,8 +3,8 @@ package org.ro.core.event
 import kotlinx.serialization.Serializable
 import org.ro.core.UiManager
 import org.ro.core.Utils
+import org.ro.core.model.Exposer
 import org.ro.core.model.ObjectList
-import org.ro.core.model.Revealator
 import org.ro.core.observer.BaseObserver
 import org.ro.layout.Layout
 import org.ro.to.Link
@@ -52,7 +52,10 @@ class ListObserver : BaseObserver() {
 
     private fun handleView() {
         val title: String = this::class.simpleName.toString()
-        val model = list.list
+        val model = mutableListOf<Exposer>()
+        for (i in list.list) {
+            model.add(i.dynamise())
+        }
         val panel = FixtureResultTable(model)
         UiManager.add(title, panel)
         isRendered = true
@@ -76,7 +79,7 @@ class ListObserver : BaseObserver() {
     }
 
     private fun handleObject(obj: TObject) {
-        list.list.add(Revealator(obj))
+        list.list.add(Exposer(obj).dynamise())
         if (!list.hasLayout()) {
             val link = obj.getLayoutLink()
             if (link != null) {

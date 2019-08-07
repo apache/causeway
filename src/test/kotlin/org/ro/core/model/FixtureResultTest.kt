@@ -32,14 +32,14 @@ class FixtureResultTest {
         assertTrue(tObj.hasOwnProperty("instanceId"))       //4
 
         //Expectations:
-        // 1:  has members (memberList?) mapped onto (dynamic) Revealator properties
+        // 1:  has members (memberList?) mapped onto (dynamic) Exposer properties
         assertTrue(tObj.hasOwnProperty("members"))   //5 only internal (Object) attributes are 'adapted'
         val members = tObj.members
         val memberMap = members as LinkedHashMap<String, Member>
         assertNotNull(memberMap)              //6
         assertEquals(8, memberMap.size)    //7
 
-        // 3:  has links (linkList?) mapped onto (dynamic) Revealator properties
+        // 3:  has links (linkList?) mapped onto (dynamic) Exposer properties
         assertTrue(tObj.hasOwnProperty("links"))   //8 only internal (Object) attributes are 'adapted'
         val links = tObj.links
         val linkList = links as ArrayList<Link>?

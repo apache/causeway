@@ -8,6 +8,7 @@ import pl.treksoft.kvision.panel.VPanel
 
 object RoView : TabPanel() {
     private var tabCount = 0
+
     init {
         marginTop = CssSize(50, UNIT.px)
     }
@@ -32,4 +33,5 @@ object RoView : TabPanel() {
         super.remove(tab)
         tabCount--
     }
+
 }

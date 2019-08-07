@@ -12,19 +12,15 @@ class ObjectList : Visible {
         return " "
     }
 
-    var list = mutableListOf<Revealator>()
+    var list = mutableListOf<Exposer>()
     var layout: Layout? = null
     var propertyLabels = mutableMapOf<String, String>()
 
     fun hasLayout(): Boolean {
-        val it = layout != null
-        if (it) {
-//            initPropertyDescription()
-        }
-        return it
+        return layout != null
     }
 
-    //TODO move to Observer
+    //FIXME move to Observer
     fun initPropertyDescription() {
         if (arePropertyLabelsToBeSet()) {
             val pls = layout!!.properties
@@ -43,10 +39,6 @@ class ObjectList : Visible {
         console.log("[ObjectList.handleProperty] $id:$friendlyName")
     }
 
-    fun getPropertyLabel(id: String): String? {
-        return propertyLabels.get(id)
-    }
-
     private fun arePropertyLabelsToBeSet(): Boolean {
         val labelSize: Int = propertyLabels.size
         var propsSize = 0
@@ -54,10 +46,6 @@ class ObjectList : Visible {
             propsSize = layout!!.properties.size
         }
         return (labelSize < propsSize)
-    }
-
-    fun last(): Revealator? {
-       return list.lastOrNull()
     }
 
 }

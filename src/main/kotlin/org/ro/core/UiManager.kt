@@ -1,10 +1,11 @@
 package org.ro.core
 
-import org.ro.Application
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.Visible
 import org.ro.view.IconManager
+import org.ro.view.RoMenuBar
+import org.ro.view.RoStatusBar
 import org.ro.view.RoView
 import org.ro.view.table.el.EventLogTable
 import pl.treksoft.kvision.i18n.I18n
@@ -27,8 +28,8 @@ object UiManager {
     }
 
     fun remove(tab: VPanel) {
-         RoView.removeTab(tab)
-      // EventStore.close(tab.get)
+        RoView.removeTab(tab)
+        // EventStore.close(tab.get)
     }
 
     fun addView(viewable: Visible) {
@@ -60,7 +61,15 @@ object UiManager {
      */
 
     fun amendMenu() {
-        Application.menuBar.amendMenu()
+        RoMenuBar.amendMenu()
+    }
+
+    fun updateStatus(entry: LogEntry) {
+        RoStatusBar.update(entry)
+    }
+
+    fun updateUser(user: String) {
+        RoStatusBar.updateUser(user)
     }
 
 }

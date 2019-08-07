@@ -1,8 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.model.Revealator
-import org.ro.core.model.ObjectList
+import org.ro.core.model.Exposer
 import org.ro.handler.TObjectHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -30,19 +29,16 @@ class TObjectTest {
         val properties = to.getProperties()
         assertEquals(4, properties.size)
 
-        val objectList = ObjectList()
-        to.addMembersAsProperties()  //FIXME move fun from TObject to OA?
-        val oa1 = Revealator(to)
-        objectList.list.add(oa1)
+        //to.addMembersAsProperties()  //FIXME move fun from TObject to OA?
+        val i = Exposer(to)
 
-        val oa: Revealator = objectList.last()!!
-        val actualDnId =  oa.get("datanucleusIdLong") as Value
+        val actualDnId =  i.get("datanucleusIdLong") as Value
         assertEquals(0, actualDnId.content)
 
-        val actualDnvers =  oa.get("datanucleusVersionTimestamp") as Value
+        val actualDnvers =  i.get("datanucleusVersionTimestamp") as Value
         assertEquals("1514897074953", actualDnvers.content)
 
-        val actualNotes =  oa.get("notes")
+        val actualNotes =  i.get("notes")
         assertEquals(null, actualNotes)
     }
 
