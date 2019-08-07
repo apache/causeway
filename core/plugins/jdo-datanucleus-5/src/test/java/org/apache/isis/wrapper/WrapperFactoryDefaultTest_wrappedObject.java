@@ -231,7 +231,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
 
         wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
-        wrapperFactory.isisSessionFactory = mockIsisSessionFactory;
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
 
         final Method employeeGetNameMethod = methodOf(Employee.class, "getName");

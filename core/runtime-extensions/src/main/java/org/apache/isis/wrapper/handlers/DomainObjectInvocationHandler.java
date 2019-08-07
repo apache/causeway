@@ -69,20 +69,15 @@ import org.apache.isis.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 import lombok.val;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
-    private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final ObjectAdapterProvider objectAdapterProvider;
-
     private final ProxyContextHandler proxy;
     private final ExecutionMode executionMode;
-    private final IsisSessionFactory isisSessionFactory;
+    private final MetaModelContext mmContext;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -109,19 +104,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     public DomainObjectInvocationHandler(
             final T delegate,
             final ExecutionMode mode,
-            final ProxyContextHandler proxy,
-            final IsisSessionFactory isisSessionFactory) {
+            final ProxyContextHandler proxy) {
+        
         super(delegate, mode);
 
+        this.mmContext = MetaModelContext.current();
         this.proxy = proxy;
         this.executionMode = mode;
-        this.isisSessionFactory = isisSessionFactory;
-
-        final MetaModelContext context = MetaModelContext.current();
-
-        this.authenticationSessionProvider = context.getAuthenticationSessionProvider(); 
-        this.objectAdapterProvider = context.getObjectAdapterProvider();
-
 
         try {
             titleMethod = delegate.getClass().getMethod("title", new Class[]{});
@@ -947,18 +936,14 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
+        return mmContext.getSpecificationLoader();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return getAuthenticationSessionProvider().getAuthenticationSession();
+        return mmContext.getAuthenticationSession();
     }
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return objectAdapterProvider;
+        return mmContext.getObjectAdapterProvider();
     }
 }

@@ -24,25 +24,23 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.wrapper.proxy.ProxyCreator;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+@RequiredArgsConstructor
 public class ProxyContextHandler {
 
-    private final ProxyCreator proxyCreator;
+    @NonNull private final ProxyCreator proxyCreator;
 
-    public ProxyContextHandler(final ProxyCreator proxyCreator) {
-        this.proxyCreator = proxyCreator;
-    }
+    public <T> T proxy(T domainObject, ExecutionMode mode) {
 
-    public <T> T proxy(
-            final T domainObject,
-            final ExecutionMode mode,
-            final IsisSessionFactory isisSessionFactory) {
-
-        final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject,
+        val invocationHandler = new DomainObjectInvocationHandler<T>(
+                domainObject,
                 mode,
-                this, isisSessionFactory);
+                this);
 
         return proxyCreator.instantiateProxy(invocationHandler);
     }
@@ -51,10 +49,16 @@ public class ProxyContextHandler {
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
      */
-    public <T, E> Collection<E> proxy(final Collection<E> collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public <T, E> Collection<E> proxy(
+            final Collection<E> collectionToProxy, 
+            final String collectionName, 
+            final DomainObjectInvocationHandler<T> handler, 
+            final OneToManyAssociation otma) {
 
-        final CollectionInvocationHandler<T, Collection<E>> collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(collectionToProxy, collectionName, handler, otma);
-        collectionInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
+        val collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
+                        collectionToProxy, collectionName, handler, otma);
+        collectionInvocationHandler.setResolveObjectChangedEnabled(
+                handler.isResolveObjectChangedEnabled());
 
         return proxyCreator.instantiateProxy(collectionInvocationHandler);
     }
@@ -63,9 +67,14 @@ public class ProxyContextHandler {
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
      */
-    public <T, P, Q> Map<P, Q> proxy(final Map<P, Q> collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public <T, P, Q> Map<P, Q> proxy(
+            final Map<P, Q> collectionToProxy, 
+            final String collectionName, 
+            final DomainObjectInvocationHandler<T> handler, 
+            final OneToManyAssociation otma) {
 
-        final MapInvocationHandler<T, Map<P, Q>> mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(collectionToProxy, collectionName, handler, otma);
+        val mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
+                collectionToProxy, collectionName, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         return proxyCreator.instantiateProxy(mapInvocationHandler);

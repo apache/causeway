@@ -32,16 +32,16 @@ import org.apache.isis.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.wrapper.handlers.DelegatingInvocationHandler;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class ProxyCreator {
 
-    private final Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass;
+    @NonNull private final Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass;
 
     public ProxyCreator() {
         this(Collections.synchronizedMap(new WeakHashMap<>()));
-    }
-
-    public ProxyCreator(Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass) {
-        this.proxyFactoryByClass = proxyFactoryByClass;
     }
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {

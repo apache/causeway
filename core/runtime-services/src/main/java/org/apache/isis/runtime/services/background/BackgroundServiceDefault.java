@@ -147,7 +147,4 @@ public class BackgroundServiceDefault implements BackgroundService {
     @Inject private TransactionService transactionService;
 
 
-
-
-
 }

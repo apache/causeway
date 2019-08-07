@@ -19,12 +19,8 @@
 
 package org.apache.isis.applib.services.wrapper;
 
-import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
@@ -114,80 +110,6 @@ public interface WrapperFactory {
         }
     }
 
-    WrapperFactory NOOP = new WrapperFactory(){
-
-        @Override
-        public <T> T wrap(T domainObject) {
-            return domainObject;
-        }
-
-        @Override public <T> T w(final T domainObject) {
-            return wrap(domainObject);
-        }
-
-        @Inject
-        FactoryService factoryService;
-
-        @Override
-        public <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
-            return wrapMixin(mixinClass, mixedIn);
-        }
-
-        @Override
-        public <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
-            return wrap(factoryService.mixin(mixinClass, mixedIn));
-        }
-
-        @Override
-        public <T> T wrapTry(T domainObject) {
-            return domainObject;
-        }
-
-        @Override
-        public <T> T wrapNoExecute(T domainObject) {
-            return domainObject;
-        }
-
-        @Override
-        public <T> T wrapSkipRules(T domainObject) {
-            return domainObject;
-        }
-
-        @Override
-        public <T> T wrap(T domainObject, ExecutionMode mode) {
-            return domainObject;
-        }
-
-        @Override
-        public <T> T unwrap(T possibleWrappedDomainObject) {
-            return possibleWrappedDomainObject;
-        }
-
-        @Override
-        public <T> boolean isWrapper(T possibleWrappedDomainObject) {
-            return false;
-        }
-
-        @Override
-        public List<InteractionListener> getListeners() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        public boolean addInteractionListener(InteractionListener listener) {
-            return false;
-        }
-
-        @Override
-        public boolean removeInteractionListener(InteractionListener listener) {
-            return false;
-        }
-
-        @Override
-        public void notifyListeners(InteractionEvent ev) {
-        }
-    };
-
     /**
      * Provides the &quot;wrapper&quot; of the underlying domain object.
      *
@@ -195,46 +117,29 @@ public interface WrapperFactory {
      * If the object has (see {@link #isWrapper(Object)} already been wrapped),
      * then should just return the object back unchanged.
      */
-    @Programmatic
     <T> T wrap(T domainObject);
-
-    /**
-     * Alias for {@link #wrap(Object)}.
-     */
-    @Programmatic
-    <T> T w(T domainObject);
-
-    /**
-     * Alias for {@link #wrapMixin(Class, Object)}
-     */
-    @Programmatic
-    <T> T wm(Class<T> mixinClass, Object mixedIn);
 
     /**
      * {@link #wrap(Object) wraps} a {@link FactoryService#mixin(Class, Object) mixin}.
      */
-    @Programmatic
     <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);
 
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#TRY},
      * to make this feature more discoverable.
      */
-    @Programmatic
     <T> T wrapTry(T domainObject);
 
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#NO_EXECUTE},
      * to make this feature more discoverable.
      */
-    @Programmatic
     <T> T wrapNoExecute(T domainObject);
 
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#SKIP_RULES},
      * to make this feature more discoverable.
      */
-    @Programmatic
     <T> T wrapSkipRules(T domainObject);
 
     /**
@@ -245,7 +150,6 @@ public interface WrapperFactory {
      * Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
      */
-    @Programmatic
     <T> T wrap(T domainObject, ExecutionMode mode);
 
 
@@ -256,7 +160,6 @@ public interface WrapperFactory {
      * If the object {@link #isWrapper(Object) is not wrapped}, then
      * should just return the object back unchanged.
      */
-    @Programmatic
     <T> T unwrap(T possibleWrappedDomainObject);
 
 
@@ -268,17 +171,12 @@ public interface WrapperFactory {
      *            - object that might or might not be a wrapper.
      * @return
      */
-    @Programmatic
     <T> boolean isWrapper(T possibleWrappedDomainObject);
-
-
-
 
     /**
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
      */
-    @Programmatic
     List<InteractionListener> getListeners();
 
     /**
@@ -294,7 +192,6 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    @Programmatic
     public boolean addInteractionListener(InteractionListener listener);
 
     /**
@@ -310,10 +207,8 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    @Programmatic
     public boolean removeInteractionListener(InteractionListener listener);
 
-    @Programmatic
     public void notifyListeners(InteractionEvent ev);
 
 }

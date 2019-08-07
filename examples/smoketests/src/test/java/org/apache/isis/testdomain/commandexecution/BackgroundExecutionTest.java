@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.jdo.InventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -62,6 +63,7 @@ class BackgroundExecutionTest {
     @Inject RepositoryService repository;
     @Inject BackgroundService backgroundService;
     @Inject FactoryService facoryService;
+    @Inject WrapperFactory wrapperFactory;
     @Inject ActionDomainEventListener actionDomainEventListener;
 
     @BeforeEach
@@ -105,6 +107,25 @@ class BackgroundExecutionTest {
 
         assertEquals(123d, product.getPrice(), 1E-6);
     }
+    
+    @Test
+    void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
+
+        val inventoryManager = facoryService.viewModel(InventoryManager.class);
+        val product = repository.allInstances(Product.class).get(0);
+
+        assertEquals(99d, product.getPrice(), 1E-6);
+
+        actionDomainEventListener.prepareLatch();
+
+        wrapperFactory.wrap(inventoryManager).updateProductPrice(product, 123);
+
+        assertTrue(
+                actionDomainEventListener.getCountDownLatch()
+                .await(5, TimeUnit.SECONDS));
+
+        assertEquals(123d, product.getPrice(), 1E-6);
+    }
 
 
     @Service
@@ -115,7 +136,7 @@ class BackgroundExecutionTest {
         @EventListener(InventoryManager.UpdateProductPriceEvent.class)
         public void hi(InventoryManager.UpdateProductPriceEvent event) {
             //FIXME[2125] not triggered yet
-            System.err.println("!!!!!!!!!!!! hiho");
+            System.err.println("!!!!!!!!!!!! event " + event.getEventPhase());
             countDownLatch.countDown();
         }
 

@@ -77,6 +77,8 @@ class TransactionRollbackTest_withTransactional {
     @Test @Order(2)
     void previousTest_shouldHaveBeenRolledBack() {
         
+        
+        
         // expected condition
         assertEquals(0, repository.allInstances(Book.class).size());
     }

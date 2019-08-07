@@ -20,15 +20,16 @@
 package org.apache.isis.wrapper.dispatchers;
 
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.commons.internal.base._Casts;
 
-public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> implements InteractionEventDispatcher {
+public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> 
+implements InteractionEventDispatcher {
 
     public abstract void dispatchTypeSafe(T interactionEvent);
 
     @Override
-    @SuppressWarnings("unchecked")
     public void dispatch(final InteractionEvent interactionEvent) {
-        dispatchTypeSafe((T) interactionEvent);
+        dispatchTypeSafe(_Casts.<T>uncheckedCast(interactionEvent));
     }
 
 }

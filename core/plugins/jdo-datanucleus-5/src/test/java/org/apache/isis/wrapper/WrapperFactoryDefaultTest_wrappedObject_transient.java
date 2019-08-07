@@ -137,7 +137,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
         wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
-        wrapperFactory.isisSessionFactory = mockIsisSessionFactory;
 
         context.checking(new Expectations() {
             {
