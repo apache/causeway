@@ -135,21 +135,11 @@ public interface ImperativeFacet extends Facet {
         }
 
         public static Intent getIntent(final ObjectMember member, final Method method) {
-//            val imperativeFacets = member.streamFacets()
-//                    .map(ImperativeFacet.Util::getImperativeFacet)
-//                    .filter(_NullSafe::isPresent)
-//                    .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
-//                    .collect(Collectors.toList());
-
-            val imperativeFacets1 = member.streamFacets()
+            val imperativeFacets = member.streamFacets()
                     .map(ImperativeFacet.Util::getImperativeFacet)
                     .filter(_NullSafe::isPresent)
-                    .collect(Collectors.toList());
-            
-            val imperativeFacets = imperativeFacets1.stream()
                     .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
                     .collect(Collectors.toList());
-            
             
             switch(imperativeFacets.size()) {
             case 0:

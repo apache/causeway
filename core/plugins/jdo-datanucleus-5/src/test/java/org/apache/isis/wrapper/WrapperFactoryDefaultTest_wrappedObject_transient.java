@@ -22,6 +22,7 @@ package org.apache.isis.wrapper;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -64,8 +65,6 @@ import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import static org.apache.isis.unittestsupport.jmocking.PostponedAction.returnValuePostponed;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import lombok.val;
 
 /**
  * Contract test.
@@ -116,6 +115,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
     private WrapperFactoryDefault wrapperFactory;
     private Employee employeeWO;
+    private List<Facet> facets;
 
     @Before
     public void setUp() throws Exception {
@@ -207,7 +207,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         // given
         final DisabledFacet disabledFacet = new DisabledFacetAbstractAlwaysEverywhere(mockPasswordMember){};
-        val facets = Arrays.asList(disabledFacet, new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
+        facets = Arrays.asList(disabledFacet, new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
 
         final Consent visibilityConsent = new Allow(new InteractionResult(new PropertyVisibilityEvent(employeeDO, null)));
 
@@ -256,36 +256,28 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
             }
         });
 
-        val facets1 = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(
+        facets = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(
                 setPasswordMethod, mockPasswordMember));
         
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).streamFacets();
-                will(returnValuePostponed(facets1::stream));
+                will(returnValuePostponed(()->facets.stream()));
 
                 oneOf(mockPasswordMember)
                 .set(mockEmployeeAdapter, mockPasswordAdapter, InteractionInitiatedBy.USER);
+                
+                oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);
+                will(returnValue(mockPasswordAdapter));
             }
         });
 
         // when
         employeeWO.setPassword(passwordValue);
 
-
         // and given
-        val facets2 = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(
+        facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(
                 mockOnType, getPasswordMethod, mockPasswordMember));
-        
-        context.checking(new Expectations() {
-            {
-                allowing(mockPasswordMember).streamFacets();
-                will(returnValuePostponed(facets2::stream));
-
-                oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);
-                will(returnValue(mockPasswordAdapter));
-            }
-        });
 
         // then be allowed
         assertThat(employeeWO.getPassword(), is(passwordValue));
