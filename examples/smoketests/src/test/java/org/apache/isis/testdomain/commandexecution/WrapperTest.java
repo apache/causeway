@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.commandexecution;
 
+import java.util.EnumSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
@@ -51,7 +51,7 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 JdoTestDomainModule.class,
-                BackgroundExecutionTest.ActionDomainEventListener.class
+                WrapperTest.ActionDomainEventListener.class
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
@@ -59,7 +59,7 @@ import lombok.val;
                 //        		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
                 //        		"logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
         })
-class BackgroundExecutionTest {
+class WrapperTest {
 
     @Inject FixtureScripts fixtureScripts;
     @Inject RepositoryService repository;
@@ -78,21 +78,7 @@ class BackgroundExecutionTest {
     }
 
     @Test
-    void testBackgroundService_waitingForFixedTime() throws InterruptedException, ExecutionException {
-
-        val inventoryManager = facoryService.viewModel(InventoryManager.class);
-        val product = repository.allInstances(Product.class).get(0);
-
-        assertEquals(99d, product.getPrice(), 1E-6);
-
-        backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
-
-        Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
-        assertEquals(123d, product.getPrice(), 1E-6);
-    }
-
-    @Test @Disabled("FIXME[2125] does not trigger domain events")
-    void testBackgroundService_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
+    void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(InventoryManager.class);
         val product = repository.allInstances(Product.class).get(0);
@@ -101,7 +87,7 @@ class BackgroundExecutionTest {
 
         actionDomainEventListener.prepareLatch();
 
-        backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
+        wrapperFactory.wrap(inventoryManager).updateProductPrice(product, 123);
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()
@@ -110,6 +96,27 @@ class BackgroundExecutionTest {
         assertEquals(123d, product.getPrice(), 1E-6);
     }
 
+    @Test
+    void testWrapper_async_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
+
+        val inventoryManager = facoryService.viewModel(InventoryManager.class);
+        val product = repository.allInstances(Product.class).get(0);
+
+        assertEquals(99d, product.getPrice(), 1E-6);
+
+        actionDomainEventListener.prepareLatch();
+
+        wrapperFactory.wrap(inventoryManager, EnumSet.of(WrapperFactory.ExecutionMode.ASYNC))
+            .updateProductPrice(product, 123);
+
+        assertTrue(
+                actionDomainEventListener.getCountDownLatch()
+                .await(5, TimeUnit.SECONDS));
+
+        assertEquals(123d, product.getPrice(), 1E-6);
+    }
+    
+
     @Service
     public static class ActionDomainEventListener {
 
@@ -117,7 +124,6 @@ class BackgroundExecutionTest {
 
         @EventListener(InventoryManager.UpdateProductPriceEvent.class)
         public void onDomainEvent(InventoryManager.UpdateProductPriceEvent event) {
-            //FIXME[2125] not triggered yet
             if(event.getEventPhase()==Phase.EXECUTED) {
                 countDownLatch.countDown();
             }

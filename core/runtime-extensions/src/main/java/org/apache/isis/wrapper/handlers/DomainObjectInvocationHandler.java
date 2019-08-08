@@ -26,6 +26,8 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -70,7 +72,9 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxy;
@@ -819,6 +823,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return !getExecutionMode().contains(ExecutionMode.SWALLOW_EXCEPTIONS);
     }
     
+    private boolean shouldExecuteAsync() {
+        return getExecutionMode().contains(ExecutionMode.ASYNC);
+    }
+    
     private void runValidationTask(Runnable task) {
         if(!shouldEnforceRules()) {
             return;
@@ -838,6 +846,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if(!shouldExecute()) {
             return null;
         }
+        if(shouldExecuteAsync()) {
+            return runAsync(task);
+        }
         if(shouldFailFast()) {
             return task.get();
         } else {
@@ -850,6 +861,40 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
     }
     
+    /* will always return null*/
+    private <X> X runAsync(Supplier<X> task) {
+        val commonPool = ForkJoinPool.commonPool();
+        
+        val transactionService = mmContext.getTransactionService();
+        val authenticationSession = mmContext.getAuthenticationSession();
+        //val transactionLatch = IsisTransactionAspectSupport.transactionLatch();
+        
+        Callable<X> asyncTask = ()->{
+
+            try {
+                //transactionLatch.await(); // wait for transaction of the calling thread to complete
+
+                return IsisContext.getSessionFactory().doInSession(
+                        ()->transactionService.executeWithinTransaction(task),
+                        authenticationSession);
+
+            } catch (Exception e) {
+
+                log.error(
+                        String.format("Async execution of action '%s' on type '%s' failed.",
+                                __isis_wrappedMethod.getName(),
+                                __isis_wrappedMethod.getDeclaringClass()),
+                        e);
+                return null;
+            }
+        };
+        
+        //unfortunately there is no easy way to make use of this future,
+        //would be nice if users had access to it via the wrapper API
+        val future = commonPool.submit(asyncTask);
+        return null;
+    }
+
     private Object singleArgUnderlyingElseThrow(Object[] args, String name) {
         if (args.length != 1) {
             throw new IllegalArgumentException("Invoking '" + name + "' should only have a single argument");
@@ -888,4 +933,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected ObjectAdapterProvider getObjectAdapterProvider() {
         return mmContext.getObjectAdapterProvider();
     }
+
+    
 }
