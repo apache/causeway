@@ -51,6 +51,20 @@ class ListObserver : BaseObserver() {
     }
 
     private fun handleView() {
+        val properties = list.layout!!.properties!!
+        //TODO iterate over properties and collect p.id
+        val title: String = properties.first().toString()
+        console.log(properties)
+        val model = mutableListOf<Exposer>()
+        for (i in list.list) {
+            model.add(i.dynamise())
+        }
+        val panel = FixtureResultTable(model)
+        UiManager.add(title, panel)
+        isRendered = true
+    }
+
+    private fun handleFixtureResult() {
         val title: String = this::class.simpleName.toString()
         val model = mutableListOf<Exposer>()
         for (i in list.list) {
