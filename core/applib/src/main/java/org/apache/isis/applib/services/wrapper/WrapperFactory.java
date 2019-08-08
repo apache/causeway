@@ -25,6 +25,9 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Provides the ability to &quot;wrap&quot; of a domain object such that it can
  * be interacted with while enforcing the hide/disable/validate rules implies by
@@ -71,33 +74,33 @@ public interface WrapperFactory {
      *
      * @see WrapperFactory#wrap(Object, ExecutionMode)
      */
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static enum ExecutionMode {
         /**
-         * Validate all business rules and then execute.
+         * Validate all business rules and then execute. May throw exceptions in order to fail fast. 
          */
-        EXECUTE(true,true,true),
+        EXECUTE(true, true, true),
+        
         /**
-         * Validate all business rules and then execute, but don't throw exception if fails.
+         * Validate all business rules and then execute, but don't throw an exception if validation 
+         * or execution fails.
          */
-        TRY(true,true,false),
+        TRY(true, true, false),
+        
         /**
-         * Skip all business rules and then execute.
+         * Skip all business rules and then execute, does throw an exception if execution fails.
          */
-        SKIP_RULES(false, true, false),
+        SKIP_RULES(false, true, true),
+        
         /**
-         * Validate all business rules but do not execute.
+         * Validate all business rules but do not execute, throw an exception if validation 
+         * fails. 
          */
         NO_EXECUTE(true, false, true);
 
         private final boolean enforceRules;
         private final boolean execute;
         private final boolean failFast;
-
-        private ExecutionMode(final boolean enforceRules, final boolean execute, final boolean failFast) {
-            this.enforceRules = enforceRules;
-            this.execute = execute;
-            this.failFast = failFast;
-        }
 
         public boolean shouldEnforceRules() {
             return enforceRules;

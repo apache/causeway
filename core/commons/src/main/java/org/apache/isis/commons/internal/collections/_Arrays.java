@@ -20,6 +20,7 @@
 package org.apache.isis.commons.internal.collections;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.BiPredicate;
 import java.util.stream.Collector;
@@ -31,6 +32,8 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -217,6 +220,24 @@ public final class _Arrays {
         }
         return _NullSafe.stream(iterable)
                 .collect(toArray(componentType));
+    }
+    
+    // -- MODIFICATION
+    
+    public static <T> T[] removeByIndex(T[] array, int index) {
+        if(array==null || array.length<=1) {
+            throw new IllegalArgumentException("Array must be of lenght 1 or larger.");
+        }
+        if(index>=array.length) {
+            val msg = String.format("Array index %d is out of bounds [0, %d]", index, array.length-1);
+            throw new IllegalArgumentException(msg);
+        }
+        final T[] result = Arrays.copyOf(array, array.length - 1);
+        // copy the elements from index + 1 till end 
+        // from original array to the new array 
+        val remaining = result.length - index;
+        System.arraycopy(array, index+1, result, index, remaining);
+        return result;
     }
 
     // -- COMPONENT TYPE INFERENCE

@@ -22,12 +22,10 @@ package org.apache.isis.wrapper;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -63,8 +61,11 @@ import org.apache.isis.security.authentication.standard.SimpleSession;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
+import static org.apache.isis.unittestsupport.jmocking.PostponedAction.returnValuePostponed;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 /**
  * Contract test.
@@ -110,7 +111,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
     private final SimpleSession session = new SimpleSession("tester", Collections.<String>emptyList());
 
-    private List<Facet> facets;
     private Method getPasswordMethod;
     private Method setPasswordMethod;
 
@@ -143,6 +143,9 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
                 allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
+                
+                allowing(mockPersistenceSessionServiceInternal).adapterFor(passwordValue);
+                will(returnValue(mockPasswordAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
@@ -162,6 +165,9 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).getIdentifier();
                 will(returnValue(mockPasswordIdentifier));
 
+                allowing(mockPasswordIdentifier).toClassAndNameIdentityString();
+                will(returnValue("mocked-class#member"));
+                
                 allowing(mockSpecificationLoader).loadSpecification(Employee.class);
                 will(returnValue(mockEmployeeSpec));
 
@@ -201,7 +207,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         // given
         final DisabledFacet disabledFacet = new DisabledFacetAbstractAlwaysEverywhere(mockPasswordMember){};
-        facets = Arrays.asList(disabledFacet, new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
+        val facets = Arrays.asList(disabledFacet, new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
 
         final Consent visibilityConsent = new Allow(new InteractionResult(new PropertyVisibilityEvent(employeeDO, null)));
 
@@ -212,13 +218,12 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).streamFacets();
-                will(returnValue(facets.stream()));
+                will(returnValuePostponed(facets::stream));
 
                 allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
 
-                allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE
-                        );
+                allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(usabilityConsent));
             }
         });
@@ -229,7 +234,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         // then should throw exception
     }
 
-    @Ignore("TODO - reinstate or replace with integration tests")
     @Test
     public void canModifyProperty() {
         // given
@@ -243,8 +247,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
 
-                allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE
-                        );
+                allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(usabilityConsent));
 
                 allowing(mockPasswordMember).isAssociationValid(mockEmployeeAdapter, mockPasswordAdapter,
@@ -253,13 +256,16 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
             }
         });
 
-        facets = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
+        val facets1 = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(
+                setPasswordMethod, mockPasswordMember));
+        
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).streamFacets();
-                will(returnValue(facets.stream()));
+                will(returnValuePostponed(facets1::stream));
 
-                oneOf(mockPasswordMember).set(mockEmployeeAdapter, mockPasswordAdapter, InteractionInitiatedBy.USER);
+                oneOf(mockPasswordMember)
+                .set(mockEmployeeAdapter, mockPasswordAdapter, InteractionInitiatedBy.USER);
             }
         });
 
@@ -268,12 +274,13 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
 
         // and given
-        facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(mockOnType, getPasswordMethod, mockPasswordMember
-                ));
+        val facets2 = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(
+                mockOnType, getPasswordMethod, mockPasswordMember));
+        
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).streamFacets();
-                will(returnValue(facets.stream()));
+                will(returnValuePostponed(facets2::stream));
 
                 oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);
                 will(returnValue(mockPasswordAdapter));

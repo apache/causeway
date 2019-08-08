@@ -22,10 +22,10 @@ package org.apache.isis.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
@@ -37,25 +37,22 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -236,12 +233,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberName));
             }
 
-            final ObjectAction objectAction = (ObjectAction) objectMember;
+            val objectAction = (ObjectAction) objectMember;
 
             ObjectAction actualObjectAction;
             ObjectAdapter actualTargetAdapter;
 
-            final MixinFacet mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
+            val mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
             if(mixinFacet != null) {
 
                 // rather than invoke on a (transient) mixin, instead try to
@@ -268,11 +265,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private static ObjectAction determineMixinAction(
             final ObjectAdapter domainObjectAdapter,
             final ObjectAction objectAction) {
+        
         if(domainObjectAdapter == null) {
             return null;
         }
-        final ObjectSpecification specification = domainObjectAdapter.getSpecification();
-        final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
+        val specification = domainObjectAdapter.getSpecification();
+        val objectActions = specification.streamObjectActions(Contributed.INCLUDED);
 
         return objectActions
                 .filter(action->action instanceof ObjectActionMixedIn)
@@ -285,7 +283,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     public InteractionInitiatedBy getInteractionInitiatedBy() {
-        return getExecutionMode().shouldEnforceRules()? InteractionInitiatedBy.USER: InteractionInitiatedBy.FRAMEWORK;
+        return getExecutionMode().shouldEnforceRules()
+                ? InteractionInitiatedBy.USER
+                        : InteractionInitiatedBy.FRAMEWORK;
     }
 
     // see if this is a contributed property/collection/action
@@ -364,9 +364,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         resolveIfRequired(targetAdapter);
 
-        final ObjectSpecification targetNoSpec = targetAdapter.getSpecification();
-        final ObjectTitleContext titleContext = targetNoSpec.createTitleInteractionContext(getAuthenticationSession(), InteractionInitiatedBy.FRAMEWORK, targetAdapter);
-        final ObjectTitleEvent titleEvent = titleContext.createInteractionEvent();
+        val targetNoSpec = targetAdapter.getSpecification();
+        val titleContext = targetNoSpec.createTitleInteractionContext(
+                getAuthenticationSession(), InteractionInitiatedBy.FRAMEWORK, targetAdapter);
+        val titleEvent = titleContext.createInteractionEvent();
         notifyListeners(titleEvent);
         return titleEvent.getTitle();
     }
@@ -378,38 +379,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private Object handleSaveMethod(
             final ObjectAdapter targetAdapter, final ObjectSpecification targetNoSpec) {
 
-        if(getExecutionMode().shouldEnforceRules()) {
-            if(getExecutionMode().shouldFailFast()) {
-                final InteractionResult interactionResult =
-                        targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
-                notifyListenersAndVetoIfRequired(interactionResult);
-            } else {
-                try {
-                    final InteractionResult interactionResult =
-                            targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
-                    notifyListenersAndVetoIfRequired(interactionResult);
-                } catch(Exception ex) {
-                    return null;
-                }
-            }
-
-        }
-
-        if (getExecutionMode().shouldExecute()) {
+        runValidationTask(()->{
+            val interactionResult =
+                    targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
+            notifyListenersAndVetoIfRequired(interactionResult);
+        });
+        
+        return runExecutionTask(()->{
             if (targetAdapter.isTransient()) {
                 val ps = IsisContext.getPersistenceSession().get();
-                if(getExecutionMode().shouldFailFast()) {
-                    ps.makePersistentInTransaction(targetAdapter);
-                } else {
-                    try {
-                        ps.makePersistentInTransaction(targetAdapter);
-                    } catch(Exception ignore) {
-                        // ignore
-                    }
-                }
+                ps.makePersistentInTransaction(targetAdapter);
             }
-        }
-        return null;
+            return null;
+        });
+        
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -421,34 +404,28 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final Object[] args,
             final OneToOneAssociation property) {
 
-        if (args.length != 0) {
-            throw new IllegalArgumentException("Invoking a 'get' should have no arguments");
-        }
+        zeroArgsElseThrow(args, "get");
 
-        if(getExecutionMode().shouldEnforceRules()) {
-            if(getExecutionMode().shouldFailFast()) {
-                checkVisibility(targetAdapter, property);
-            } else {
-                try {
-                    checkVisibility(targetAdapter, property);
-                } catch(Exception ex) {
-                    return null;
-
-                }
-            }
-
-        }
+        runValidationTask(()->{
+            checkVisibility(targetAdapter, property);
+        });
 
         resolveIfRequired(targetAdapter);
+        
+        return runExecutionTask(()->{
+        
+            val interactionInitiatedBy = getInteractionInitiatedBy();
+            val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-        final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-        final ObjectAdapter currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
+            val currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
 
-        final Object currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
-
-        final PropertyAccessEvent ev = new PropertyAccessEvent(getDelegate(), property.getIdentifier(), currentReferencedObj);
-        notifyListeners(ev);
-        return currentReferencedObj;
+            val propertyAccessEvent = new PropertyAccessEvent(
+                    getDelegate(), property.getIdentifier(), currentReferencedObj);
+            notifyListeners(propertyAccessEvent);
+            return currentReferencedObj;
+            
+        });
+        
     }
 
 
@@ -456,54 +433,36 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // property - modify
     // /////////////////////////////////////////////////////////////////
 
+
+
     private Object handleSetterMethodOnProperty(
-            final ObjectAdapter targetAdapter, final Object[] args,
+            final ObjectAdapter targetAdapter, 
+            final Object[] args,
             final OneToOneAssociation property) {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Invoking a setter should only have a single argument");
-        }
-
-        final Object argumentObj = underlying(args[0]);
-
-        if(getExecutionMode().shouldEnforceRules()) {
-            if(getExecutionMode().shouldFailFast()) {
-                checkVisibility(targetAdapter, property);
-                checkUsability(targetAdapter, property);
-            } else {
-                try {
-                    checkVisibility(targetAdapter, property);
-                    checkUsability(targetAdapter, property);
-                } catch(Exception ex) {
-                    return null;
-                }
-            }
-
-        }
-
-        final ObjectAdapter argumentAdapter = argumentObj != null ? adapterFor(argumentObj) : null;
-
+        
+        val singleArg = singleArgUnderlyingElseNull(args, "setter");
+        
+        runValidationTask(()->{
+            checkVisibility(targetAdapter, property);
+            checkUsability(targetAdapter, property);
+        });
+        
+        val argumentAdapter = adapterFor(singleArg);
+        
         resolveIfRequired(targetAdapter);
 
-
-        if(getExecutionMode().shouldEnforceRules()) {
-            final InteractionResult interactionResult = property.isAssociationValid(targetAdapter, argumentAdapter, getInteractionInitiatedBy()).getInteractionResult();
+        runValidationTask(()->{
+            val interactionResult = property.isAssociationValid(
+                    targetAdapter, argumentAdapter, getInteractionInitiatedBy())
+                    .getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
-        }
-
-        if (getExecutionMode().shouldExecute()) {
-            if(getExecutionMode().shouldFailFast()) {
-                property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
-            } else {
-                try {
-                    property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
-                } catch(Exception ignore) {
-                    // ignore
-                }
-            }
-
-        }
-
-        return null;
+        });
+        
+        return runExecutionTask(()->{
+            property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
+            return null;
+        });
+        
     }
 
 
@@ -518,44 +477,40 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final Method method,
             final String memberName) {
 
-        if (args.length != 0) {
-            throw new IllegalArgumentException("Invoking a 'get' should have no arguments");
-        }
+        zeroArgsElseThrow(args, "get");
 
-        if(getExecutionMode().shouldEnforceRules()) {
-            if(getExecutionMode().shouldFailFast()) {
-                checkVisibility(targetAdapter, collection);
-            } else {
-                try {
-                    checkVisibility(targetAdapter, collection);
-                } catch(Exception ex) {
-                    return null;
-                }
-            }
-
-        }
+        runValidationTask(()->{
+            checkVisibility(targetAdapter, collection);
+        });
 
         resolveIfRequired(targetAdapter);
+        
+        return runExecutionTask(()->{
+        
+            val interactionInitiatedBy = getInteractionInitiatedBy();
+            val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-        final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-        final ObjectAdapter currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
+            val currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
 
-        final Object currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
+            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
 
-        final CollectionAccessEvent ev = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
-
-        if (currentReferencedObj instanceof Collection) {
-            final Collection<?> collectionViewObject = lookupWrappingObject(method, memberName,
-                    (Collection<?>) currentReferencedObj, collection);
-            notifyListeners(ev);
-            return collectionViewObject;
-        } else if (currentReferencedObj instanceof Map) {
-            final Map<?, ?> mapViewObject = lookupWrappingObject(memberName, (Map<?, ?>) currentReferencedObj,
-                    collection);
-            notifyListeners(ev);
-            return mapViewObject;
-        }
-        throw new IllegalArgumentException(String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName()));
+            if (currentReferencedObj instanceof Collection) {
+                val collectionViewObject = lookupWrappingObject(method, memberName,
+                        (Collection<?>) currentReferencedObj, collection);
+                notifyListeners(collectionAccessEvent);
+                return collectionViewObject;
+            } else if (currentReferencedObj instanceof Map) {
+                val mapViewObject = lookupWrappingObject(memberName, (Map<?, ?>) currentReferencedObj,
+                        collection);
+                notifyListeners(collectionAccessEvent);
+                return mapViewObject;
+            }
+            
+            val msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName()); 
+            throw new IllegalArgumentException(msg);
+            
+        });
+        
     }
 
     private Collection<?> lookupWrappingObject(
@@ -586,109 +541,64 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final Object[] args,
             final OneToManyAssociation otma) {
 
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Invoking a addTo should only have a single argument");
-        }
+        val singleArg = singleArgUnderlyingElseThrow(args, "addTo");
 
-        if(getExecutionMode().shouldEnforceRules()) {
-            if(getExecutionMode().shouldFailFast()) {
-                checkVisibility(targetAdapter, otma);
-                checkUsability(targetAdapter, otma);
-            } else {
-                try {
-                    checkVisibility(targetAdapter, otma);
-                    checkUsability(targetAdapter, otma);
-                } catch(Exception ex) {
-                    return null;
-                }
-            }
-        }
-
+        runValidationTask(()->{
+            checkVisibility(targetAdapter, otma);
+            checkUsability(targetAdapter, otma);
+        });
+        
         resolveIfRequired(targetAdapter);
-
-        final Object argumentObj = underlying(args[0]);
-        if (argumentObj == null) {
-            throw new IllegalArgumentException("Must provide a non-null object to add");
-        }
-        final ObjectAdapter argumentNO = adapterFor(argumentObj);
-
-        if(getExecutionMode().shouldEnforceRules()) {
-            final InteractionResult interactionResult = otma.isValidToAdd(targetAdapter, argumentNO,
+        val argumentAdapter = adapterFor(singleArg);
+        
+        runValidationTask(()->{
+            val interactionResult = otma.isValidToAdd(targetAdapter, argumentAdapter,
                     getInteractionInitiatedBy()).getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
-        }
-
-        if (getExecutionMode().shouldExecute()) {
-            if(getExecutionMode().shouldFailFast()) {
-                otma.addElement(targetAdapter, argumentNO, getInteractionInitiatedBy());
-            } else {
-                try {
-                    otma.addElement(targetAdapter, argumentNO, getInteractionInitiatedBy());
-                } catch(Exception ignore) {
-                    // ignore
-                }
-            }
-        }
-
-        return null;
+        });
+        
+        return runExecutionTask(()->{
+            otma.addElement(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
+            return null;
+        });
+        
     }
 
 
+    
     // /////////////////////////////////////////////////////////////////
     // collection - remove from
     // /////////////////////////////////////////////////////////////////
+
+
 
     private Object handleCollectionRemoveFromMethod(
             final ObjectAdapter targetAdapter,
             final Object[] args,
             final OneToManyAssociation collection) {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Invoking a removeFrom should only have a single argument");
-        }
+        
+        val singleArg = singleArgUnderlyingElseThrow(args, "removeFrom");
 
-        if(getExecutionMode().shouldEnforceRules()) {
-            if(getExecutionMode().shouldFailFast()) {
-                checkVisibility(targetAdapter, collection);
-                checkUsability(targetAdapter, collection);
-            } else {
-                try {
-                    checkVisibility(targetAdapter, collection);
-                    checkUsability(targetAdapter, collection);
-                } catch(Exception ex) {
-                    return null;
-                }
-            }
-
-        }
-
+        runValidationTask(()->{
+            checkVisibility(targetAdapter, collection);
+            checkUsability(targetAdapter, collection);
+        });
 
         resolveIfRequired(targetAdapter);
+        val argumentAdapter = adapterFor(singleArg);
 
-        final Object argumentObj = underlying(args[0]);
-        if (argumentObj == null) {
-            throw new IllegalArgumentException("Must provide a non-null object to remove");
-        }
-        final ObjectAdapter argumentAdapter = adapterFor(argumentObj);
-
-        if(getExecutionMode().shouldEnforceRules()) {
-            final InteractionResult interactionResult = collection.isValidToRemove(targetAdapter, argumentAdapter,
+        runValidationTask(()->{
+            val interactionResult = collection.isValidToRemove(targetAdapter, argumentAdapter,
                     getInteractionInitiatedBy()).getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
-        }
+        });
+        
+        return runExecutionTask(()->{
+            collection.removeElement(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
+            return null;
+        });
 
-        if (getExecutionMode().shouldExecute()) {
-            if(getExecutionMode().shouldFailFast()) {
-                collection.removeElement(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
-            } else {
-                try {
-                    collection.removeElement(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
-                } catch(Exception ignore) {
-                    // ignore
-                }
-            }
-        }
-
-        return null;
+        
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -696,106 +606,71 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private Object handleActionMethod(
-            final ObjectAdapter targetAdapter, final Object[] args,
+            final ObjectAdapter targetAdapter, 
+            final Object[] args,
             final ObjectAction objectAction,
             final ContributeeMember contributeeMember) {
 
         final ObjectAdapter contributeeAdapter;
         final Object[] contributeeArgs;
         if(contributeeMember != null) {
-            final int contributeeParamPosition = contributeeMember.getContributeeParamPosition();
-            final Object contributee = args[contributeeParamPosition];
+            val contributeeParamPosition = contributeeMember.getContributeeParamPosition();
+            val contributee = args[contributeeParamPosition];
+            
             contributeeAdapter = adapterFor(contributee);
-
-            final List<Object> argCopy = _Lists.of(args);
-            argCopy.remove(contributeeParamPosition);
-            contributeeArgs = argCopy.toArray();
+            contributeeArgs = _Arrays.removeByIndex(args, contributeeParamPosition); 
         } else {
             contributeeAdapter = null;
             contributeeArgs = null;
         }
+        
+        val argAdapters = asObjectAdaptersUnderlying(args);
 
-        if(getExecutionMode().shouldEnforceRules()) {
-            if(getExecutionMode().shouldFailFast()) {
-                if(contributeeMember != null) {
-                    checkVisibility(contributeeAdapter, contributeeMember);
-                    checkUsability(contributeeAdapter, contributeeMember);
-                } else {
-                    checkVisibility(targetAdapter, objectAction);
-                    checkUsability(targetAdapter, objectAction);
-                }
-            } else {
-                try {
-                    if(contributeeMember != null) {
-                        checkVisibility(contributeeAdapter, contributeeMember);
-                        checkUsability(contributeeAdapter, contributeeMember);
-                    } else {
-                        checkVisibility(targetAdapter, objectAction);
-                        checkUsability(targetAdapter, objectAction);
-                    }
-                } catch(Exception ex) {
-                    return null;
-                }
-            }
-
-        }
-
-        final ObjectAdapter[] argAdapters = asObjectAdaptersUnderlying(args);
-
-        if(getExecutionMode().shouldEnforceRules()) {
+        runValidationTask(()->{
             if(contributeeMember != null) {
+                checkVisibility(contributeeAdapter, contributeeMember);
+                checkUsability(contributeeAdapter, contributeeMember);
+                
                 if(contributeeMember instanceof ObjectActionContributee) {
-                    final ObjectActionContributee objectActionContributee = (ObjectActionContributee) contributeeMember;
-                    final ObjectAdapter[] contributeeArgAdapters = asObjectAdaptersUnderlying(contributeeArgs);
-
+                    val objectActionContributee = (ObjectActionContributee) contributeeMember;
+                    val contributeeArgAdapters = asObjectAdaptersUnderlying(contributeeArgs);
                     checkValidity(contributeeAdapter, objectActionContributee, contributeeArgAdapters);
                 }
                 // nothing to do for contributed properties or collections
+                
             } else {
+                checkVisibility(targetAdapter, objectAction);
+                checkUsability(targetAdapter, objectAction);
                 checkValidity(targetAdapter, objectAction, argAdapters);
             }
-        }
+        });
+        
+        return runExecutionTask(()->{
 
-        if (getExecutionMode().shouldExecute()) {
-            final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-
-            final ObjectAdapter mixedInAdapter = null; // if a mixin action, then it will automatically fill in.
-
-
-            ObjectAdapter returnedAdapter;
-
-            if(getExecutionMode().shouldFailFast()) {
-                returnedAdapter = objectAction.execute(
-                        targetAdapter, mixedInAdapter, argAdapters,
-                        interactionInitiatedBy);
-            } else {
-                try {
-                    returnedAdapter = objectAction.execute(
-                            targetAdapter, mixedInAdapter, argAdapters,
-                            interactionInitiatedBy);
-                } catch(Exception ignore) {
-                    // ignore
-                    returnedAdapter = null;
-                }
-
-            }
-
-
+            val interactionInitiatedBy = getInteractionInitiatedBy();
+            val mixedInAdapter = (ObjectAdapter)null; // if a mixin action, then it will automatically fill in.
+            val returnedAdapter = objectAction.execute(
+                    targetAdapter, mixedInAdapter, argAdapters,
+                    interactionInitiatedBy);
             return ObjectAdapter.Util.unwrapPojo(returnedAdapter);
-        }
-
-        return null;
+            
+        });
+        
     }
 
-    private void checkValidity(final ObjectAdapter targetAdapter, final ObjectAction objectAction, final ObjectAdapter[] argAdapters) {
-        final InteractionResult interactionResult = objectAction.isProposedArgumentSetValid(targetAdapter, argAdapters,
+    private void checkValidity(
+            final ObjectAdapter targetAdapter, 
+            final ObjectAction objectAction, 
+            final ObjectAdapter[] argAdapters) {
+        
+        val interactionResult = objectAction.isProposedArgumentSetValid(targetAdapter, argAdapters,
                 getInteractionInitiatedBy()).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
     private ObjectAdapter[] asObjectAdaptersUnderlying(final Object[] args) {
 
-        final ObjectAdapter[] argAdapters = new ObjectAdapter[args.length];
+        val argAdapters = new ObjectAdapter[args.length];
         int i = 0;
         for (final Object arg : args) {
             argAdapters[i++] = adapterFor(underlying(arg));
@@ -810,7 +685,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private Object underlying(final Object arg) {
         if (arg instanceof WrappingObject) {
-            final WrappingObject argViewObject = (WrappingObject) arg;
+            val argViewObject = (WrappingObject) arg;
             return argViewObject.__isis_wrapped();
         } else {
             return arg;
@@ -830,26 +705,28 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private void checkVisibility(
             final ObjectAdapter targetObjectAdapter,
             final ObjectMember objectMember) {
-        final Consent visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
-        final InteractionResult interactionResult = visibleConsent.getInteractionResult();
+        
+        val visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
+        val interactionResult = visibleConsent.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
     private void checkUsability(
             final ObjectAdapter targetObjectAdapter,
             final ObjectMember objectMember) {
-        final InteractionResult interactionResult = objectMember.isUsable(targetObjectAdapter,
-                getInteractionInitiatedBy(), where
-                ).getInteractionResult();
+        
+        val interactionResult = objectMember.isUsable(
+                targetObjectAdapter,
+                getInteractionInitiatedBy(), 
+                where)
+                .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // notify listeners
-    // /////////////////////////////////////////////////////////////////
+    // -- NOTIFY LISTENERS
 
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
-        final InteractionEvent interactionEvent = interactionResult.getInteractionEvent();
+        val interactionEvent = interactionResult.getInteractionEvent();
         notifyListeners(interactionEvent);
         if (interactionEvent.isVeto()) {
             throw toException(interactionEvent);
@@ -880,13 +757,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         throw new IllegalArgumentException("Provided interactionEvent must be a VisibilityEvent, UsabilityEvent or a ValidityEvent");
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // switching
-    // /////////////////////////////////////////////////////////////////
+    // -- SWITCHING
 
     private ObjectMember locateAndCheckMember(final Method method) {
-        final ObjectSpecificationDefault objectSpecificationDefault = getJavaSpecificationOfOwningClass(method);
-        final ObjectMember member = objectSpecificationDefault.getMember(method);
+        val objectSpecificationDefault = getJavaSpecificationOfOwningClass(method);
+        val member = objectSpecificationDefault.getMember(method);
 
         if (member == null) {
             final String methodName = method.getName();
@@ -911,9 +786,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return method.equals(__isis_executionMode);
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // Specification lookup
-    // /////////////////////////////////////////////////////////////////
+    // -- SPECIFICATION LOOKUP
 
     private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
         return getJavaSpecification(method.getDeclaringClass());
@@ -931,9 +804,80 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return getSpecificationLoader().loadSpecification(type);
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // Dependencies
-    // /////////////////////////////////////////////////////////////////
+    // -- HELPER
+    
+    private void runValidationTask(Runnable task) {
+        if(!getExecutionMode().shouldEnforceRules()) {
+            return;
+        }
+        if(getExecutionMode().shouldFailFast()) {
+            task.run();
+        } else {
+            try {
+                task.run();
+            } catch(Exception ex) {
+                // swallow
+            }
+        }
+    }
+    
+//    private void runExecutionTask(Runnable task) {
+//        if(!getExecutionMode().shouldExecute()) {
+//            return;
+//        }
+//        if(getExecutionMode().shouldFailFast()) {
+//            task.run();
+//        } else {
+//            try {
+//                task.run();
+//            } catch(Exception ex) {
+//                // swallow
+//            }
+//        }
+//    }
+    
+    private <X> X runExecutionTask(Supplier<X> task) {
+        if(!getExecutionMode().shouldExecute()) {
+            return null;
+        }
+        if(getExecutionMode().shouldFailFast()) {
+            return task.get();
+        } else {
+            try {
+                return task.get();
+            } catch(Exception ex) {
+                // swallow
+                return null;
+            }
+        }
+    }
+    
+    private Object singleArgUnderlyingElseThrow(Object[] args, String name) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Invoking '" + name + "' should only have a single argument");
+        }
+        val argumentObj = underlying(args[0]);
+        if (argumentObj == null) {
+            throw new IllegalArgumentException("Must provide a non-null object to '" + name +"'");
+        }
+        return argumentObj;
+    }
+    
+    private Object singleArgUnderlyingElseNull(Object[] args, String name) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Invoking '" + name + "' should only have a single argument");
+        }
+        val argumentObj = underlying(args[0]);
+        return argumentObj;
+    }
+    
+    private void zeroArgsElseThrow(Object[] args, String name) {
+        if (args.length != 0) {
+            throw new IllegalArgumentException("Invoking '" + name + "' should have no arguments");
+        }
+    }
+    
+    // -- DEPENDENCIES
 
     protected SpecificationLoader getSpecificationLoader() {
         return mmContext.getSpecificationLoader();

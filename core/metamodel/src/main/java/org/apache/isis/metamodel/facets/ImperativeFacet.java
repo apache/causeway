@@ -23,15 +23,17 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
+
+import lombok.val;
 
 /**
  * A {@link Facet} implementation that ultimately wraps a {@link Method} or
@@ -133,20 +135,22 @@ public interface ImperativeFacet extends Facet {
         }
 
         public static Intent getIntent(final ObjectMember member, final Method method) {
-            final List<ImperativeFacet> imperativeFacets = _Lists.newArrayList();
-            final Stream<Facet> allFacets = member.streamFacets();
-            allFacets.forEach(facet->{
-                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
-                if (imperativeFacet == null) {
-                    return;
-                }
-                final List<Method> methods = imperativeFacet.getMethods();
-                if (!methods.contains(method)) {
-                    return;
-                }
-                imperativeFacets.add(imperativeFacet);
-            });
+//            val imperativeFacets = member.streamFacets()
+//                    .map(ImperativeFacet.Util::getImperativeFacet)
+//                    .filter(_NullSafe::isPresent)
+//                    .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
+//                    .collect(Collectors.toList());
 
+            val imperativeFacets1 = member.streamFacets()
+                    .map(ImperativeFacet.Util::getImperativeFacet)
+                    .filter(_NullSafe::isPresent)
+                    .collect(Collectors.toList());
+            
+            val imperativeFacets = imperativeFacets1.stream()
+                    .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
+                    .collect(Collectors.toList());
+            
+            
             switch(imperativeFacets.size()) {
             case 0:
                 break;
