@@ -12,7 +12,7 @@ The framework-provided `AppManifestAbstract2` and `AppManifestAbstract2.Builder`
 The app manifest can then be used both to bootstrap the application "proper", or for integration tests.
 ====
 
-TODO: v2: these two versions of `AppManifestAbstract` and `AppManifestAbstract2` will be unified.
+// TODO: v2: `AppManifestAbstract` and `AppManifestAbstract2` have been unified/simplified
 
 == API
 

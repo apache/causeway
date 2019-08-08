@@ -1,4 +1,4 @@
-= Demo App
+= Demo
 include::_attributes.adoc[]
 
 CAUTION: TODO ... isis-2-demo

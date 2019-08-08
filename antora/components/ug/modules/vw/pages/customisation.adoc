@@ -4,4 +4,5 @@ include::_attributes.adoc[]
 
 
 
+This chapter describes a number of mechanisms by which the UI provided by the Wicket viewer can be customised.
 

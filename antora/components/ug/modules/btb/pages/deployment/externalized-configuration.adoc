@@ -46,7 +46,7 @@ To tell Apache Isis to load configuration from an external directory, specify th
 
 If the external configuration directory is fixed for all environments (systest, UAT, prod etc), then you can specify within the `web.xml` itself:
 
-TODO: v2: this has almost certainly changed, because the configuration is picked up earlier; this probably no longer works.
+// TODO: v2: this has almost certainly changed, because the configuration is picked up earlier; this probably no longer works.
 
 [source,xml]
 ----

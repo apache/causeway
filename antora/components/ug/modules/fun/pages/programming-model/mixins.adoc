@@ -8,7 +8,7 @@ A xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixin] acts li
 
 Syntactically, a mixin is defined using either the xref:rg:ant:Mixin.adoc[`@Mixin`] annotation or using xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
 
-TODO: v2: perhaps we should get rid of @DomainObject#nature=MIXIN ?
+// TODO: v2: perhaps we should get rid of @DomainObject#nature=MIXIN ?
 
 [source,java]
 ----

@@ -19,16 +19,16 @@ To support this the framework requires three services to be registered and confi
 * the xref:rg:svc:presentation-layer-spi/EmailNotificationService.adoc[email notification service], which provides an API for to send the verification emails
 * the xref:rg:svc:integration-api/EmailService.adoc[email service], that is used by the email notification service to actually send the email.
 
-The Apache Isis core framework provides a default implementation of both the email notification service and the email service. If your application uses the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module then an implementation is provided by that module; just add to the classpath. Otherwise you will need to provide your own implementation.
+The Apache Isis core framework provides a default implementation of both the email notification service and the email service.
+The xref:ext:secman:about.adoc[Security Manager] extension provides a partial implementation of xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] that you can complete for your own applications.
 
-[NOTE]
-====
-There is _no_ default implementation of the user registration service in the core framework.
-====
+// TODO: v2: search for references of 'security module' because this is now available as the 'secman' extension, and reference the extensions doc component.
 
 
 
 == Screenshots
+
+// TODO: v2: update theses screenshots, perhaps we could make secman's implementation complete with an optionaly override?
 
 The user is presented with a login page:
 
@@ -72,7 +72,7 @@ There are two prerequisites:
 
 The latter is required if you are using the default email notification service and email service. If you are using your own alternative implementation of the email notification service then it may be omitted (and configure your own alternative implementation as required).
 
-It is also possible to configure the Wicket viewer to suppress the sign-up page link and/or the password reset page, see xref:ug:vw:configuration-properties/sign-in.adoc[here] for further details.
+It is also possible to configure the Wicket viewer to suppress the sign-up page link and/or the password reset page, see xref:ug:vw:configuration-properties.adoc#sign-in[here] for further details.
 
 
 

@@ -16,9 +16,9 @@ The following screenshot, taken from the https://github.com/estatio/estatio[Esta
 image::features/recent-pages/recent-pages.png[width="800px",link="{imagesdir}/features/recent-pages/recent-pages.png"]
 
 
-This screenshot is based on v1.17.x of the xref:ug:vw:about.adoc[Wicket viewer] UI.
+This screenshot is based on v1.7.x of the xref:ug:vw:about.adoc[Wicket viewer] UI.
 
-
+// TODO: v2: update this old screenshot.
 
 
 

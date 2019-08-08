@@ -12,7 +12,7 @@ File-based layouts offer a number of benefits:
 
 * Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
 
-* UI hints can be provided for xref:ug:fun:how-tos/contributed-members.adoc[contributed associations and actions] that are synthesised at runtime.
+* UI hints can be provided for contributed xref:ug:fun:programming-model/mixins/contributed-property.adoc[properties], xref:ug:fun:programming-model/mixins/contributed-collection.adoc[collections] and xref:ug:fun:programming-model/mixins/contributed-action.adoc[actions] that are synthesised at runtime.
 
 It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:rg:cms:classes/mixins/Object.adoc[mixin action] contributed to every domain object.
 

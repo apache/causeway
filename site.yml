@@ -13,6 +13,9 @@ content:
     start_path: antora/components/rg
   - url: .
     branches: HEAD
+    start_path: antora/components/extensions
+  - url: .
+    branches: HEAD
     start_path: antora/components/demoapp
   - url: .
     branches: HEAD

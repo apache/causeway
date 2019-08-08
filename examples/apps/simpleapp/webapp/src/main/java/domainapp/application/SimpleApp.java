@@ -39,7 +39,6 @@ import domainapp.application.manifest.SimpleAppManifest;
     IsisBootWebWicket.class,
     IsisBootSecurityShiro.class
 })
-@PropertySource("classpath:/domainapp/application/isis.properties")
 public class SimpleApp extends SpringBootServletInitializer {
 
     /**

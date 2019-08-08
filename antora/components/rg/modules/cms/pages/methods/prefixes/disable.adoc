@@ -81,8 +81,8 @@ public class Customer {
 
 [NOTE]
 ====
-TODO: v2: remove this feature, instead should fail-fast if there's a disableXxx() method with parameters.
-Ditto for hideXxx().
+// TODO: v2: remove this feature, instead should fail-fast if there's a disableXxx() method with parameters.
+//  Ditto for hideXxx().
 
 In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
 Enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.

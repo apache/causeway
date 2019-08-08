@@ -6,18 +6,10 @@ include::_attributes.adoc[]
 
 The Wicket viewer ships with embedded JQuery, so this can be leveraged, for example to perform arbitrary transformations of the rendered page on page load.
 
-[WARNING]
-====
-Just because something is possible, it doesn't necessarily mean we encourage it.
-Please be aware that there is no formal API for any custom javascript that you might implement to target; future versions of Apache Isis might break your code.
-
-If possible, consider using the `ComponentFactory` API described in the xref:ug:vw:extending.adoc[Extending] chapter.
-====
-
 To register your Javascript code, then just specify the appropriate configuration property:
 
 
-[source,java]
+[source,properties]
 ----
 isis.viewer.wicket.application.js=stylesheets/myapp.js
 ----
@@ -26,6 +18,14 @@ This file is resolved relative to `src/main/webapp`.
 
 Currently only one such `.js` file can be registered.
 
+
+[WARNING]
+====
+Just because something is possible, it doesn't necessarily mean we encourage it.
+Please be aware that there is no formal API for any custom javascript that you might implement to target; future versions of Apache Isis might break your code.
+
+As an alternative, consider using the `ComponentFactory` API described in the xref:ug:vw:extending.adoc[Extending] chapter.
+====
 
 
 

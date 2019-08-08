@@ -11,6 +11,8 @@ Configuration properties are typically stored in `WEB-INF/isis.properties` or in
 
 To tell Apache Isis that the Wicket viewer is in use (and should therefore search for the `viewer_wicket.properties` file), add the following to `WEB-INF/web.xml`:
 
+// TODO: v2: is this still supported?  I doubt it.
+
 [source, xml]
 ----
 <context-param>
@@ -21,13 +23,15 @@ To tell Apache Isis that the Wicket viewer is in use (and should therefore searc
 
 Alternatively, because most of these configuration properties tend not to change between environment (development and production), another practice is to load them programmatically from the `AppManifest`:
 
+// TODO: v2: any reference to AppManifestAbstract will need updating.
+
 [source,java]
 ----
 public class MyAppAppManifest extends AppManifestAbstract2 {
 
     public static final Builder BUILDER = Builder
             .forModule(new MyApplicationModule())
-            ...
+            //...
             .withConfigurationPropertiesFile(
             MyAppManifest.class, "isis-non-changing.properties") ;
 
@@ -251,20 +255,6 @@ Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_remember-me[
 Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_password-reset[below].
 
 |`isis.viewer.wicket.` +
-`suppressRememberMe`
-| `true`,`false` +
-(`_false_`)
-|Wphether to suppress "remember me" checkbox on the login page.
-
-Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_remember-me[below].
-
-[NOTE]
-====
-(Deprecated in `1.13.0`, replaced by `rememberMe.suppress`).
-====
-
-
-|`isis.viewer.wicket.` +
 `suppressSignUp`
 | `true`,`false` +
 (`_false_`)
@@ -280,6 +270,8 @@ Further discussion xref:ug:vw:configuration-properties.adoc#sign-in_sign-up[belo
 
 
 === Remember Me
+
+// TODO: v2: these screenshots could be updated, perhaps now with secman we could use examples from helloworld?
 
 The 'remember me' checkbox on the login page can be suppressed, if required, by setting a configuration flag:
 
@@ -353,8 +345,8 @@ image::suppress-password-reset/login-page-suppress-password-reset.png[width="300
 
 Configuration properties that influence the appearance of the header and footer panels.
 
-See also the xref:ug:vw:configuration-properties/bookmarks-and-breadcrumbs.adoc[bookmarks and breadcrumbs] and xref:ug:vw:configuration-properties/themes
-.adoc[themes] configuration properties, because these also control UI elements that appear on the header/footer panels.
+See also the xref:ug:vw:configuration-properties.adoc#bookmarks-and-breadcrumbs[bookmarks and breadcrumbs] and xref:ug:vw:configuration-properties.adoc#themes
+[themes] configuration properties, because these also control UI elements that appear on the header/footer panels.
 
 .Header and Footer
 [cols="2a,1,3a", options="header"]
@@ -365,7 +357,7 @@ See also the xref:ug:vw:configuration-properties/bookmarks-and-breadcrumbs.adoc[
 |Description
 
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.1.image`
 |File path
 |File path to a logo image for the first credited organisation, relative to `src/main/webapp` directory.
@@ -375,7 +367,7 @@ For example: +
 
 Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.1.name`
 |String
 |Name of the first credited organisation.
@@ -384,7 +376,7 @@ For example: "Apache Isis"
 
 Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.1.url`
 |URL
 |URL to the website of the first credited organisation.
@@ -394,42 +386,42 @@ For example: +
 
 Optional.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.2.image`
 |File path
 |File path to a logo image for the second credited organisation, relative to `src/main/webapp` directory.
 
 Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.2.name`
 |String
 |Name of the second credited organisation.
 
 Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.2.url`
 |URL
 |URL to the website of the second credited organisation.
 
 Optional.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.3.image`
 |File path
 |File path to a logo image for the third credited organisation, relative to `src/main/webapp` directory.
 
 Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.3.name`
 |String
 |Name of the third credited organisation.
 
 Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
 
-|`isis.viewer.wicket.+`
+|`isis.viewer.wicket.` +
 `credit.3.url`
 |URL
 |URL to the website of the third credited organisation.
@@ -448,6 +440,8 @@ Optional.
 == Presentation
 
 These configuration properties that effect the overall presentation and appearance of the viewer.
+
+// TODO: v2: we should rename these
 
 [NOTE]
 ====
@@ -907,12 +901,6 @@ These configuration properties are used to enable/disable features that are eith
 The same is true for property edits.
 
 If this setting is enabled, then the viewer will always render to a new page.
-
-[NOTE]
-====
-Note that the default behaviour is new in `1.15.0`, providing a better end-user experience.
-Setting this option retains the behaviour of the viewer pre-`1.15.0`.
-====
 
 |`isis.viewer.wicket.` +
 `regularCase`

@@ -5,9 +5,8 @@ include::_attributes.adoc[]
 
 This requirement from the users mailing list:
 
-pass:[<div class="extended-quote-first"><p>]Suppose you want to build a monitoring application, eg for an electricity grid. Data is updated in the background (eg via the Restful Objects REST API).
-What is needed is the ability to show an entity that includes a map, and have it auto-refresh every 5 seconds or so.
-pass:[</p></div>]
+"Suppose you want to build a monitoring application, eg for an electricity grid. Data is updated in the background (eg via the Restful Objects REST API).
+What is needed is the ability to show an entity that includes a map, and have it auto-refresh every 5 seconds or so."
 
 Here's one (somewhat crude, but workable) way to accomplish this.
 
@@ -16,9 +15,9 @@ Here's one (somewhat crude, but workable) way to accomplish this.
 [source,java]
 ----
 public class MyDomainObject {
-    ...
-    public String cssClass() {return "my-special-auto-updating-entity"; }
-    ...
+    // ...
+    public String cssClass() { return "my-special-auto-updating-entity"; }
+    // ...
 }
 ----
 
