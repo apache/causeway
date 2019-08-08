@@ -49,7 +49,7 @@ public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
         public void happyCase() {
 
             // given
-            fixtureScripts.runFixtureScript(new SimpleObject_persona.PersistAll());
+            fixtureScripts.run(new SimpleObject_persona.PersistAll());
             transactionService.flushTransaction();
 
             // when
@@ -86,7 +86,7 @@ public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
         public void whenAlreadyExists() {
 
             // given
-            fixtureScripts.runBuilderScript(SimpleObject_persona.FIZZ.builder());
+            fixtureScripts.runPersona(SimpleObject_persona.FIZZ);
             transactionService.flushTransaction();
 
             // expect

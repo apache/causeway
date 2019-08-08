@@ -380,13 +380,12 @@ public abstract class FixtureScripts extends AbstractService {
      * @return
      */
     @Programmatic
-    public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
-
+    public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
         return transactionService.executeWithinTransaction(()->{
             return runBuilderScriptNonTransactional(builderScript);
         });
     }
-    
+
     /**
      * Runs the builderScript without its own transactional boundary.<br>
      * The caller is responsible to provide a transactional context/boundary.
@@ -542,6 +541,13 @@ public abstract class FixtureScripts extends AbstractService {
     public void runFixtureScript(final FixtureScript... fixtureScriptList) {
         run(fixtureScriptList);
     }
-    
+
+    /**
+     * @deprecated renamed to {@link #runBuilder(BuilderScriptAbstract)}
+     */
+    @Programmatic
+    public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
+        return runBuilder(builderScript);
+    }
 
 }

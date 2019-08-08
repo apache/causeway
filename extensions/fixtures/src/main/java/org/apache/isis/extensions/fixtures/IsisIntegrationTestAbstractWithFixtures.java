@@ -34,19 +34,19 @@ import org.apache.isis.integtestsupport.IsisIntegrationTestAbstact;
 
 public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegrationTestAbstact {
 
-    protected void runFixtureScript(final FixtureScript... fixtureScriptList) {
+    protected void run(final FixtureScript... fixtureScriptList) {
         this.fixtureScripts.run(fixtureScriptList);
     }
 
-    protected <T> T runBuilderScript(final BuilderScriptAbstract<T> fixtureScript) {
+    protected <T> T runBuilder(final BuilderScriptAbstract<T> fixtureScript) {
         return this.fixtureScripts.runBuilderScript(fixtureScript);
     }
 
-    protected <T> void runPersonaScripts(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
+    protected <T> void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
         this.fixtureScripts.runPersonas(personaScripts);
     }
 
-    protected <T> T runPersonaScript(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaScript) {
+    protected <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaScript) {
         return this.fixtureScripts.runPersona(personaScript);
     }
 
