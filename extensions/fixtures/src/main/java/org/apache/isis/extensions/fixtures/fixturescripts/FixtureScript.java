@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
@@ -952,9 +953,9 @@ extends AbstractViewModel {
     }
 
     /**
-     * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object, WrapperFactory.ExecutionMode)}.
+     * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object, EnumSet)}.
      */
-    protected <T> T wrap(final T domainObject, final WrapperFactory.ExecutionMode executionMode) {
+    protected <T> T wrap(final T domainObject, final EnumSet<WrapperFactory.ExecutionMode> executionMode) {
         return wrapperFactory.wrap(domainObject, executionMode);
     }
 

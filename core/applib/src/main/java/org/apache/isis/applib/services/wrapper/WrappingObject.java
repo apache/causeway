@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.services.wrapper;
 
+import java.util.EnumSet;
+
 /**
  * Implemented by all objects that have been viewed as per
  * {@link org.apache.isis.applib.services.wrapper.WrapperFactory#wrap(Object)}.
@@ -55,14 +57,14 @@ public interface WrappingObject {
     Object __isis_wrapped();
 
     /**
-     * The {@link org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode execution mode}
+     * The {@link EnumSet<WrapperFactory.ExecutionMode> execution mode}
      * with which this wrapper was
-     * {@link WrapperFactory#wrap(Object, org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode) created}.
+     * {@link WrapperFactory#wrap(Object, EnumSet) created}.
      *
      * <p>
      * NOTE: domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
      * intended to reduce the risk of a collision.
      * </p>
      */
-    WrapperFactory.ExecutionMode __isis_executionMode();
+    EnumSet<WrapperFactory.ExecutionMode> __isis_executionMode();
 }

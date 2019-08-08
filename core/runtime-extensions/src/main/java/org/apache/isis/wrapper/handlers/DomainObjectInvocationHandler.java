@@ -22,6 +22,7 @@ package org.apache.isis.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -73,7 +74,7 @@ import lombok.val;
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxy;
-    private final ExecutionMode executionMode;
+    private final EnumSet<ExecutionMode> executionMode;
     private final MetaModelContext mmContext;
 
     /**
@@ -100,7 +101,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     public DomainObjectInvocationHandler(
             final T delegate,
-            final ExecutionMode mode,
+            final EnumSet<ExecutionMode> mode,
             final ProxyContextHandler proxy) {
         
         super(delegate, mode);
@@ -283,7 +284,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     public InteractionInitiatedBy getInteractionInitiatedBy() {
-        return getExecutionMode().shouldEnforceRules()
+        return shouldEnforceRules()
                 ? InteractionInitiatedBy.USER
                         : InteractionInitiatedBy.FRAMEWORK;
     }
@@ -806,11 +807,23 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     // -- HELPER
     
+    private boolean shouldEnforceRules() {
+        return !getExecutionMode().contains(ExecutionMode.SKIP_RULE_VALIDATION);
+    }
+    
+    private boolean shouldExecute() {
+        return !getExecutionMode().contains(ExecutionMode.SKIP_EXECUTION);
+    }
+    
+    private boolean shouldFailFast() {
+        return !getExecutionMode().contains(ExecutionMode.SWALLOW_EXCEPTIONS);
+    }
+    
     private void runValidationTask(Runnable task) {
-        if(!getExecutionMode().shouldEnforceRules()) {
+        if(!shouldEnforceRules()) {
             return;
         }
-        if(getExecutionMode().shouldFailFast()) {
+        if(shouldFailFast()) {
             task.run();
         } else {
             try {
@@ -821,26 +834,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
     }
     
-//    private void runExecutionTask(Runnable task) {
-//        if(!getExecutionMode().shouldExecute()) {
-//            return;
-//        }
-//        if(getExecutionMode().shouldFailFast()) {
-//            task.run();
-//        } else {
-//            try {
-//                task.run();
-//            } catch(Exception ex) {
-//                // swallow
-//            }
-//        }
-//    }
-    
     private <X> X runExecutionTask(Supplier<X> task) {
-        if(!getExecutionMode().shouldExecute()) {
+        if(!shouldExecute()) {
             return null;
         }
-        if(getExecutionMode().shouldFailFast()) {
+        if(shouldFailFast()) {
             return task.get();
         } else {
             try {

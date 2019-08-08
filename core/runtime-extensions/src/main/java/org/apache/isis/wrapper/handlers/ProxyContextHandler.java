@@ -20,6 +20,7 @@
 package org.apache.isis.wrapper.handlers;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
@@ -35,7 +36,7 @@ public class ProxyContextHandler {
 
     @NonNull private final ProxyCreator proxyCreator;
 
-    public <T> T proxy(T domainObject, ExecutionMode mode) {
+    public <T> T proxy(T domainObject, EnumSet<ExecutionMode> mode) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 domainObject,

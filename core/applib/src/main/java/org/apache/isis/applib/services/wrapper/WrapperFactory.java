@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -76,41 +77,53 @@ public interface WrapperFactory {
      */
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static enum ExecutionMode {
+        
+        /**
+         * Skip all business rules.
+         */
+        SKIP_RULE_VALIDATION,
+        
+        /**
+         * Skip execution.
+         */
+        SKIP_EXECUTION,
+        
+        /**
+         * Don't fail fast, swallow any exception during validation or execution.
+         */
+        SWALLOW_EXCEPTIONS,
+        
+        /**
+         * Validate/Execute in background.
+         */
+        ASYNC,
+        
+        ;
+        
+        // -- PRESET ENUM SETS
+
         /**
          * Validate all business rules and then execute. May throw exceptions in order to fail fast. 
          */
-        EXECUTE(true, true, true),
-        
-        /**
-         * Validate all business rules and then execute, but don't throw an exception if validation 
-         * or execution fails.
-         */
-        TRY(true, true, false),
-        
+        public static EnumSet<ExecutionMode> EXECUTE = EnumSet.noneOf(ExecutionMode.class); 
+
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
-        SKIP_RULES(false, true, true),
+        public static EnumSet<ExecutionMode> SKIP_RULES = EnumSet.of(SKIP_RULE_VALIDATION);
         
         /**
          * Validate all business rules but do not execute, throw an exception if validation 
          * fails. 
          */
-        NO_EXECUTE(true, false, true);
-
-        private final boolean enforceRules;
-        private final boolean execute;
-        private final boolean failFast;
-
-        public boolean shouldEnforceRules() {
-            return enforceRules;
-        }
-        public boolean shouldExecute() {
-            return execute;
-        }
-        public boolean shouldFailFast() {
-            return failFast;
-        }
+        public static EnumSet<ExecutionMode> NO_EXECUTE = EnumSet.of(SKIP_EXECUTION);
+        
+        /**
+         * Validate all business rules and then execute, but don't throw an exception if validation 
+         * or execution fails.
+         */
+        public static EnumSet<ExecutionMode> TRY = EnumSet.of(SWALLOW_EXCEPTIONS); 
+        
     }
 
     /**
@@ -153,7 +166,7 @@ public interface WrapperFactory {
      * Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
      */
-    <T> T wrap(T domainObject, ExecutionMode mode);
+    <T> T wrap(T domainObject, EnumSet<ExecutionMode> mode);
 
 
     /**

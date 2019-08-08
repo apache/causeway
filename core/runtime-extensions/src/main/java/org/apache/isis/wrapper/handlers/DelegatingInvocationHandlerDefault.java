@@ -21,6 +21,7 @@ package org.apache.isis.wrapper.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.EnumSet;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
@@ -34,7 +35,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
     private final T delegate;
     protected final WrapperFactory wrapperFactory;
-    private final ExecutionMode executionMode;
+    private final EnumSet<ExecutionMode> executionMode;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
@@ -44,7 +45,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
     public DelegatingInvocationHandlerDefault(
             final T delegate,
-            final ExecutionMode executionMode) {
+            final EnumSet<ExecutionMode> executionMode) {
 
         if (delegate == null) {
             throw new IllegalArgumentException("delegate must not be null");
@@ -93,7 +94,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         return delegate;
     }
 
-    public ExecutionMode getExecutionMode() {
+    public EnumSet<ExecutionMode> getExecutionMode() {
         return executionMode;
     }
 

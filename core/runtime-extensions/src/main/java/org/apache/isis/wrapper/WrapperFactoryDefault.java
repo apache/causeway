@@ -22,6 +22,7 @@ package org.apache.isis.wrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,7 +133,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Override
-    public <T> T wrap(T domainObject, ExecutionMode mode) {
+    public <T> T wrap(T domainObject, EnumSet<ExecutionMode> mode) {
         if (domainObject instanceof WrappingObject) {
             val wrapperObject = (WrappingObject) domainObject;
             val executionMode = wrapperObject.__isis_executionMode();
@@ -145,7 +146,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return createProxy(domainObject, mode);
     }
 
-    protected <T> T createProxy(T domainObject, ExecutionMode mode) {
+    protected <T> T createProxy(T domainObject, EnumSet<ExecutionMode> mode) {
         
         return proxyContextHandler.proxy(domainObject, mode);
     }
