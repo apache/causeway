@@ -9,61 +9,42 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
-		<version>${revision}</version>
-		<relativePath>../../pom.xml</relativePath>
-	</parent>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>isis-legacy</artifactId>
-
- <name>Apache Isis Legacy (1.16+ to 2.0.0)</name>
+    <artifactId>isis-extensions-legacy</artifactId>
+    <name>Apache Isis Extensions - Legacy</name>
     <description>
         To ease migration from Apache Isis versions 1.16+ to 2.0.0.
     </description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.legacy</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/legacy</git-plugin.propertiesDir>
-	</properties>
-
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.legacy</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/legacy</git-plugin.propertiesDir>
+    </properties>
 
 	<dependencies>
-	
+
 		<!-- JDO API (non transient, provided by plugin) -->
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>${jdo-api.version}</version>
-            <!-- provided by plugins -->
-            <scope>provided</scope>
-        </dependency>
-		
+		<dependency>
+			<groupId>javax.jdo</groupId>
+			<artifactId>jdo-api</artifactId>
+			<version>${jdo-api.version}</version>
+			<!-- provided by plugins -->
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- LEGACY DEPENDENCY -->
-		
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -76,28 +57,28 @@
 			<artifactId>isis-applib</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		
-		
+
+
 		<!-- TEST DEPENDENCY -->
-		
+
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-unittestsupport</artifactId>
-            <scope>test</scope>
-            <exclusions>
-            	<!-- whatever unittestsupport is dependent on, it should not be transitive  -->
-            	<exclusion>
-	            	<groupId>com.google.guava</groupId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-unittestsupport</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<!-- whatever unittestsupport is dependent on, it should not be transitive -->
+				<exclusion>
+					<groupId>com.google.guava</groupId>
 					<artifactId>guava</artifactId>
-            	</exclusion>
-            </exclusions>
-        </dependency>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 	</dependencies>
 

@@ -219,9 +219,7 @@
 		<module>markdown</module>
 		<module>fixtures</module>
 		<module>specsupport</module>
-
-
-
+		<module>legacy</module>
 		<module>viewer-wicket-excel</module>
 		<module>secman</module>
 		<module>restclient</module>
