@@ -824,7 +824,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
     
     private boolean shouldExecuteAsync() {
-        return getExecutionMode().contains(ExecutionMode.ASYNC);
+        return getExecutionMode().contains(ExecutionMode.ASYNC_EXECUTION);
     }
     
     private void runValidationTask(Runnable task) {
@@ -847,7 +847,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return null;
         }
         if(shouldExecuteAsync()) {
-            return runAsync(task);
+            return runAsync(task); // will always return null
         }
         if(shouldFailFast()) {
             return task.get();

@@ -94,9 +94,22 @@ public interface WrapperFactory {
         SWALLOW_EXCEPTIONS,
         
         /**
-         * Validate/Execute in background.
+         * 
+         * Validates synchronously but executes in background. Any wrapped object method that is supposed to 
+         * return something, will always return {@code null} when invoked to run in background.
+         * <p> 
+         * Execution gets skipped if {@link #SKIP_EXECUTION} is selected.
+         * <p>
+         * During background execution, presence or absence of {@link #SWALLOW_EXCEPTIONS} has no effect, 
+         * since background executions will not fail fast. Instead any exceptions that occur during
+         * background execution will be logged.
+         * 
+         * @since 2.0
+         * 
+         * @apiNote EXPERIMENTAL, what to do in case of exceptions possibly needs refinement, also there 
+         * should be some way to customize the background executor service.
          */
-        ASYNC,
+        ASYNC_EXECUTION,
         
         ;
         
@@ -107,6 +120,14 @@ public interface WrapperFactory {
          */
         public static EnumSet<ExecutionMode> EXECUTE = EnumSet.noneOf(ExecutionMode.class); 
 
+        /**
+         * Validate all business rules and then execute in background. Does throw an exception if 
+         * validation fails, any exceptions that occur during background execution will be logged.
+         * @since 2.0
+         * @apiNote EXPERIMENTAL see {@link #ASYNC_EXECUTION}
+         */
+        public static EnumSet<ExecutionMode> ASYNC = EnumSet.of(ASYNC_EXECUTION);
+        
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
