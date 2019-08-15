@@ -1,6 +1,4 @@
-package org.ro.to
-
-import org.ro.urls.Response
+package org.ro.urls
 
 object SO_LIST_ALL : Response() {
     override val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll"

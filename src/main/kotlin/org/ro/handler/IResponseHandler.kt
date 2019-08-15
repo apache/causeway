@@ -11,8 +11,8 @@ import org.ro.to.TransferObject
  *
  * Implementing classes are responsible for:
  * @item creating Objects from JSON responses,
- * @item creating/finding Observers (eg. ListObserver, ObjectObserver), and
- * @item setting Objects and Observers into LogEntry.
+ * @item creating/finding Aggregators (eg. ListAggregator, ObjectAggregator), and
+ * @item setting Objects and Aggregators into LogEntry.
  *
  * @see org.ro.handler.BaseHandler for more details
  */

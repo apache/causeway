@@ -2,10 +2,11 @@ package org.ro.to
 
 import com.github.snabbdom._set
 import kotlinx.serialization.UnstableDefault
+import org.ro.IntegrationTest
+import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
-import org.ro.handler.IntegrationTest
-import org.ro.org.ro.core.observer.ActionObserver
+import org.ro.urls.ACTIONS_RUN_FIXTURE_SCRIPT
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -36,7 +37,7 @@ class LinkTest : IntegrationTest() {
             val arguments = link.arguments
             val arg = Argument(href)
             arguments._set("script", arg)
-            ActionObserver().invoke(link)
+            ActionAggregator().invoke(link)
             val le = EventStore.find(url)
             assertNotNull(le)
             assertTrue(!le.isError())

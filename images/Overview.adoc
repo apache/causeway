@@ -17,18 +17,18 @@ class EventStore<<(S,#FF7700) Singleton>> {
 
 class LogEntry {
     url:Href
-    title:String 
+    title:String
     startedAt:Date
     updatedAt:Date
-    request:String 
+    request:String
     response:String
     object:TransferObject
-    observer:Observer
+    aggregator:Aggregator
     cacheHits:int
 }
 EventStore o-- LogEntry
 LogEntry o-- TransferObject
-LogEntry o-- Observer
+LogEntry o-- Aggregator
 
 class ResponseHandler<<Facade,ChainOfResponsibility>>{
     handle(LogEntry)
@@ -50,7 +50,7 @@ interface RestfulObjects
 RestfulObjects <|-- ApacheIsis
 RestfulObjects <|-- NakedObjects
 XHR -> RestfulObjects : invoke
-XHR <- RestfulObjects : json 
+XHR <- RestfulObjects : json
 
 
 interface TransferObject
@@ -63,30 +63,30 @@ interface to.Linked{
 TransferObject <|.. to.Linked
 to.Linked <|.. to.Result
 to.Linked <|.. to.ResultList
-to.Linked <|.. to.Extended 
+to.Linked <|.. to.Extended
 
 interface to.Extended{
     extensions:Extensions
 }
 to.Linked o-- to.Link
 to.Extended o-- to.Extensions
-to.Extended <|.. to.Property 
-to.Extended <|.. to.TObject 
-to.Extended <|.. to.Service 
-to.Extended <|.. to.Member 
+to.Extended <|.. to.Property
+to.Extended <|.. to.TObject
+to.Extended <|.. to.Service
+to.Extended <|.. to.Member
 to.Service o-- to.Member
 
-interface Observer {
+interface Aggregator {
     update(logEntry)
 }
-class ListObserver {
-    -list:ObjectList  
+class ListAggregator {
+    -list:ObjectList
 }
-ListObserver *-- ObjectList
-Observer <|.. ListObserver
+ListAggregator *-- ObjectList
+Aggregator <|.. ListAggregator
 
-class NavigationObserver
-Observer <|.. NavigationObserver
+class NavigationAggregator
+Aggregator <|.. NavigationAggregator
 
 class ObjectList {
     list:ObjectAdapter

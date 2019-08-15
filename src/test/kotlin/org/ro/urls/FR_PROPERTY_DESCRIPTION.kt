@@ -1,6 +1,4 @@
-package org.ro.to
-
-import org.ro.urls.Response
+package org.ro.urls
 
 object FR_PROPERTY_DESCRIPTION : Response() {
     override val url = "http://localhost:8080/restful/domain-types/isisApplib.FixtureResult/properties/className"

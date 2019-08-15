@@ -2,9 +2,9 @@ package org.ro.core.model
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.TObjectHandler
-import org.ro.to.FR_OBJECT_BAZ
 import org.ro.to.Link
 import org.ro.to.Member
+import org.ro.urls.FR_OBJECT_BAZ
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -32,14 +32,14 @@ class FixtureResultTest {
         assertTrue(tObj.hasOwnProperty("instanceId"))       //4
 
         //Expectations:
-        // 1:  has members (memberList?) mapped onto (dynamic) Exposer properties
+        // 1:  has members (memberList?) mapped onto (dynamic) MemberExposer properties
         assertTrue(tObj.hasOwnProperty("members"))   //5 only internal (Object) attributes are 'adapted'
         val members = tObj.members
         val memberMap = members as LinkedHashMap<String, Member>
         assertNotNull(memberMap)              //6
         assertEquals(8, memberMap.size)    //7
 
-        // 3:  has links (linkList?) mapped onto (dynamic) Exposer properties
+        // 3:  has links (linkList?) mapped onto (dynamic) MemberExposer properties
         assertTrue(tObj.hasOwnProperty("links"))   //8 only internal (Object) attributes are 'adapted'
         val links = tObj.links
         val linkList = links as ArrayList<Link>?

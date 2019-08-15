@@ -1,21 +1,21 @@
-package org.ro.handler
+package org.ro.core.aggregator
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.event.NavigationObserver
+import org.ro.IntegrationTest
 import org.ro.to.Result
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @UnstableDefault
-class ServiceHandlerTest : IntegrationTest() {
+class NavigationAggregatorTest : IntegrationTest() {
 
     @Test
     fun testService() {
         // given
-        val observer = NavigationObserver()
+        val aggregator = NavigationAggregator()
         // when
-        val logEntry = mockResponse(RESTFUL_SERVICES, observer)
+        val logEntry = mockResponse(RESTFUL_SERVICES, aggregator)
         val result = logEntry.obj as Result
         val actual = result.value.size
         // then

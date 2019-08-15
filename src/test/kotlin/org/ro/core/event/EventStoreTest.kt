@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.to.Method
-import org.ro.to.RESTFUL
+import org.ro.urls.RESTFUL
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.*
 
@@ -12,6 +12,7 @@ class EventStoreTest {
     @Test
     fun testSecondEntry() {
         // given
+        EventStore.reset()
         val initialSize: Int = EventStore.log.size
         val myFirst = "1"
         val myLast = "n"
@@ -37,13 +38,13 @@ class EventStoreTest {
         //when
         val le2 = EventStore.find(selfUrl)!!
         //then
-        assertEquals(le2.request, myFirst)  //2
-        assertEquals(le2.response.length, selfStr.length)  //3
+        assertEquals(myFirst, le2.request)  //2
+        assertEquals(selfStr.length, le2.response.length)  //3
         //when
         val leU = EventStore.find(upUrl)!!
         //then
-        assertEquals(leU.request, myFirst)  //4
-        assertEquals(leU.response.length, upStr.length)  //5
+        assertEquals(myFirst, leU.request)  //4
+        assertEquals(upStr.length, leU.response.length)  //5
     }
 
     @Test

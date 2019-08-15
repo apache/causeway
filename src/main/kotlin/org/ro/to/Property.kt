@@ -24,4 +24,19 @@ data class Property(val id: String = "",
         }
         return answer
     }
+
+    /**
+     * property-description's have extensions.friendlyName whereas
+     * plain properties don't have them  cf.:
+     * FR_PROPERTY_DESCRIPTION
+     * FR_OBJECT_PROPERTY_
+     */
+    fun isPropertyDescription(): Boolean {
+        val hasExtensions = extensions != null
+        if (!hasExtensions) {
+            return false
+        }
+        val hasFriendlyName = extensions!!.friendlyName.isNotEmpty()
+        return hasFriendlyName
+    }
 }

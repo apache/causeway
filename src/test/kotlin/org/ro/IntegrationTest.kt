@@ -1,13 +1,14 @@
-package org.ro.handler
+package org.ro
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.UnstableDefault
 import org.ro.core.Session
+import org.ro.core.aggregator.Aggregator
 import org.ro.core.event.EventStore
-import org.ro.core.event.IObserver
 import org.ro.core.event.LogEntry
+import org.ro.handler.ResponseHandler
 import org.ro.to.Method
 import org.ro.urls.Response
 import org.w3c.xhr.XMLHttpRequest
@@ -38,11 +39,11 @@ open class IntegrationTest {
         return answer
     }
 
-    fun mockResponse(response: Response, observer: IObserver?) : LogEntry {
+    fun mockResponse(response: Response, aggregator: Aggregator?): LogEntry {
         val str = response.str
         val url = response.url
         val method = Method.GET.operation
-        EventStore.start(url, method, "", observer)
+        EventStore.start(url, method, "", aggregator)
         val le = EventStore.end(url, str)
         ResponseHandler.handle(le!!)
         wait(100)

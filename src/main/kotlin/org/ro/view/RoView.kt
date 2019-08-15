@@ -10,7 +10,7 @@ object RoView : TabPanel() {
     private var tabCount = 0
 
     init {
-        marginTop = CssSize(50, UNIT.px)
+        marginTop = CssSize(-20, UNIT.px)
     }
 
     fun addTab(

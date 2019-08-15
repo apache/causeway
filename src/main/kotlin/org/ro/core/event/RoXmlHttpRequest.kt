@@ -1,6 +1,7 @@
 package org.ro.core.event
 
 import org.ro.core.Session
+import org.ro.core.aggregator.Aggregator
 import org.ro.handler.ResponseHandler
 import org.ro.to.Link
 import org.ro.to.Method
@@ -9,7 +10,6 @@ import org.w3c.xhr.XMLHttpRequest
 /**
  * The name is somewhat misleading, see: https://en.wikipedia.org/wiki/XMLHttpRequest
  */
-
 class RoXmlHttpRequest {
     private var url = ""
 
@@ -25,7 +25,7 @@ class RoXmlHttpRequest {
         }
     }
 
-    fun invoke(link: Link, obs: IObserver?) {
+    fun invoke(link: Link, aggregator: Aggregator?) {
         //@kotlinx.coroutines.InternalCoroutinesApi cancel()
         url = link.href
         if (EventStore.isCached(url)) {
@@ -50,7 +50,7 @@ class RoXmlHttpRequest {
         } else {
             xhr.send()
         }
-        EventStore.start(url, method, body, obs)
+        EventStore.start(url, method, body, aggregator)
     }
 
 }

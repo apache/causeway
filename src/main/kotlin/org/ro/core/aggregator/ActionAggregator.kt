@@ -1,12 +1,11 @@
-package org.ro.org.ro.core.observer
+package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
-import org.ro.core.observer.BaseObserver
 import org.ro.to.Action
 import org.ro.to.Method
 import org.ro.view.ActionPrompt
 
-class ActionObserver : BaseObserver() {
+class ActionAggregator : BaseAggregator() {
 
     override fun update(logEntry: LogEntry) {
         val action = logEntry.getObj() as Action
@@ -15,7 +14,7 @@ class ActionObserver : BaseObserver() {
             if (l.isInvokeAction()) {
                 when (l.method) {
                     Method.GET.name -> {
-                        //val obs = logEntry.observer!! ? this==obs?
+                        //val obs = logEntry.aggregator!! ? this==obs?
                         this.invoke(l)
                     }
                     Method.POST.name -> {

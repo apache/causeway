@@ -1,6 +1,5 @@
 package org.ro.handler
 
-import org.ro.core.Utils
 import org.ro.core.event.LogEntry
 import org.ro.to.TransferObject
 
@@ -20,10 +19,9 @@ abstract class BaseHandler : IResponseHandler {
         this.logEntry = logEntry
         val jsonStr: String? = logEntry.getResponse()
         if (null === jsonStr) {
-            Utils.debug("jsonStr == null : " + logEntry.url)
+//            Utils.debug("jsonStr == null : " + logEntry.url)
         } else {
             if (canHandle(jsonStr)) {
-//                Utils.debug(this::class)
                 doHandle()
             } else {
                 successor!!.handle(logEntry)
@@ -64,7 +62,7 @@ abstract class BaseHandler : IResponseHandler {
     }
 
     protected fun update() {
-        logEntry.observer!!.update(logEntry)
+        logEntry.aggregator!!.update(logEntry)
     }
 
 }

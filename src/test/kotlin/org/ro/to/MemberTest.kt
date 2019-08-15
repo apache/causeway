@@ -3,6 +3,7 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.ro.handler.MemberHandler
+import org.ro.urls.FR_PROPERTY_DESCRIPTION
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -14,9 +15,6 @@ class MemberTest() {
     fun testParseLong() {
         val jsonStr = getJsonWith(1234567890)
         val actual = parse(jsonStr)
-        console.log("[${this::class}.testParseLong] ${actual}")
-        console.log("[${this::class}.testParseLong] ${actual.value!!}")
-        console.log("[${this::class}.testParseLong] ${actual.value!!.content!!::class}")
         //FIXME using Longs eg. 123456789012 results in a NumberFormatException - is this due to Kotlin/KotlinJS differences?
         assertEquals(1234567890, actual.value!!.content as Number)
     }
@@ -63,7 +61,7 @@ class MemberTest() {
     }
 
     private fun parse(jsonStr: String): Member {
-        return Json.parse(Member.serializer(), jsonStr)
+        return Json.nonstrict.parse(Member.serializer(), jsonStr)
     }
 
     private fun getJsonWith(value: Any): String {

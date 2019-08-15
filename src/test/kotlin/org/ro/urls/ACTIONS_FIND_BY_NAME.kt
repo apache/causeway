@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object ACTIONS_FIND_BY_NAME {
-    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/findByName"
-    val str = """{
+object ACTIONS_FIND_BY_NAME : Response(){
+    override val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/findByName"
+    override val str = """{
         "id": "findByName",
         "memberType": "action",
         "links": [

@@ -1,7 +1,7 @@
 package org.ro.view.table
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.Exposer
+import org.ro.core.model.MemberExposer
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n
@@ -23,8 +23,8 @@ import pl.treksoft.kvision.utils.px
  * - accessor names are not fixed
  */
 class DynamicTable(
-        val model: List<Exposer>,
-        var columns: List<ColumnDefinition<Exposer>>) : VPanel() {
+        val model: List<MemberExposer>,
+        val columns: List<ColumnDefinition<MemberExposer>>) : VPanel() {
 
     init {
         HPanel(
@@ -45,7 +45,7 @@ class DynamicTable(
                 model, options = options) {
             marginTop = 0.px
             marginBottom = 0.px
-            setEventListener<Tabulator<Exposer>> {
+            setEventListener<Tabulator<MemberExposer>> {
                 tabulatorRowClick = {
                 }
             }

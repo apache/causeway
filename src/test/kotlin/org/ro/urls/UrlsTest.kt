@@ -1,10 +1,11 @@
 package org.ro.urls
 
 import kotlinx.serialization.UnstableDefault
+import org.ro.IntegrationTest
+import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
-import org.ro.handler.IntegrationTest
-import org.ro.org.ro.core.observer.ActionObserver
-import org.ro.to.*
+import org.ro.to.Link
+import org.ro.to.Method
 import kotlin.test.assertEquals
 
 /**
@@ -39,7 +40,7 @@ class UrlsTest : IntegrationTest() {
             for (entry in urls) {
                 val href = entry.key
                 val link = Link(method = Method.GET.operation, href = href)
-                ActionObserver().invoke(link)
+                ActionAggregator().invoke(link)
             }
 
             // then

@@ -1,10 +1,10 @@
 package org.ro.layout
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.handler.IntegrationTest
+import org.ro.IntegrationTest
 import org.ro.handler.LayoutHandler
-import org.ro.to.FR_OBJECT_LAYOUT
-import org.ro.to.SO_OBJECT_LAYOUT
+import org.ro.urls.FR_OBJECT_LAYOUT
+import org.ro.urls.SO_OBJECT_LAYOUT
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -45,7 +45,7 @@ class LayoutTest : IntegrationTest() {
     }
 
     @Test
-    fun testparseFixtureScriptObjectLayout() {
+    fun testParseFixtureScriptObjectLayout() {
         if (isSimpleAppAvailable()) {
             // given
             val jsonStr = FR_OBJECT_LAYOUT.str

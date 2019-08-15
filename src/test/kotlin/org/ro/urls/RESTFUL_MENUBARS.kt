@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object RESTFUL_MENUBARS {
-    val url = ""
-    val str = """
+object RESTFUL_MENUBARS : Response(){
+    override val url = ""
+    override val str = """
             <mb3:menuBars xmlns:cpt="http://isis.apache.org/applib/layout/component"
                           xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"
                           xmlns:lnk="http://isis.apache.org/applib/layout/links">

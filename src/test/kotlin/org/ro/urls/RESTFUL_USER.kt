@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object RESTFUL_USER {
-    val url = "http://localhost:8080/restful/user"
-    val str = """{
+object RESTFUL_USER : Response(){
+    override val url = "http://localhost:8080/restful/user"
+    override val str = """{
         "userName": "sven",
         "roles": ["iniRealm:admin_role"],
         "links": [{

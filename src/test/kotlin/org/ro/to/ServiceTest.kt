@@ -1,10 +1,10 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.Utils
 import org.ro.handler.ResultHandler
 import org.ro.handler.ServiceHandler
 import org.ro.urls.RESTFUL_SERVICES
+import org.ro.urls.SO_MENU
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -47,7 +47,6 @@ class ServiceTest : ToTest() {
         val services = ResultHandler().parse(jsonStr) as Result
         val values = services.value
         assertNotNull(values)
-        Utils.debug(services)
         assertEquals(8, values.size)
     }
 

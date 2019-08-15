@@ -1,15 +1,15 @@
-package org.ro.core.event
+package org.ro.core.aggregator
 
 import kotlinx.serialization.Serializable
 import org.ro.core.Menu
 import org.ro.core.UiManager
-import org.ro.core.observer.BaseObserver
+import org.ro.core.event.LogEntry
 import org.ro.to.Result
 import org.ro.to.Service
 import org.ro.to.TransferObject
 
 @Serializable
-class NavigationObserver : BaseObserver() {
+class NavigationAggregator : BaseAggregator() {
     private var isRendered = false;
     private var serviceTotal = 0;
     private var serviceCount = 0;
@@ -26,7 +26,7 @@ class NavigationObserver : BaseObserver() {
 
         if (serviceCount >= serviceTotal) {
             if (isRendered) {
-                console.log("[NavigationObserver.update] Unexpected MenuItem ${logEntry.url}")
+                console.log("[NavigationAggregator.update] Unexpected MenuItem ${logEntry.url}")
             } else {
                 UiManager.amendMenu()
                 isRendered = true

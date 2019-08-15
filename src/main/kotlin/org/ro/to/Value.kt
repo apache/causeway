@@ -16,7 +16,7 @@ import kotlinx.serialization.json.JsonParsingException
  */
 @Serializable
 data class Value(
-        @Optional @ContextualSerialization @SerialName("value") val content: Any? = null
+        @Optional @ContextualSerialization  @SerialName("value") val content: Any? = null
 ) : TransferObject {
 
     @Serializer(forClass = Value::class)
@@ -60,9 +60,11 @@ data class Value(
         private fun asLong(decoder: Decoder): Long? {
             var result: Long? = null
             try {
-                result = decoder.decodeLong()
+                result = decoder.decodeSerializableValue(Long.serializer())
             } catch (jpe: JsonParsingException) {
+                console.log(jpe)
             } catch (nfe: NumberFormatException) {
+                console.log(nfe)
             }
             return result
         }
@@ -70,7 +72,7 @@ data class Value(
         private fun asInt(decoder: Decoder): Int? {
             var result: Int? = null
             try {
-                result = decoder.decodeInt()
+                result = decoder.decodeSerializableValue(Int.serializer())
             } catch (jpe: JsonParsingException) {
             } catch (nfe: NumberFormatException) {
             }
@@ -80,8 +82,9 @@ data class Value(
         private fun asString(decoder: Decoder): String? {
             var result: String?
             try {
-                result = decoder.decodeString()
+                result = decoder.decodeSerializableValue(String.serializer())
             } catch (jpe: JsonParsingException) {
+//                console.log(jpe)
                 result = decodeStringMayBeWrong(decoder)
             }
             return result
@@ -97,20 +100,27 @@ data class Value(
         }
 
         private fun decodeStringMayBeWrong(decoder: Decoder): String {
+            console.log("[${this::class}.decodeStringMayBeWrong]")
+            console.log(decoder)
             val keyword = "value"
             val nl = "\\n"
             val delim = ":"
 
             val inputAsJsonStr = JSON.stringify(decoder.asJsObject())
-            val lines = inputAsJsonStr.split("{")
+            val startIndex = inputAsJsonStr.indexOf("source_0")
+            val endIndex = inputAsJsonStr.indexOf("buf_0")
+            val sourceBuf = inputAsJsonStr.substring(startIndex, endIndex)
+            val lines = sourceBuf.split("id\\")
+            console.log(lines)
             var source: String = ""
             for (l in lines) {
-                if (l.contains(keyword) && l.contains(delim) && (l.contains(nl))) {
+                if (l.contains(keyword)) {
                     source = l
                 }
             }
 
             val elements = source.split(nl)
+            console.log(elements)
             var keyValue: String = ""
             for (e in elements) {
                 if (e.contains(keyword)) {
@@ -123,7 +133,7 @@ data class Value(
             val delimRemoved = keywordRemoved.replaceFirst(delim, "")
             val unQuoted = delimRemoved.replace("\"", "")
             val result = unQuoted.trim().split(",")[0]
-            //console.log("[${this::class}.decodeStringMayBeWrong] found String: $result")
+            console.log("[${this::class}.decodeStringMayBeWrong] found String: $result")
 
             return result
         }

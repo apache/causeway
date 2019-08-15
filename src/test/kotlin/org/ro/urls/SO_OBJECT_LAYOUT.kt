@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object SO_OBJECT_LAYOUT {
-    val url = "no self in here"
-    val str = """{
+object SO_OBJECT_LAYOUT: Response() {
+    override val url = "no self in here"
+    override val str = """{
         "row": [
             {
                 "cols": [

@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object ACTIONS_DELETE {
-    val url = "http://localhost:8080/restful/objects/simple.SimpleObject/40/actions/delete"
-    val str = """{
+object ACTIONS_DELETE : Response() {
+    override val url = "http://localhost:8080/restful/objects/simple.SimpleObject/40/actions/delete"
+    override val str = """{
         "id": "delete",
         "memberType": "action",
         "links": [

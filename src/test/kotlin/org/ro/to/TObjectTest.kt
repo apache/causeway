@@ -1,8 +1,8 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.model.Exposer
 import org.ro.handler.TObjectHandler
+import org.ro.urls.SO_0
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -11,35 +11,26 @@ import kotlin.test.assertNotNull
 class TObjectTest {
 
     @Test
-    fun testParse() {
+    fun testLinksMembersProperties() {
+        //given
         val jsonStr = SO_0.str
+        // when
         val to = TObjectHandler().parse(jsonStr) as TObject
-        assertNotNull(to)
-        assertNotNull(to.links)
-    }
-
-    @Test
-    fun testMembers() {
-        val jsonStr = SO_0.str
-        val to = TObjectHandler().parse(jsonStr) as TObject
-        assertEquals("Object: Foo", to.links[0].title)
-
         val members = to.members
-        assertEquals(10, members.size)
         val properties = to.getProperties()
+        // then
+        assertNotNull(to.links)
+        assertEquals("Object: Foo", to.links[0].title)
+        assertEquals(10, members.size)
         assertEquals(4, properties.size)
 
-        //to.addMembersAsProperties()  //FIXME move fun from TObject to OA?
-        val i = Exposer(to)
+        //val matchingPredicate = { it.value == 0 }
+        val namedMembers = properties.filter { it.id == "name" }
+        assertEquals(1, namedMembers.size)
 
-        val actualDnId =  i.get("datanucleusIdLong") as Value
-        assertEquals(0, actualDnId.content)
-
-        val actualDnvers =  i.get("datanucleusVersionTimestamp") as Value
-        assertEquals("1514897074953", actualDnvers.content)
-
-        val actualNotes =  i.get("notes")
-        assertEquals(null, actualNotes)
+        val nameMember = namedMembers.first()
+        val content = nameMember.value!!.content as String
+        assertEquals("Foo", content)
     }
 
 }

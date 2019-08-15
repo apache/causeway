@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object ACTIONS_RUN_FIXTURE_SCRIPT {
-    val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript"
-    val str = """{
+object ACTIONS_RUN_FIXTURE_SCRIPT : Response() {
+    override val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript"
+    override val str = """{
         "id": "runFixtureScript",
         "memberType": "action",
         "links": [

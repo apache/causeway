@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object RESTFUL {
-    val url = "http://localhost:8080/restful/"
-    val str = """{
+object RESTFUL : Response(){
+    override val url = "http://localhost:8080/restful/"
+    override val str = """{
         "links": [{
             "rel": "self",
             "href": "http://localhost:8080/restful/",

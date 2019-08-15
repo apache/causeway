@@ -1,15 +1,14 @@
-package org.ro.core.observer
+package org.ro.core.aggregator
 
-import org.ro.core.event.IObserver
 import org.ro.core.event.LogEntry
 import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Link
 import org.ro.to.TObject
 
-abstract class BaseObserver : IObserver {
+abstract class BaseAggregator : Aggregator {
 
     protected fun log(logEntry: LogEntry) {
-        console.log("[ListObserver.update] unexpected:\n $logEntry}")
+        console.log("[BaseAggregator.log] unexpected:\n $logEntry}")
     }
 
     fun invoke(link: Link) {

@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 data class Member(val id: String,
                   val memberType: String,
                   @Optional val links: List<Link> = emptyList(),
+                  // members of type action do not have a value whereas those of type property have it !!!
                   @Optional val value: Value? = null,
                   @Optional val format: String = "",
                   @Optional val extensions: Extensions? = null,
@@ -22,14 +23,6 @@ data class Member(val id: String,
             }
         }
         return null
-    }
-
-    private fun isString(): Boolean {
-        return (format == "string") || (extensions!!.xIsisFormat == "string")
-    }
-
-    private fun isNumber(): Boolean {
-        return (format == "int") || (format == "utc-millisec")
     }
 
 }

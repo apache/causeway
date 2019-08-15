@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object OBJECT_PROPERTY {
-    val url = "http://localhost:8080/restful/objects/simple.SimpleObject/119/properties/notes"
-    val str = """{
+object OBJECT_PROPERTY : Response(){
+    override val url = "http://localhost:8080/restful/objects/simple.SimpleObject/119/properties/notes"
+    override val str = """{
         "id": "notes",
         "memberType": "property",
         "links": [{

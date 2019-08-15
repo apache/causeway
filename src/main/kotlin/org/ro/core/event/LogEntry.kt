@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UnstableDefault
+import org.ro.core.aggregator.Aggregator
 import org.ro.to.TransferObject
 import kotlin.js.Date
 
@@ -36,7 +36,7 @@ data class LogEntry(
     var createdAt = Date()
 
     @ContextualSerialization
-    var start: Int = createdAt.getMilliseconds()
+    var start: Long = createdAt.getMilliseconds().toLong()
 
     @ContextualSerialization
     var updatedAt: Date? = null
@@ -47,13 +47,13 @@ data class LogEntry(
     private var fault: String? = null
 
     @ContextualSerialization
-    var offset: Int = 0
+    var offset: Long = 0L
 
     @ContextualSerialization
-    var duration: Int = 0
+    var duration: Long = 0L
 
-    var cacheHits = 0             // FIXME always 0
-    var observer: IObserver? = null
+    var cacheHits = 0
+    var aggregator: Aggregator? = null
     var obj: TransferObject? = null
 
     // alternative constructor for UI events (eg. from user interaction)
@@ -63,12 +63,12 @@ data class LogEntry(
     }
 
     private fun calculate() {
-        // FIXME duration and offset are sometimes ouseide expected range
-
         duration = updatedAt!!.getMilliseconds() - start
-        val logStartTime = EventStore.getLogStartTime()
-        if (logStartTime != null) {
-            offset = start - logStartTime
+        offset = start - EventStore.logStartTime
+
+        if (duration < 0 || offset < 0) {
+            console.log("[LogEntry.calculate] duration/offset out of range")
+            console.log(this)
         }
     }
 
@@ -89,24 +89,6 @@ data class LogEntry(
         calculate()
         this.responseLength = response.length
         state = EventState.SUCCESS
-    }
-
-    @UnstableDefault
-    override fun toString(): String {
-        var s = "\n"
-        s += "url:= $url\n"
-        if (getObj() == null) {
-            s += "obj:= null\n"
-        } else {
-            s += "obj:= ${getObj()!!::class.simpleName}\n"
-        }
-        if (observer == null) {
-            s += "observer:= null\n"
-        } else {
-            s += "observer:= ${observer!!::class.simpleName}\n"
-        }
-        s += "response:= $response\n"
-        return s
     }
 
     fun getObj(): TransferObject? {

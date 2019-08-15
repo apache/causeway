@@ -1,6 +1,7 @@
 package org.ro.core.event
 
 import org.ro.core.UiManager
+import org.ro.core.aggregator.Aggregator
 import org.ro.handler.ResponseHandler
 import pl.treksoft.kvision.utils.observableListOf
 import kotlin.js.Date
@@ -14,11 +15,19 @@ import kotlin.js.Date
  */
 object EventStore {
     var log = observableListOf<LogEntry>()
+    var logStartTime: Long = 0L
 
-    fun start(url: String, method: String, body: String = "", obs: IObserver? = null): LogEntry {
+    private fun log(logEntry: LogEntry) {
+        log.add(logEntry)
+        if (logStartTime == 0L) {
+            logStartTime = logEntry.start.toLong()
+        }
+    }
+
+    fun start(url: String, method: String, body: String = "", aggregator: Aggregator? = null): LogEntry {
         val entry = LogEntry(url, method, body)
-        entry.observer = obs
-        log.add(entry)
+        entry.aggregator = aggregator
+        log(entry)
         updateStatus(entry)
         return entry
     }
@@ -26,14 +35,14 @@ object EventStore {
     fun add(url: String) {
         val entry = LogEntry(url = url)
         entry.createdAt = Date()
-        log.add(entry)
+        log(entry)
         updateStatus(entry)
     }
 
     fun addView(title: String) {
         val entry = LogEntry(title = title)
         entry.createdAt = Date()
-        log.add(entry)
+        log(entry)
         updateStatus(entry)
     }
 
@@ -140,11 +149,6 @@ object EventStore {
             }
         }
         return diffCnt <= allowedDiff
-    }
-
-    fun getLogStartTime(): Int? {
-        val first = this.log[0]
-        return first.start.toInt()
     }
 
     //TODO function has a side effect - refactor

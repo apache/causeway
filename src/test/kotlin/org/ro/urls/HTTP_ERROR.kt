@@ -1,11 +1,11 @@
 package org.ro.urls
 
-object HTTP_ERROR {
+object HTTP_ERROR : Response(){
     val ReadCallback = "\$ReadCallback"
     val CachedChain = "\$CachedChain"
     // occurrs when invoked with erroneous (empty) parameters
-    val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript/invoke"
-    val str = """{
+    override val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript/invoke"
+    override val str = """{
 	"httpStatusCode": 400,
 	"message": "could not read query string as a JSON map",
 	"detail": {

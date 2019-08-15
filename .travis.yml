@@ -4,6 +4,9 @@ sudo: true
 
 install: true
 
+before_install:
+  - sudo apt-get install -y --allow-unauthenticated yarn
+
 jdk:
   - oraclejdk9
 

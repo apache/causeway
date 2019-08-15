@@ -2,23 +2,22 @@ package org.ro.core
 
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
-import org.ro.core.model.Visible
-import org.ro.view.IconManager
+import org.ro.core.model.DisplayList
+import org.ro.core.model.MemberExposer
+import org.ro.core.model.ResultExposer
 import org.ro.view.RoMenuBar
 import org.ro.view.RoStatusBar
 import org.ro.view.RoView
-import org.ro.view.table.el.EventLogTable
-import pl.treksoft.kvision.i18n.I18n
+import org.ro.view.table.DynamicTable
+import org.ro.view.table.TableFactory
+import org.ro.view.table.fr.FixtureResultTable
 import pl.treksoft.kvision.panel.VPanel
 
 /**
- * Single point of contact for view components:
- * @item RoView consisting of:
+ * Single point of contact for view components consisting of:
  * @item RoMenubar,
- * @item RoTabbar (RoTabs),
+ * @item RoView (tabs, etc.),
  * @item RoStatusbar,
- * @item Dock
- * etc.
  */
 object UiManager {
 
@@ -30,25 +29,6 @@ object UiManager {
     fun remove(tab: VPanel) {
         RoView.removeTab(tab)
         // EventStore.close(tab.get)
-    }
-
-    fun addView(viewable: Visible) {
-        val title: String = viewable.tag()
-        val le: LogEntry? = EventStore.findView(title)
-        if (le == null) {
-            createView()
-            EventStore.addView(title)
-        } else {
-            le.cacheHits += 1
-            EventStore.update(title)
-        }
-    }
-
-    fun createView() {
-        val title = "Log Entries"
-        val icon = IconManager.find(title)
-        val model = EventStore.log
-        RoView.addTab(I18n.tr(title), EventLogTable(model), icon/*, closable = true*/)
     }
 
     /**
@@ -71,5 +51,30 @@ object UiManager {
     fun updateUser(user: String) {
         RoStatusBar.updateUser(user)
     }
+
+    fun handleView(displayList: DisplayList) {
+        if (displayList.title.contains("FixtureScript", ignoreCase = false)) {
+            handleFixtureResult(displayList)
+        } else {
+            handleDynamic(displayList)
+        }
+    }
+
+    private fun handleDynamic(displayList: DisplayList) {
+        val members = displayList.getMembers()
+        val columns = TableFactory().buildColumns(members)
+        val panel = DynamicTable(displayList.getData() as List<MemberExposer>, columns)
+        add(displayList.title, panel)
+        displayList.isRendered = true
+    }
+
+    @Deprecated("use generic / dynamic table")
+    private fun handleFixtureResult(displayList: DisplayList) {
+        val title: String = this::class.simpleName.toString()
+        val panel = FixtureResultTable(displayList.getData() as List<ResultExposer>)
+        add(title, panel)
+        displayList.isRendered = true
+    }
+
 
 }

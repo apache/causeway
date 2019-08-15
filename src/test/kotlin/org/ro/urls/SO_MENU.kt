@@ -1,8 +1,8 @@
-package org.ro.to
+package org.ro.urls
 
-object SO_MENU {
-    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu"
-    val str = """{
+object SO_MENU: Response() {
+    override val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu"
+    override val str = """{
         "links": [
             {
                 "rel": "self",

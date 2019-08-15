@@ -1,6 +1,4 @@
-package org.ro.to
-
-import org.ro.urls.Response
+package org.ro.urls
 
 object FR_OBJECT_LAYOUT : Response() {
     override val url = "no self in here"
