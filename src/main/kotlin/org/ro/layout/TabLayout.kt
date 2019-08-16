@@ -1,16 +1,14 @@
 package org.ro.layout
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.view.uicomp.TabNavigator
 import org.ro.view.uicomp.UIComponent
 import org.ro.view.uicomp.VBox
 
 @Serializable
-@Suppress("DEPRECATION")
 data class TabLayout(val cssClass: String? = null,
                      val name: String? = null,
-                     @Optional val row: List<RowLayout> = emptyList()) {
+                     val row: List<RowLayout> = emptyList()) {
 
     fun build(): UIComponent {
         val result = TabNavigator("TabLayout")

@@ -1,5 +1,7 @@
 package org.ro.core.model
 
+import org.ro.to.Link
+import org.ro.to.RelType
 import org.ro.to.TObject
 
 class ResultExposer(val delegate: TObject) : Exposer {
@@ -8,7 +10,7 @@ class ResultExposer(val delegate: TObject) : Exposer {
         val that = this.asDynamic()
         // result
         var result = "dummy result"
-        val link = delegate.selfLink()
+        val link = selfLink(delegate)
         if (link != null) {
             result = link.resultTitle()
         }
@@ -38,10 +40,12 @@ class ResultExposer(val delegate: TObject) : Exposer {
     //TODO special handling required?
 
     var result: String
-        set(arg: String) {}  // tabulator requires setter
+        set(arg: String) {
+            console.log("[ResultExposer.result.set] tabulator requires setter $arg")
+        }
         get() {
             var answer = "dummy result"
-            val link = delegate.selfLink()
+            val link = selfLink(delegate)
             if (link != null) {
                 answer = link.resultTitle()
             }
@@ -49,7 +53,9 @@ class ResultExposer(val delegate: TObject) : Exposer {
         }
 
     var resultClass: String
-        set(arg: String) {} // tabulator requires setter
+        set(arg: String) {
+            console.log("[ResultExposer.resultClass.set] tabulator requires setter $arg")
+        }
         get() {
             var answer = ""
             val member = delegate.getProperty("className")
@@ -62,15 +68,23 @@ class ResultExposer(val delegate: TObject) : Exposer {
         }
 
     var resultKey: String
-        set(arg: String) {} // tabulator requires setter
+        set(arg: String) {
+            console.log("[ResultExposer.resultKey.set] tabulator requires setter $arg")
+        }
         get() {
             var answer = "dummy resultKey"
-            val link = delegate.selfLink()
+            val link = selfLink(delegate)
             if (link != null) {
                 answer = link.resultKey()
             }
             return answer
         }
 
+    private fun selfLink(delegate: TObject): Link? {
+        val answer = delegate.links.find {
+            it.rel == RelType.SELF.type
+        }
+        return answer
+    }
 
 }

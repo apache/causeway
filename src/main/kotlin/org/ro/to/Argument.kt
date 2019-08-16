@@ -1,13 +1,11 @@
 package org.ro.to
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Suppress("DEPRECATION")
-data class Argument(@Optional var key: String = "",
+data class Argument(var key: String = "",
                     var value: String? = null,
-                    @Optional val potFileName: String = "") : TransferObject {
+                    val potFileName: String = "") : TransferObject {
     init {
         if (value == null) {
             value = ""

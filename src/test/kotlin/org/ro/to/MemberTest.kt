@@ -61,7 +61,7 @@ class MemberTest() {
     }
 
     private fun parse(jsonStr: String): Member {
-        return Json.nonstrict.parse(Member.serializer(), jsonStr)
+        return Json.parse(Member.serializer(), jsonStr)
     }
 
     private fun getJsonWith(value: Any): String {

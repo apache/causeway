@@ -1,19 +1,17 @@
 package org.ro.to
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Suppress("DEPRECATION")
 data class Member(val id: String,
                   val memberType: String,
-                  @Optional val links: List<Link> = emptyList(),
-                  // members of type action do not have a value whereas those of type property have it !!!
-                  @Optional val value: Value? = null,
-                  @Optional val format: String = "",
-                  @Optional val extensions: Extensions? = null,
-                  @Optional val disabledReason: String = "",
-                  @Optional val optional: Boolean = false
+                  val links: List<Link> = emptyList(),
+        // members of type property have a value, those of type action don't
+                  val value: Value? = null,
+                  val format: String = "",
+                  val extensions: Extensions? = null,
+                  val disabledReason: String = "",
+                  val optional: Boolean = false
 ) : TransferObject {
 
     fun getInvokeLink(): Link? {

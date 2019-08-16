@@ -1,32 +1,30 @@
 package org.ro.layout
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
 import org.ro.view.uicomp.HBox
 import org.ro.view.uicomp.UIComponent
 
 @Serializable
-@Suppress("DEPRECATION")
-data class ColLayout(@Optional val domainObject: DomainObjectLayout? = null,
-                     @Optional val action: List<ActionLayout> = emptyList(),  // org.ro.authors
-                     @Optional val named: String? = "",
-                     @Optional val describedAs: String? = "",
-                     @Optional val plural: String? = "",
-                     @Optional val link: Link? = null,
-                     @Optional val bookmarking: String? = "",
+data class ColLayout(val domainObject: DomainObjectLayout? = null,
+                     val action: List<ActionLayout> = emptyList(),  // org.ro.authors
+                     val named: String? = "",
+                     val describedAs: String? = "",
+                     val plural: String? = "",
+                     val link: Link? = null,
+                     val bookmarking: String? = "",
                      val metadataError: String? = "",
                      val cssClass: String? = "",
-                     @Optional val cssClassFa: String? = "",
-                     @Optional val cssClassFaPosition: String? = "",
-                     @Optional val namedEscaped: Boolean? = false,
-                     @Optional val size: String? = "",
-                     @Optional val id: String? = "",
-                     @Optional val span: Int? = 0,
-                     @Optional val unreferencedActions: Boolean? = false,
-                     @Optional val unreferencedCollections: Boolean? = false,
-                     @Optional val tabGroup: List<TabGroupLayout> = emptyList(),
-                     @Optional val fieldSet: List<FieldSetLayout> = emptyList()
+                     val cssClassFa: String? = "",
+                     val cssClassFaPosition: String? = "",
+                     val namedEscaped: Boolean? = false,
+                     val size: String? = "",
+                     val id: String? = "",
+                     val span: Int? = 0,
+                     val unreferencedActions: Boolean? = false,
+                     val unreferencedCollections: Boolean? = false,
+                     val tabGroup: List<TabGroupLayout> = emptyList(),
+                     val fieldSet: List<FieldSetLayout> = emptyList()
 ) {
     fun build(): HBox {
         val result = HBox("ColLayout")

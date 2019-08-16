@@ -1,15 +1,13 @@
 package org.ro.layout
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.view.uicomp.TabNavigator
 import org.ro.view.uicomp.UIComponent
 
 @Serializable
-@Suppress("DEPRECATION")
 data class TabGroupLayout(val cssClass: String? = "",
                           val metadataError: String? = "",
-                          @Optional val tab: List<TabLayout> = emptyList(),
+                          val tab: List<TabLayout> = emptyList(),
                           val unreferencedCollections: Boolean? = false) {
 
     fun build(): UIComponent {

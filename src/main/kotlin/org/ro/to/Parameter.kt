@@ -1,17 +1,15 @@
 package org.ro.to
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Suppress("DEPRECATION")
 class Parameter(val id: String,
                 val num: Int = 0,
                 val description: String,
                 val name: String,
-                @Optional val choices: List<Link> = emptyList(),
-                @Optional @SerialName("default") val defaultChoice: Link? = null
+                val choices: List<Link> = emptyList(),
+                @SerialName("default") val defaultChoice: Link? = null
 ) : TransferObject {
 
     fun hasChoices(): Boolean {

@@ -12,6 +12,7 @@ import kotlin.js.Date
  * UI events (Dialogs, Windows, etc.) are logged here as well.
  *
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
+ * @See https://martinfowler.com/eaaDev/EventSourcing.html
  */
 object EventStore {
     var log = observableListOf<LogEntry>()

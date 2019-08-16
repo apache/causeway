@@ -71,6 +71,7 @@ object UiManager {
     @Deprecated("use generic / dynamic table")
     private fun handleFixtureResult(displayList: DisplayList) {
         val title: String = this::class.simpleName.toString()
+        @Suppress("UNCHECKED_CAST")
         val panel = FixtureResultTable(displayList.getData() as List<ResultExposer>)
         add(title, panel)
         displayList.isRendered = true

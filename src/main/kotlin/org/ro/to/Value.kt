@@ -16,13 +16,13 @@ import kotlinx.serialization.json.JsonParsingException
  */
 @Serializable
 data class Value(
-        @Optional @ContextualSerialization  @SerialName("value") val content: Any? = null
+        @ContextualSerialization @SerialName("value") val content: Any? = null
 ) : TransferObject {
 
     @Serializer(forClass = Value::class)
     companion object : KSerializer<Value> {
         override fun serialize(encoder: Encoder, obj: Value) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            // No need to serialize this
         }
 
         override val descriptor: SerialDescriptor =
