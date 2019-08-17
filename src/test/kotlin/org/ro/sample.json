@@ -2,64 +2,48 @@
     "links": [
         {
             "rel": "self",
-            "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0",
+            "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==",
             "method": "GET",
             "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
-            "title": "Object: Foo"
+            "title": "domain-app-demo/persist-all/item-3:  Object: Baz"
         },
         {
             "rel": "describedby",
-            "href": "http://localhost:8080/restful/domain-types/simple.SimpleObject",
+            "href": "http://localhost:8080/restful/domain-types/isisApplib.FixtureResult",
             "method": "GET",
             "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },
         {
-            "rel": "urn:org.apache.isis.restfulobjects:rels/layout",
-            "href": "http://localhost:8080/restful/domain-types/simple.SimpleObject/layout",
+            "rel": "urn:org.apache.isis.restfulobjects:rels/object-layout",
+            "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/object-layout",
             "method": "GET",
-            "type": "application/xmlprofile=\"urn:org.restfulobjects:repr-types/layout-bs3\""
+            "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
+            "title": "domain-app-demo/persist-all/item-3:  Object: Baz"
         },
         {
             "rel": "urn:org.restfulobjects:rels/update",
-            "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0",
+            "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==",
             "method": "PUT",
             "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
             "arguments": {}
         }
     ],
     "extensions": {
-        "oid": "simple.SimpleObject:0",
+        "oid": "*isisApplib.FixtureResult:PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==",
         "isService": false,
         "isPersistent": true
     },
-    "title": "Object: Foo",
-    "domainType": "simple.SimpleObject",
-    "instanceId": "0",
+    "title": "domain-app-demo/persist-all/item-3:  Object: Baz",
+    "domainType": "isisApplib.FixtureResult",
+    "instanceId": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==",
     "members": {
-        "name": {
-            "id": "name",
+        "fixtureScriptClassName": {
+            "id": "fixtureScriptClassName",
             "memberType": "property",
             "links": [
                 {
-                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"name\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/properties/name",
-                    "method": "GET",
-                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
-                }
-            ],
-            "value": "Foo",
-            "extensions": {
-                "x-isis-format": "string"
-            },
-            "disabledReason": "Immutable"
-        },
-        "notes": {
-            "id": "notes",
-            "memberType": "property",
-            "links": [
-                {
-                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"notes\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/properties/notes",
+                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"fixtureScriptClassName\"",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/properties/fixtureScriptClassName",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
                 }
@@ -67,55 +51,62 @@
             "value": null,
             "extensions": {
                 "x-isis-format": "string"
-            }
+            },
+            "disabledReason": "Non-cloneable view models are read-only Immutable"
         },
-        "datanucleusIdLong": {
-            "id": "datanucleusIdLong",
+        "key": {
+            "id": "key",
             "memberType": "property",
             "links": [
                 {
-                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"datanucleusIdLong\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/properties/datanucleusIdLong",
+                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"key\"",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/properties/key",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
                 }
             ],
-            "value": 0,
-            "format": "int",
+            "value": "domain-app-demo/persist-all/item-3",
             "extensions": {
-                "x-isis-format": "long"
+                "x-isis-format": "string"
             },
-            "disabledReason": "Contributed property"
+            "disabledReason": "Non-cloneable view models are read-only Immutable"
         },
-        "datanucleusVersionTimestamp": {
-            "id": "datanucleusVersionTimestamp",
+        "object": {
+            "id": "object",
             "memberType": "property",
             "links": [
                 {
-                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"datanucleusVersionTimestamp\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/properties/datanucleusVersionTimestamp",
+                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"object\"",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/properties/object",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
                 }
             ],
-            "value": 1514897074953,
-            "format": "utc-millisec",
-            "extensions": {
-                "x-isis-format": "javasqltimestamp"
+            "value": {
+                "rel": "urn:org.restfulobjects:rels/value",
+                "href": "http://localhost:8080/restful/objects/simple.SimpleObject/52",
+                "method": "GET",
+                "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
+                "title": "Object: Baz"
             },
-            "disabledReason": "Contributed property"
+            "disabledReason": "Non-cloneable view models are read-only Immutable"
         },
-        "downloadLayoutXml": {
-            "id": "downloadLayoutXml",
-            "memberType": "action",
+        "className": {
+            "id": "className",
+            "memberType": "property",
             "links": [
                 {
-                    "rel": "urn:org.restfulobjects:rels/detailsaction=\"downloadLayoutXml\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/actions/downloadLayoutXml",
+                    "rel": "urn:org.restfulobjects:rels/detailsproperty=\"className\"",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/properties/className",
                     "method": "GET",
-                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
+                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
                 }
-            ]
+            ],
+            "value": "domainapp.modules.simple.dom.impl.SimpleObject",
+            "extensions": {
+                "x-isis-format": "string"
+            },
+            "disabledReason": "Non-cloneable view models are read-only Immutable"
         },
         "rebuildMetamodel": {
             "id": "rebuildMetamodel",
@@ -123,43 +114,31 @@
             "links": [
                 {
                     "rel": "urn:org.restfulobjects:rels/detailsaction=\"rebuildMetamodel\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/actions/rebuildMetamodel",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/actions/rebuildMetamodel",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
                 }
             ]
         },
-        "downloadJdoMetadata": {
-            "id": "downloadJdoMetadata",
+        "openRestApi": {
+            "id": "openRestApi",
             "memberType": "action",
             "links": [
                 {
-                    "rel": "urn:org.restfulobjects:rels/detailsaction=\"downloadJdoMetadata\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/actions/downloadJdoMetadata",
+                    "rel": "urn:org.restfulobjects:rels/detailsaction=\"openRestApi\"",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/actions/openRestApi",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
                 }
             ]
         },
-        "delete": {
-            "id": "delete",
+        "downloadLayoutXml": {
+            "id": "downloadLayoutXml",
             "memberType": "action",
             "links": [
                 {
-                    "rel": "urn:org.restfulobjects:rels/detailsaction=\"delete\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/actions/delete",
-                    "method": "GET",
-                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
-                }
-            ]
-        },
-        "updateName": {
-            "id": "updateName",
-            "memberType": "action",
-            "links": [
-                {
-                    "rel": "urn:org.restfulobjects:rels/detailsaction=\"updateName\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/actions/updateName",
+                    "rel": "urn:org.restfulobjects:rels/detailsaction=\"downloadLayoutXml\"",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/actions/downloadLayoutXml",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
                 }
@@ -171,7 +150,7 @@
             "links": [
                 {
                     "rel": "urn:org.restfulobjects:rels/detailsaction=\"clearHints\"",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0/actions/clearHints",
+                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg==/actions/clearHints",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
                 }

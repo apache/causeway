@@ -15,7 +15,7 @@ import org.ro.to.TObject
  * (1) FR_OBJECT                TObjectHandler -> invoke()
  * (2) FR_OBJECT_LAYOUT         layoutHandler -> invoke(layout.getProperties()[].getLink()) link can be null?
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
- * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler      //FIXME PropertyDescription to be used for table layout
+ * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
 @Serializable
 class ListAggregator(private val actionTitle: String) : BaseAggregator() {

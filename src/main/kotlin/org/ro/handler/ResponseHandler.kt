@@ -4,7 +4,7 @@ import org.ro.core.event.LogEntry
 
 /**
  * Delegates responses to handlers, acts as Facade.
- * @see: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
+ * @See: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
 object ResponseHandler {
     private var delegate: IResponseHandler;

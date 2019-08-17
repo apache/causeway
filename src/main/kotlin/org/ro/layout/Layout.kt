@@ -7,6 +7,9 @@ import org.ro.view.uicomp.VBox
 /**
  * Parse layout specification.
  * In case of non-menu layout, build a UIComponent.
+ *
+ * @See: https://en.wikipedia.org/wiki/Composite_pattern
+ * //TODO eventually use Decorator
  */
 @Serializable
 data class Layout(val cssClass: String? = null,
