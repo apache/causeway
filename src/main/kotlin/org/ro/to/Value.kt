@@ -3,7 +3,10 @@ package org.ro.to
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.StringDescriptor
 import kotlinx.serialization.internal.makeNullable
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonElementTypeMismatchException
+import kotlinx.serialization.json.content
 
 /**
  *  Custom data structure to handle 'untyped' value in Member and Property.
@@ -34,26 +37,27 @@ data class Value(
             try {
                 val nss = makeNullable(JsonElement.serializer())
                 jse = decoder.decode(nss)!!
+                val jsct =jse.content
                 when {
                     jse.isNull -> {
                         return Value(null)
                     }
-                    isInt(jse.content) -> {
-                        return Value(jse.content.toInt())
+                    isInt(jsct) -> {
+                        return Value(jsct.toInt())
                     }
-                    isLong(jse.content) -> {
-                        return Value(jse.content.toLong())
+                    isLong(jsct) -> {
+                        return Value(jsct.toLong())
                     }
                     else -> {
-                        return Value(jse.content)
+                        return Value(jsct)
                     }
                 }
             } catch (jetme: JsonElementTypeMismatchException) {
-//                console.log("[Value.deserialize] JsonElementTypeMismatchException: $jse")
-                return Value(asLink(jse.toString()))
+                val linkStr = jse.toString()
+                val link = Json.parse(Link.serializer(), linkStr)
+                return Value(link)
             }
         }
-
 
         private fun isInt(raw: String): Boolean {
             try {
@@ -71,18 +75,6 @@ data class Value(
             } catch (nfe: NumberFormatException) {
                 return false
             }
-        }
-
-        @UnstableDefault
-        private fun asLink(raw: String): Link? {
-            var result: Link? = null
-            try {
-                result = Json.parse(Link.serializer(), raw)
-            } catch (jpe: JsonParsingException) {
-                console.log("[Value.asLink] $jpe")
-                console.log("[Value.asLink] $raw")
-            }
-            return result
         }
 
     }
