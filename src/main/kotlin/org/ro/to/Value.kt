@@ -9,10 +9,10 @@ import kotlinx.serialization.json.*
  *  Custom data structure to handle 'untyped' value in Member and Property.
  *  "value" can either be:
  *  @Item 'null'
+ *  @Item Int with format "int"
+ *  @Item Long with format "utc-millisec"
  *  @Item String
  *  @Item Link
- *  @Item Long with format "utc-millisec"
- *  @Item Int with format "int"
  */
 @Serializable
 data class Value(
@@ -34,43 +34,43 @@ data class Value(
             try {
                 val nss = makeNullable(JsonElement.serializer())
                 jse = decoder.decode(nss)!!
-//                console.log("[Value.deserialize] JsonElement: $jse")
-                //TODO use when () to be more expressive
-                if (jse.isNull) {
-                    return Value(null)
+                when {
+                    jse.isNull -> {
+                        return Value(null)
+                    }
+                    isInt(jse.content) -> {
+                        return Value(jse.content.toInt())
+                    }
+                    isLong(jse.content) -> {
+                        return Value(jse.content.toLong())
+                    }
+                    else -> {
+                        return Value(jse.content)
+                    }
                 }
-                val nStr = jse.content
-                var result: Any? = null
-                result = asInt(nStr)
-                if (result == null) {
-                    result = asLong(nStr)
-                }
-                if (result == null) {
-                    result = nStr // String
-                }
-                return Value(result)
             } catch (jetme: JsonElementTypeMismatchException) {
 //                console.log("[Value.deserialize] JsonElementTypeMismatchException: $jse")
                 return Value(asLink(jse.toString()))
             }
         }
 
-        private fun asInt(raw: String): Int? {
-            var result: Int? = null
+
+        private fun isInt(raw: String): Boolean {
             try {
-                result = raw.toInt()
+                raw.toInt()
+                return true
             } catch (nfe: NumberFormatException) {
+                return false
             }
-            return result
         }
 
-        private fun asLong(raw: String): Long? {
-            var result: Long? = null
+        private fun isLong(raw: String): Boolean {
             try {
-                result = raw.toLong()
+                raw.toLong()
+                return true
             } catch (nfe: NumberFormatException) {
+                return false
             }
-            return result
         }
 
         @UnstableDefault
