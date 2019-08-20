@@ -16,6 +16,7 @@ class MemberExposerTest {
 new.*:fa-plus,add.*:fa-plus-square,create.*:fa-plus,update.*:fa-edit,delete.*:fa-trash,save.*:fa-floppy-o,change.*:fa-edit,edit.*:fa-pencil-square-o,maintain.*:fa-edit,remove.*:fa-minus-square,copy.*:fa-copy,move.*:fa-exchange,first.*:fa-star,find.*:fa-search,lookup.*:fa-search,search.*:fa-search,view.*:fa-search,clear.*:fa-remove,previous.*:fa-step-backward,next.*:fa-step-forward,list.*:fa-list, all.*:fa-list, download.*:fa-download, upload.*:fa-upload, export.*:fa-download,switch.*:fa-exchange,import.*:fa-upload,execute.*:fa-bolt, run.*:fa-bolt, calculate.*:fa-calculator, verify.*:fa-check-circle, refresh.*:fa-refresh, install.*:fa-wrench,stop.*:fa-stop,terminate.*:fa-stop,cancel.*:fa-stop,discard.*:fa-trash-o,pause.*:fa-pause,suspend.*:fa-pause,resume.*:fa-play,renew.*:fa-repeat,reset.*:fa-repeat,categorise.*:fa-folder-open-o,assign.*:fa-hand-o-right,approve.*:fa-thumbs-o-up,decline.*:fa-thumbs-o-down
      */
 
+    @Test
     fun testConfiguration() {
         val jsonStr = CFG_1.str
         val to = TObjectHandler().parse(jsonStr) as TObject
@@ -25,9 +26,6 @@ new.*:fa-plus,add.*:fa-plus-square,create.*:fa-plus,update.*:fa-edit,delete.*:fa
 
         val exposer = MemberExposer(to).dynamise()
 
-        console.log("[MemberExposer.testConfiguration]")
-        console.log(exposer)
-
         val actKey = exposer["key"]
         assertEquals("isis.appManifest", actKey)
 
@@ -36,6 +34,7 @@ new.*:fa-plus,add.*:fa-plus-square,create.*:fa-plus,update.*:fa-edit,delete.*:fa
 
         val members = to.members
         for (m in members) {
+            //TODO iterate over members?
         }
     }
 
@@ -47,16 +46,13 @@ new.*:fa-plus,add.*:fa-plus-square,create.*:fa-plus,update.*:fa-edit,delete.*:fa
 
         //TODO datanucleus will likely be gone with Apache Isis 2.0.x
         val actualDnId = exposer.get("datanucleusIdLong") as Value
-        assertEquals(0, actualDnId.content)
+        assertEquals(0, actualDnId.content as Int)
 
         val actualDnvers = exposer.get("datanucleusVersionTimestamp") as Value
-        assertEquals("1514897074953", actualDnvers.content)
+        assertEquals(1514897074953L, actualDnvers.content as Long)
 
         val actualNotes = exposer.get("notes")
         assertEquals(null, actualNotes)
-
-        console.log("[MemberExposer.testSimpleObject]")
-        console.log(exposer)
 
         val dynEx = exposer.dynamise()
         val actKey = dynEx["name"]

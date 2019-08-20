@@ -16,7 +16,6 @@ class MemberExposer(val delegate: TObject) : Exposer {
 
     fun dynamise(): dynamic {
         val that = this.asDynamic()
-        console.log(delegate.members)
         for (m in delegate.members) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
@@ -42,6 +41,5 @@ class MemberExposer(val delegate: TObject) : Exposer {
             return null
         }
     }
-
 
 }

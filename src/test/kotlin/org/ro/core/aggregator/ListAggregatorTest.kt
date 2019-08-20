@@ -38,7 +38,6 @@ class ListAggregatorTest : IntegrationTest() {
             val property = pdLe.getObj() as Property
             val propertyLabels = dl.propertyLabels
             val lbl = dl.getPropertyLabel(property.id)!!
-            console.log(lbl)
             // then
             assertEquals("className", p.id) //1
             assertNotNull(descLink)                  //2

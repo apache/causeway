@@ -1,7 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.handler.PropertyHandler
+import kotlinx.serialization.json.Json
 import org.ro.urls.FR_OBJECT_PROPERTY_
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,7 +11,7 @@ class PropertyTest {
 
     @Test
     fun testParse() {
-        val to = PropertyHandler().parse(FR_OBJECT_PROPERTY_.str)
+        val to = Json.nonstrict.parse(Property.serializer(),FR_OBJECT_PROPERTY_.str)
         val p = to as Property
         val actual = p.disabledReason!!
         val expected = "Non-cloneable view models are read-only; Immutable"

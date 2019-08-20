@@ -2,7 +2,8 @@ package org.ro.to
 
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.StringDescriptor
-import kotlinx.serialization.json.JsonParsingException
+import kotlinx.serialization.internal.makeNullable
+import kotlinx.serialization.json.*
 
 /**
  *  Custom data structure to handle 'untyped' value in Member and Property.
@@ -21,34 +22,37 @@ data class Value(
     @Serializer(forClass = Value::class)
     companion object : KSerializer<Value> {
         override fun serialize(encoder: Encoder, obj: Value) {
-            // No need to serialize this
+            // Not required yet
         }
 
         override val descriptor: SerialDescriptor =
                 StringDescriptor.withName("Value")
 
+        @UnstableDefault
         override fun deserialize(decoder: Decoder): Value {
-            //TODO can function and type be passed on in order to be less verbose?
-
-            val raw = decoder.decodeString()
-            console.log("[Value.deserialize] $raw")
-
-            var result: Any? = null //asNull(raw)
-            if (result == null) {
-                result = asInt(raw)
+            var jse: JsonElement? = null
+            try {
+                val nss = makeNullable(JsonElement.serializer())
+                jse = decoder.decode(nss)!!
+//                console.log("[Value.deserialize] JsonElement: $jse")
+                //TODO use when () to be more expressive
+                if (jse.isNull) {
+                    return Value(null)
+                }
+                val nStr = jse.content
+                var result: Any? = null
+                result = asInt(nStr)
+                if (result == null) {
+                    result = asLong(nStr)
+                }
+                if (result == null) {
+                    result = nStr // String
+                }
+                return Value(result)
+            } catch (jetme: JsonElementTypeMismatchException) {
+//                console.log("[Value.deserialize] JsonElementTypeMismatchException: $jse")
+                return Value(asLink(jse.toString()))
             }
-            if (result == null) {
-                result = asLong(raw)
-            }
-            // Sequence is important, Link has to be checked before String
-            if (result == null) {
-                result = asLink(raw, decoder)
-            }
-            if (result == null) {
-                result = raw // String
-            }
-
-            return Value(result)
         }
 
         private fun asInt(raw: String): Int? {
@@ -56,7 +60,6 @@ data class Value(
             try {
                 result = raw.toInt()
             } catch (nfe: NumberFormatException) {
-                console.log("not an Int")
             }
             return result
         }
@@ -66,25 +69,20 @@ data class Value(
             try {
                 result = raw.toLong()
             } catch (nfe: NumberFormatException) {
-                console.log("not a Long")
             }
             return result
         }
 
-        private fun asLink(raw: String, decoder: Decoder): Link? {
+        @UnstableDefault
+        private fun asLink(raw: String): Link? {
             var result: Link? = null
             try {
-                result = decoder.decodeSerializableValue(Link.serializer())
+                result = Json.parse(Link.serializer(), raw)
             } catch (jpe: JsonParsingException) {
+                console.log("[Value.asLink] $jpe")
+                console.log("[Value.asLink] $raw")
             }
             return result
-        }
-
-        private fun logSource(decoder: Decoder) {
-            val dynDec = decoder.asDynamic()
-            val dynReader = dynDec["reader_0"]
-            val dynSource = dynReader["source_0"]
-            console.log(dynSource)
         }
 
     }

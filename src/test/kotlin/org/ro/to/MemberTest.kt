@@ -15,7 +15,6 @@ class MemberTest() {
     fun testParseLong() {
         val jsonStr = getJsonWith(1234567890)
         val actual = parse(jsonStr)
-        //FIXME using Longs eg. 123456789012 results in a NumberFormatException - is this due to Kotlin/KotlinJS differences?
         assertEquals(1234567890, actual.value!!.content as Number)
     }
 

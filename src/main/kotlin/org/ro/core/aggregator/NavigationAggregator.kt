@@ -25,9 +25,7 @@ class NavigationAggregator : BaseAggregator() {
         }
 
         if (serviceCount >= serviceTotal) {
-            if (isRendered) {
-                console.log("[NavigationAggregator.update] Unexpected MenuItem ${logEntry.url}")
-            } else {
+            if (!isRendered) {
                 UiManager.amendMenu()
                 isRendered = true
             }

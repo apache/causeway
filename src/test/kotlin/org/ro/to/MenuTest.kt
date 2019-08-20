@@ -22,7 +22,6 @@ class MenuTest : ToTest() {
         Menu.add(s2)
         //then
         val size: Int = Menu.filterUniqueMenuTitles().size
-        console.log("[Menu.uniqueMenuTitles().size: $size]")
         assertTrue(1 == size)
     }
 

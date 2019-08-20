@@ -2,17 +2,37 @@ package org.ro.to
 
 import com.github.snabbdom._set
 import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.json.Json
 import org.ro.IntegrationTest
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
 import org.ro.urls.ACTIONS_RUN_FIXTURE_SCRIPT
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @UnstableDefault
 class LinkTest : IntegrationTest() {
+
+    @Test
+    fun testParse() {
+        //given
+        val jsonStr = """{
+            "rel": "R",
+            "href": "H",
+            "method": "GET",
+            "type": "TY",
+            "title": "TI"
+        }"""
+
+        // when
+        val link = Json.parse(Link.serializer(), jsonStr)
+
+        // then
+        assertEquals("R", link.rel)
+    }
 
     @Test
     // IntegrationTest, assumes a server is running, furthermore expects the fingerPrint (PD94*) to be valid
@@ -43,4 +63,5 @@ class LinkTest : IntegrationTest() {
             assertTrue(!le.isError())
         }
     }
+
 }

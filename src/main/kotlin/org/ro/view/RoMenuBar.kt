@@ -5,8 +5,8 @@ import org.ro.core.MenuEntry
 import org.ro.core.UiManager
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
-import org.ro.view.table.TableFactory
 import org.ro.view.table.DynamicTable
+import org.ro.view.table.TableFactory
 import org.ro.view.table.el.EventLogTable
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
@@ -69,7 +69,6 @@ object RoMenuBar : Navbar() {
                 val menuLink = buildMenuAction(me.action.id)
                 val execLink = me.action.getInvokeLink()!!
                 menuLink.onClick {
-                    // console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
                     //TODO pass in action.id?
                     ActionAggregator().invoke(execLink)
                 }
