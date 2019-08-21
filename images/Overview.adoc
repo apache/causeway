@@ -1,3 +1,36 @@
+.Architecture Overview Diagram
+[plantuml,file="arc-overview.png"]
+--
+@startuml
+node Desktop <<client>>{
+component Chrome <<browser>> #Red-Green {
+component V8 <<"JS Runtime">> #f7df1e {
+    component KotlinJS [[https://github.com/JetBrains/kotlin/tree/master/js]] #8167FF-02AEFF {
+        component kotlinx.serialization as KS #DDE1F9/A9B4EF
+        component kvision [[https://rjaros.github.io/kvision]] #00AAD4/216778 {
+            component Bootstrap [[https://getbootstrap.com/]] #8F5ADC-31135B 
+            component "Font\nAwesome" [[https://fontawesome.com/]] #155592-1C7ED6
+            component Tabulator [[http://tabulator.info/]] #21441F|3DB549 
+            component Chart.js [[https://www.chartjs.org/]] #f27173  
+        }
+        component kroViz #8064A2-F79646
+        kroViz --> kvision : implemented\nusing
+        kroViz --> KS : implemented\nusing
+    } 
+}
+}
+}
+
+node server{
+    interface RestfulObjects as RO
+    component ApacheIsis<<NakedObjects>> [[https://isis.apache.org/]] #9BBB59/4F81BD
+}
+
+ApacheIsis -- RO
+kroViz --> RO : invoke\ \nuse  
+@enduml
+--
+
 .Overview Diagram
 [plantuml,file="uml-overview.png"]
 --
@@ -95,3 +128,4 @@ class ObjectList {
 }
 ObjectList *-- to.layout.Layout
 @enduml
+--

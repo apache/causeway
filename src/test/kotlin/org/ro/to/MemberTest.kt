@@ -13,21 +13,21 @@ class MemberTest() {
 
     @Test
     fun testParseLong() {
-        val jsonStr = getJsonWith(1234567890)
+        val jsonStr = buildJsonWith(1234567890)
         val actual = parse(jsonStr)
         assertEquals(1234567890, actual.value!!.content as Number)
     }
 
     @Test
     fun testParseInt() {
-        val jsonStr = getJsonWith(0)
+        val jsonStr = buildJsonWith(0)
         val actual = parse(jsonStr)
         assertEquals(0, actual.value!!.content as Int)
     }
 
     @Test
     fun testParseString() {
-        val jsonStr = getJsonWith("\"Object: Foo\"")
+        val jsonStr = buildJsonWith("\"Object: Foo\"")
         val actual = parse(jsonStr)
         assertEquals("className", actual.id)
         assertEquals("Object: Foo", (actual.value!!.content.toString()))
@@ -35,7 +35,7 @@ class MemberTest() {
 
     @Test
     fun testParseLink() {
-        val jsonStr = getJsonWith("""{"rel": "R", "href": "H", "method": "GET", "type": "TY", "title": "TI"}""")
+        val jsonStr = buildJsonWith("""{"rel": "R", "href": "H", "method": "GET", "type": "TY", "title": "TI"}""")
         val m = parse(jsonStr)
         assertEquals("className", m.id)
         val actual = m.value!!.content as Link
@@ -45,7 +45,7 @@ class MemberTest() {
 
     @Test
     fun testParseNull() {
-        val jsonStr = getJsonWith("null")
+        val jsonStr = buildJsonWith("null")
         val actual = parse(jsonStr)
         assertEquals("className", actual.id)
         assertEquals(null, actual.value)
@@ -63,12 +63,12 @@ class MemberTest() {
         return Json.parse(Member.serializer(), jsonStr)
     }
 
-    private fun getJsonWith(value: Any): String {
+    private fun buildJsonWith(value: Any): String {
         return """{
         "id": "className",
         "memberType": "property",
         "value": $value
     }"""
-
     }
+
 }
