@@ -42,10 +42,10 @@ TIP: Remote applications (here: [SEMAT](http://semat.ofbizian.com/)) can be used
 
 ![Remote Application](./images/SEMAT.png)
 
-#License
-Kotlin is distributed under the terms of the Apache License (Version 2.0). See [LICENSE](.LICENSE).
+# License
+kroViz is distributed under the terms of the Apache License (Version 2.0). See [LICENSE](.LICENSE).
 
-#Contributing
+# Contributing
 Contributions are welcome! Especially:
 * bug reports
 * code review
