@@ -1,7 +1,6 @@
-name: arch
-title: Archetypes
+name: simpleapp
+title: SimpleApp Example App
 version: master
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
-- modules/simpleapp/nav.adoc

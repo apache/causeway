@@ -12,10 +12,10 @@ content:
     branches: HEAD
     start_path: antora/components/rg
   - url: .
-    start_path: examples/apps/helloworld/doc
+    start_path: examples/apps/helloworld/_adoc
     branches: HEAD
   - url: .
-    start_path: examples/apps/simpleapp/doc
+    start_path: examples/apps/simpleapp/_adoc
     branches: HEAD
   - url: .
     branches: HEAD
