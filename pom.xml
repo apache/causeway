@@ -33,40 +33,23 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<modules>
+		<module>core</module>
+	</modules>
 
 	<profiles>
 		<profile>
-			<id>core</id>
+			<id>examples</id>
 			<activation>
+				<!--
+				only include within IDE as a convenience
+				-->
 				<property>
-					<name>!skip.core</name>
+					<name>idea.version</name>
 				</property>
 			</activation>
 			<modules>
 				<module>core</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>extensions</id>
-			<activation>
-				<property>
-					<name>!skip.extensions</name>
-				</property>
-			</activation>
-			<modules>
-				<module>extensions</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>examples</id>
-			<activation>
-				<property>
-					<name>!skip.examples</name>
-				</property>
-			</activation>
-			<modules>
 				<module>examples</module>
 			</modules>
 		</profile>
