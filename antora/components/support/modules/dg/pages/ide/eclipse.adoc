@@ -118,7 +118,7 @@ DataNucleus' enhancer uses the domain object model's own classpath to reference 
 So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
 See the section in xref:support:dg:hints-and-tips/datanucleus-enhancer.adoc[DataNucleus enhancer] for details of the contents of the `pom.xml`.
-Chances are it is already set up from running the xref:arch:helloworld:about.adoc[HelloWorld] or the xref:arch:simpleapp:about.adoc[SimpleApp] archetype.
+Chances are it is already set up from running the xref:helloworld:ROOT:about.adoc[HelloWorld] or the xref:arch:simpleapp:about.adoc[SimpleApp] archetype.
 
 
 Then, tell DataNucleus to use the project classpath:

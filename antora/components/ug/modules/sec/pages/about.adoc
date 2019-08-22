@@ -25,7 +25,7 @@ Isis provides an API for both authentication and authorization, and provides an 
 Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
 
 Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.
-The xref:arch:helloworld:about.adoc[HelloWorld] and xref:arch:simpleapp:about.adoc[SimpleApp] archetypes are both configured to use this realm.
+The xref:helloworld:ROOT:about.adoc[HelloWorld] and xref:arch:simpleapp:about.adoc[SimpleApp] archetypes are both configured to use this realm.
 
 Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
 Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.

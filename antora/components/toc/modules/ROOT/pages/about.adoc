@@ -16,7 +16,7 @@ include::_attributes.adoc[]
 
 | *Starter Apps*
 
-* xref:arch:helloworld:about.adoc[HelloWorld]
+* xref:helloworld:ROOT:about.adoc[HelloWorld]
 * xref:arch:simpleapp:about.adoc[SimpleApp]
 
 *Learning by Example*

@@ -26,7 +26,7 @@ We therefore recommend that you disable persistence-by-reachability by adding th
 isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
 ----
 
-This change has been made to both the xref:arch:helloworld:about.adoc[HelloWorld] and xref:arch:simpleapp:about.adoc[SimpleApp] archetypes.
+This change has been made to both the xref:helloworld:ROOT:about.adoc[HelloWorld] and xref:arch:simpleapp:about.adoc[SimpleApp] archetypes.
 
 If you do disable this feature, then you will (of course) need to ensure that you explicitly persist all entities using the `RepositoryService#persist(.)` or `RepositoryService#persistAndFlush(.)` methods.
 

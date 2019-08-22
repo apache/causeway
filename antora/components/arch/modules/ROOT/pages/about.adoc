@@ -3,7 +3,7 @@ include::_attributes.adoc[]
 
 Apache Isis provides two different Maven archetypes to use as a "quick start" for your applications.
 
-* the xref:arch:helloworld:about.adoc[helloworld] archetype is a single Maven module that contains the absolute minimum; there are not tests or fixture scripts, just a single entity and domain service
+* the xref:helloworld:ROOT:about.adoc[helloworld] archetype is a single Maven module that contains the absolute minimum; there are not tests or fixture scripts, just a single entity and domain service
 
 * the xref:arch:simpleapp:about.adoc[simpleapp] archetype is similar to "helloworld", however it provides more structure and guidance:
 
