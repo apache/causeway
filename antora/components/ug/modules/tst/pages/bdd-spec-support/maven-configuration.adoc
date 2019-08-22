@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-Apache Isis' BDD spec support is automatically configured if you use the xref:arch:simpleapp:about.adoc[SimpleApp archetype].
+Apache Isis' BDD spec support is automatically configured if you use the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype].
 To set it up manually, update the `pom.xml` of your domain object model module:
 
 [source,xml]

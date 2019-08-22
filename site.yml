@@ -11,18 +11,18 @@ content:
   - url: .
     branches: HEAD
     start_path: antora/components/rg
-#  - url: .
-#    start_path: examples/apps/helloworld/doc
-#    branches: HEAD
+  - url: .
+    start_path: examples/apps/helloworld/doc
+    branches: HEAD
+  - url: .
+    start_path: examples/apps/simpleapp/doc
+    branches: HEAD
   - url: .
     branches: HEAD
     start_path: antora/components/extensions
   - url: .
     branches: HEAD
     start_path: antora/components/demoapp
-  - url: .
-    branches: HEAD
-    start_path: antora/components/arch
   - url: .
     branches: HEAD
     start_path: antora/components/downloads

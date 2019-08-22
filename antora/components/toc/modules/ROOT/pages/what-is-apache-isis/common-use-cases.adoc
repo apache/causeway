@@ -22,7 +22,7 @@ Once you've sketched out your domain model, you can then either start-over using
 One of the original motivations for Apache Isis itself was to be able automatically generate a user interface for a domain object model.
 
 Apache Isis' has a pluggable architecture allowing different user interface technologies.
- The principal implementation (as configured by the xref:arch:simpleapp:about.adoc[SimpleApp archetype]) is the xref:ug:vw:about.adoc[Wicket viewer].
+ The principal implementation (as configured by the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]) is the xref:ug:vw:about.adoc[Wicket viewer].
   This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components.
 Some third-party components can be found in the (non-ASF) link:http://platform.incode.org[Incode Platform^].
 

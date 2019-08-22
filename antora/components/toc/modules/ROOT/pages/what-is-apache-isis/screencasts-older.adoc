@@ -81,7 +81,7 @@ Learn more xref:support:dg:ide/intellij.adoc[here]
 
 |Commands and Auditing (v1.6.0) +
 
-_Configuring the command and auditing add-on modules for the xref:arch:simpleapp:about.adoc[SimpleApp]._ +
+_Configuring the command and auditing add-on modules for the xref:simpleapp:ROOT:about.adoc[SimpleApp]._ +
 
 Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command and audit SPI modules
 
@@ -90,7 +90,7 @@ Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s 
 
 |Security (v1.6.0) +
 
-_Configuring the security add-on module for for the xref:arch:simpleapp:about.adoc[SimpleApp]._ +
+_Configuring the security add-on module for for the xref:simpleapp:ROOT:about.adoc[SimpleApp]._ +
 
 Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security SPI module.
 

@@ -131,7 +131,7 @@ Alternatively, you can xref:support:cgcom:verifying-releases.adoc#casting-a-vote
 
 == (Optional) Verifying binary artifacts
 
-You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:helloworld:ROOT:about.adoc[HelloWorld archetype] or the xref:arch:simpleapp:about.adoc[SimpleApp archetype] and running the resultant app.
+You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:helloworld:ROOT:about.adoc[HelloWorld archetype] or the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype] and running the resultant app.
 
 Configuring your local Maven install amounts to updating the `~/.m2/settings.xml` file:
 

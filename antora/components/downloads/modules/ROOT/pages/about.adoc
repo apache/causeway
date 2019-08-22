@@ -13,7 +13,7 @@ Use for prototyping or production.
 
 == Getting Started
 
-If you just want to get going quickly, we suggest using our xref:arch:simpleapp:about.adoc[Maven archetype].
+If you just want to get going quickly, we suggest using our xref:simpleapp:ROOT:about.adoc[Maven archetype].
 
 
 

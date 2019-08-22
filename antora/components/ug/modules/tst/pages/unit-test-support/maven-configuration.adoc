@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-Apache Isis' unit test support is automatically configured if you use the xref:helloworld:ROOT:about.adoc[HelloWorld] or the xref:arch:simpleapp:about.adoc[SimpleApp] archetypes.
+Apache Isis' unit test support is automatically configured if you use the xref:helloworld:ROOT:about.adoc[HelloWorld] or the xref:simpleapp:ROOT:about.adoc[SimpleApp] archetypes.
 To set it up manually, update the `pom.xml` of your domain object model module:
 
 [source,xml]
@@ -19,7 +19,7 @@ To set it up manually, update the `pom.xml` of your domain object model module:
 
 [NOTE]
 ====
-This can also be done by adding a dependency to `org.apache.isis.mavendeps:isis-mavendeps-testing` module; see the xref:arch:simpleapp:about.adoc[SimpleApp archetype].
+This can also be done by adding a dependency to `org.apache.isis.mavendeps:isis-mavendeps-testing` module; see the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype].
 ====
 
 
@@ -51,5 +51,5 @@ We also recommend that you configure the `maven-surefire-plugin` to pick up the 
 
 [NOTE]
 ====
-This can also be done using mavenmixins; see the xref:arch:simpleapp:about.adoc[SimpleApp archetype].
+This can also be done using mavenmixins; see the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype].
 ====

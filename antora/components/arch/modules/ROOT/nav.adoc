@@ -1,2 +1,0 @@
-* xref:about.adoc[Prerequisites]
-
