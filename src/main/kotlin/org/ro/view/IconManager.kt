@@ -9,17 +9,17 @@ object IconManager {
             "Find" to "fa-search",
             "List" to "fa-list",
             "Download" to "fa-download",
-            "Open" to "fa-book",     
-            "Run" to "fa-rocket",   
+            "Open" to "fa-book",
+            "Run" to "fa-rocket",
             "Simple" to "fa-cubes",
             "Configuration" to "fa-cog",
             "Manager" to "fa-manager",
-            "Switch" to "fa-power-off",   
+            "Switch" to "fa-power-off",
             "Hsql" to "fa-database",
             "Prototyping" to "fa-object-group",
             "Objects" to "fa-cubes",
             "Log" to "fa-history",
-            "Connect" to "fa-server",
+            "Connect" to "fa-plug",
             "Close" to "fa-times")
 
     fun find(query: String): String {

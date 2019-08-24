@@ -1,0 +1,45 @@
+.Development MindMap
+[plantuml,file="dev-mindmap.png"]
+--
+@startmindmap
++_ know\nhow
+--_ basics
+--- HTML
+--- CSS
+--- <&script>JavaScript
+--_ code
+--- Kotlin<&star>
+---- constructor
+---- default values
+---- named arguments
+---- extension functions
+---- companion object
+---- mutable lists
+---- init
+--- KVision
+--- Tabulator
+--- kotlinx.serialization
+++_ trouble\nshooting
++++ <&exclamation>CORS
++++ <&exclamation>Proxy settings
+++++ npm
+++++ git
+++++ gradle
+++_ build
++++ Node.js
++++ gradle
++++ npm
++++ Yarn
++++ webpack
++++ DCE
+++_ <&bug>debug
++++ Chrome
+++++ Plugins
++++ JavaScript
+++_ test
++++ Karma
++++ Broswerify
++++ ~~Mocha~~ 
+@endmindmap
+--
+~~
