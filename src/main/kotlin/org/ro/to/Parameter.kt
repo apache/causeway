@@ -33,16 +33,4 @@ class Parameter(val id: String,
         return null
     }
 
-    fun findIndexOfDefaultChoice(): Int {
-        val dcTitle = defaultChoice!!.title
-        var i = 0
-        for (c in choices) {
-            i++
-            if (c.title == dcTitle) {
-                return i
-            }
-        }
-        return 0
-    }
-
 }

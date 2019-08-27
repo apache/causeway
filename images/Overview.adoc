@@ -2,18 +2,18 @@
 [plantuml,file="arc-overview.png"]
 --
 @startuml
-node Desktop <<client>>{
+node Desktop <<client>>{ 
 component Chrome <<browser>> #Red-Green {
-component V8 <<"<JS Runtime>">>   #f7df1e {
-    component KotlinJS [[https://github.com/JetBrains/kotlin/tree/master/js]] #8167FF-02AEFF {
-        component kotlinx.serialization as KS #DDE1F9/A9B4EF
-        component kvision [[https://rjaros.github.io/kvision]] #00AAD4/216778 {
-            component Bootstrap [[https://getbootstrap.com/]] #8F5ADC-31135B
-            component "Font\nAwesome" [[https://fontawesome.com/]] #155592-1C7ED6
-            component Tabulator [[http://tabulator.info/]] #21441F|3DB549
-            component Chart.js [[https://www.chartjs.org/]] #f27173
+component V8 <<"<JS Runtime>">> #yellow {
+    component KotlinJS [[https://github.com/JetBrains/kotlin/tree/master/js]] #4BACC6 { 
+        component kotlinx.serialization as KS #4F81BD
+        component kvision [[https://rjaros.github.io/kvision]] #4F81BD {
+            component Bootstrap [[https://getbootstrap.com/]] #8064A2 
+            component "Font\nAwesome" [[https://fontawesome.com/]] #4BACC6 
+            component Tabulator [[http://tabulator.info/]] #9BBB59
+            component Chart.js [[https://www.chartjs.org/]] #C0504D  
         }
-        component kroViz #8064A2-F79646
+        component kroViz #F79646 
         kroViz --> kvision : implemented\nusing
         kroViz --> KS : implemented\nusing
     }
@@ -23,7 +23,7 @@ component V8 <<"<JS Runtime>">>   #f7df1e {
 
 node server{
     interface RestfulObjects as RO
-    component ApacheIsis<<NakedObjects>> [[https://isis.apache.org/]] #9BBB59/4F81BD
+    component ApacheIsis<<NakedObjects>> [[https://isis.apache.org/]] #F79646
 }
 
 ApacheIsis -- RO
@@ -75,7 +75,7 @@ ResponseHandler .> TransferObject : converts JSON into TO
 XHR -> EventStore
 
 
-package remote <<Cloud>> {
+package remote <<Node>> {
 interface RestfulObjects
     class ApacheIsis<<(A, #FF7700)Application>>
     class NakedObjects<<(A, #FF7700)Application>>
@@ -126,6 +126,23 @@ class ObjectList {
     -limit:int
     -layout:Layout
 }
-ObjectList *-- to.layout.Layout
+ObjectList *-- to.layout.Layout 
+
+note "<<Pattern>>\nEventSourcing" as PES
+EventStore .. PES
+PES .. LogEntry
+
+note "<<Pattern>>\nRedux" as PR
+PR .. PES
+PR .. Aggregator
+
+note "<<Pattern>>\nRemoteFacade" as PRF
+PRF .. RestfulObjects
+
+note "<<Pattern>>\nTransferObject" as PTO
+PTO .. TransferObject 
+
+note "<<Pattern>>\nAggregator" as PA
+PA .. Aggregator  
 @enduml
 --

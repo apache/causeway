@@ -17,13 +17,13 @@ import pl.treksoft.kvision.navbar.Nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
 
-object RoMenuBar : Navbar() {
+object RoMenuBar {
     private val nav = Nav()
+    val navbar = Navbar(type = NavbarType.FIXEDTOP)
 
     init {
-        type = NavbarType.FIXEDTOP
-        marginLeft = CssSize(-12, UNIT.px)
-        add(nav)
+        navbar.marginLeft = CssSize(-12, UNIT.px)
+        navbar.add(nav)
         val mainEntry = buildMainEntry()
         nav.add(mainEntry)
     }
@@ -65,16 +65,16 @@ object RoMenuBar : Navbar() {
     fun amendMenu() {
         for (title: String in Menu.filterUniqueMenuTitles()) {
             val dd = buildMenuEntry(title)
+            nav.add(dd)
             for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
                 val menuLink = buildMenuAction(me.action.id)
+                dd.add(menuLink)
                 val execLink = me.action.getInvokeLink()!!
                 menuLink.onClick {
                     //TODO pass in action.id?
                     ActionAggregator().invoke(execLink)
                 }
-                dd.add(menuLink)
             }
-            nav.add(dd)
         }
     }
 

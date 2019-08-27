@@ -49,7 +49,6 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     formatter = Formatter.DATETIME,
                     formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
                     width = "100"),
-            ColumnDefinition("offset", field = "offset", width = "100", align = Align.RIGHT),
             ColumnDefinition("duration", field = "duration", width = "100", align = Align.RIGHT),
             ColumnDefinition("cacheHits", field = "cacheHits", width = "100", align = Align.RIGHT),
             ColumnDefinition("Details",

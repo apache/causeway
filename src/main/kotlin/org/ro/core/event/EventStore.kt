@@ -4,7 +4,6 @@ import org.ro.core.UiManager
 import org.ro.core.aggregator.Aggregator
 import org.ro.handler.ResponseHandler
 import pl.treksoft.kvision.utils.observableListOf
-import kotlin.js.Date
 
 /**
  * Keeps a log of remote invocations and the responses.
@@ -16,12 +15,12 @@ import kotlin.js.Date
  */
 object EventStore {
     var log = observableListOf<LogEntry>()
-    var logStartTime: Long = 0L
+    var logStartTime: Int = 0
 
     private fun log(logEntry: LogEntry) {
         log.add(logEntry)
-        if (logStartTime == 0L) {
-            logStartTime = logEntry.start.toLong()
+        if (log.size == 1) {
+            logStartTime = logEntry.createdAt.getMilliseconds()
         }
     }
 
@@ -35,14 +34,12 @@ object EventStore {
 
     fun add(url: String) {
         val entry = LogEntry(url = url)
-        entry.createdAt = Date()
         log(entry)
         updateStatus(entry)
     }
 
     fun addView(title: String) {
         val entry = LogEntry(title = title)
-        entry.createdAt = Date()
         log(entry)
         updateStatus(entry)
     }

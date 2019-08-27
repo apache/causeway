@@ -2,6 +2,7 @@ package org.ro.core.event
 
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
+import org.ro.core.Session
 import org.ro.core.aggregator.Aggregator
 import org.ro.to.TransferObject
 import kotlin.js.Date
@@ -19,7 +20,8 @@ enum class EventState(val id: String, val iconName: String) {
 data class LogEntry(
         val url: String,
         val method: String? = "",
-        val request: String = "") {
+        val request: String = "",
+        @ContextualSerialization val createdAt: Date = Date()) {
     var state = EventState.INITIAL
     var title: String = ""
     var requestLength: Int = 0
@@ -33,12 +35,6 @@ data class LogEntry(
     }
 
     @ContextualSerialization
-    var createdAt = Date()
-
-    @ContextualSerialization
-    var start: Long = createdAt.getMilliseconds().toLong()
-
-    @ContextualSerialization
     var updatedAt: Date? = null
 
     @ContextualSerialization
@@ -47,10 +43,7 @@ data class LogEntry(
     private var fault: String? = null
 
     @ContextualSerialization
-    var offset: Long = 0L
-
-    @ContextualSerialization
-    var duration: Long = 0L
+    var duration: Int = 0
 
     var cacheHits = 0
     var aggregator: Aggregator? = null
@@ -63,17 +56,12 @@ data class LogEntry(
     }
 
     private fun calculate() {
-        duration = updatedAt!!.getMilliseconds() - start
-        offset = start - EventStore.logStartTime
-
-        if (duration < 0 || offset < 0) {
-            console.log("[LogEntry.calculate] duration/offset out of range")
-            console.log(this)
-        }
+        val date = Date()
+        updatedAt = date
+        duration = (date.getTime() - createdAt.getTime()).toInt()
     }
 
     fun setError(error: String) {
-        updatedAt = Date()
         calculate()
         fault = error
         state = EventState.ERROR
@@ -85,7 +73,6 @@ data class LogEntry(
     }
 
     fun setSuccess() {
-        updatedAt = Date()
         calculate()
         this.responseLength = response.length
         state = EventState.SUCCESS
@@ -125,8 +112,8 @@ data class LogEntry(
 
     private fun stripHostPort(url: String): String {
         var result = url
-        //TODO use value from Session
-        result = result.replace("http://localhost:8080/restful/", "")
+        val protocolHostPort = Session.url
+        result = result.replace(protocolHostPort + "restful/", "")
         result = removeHexCode(result)
         return result
     }

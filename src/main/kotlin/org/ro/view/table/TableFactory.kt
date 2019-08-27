@@ -7,8 +7,11 @@ import org.ro.to.MemberType
 import org.ro.to.TObject
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
+import pl.treksoft.kvision.tabulator.Align
 import pl.treksoft.kvision.tabulator.ColumnDefinition
+import pl.treksoft.kvision.tabulator.Formatter
 import pl.treksoft.kvision.utils.ObservableList
+import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.observableListOf
 
 /**
@@ -16,8 +19,29 @@ import pl.treksoft.kvision.utils.observableListOf
  */
 class TableFactory {
 
+    private val faFormatterParams = obj {
+        allowEmpty = true;
+        allowTruthy = true;
+        tickElement = "<i class='fa fa-square-o'></i>";
+        crossElement = "<i class='fa fa-check'></i>"
+    }
+
     fun buildColumns(members: Map<String, String>): List<ColumnDefinition<MemberExposer>> {
         val columns = mutableListOf<ColumnDefinition<MemberExposer>>()
+        // add a checkbox
+        val checkBox = ColumnDefinition<MemberExposer>(
+                "selected",   //TODO add attribute dynamically ? or do it when dynamise is called?
+                field = "key",
+                formatter = Formatter.TICKCROSS,
+                formatterParams = faFormatterParams,
+                align = Align.CENTER,
+                width = "100",
+                headerSort = false,
+                cellClick = { evt, cell ->
+                    evt.stopPropagation()
+                    showDetails(cell)
+                })
+        columns.add(checkBox)
         for (m in members) {
             val columnDefinition = when (m.value) {
                 "iconName" -> ColumnDefinition<MemberExposer>(
@@ -73,4 +97,11 @@ class TableFactory {
         )
         return map
     }
+
+    private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {
+        val row = cell.getRow()
+        val data = row.getData()
+        console.log("[FT.showDetails] $data")
+    }
+
 }

@@ -1,8 +1,6 @@
 package org.ro.view
 
 import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.TabPanel
 import pl.treksoft.kvision.panel.VPanel
 
@@ -10,7 +8,7 @@ object RoView : TabPanel() {
     private var tabCount = 0
 
     init {
-        marginTop = CssSize(-20, UNIT.px)
+       // marginTop = CssSize(-20, UNIT.px)
     }
 
     fun addTab(
