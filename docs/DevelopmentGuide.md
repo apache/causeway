@@ -152,6 +152,7 @@ https://gist.github.com/EudesSilva/0329645b9c258e0495544b8a5ccd1454
 
 
 # Toolchain
+* node js (https://nodejs.org/en/download/current/)
 * Apache Gradle 
 * Google Chrome (72.0.3626.81)
 * Moesif CORS Plugin (for Chrome)

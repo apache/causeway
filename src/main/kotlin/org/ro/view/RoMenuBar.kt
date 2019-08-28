@@ -18,16 +18,17 @@ import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
 
 object RoMenuBar {
+    var navbar: Navbar
     private val nav = Nav()
-    val navbar = Navbar(type = NavbarType.FIXEDTOP)
 
     init {
-        navbar.marginLeft = CssSize(-12, UNIT.px)
-        navbar.add(nav)
-        val mainEntry = buildMainEntry()
-        nav.add(mainEntry)
+        navbar = Navbar(type = NavbarType.FIXEDTOP) {
+            marginLeft = CssSize(-12, UNIT.px)
+            add(nav)
+            val mainEntry = buildMainEntry()
+            nav.add(mainEntry)
+        }
     }
-
 
     private fun buildMainEntry(): DropDown {
         val mainMenu = buildMenuEntry("", iconName = "fa-bars")

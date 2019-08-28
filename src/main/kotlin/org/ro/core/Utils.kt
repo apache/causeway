@@ -7,7 +7,6 @@ import pl.treksoft.kvision.panel.StackPanel
 object Utils {
 
     fun debug(value: Any?, throwable: Throwable? = null) {
-        //var st = kotlin.test.cu
         val message: String?
         if (value is String) {
             message = value

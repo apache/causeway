@@ -20,6 +20,7 @@ buildscript {
 
 plugins {
     id "com.moowork.grunt" version "1.2.0"
+//    id "org.sonarqube" version "2.7"
 }
 
 apply plugin: 'kotlin2js'

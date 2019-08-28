@@ -1,11 +1,11 @@
 package org.ro.core
 
-import org.ro.Application
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.MemberExposer
 import org.ro.core.model.ResultExposer
+import org.ro.view.RoMenuBar
 import org.ro.view.RoStatusBar
 import org.ro.view.RoView
 import org.ro.view.table.DynamicTable
@@ -41,7 +41,7 @@ object UiManager {
      */
 
     fun amendMenu() {
-        Application.menuBar.amendMenu()
+        RoMenuBar.amendMenu()
     }
 
     fun updateStatus(entry: LogEntry) {

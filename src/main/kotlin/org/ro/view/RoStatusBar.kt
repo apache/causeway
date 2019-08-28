@@ -9,7 +9,7 @@ import pl.treksoft.kvision.navbar.NavbarType
 import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
 
-object RoStatusBar : Navbar() {
+object RoStatusBar {
 
     private var urlLabel = Span()
     private var userLabel = Span()
@@ -17,9 +17,10 @@ object RoStatusBar : Navbar() {
         add(urlLabel)
         add(userLabel)
     }
+    var navbar: Navbar
 
     init {
-        navbar(type = NavbarType.FIXEDBOTTOM) {
+        navbar = Navbar(type = NavbarType.FIXEDBOTTOM) {
             height = CssSize(8, UNIT.mm)
             minHeight = CssSize(8, UNIT.mm)
             add(bar)
@@ -35,7 +36,7 @@ object RoStatusBar : Navbar() {
     fun update(le: LogEntry?) {
         urlLabel.content = le?.title
         urlLabel.title = le?.url
-        enableTooltip()
+        navbar.enableTooltip()
     }
 
 }

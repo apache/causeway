@@ -1,11 +1,10 @@
-<svg viewBox="0 0 3000 1200"
+<svg viewBox="0 0 3000 1300"
      xmlns="http://www.w3.org/2000/svg">
     <g id="crow"
-		display="none"
-				visibility="hidden"
->
+       display="none"
+       visibility="hidden">
         <path id="body"
-			stroke-width="10"
+              stroke-width="10"
               d="M 139.82,5.748
               C 127.22,5.7199 112.83,9.1168 96.113,16.965
               l 0.07813,-1.8711
@@ -29,16 +28,28 @@
                 cx="130" cy="40" r="12"
                 fill="white"/>
     </g>
-    <use href="#body" x="110" fill="#8064A2" stroke="#8064A2"/>
-    <use href="#eye" x="110"/>
-    <use href="#body" x="220" fill="#4F81BD" stroke="#4F81BD"/>
-    <use href="#eye" x="220"/>
-    <use href="#body" x="330" fill="#4BACC6" stroke="#4BACC6"/>
-    <use href="#eye" x="330"/>
-    <use href="#body" x="440" fill="#9BBB59" stroke="#9BBB59"/>
-    <use href="#eye" x="440"/>
-    <use href="#body" x="550" fill="#F79646" stroke="#F79646"/>
-    <use href="#eye" x="550"/>
-    <use href="#body" x="660" fill="#C0504D" stroke="#C0504D"/>
-    <use href="#eye" x="660"/>
+    <g>
+        <use href="#body" x="0" fill="#8064A2" stroke="#8064A2"/>
+        <use href="#eye" x="0"/>
+    </g>
+    <g>
+        <use href="#body" x="90" fill="#4F81BD" stroke="#4F81BD"/>
+        <use href="#eye" x="90"/>
+    </g>
+    <g>
+        <use href="#body" x="180" fill="#4BACC6" stroke="#4BACC6"/>
+        <use href="#eye" x="180"/>
+    </g>
+    <g>
+        <use href="#body" x="270" fill="#9BBB59" stroke="#9BBB59"/>
+        <use href="#eye" x="270"/>
+    </g>
+    <g>
+        <use href="#body" x="350" fill="#F79646" stroke="#F79646"/>
+        <use href="#eye" x="350"/>
+    </g>
+    <g>
+        <use href="#body" x="420" fill="#C0504D" stroke="#C0504D"/>
+        <use href="#eye" x="420"/>
+    </g>
 </svg>

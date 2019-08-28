@@ -1,14 +1,17 @@
 package org.ro.view
 
 import pl.treksoft.kvision.core.Component
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.TabPanel
 import pl.treksoft.kvision.panel.VPanel
 
-object RoView : TabPanel() {
+object RoView {
+    val tabPanel = TabPanel()
     private var tabCount = 0
 
     init {
-       // marginTop = CssSize(-20, UNIT.px)
+        tabPanel.marginTop = CssSize(48, UNIT.px)
     }
 
     fun addTab(
@@ -17,18 +20,18 @@ object RoView : TabPanel() {
 
         val icon = IconManager.find(title)
 
-        super.addTab(
+        tabPanel.addTab(
                 title,
                 panel,
                 icon,
                 image = null,
                 closable = true)
-        activeIndex = tabCount
+        tabPanel.activeIndex = tabCount
         tabCount += 1
     }
 
     fun removeTab(tab: VPanel) {
-        super.remove(tab)
+        tabPanel.remove(tab)
         tabCount--
     }
 
