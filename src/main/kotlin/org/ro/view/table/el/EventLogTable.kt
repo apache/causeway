@@ -65,12 +65,15 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     )
 
     init {
-        hPanel(FlexWrap.NOWRAP, alignItems = FlexAlignItems.CENTER, spacing = 20) {
+        hPanel(FlexWrap.NOWRAP,
+                alignItems = FlexAlignItems.CENTER,
+                spacing = 20) {
             padding = 10.px
+            paddingTop = 0.px
         }
 
         val options = TabulatorOptions(
-                height = "calc(100vh - 250px)",
+                height = "calc(100vh - 120px)",
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false

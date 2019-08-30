@@ -26,22 +26,23 @@ class TableFactory {
         crossElement = "<i class='fa fa-check'></i>"
     }
 
-    fun buildColumns(members: Map<String, String>): List<ColumnDefinition<MemberExposer>> {
+    fun buildColumns(members: Map<String, String>, withCheckBox: Boolean = false): List<ColumnDefinition<MemberExposer>> {
         val columns = mutableListOf<ColumnDefinition<MemberExposer>>()
-        // add a checkbox
-        val checkBox = ColumnDefinition<MemberExposer>(
-                "selected",   //TODO add attribute dynamically ? or do it when dynamise is called?
-                field = "key",
-                formatter = Formatter.TICKCROSS,
-                formatterParams = faFormatterParams,
-                align = Align.CENTER,
-                width = "100",
-                headerSort = false,
-                cellClick = { evt, cell ->
-                    evt.stopPropagation()
-                    showDetails(cell)
-                })
-        columns.add(checkBox)
+        if (withCheckBox) {
+            val checkBox = ColumnDefinition<MemberExposer>(
+                    title = "selected", //TODO add 'selected' attribute dynamically???
+                    field = "key",
+                    formatter = Formatter.TICKCROSS,
+                    formatterParams = faFormatterParams,
+                    align = Align.CENTER,
+                    width = "100",
+                    headerSort = false,
+                    cellClick = { evt, cell ->
+                        evt.stopPropagation()
+                        showDetails(cell)
+                    })
+            columns.add(checkBox)
+        }
         for (m in members) {
             val columnDefinition = when (m.value) {
                 "iconName" -> ColumnDefinition<MemberExposer>(

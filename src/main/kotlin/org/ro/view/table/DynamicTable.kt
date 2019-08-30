@@ -41,8 +41,7 @@ class DynamicTable(
                 persistenceMode = false
         )
 
-        tabulator(
-                model, options = options) {
+        tabulator(model, options = options) {
             marginTop = 0.px
             marginBottom = 0.px
             setEventListener<Tabulator<MemberExposer>> {
@@ -50,6 +49,7 @@ class DynamicTable(
                 }
             }
         }
+
     }
 
     fun build(logEntry: LogEntry): DropDown {

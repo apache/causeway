@@ -10,8 +10,7 @@
 --_ code
 --- Kotlin<&star>
 ---- constructor
----- default values
----- named arguments
+---- default/named arguments
 ---- extension functions
 ---- companion object
 ---- mutable lists
@@ -39,7 +38,7 @@
 ++_ test
 +++ Karma
 +++ Broswerify
-+++ ~~Mocha~~ 
++++ ~~Mocha~~
 @endmindmap
 --
 ~~
