@@ -15,17 +15,17 @@ class MemberExposer(val delegate: TObject) : Exposer {
     var iconName = "fa-star"
 
     fun dynamise(): dynamic {
-        val that = this.asDynamic()
+        val thys = this.asDynamic()
         for (m in delegate.members) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
                 val realValue = member.value
                 if (realValue != null) {
-                    that[member.id] = realValue.content
+                    thys[member.id] = realValue.content
                 }
             }
         }
-        return that
+        return thys
     }
 
     // eg. for dataNucleusId

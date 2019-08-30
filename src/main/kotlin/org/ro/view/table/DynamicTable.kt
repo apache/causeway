@@ -35,7 +35,7 @@ class DynamicTable(
         }
 
         val options = TabulatorOptions(
-                height = "calc(100vh - 120px)",
+                height = "calc(100vh - 128px)",
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false
