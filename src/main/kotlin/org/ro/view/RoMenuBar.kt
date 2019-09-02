@@ -5,7 +5,7 @@ import org.ro.core.MenuEntry
 import org.ro.core.UiManager
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
-import org.ro.view.table.DynamicTable
+import org.ro.view.table.RoTable
 import org.ro.view.table.TableFactory
 import org.ro.view.table.el.EventLogTable
 import pl.treksoft.kvision.core.CssSize
@@ -50,7 +50,7 @@ object RoMenuBar {
             val model = TableFactory().testData()
             val members = TableFactory().testMap()
             val columns = TableFactory().buildColumns(members)
-            UiManager.add(sample, DynamicTable(model, columns))
+            UiManager.add(sample, RoTable(model, columns))
         }
         mainMenu.add(dynTable)
 

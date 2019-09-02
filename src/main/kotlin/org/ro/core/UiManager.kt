@@ -3,12 +3,11 @@ package org.ro.core
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
-import org.ro.core.model.MemberExposer
-import org.ro.core.model.ResultExposer
+import org.ro.core.model.Exposer
 import org.ro.view.RoMenuBar
 import org.ro.view.RoStatusBar
 import org.ro.view.RoView
-import org.ro.view.table.DynamicTable
+import org.ro.view.table.RoTable
 import org.ro.view.table.TableFactory
 import org.ro.view.table.fr.FixtureResultTable
 import pl.treksoft.kvision.panel.VPanel
@@ -63,7 +62,7 @@ object UiManager {
     private fun handleDynamic(displayList: DisplayList) {
         val members = displayList.getMembers()
         val columns = TableFactory().buildColumns(members)
-        val panel = DynamicTable(displayList.getData() as List<MemberExposer>, columns)
+        val panel = RoTable(displayList.getData() as List<Exposer>, columns)
         add(displayList.title, panel)
         displayList.isRendered = true
     }
@@ -72,7 +71,7 @@ object UiManager {
     private fun handleFixtureResult(displayList: DisplayList) {
         val title: String = this::class.simpleName.toString()
         @Suppress("UNCHECKED_CAST")
-        val panel = FixtureResultTable(displayList.getData() as List<ResultExposer>)
+        val panel = FixtureResultTable(displayList.getData() as List<Exposer>)
         add(title, panel)
         displayList.isRendered = true
     }

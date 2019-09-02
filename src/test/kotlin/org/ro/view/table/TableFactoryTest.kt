@@ -1,6 +1,6 @@
 package org.ro.view.table
 
-import org.ro.core.model.MemberExposer
+import org.ro.core.model.Exposer
 import org.ro.to.Extensions
 import org.ro.to.Member
 import org.ro.to.MemberType
@@ -11,20 +11,20 @@ import pl.treksoft.kvision.utils.observableListOf
 class TableFactoryTest {
 
     //TODO how can this be tested?
-    fun testData(): ObservableList<MemberExposer> {
-        val answer = observableListOf<MemberExposer>()
+    fun testData(): ObservableList<Exposer> {
+        val answer = observableListOf<Exposer>()
         val m1 = Member(id = "m1", memberType = MemberType.PROPERTY.type)
         val m2 = Member(id = "m2", memberType = MemberType.PROPERTY.type)
         val map = mapOf("m1" to m1, "m2" to m2)
         val t1 = TObject(extensions = Extensions(), members = map)
-        val o1 = MemberExposer(t1)
+        val o1 = Exposer(t1)
         val d1 = o1.dynamise()
         d1["var1"] = "string1"
         d1["var2"] = 1
         answer.add(d1)
 
         val t2 = TObject(extensions = Extensions())
-        val o2 = MemberExposer(t2)
+        val o2 = Exposer(t2)
         val d2 = o2.asDynamic()
         d2["var1"] = "string2"
         d2["var2"] = 2
