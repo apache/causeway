@@ -37,7 +37,7 @@ class ActionTest {
 
         val invokeLink = action.getInvokeLink()
         assertNotNull(invokeLink)
-        val argList = invokeLink.arguments
+        val argList = invokeLink.arguments!!.asMap()
         assertNotNull(argList)
         assertEquals(2, argList.size)
 

@@ -47,7 +47,7 @@ class TableFactory {
             val columnDefinition = when (m.value) {
                 "iconName" -> ColumnDefinition<Exposer>(
                         "",
-                        field = m.value,
+                        field = "iconName",
                         width = "40",
                         formatterComponentFunction = { _, _, data ->
                             Button(text = "", icon = data.iconName, style = ButtonStyle.LINK).onClick {

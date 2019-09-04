@@ -9,7 +9,6 @@ import org.ro.view.RoStatusBar
 import org.ro.view.RoView
 import org.ro.view.table.RoTable
 import org.ro.view.table.TableFactory
-import org.ro.view.table.fr.FixtureResultTable
 import pl.treksoft.kvision.panel.VPanel
 
 /**
@@ -70,8 +69,10 @@ object UiManager {
     @Deprecated("use generic / dynamic table")
     private fun handleFixtureResult(displayList: DisplayList) {
         val title: String = this::class.simpleName.toString()
-        @Suppress("UNCHECKED_CAST")
-        val panel = FixtureResultTable(displayList.getData() as List<Exposer>)
+//        @Suppress("UNCHECKED_CAST")
+        val members = displayList.getMembers()
+        val columns = TableFactory().buildColumns(members)
+        val panel = RoTable(displayList.getData() as List<Exposer>, columns)
         add(title, panel)
         displayList.isRendered = true
     }

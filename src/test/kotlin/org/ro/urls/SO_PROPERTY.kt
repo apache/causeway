@@ -1,6 +1,6 @@
 package org.ro.urls
 
-object OBJECT_PROPERTY : Response(){
+object SO_PROPERTY : Response(){
     override val url = "http://localhost:8080/restful/objects/simple.SimpleObject/119/properties/notes"
     override val str = """{
         "id": "notes",

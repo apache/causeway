@@ -1,22 +1,25 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
+import org.ro.org.ro.to.Arguments
 
 @Serializable
 data class Link(val rel: String = "",
                 val method: String = Method.GET.operation,
                 val href: String = "",
                 val type: String = "",
-                val args: Map<String, Argument> = emptyMap(),
-                val arguments: Map<String, Argument> = emptyMap(),
+//                val args: Map<String, Argument> = emptyMap(),
+//                val arguments: Map<String, Argument> = emptyMap(),
+                val args: Arguments? = null,         //TODO authors@ro.org "args" should be changed to "arguments"
+                val arguments: Arguments? = null,
                 val title: String = "") : TransferObject {
 
     private fun argMap(): Map<String, Argument>? {
-        if (args.isNotEmpty()) {
-            return args
+        if (args != null && args.isNotEmpty()) {
+            return args.asMap()
         }
-        if (arguments.isNotEmpty()) {
-            return arguments
+        if (arguments != null && arguments.isNotEmpty()) {
+            return arguments.asMap()
         }
         return null
     }
@@ -24,10 +27,9 @@ data class Link(val rel: String = "",
     fun setArgument(key: String?, value: String?) {
         if (key != null) {
             val k = key.toLowerCase()
-            val v = value!!
-            val arg = arguments.get(k)!!
+            val arg = argMap()!!.get(k)!!
             arg.key = k
-            arg.value = v
+            arg.value = value!!
         }
     }
 
@@ -54,4 +56,5 @@ data class Link(val rel: String = "",
         val start = title.indexOf(":")
         return title.substring(start + 1, title.length)
     }
+
 }
