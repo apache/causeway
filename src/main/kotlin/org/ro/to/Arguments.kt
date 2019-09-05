@@ -18,7 +18,7 @@ data class Arguments(
         val name: Argument? = null,
         val script: Argument? = null,
         val parameters: Argument? = null
-        ) : TransferObject {
+) : TransferObject {
 
     fun isNotEmpty(): Boolean {
         return (argument != null || name != null || script != null)
@@ -27,16 +27,16 @@ data class Arguments(
     fun asMap(): Map<String, Argument> {
         val map = mutableMapOf<String, Argument>()
         if (argument != null) {
-            map.put("single", Argument(value = argument.toString()))
+            map["single"] = Argument(value = argument.toString())
         }
         if (name != null) {
-            map.put("name", name)
+            map["name"] = name
         }
         if (script != null) {
-            map.put("script", script)
+            map["script"] = script
         }
         if (parameters != null) {
-            map.put("parameters", parameters)
+            map["parameters"] = parameters
         }
         return map
     }
