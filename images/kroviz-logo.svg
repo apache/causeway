@@ -4,7 +4,7 @@
        display="none"
        visibility="hidden">
         <path id="body"
-              stroke-width="10"
+              stroke-width="1"
               d="M 139.82,5.748
               C 127.22,5.7199 112.83,9.1168 96.113,16.965
               l 0.07813,-1.8711
@@ -29,27 +29,27 @@
                 fill="white"/>
     </g>
     <g>
-        <use href="#body" x="0" fill="#8064A2" stroke="#8064A2"/>
+        <use href="#body" x="0" fill="#8064A2" stroke="#8064A2" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="0"/>
     </g>
     <g>
-        <use href="#body" x="90" fill="#4F81BD" stroke="#4F81BD"/>
+        <use href="#body" x="90" fill="#4F81BD" stroke="#4F81BD" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="90"/>
     </g>
     <g>
-        <use href="#body" x="180" fill="#4BACC6" stroke="#4BACC6"/>
+        <use href="#body" x="180" fill="#4BACC6" stroke="#4BACC6" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="180"/>
     </g>
     <g>
-        <use href="#body" x="270" fill="#9BBB59" stroke="#9BBB59"/>
+        <use href="#body" x="270" fill="#9BBB59" stroke="#9BBB59" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="270"/>
     </g>
     <g>
-        <use href="#body" x="350" fill="#F79646" stroke="#F79646"/>
+        <use href="#body" x="350" fill="#F79646" stroke="#F79646" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="350"/>
     </g>
     <g>
-        <use href="#body" x="420" fill="#C0504D" stroke="#C0504D"/>
+        <use href="#body" x="420" fill="#C0504D" stroke="#C0504D" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="420"/>
     </g>
 </svg>
