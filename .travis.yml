@@ -4,5 +4,6 @@ before_install:
   - chmod +x gradlew
   - npm install webpack
   - npm install webpack-cli
+  - npm install webpack-bundle
 
 script: ./gradlew test
