@@ -9,7 +9,7 @@ import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.require
 import pl.treksoft.kvision.utils.px
 
-class BasicTab : VPanel() {
+class ImagePanel : VPanel() {
     init {
         this.marginTop = 10.px
         this.minHeight = 400.px
