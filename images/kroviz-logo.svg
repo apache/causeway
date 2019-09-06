@@ -1,4 +1,4 @@
-<svg viewBox="0 0 3000 1300"
+<svg viewBox="0 0 1162 512"
      xmlns="http://www.w3.org/2000/svg">
     <g id="crow"
        display="none"
@@ -52,4 +52,5 @@
         <use href="#body" x="420" fill="#C0504D" stroke="#C0504D" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="420"/>
     </g>
+    <!--rect height="512" width="1162" style="stroke-width:10;stroke:rgb(255,0,0);fill:none;"/-->
 </svg>
