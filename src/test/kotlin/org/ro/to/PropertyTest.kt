@@ -6,6 +6,7 @@ import org.ro.urls.FR_OBJECT_PROPERTY_
 import org.ro.urls.SO_PROPERTY
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @UnstableDefault
 class PropertyTest {
@@ -33,6 +34,7 @@ class PropertyTest {
         //            }
         val arguments = modifyLink.arguments!!.asMap()
   //      assertEquals(1, arguments.size)
+        assertNotNull(arguments)
     }
 
 }
