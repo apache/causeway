@@ -37,7 +37,7 @@ data class Value(
             try {
                 val nss = makeNullable(JsonElement.serializer())
                 jse = decoder.decode(nss)!!
-                val jsct =jse.content
+                val jsct = jse.content
                 when {
                     jse.isNull -> {
                         return Value(null)

@@ -2,6 +2,7 @@ package org.ro.core
 
 import kotlinext.js.asJsObject
 import pl.treksoft.kvision.panel.StackPanel
+
 //import java.lang.Throwable
 
 object Utils {

@@ -51,10 +51,10 @@ class ListAggregator(private val actionTitle: String) : BaseAggregator() {
 
     private fun handleObject(obj: TObject) {
         list.addData(obj)
-            val link = obj.getLayoutLink()
-            if (link != null) {
-                invoke(link)
-            }
+        val link = obj.getLayoutLink()
+        if (link != null) {
+            invoke(link)
+        }
     }
 
     private fun handleLayout(layout: Layout) {

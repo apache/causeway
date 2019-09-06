@@ -22,7 +22,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
 
     private fun toString(jsonStr: String): String {
         val s1 = JSON.parse<String>(jsonStr)
-        return  JSON.stringify(s1, null, 2)
+        return JSON.stringify(s1, null, 2)
     }
 
 }

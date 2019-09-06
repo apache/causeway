@@ -18,7 +18,7 @@ class RoDialog(
         val label: String,
         val items: List<FormItem>,
         val command: Command) :
-        Modal(  caption = label,
+        Modal(caption = label,
                 closeButton = true,
                 animation = true,
                 size = ModalSize.LARGE

@@ -39,5 +39,4 @@ data class TObject(val links: List<Link> = emptyList(),
     }
 
 
-
 }
