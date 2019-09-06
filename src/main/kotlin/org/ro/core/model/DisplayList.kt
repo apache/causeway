@@ -67,4 +67,14 @@ class DisplayList(val title: String) {
         return members
     }
 
+    fun getTitle(): String {
+        if (data.size > 0) {
+            val exposer = data.get(0)
+            val obj = exposer.delegate
+            return obj.title
+        } else {
+            return "no data yet"
+        }
+    }
+
 }

@@ -84,7 +84,7 @@ class Exposer(val delegate: TObject) {
 
     var result: String
         set(arg: String) {
-            console.log("[RE.result.set] tabulator requires setter $arg")
+    //        console.log("[RE.result.set] tabulator requires setter $arg")
         }
         get() {
             var answer = "dummy result"
@@ -97,7 +97,7 @@ class Exposer(val delegate: TObject) {
 
     var resultClass: String
         set(arg: String) {
-            console.log("[RE.resultClass.set] tabulator requires setter $arg")
+     //       console.log("[RE.resultClass.set] tabulator requires setter $arg")
         }
         get() {
             var answer = ""
@@ -112,7 +112,7 @@ class Exposer(val delegate: TObject) {
 
     var resultKey: String
         set(arg: String) {
-            console.log("[RE.resultKey.set] tabulator requires setter $arg")
+   //         console.log("[RE.resultKey.set] tabulator requires setter $arg")
         }
         get() {
             var answer = "dummy resultKey"

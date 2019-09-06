@@ -51,30 +51,18 @@ object UiManager {
     }
 
     fun handleView(displayList: DisplayList) {
-        if (displayList.title.contains("FixtureScript", ignoreCase = false)) {
-            handleFixtureResult(displayList)
-        } else {
-            handleDynamic(displayList)
-        }
-    }
-
-    private fun handleDynamic(displayList: DisplayList) {
-        val members = displayList.getMembers()
-        val columns = TableFactory().buildColumns(members)
-        val panel = RoTable(displayList.getData() as List<Exposer>, columns)
-        add(displayList.title, panel)
-        displayList.isRendered = true
-    }
-
-    @Deprecated("use generic / dynamic table")
-    private fun handleFixtureResult(displayList: DisplayList) {
-        val title: String = this::class.simpleName.toString()
-//        @Suppress("UNCHECKED_CAST")
+        val title: String = extractTitle(displayList)
         val members = displayList.getMembers()
         val columns = TableFactory().buildColumns(members)
         val panel = RoTable(displayList.getData() as List<Exposer>, columns)
         add(title, panel)
         displayList.isRendered = true
+    }
+
+    private fun extractTitle(displayList: DisplayList): String {
+        val strList = displayList.title.split("/")
+        val len = strList.size
+        return strList.get(len - 2)
     }
 
 }
