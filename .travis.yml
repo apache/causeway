@@ -2,6 +2,6 @@ language: node_js
 
 before_install:
   - chmod +x gradlew
-  - npm install --save-dev webpack-cli@latest
+  - npm install --save-dev webpack-bundle@0.9.32
 
 script: ./gradlew test
