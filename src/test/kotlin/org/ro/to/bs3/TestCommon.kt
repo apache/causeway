@@ -22,6 +22,7 @@ package org.ro.org.ro.to.bs3
 
 //package nl.adaptivity.xml.serialization
 
+/*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.MissingFieldException
 import kotlinx.serialization.UnstableDefault
@@ -88,7 +89,7 @@ class TestCommon {
     }
 
     abstract class TestPolymorphicBase<T>(value: T, serializer: KSerializer<T>, serialModule: SerialModule)
-        :TestBase<T>(value, serializer, serialModule, DataType.XML(serialModule) { autoPolymorphic = true }) {
+        : TestBase<T>(value, serializer, serialModule, DataType.XML(serialModule) { autoPolymorphic = true }) {
 
         abstract val expectedNonAutoPolymorphicXML: String
 
@@ -270,7 +271,7 @@ class TestCommon {
         @Test
         fun invalidXmlDoesNotDeserialize() {
             assertFailsWith<UnknownXmlFieldException> {
-                XML.parse(serializer, invalidXml)
+                DataType.XML.parse(serializer, invalidXml)
             }
         }
     }
@@ -327,7 +328,7 @@ class TestCommon {
         override val expectedNonAutoPolymorphicXML: String get() = "<Container label=\"lbl\"><member type=\".ChildA\"><value valueA=\"data\"/></member></Container>"
     }
 
-    class AClassWithMultipleChildren: TestPolymorphicBase<Container2>(
+    class AClassWithMultipleChildren : TestPolymorphicBase<Container2>(
             Container2("name2", listOf(ChildA("data"), ChildB("xxx"))),
             Container2.serializer(),
             baseModule
@@ -342,7 +343,7 @@ class TestCommon {
 
     }
 
-    class ASimplerClassWithUnspecifiedChildren: TestPolymorphicBase<Container3>(
+    class ASimplerClassWithUnspecifiedChildren : TestPolymorphicBase<Container3>(
             Container3("name2", listOf(ChildA("data"), ChildB("xxx"), ChildA("yyy"))),
             Container3.serializer(),
             baseModule
@@ -366,7 +367,7 @@ class TestCommon {
 
     }
 
-    class AContainerWithSealedChild: TestBase<SealedSingle>(
+    class AContainerWithSealedChild : TestBase<SealedSingle>(
             SealedSingle("mySealed", SealedA("a-data")),
             SealedSingle.serializer()
     ) {
@@ -376,7 +377,7 @@ class TestCommon {
             get() = "{\"name\":\"mySealed\",\"member\":{\"data\":\"a-data\",\"extra\":\"2\"}}"
     }
 
-    class AContainerWithSealedChildren: TestPolymorphicBase<Sealed>(
+    class AContainerWithSealedChildren : TestPolymorphicBase<Sealed>(
             Sealed("mySealed", listOf(SealedA("a-data"), SealedB("b-data"))),
             Sealed.serializer(),
             sealedModule
@@ -391,3 +392,4 @@ class TestCommon {
 
 
 }
+    */

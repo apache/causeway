@@ -19,7 +19,4 @@ class Property(
         var isRenderedAsDayBefore: Boolean,
         var typicalLength: Int,
         //@XmlAttribute(name = "unchanging")
-        var isUnchanging: Boolean
-) {
-
-}
+        var isUnchanging: Boolean)

@@ -3,7 +3,7 @@ buildscript {
     ext.production = (findProperty('prod') ?: 'false') == 'true'
 
     repositories {
-        jcenter()
+        maven { url = "http://bintray.com/" }
         maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url = 'https://plugins.gradle.org/m2/' }
         maven { url = 'https://kotlin.bintray.com/kotlinx' }
@@ -14,7 +14,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
         classpath "org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}"
         classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:${frontendPluginVersion}"
-        classpath "gradle.plugin.com.javagen:schema-gen:0.9.0"
+//        classpath "net.devrieze:xmlutil-serialization:0.12.0.0"
     }
 }
 
@@ -28,9 +28,10 @@ if (production) {
 }
 apply plugin: 'org.jetbrains.kotlin.frontend'
 apply plugin: 'kotlinx-serialization'
+//apply plugin: 'xmlutil-serialization-js'
 
 repositories {
-    jcenter()
+    maven { url = "http://bintray.com/" }
     maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
     maven { url = 'https://kotlin.bintray.com/kotlinx' }
     maven { url = 'https://dl.bintray.com/kotlin/kotlin-js-wrappers' }
@@ -57,6 +58,7 @@ dependencies {
     compile "pl.treksoft:kvision-moment:${kvisionVersion}"
     compile "pl.treksoft:kvision-tabulator:${kvisionVersion}"
     testCompile "org.jetbrains.kotlin:kotlin-test-js:${kotlinVersion}"
+//    compile "net.devrieze:xmlutil-serialization:0.12.0.0"
 }
 
 kotlinFrontend {
@@ -96,9 +98,9 @@ task pot(type: GruntTask) {
 
 task po2json(type: GruntTask) {
     args = ["default"]
-        inputs.dir(file('translation'))
-        outputs.dir(file('build/js'))
-        outputs.dir(file('build/kotlin-js-min/main'))
+    inputs.dir(file('translation'))
+    outputs.dir(file('build/js'))
+    outputs.dir(file('build/kotlin-js-min/main'))
 }
 
 pot.dependsOn 'installGrunt'

@@ -4,6 +4,4 @@ class ClearFixVisible(
         val cssDisplay: CssDisplay,   // required = true
         size: Size,
         cssClass: String
-) : Bs3ClearFix(size, cssClass) {
-
-}
+) : Bs3ClearFix(size, cssClass)

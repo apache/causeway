@@ -4,7 +4,7 @@ data class Collection(
         var named: String,
         var describedAs: String,
         var sortedBy: String,
-        protected var action: List<Action>? = null,
+        protected var action: List<Action>? = ArrayList(),
         var metadataError: String,
         var link: Link,
         var cssClass: String,
@@ -14,15 +14,4 @@ data class Collection(
         var id: String,
 //@XmlAttribute(name = "namedEscaped")
         var isNamedEscaped: Boolean,
-        var paged: Int
-
-) {
-
-    init {
-        if (action == null) {
-            action = ArrayList()
-        }
-    }
-
-
-}
+        var paged: Int)

@@ -5,6 +5,4 @@ class Row(
         var metadataError: String,
         var id: String,
         cssClass: String
-) : Bs3ElementAbstract(cssClass) {
-
-}
+) : Bs3ElementAbstract(cssClass)

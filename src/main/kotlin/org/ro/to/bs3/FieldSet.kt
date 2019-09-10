@@ -6,10 +6,7 @@ class FieldSet(
         var metadataError: String,
         var name: String,
         var id: String,
-        //   @XmlAttribute(name = "unreferencedActions")
+//   @XmlAttribute(name = "unreferencedActions")
         var isUnreferencedActions: Boolean,
 //    @XmlAttribute(name = "unreferencedProperties")
-        var isUnreferencedProperties: Boolean
-) {
-
-}
+        var isUnreferencedProperties: Boolean)

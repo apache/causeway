@@ -7,6 +7,4 @@ class TabGroup(
         var isCollapseIfOne: Boolean,
         //@XmlAttribute(name = "unreferencedCollections")
         var isUnreferencedCollections: Boolean,
-        cssClass: String) : Bs3ElementAbstract(cssClass) {
-
-}
+        cssClass: String) : Bs3ElementAbstract(cssClass)

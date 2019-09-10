@@ -15,7 +15,4 @@ class ServiceAction(
         var bookmarking: BookmarkPolicy,
         //@XmlAttribute(name = "cssClass")
         var cssClass: String,
-        var cssClassFa: String
-) {
-
-}
+        var cssClassFa: String)

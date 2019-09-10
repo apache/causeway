@@ -46,7 +46,6 @@ TIP: Remote applications (here: [SEMAT](http://semat.ofbizian.com/)) can be used
 
 # Contributing
 Contributions are welcome! Especially:
-* fixing Travis build
 * bug reports
 * code review
 * tests increasing the code coverage

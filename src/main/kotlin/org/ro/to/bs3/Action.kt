@@ -1,15 +1,5 @@
 package org.ro.to.bs3
 
-import org.ro.to.bs3.BookmarkPolicy
-import org.ro.to.bs3.PromptStyle
-
-/*
-@XmlType(name = "action", namespace = "http://isis.apache.org/applib/layout/component", propOrder = {
-    "named",
-    "describedAs",
-    "metadataError",
-    "link"
-}) */
 data class Action(
         val named: String? = null,
         val describedAs: String? = null,
@@ -25,6 +15,4 @@ data class Action(
         val isNamedEscaped: Boolean? = null,
         val position: Position? = null,
         var promptStyle: PromptStyle? = null
-) {
-
-}
+)

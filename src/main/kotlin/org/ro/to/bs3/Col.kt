@@ -19,6 +19,4 @@ data class Col(
         var isUnreferencedCollections: Boolean,
         override var size: Size,
         override var cssClass: String
-) : Bs3RowContent(size, cssClass) {
-
-}
+) : Bs3RowContent(size, cssClass)

@@ -12,6 +12,4 @@ class DomainObject(
         var cssClassFa: String,
         var cssClassFaPosition: CssClassFaPosition,
 //    @XmlAttribute(name = "namedEscaped")
-        var isNamedEscaped: Boolean) {
-
-}
+        var isNamedEscaped: Boolean)
