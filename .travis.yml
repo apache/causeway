@@ -1,7 +1,9 @@
 language: node_js
 
+node_js:
+  - "lts/*"
+
 before_install:
   - chmod +x gradlew
-  - npm install --save-dev webpack-bundle@0.9.32
 
 script: ./gradlew test
