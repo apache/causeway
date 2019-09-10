@@ -128,8 +128,10 @@ object EventStore {
     }
 
     private fun areEquivalent(searchUrl: String, compareUrl: String, allowedDiff: Int = 1): Boolean {
-        val searchList: List<String> = searchUrl.split("/")
-        val compareList: List<String> = compareUrl.split("/")
+        val sl = removeHexCode(searchUrl)
+        val cl = removeHexCode(compareUrl)
+        val searchList: List<String> = sl.split("/")
+        val compareList: List<String> = cl.split("/")
         if (searchList.size != compareList.size) {
             return false
         }
@@ -146,8 +148,26 @@ object EventStore {
                 }
             }
         }
+        console.log("[EventStore.areEquivalent] $diffCnt")
         return diffCnt <= allowedDiff
     }
+
+    //TODO C&P from LogEntry.removeHexCode -> apply extract refactoring
+    private fun removeHexCode(input: String): String {
+        var output = ""
+        val list: List<String> = input.split("/")
+        //split string by "/" and remove parts longer than 40chars
+        for (s in list) {
+            output += "/"
+            output += if (s.length < 40) {
+                s
+            } else {
+                "..."
+            }
+        }
+        return output
+    }
+
 
     //TODO function has a side effect - refactor
     fun isCached(url: String): Boolean {

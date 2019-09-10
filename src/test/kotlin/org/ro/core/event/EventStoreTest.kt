@@ -125,4 +125,22 @@ class EventStoreTest {
         assertNotNull(le7)            //9
         assertEquals(le7.url, pNotes) //10
     }
+
+    @Test
+    fun testFindEquivalent_ConfigurationLayout() {
+        EventStore.reset()
+        val ol1 = "http://localhost:8080/restful/objects/isisApplib.ConfigurationProperty/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI_Pgo8Y29uZmlndXJhdGlvblByb3BlcnR5PgogICAgPGtleT5pc2lzLnBlcnNpc3Rvci5kYXRhbnVjbGV1cy5pbXBsLmRhdGFudWNsZXVzLmNhY2hlLmxldmVsMi50eXBlPC9rZXk-CiAgICA8dmFsdWU-bm9uZTwvdmFsdWU-CjwvY29uZmlndXJhdGlvblByb3BlcnR5Pgo=/object-layout"
+        val ol2 = "http://localhost:8080/restful/objects/isisApplib.ConfigurationProperty/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI_Pgo8Y29uZmlndXJhdGlvblByb3BlcnR5PgogICAgPGtleT5pc2lzLnJlZmxlY3Rvci52YWxpZGF0b3Iuc2VydmljZUFjdGlvbnNPbmx5PC9rZXk-CiAgICA8dmFsdWU-dHJ1ZTwvdmFsdWU-CjwvY29uZmlndXJhdGlvblByb3BlcnR5Pgo=/object-layout"
+
+        // construct list with urls
+        EventStore.add(ol1)
+        EventStore.add(ol2)
+
+        val le1 = EventStore.find(ol1)
+        assertNotNull(le1)  //1
+
+        val le2 = EventStore.findEquivalent(ol2)
+        assertNotNull(le2)  //2
+        assertEquals(ol1, le2.url)  //3
+    }
 }
