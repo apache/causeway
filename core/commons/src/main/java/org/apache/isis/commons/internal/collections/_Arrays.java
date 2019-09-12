@@ -224,6 +224,14 @@ public final class _Arrays {
     
     // -- MODIFICATION
     
+    /**
+     * Returns a new array of size {@code array.length - 1} with the element at {@code array[index]} removed. 
+     * 
+     * @param <T>
+     * @param array
+     * @param index
+     * @return
+     */
     public static <T> T[] removeByIndex(T[] array, int index) {
         if(array==null || array.length<=1) {
             throw new IllegalArgumentException("Array must be of lenght 1 or larger.");

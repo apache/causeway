@@ -23,8 +23,19 @@ package org.apache.isis.commons.collections;
  */
 public enum Cardinality {
 
+    /**
+     * The container is empty.
+     */
     ZERO,
+    
+    /**
+     * The container has exactly one element.
+     */
     ONE,
+    
+    /**
+     * The container has at least two elements.
+     */
     MULTIPLE
     ;
 

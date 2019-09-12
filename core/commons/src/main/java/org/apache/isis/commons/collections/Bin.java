@@ -41,28 +41,59 @@ import lombok.val;
 
 /**
  * 
- * Immutable 'multi-set'. 
+ * Immutable 'multi-set', that is particularly designed to conveniently deal 
+ * with the 3 possible states of {@link Cardinality}. 
+ * <p>
+ * A {@code Bin} must not contain elements equal to {@code null}.
  * 
  * @param <T>
  * @since 2.0
  */
 public interface Bin<T> extends Iterable<T> {
 
+    /**
+     * @return this Bin's cardinality
+     */
     Cardinality getCardinality();
+    
+    /**
+     * @return number of elements this Bin contains 
+     */
     int size();
 
+    /**
+     * @return Stream of elements this Bin contains
+     */
     Stream<T> stream();
 
+    /**
+     * @return this Bin's first element or an empty Optional if no such element
+     */
     Optional<T> getFirst();
+    
+    /**
+     * @return this Bin's single element or an empty Optional if this Bin has any cardinality other than ONE 
+     */
     Optional<T> getSingleton();
 
     // -- FACTORIES
 
+    /**
+     * Returns an empty {@code Bin}.
+     * @param <T>
+     */
     @SuppressWarnings("unchecked") // this is how the JDK does it for eg. empty lists
     public static <T> Bin<T> empty() {
         return (Bin<T>) Bin_Empty.INSTANCE;
     }
 
+    /**
+     * Returns either a {@code Bin} with the given {@code element} or an empty {@code Bin} if the
+     * {@code element} is {@code null}.
+     * @param <T>
+     * @param element
+     * @return non-null
+     */
     public static <T> Bin<T> ofNullable(@Nullable T element) {
         if(element==null) {
             return empty();
@@ -70,18 +101,36 @@ public interface Bin<T> extends Iterable<T> {
         return Bin_Singleton.of(element);
     }
 
+    /**
+     * Returns either a {@code Bin} with the given {@code element} or throws if the
+     * {@code element} is {@code null}.
+     * @param <T>
+     * @param element
+     * @return non-null
+     * @throws NullPointerException if {@code element} is {@code null}
+     */
     public static <T> Bin<T> ofSingleton(T element) {
         requires(element, "element");
         return Bin_Singleton.of(element);
     }
 
+    /**
+     * Returns either a {@code Bin} with all the elements from given {@code collection} 
+     * or an empty {@code Bin} if the {@code collection} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * @param <T>
+     * @param collection
+     * @return non-null
+     */
     public static <T> Bin<T> ofCollection(@Nullable Collection<T> collection) {
 
         if(_NullSafe.size(collection)==0) {
             return empty();
         }
 
-        val maxSize = collection.size();
+        // this is just an optimization, to pre-allocate a reasonable list size,
+        // specifically targeted at small list sizes
+        val maxSize = Math.min(collection.size(), 1024); 
 
         val nonNullElements = collection.stream()
                 .filter(_NullSafe::isPresent)
@@ -104,6 +153,14 @@ public interface Bin<T> extends Iterable<T> {
         return Bin_Multiple.of(nonNullElements);
     }
 
+    /**
+     * Returns either a {@code Bin} with all the elements from given {@code stream} 
+     * or an empty {@code Bin} if the {@code stream} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * @param <T>
+     * @param stream
+     * @return non-null
+     */
     public static <T> Bin<T> ofStream(@Nullable Stream<T> stream) {
 
         if(stream==null) {
@@ -129,6 +186,14 @@ public interface Bin<T> extends Iterable<T> {
         return Bin_Multiple.of(nonNullElements);
     }
 
+    /**
+     * Returns either a {@code Bin} with all the elements from given {@code instance} 
+     * or an empty {@code Bin} if the {@code instance} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * @param <T>
+     * @param instance
+     * @return non-null
+     */
     public static <T> Bin<T> ofInstance(@Nullable Instance<T> instance) {
         if(instance==null || instance.isUnsatisfied()) {
             return empty();
@@ -148,6 +213,13 @@ public interface Bin<T> extends Iterable<T> {
 
     // -- OPERATORS
 
+    /**
+     * Returns a {@code Bin} with all the elements from this {@code Bin},
+     * that are accepted by the given {@code predicate}. If {@code predicate}
+     * is {@code null} <em>all</em> elements are accepted.
+     * @param predicate - if absent accepts all
+     * @return non-null
+     */
     public default Bin<T> filter(@Nullable Predicate<? super T> predicate) {
         if(predicate==null || isEmpty()) {
             return this;
@@ -174,20 +246,15 @@ public interface Bin<T> extends Iterable<T> {
         return ofCollection(filteredElements);
     }
 
-    public static <T> Bin<T> concat(@Nullable Bin<T> bin, @Nullable T variant) {
-        if(bin==null || bin.isEmpty()) {
-            return ofNullable(variant);
-        }
-        if(variant==null) {
-            return bin;
-        }
-        // at this point: bin is not empty and variant is not null
-        val newSize = bin.size() + 1;
-        val union = bin.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
-        union.add(variant);
-        return Bin_Multiple.of(union);
-    }
-
+    /**
+     * Returns a {@code Bin} with all the elements from this {@code Bin}
+     * 'transformed' by the given {@code mapper} function. Any resulting elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Bin}.
+     * 
+     * @param <R>
+     * @param mapper - if absent throws if this {@code Bin} is non-empty 
+     * @return non-null
+     */
     default <R> Bin<R> map(Function<? super T, R> mapper) {
 
         if(isEmpty()) {
@@ -204,7 +271,32 @@ public interface Bin<T> extends Iterable<T> {
 
         return ofCollection(mappedElements);
     }
+    
+    // -- CONCATENATION
 
+    /**
+     * Returns a {@code Bin} with all the elements from given {@code bin} joined by 
+     * the given {@code element}. If any of given {@code bin} or {@code element} are {@code null}
+     * these do not contribute any elements and are ignored.
+     * @param <T>
+     * @param bin - nullable
+     * @param element - nullable
+     * @return non-null
+     */
+    public static <T> Bin<T> concat(@Nullable Bin<T> bin, @Nullable T element) {
+        if(bin==null || bin.isEmpty()) {
+            return ofNullable(element);
+        }
+        if(element==null) {
+            return bin;
+        }
+        // at this point: bin is not empty and variant is not null
+        val newSize = bin.size() + 1;
+        val union = bin.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
+        union.add(element);
+        return Bin_Multiple.of(union);
+    }
+    
     // -- TRAVERSAL
 
     @Override
