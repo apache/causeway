@@ -14,21 +14,29 @@ include::_attributes.adoc[]
 * xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
 
-| *Getting Started*
+| *Starter Apps*
 
-* xref:arch:helloworld:about.adoc[HelloWorld archetype]
-* xref:arch:simpleapp:about.adoc[SimpleApp archetype]
+* xref:helloworld:ROOT:about.adoc[HelloWorld]
+* xref:simpleapp:ROOT:about.adoc[SimpleApp]
+
+*Learning by Example*
 
 * link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic Tutorial]
+* *xref:demoapp:ROOT:about.adoc[Demo App]*
 
 
-|*Developer Resources:*
+|*Releases*
+
+ * xref:downloads:rn:about.adoc[Release Notes]
+ * xref:downloads:mn:about.adoc[Migration Notes]
+
+*Developer Resources*
 
 * *xref:developer-resources/cheat-sheet.adoc[Cheat Sheet]*
 * xref:developer-resources/icons.adoc[Icons]
 
 
-|*User Guides:*
+|*User Guides*
 
 * *xref:ug:fun:about.adoc[Fundamentals]*
 *  xref:ug:vw:about.adoc[Wicket Viewer]
@@ -39,7 +47,7 @@ include::_attributes.adoc[]
 *  xref:ug:btb:about.adoc[Beyond the Basics]
 
 
-|*Reference Guides:*
+|*Reference Guides*
 
 * *xref:rg:ant:about.adoc[Annotations]*
 * *xref:rg:svc:about.adoc[Domain Services]*
@@ -49,11 +57,16 @@ include::_attributes.adoc[]
 *  xref:rg:fis:about.adoc[Framework Internal Services]
 
 
-|*Releases:*
+|*Extensions*
 
-* xref:downloads:rn:about.adoc[Release Notes]
-* xref:downloads:mn:about.adoc[Migration Notes]
-
+* Testing & Prototyping
+** xref:ext:fixtures:about.adoc[Fixtures]
+** xref:ext:specsupport:about.adoc[(BDD) Spec Support]
+* Modules
+**  xref:ext:secman:about.adoc[Security Manager]
+**  xref:ext:viewer-wicket-excel:about.adoc[Excel Download (Wicket)]
+* Values Types
+**  xref:ext:asciidoc:about.adoc[Asciidoc], xref:ext:markdown:about.adoc[Markdown]
 
 |*Get involved*
 
@@ -70,7 +83,7 @@ include::_attributes.adoc[]
 
 
 
-|*Going Deeper:*
+|*Going Deeper*
 
 * xref:going-deeper/articles-and-presentations.adoc[Articles, Conferences, Podcasts]
 * xref:going-deeper/books.adoc[Books]
@@ -84,11 +97,11 @@ Other academia:
 
 |*Third party* footnoteref:[ASF, Not Apache Software Foundation projects.]
 
-*Libraries:*
+*Libraries*
 
 * https://platform.incode.org[Incode Platform]
 
-*Example Apps:*
+*Example Apps*
 
 * https://github.com/estatio/estatio[Estatio]
 * https://github.com/incodehq/contactapp[ContactApp]
@@ -99,7 +112,7 @@ Other academia:
 * https://github.com/incodehq/incode-camel[Incode Camel App]
 * https://github.com/isisaddons/isis-app-quickstart[Quickstart]
 
-*Experiments:*
+*Experiments*
 
 * https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]

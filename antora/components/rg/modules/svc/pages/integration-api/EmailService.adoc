@@ -177,7 +177,7 @@ and these properties may optionally be configured (each has a default to use gma
 
 These configuration properties can be specified either in `isis.properties` or in an xref:ug:btb:deployment/externalized-configuration.adoc[external configuration file], or programmatically using the xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`].
 
-TODO: v2: confirm this is the case.
+// TODO: v2: confirm this is the case.
 
 Configuration properties can also be specified as system properties.
 For example, if you create a test email account on gmail, you can configure the service using:

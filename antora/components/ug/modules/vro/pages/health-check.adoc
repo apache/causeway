@@ -49,7 +49,7 @@ Moreover (unless the `HealthCheckService` implementation uses the `WrapperFactor
 
 The `/restful/health` path must be specified as a "passThru" in `web.xml` so that no authentication challenge is issued.
 
-TODO: v2: this has changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+// TODO: v2: this has changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 
 [source,xml]
 .web.xml

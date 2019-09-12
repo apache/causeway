@@ -3,7 +3,8 @@
 include::_attributes.adoc[]
 
 
-Object titles can often be quite long if the intention is to uniquely identify the object.  While this is appropriate for the object view, it can be cumbersome within tables.
+Object titles can often be quite long if the intention is to uniquely identify the object.
+While this is appropriate for the object view, it can be cumbersome within tables.
 
 If an object's title is specified with from `@Title` annotation then the Wicket viewer will (for parented collections) automatically "contextualize" a title by excluding the part of the title corresponding to a reference to the owning (parent) object.
 
@@ -33,7 +34,7 @@ public class Product {
 
 and where the `Order` class references both `Customer` and `Product`.
 
-The `Order`'s might involve each of these:
+The ``Order``'s might involve each of these:
 
 [source,java]
 ----
@@ -48,11 +49,13 @@ public class Order {
 }
 ----
 
-In this case, if we view a `Customer` with its collection of ``Order``s, then in that parented collection's table the customer's property will be automatically excluded from the title of the `Order` (but it would show the product).  Conversely, if a `Product` is viewed then its collection of ``Order``s would suppress product (but would show the customer).
+In this case, if we view a `Customer` with its collection of ``Order``s, then in that parented collection's table the customer's property will be automatically excluded from the title of the `Order` (but it would show the product).
+Conversely, if a `Product` is viewed then its collection of ``Order``s would suppress product (but would show the customer).
 
 [TIP]
 ====
-This feature is a close cousin of the `@PropertyLayout(hidden=Where.REFERENCES_PARENT)` annotation, which will cause the property itself to be hidden as a column in the table. An Isis idiom is therefore:
+This feature is a close cousin of the `@PropertyLayout(hidden=Where.REFERENCES_PARENT)` annotation, which will cause the property itself to be hidden as a column in the table.
+An Apache Isis idiom is therefore:
 
 [source,java]
 ----
@@ -60,7 +63,7 @@ public class Order {
     @Title(sequence="1")
     @PropertyLayout(hidden=Where.REFERENCES_PARENT)
     public Customer getCustomer() { /* ... */ }
-    ...
+    // ...
 }
 ----
 
@@ -70,5 +73,5 @@ The above annotations mean that titles usually "just work", altering according t
 
 [TIP]
 ====
-It is also possible to configure the Wicket viewer to xref:ug:vw:configuration-properties/presentation.adoc[abbreviate titles or suppress them] completely.
+It is also possible to configure the Wicket viewer to xref:ug:vw:configuration-properties.adoc#presentation.[abbreviate titles or suppress them] completely.
 ====

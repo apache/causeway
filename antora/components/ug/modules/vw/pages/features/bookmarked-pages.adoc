@@ -15,14 +15,10 @@ Bookmarking is automatic; whenever a bookmarkable object/action is visited, then
 
 == Screenshots
 
-The following screenshot, taken from https://github.com/isisaddons/isis-app-todoapp[Isisaddons example todoapp] (not ASF) shows how the bookmarks are listed in a sliding panel.
+The following screenshot (nb: using a pre 1.8.0 version of the xref:ug:vw:about.adoc[Wicket viewer] UI), taken from https://github.com/isisaddons/isis-app-todoapp[Isisaddons example todoapp] (not ASF), shows how the bookmarks are listed in a sliding panel.
 
 image::bookmarked-pages/panel.png[width="800px",link="{imagesdir}/bookmarked-pages/panel.png"]
 
-[NOTE]
-====
-Note that these screenshots show an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
-====
 
 Note how the list contains both domain objects and an action ("not yet complete").
 

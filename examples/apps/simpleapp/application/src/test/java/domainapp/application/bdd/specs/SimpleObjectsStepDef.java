@@ -66,9 +66,7 @@ public class SimpleObjectsStepDef extends SpringIntegrationTest {
             txTemplate.getTransactionManager().rollback(status);
         };
 
-        fixtureScripts.runBuilderScript(SimpleObject_persona.BANG.builder());
-        fixtureScripts.runBuilderScript(SimpleObject_persona.BAR.builder());
-        fixtureScripts.runBuilderScript(SimpleObject_persona.BAZ.builder());
+		fixtureScripts.runPersonas(SimpleObject_persona.BANG, SimpleObject_persona.BAR, SimpleObject_persona.BAZ);
 
         status.flush();
     } 

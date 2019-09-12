@@ -106,7 +106,7 @@ mvn test -Dskip.isis-validate
 
 == Example of failure
 
-In the xref:arch:simpleapp:about.adoc[SimpleApp] application the `SimpleObject` defines an `updateName` action.
+In the xref:simpleapp:ROOT:about.adoc[SimpleApp] application the `SimpleObject` defines an `updateName` action.
 This has a supporting method:
 
 

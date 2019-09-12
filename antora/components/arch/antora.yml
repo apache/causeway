@@ -1,8 +1,0 @@
-name: arch
-title: Maven Archetypes
-version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc
-- modules/helloworld/nav.adoc
-- modules/simpleapp/nav.adoc

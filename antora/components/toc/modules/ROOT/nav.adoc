@@ -7,8 +7,8 @@
 
 * Getting Started
 
-** xref:arch:helloworld:about.adoc[HelloWorld archetype]
-** xref:arch:simpleapp:about.adoc[SimpleApp archetype]
+** xref:helloworld:ROOT:about.adoc[HelloWorld archetype]
+** xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]
 ** link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic Tutorial]
 
 

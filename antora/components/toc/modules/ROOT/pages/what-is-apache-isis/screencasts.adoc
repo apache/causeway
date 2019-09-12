@@ -45,7 +45,7 @@ Searching and using the Apache Isis docs
 
 
 |link:https://www.youtube.com/watch?v=OTNHR5EdAs8[001^] +
-Generating an app using the xref:arch:simpleapp:about.adoc[SimpleApp archetype]
+Generating an app using the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]
 
 |x||||||||||
 

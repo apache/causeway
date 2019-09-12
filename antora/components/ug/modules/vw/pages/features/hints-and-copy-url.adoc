@@ -15,18 +15,15 @@ The copy URL and hinting is automatic.
 
 == Screenshots
 
-The following screenshots are taken from the [Estatio](https://github.com/estatio/estatio) application.
+The following screenshots are taken from the https://github.com/estatio/estatio[Estatio] application.
 
 === Copy URL
 
-This screenshot shows the copy URL button (top right):
+This screenshot (nb: using a pre 1.8.0 version of the xref:ug:vw:about.adoc[Wicket viewer] UI) shows the copy URL button (top right):
 
 image::copy-link/010-copy-link-button.png[width="800px",link="{imagesdir}/copy-link/010-copy-link-button.png"]
 
-[NOTE]
-====
-Note that these screenshots show an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
-====
+
 
 Clicking on this button brings up a dialog with the URL preselected:
 

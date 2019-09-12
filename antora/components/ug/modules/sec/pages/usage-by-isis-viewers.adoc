@@ -100,7 +100,7 @@ As you can see, none of these should be considered production-quality.
 
 The strategy is configured in `web.xml`; for example:
 
-TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+// TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 
 [source,xml]
 ----
@@ -131,7 +131,7 @@ TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead 
 
 The above filter must then be chained before the servlet that actually handles the REST requests:
 
-TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+// TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 
 [source,xml]
 ----
@@ -189,7 +189,7 @@ public class CustomRestfulObjectsApplication extends RestfulObjectsApplication {
 
 * Register your application class in `web.xml` instead of the default: +
 +
-TODO: v2: this may have changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+// TODO: v2: this may have changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 +
 [source,xml]
 ----

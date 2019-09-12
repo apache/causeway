@@ -24,10 +24,7 @@ The following screenshots are taken from the Isis addons example https://github.
 
 image::blob-attachments/010-attachment-field-940.png[width="800px",link="{imagesdir}/blob-attachments/010-attachment-field.png"]
 
-[NOTE]
-====
-Note that these screenshots show an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
-====
+Note that this screenshot show an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
 
 
 === Edit mode

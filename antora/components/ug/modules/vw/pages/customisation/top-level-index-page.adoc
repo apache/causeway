@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 If the user visits the root of the webapp (eg http://localhost:8080[]), then a top-level index page can specified.
 This is a static file that typically has hyperlinks to the available resources available (eg the Wicket viewer at `/wicket/`, the Swagger UI is bound to `/swagger-ui`, the Restful at `/restful/`).
 
-The archetypes provide an example in the `about/index.html` file (relative to `src/main/webapp`).
+The example apps provide an example in the `about/index.html` file (relative to `src/main/webapp`).
 This is configured using the `web.xml`:
 
 

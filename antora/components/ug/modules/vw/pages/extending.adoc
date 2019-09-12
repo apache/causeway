@@ -5,14 +5,17 @@ include::_attributes.adoc[]
 
 The Wicket viewer allows you to customize the GUI in several (progressively more sophisticated) ways:
 
-* by xref:ug:vw:customisation/tweaking-css-classes.adoc[tweaking the UI using CSS]
-* by xref:ug:vw:customisation/custom-javascript.adoc[tweaking the UI using Javascript]
-* by writing a xref:ug:vw:extending/custom-bootstrap-theme.adoc[custom bootstrap theme]
-* by xref:ug:vw:extending/replacing-page-elements.adoc[replacing elements of the page] using the `ComponentFactory` interface
-* by implementing xref:ug:vw:extending/custom-pages.adoc[replacement page implementations] for the standard page types
+* the xref:ug:vw:customisation.adoc[customisation] chapter described:
 
-The first two of these options are discussed in the xref:ug:vw:about.adoc[Wicket viewer] chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
+** by xref:ug:vw:customisation/tweaking-css-classes.adoc[tweaking the UI using CSS]
+** by xref:ug:vw:customisation/custom-javascript.adoc[tweaking the UI using Javascript]
 
-The chapter wraps up with a technique for prototyping, allowing user/passwords to be specified as query arguments.
+* in this chapter we have a number of heavier-weight approaches:
+
+** by writing a xref:ug:vw:extending/custom-bootstrap-theme.adoc[custom bootstrap theme]
+** by xref:ug:vw:extending/replacing-page-elements.adoc[replacing elements of the page] using the `ComponentFactory` interface
+** by implementing xref:ug:vw:extending/custom-pages.adoc[replacement page implementations] for the standard page types
+
+The chapter also includes a technique useful when prototyping, allowing xref:ug:vw:extending/login-via-query-args-prototyping.adoc[user/passwords to be specified as query arguments].
 
 

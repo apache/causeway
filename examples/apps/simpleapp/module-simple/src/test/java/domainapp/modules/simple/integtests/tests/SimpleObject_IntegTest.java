@@ -49,7 +49,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     @BeforeEach
     public void setUp() {
         // given
-        simpleObject = fixtureScripts.runBuilderScript(SimpleObject_persona.FOO.builder());
+        simpleObject = fixtureScripts.runPersona(SimpleObject_persona.FOO);
     }
 
     public static class Name extends SimpleObject_IntegTest {

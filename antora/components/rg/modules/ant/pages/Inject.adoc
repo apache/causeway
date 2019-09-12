@@ -27,7 +27,7 @@ public class Customer {
     OrderRepository orders;                    // <2>
 }
 ----
-<1> an alternative implementation would be to implement `findRecentOrders()` as a xref:ug:fun:how-tos/contributed-members.adoc[contributed action].
+<1> an alternative implementation would be to implement `findRecentOrders()` as a xref:ug:fun:programming-model/mixins/contributed-action.adoc[contributed action].
 <2> we recommend default (rather than `private`) visibility so that unit tests can easily mock out the service
 
 

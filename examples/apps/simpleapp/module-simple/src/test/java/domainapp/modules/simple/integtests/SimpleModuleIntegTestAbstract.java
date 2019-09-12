@@ -18,17 +18,16 @@
  */
 package domainapp.modules.simple.integtests;
 
+import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstractWithFixtures;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import org.apache.isis.extensions.fixtures.IsisIntegrationTestAbstactWithFixtures;
 
 @SpringBootTest(
-        classes = SimpleModuleManifestForTesting.class, 
+        classes = SimpleModuleManifestForTesting.class,
         properties = {
                 "isis.objects.editing=false"
         })
-public abstract class SimpleModuleIntegTestAbstract extends IsisIntegrationTestAbstactWithFixtures {
-
+public abstract class SimpleModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
 
 }
 

@@ -259,12 +259,18 @@ For example:
 
 [source,java]
 ----
-public List<Order> findOrders( /* ... */ ) {
-    javax.jdo.PersistenceManager pm = isisJdoSupport.getPersistenceManager();
+public class Orders {
 
-    // ...
+    public List<Order> findOrders( /* ... */ ) {
+        javax.jdo.PersistenceManager pm = isisJdoSupport.getPersistenceManager();
 
-    return someListOfOrders;
+        // ...
+
+        return someListOfOrders;
+    }
+
+    @Inject
+    IsisJdoSupport isisJdoSupport;
 }
 ----
 

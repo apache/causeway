@@ -351,20 +351,26 @@ public abstract class FixtureScripts extends AbstractService {
 
     @Programmatic
     public void run(final FixtureScript... fixtureScriptList) {
-
-        val singleScript = toSingleScript(fixtureScriptList);
-        val parameters = (String)null;
-
-        transactionService.executeWithinTransaction(()->{
-            runFixtureScript(singleScript, parameters);	
-        });
-
+    	
+    	val singleScript = toSingleScript(fixtureScriptList);
+    	val parameters = (String)null;
+    	
+    	transactionService.executeWithinTransaction(()->{
+    		runFixtureScript(singleScript, parameters);	
+    	});
     }
 
     @Programmatic
-    public <T> T runPersona(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
-        val builderScript = persona.builder();
-        return runBuilderScript(builderScript);
+    public <T> void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
+        for (PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaWithBuilderScript : personaScripts) {
+            runPersona(personaWithBuilderScript);
+        }
+    }
+
+    @Programmatic
+    public <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> persona) {
+        final BuilderScriptAbstract<T> fixtureScript = persona.builder();
+        return runBuilderScript(fixtureScript);
     }
 
     /**
@@ -374,13 +380,12 @@ public abstract class FixtureScripts extends AbstractService {
      * @return
      */
     @Programmatic
-    public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
-
+    public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
         return transactionService.executeWithinTransaction(()->{
             return runBuilderScriptNonTransactional(builderScript);
         });
     }
-    
+
     /**
      * Runs the builderScript without its own transactional boundary.<br>
      * The caller is responsible to provide a transactional context/boundary.
@@ -536,6 +541,13 @@ public abstract class FixtureScripts extends AbstractService {
     public void runFixtureScript(final FixtureScript... fixtureScriptList) {
         run(fixtureScriptList);
     }
-    
+
+    /**
+     * @deprecated renamed to {@link #runBuilder(BuilderScriptAbstract)}
+     */
+    @Programmatic
+    public <T> T runBuilderScript(final BuilderScriptAbstract<T> builderScript) {
+        return runBuilder(builderScript);
+    }
 
 }
