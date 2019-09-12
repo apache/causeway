@@ -22,11 +22,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.application.manifest.SimpleAppManifest;
 
@@ -36,8 +33,6 @@ import domainapp.application.manifest.SimpleAppManifest;
 @SpringBootApplication
 @Import({
     SimpleAppManifest.class,
-    IsisBootWebWicket.class,
-    IsisBootSecurityShiro.class
 })
 public class SimpleApp extends SpringBootServletInitializer {
 

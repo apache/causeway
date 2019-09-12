@@ -49,8 +49,8 @@ import domainapp.modules.simple.SimpleModule;
 @Configuration
 @PropertySources({
     @PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
-    @PropertySource(IsisPresets.HsqlDbInMemory),
-    @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.H2InMemory),
+    //@PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.DataNucleusAutoCreate),
 })
 @Import({
@@ -75,7 +75,7 @@ public class SimpleAppManifest {
     public WebAppConfigBean webAppConfigBean() {
         return WebAppConfigBean.builder()
                 .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-                .brandLogoHeader("/images/gift_48.png")
+                .brandLogoHeader("/images/apache-isis/logo-48x48.png")
                 .applicationCss("css/application.css")
                 .applicationJs("scripts/application.js")
                 .applicationName("Apache Isis Simple App")
