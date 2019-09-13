@@ -18,12 +18,10 @@
  */
 package domainapp.modules.simple;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "module")
+//@XmlRootElement(name = "module")
 public class SimpleModule /*extends ModuleAbstract*/ {
 
-    //FIXME[2112] needs migration
+    //XXX migrated from
     //    @Override
     //    public FixtureScript getTeardownFixture() {
     //        return new TeardownFixtureAbstract2() {
@@ -35,9 +33,14 @@ public class SimpleModule /*extends ModuleAbstract*/ {
     //    }
 
     public static class PropertyDomainEvent<S,T>
-    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
+    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {
+        private static final long serialVersionUID = 1L;}
+    
     public static class CollectionDomainEvent<S,T>
-    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {}
+    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {
+        private static final long serialVersionUID = 1L;}
+    
     public static class ActionDomainEvent<S> extends
-    org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
+    org.apache.isis.applib.events.domain.ActionDomainEvent<S> {
+        private static final long serialVersionUID = 1L;}
 }

@@ -361,8 +361,8 @@ public abstract class FixtureScripts extends AbstractService {
 
     @SuppressWarnings("unchecked")
     @Programmatic
-    public <T> void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
-        for (PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaWithBuilderScript : personaScripts) {
+    public final void runPersonas(@SuppressWarnings("rawtypes") final PersonaWithBuilderScript ... personaScripts) {
+        for (PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> personaWithBuilderScript : personaScripts) {
             runPersona(personaWithBuilderScript);
         }
     }
