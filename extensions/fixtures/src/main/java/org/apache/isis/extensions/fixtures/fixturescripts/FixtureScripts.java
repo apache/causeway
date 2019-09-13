@@ -220,6 +220,7 @@ public abstract class FixtureScripts extends AbstractService {
     // -- fixtureScriptList (lazily built)
 
     private List<FixtureScript> fixtureScriptList;
+    
     @Programmatic
     public List<FixtureScript> getFixtureScriptList() {
         if(fixtureScriptList == null) {
@@ -231,31 +232,33 @@ public abstract class FixtureScripts extends AbstractService {
     private List<FixtureScript> findAndInstantiateFixtureScripts() {
         return findFixtureScriptSubTypesInPackage().stream()
                 .filter(fixtureScriptCls -> {
-                    final String packageName = fixtureScriptCls.getPackage().getName();
+                    val packageName = fixtureScriptCls.getPackage().getName();
                     // redundant check if ClassDiscoveryService2 in use because already filtered out
                     return packageName.startsWith(getPackagePrefix());
                 })
                 .map(this::newFixtureScript)
-                .filter(Objects::nonNull).
-                sorted((o1, o2) -> Comparator
+                .filter(Objects::nonNull)
+                .sorted(Comparator
                         .comparing(FixtureScript::getFriendlyName)
                         .thenComparing(FixtureScript::getQualifiedName)
-                        .compare(o1, o2))
+                        )
                 .collect(Collectors.toList());
     }
 
     private Set<Class<? extends FixtureScript>> findFixtureScriptSubTypesInPackage() {
 
         val packagePrefix = getPackagePrefix();
+        
+
+        System.out.println("####### searching " + packagePrefix);
 
         return serviceRegistry.streamRegisteredBeansOfType(FixtureScript.class)
                 .map(beanAdapter->beanAdapter.getBeanClass())
                 .map(type->_Casts.<Class<? extends FixtureScript>>uncheckedCast(type))
+                .peek(type->{System.out.println("!!!!!!!!!!!! " + type);})                
                 .filter(type->type.getPackage().getName().startsWith(packagePrefix))
                 .collect(Collectors.toCollection(HashSet::new));
     }
-
-
 
     private FixtureScript newFixtureScript(final Class<? extends FixtureScript> fixtureScriptCls) {
         try {
@@ -360,6 +363,7 @@ public abstract class FixtureScripts extends AbstractService {
     	});
     }
 
+    @SuppressWarnings("unchecked")
     @Programmatic
     public <T> void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
         for (PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaWithBuilderScript : personaScripts) {
@@ -370,7 +374,7 @@ public abstract class FixtureScripts extends AbstractService {
     @Programmatic
     public <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> persona) {
         final BuilderScriptAbstract<T> fixtureScript = persona.builder();
-        return runBuilderScript(fixtureScript);
+        return runBuilder(fixtureScript);
     }
 
     /**
@@ -405,7 +409,7 @@ public abstract class FixtureScripts extends AbstractService {
 
     @Programmatic
     public FixtureScript findFixtureScriptFor(final Class<? extends FixtureScript> fixtureScriptClass) {
-        final List<FixtureScript> fixtureScripts = getFixtureScriptList();
+        val fixtureScripts = getFixtureScriptList();
         for (final FixtureScript fs : fixtureScripts) {
             if(fixtureScriptClass.isAssignableFrom(fs.getClass())) {
                 return fs;

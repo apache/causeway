@@ -29,7 +29,6 @@ import org.apache.isis.extensions.fixtures.api.WithPrereqs;
 
 import lombok.Getter;
 
-@Programmatic
 public abstract class BuilderScriptAbstract<T>
 extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrategy {
 

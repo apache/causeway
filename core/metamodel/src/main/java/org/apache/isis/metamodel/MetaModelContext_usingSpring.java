@@ -155,6 +155,7 @@ class MetaModelContext_usingSpring implements MetaModelContext {
                 .filter(registeredBean->!registeredBean.getManagedObjectSort().isUnknown())        
                 .map(objectAdapterProvider::adapterForBean) 
                 .peek(objectAdapter->{
+                    
                     val oid = objectAdapter.getOid();
                     if(oid.isTransient()) {
                         val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;

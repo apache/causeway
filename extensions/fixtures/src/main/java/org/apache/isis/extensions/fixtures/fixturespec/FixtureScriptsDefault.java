@@ -43,6 +43,8 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
+import lombok.val;
+
 /**
  * Default instance of {@link FixtureScripts}, instantiated automatically by the framework if no custom user-defined instance was
  * registered.
@@ -216,8 +218,8 @@ public class FixtureScriptsDefault extends FixtureScripts {
             )
     @MemberOrder(sequence="20")
     public Object recreateObjectsAndReturnFirst() {
-        Class<? extends FixtureScript> recreateScriptClass =  getSpecification().getRecreateScriptClass();
-        final FixtureScript recreateScript = findFixtureScriptFor(recreateScriptClass);
+        val recreateScriptClass =  getSpecification().getRecreateScriptClass();
+        val recreateScript = findFixtureScriptFor(recreateScriptClass);
         if(recreateScript == null) {
             return null;
         }

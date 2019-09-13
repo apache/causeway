@@ -45,7 +45,6 @@ import javax.annotation.Nullable;
  * @since 2.0
  *
  */
-
 public final class _NullSafe {
 
     private _NullSafe(){}
@@ -147,20 +146,22 @@ public final class _NullSafe {
     // -- ABSENCE/PRESENCE PREDICATES
 
     /**
-     * Allows to replace a lambda expression {@code x->x!=null} with {@code NullSafe::isPresent}.
      * Equivalent to {@link java.util.Objects#nonNull(Object)}.
      * @param x
      * @return whether {@code x} is not null (present).
+     * 
+     * @apiNote we keep this, arguably provides better code readability than {@code Objects#nonNull} 
      */
     public static boolean isPresent(Object x) {
         return x!=null;
     }
 
     /**
-     * Allows to replace a lambda expression {@code x->x==null} with {@code NullSafe::isAbsent}.<br/>
      * Equivalent to {@link java.util.Objects#isNull(Object)}.
      * @param x
      * @return whether {@code x} is null (absent).
+     * 
+     * @apiNote we keep this, arguably provides better code readability than {@code Objects#isNull}
      */
     public static boolean isAbsent(Object x) {
         return x==null;

@@ -41,6 +41,7 @@ import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.application.DomainAppApplicationModule;
+import domainapp.application.fixture.scenarios.DomainAppDemo;
 import domainapp.modules.simple.SimpleModule;
 
 /**
@@ -59,7 +60,9 @@ import domainapp.modules.simple.SimpleModule;
     IsisBootDataNucleus.class,
     IsisBootWebRestfulObjects.class,
     IsisBootWebWicket.class,
-    IsisBootFixtures.class
+    IsisBootFixtures.class,
+    
+    DomainAppDemo.class // register this fixture
 })
 @ComponentScan(
         basePackageClasses= {
