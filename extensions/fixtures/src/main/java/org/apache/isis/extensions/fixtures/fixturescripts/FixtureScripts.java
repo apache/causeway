@@ -249,13 +249,9 @@ public abstract class FixtureScripts extends AbstractService {
 
         val packagePrefix = getPackagePrefix();
         
-
-        System.out.println("####### searching " + packagePrefix);
-
         return serviceRegistry.streamRegisteredBeansOfType(FixtureScript.class)
                 .map(beanAdapter->beanAdapter.getBeanClass())
                 .map(type->_Casts.<Class<? extends FixtureScript>>uncheckedCast(type))
-                .peek(type->{System.out.println("!!!!!!!!!!!! " + type);})                
                 .filter(type->type.getPackage().getName().startsWith(packagePrefix))
                 .collect(Collectors.toCollection(HashSet::new));
     }
