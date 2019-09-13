@@ -22,7 +22,7 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1"> 
 
-    <display-name>Apache Isis Demo</display-name>
+    <display-name>Simple App</display-name>
 
     <welcome-file-list>
         <welcome-file>about/index.html</welcome-file>
