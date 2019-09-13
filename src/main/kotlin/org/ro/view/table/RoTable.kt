@@ -1,6 +1,7 @@
 package org.ro.view.table
 
 import org.ro.core.event.LogEntry
+import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
@@ -9,7 +10,6 @@ import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.VPanel
-import pl.treksoft.kvision.tabulator.ColumnDefinition
 import pl.treksoft.kvision.tabulator.Layout
 import pl.treksoft.kvision.tabulator.Tabulator
 import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
@@ -22,11 +22,13 @@ import pl.treksoft.kvision.utils.px
  * - attribute types (can only be determined at runtime) and
  * - accessor names are not fixed
  */
-class RoTable(
-        val model: List<Exposer>,
-        val columns: List<ColumnDefinition<Exposer>>) : VPanel() {
+class RoTable(displayList: DisplayList) : VPanel() {
 
     init {
+        val model = displayList.getData() as List<Exposer>
+        val members = displayList.getMembers()
+        val columns = TableFactory().buildColumns(members, true)
+
         HPanel(
                 FlexWrap.NOWRAP,
                 alignItems = FlexAlignItems.CENTER,

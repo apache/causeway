@@ -1,3 +1,8 @@
+package org.ro.urls
+
+object CFG_LAYOUT: Response() {
+    override val url= "http://localhost:8080/restful/objects/isisApplib.ConfigurationProperty/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI_Pgo8Y29uZmlndXJhdGlvblByb3BlcnR5PgogICAgPGtleT5pc2lzLmFwcE1hbmlmZXN0PC9rZXk-CiAgICA8dmFsdWU-ZG9tYWluYXBwLmFwcGxpY2F0aW9uLm1hbmlmZXN0LkRvbWFpbkFwcEFwcE1hbmlmZXN0PC92YWx1ZT4KPC9jb25maWd1cmF0aW9uUHJvcGVydHk-Cg==/object-layout"
+    override val str = """
 {
     "row": [
         {
@@ -287,4 +292,6 @@
         }
     ],
     "cssClass": null
+} 
+"""
 }

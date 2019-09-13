@@ -17,9 +17,9 @@ class Exposer(val delegate: TObject) {
     fun dynamise(): dynamic {
         //FIXME where do Result and Member differ?
         val thys = dynamiseMember()
-        iconName = "fa-cube"
+//        iconName = "fa-cube"
         if (delegate.selfLink() != null) {
-            iconName = "fa-star"
+//            iconName = "fa-star"
             return dynamiseResult()
         }
         return thys
@@ -36,6 +36,7 @@ class Exposer(val delegate: TObject) {
                 }
             }
         }
+        thys.iconName = "fa-cube"
         return thys
     }
 

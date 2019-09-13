@@ -3,12 +3,10 @@ package org.ro.core
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
-import org.ro.core.model.Exposer
 import org.ro.view.RoMenuBar
 import org.ro.view.RoStatusBar
 import org.ro.view.RoView
 import org.ro.view.table.RoTable
-import org.ro.view.table.TableFactory
 import pl.treksoft.kvision.panel.VPanel
 
 /**
@@ -52,9 +50,7 @@ object UiManager {
 
     fun handleView(displayList: DisplayList) {
         val title: String = extractTitle(displayList)
-        val members = displayList.getMembers()
-        val columns = TableFactory().buildColumns(members)
-        val panel = RoTable(displayList.getData() as List<Exposer>, columns)
+        val panel = RoTable(displayList)
         add(title, panel)
         displayList.isRendered = true
     }

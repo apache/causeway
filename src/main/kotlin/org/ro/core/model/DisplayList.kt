@@ -27,7 +27,9 @@ class DisplayList(val title: String) {
 
     // List<MemberExposer<TObject>>
     fun addData(obj: TObject) {
-        data.add(Exposer(obj).dynamise())
+        // FIXME use dynamic?
+        val dyn = Exposer(obj).dynamise()
+        data.add(dyn)
     }
 
     fun getData(): MutableList<Exposer> {
