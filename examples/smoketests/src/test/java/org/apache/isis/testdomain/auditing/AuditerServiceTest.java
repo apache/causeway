@@ -69,18 +69,11 @@ class AuditerServiceTest {
     @BeforeEach
     void setUp() {
 
-        val transactionTemplate = IsisContext.createTransactionTemplate();
-        transactionTemplate.execute(status -> {
-
-            // cleanup
-            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-            // given
-            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-
-            return null;
-
-        });
+        // cleanup
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        
+        // given
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
     }
 

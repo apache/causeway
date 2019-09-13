@@ -16,35 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.fixtures.fixturescripts;
 
-package domainapp.modules.simple.fixture;
+import org.apache.isis.applib.annotation.Programmatic;
 
-import javax.inject.Inject;
-
-import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptWithResult;
-
-import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.dom.impl.SimpleObjects;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
-@Accessors(chain = true)
-public class SimpleObjectBuilder extends BuilderScriptWithResult<SimpleObject> {
+/**
+ * 
+ * @since 2.0
+ *
+ * @param <T>
+ */
+public abstract class BuilderScriptWithResult<T> extends BuilderScriptAbstract<T> {
 
-    @Getter @Setter
-    private String name;
+    @Getter(onMethod=@__({@Override}))
+    public T object;
+    
+    @Programmatic
+    protected abstract T buildResult(final ExecutionContext ec);
 
     @Override
-    protected SimpleObject buildResult(final ExecutionContext ec) {
-        
-        checkParam("name", ec, String.class);
-        
-        return wrap(simpleObjects).create(name);
+    protected final void execute(final ExecutionContext executionContext) {
+        object = buildResult(executionContext);
     }
     
-    // -- DEPENDENCIES
-
-    @Inject SimpleObjects simpleObjects;
-
 }

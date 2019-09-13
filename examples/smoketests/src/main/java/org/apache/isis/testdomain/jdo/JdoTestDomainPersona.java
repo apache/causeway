@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptAbstract;
+import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptWithResult;
+import org.apache.isis.extensions.fixtures.fixturescripts.BuilderScriptWithoutResult;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -33,12 +35,12 @@ import org.apache.isis.testdomain.ldap.LdapConstants;
 import lombok.val;
 
 public enum JdoTestDomainPersona 
-implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
+implements PersonaWithBuilderScript<BuilderScriptAbstract<? extends Object>>  {
 
     PurgeAll {
         @Override
-        public BuilderScriptAbstract<Inventory> builder() {
-            return new BuilderScriptAbstract<Inventory>() {
+        public BuilderScriptAbstract<?> builder() {
+            return new BuilderScriptWithoutResult() {
 
                 @Override
                 protected void execute(ExecutionContext ec) {
@@ -53,11 +55,6 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                     .forEach(repository::remove);
 
                 }
-
-                @Override
-                public Inventory getObject() {
-                    return null;
-                }
                 
                 @Inject private RepositoryService repository;
 
@@ -67,13 +64,13 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
 
     InventoryWith1Book {
         @Override
-        public BuilderScriptAbstract<Inventory> builder() {
-            return new BuilderScriptAbstract<Inventory>() {
+        public BuilderScriptAbstract<?> builder() {
+            return new BuilderScriptWithResult<Inventory>() {
 
                 private Inventory inventory;
 
                 @Override
-                protected void execute(ExecutionContext ec) {
+                protected Inventory buildResult(ExecutionContext ec) {
 
                     val products = new HashSet<Product>();
 
@@ -83,12 +80,9 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
 
                     inventory = Inventory.of("Sample Inventory", products);
                     repository.persist(inventory);
-
-                }
-
-                @Override
-                public Inventory getObject() {
+                    
                     return inventory;
+
                 }
                 
                 @Inject private RepositoryService repository;
@@ -99,13 +93,13 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
     
     SvenApplicationUser {
         @Override
-        public BuilderScriptAbstract<Inventory> builder() {
-            return new BuilderScriptAbstract<Inventory>() {
+        public BuilderScriptAbstract<?> builder() {
+            return new BuilderScriptWithResult<Inventory>() {
 
                 private Inventory inventory;
 
                 @Override
-                protected void execute(ExecutionContext ec) {
+                protected Inventory buildResult(ExecutionContext ec) {
 
                     val regularUserRoleName = securityConfig.getRegularUserRoleName();
                     val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
@@ -118,12 +112,9 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                     } else {
                         applicationUserRepository.enable(svenUser);
                     }
-
-                }
-
-                @Override
-                public Inventory getObject() {
+                    
                     return inventory;
+
                 }
                 
                 @Inject private ApplicationUserRepository applicationUserRepository;

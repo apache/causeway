@@ -27,12 +27,17 @@ import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.isis.extensions.fixtures.api.PersonaWithFinder;
 import org.apache.isis.extensions.fixtures.api.WithPrereqs;
 
+import lombok.Getter;
+
 @Programmatic
 public abstract class BuilderScriptAbstract<T>
 extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrategy {
 
-    private final FixtureScripts.MultipleExecutionStrategy executionStrategy;
+    @Getter(onMethod=@__({@Override}))
+    private final FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy;
 
+    // -- FACTORIES
+    
     /**
      * Typically we expect builders to have value semantics, so this is provided as a convenience.
      */
@@ -41,14 +46,15 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
     }
 
     protected BuilderScriptAbstract(final FixtureScripts.MultipleExecutionStrategy executionStrategy) {
-        this.executionStrategy = executionStrategy;
+        this.multipleExecutionStrategy = executionStrategy;
     }
 
-    @Override
-    public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
-        return executionStrategy;
-    }
-
+    // -- RESULTING OBJECT
+    
+    public abstract T getObject();
+    
+    // -- RUN ANOTHER SCRIPT
+    
     @Programmatic
     public BuilderScriptAbstract<T> build(
             final FixtureScript parentFixtureScript,
@@ -63,35 +69,29 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
         return executionContext.executeChildT(parentFixtureScript, this);
     }
 
-    @Override
-    public void execPrereqs(final ExecutionContext executionContext) {
-        for (final WithPrereqs.Block<T> prereq : prereqs) {
-            prereq.execute(this, executionContext);
-        }
-    }
-
-    @Override
-    protected abstract void execute(final ExecutionContext executionContext);
-
-    public abstract T getObject();
-
+    // -- RUN PERSONAS
+    
     public T objectFor(
             final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona,
-            final FixtureScript.ExecutionContext ec) {
+            final ExecutionContext executionContext) {
 
         if(persona == null) {
             return null;
         }
         final BuilderScriptAbstract<T> fixtureScript = persona.builder();
-        return ec.executeChildT(this, fixtureScript).getObject();
+        return executionContext.executeChildT(this, fixtureScript).getObject();
     }
 
+    // -- RUN FINDERS
+    
     public T findUsing(final PersonaWithFinder<T> persona) {
         if(persona == null) {
             return null;
         }
         return persona.findUsing(serviceRegistry);
     }
+    
+    // -- PREREQUISITES
 
     private final List<WithPrereqs.Block<T>> prereqs = _Lists.newArrayList();
 
@@ -100,7 +100,13 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
         prereqs.add(prereq);
         return this;
     }
-
+    
+    @Override
+    public void execPrereqs(final ExecutionContext executionContext) {
+        for (final WithPrereqs.Block<T> prereq : prereqs) {
+            prereq.execute(this, executionContext);
+        }
+    }
 
 
 }

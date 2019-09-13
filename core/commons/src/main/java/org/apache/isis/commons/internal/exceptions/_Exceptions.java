@@ -104,6 +104,11 @@ public final class _Exceptions {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
 
+    public static UnsupportedOperationException unsupportedOperation() {
+        return new UnsupportedOperationException("unrecoverable error: method call not allowed/supported");
+    }
+    
+    
     /**
      * Used to hide from the compiler the fact, that this call always throws.
      *
@@ -338,6 +343,8 @@ public final class _Exceptions {
             uncheckedConsumer(checkedConsumer).accept(obj);
         }
     }
+
+
 
 
 }

@@ -68,19 +68,11 @@ class PublisherServiceTest {
     @BeforeEach
     void setUp() {
 
-        val transactionTemplate = IsisContext.createTransactionTemplate();
-        transactionTemplate.execute(status -> {
+        // cleanup
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
-            // cleanup
-            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-            // given
-            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-
-            return null;
-
-        });
-
+        // given
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @Test @Order(1)
