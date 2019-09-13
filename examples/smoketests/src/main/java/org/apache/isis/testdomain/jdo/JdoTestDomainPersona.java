@@ -67,8 +67,6 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<? extends Object>>  {
         public BuilderScriptAbstract<?> builder() {
             return new BuilderScriptWithResult<Inventory>() {
 
-                private Inventory inventory;
-
                 @Override
                 protected Inventory buildResult(ExecutionContext ec) {
 
@@ -78,7 +76,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<? extends Object>>  {
                             "Sample Book", "A sample book for testing.", 99.,
                             "Sample Author", "Sample ISBN", "Sample Publisher"));
 
-                    inventory = Inventory.of("Sample Inventory", products);
+                    val inventory = Inventory.of("Sample Inventory", products);
                     repository.persist(inventory);
                     
                     return inventory;
@@ -94,12 +92,10 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<? extends Object>>  {
     SvenApplicationUser {
         @Override
         public BuilderScriptAbstract<?> builder() {
-            return new BuilderScriptWithResult<Inventory>() {
-
-                private Inventory inventory;
+            return new BuilderScriptWithoutResult() {
 
                 @Override
-                protected Inventory buildResult(ExecutionContext ec) {
+                protected void execute(ExecutionContext ec) {
 
                     val regularUserRoleName = securityConfig.getRegularUserRoleName();
                     val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
@@ -113,8 +109,6 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<? extends Object>>  {
                         applicationUserRepository.enable(svenUser);
                     }
                     
-                    return inventory;
-
                 }
                 
                 @Inject private ApplicationUserRepository applicationUserRepository;
