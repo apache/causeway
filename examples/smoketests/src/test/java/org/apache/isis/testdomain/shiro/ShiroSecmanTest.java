@@ -18,6 +18,11 @@
  */
 package org.apache.isis.testdomain.shiro;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
@@ -35,22 +40,16 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                JdoTestDomainModule_withShiro.class, 
+                Configuration_usingJdoAndShiro.class, 
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring 
         })
 @Import({
     // Security Manager Extension (secman)

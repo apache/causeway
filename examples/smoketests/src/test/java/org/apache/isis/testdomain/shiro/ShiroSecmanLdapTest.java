@@ -18,6 +18,12 @@
  */
 package org.apache.isis.testdomain.shiro;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
@@ -39,30 +45,22 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                JdoTestDomainModule_withShiro.class, 
+                Configuration_usingJdoAndShiro.class, 
         }, 
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
-                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring
                 IsisPresets.DebugPersistence,
                 "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
         })

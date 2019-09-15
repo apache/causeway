@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.manifest;
+package org.apache.isis.testdomain.conf;
 
 import javax.inject.Singleton;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -29,64 +28,58 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
+import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
-import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
-import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 
-import domainapp.application.DomainAppApplicationModule;
-import domainapp.application.fixture.scenarios.DomainAppDemo;
-import domainapp.modules.simple.SimpleModule;
-
-/**
- * Makes the integral parts of the 'simple app' web application.
- */
 @Configuration
-@PropertySources({
-    @PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
-    @PropertySource(IsisPresets.H2InMemory),
-    //@PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.DataNucleusAutoCreate),
-})
 @Import({
     IsisBoot.class,
+
     IsisBootSecurityShiro.class,
+
     IsisBootDataNucleus.class,
-    IsisBootWebRestfulObjects.class,
-    IsisBootWebWicket.class,
-    IsisBootFixtures.class,
-    
-    DomainAppDemo.class // register this fixture
+    IsisBootFixtures.class
 })
 @ComponentScan(
-        basePackageClasses= {
-                DomainAppApplicationModule.class,
-                SimpleModule.class
+        basePackageClasses= {               
+                JdoTestDomainModule.class
         },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
-//enable this default config to be picked up by Spring (when property NOT set: integtest=true)
-@ConditionalOnProperty(value = "integtest", havingValue = "false", matchIfMissing = true)
-public class SimpleAppManifest {
+@PropertySources({
+    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
+    @PropertySource(IsisPresets.H2InMemory),
+    @PropertySource(IsisPresets.NoTranslations),
+})
+public class Configuration_usingJdoAndShiro {
 
     @Bean @Singleton
     public WebAppConfigBean webAppConfigBean() {
         return WebAppConfigBean.builder()
-                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-                .brandLogoHeader("/images/apache-isis/logo-48x48.png")
-                .applicationCss("css/application.css")
-                .applicationJs("scripts/application.js")
-                .applicationName("Apache Isis Simple App")
-                .faviconUrl("/images/favicon.png")
+                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
                 .build();
+    }
+
+    @Bean @Singleton
+    public SecurityModuleConfig securityModuleConfigBean() {
+        return SecurityModuleConfig.builder()
+                .build();
+    }
+
+    @Bean @Singleton
+    public PermissionsEvaluationService permissionsEvaluationService() {
+        return new PermissionsEvaluationServiceAllowBeatsVeto();
     }
 
 }

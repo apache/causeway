@@ -18,6 +18,10 @@
  */
 package org.apache.isis.testdomain.bootstrapping;
 
+import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
+import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.TreeSet;
@@ -32,17 +36,13 @@ import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
-
-import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
-import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                JdoTestDomainModule.class, 
+                Configuration_usingJdo.class, 
         },
         properties = {
                 "logging.config=log4j2-test.xml",

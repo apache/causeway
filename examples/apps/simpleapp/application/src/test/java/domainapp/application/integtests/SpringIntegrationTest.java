@@ -25,12 +25,12 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
-import domainapp.application.manifest.SimpleAppManifestForTesting;
+import domainapp.conf.SimpleAppConfigurationForTesting;
 
 @SpringBootTest(
-        classes = SimpleAppManifestForTesting.class,
+        classes = SimpleAppConfigurationForTesting.class,
         properties = {
-                "integtest=true", // enable testing specific config to be picked up by Spring
+         
         })
 @ContextConfiguration
 public abstract class SpringIntegrationTest {

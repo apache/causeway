@@ -40,8 +40,8 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.InventoryManager;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
 
@@ -50,7 +50,7 @@ import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                JdoTestDomainModule.class,
+                Configuration_usingJdo.class,
                 WrapperTest.ActionDomainEventListener.class
         }, 
         properties = {

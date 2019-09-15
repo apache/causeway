@@ -31,11 +31,11 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Provides the ability to &quot;wrap&quot; of a domain object such that it can
- * be interacted with while enforcing the hide/disable/validate rules implies by
+ * be interacted with while enforcing the hide/disable/validate rules implied by
  * the Isis programming model.
  *
  * <p>
- * The &quot;wrap&quot; is a CGLib proxy that wraps the underlying domain
+ * The 'wrap' is a runtime-code-generated proxy that wraps the underlying domain
  * object. The wrapper can then be interacted with as follows:
  * <ul>
  * <li>a <tt>get</tt> method for properties or collections</li>

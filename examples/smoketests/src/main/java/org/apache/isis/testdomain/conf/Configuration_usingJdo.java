@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.conf;
 
 import javax.inject.Singleton;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -34,54 +33,37 @@ import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.security.IsisBootSecurityBypass;
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 
 @Configuration
 @Import({
     IsisBoot.class,
-
-    IsisBootSecurityShiro.class,
-
+    IsisBootSecurityBypass.class,
     IsisBootDataNucleus.class,
     IsisBootFixtures.class
 })
 @ComponentScan(
-        basePackageClasses= {        		
-                JdoTestDomainModule_withShiro.class
+        basePackageClasses= {               
+                JdoTestDomainModule.class
         },
         includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
-        })
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})}
+        )
 @PropertySources({
     @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
     @PropertySource(IsisPresets.H2InMemory),
     @PropertySource(IsisPresets.NoTranslations),
 })
-// enable shiro specific config to be picked up by Spring
-@ConditionalOnProperty(value = "smoketest.withShiro", havingValue = "true", matchIfMissing = false)
-public class JdoTestDomainModule_withShiro {
+public class Configuration_usingJdo {
 
     @Bean @Singleton
     public WebAppConfigBean webAppConfigBean() {
         return WebAppConfigBean.builder()
                 //.menubarsLayoutXml(new ClassPathResource(path, clazz))
                 .build();
-    }
-
-    @Bean @Singleton
-    public SecurityModuleConfig securityModuleConfigBean() {
-        return SecurityModuleConfig.builder()
-                .build();
-    }
-
-    @Bean @Singleton
-    public PermissionsEvaluationService permissionsEvaluationService() {
-        return new PermissionsEvaluationServiceAllowBeatsVeto();
     }
 
 }

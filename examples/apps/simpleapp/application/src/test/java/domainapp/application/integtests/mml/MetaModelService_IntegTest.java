@@ -36,15 +36,15 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
+import domainapp.conf.SimpleAppConfiguration;
+
 import static org.approvaltests.Approvals.getReporter;
 import static org.approvaltests.Approvals.verify;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assume.assumeThat;
 
-import domainapp.application.manifest.SimpleAppManifest;
-
-@SpringBootTest(classes = SimpleAppManifest.class)
+@SpringBootTest(classes = SimpleAppConfiguration.class)
 public class MetaModelService_IntegTest {
 
     @Inject MetaModelService metaModelService;

@@ -25,14 +25,14 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.config.IsisPresets;
 
-import domainapp.application.manifest.SimpleAppManifest;
+import domainapp.conf.SimpleAppConfiguration;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    SimpleAppManifest.class,
+    SimpleAppConfiguration.class,
 })
 public class SimpleApp extends SpringBootServletInitializer {
 

@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testdomain.bootstrapping;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,19 +39,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.config.IsisPresets;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.Inventory;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.Product;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                JdoTestDomainModule.class,
+                Configuration_usingJdo.class,
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",

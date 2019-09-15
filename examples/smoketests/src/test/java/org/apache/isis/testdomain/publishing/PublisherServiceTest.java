@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.publishing;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -35,11 +37,9 @@ import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -48,7 +48,7 @@ import lombok.val;
  */
 @SpringBootTest(
         classes = { 
-                JdoTestDomainModule.class, 
+                Configuration_usingJdo.class, 
                 PublisherServiceTest.PublisherServiceProbe.class
         }, 
         properties = {

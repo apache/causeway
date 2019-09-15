@@ -18,8 +18,6 @@
  */
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-
 /**
  * 
  * @since 2.0
@@ -30,7 +28,7 @@ public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<O
 
     @Override
     public Object getObject() {
-        throw _Exceptions.unsupportedOperation();
+        return null;
     }
     
 }

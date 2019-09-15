@@ -18,54 +18,14 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import javax.inject.Singleton;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
+/**
+ * Just an entry-point to initialize class-path scanning. 
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class JdoTestDomainModule {
 
-import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.extensions.fixtures.IsisBootFixtures;
-import org.apache.isis.jdo.IsisBootDataNucleus;
-import org.apache.isis.runtime.spring.IsisBoot;
-import org.apache.isis.security.IsisBootSecurityBypass;
-
-@Configuration
-@Import({
-    IsisBoot.class,
-    IsisBootSecurityBypass.class,
-    IsisBootDataNucleus.class,
-    IsisBootFixtures.class
-})
-@ComponentScan(
-        basePackageClasses= {        		
-                JdoTestDomainModule.class
-        },
-        includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})}
-        )
-@PropertySources({
-    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
-    @PropertySource(IsisPresets.H2InMemory),
-    @PropertySource(IsisPresets.NoTranslations),
-})
-//by default disable shiro specific config to be picked up by Spring 
-@ConditionalOnProperty(value = "smoketest.withShiro", havingValue = "false", matchIfMissing = true)
-public class JdoTestDomainModule {
-
-    @Bean @Singleton
-    public WebAppConfigBean webAppConfigBean() {
-        return WebAppConfigBean.builder()
-                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
-                .build();
-    }
 
 }

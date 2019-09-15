@@ -18,6 +18,12 @@
  */
 package org.apache.isis.testdomain.shiro;
 
+import static java.time.Duration.ofMillis;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterAll;
@@ -37,28 +43,21 @@ import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.security.shiro.WebModuleShiro;
-import org.apache.isis.testdomain.jdo.JdoTestDomainModule_withShiro;
+import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 
-import static java.time.Duration.ofMillis;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                JdoTestDomainModule_withShiro.class
+                Configuration_usingJdoAndShiro.class
         }, 
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
-                "smoketest.withShiro=true", // enable shiro specific config to be picked up by Spring
                 IsisPresets.DataNucleusAutoCreate,
                 "datanucleus.schema.autoCreateDatabase=true",
                 "server.servlet.session.persistent=false", // defaults to false
