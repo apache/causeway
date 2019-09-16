@@ -27,7 +27,6 @@ class DisplayList(val title: String) {
 
     // List<MemberExposer<TObject>>
     fun addData(obj: TObject) {
-        // FIXME use dynamic?
         val dyn = Exposer(obj).dynamise()
         data.add(dyn)
     }
@@ -44,10 +43,6 @@ class DisplayList(val title: String) {
         propertyLabels.put(id, friendlyName)
     }
 
-    fun getPropertyLabel(key: String): String? {
-        return propertyLabels.get(key)
-    }
-
     // Property
     fun addProperty(property: Property) {
         properties.add(property)
@@ -59,7 +54,7 @@ class DisplayList(val title: String) {
         if (layout != null) {
             for (p in properties) {
                 val key = p.id
-                val columnTitle = getPropertyLabel(key)
+                val columnTitle = propertyLabels.get(key)
                 if (columnTitle != null) {
                     members.put(columnTitle, key)
                 }

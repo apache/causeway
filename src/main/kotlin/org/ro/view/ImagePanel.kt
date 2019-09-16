@@ -14,21 +14,8 @@ class ImagePanel : VPanel() {
         this.marginTop = 10.px
         this.minHeight = 400.px
         vPanel(spacing = 3) {
-            image(require("img/kroviz-logo.svg")) {
-                width = CssSize(200, UNIT.px)
-                height = CssSize(100, UNIT.px)
-                enableTooltip(TooltipOptions(title = ("This is a tooltip")))
-                enablePopover(
-                        PopoverOptions(
-                                title = ("This is a popover"),
-                                content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec fringilla turpis."
-                        )
-                )
-            }
-        }
-        vPanel(spacing = 3) {
-            image(require("img/uml-overview.png")) {
-                width = CssSize(1200, UNIT.px)
+            image(require("img/plantUml_stateSample.svg")) {
+                width = CssSize(1600, UNIT.px)
                 height = CssSize(800, UNIT.px)
                 enableTooltip(TooltipOptions(title = ("This is a tooltip")))
                 enablePopover(

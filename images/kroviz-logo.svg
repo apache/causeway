@@ -29,27 +29,27 @@
                 fill="white"/>
     </g>
     <g>
-        <use href="#body" x="0" fill="#8064A2" stroke="#8064A2" fill-opacity="0.8" stroke-opacity="0.8"/>
+        <use href="#body" x="0" fill="#C0504D" stroke="#C0504D" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="0"/>
     </g>
     <g>
-        <use href="#body" x="110" fill="#4F81BD" stroke="#4F81BD" fill-opacity="0.8" stroke-opacity="0.8"/>
+        <use href="#body" x="110" fill="#F79646" stroke="#F79646" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="110"/>
     </g>
     <g>
-        <use href="#body" x="220" fill="#4BACC6" stroke="#4BACC6" fill-opacity="0.8" stroke-opacity="0.8"/>
+        <use href="#body" x="220" fill="#9BBB59" stroke="#9BBB59" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="220"/>
     </g>
     <g>
-        <use href="#body" x="330" fill="#9BBB59" stroke="#9BBB59" fill-opacity="0.8" stroke-opacity="0.8"/>
+        <use href="#body" x="330" fill="#4BACC6" stroke="#4BACC6" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="330"/>
     </g>
     <g>
-        <use href="#body" x="440" fill="#F79646" stroke="#F79646" fill-opacity="0.8" stroke-opacity="0.8"/>
+        <use href="#body" x="440" fill="#4F81BD" stroke="#4F81BD" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="440"/>
     </g>
     <g>
-        <use href="#body" x="550" fill="#C0504D" stroke="#C0504D" fill-opacity="0.8" stroke-opacity="0.8"/>
+        <use href="#body" x="550" fill="#8064A2" stroke="#8064A2" fill-opacity="0.8" stroke-opacity="0.8"/>
         <use href="#eye" x="550"/>
     </g>
     <!--rect height="512" width="1162" style="stroke-width:10;stroke:rgb(255,0,0);fill:none;"/-->

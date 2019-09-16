@@ -26,8 +26,7 @@ class RoTable(displayList: DisplayList) : VPanel() {
 
     init {
         val model = displayList.getData() as List<Exposer>
-        val members = displayList.getMembers()
-        val columns = TableFactory().buildColumns(members, true)
+        val columns = ColumnFactory().buildColumns(displayList, true)
 
         HPanel(
                 FlexWrap.NOWRAP,

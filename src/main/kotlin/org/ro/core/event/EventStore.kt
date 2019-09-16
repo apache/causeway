@@ -148,7 +148,6 @@ object EventStore {
                 }
             }
         }
-        console.log("[EventStore.areEquivalent] $diffCnt")
         return diffCnt <= allowedDiff
     }
 

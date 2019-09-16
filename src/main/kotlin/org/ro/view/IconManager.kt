@@ -3,7 +3,9 @@ package org.ro.view
 import org.ro.core.Utils
 
 object IconManager {
-    /*  Recreate */
+    val DEFAULT_ICON = "fa-cube"
+
+    /* Recreate from configuration value*/
     val word2Icon = mapOf<String, String>(
             "Create" to "fa-plus",
             "Find" to "fa-search",
@@ -12,7 +14,7 @@ object IconManager {
             "Open" to "fa-book",
             "Run" to "fa-rocket",
             "Simple" to "fa-cubes",
-            "Configuration" to "fa-cog",
+            "Configuration" to "fa-wrench",
             "Manager" to "fa-manager",
             "Switch" to "fa-power-off",
             "Hsql" to "fa-database",
@@ -31,6 +33,6 @@ object IconManager {
                 return hit
             }
         }
-        return "fa-magic"
+        return DEFAULT_ICON
     }
 }
