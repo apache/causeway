@@ -359,11 +359,15 @@ public abstract class FixtureScripts extends AbstractService {
     	});
     }
 
-    @SuppressWarnings("unchecked")
+    @SafeVarargs
     @Programmatic
-    public final void runPersonas(@SuppressWarnings("rawtypes") final PersonaWithBuilderScript ... personaScripts) {
-        for (PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> personaWithBuilderScript : personaScripts) {
-            runPersona(personaWithBuilderScript);
+    public final void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> ... personaScripts) {
+        for (val personaWithBuilderScript : personaScripts) {
+            
+            val script = _Casts.<PersonaWithBuilderScript<BuilderScriptAbstract<Object>>>
+                uncheckedCast(personaWithBuilderScript);
+            
+            runPersona(script);
         }
     }
 

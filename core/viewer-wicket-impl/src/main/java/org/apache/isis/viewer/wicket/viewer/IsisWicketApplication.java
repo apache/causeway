@@ -60,9 +60,7 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ApplicationSettings;
 
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.concurrent.ConcurrentContext;
-import org.apache.isis.commons.internal.concurrent.ConcurrentTask;
 import org.apache.isis.commons.internal.concurrent.ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
@@ -337,14 +335,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     protected ConcurrentTaskList createBackgroundInitializationTasks() {
         
-        val tasks = _Lists.of(
-                ConcurrentTask.of(this::configureWebJars).withName("Configure WebJars"),
-                ConcurrentTask.of(this::configureWicketBootstrap).withName("Configure WicketBootstrap"),
-                ConcurrentTask.of(this::configureWicketSelect2).withName("Configure WicketSelect2")
-                );
-        
         return ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
-               .addTasks(tasks);
+               .addRunnable("Configure WebJars",            this::configureWebJars)
+               .addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
+               .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);
     }
 
     /**
