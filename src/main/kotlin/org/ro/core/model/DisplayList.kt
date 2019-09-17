@@ -8,7 +8,7 @@ import org.ro.to.TObject
 
 @Serializable
 class DisplayList(val title: String) {
-    private val data = mutableListOf<Exposer>()
+    val data = mutableListOf<Exposer>()
     var layout: Layout? = null
     val propertyLabels = mutableMapOf<String, String>()
     var properties = mutableListOf<Property>()
@@ -27,12 +27,8 @@ class DisplayList(val title: String) {
 
     // List<MemberExposer<TObject>>
     fun addData(obj: TObject) {
-        val dyn = Exposer(obj).dynamise()
-        data.add(dyn)
-    }
-
-    fun getData(): MutableList<Exposer> {
-        return data
+        val exo = Exposer(obj)
+        data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
     }
 
     // PropertyDescription

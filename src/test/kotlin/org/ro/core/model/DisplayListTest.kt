@@ -22,7 +22,7 @@ class DisplayListTest {
         dl.addData(ro0)
 
         dl.layout = lyt
-        assertEquals(1, dl.getData().size)
+        assertEquals(1, dl.data.size)
 
         assertNotNull(dl.layout)
         val properties = dl.layout!!.properties
@@ -40,7 +40,7 @@ class DisplayListTest {
         dl.addData(ro0)
 
         dl.layout = lyt
-        assertEquals(1, dl.getData().size)
+        assertEquals(1, dl.data.size)
 
         assertNotNull(dl.layout)
         val properties = dl.layout!!.properties
@@ -65,7 +65,7 @@ class DisplayListTest {
         dl.addData(ro1)
 
         dl.layout = lyt
-        assertEquals(2, dl.getData().size) //1
+        assertEquals(2, dl.data.size) //1
 
         assertNotNull(dl.layout) //2
         val properties = dl.layout!!.properties

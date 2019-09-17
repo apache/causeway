@@ -62,7 +62,7 @@ class ListAggregatorTest : IntegrationTest() {
             // then
             val ol = obs.list
             assertNotNull(ol)
-            assertEquals(1, ol.getData().size)
+            assertEquals(1, ol.data.size)
         }
     }
 

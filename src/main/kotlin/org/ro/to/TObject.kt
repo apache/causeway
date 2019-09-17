@@ -31,12 +31,4 @@ data class TObject(val links: List<Link> = emptyList(),
         return null
     }
 
-    fun selfLink(): Link? {
-        val answer = links.find {
-            it.rel == RelType.SELF.type
-        }
-        return answer
-    }
-
-
 }

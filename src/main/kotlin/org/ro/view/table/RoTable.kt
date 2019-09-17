@@ -25,7 +25,7 @@ import pl.treksoft.kvision.utils.px
 class RoTable(displayList: DisplayList) : VPanel() {
 
     init {
-        val model = displayList.getData() as List<Exposer>
+        val model = displayList.data
         val columns = ColumnFactory().buildColumns(displayList, true)
 
         HPanel(

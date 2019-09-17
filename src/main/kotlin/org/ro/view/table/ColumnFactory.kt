@@ -29,7 +29,7 @@ class ColumnFactory {
             columns.add(checkBox)
         }
 
-        val model = displayList.getData() as List<dynamic>
+        val model = displayList.data as List<dynamic>
         if (model[0].hasOwnProperty("iconName")) {
             val icon = buildLinkIcon()
             columns.add(icon)
