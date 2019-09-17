@@ -37,7 +37,8 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.concurrent._Tasks;
+import org.apache.isis.commons.internal.concurrent.ConcurrentContext;
+import org.apache.isis.commons.internal.concurrent.ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
@@ -74,7 +75,6 @@ import lombok.extern.log4j.Log4j2;
 @Singleton @Log4j2
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
-    @Inject private IsisConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private AuthenticationManager authenticationManager;
     @Inject private RuntimeEventService runtimeEventService;
@@ -109,9 +109,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         runtimeEventService.fireAppPreMetamodel();
 
-        val tasks = _Tasks.create();
-
-        tasks.addRunnable("SpecificationLoader.init()", ()->{
+        val taskList = ConcurrentTaskList.named("IsisSessionFactoryDefault Concurrent Tasks");
+        
+        taskList.addRunnable("SpecificationLoader.init()", ()->{
             // time to initialize...
             specificationLoader.init();
 
@@ -136,12 +136,12 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             authorizationManager.init();
         });
 
-        tasks.addRunnable("ChangesDtoUtils.init()", ChangesDtoUtils::init);
-        tasks.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
-        tasks.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
+        taskList.addRunnable("ChangesDtoUtils.init()", ChangesDtoUtils::init);
+        taskList.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
+        taskList.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
 
-        val concurrentInit = false; // otherwise deadlocks
-        tasks.invokeAndWait(concurrentInit);
+        taskList.submit(ConcurrentContext.sequential());
+        taskList.await();
 
         runtimeEventService.fireAppPostMetamodel();
 

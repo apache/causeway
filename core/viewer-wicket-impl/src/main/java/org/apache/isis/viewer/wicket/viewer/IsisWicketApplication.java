@@ -19,14 +19,10 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.function.Function;
 
 import javax.inject.Inject;
@@ -64,9 +60,12 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ApplicationSettings;
 
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.concurrent.ConcurrentContext;
+import org.apache.isis.commons.internal.concurrent.ConcurrentTask;
+import org.apache.isis.commons.internal.concurrent.ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -230,11 +229,12 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         val serviceRegistry = IsisContext.getServiceRegistry();
         //val serviceInjector = IsisContext.getServiceInjector();
 
-        List<Future<Object>> futures = null;
+        val backgroundInitializationTasks = createBackgroundInitializationTasks();
+        
         try {
             super.init();
 
-            futures = startBackgroundInitializationThreads();
+            backgroundInitializationTasks.submit(ConcurrentContext.sequential());
 
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
@@ -320,13 +320,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             log.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
             log.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
 
+            backgroundInitializationTasks.await();
+            
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
             log.error("Failed to initialize", ex);
             throw ex;
-        } finally {
-            ThreadPoolSupport.getInstance().join(futures);
-        }
+        } 
 
         acceptIfPresent(IsisWicketThemeSupport.getInstance(), themeSupport->{
             IBootstrapSettings settings = Bootstrap.getSettings();
@@ -335,12 +335,16 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     }
 
-    protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.getInstance().invokeAll(Arrays.asList(
-                Executors.callable(this::configureWebJars),
-                Executors.callable(this::configureWicketBootstrap),
-                Executors.callable(this::configureWicketSelect2)
-                ));
+    protected ConcurrentTaskList createBackgroundInitializationTasks() {
+        
+        val tasks = _Lists.of(
+                ConcurrentTask.of(this::configureWebJars).withName("Configure WebJars"),
+                ConcurrentTask.of(this::configureWicketBootstrap).withName("Configure WicketBootstrap"),
+                ConcurrentTask.of(this::configureWicketSelect2).withName("Configure WicketSelect2")
+                );
+        
+        return ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
+               .addTasks(tasks);
     }
 
     /**

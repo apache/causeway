@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.system.transaction;
+package org.apache.isis.commons.concurrent;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,28 +31,36 @@ import lombok.RequiredArgsConstructor;
  *
  */
 @RequiredArgsConstructor(staticName = "of")
-public final class TransactionLatch {
+public final class AwaitableLatch {
 
     private final CountDownLatch countDownLatch;  
 
-    public static TransactionLatch unlocked() {
+    public static AwaitableLatch unlocked() {
         return of(new CountDownLatch(0));
     }
 
     /**
-     * {@link CountDownLatch#await()}
+     * {@link AwaitableLatch#await()}
      * @throws InterruptedException
      */
-    public void await() throws InterruptedException {
-        countDownLatch.await();
+    public void await() {
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            throw _Exceptions.unrecoverable(e);
+        }
     }
 
     /**
-     * {@link CountDownLatch#await(long, TimeUnit)}
+     * {@link AwaitableLatch#await(long, TimeUnit)}
      * @throws InterruptedException
      */
-    public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
-        return countDownLatch.await(timeout, unit);
+    public boolean await(long timeout, TimeUnit unit) {
+        try {
+            return countDownLatch.await(timeout, unit);
+        } catch (InterruptedException e) {
+            throw _Exceptions.unrecoverable(e);
+        }
     }
 
 }

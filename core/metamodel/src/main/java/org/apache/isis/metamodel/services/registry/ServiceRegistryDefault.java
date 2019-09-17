@@ -43,8 +43,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.commons.internal.threadpool.ThreadPoolExecutionMode;
-import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -60,11 +58,6 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
 
     @Override
     public void setApplicationContext(ApplicationContext springContext) throws BeansException {
-
-        // disables concurrent Spec-Loading
-        ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
-                ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD;
-
 
         // ensures a well defined precondition
         {

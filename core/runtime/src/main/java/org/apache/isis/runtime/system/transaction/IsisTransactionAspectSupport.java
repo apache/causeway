@@ -20,6 +20,7 @@ package org.apache.isis.runtime.system.transaction;
 
 import java.util.Optional;
 
+import org.apache.isis.commons.concurrent.AwaitableLatch;
 import org.apache.isis.commons.internal.context._Context;
 
 public final class IsisTransactionAspectSupport {
@@ -44,11 +45,11 @@ public final class IsisTransactionAspectSupport {
                 .orElse(false);
     }
 
-    public static TransactionLatch transactionLatch() {
+    public static AwaitableLatch transactionLatch() {
         return currentTransactionObject()
                 .map(IsisTransactionObject::getCountDownLatch)
-                .map(TransactionLatch::of)
-                .orElseGet(TransactionLatch::unlocked);
+                .map(AwaitableLatch::of)
+                .orElseGet(AwaitableLatch::unlocked);
     }
 
 }

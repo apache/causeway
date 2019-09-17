@@ -19,6 +19,7 @@
 
 package org.apache.isis.commons.internal.threadpool;
 
+@Deprecated
 final class ThreadPoolSizeAdvisor {
 
     /*

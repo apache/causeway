@@ -25,6 +25,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+@Deprecated
 final class FutureWithIndexIntoFutureOfList<T> implements Future<T> {
     final Future<List<T>> commonFuture;
     final int index;

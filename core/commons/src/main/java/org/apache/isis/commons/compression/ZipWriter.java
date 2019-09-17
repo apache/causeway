@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons;
+package org.apache.isis.commons.compression;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

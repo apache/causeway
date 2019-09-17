@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.concurrent._Tasks;
+import org.apache.isis.commons.internal.concurrent.ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
@@ -349,11 +349,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return cache.allSpecifications();
     }
 
-    //	private Stream<BeanAdapter> streamBeans() {
-    //		final ServiceRegistry registry = MetaModelContext.current().getServiceRegistry();
-    //		return registry.streamRegisteredBeans();
-    //	}
-
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
@@ -420,49 +415,25 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private void introspect(final Collection<ObjectSpecification> specs, final IntrospectionState upTo) {
 
-        val tasks = _Tasks.create();
-
-        for (final ObjectSpecification specification : specs) {
-
-            val specSpi = (ObjectSpecificationAbstract) specification;
-
-            tasks.addRunnable(
-                    ()->specSpi.introspectUpTo(upTo), 
-                    ()->String.format(
-                            "%s: #introspectUpTo( %s )",
-                            specification.getFullIdentifier(), upTo));
+        val isConcurrentFromConfig = (boolean) CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
+        
+        val runSequential = !isConcurrentFromConfig || true; //FIXME concurrent specloading disabled, it deadlocks
+        
+        if(runSequential) { 
+            
+            for (final ObjectSpecification specification : specs) {
+                val specSpi = (ObjectSpecificationAbstract) specification;
+                specSpi.introspectUpTo(upTo);
+            }
+            
+            return;
         }
-
-        val isConcurrent = (boolean) CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
-
-        tasks.invokeAndWait(isConcurrent && false); //FIXME concurrent init is broken
+        
+        specs.parallelStream()
+        .map(spec -> (ObjectSpecificationAbstract) spec)
+        .forEach(spec -> spec.introspectUpTo(upTo));
     }
 
-
-    //	private List<ObjectSpecification> loadSpecificationsFor(
-    //			final Stream<Class<?>> domainTypes,
-    //			final List<ObjectSpecification> appendTo,
-    //			final IntrospectionState upTo) {
-    //
-    //		return domainTypes
-    //				.map(domainType->internalLoadSpecification(domainType, upTo))
-    //				.filter(_NullSafe::isPresent)
-    //				.peek(appendTo::add)
-    //				.collect(Collectors.toList());
-    //	}
-    //
-    //	private List<ObjectSpecification> loadSpecificationsForBeans (
-    //			final Stream<BeanAdapter> beans,
-    //			final List<ObjectSpecification> appendTo,
-    //			final IntrospectionState upTo) {
-    //
-    //		return beans
-    //				.map(BeanAdapter::getBeanClass)    
-    //				.map(type->internalLoadSpecification(type, upTo))
-    //				.filter(_NullSafe::isPresent)
-    //				.peek(appendTo::add)
-    //				.collect(Collectors.toList());
-    //	}
 
     private void invalidateCache(final Class<?> cls) {
 

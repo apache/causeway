@@ -28,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
 
 import javax.inject.Inject;
@@ -38,7 +39,6 @@ import org.apache.isis.applib.events.sse.EventStreamService;
 import org.apache.isis.applib.events.sse.EventStreamSource;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.threadpool.ThreadPoolSupport;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 
@@ -73,12 +73,12 @@ public class EventStreamServiceDefault implements EventStreamService {
 
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
-
-        val threadPool = ThreadPoolSupport.getInstance();
+        
+        val executor = ForkJoinPool.commonPool();
 
         switch(executionBehavior) {
         case SIMPLE:
-            CompletableFuture.runAsync(()->run(task), threadPool.getExecutor());
+            CompletableFuture.runAsync(()->run(task), executor);
             return;
         case REQUIRES_NEW_SESSION:
             break; // fall through
@@ -90,19 +90,11 @@ public class EventStreamServiceDefault implements EventStreamService {
         CompletableFuture.runAsync(()->{
 
             // wait for calling thread to commit its current transaction 
-            try {
-                callingThread_TransactionLatch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            callingThread_TransactionLatch.await();
 
             IsisContext.getSessionFactory().doInSession(()->run(task));
 
-        }, threadPool.getExecutor());
-
-        //        ForkJoinPool.commonPool().submit(()->{
-        //
-        //        });
+        }, executor);
 
     }
 

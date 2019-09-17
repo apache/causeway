@@ -21,7 +21,8 @@ package org.apache.isis.commons.internal.threadpool;
 /**
  *  ThreadPollSupport's executions mode where the enum's ordinal corresponds to the level of concurrency.
  */
-public enum ThreadPoolExecutionMode {
+@Deprecated
+enum ThreadPoolExecutionMode {
 
     /**
      *  Wraps submitted tasks into a single task, which is then executed within the context 

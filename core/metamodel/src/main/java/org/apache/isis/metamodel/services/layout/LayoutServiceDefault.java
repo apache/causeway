@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
-import org.apache.isis.commons.ZipWriter;
+import org.apache.isis.commons.compression.ZipWriter;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;

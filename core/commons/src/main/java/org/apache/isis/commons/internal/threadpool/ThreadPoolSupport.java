@@ -58,9 +58,11 @@ import lombok.extern.log4j.Log4j2;
  * Implementation Note: ThreadPoolSupport::close is triggered by _Context.clear()
  * when application shuts down.
  *
+ * @deprecated in favor of the {@code org.apache.isis.commons.internal.concurrent} API
  */
+@Deprecated
 @Log4j2
-public final class ThreadPoolSupport implements AutoCloseable {
+final class ThreadPoolSupport implements AutoCloseable {
 
     public static ThreadPoolExecutionMode HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
             ThreadPoolExecutionMode.PARALLEL;
