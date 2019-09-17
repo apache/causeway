@@ -1,8 +1,0 @@
-name: ext
-title: "Extensions"
-version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc
-- modules/specsupport/nav.adoc
-- modules/viewer-wicket-excel/nav.adoc

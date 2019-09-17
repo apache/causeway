@@ -19,9 +19,6 @@ content:
     branches: HEAD
   - url: .
     branches: HEAD
-    start_path: antora/components/extensions
-  - url: .
-    branches: HEAD
     start_path: antora/components/ext-asciidoc
   - url: .
     branches: HEAD
@@ -32,6 +29,12 @@ content:
   - url: .
     branches: HEAD
     start_path: antora/components/ext-secman
+  - url: .
+    branches: HEAD
+    start_path: antora/components/ext-specsupport
+  - url: .
+    branches: HEAD
+    start_path: antora/components/ext-viewer-wicket-excel
   - url: .
     branches: HEAD
     start_path: examples/apps/demo/_adoc

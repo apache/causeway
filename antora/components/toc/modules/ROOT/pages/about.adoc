@@ -61,10 +61,10 @@ include::_attributes.adoc[]
 
 * Testing & Prototyping
 ** xref:ext-fixtures:ROOT:about.adoc[Fixtures]
-** xref:ext:specsupport:about.adoc[(BDD) Spec Support]
+** xref:ext-specsupport:ROOT:about.adoc[(BDD) Spec Support]
 * Modules
 **  xref:ext-secman:ROOT:about.adoc[Security Manager]
-**  xref:ext:viewer-wicket-excel:about.adoc[Excel Download (Wicket)]
+**  xref:ext-viewer-wicket-excel:ROOT:about.adoc[Excel Download (Wicket)]
 * Values Types
 **  xref:ext-asciidoc:ROOT:about.adoc[Asciidoc], xref:ext-markdown:ROOT:about.adoc[Markdown]
 

@@ -1,0 +1,6 @@
+name: ext-viewer-wicket-excel
+title: "Extensions: Excel Download (Wicket)"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc
