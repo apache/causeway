@@ -43,7 +43,6 @@ import static org.junit.Assume.assumeThat;
 
 import domainapp.application.integtests.SpringIntegrationTest;
 
-//@SpringBootTest(classes = SimpleAppConfiguration.class)
 class MetaModelService_IntegTest extends SpringIntegrationTest {
 
     @Inject MetaModelService metaModelService;
