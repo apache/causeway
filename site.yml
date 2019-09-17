@@ -19,22 +19,22 @@ content:
     branches: HEAD
   - url: .
     branches: HEAD
-    start_path: antora/components/ext-asciidoc
+    start_path: extensions/asciidoc/_adoc
   - url: .
     branches: HEAD
-    start_path: antora/components/ext-markdown
+    start_path: extensions/markdown/_adoc
   - url: .
     branches: HEAD
-    start_path: antora/components/ext-fixtures
+    start_path: extensions/fixtures/_adoc
   - url: .
     branches: HEAD
-    start_path: antora/components/ext-secman
+    start_path: extensions/secman/_adoc
   - url: .
     branches: HEAD
-    start_path: antora/components/ext-specsupport
+    start_path: extensions/specsupport/_adoc
   - url: .
     branches: HEAD
-    start_path: antora/components/ext-viewer-wicket-excel
+    start_path: extensions/viewer-wicket-excel/_adoc
   - url: .
     branches: HEAD
     start_path: examples/apps/demo/_adoc
