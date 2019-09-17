@@ -38,10 +38,13 @@ class ColumnFactory {
         //TODO use propertyLabels for sequence of columns?
         val properties = displayList.getMembers()
         for (m in properties) {
-            val columnDefinition = ColumnDefinition<Exposer>(
+            var cd = ColumnDefinition<Exposer>(
                     title = m.key,
                     field = m.value)
-            columns.add(columnDefinition)
+            if (m.value == "object") {
+                cd = buildLink()
+            }
+            columns.add(cd)
         }
         return columns
     }
@@ -53,6 +56,18 @@ class ColumnFactory {
                 width = "40",
                 formatterComponentFunction = { _, _, data ->
                     Button(text = "", icon = data["iconName"], style = ButtonStyle.LINK).onClick {
+                        console.log(data)
+                    }
+                })
+        return icon
+    }
+
+    private fun buildLink(): ColumnDefinition<Exposer> {
+        val icon = ColumnDefinition<dynamic>(
+                title = "Result",
+                field = "result",
+                formatterComponentFunction = { _, _, data ->
+                    Button(text = data["object"].title, icon = "fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log(data)
                     }
                 })
