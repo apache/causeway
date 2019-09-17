@@ -66,7 +66,7 @@ include::_attributes.adoc[]
 **  xref:ext:secman:about.adoc[Security Manager]
 **  xref:ext:viewer-wicket-excel:about.adoc[Excel Download (Wicket)]
 * Values Types
-**  xref:ext:asciidoc:about.adoc[Asciidoc], xref:ext:markdown:about.adoc[Markdown]
+**  xref:ext-asciidoc:ROOT:about.adoc[Asciidoc], xref:ext:markdown:about.adoc[Markdown]
 
 |*Get involved*
 

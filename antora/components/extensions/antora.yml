@@ -8,5 +8,4 @@ nav:
 - modules/specsupport/nav.adoc
 - modules/secman/nav.adoc
 - modules/viewer-wicket-excel/nav.adoc
-- modules/asciidoc/nav.adoc
 - modules/markdown/nav.adoc

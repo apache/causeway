@@ -22,6 +22,9 @@ content:
     start_path: antora/components/extensions
   - url: .
     branches: HEAD
+    start_path: antora/components/ext-asciidoc
+  - url: .
+    branches: HEAD
     start_path: examples/apps/demo/_adoc
   - url: .
     branches: HEAD
