@@ -1,5 +1,5 @@
 name: ext
-title: Extensions
+title: "Extensions"
 version: master
 start_page: ROOT:about.adoc
 nav:

@@ -22,7 +22,7 @@ content:
     start_path: antora/components/extensions
   - url: .
     branches: HEAD
-    start_path: antora/components/demoapp
+    start_path: examples/apps/demo/_adoc
   - url: .
     branches: HEAD
     start_path: antora/components/downloads

@@ -1,5 +1,5 @@
 name: helloworld
-title: Helloworld Example App
+title: "Example App - Hello World"
 version: master
 start_page: ROOT:about.adoc
 nav:
