@@ -28,15 +28,12 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.QuietReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.approvaltests.writers.ApprovalTextWriter;
-import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
-
-import domainapp.conf.SimpleAppConfiguration;
 
 import static org.approvaltests.Approvals.getReporter;
 import static org.approvaltests.Approvals.verify;
@@ -44,8 +41,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assume.assumeThat;
 
-@SpringBootTest(classes = SimpleAppConfiguration.class)
-public class MetaModelService_IntegTest {
+import domainapp.application.integtests.SpringIntegrationTest;
+
+//@SpringBootTest(classes = SimpleAppConfiguration.class)
+class MetaModelService_IntegTest extends SpringIntegrationTest {
 
     @Inject MetaModelService metaModelService;
     @Inject JaxbService jaxbService;
@@ -57,7 +56,7 @@ public class MetaModelService_IntegTest {
     //
     @UseReporter(QuietReporter.class)
     @Test
-    public void _1_learn() throws Exception {
+    void _1_learn() throws Exception {
 
         assumeThat(System.getProperty("lockdown.learn"), is(notNullValue()));
 
@@ -91,7 +90,7 @@ public class MetaModelService_IntegTest {
     //
     @UseReporter(DiffReporter.class)
     @Test
-    public void _2_verify() throws Exception {
+    void _2_verify() throws Exception {
 
         assumeThat(System.getProperty("lockdown.verify"), is(notNullValue()));
 

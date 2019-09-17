@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mml:domainClassDto id="domainapp.modules.simple.SimpleModule$CollectionDomainEvent" xmlns:mml="http://isis.apache.org/schema/metamodel">
+    <mml:facets>
+        <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.named.NamedFacetInferred">
+            <mml:attr name="escaped">true</mml:attr>
+            <mml:attr name="value">Collection Domain Event</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.audit.AuditableFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration">
+            <mml:attr name="enablement">ENABLED</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+            <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.metamodel.facets.object.grid.GridFacetDefault"/>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration">
+            <mml:attr name="disabling">true</mml:attr>
+            <mml:attr name="reason">Disabled</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.layout.LayoutFacet" fqcn="org.apache.isis.metamodel.facets.object.layout.LayoutFacetFallback">
+            <mml:attr name="derived">true</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet" fqcn="org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">domainapp.modules.simple.SimpleModule.CollectionDomainEvent</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.isis.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
+            <mml:attr name="validating">true</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.metamodel.facets.fallback.PagedFacetFromConfiguration">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">25</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.plural.PluralFacet" fqcn="org.apache.isis.metamodel.facets.object.plural.inferred.PluralFacetInferred">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">Collection Domain Events</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration"/>
+    </mml:facets>
+    <mml:properties>
+        <mml:prop id="disabled">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#disabled</mml:attr>
+                    <mml:attr name="originalText">Disabled</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
+                    <mml:attr name="derived">true</mml:attr>
+                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.isDisabled">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public boolean org.apache.isis.applib.events.domain.AbstractDomainEvent.isDisabled()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
+                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>boolean</mml:type>
+        </mml:prop>
+        <mml:prop id="disabledReason">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#disabledReason</mml:attr>
+                    <mml:attr name="originalText">Disabled Reason</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
+                    <mml:attr name="derived">true</mml:attr>
+                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getDisabledReason">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public java.lang.String org.apache.isis.applib.events.domain.AbstractDomainEvent.getDisabledReason()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
+                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.String</mml:type>
+        </mml:prop>
+        <mml:prop id="disabledReasonTranslatable">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#disabledReasonTranslatable</mml:attr>
+                    <mml:attr name="originalText">Disabled Reason Translatable</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getDisabledReasonTranslatable">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public org.apache.isis.applib.services.i18n.TranslatableString org.apache.isis.applib.events.domain.AbstractDomainEvent.getDisabledReasonTranslatable()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>org.apache.isis.applib.services.i18n.TranslatableString</mml:type>
+        </mml:prop>
+        <mml:prop id="eventPhase">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#eventPhase</mml:attr>
+                    <mml:attr name="originalText">Event Phase</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
+                    <mml:attr name="derived">true</mml:attr>
+                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getEventPhase">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public org.apache.isis.applib.events.domain.AbstractDomainEvent$Phase org.apache.isis.applib.events.domain.AbstractDomainEvent.getEventPhase()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacet" fqcn="org.apache.isis.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacet"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
+                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault">
+                    <mml:attr name="clearFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
+                    <mml:attr name="intent.setEventPhase">MODIFY_PROPERTY</mml:attr>
+                    <mml:attr name="methods">public void org.apache.isis.applib.events.domain.AbstractDomainEvent.setEventPhase(org.apache.isis.applib.events.domain.AbstractDomainEvent$Phase)</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault">
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="setterFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>org.apache.isis.applib.events.domain.AbstractDomainEvent$Phase</mml:type>
+        </mml:prop>
+        <mml:prop id="hidden">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#hidden</mml:attr>
+                    <mml:attr name="originalText">Hidden</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
+                    <mml:attr name="derived">true</mml:attr>
+                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.isHidden">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public boolean org.apache.isis.applib.events.domain.AbstractDomainEvent.isHidden()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
+                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>boolean</mml:type>
+        </mml:prop>
+        <mml:prop id="identifier">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#identifier</mml:attr>
+                    <mml:attr name="originalText">Identifier</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getIdentifier">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public org.apache.isis.applib.Identifier org.apache.isis.applib.events.domain.AbstractDomainEvent.getIdentifier()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault">
+                    <mml:attr name="clearFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
+                    <mml:attr name="intent.setIdentifier">MODIFY_PROPERTY</mml:attr>
+                    <mml:attr name="methods">public void org.apache.isis.applib.events.domain.AbstractDomainEvent.setIdentifier(org.apache.isis.applib.Identifier)</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault">
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="setterFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>org.apache.isis.applib.Identifier</mml:type>
+        </mml:prop>
+        <mml:prop id="invalid">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#invalid</mml:attr>
+                    <mml:attr name="originalText">Invalid</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
+                    <mml:attr name="derived">true</mml:attr>
+                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.isInvalid">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public boolean org.apache.isis.applib.events.domain.AbstractDomainEvent.isInvalid()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
+                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>boolean</mml:type>
+        </mml:prop>
+        <mml:prop id="invalidityReason">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#invalidityReason</mml:attr>
+                    <mml:attr name="originalText">Invalidity Reason</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
+                    <mml:attr name="derived">true</mml:attr>
+                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getInvalidityReason">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public java.lang.String org.apache.isis.applib.events.domain.AbstractDomainEvent.getInvalidityReason()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
+                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.String</mml:type>
+        </mml:prop>
+        <mml:prop id="invalidityReasonTranslatable">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#invalidityReasonTranslatable</mml:attr>
+                    <mml:attr name="originalText">Invalidity Reason Translatable</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getInvalidityReasonTranslatable">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public org.apache.isis.applib.services.i18n.TranslatableString org.apache.isis.applib.events.domain.AbstractDomainEvent.getInvalidityReasonTranslatable()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>org.apache.isis.applib.services.i18n.TranslatableString</mml:type>
+        </mml:prop>
+        <mml:prop id="mixedIn">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#mixedIn</mml:attr>
+                    <mml:attr name="originalText">Mixed In</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getMixedIn">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public java.lang.Object org.apache.isis.applib.events.domain.AbstractDomainEvent.getMixedIn()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault">
+                    <mml:attr name="clearFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
+                    <mml:attr name="intent.setMixedIn">MODIFY_PROPERTY</mml:attr>
+                    <mml:attr name="methods">public void org.apache.isis.applib.events.domain.AbstractDomainEvent.setMixedIn(java.lang.Object)</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault">
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="setterFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.Object</mml:type>
+        </mml:prop>
+        <mml:prop id="of">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#of</mml:attr>
+                    <mml:attr name="originalText">Of</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType">
+                    <mml:attr name="derived">true</mml:attr>
+                    <mml:attr name="typicalLengthFacet">org.apache.isis.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getOf">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public org.apache.isis.applib.events.domain.CollectionDomainEvent$Of org.apache.isis.applib.events.domain.CollectionDomainEvent.getOf()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacet" fqcn="org.apache.isis.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacet"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet" fqcn="org.apache.isis.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromDefaultedFacet">
+                    <mml:attr name="typeFacet">org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault">
+                    <mml:attr name="clearFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
+                    <mml:attr name="intent.setOf">MODIFY_PROPERTY</mml:attr>
+                    <mml:attr name="methods">public void org.apache.isis.applib.events.domain.CollectionDomainEvent.setOf(org.apache.isis.applib.events.domain.CollectionDomainEvent$Of)</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault">
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="setterFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>org.apache.isis.applib.events.domain.CollectionDomainEvent$Of</mml:type>
+        </mml:prop>
+        <mml:prop id="source">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#source</mml:attr>
+                    <mml:attr name="originalText">Source</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getSource">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public S org.apache.isis.applib.events.domain.AbstractDomainEvent.getSource()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault">
+                    <mml:attr name="clearFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
+                    <mml:attr name="intent.setSource">MODIFY_PROPERTY</mml:attr>
+                    <mml:attr name="methods">public void org.apache.isis.applib.events.domain.AbstractDomainEvent.setSource(S)</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault">
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="setterFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.Object</mml:type>
+        </mml:prop>
+        <mml:prop id="subject">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#subject</mml:attr>
+                    <mml:attr name="originalText">Subject</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferred">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getSubject">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public java.lang.Object org.apache.isis.applib.events.domain.AbstractDomainEvent.getSubject()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.NotPersistableFacetInferred"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.Object</mml:type>
+        </mml:prop>
+        <mml:prop id="value">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.modules.simple.SimpleModule$CollectionDomainEvent#value</mml:attr>
+                    <mml:attr name="originalText">Value</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.members.disabled.DisabledFacet" fqcn="org.apache.isis.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">DISABLED</mml:attr>
+                    <mml:attr name="where">ANYWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                    <mml:attr name="inverted">false</mml:attr>
+                    <mml:attr name="semantics">REQUIRED</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
+                    <mml:attr name="intent.getValue">ACCESSOR</mml:attr>
+                    <mml:attr name="methods">public T org.apache.isis.applib.events.domain.CollectionDomainEvent.getValue()</mml:attr>
+                    <mml:attr name="onType">domainapp.modules.simple.SimpleModule$CollectionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault">
+                    <mml:attr name="clearFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.isis.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
+                    <mml:attr name="intent.setValue">MODIFY_PROPERTY</mml:attr>
+                    <mml:attr name="methods">public void org.apache.isis.applib.events.domain.CollectionDomainEvent.setValue(T)</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault">
+                    <mml:attr name="getterFacet">org.apache.isis.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor</mml:attr>
+                    <mml:attr name="setterFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.PropertyDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.validating.PropertyValidateFacet" fqcn="org.apache.isis.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefault">
+                    <mml:attr name="validating">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:type>java.lang.Object</mml:type>
+        </mml:prop>
+    </mml:properties>
+    <mml:collections/>
+    <mml:actions/>
+</mml:domainClassDto>

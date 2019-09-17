@@ -23,7 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -31,17 +30,12 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import domainapp.conf.SimpleAppConfigurationForTesting;
+import domainapp.application.integtests.SpringIntegrationTest;
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 
-@SpringBootTest(
-        classes = SimpleAppConfigurationForTesting.class,
-        properties = {
-
-        })
 @Transactional
-class Smoke_IntegTest {
+class Smoke_IntegTest extends SpringIntegrationTest {
 
     @Inject SimpleObjects menu;
     @Inject TransactionService transactionService;
@@ -104,10 +98,6 @@ class Smoke_IntegTest {
         all = wrap(menu).listAll();
         assertThat(all).hasSize(1);
 
-    }
-
-    private <T> T wrap(T domainObject) {
-        return wrapperFactory.wrap(domainObject);
     }
 
 }

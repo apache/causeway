@@ -1,44 +1,92 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mml:domainClassDto id="domainapp.application.services.homepage.HomePageService" service="true" xmlns:mml="http://isis.apache.org/schema/metamodel">
     <mml:facets>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred">
+        <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.named.NamedFacetInferred">
             <mml:attr name="escaped">true</mml:attr>
             <mml:attr name="value">Home Page Service</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet" fqcn="org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration">
+        <mml:facet id="org.apache.isis.metamodel.facets.object.audit.AuditableFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration">
             <mml:attr name="enablement">ENABLED</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+        <mml:facet id="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
             <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet" fqcn="org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotation">
-            <mml:attr name="natureOfService">DOMAIN</mml:attr>
-            <mml:attr name="repositoryFor">java.lang.Object</mml:attr>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.metamodel.facets.object.grid.GridFacetDefault"/>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration">
+            <mml:attr name="disabling">true</mml:attr>
+            <mml:attr name="reason">Disabled</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet" fqcn="org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation">
-            <mml:attr name="menuBar">PRIMARY</mml:attr>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.layout.LayoutFacet" fqcn="org.apache.isis.metamodel.facets.object.layout.LayoutFacetFallback">
+            <mml:attr name="derived">true</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.core.metamodel.facets.object.grid.GridFacetDefault"/>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.isis.core.metamodel.facets.object.domainservice.annotation.IconFacetDerivedFromDomainServiceAnnotation">
-            <mml:attr name="repositoryFor">java.lang.Object</mml:attr>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet" fqcn="org.apache.isis.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">domainapp.application.services.homepage.HomePageService</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet" fqcn="org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId">
-            <mml:attr name="value">homepage.HomePageService</mml:attr>
-        </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
+        <mml:facet id="org.apache.isis.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.isis.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
             <mml:attr name="validating">true</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+        <mml:facet id="org.apache.isis.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.metamodel.facets.fallback.PagedFacetFromConfiguration">
             <mml:attr name="derived">true</mml:attr>
             <mml:attr name="value">25</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.plural.PluralFacet" fqcn="org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred">
+        <mml:facet id="org.apache.isis.metamodel.facets.object.plural.PluralFacet" fqcn="org.apache.isis.metamodel.facets.object.plural.inferred.PluralFacetInferred">
             <mml:attr name="derived">true</mml:attr>
             <mml:attr name="value">Home Page Services</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetImpl">
-            <mml:attr name="disabling">true</mml:attr>
-            <mml:attr name="hiding">true</mml:attr>
-        </mml:facet>
+        <mml:facet id="org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet" fqcn="org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration"/>
     </mml:facets>
+    <mml:actions>
+        <mml:act id="homePage">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.events.domain.ActionDomainEvent.Default</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault">
+                    <mml:attr name="eventType">org.apache.isis.applib.events.domain.ActionDomainEvent.Default</mml:attr>
+                    <mml:attr name="intent.homePage">EXECUTE</mml:attr>
+                    <mml:attr name="methods">public domainapp.application.services.homepage.HomePageViewModel domainapp.application.services.homepage.HomePageService.homePage()</mml:attr>
+                    <mml:attr name="onType">domainapp.application.services.homepage.HomePageService</mml:attr>
+                    <mml:attr name="returnType">domainapp.application.services.homepage.HomePageViewModel</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.command.CommandFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration">
+                    <mml:attr name="disabled">false</mml:attr>
+                    <mml:attr name="executeIn">FOREGROUND</mml:attr>
+                    <mml:attr name="persistence">PERSISTED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet" fqcn="org.apache.isis.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotation"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.isis.metamodel.facets.actions.position.ActionPositionFacetFallback">
+                    <mml:attr name="position">BELOW</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.isis.metamodel.facets.actions.redirect.RedirectFacetFallback">
+                    <mml:attr name="redirect">AS_CONFIGURED</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
+                    <mml:attr name="value">SAFE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
+                <mml:facet id="org.apache.isis.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.application.services.homepage.HomePageService#homePage()</mml:attr>
+                    <mml:attr name="originalText">Home Page</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.metamodel.facets.fallback.NamedFacetDefault</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutAnnotation">
+                    <mml:attr name="value">hidden</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+                    <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
+                    <mml:attr name="promptStyle">INLINE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet" fqcn="org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetFromConfiguration"/>
+            </mml:facets>
+            <mml:returnType>domainapp.application.services.homepage.HomePageViewModel</mml:returnType>
+            <mml:params/>
+        </mml:act>
+    </mml:actions>
 </mml:domainClassDto>
