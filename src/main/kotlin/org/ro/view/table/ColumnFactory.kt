@@ -35,8 +35,6 @@ class ColumnFactory {
             columns.add(icon)
         }
 
-        //TODO use propertyLabels for sequence of columns?
-        val properties = displayList.getMembers()
         val propertyLabels = displayList.propertyLabels
         for (pl in propertyLabels) {
             val id = pl.key
