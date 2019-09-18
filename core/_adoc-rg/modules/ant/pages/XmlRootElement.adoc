@@ -3,44 +3,33 @@
 include::_attributes.adoc[]
 
 
-The `@XmlRootElement` annotation provides an alternative way to define a
-xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model], in particular one intended to act as a DTO for use within
-xref:vro:ROOT::about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
+The `@XmlRootElement` annotation provides an alternative way to define a xref:ug:fun:building-blocks.adoc#view-models[view model], in particular one intended to act as a DTO for use within xref:vro:ROOT::about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
 
-A view model is a non-persisted domain object whose state is converted to/from a string memento.  In the case of a
-JAXB-annotated object this memento is its XML representation.  JAXB generally requires that the root element of the
-XML representation is annotated with `@XmlRootElement`.  Apache Isis makes this a mandatory requirement.
+A view model is a non-persisted domain object whose state is converted to/from a string memento.
+In the case of a JAXB-annotated object this memento is its XML representation.
+JAXB generally requires that the root element of the XML representation is annotated with `@XmlRootElement`.
+Apache Isis makes this a mandatory requirement.
 
-In comparison to using either the xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface or the
-xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of
-significant advantages:
+In comparison to using either the xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface or the xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of significant advantages:
 
-* the view model can be used as a "canonical" DTO, for example when accessing data using the
-xref:vro:ROOT::about.adoc[RestfulObjects viewer] in combination with the
-xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`]. +
+* the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT::about.adoc[RestfulObjects viewer] in combination with the
+xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`].
 +
-This provides a stable and
-versioned API to access data in XML format using whatever client-side technology may be appropriate.
+This provides a stable and versioned API to access data in XML format using whatever client-side technology may be appropriate.
 
-* the XML graph can be as deep as required; in particular it can contain collections of other objects. +
+* the XML graph can be as deep as required; in particular it can contain collections of other objects.
 +
 In contrast, if the `@ViewModel` annotation is used then only the state of the properties (not collections) is captured.
-If using `ViewModel` interface then arbitrary state (including that of collections), however the programmer must write
-all the code by hand
+If using `ViewModel` interface then arbitrary state (including that of collections), however the programmer must write all the code by hand
 
-The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated
-with the xref:rg:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], using the
-framework-provided `PersistentEntityAdapter`.  This adapter converts any references to such domain entities using the
-`oidDto` complex type (as defined by the Apache Isis xref:rg:cms:schema/common.adoc[common schema]):
-the object's type and its identifier.
+The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated with the xref:rg:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], using the framework-provided `PersistentEntityAdapter`.
+This adapter converts any references to such domain entities using the `oidDto` complex type (as defined by the Apache Isis xref:rg:cms:schema/common.adoc[common schema]): the object's type and its identifier.
 
 [TIP]
 ====
-The memento string for view models is converted into a form compatible with use within a URL.  This is performed by the
-xref:rg:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`], the default implementation of which
-simply encodes to base 64.  If the view model XML graph is too large to be serialized to a string, then an alternative
-implementation (eg which maps XML strings to a GUID, say) can be configured using the technique described in
-xref:ug:btb:hints-and-tips/replacing-default-service-implementations.adoc[here] in the user guide.
+The memento string for view models is converted into a form compatible with use within a URL.
+This is performed by the xref:rg:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`], the default implementation of which simply encodes to base 64.
+If the view model XML graph is too large to be serialized to a string, then an alternative implementation (eg which maps XML strings to a GUID, say) can be configured using the technique described in xref:ug:btb:hints-and-tips/replacing-default-service-implementations.adoc[here] in the user guide.
 ====
 
 
@@ -69,13 +58,9 @@ public class ToDoItemDto implements Dto {
 
 == See also
 
-Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep
-the DTO "clean", just focused on specifying the data contract.
+Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep the DTO "clean", just focused on specifying the data contract.
 
-Behaviour can therefore be provided using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] (annotated with
-xref:rg:ant:Mixin.adoc[`@Mixin`]), while xref:rg:cms:classes/uievent.adoc[UI events] can be used
-to obtain title, icons and so on.
+Behaviour can therefore be provided using xref:ug:fun:building-blocks.adoc#mixins[mixins] (annotated with xref:rg:ant:Mixin.adoc[`@Mixin`]), while xref:rg:cms:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
 
-For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[this topic]
-in the user guide.
+For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:building-blocks.adoc#view-models[this topic] in the user guide.
 

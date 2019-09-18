@@ -15,7 +15,7 @@ That said, it is possible to "flush" pending changes:
 * using xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] it is possible to reach down to the underlying JDO API, and perform a flush of pending object updates also.
 
 
-When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle events].
+When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:ug:fun:building-blocks.adoc#lifecycle-events[lifecycle events].
 
 
 

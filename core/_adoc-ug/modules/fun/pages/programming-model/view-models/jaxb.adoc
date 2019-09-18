@@ -50,7 +50,7 @@ This is an all-or-nothing affair: either all properties must be listed, or else 
 For collections, the `@XmlElementWrapper` would also typically be used.
 <5> The `@XmlTransient` indicates that the property is derived and should be ignored by JAXB.
 +
-The derived properties could also have been implemented using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins].
+The derived properties could also have been implemented using xref:ug:fun:building-blocks.adoc#mixins[mixins].
 
 
 [IMPORTANT]

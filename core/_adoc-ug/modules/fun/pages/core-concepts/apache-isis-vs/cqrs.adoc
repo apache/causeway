@@ -31,7 +31,7 @@ In these cases Apache Isis can often provide a reasonable alternative, namely to
 In such cases there is still only a single physical datastore, and so transactional integrity is retained.
 
 Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], or using xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscribers]  on the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].
-One can then use xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models] to surface the data in the external read datastore.
+One can then use xref:ug:fun:building-blocks.adoc#view-models[view models] to surface the data in the external read datastore.
 
 With respect to commands, Apache Isis does of course support the xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] which allows each business action to be reified into a `Command`.
 However, names are misleading here: Apache Isis' commands are relatively passive, merely recording the intent of the user to invoke some operation.
@@ -42,7 +42,7 @@ With Apache Isis, though, the end-user merely invokes the `placeOrder(...)` acti
 In CQRS the commands correspond to the business logic that mutates the system.
 Whether this logic is part of the command class (`PlaceOrderCommand`) or whether that command delegates to methods on the domain object is an implementation detail; but it certainly is common for the business logic to be wholly within the command object and for the domain object to be merely a data holder of the data within the command/write datastore.
 
-In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins].
+In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:ug:fun:building-blocks.adoc#mixins[mixins].
 In the UI (surfaced by the xref:vw:ROOT::about.adoc[Wicket viewer]) or in the REST API (surfaced by the xref:vro:ROOT::about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
 
 

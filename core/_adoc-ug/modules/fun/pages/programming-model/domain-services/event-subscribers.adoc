@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 // TODO: v2: update for Spring events rather than axon/guava
 
-Domain services acting as event subscribers can subscribe to xref:ug:fun:building-blocks/events/domain-events.adoc[domain], xref:ug:fun:building-blocks/events/ui-events.adoc[UI] and xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle] events, influencing the rendering and behaviour of other objects.
+Domain services acting as event subscribers can subscribe to xref:ug:fun:building-blocks.adoc#lifecycle-events[lifecycle] events, influencing the rendering and behaviour of other objects.
 
 All subscribers must subscribe to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`]; as this amounts to a few lines of boilerplate it's easiest to inherit from the convenience `AbstractSubscriber` class.
 

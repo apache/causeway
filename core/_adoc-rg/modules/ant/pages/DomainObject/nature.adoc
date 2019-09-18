@@ -46,7 +46,8 @@ The framework will automatically recreate the domain object each time it is inte
 +
 indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 +
-Equivalent to annotating with xref:rg:ant:Mixin.adoc[`@Mixin`].  For further discussion on using mixins, see xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] in the user guide.
+Equivalent to annotating with xref:rg:ant:Mixin.adoc[`@Mixin`].
+For further discussion on using mixins, see xref:ug:fun:building-blocks.adoc#mixins[mixins] in the user guide.
 
 
 * `VIEW_MODEL` +

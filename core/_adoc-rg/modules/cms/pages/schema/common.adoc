@@ -12,7 +12,8 @@ The `oidDto` complex type captures an object's type and its identifier.
 This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by a given Apache Isis application.
-With it, we have the ability to lookup any arbitrary object.  Further discussion and examples can be found xref:ug:fun:building-blocks/identifiers/oid.adoc[here].
+With it, we have the ability to lookup any arbitrary object.
+Further discussion and examples can be found xref:ug:fun:building-blocks.adoc#oid[here].
 
 The `oidDto` complex type is defined as:
 

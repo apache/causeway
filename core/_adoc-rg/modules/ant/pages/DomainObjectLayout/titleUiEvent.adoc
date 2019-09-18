@@ -13,8 +13,8 @@ From this they can, if they wish, specify a title for the domain object using th
 
 [NOTE]
 ====
-The feature was originally introduced so that xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model]s could be kept as minimal as possible, just defining the data.
-UI events allow subscribers to provide UI hints, while xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixin]s can be used to provide the behaviour.
+The feature was originally introduced so that xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated xref:ug:fun:building-blocks.adoc#view-models[view model]s could be kept as minimal as possible, just defining the data.
+UI events allow subscribers to provide UI hints, while xref:ug:fun:building-blocks.adoc#mixins[mixin]s can be used to provide the behaviour.
 ====
 
 By default the event raised is `TitleUiEvent.Default`.

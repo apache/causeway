@@ -55,7 +55,7 @@ Nevertheless, if you want to ensure that the persist command is flushed immediat
 repositoryService.persistAndFlush(customer);
 ----
 
-When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:ug:fun:building-blocks/events/lifecycle-events.adoc[lifecycle events].
+When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:ug:fun:building-blocks.adoc#lifecycle-events[lifecycle events].
 
 
 == Persistence by Reachability

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `UrlEncodingService` defines a consistent way to convert strings to/from a form safe for use within a URL.
-The service is used by the framework to map xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model] mementos (derived from the state of the view model itself) into a form that can be used as a view model.
+The service is used by the framework to map xref:ug:fun:building-blocks.adoc#view-models[view model] mementos (derived from the state of the view model itself) into a form that can be used as a view model.
 When the framework needs to recreate the view model (for example to invoke an action on it), this URL is converted back into a view model memento, from which the view model can then be hydrated.
 
 Defining this functionality as an SPI has two use cases:

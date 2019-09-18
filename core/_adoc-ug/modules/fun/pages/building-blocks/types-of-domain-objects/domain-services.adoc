@@ -24,7 +24,7 @@ Domain services can also be used for a number of other purposes:
 
 * to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications) +
 +
-This is discussed in more detail below, in the section on xref:ug:fun:building-blocks/events.adoc[events].
+This is discussed in more detail below, in the section on xref:ug:fun:building-blocks.adoc#events[events].
 
 * to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Isis framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 

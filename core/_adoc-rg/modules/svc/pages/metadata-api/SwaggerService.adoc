@@ -35,7 +35,7 @@ public interface SwaggerService {
 }
 ----
 <1> Generate a Swagger spec for use by third-party clients, ie public use.  This specification is restricted only to
-xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model]s and to domain services with a xref:rg:ant:DomainService/nature.adoc[nature] of `VIEW_REST_ONLY`.
+xref:ug:fun:building-blocks.adoc#view-models[view model]s and to domain services with a xref:rg:ant:DomainService/nature.adoc[nature] of `VIEW_REST_ONLY`.
 <2> Generate a Swagger spec for use only by internally-managed clients, ie private internal use.  This specification includes domain entities and all menu domain services (as well as any view models).
 <3> Generate a Swagger spec that is the same as private case (above), but also including any xref:rg:ant:Action/restrictTo.adoc[prototype] actions.
 <4> Swagger specs can be written either in JSON or YAML format.

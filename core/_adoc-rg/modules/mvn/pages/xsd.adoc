@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `xsd` goal of the `isis-maven-plugin` uses the xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`] to
-generate XSD schemas from any JAXB-annotated xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model/DTOs].
+generate XSD schemas from any JAXB-annotated xref:ug:fun:building-blocks.adoc#view-models[view model/DTOs].
 
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
 tool, because it uses the framework's support (via

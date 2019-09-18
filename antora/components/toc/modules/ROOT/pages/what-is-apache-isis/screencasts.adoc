@@ -240,19 +240,19 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Wn5215K7_Jg[022^] +
-Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixin] (useful for decoupling).
+Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:ug:fun:building-blocks.adoc#mixins[mixin] (useful for decoupling).
 |x|||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=m633OEBpWqQ[023^] +
-Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixin].
+Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:ug:fun:building-blocks.adoc#mixins[mixin].
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscriber] to xref:ug:fun:building-blocks/events/domain-events.adoc[decouple] and abstract business rules (xref:rg:cms:methods/prefixes/validate.adoc[validation]).
+Using a domain event xref:rg:cms:classes/super/AbstractSubscriber.adoc[subscriber] to xref:ug:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:rg:cms:methods/prefixes/validate.adoc[validation]).
 ||||||x|||||
 
 

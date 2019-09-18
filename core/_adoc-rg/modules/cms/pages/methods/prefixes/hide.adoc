@@ -91,7 +91,7 @@ However, if they check the first boolean parameter (ie, to ship the `Order` to t
 In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
 Enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
 
-Note that enabling this configuration property in effect means that xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] must be used instead of xref:ug:fun:programming-model/domain-services/contributions.adoc[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
+Note that enabling this configuration property in effect means that xref:ug:fun:building-blocks.adoc#mixins[mixins] must be used instead of xref:ug:fun:programming-model/domain-services/contributions.adoc[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
 ====
 
 
