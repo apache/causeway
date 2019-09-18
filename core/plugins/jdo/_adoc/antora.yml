@@ -1,5 +1,5 @@
-name: ug-odn
-title: "User Guides - DataNucleus ObjectStore"
+name: odn
+title: "DataNucleus ObjectStore"
 version: master
 start_page: ROOT:about.adoc
 nav:

@@ -9,7 +9,7 @@ content:
     start_path: antora/components/ug
     branches: HEAD
   - url: .
-    start_path: antora/components/ug-odn
+    start_path: core/plugins/jdo/_adoc
     branches: HEAD
   - url: .
     start_path: antora/components/ug-sec

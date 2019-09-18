@@ -11,4 +11,4 @@ The "Variables" pane will tell you which field(s) are being loaded, and the stac
 
 For example, it may be that an object is being loaded in a table and the initial query did not eagerly load that field.
 In such a case, consider using fetch groups in the initial repository query to bring the required data into memory with just one SQL call.
-See xref:ug-odn:ROOT:hints-and-tips/typesafe-queries-and-fetchgroups.adoc[this hint/tip] for further details.
+See xref:odn:ROOT:hints-and-tips/typesafe-queries-and-fetchgroups.adoc[this hint/tip] for further details.

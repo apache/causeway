@@ -253,4 +253,4 @@ The cost of these proxies can be mitigated using:
 
 == Using a JNDI Datasource
 
-See the guidance in the xref:ug-odn:ROOT:configuring/using-jndi-data-source.adoc[configuring datanucleus] section.
+See the guidance in the xref:odn:ROOT:configuring/using-jndi-data-source.adoc[configuring datanucleus] section.

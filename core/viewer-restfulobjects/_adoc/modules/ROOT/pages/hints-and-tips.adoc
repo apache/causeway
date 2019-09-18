@@ -13,7 +13,7 @@ See also hints-n-tips chapters in the:
 
 * the xref:vro:ROOT::hints-and-tips.adoc[Restful Objects viewer] guide (this chapter)
 
-* the xref:ug-odn:ROOT:hints-and-tips.adoc[Datanucleus ObjectStore] guide
+* the xref:odn:ROOT:hints-and-tips.adoc[Datanucleus ObjectStore] guide
 
 * the xref:ug:sec:hints-and-tips.adoc[Security] guide
 
