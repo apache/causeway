@@ -17,7 +17,7 @@
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
 		<version>${revision}</version>
-		<relativePath>../../pom.xml</relativePath>
+		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>isis-plugins-jdo-datanucleus-5</artifactId>

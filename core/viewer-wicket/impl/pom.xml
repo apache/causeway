@@ -25,6 +25,7 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
         <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <name>Apache Isis Wicket Viewer Implementation</name>
