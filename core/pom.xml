@@ -2474,9 +2474,9 @@
 		<module>viewer-restfulobjects/rendering</module>
 		<module>viewer-restfulobjects/server</module>
 
-		<module>viewer-wicket-model</module>
-		<module>viewer-wicket-ui</module>
-		<module>viewer-wicket-impl</module>
+		<module>viewer-wicket/model</module>
+		<module>viewer-wicket/ui</module>
+		<module>viewer-wicket/impl</module>
 
 		<module>plugins/codegen-bytebuddy</module>
 		<module>plugins/jaxrs-resteasy-4</module>
