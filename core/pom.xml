@@ -2465,7 +2465,7 @@
 		<module>runtime-extensions</module>
 		<module>runtime-web</module>
 
-		<module>security</module>
+		<module>security/api-and-bypass</module>
 
 		<module>testsupport/unittestsupport</module>
 		<module>testsupport/integtestsupport</module>
