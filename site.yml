@@ -21,7 +21,7 @@ content:
     start_path: antora/components/ug-vro
     branches: HEAD
   - url: .
-    start_path: antora/components/ug-vw
+    start_path: core/viewer-wicket/_adoc
     branches: HEAD
   - url: .
     branches: HEAD

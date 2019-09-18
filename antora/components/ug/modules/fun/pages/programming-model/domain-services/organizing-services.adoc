@@ -8,11 +8,11 @@ In larger applications we have found it worthwhile to ensure that our domain ser
 
 The application provides the `@DomainService(nature=...)` annotation that helps distinguish some of these responsibilities:
 
-* `VIEW` indicates that the actions should appear on the menu of the xref:ug-vw:ROOT:about.adoc[Wicket viewer], and as top-level actions for the REST API provided by the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer]
+* `VIEW` indicates that the actions should appear on the menu of the xref:vw:ROOT::about.adoc[Wicket viewer], and as top-level actions for the REST API provided by the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer]
 
 * `DOMAIN` indicates that the actions are for other domain objects to invoke (either directly or indirectly through the event bus), but in any case should not be rendered at all in the UI
 
-* `VIEW_REST_ONLY` indicates that the actions should appear in the REST API provided by the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer], but not rendered by the xref:ug-vw:ROOT:about.adoc[Wicket viewer].
+* `VIEW_REST_ONLY` indicates that the actions should appear in the REST API provided by the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer], but not rendered by the xref:vw:ROOT::about.adoc[Wicket viewer].
 
 If the domain service nature is not specified (or is left to its default, `VIEW`), then the service's actions will appear in the UI.
 

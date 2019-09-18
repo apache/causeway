@@ -8,7 +8,7 @@ End users interact with view models in the same way as a domain entity, indeed t
 
 However, whereas domain entities are mapped to a datastore, view models are not.
 Instead they are recreated dynamically by serializing their state, ultimately into the URL itself (meaning their state it is in effect implicitly managed by the client browser).
-You will notice that the URL for view models (as shown in xref:ug-vw:ROOT:about.adoc[Wicket viewer] or xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer]) tends to be quite long.
+You will notice that the URL for view models (as shown in xref:vw:ROOT::about.adoc[Wicket viewer] or xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer]) tends to be quite long.
 
 This capability opens up a number of more advanced use cases:
 
@@ -110,7 +110,7 @@ To support this use case, a view model can be defined such that it can act as a 
 This is done by annotating the class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.
 A discussion of how that might be done using an ESB such as link:http://camel.apache.org[Apache Camel(TM)] follows xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc#dtos_consumers[below].
 
-In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ug-vw:ROOT:about.adoc[Wicket viewer] just like any other.
+In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:vw:ROOT::about.adoc[Wicket viewer] just like any other.
 In fact (as the xref:ug:fun:programming-model/view-models/jaxb.adoc[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.

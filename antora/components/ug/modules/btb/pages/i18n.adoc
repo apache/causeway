@@ -7,7 +7,7 @@ Apache Isis' support for internationlization (i18n) allows every element of the 
 
 It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`] or xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`], and so on.
 
-The xref:ug-vw:ROOT:about.adoc[Wicket viewer] (that is, its labels and messages) is also internationalized using the same mechanism.
+The xref:vw:ROOT::about.adoc[Wicket viewer] (that is, its labels and messages) is also internationalized using the same mechanism.
 If no translations are available, then the Wicket viewer falls back to using Wicket resource bundles.
 
 Isis does not translate the values of your domain objects, though.
@@ -234,7 +234,7 @@ If returns `null`, then the `Exception#getMessage()` is used as a fallback
 
 == Wicket Viewer
 
-The xref:ug-vw:ROOT:about.adoc[Wicket viewer] (its labels and messages) is also internationalized using
+The xref:vw:ROOT::about.adoc[Wicket viewer] (its labels and messages) is also internationalized using
 the `TranslationService`.
 This is done through an Isis-specific implementation of the Wicket framework's `org.apache.wicket.Localizer` class, namely `LocalizerForIsis`.
 
@@ -334,7 +334,7 @@ msgstr "You can only select 1 item"
 === Login/self-sign-up
 
 In addition, there are a reasonably large number of messages that are used for both login and the
- xref:ug-vw:ROOT:features/user-registration.adoc[user registration] (self sign-up) and password reset features.
+ xref:vw:ROOT::features/user-registration.adoc[user registration] (self sign-up) and password reset features.
 
 These are:
 
@@ -550,7 +550,7 @@ msgid "<i>Quantity</i>"
 msgstr "<i>Quantité</i>"
 ----
 
-For this to work, the `namedEscaped()` attribute must be specified using either the xref:ug-vw:ROOT:layout/file-based.adoc[layout file], or using an annotation such as xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`].
+For this to work, the `namedEscaped()` attribute must be specified using either the xref:vw:ROOT::layout/file-based.adoc[layout file], or using an annotation such as xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`].
 
 For example:
 

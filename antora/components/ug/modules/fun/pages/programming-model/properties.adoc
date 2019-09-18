@@ -14,7 +14,7 @@ Most properties (those that are editable/modifiable) will also have a setter and
 And most properties will also have a number of annotations:
 
 * Apache Isis defines its own set own `@Property` annotation for capturing domain semantics.
-It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ug-vw:ROOT:layout.adoc[`.layout.xml`] file)
+It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:vw:ROOT::layout.adoc[`.layout.xml`] file)
 
 * the properties of domain entities are often annotated with the JDO/DataNucleus `@javax.jdo.annotations.Column` annotation.
 For property references, there may be other annotations to indicate whether the reference is bidirectional.
@@ -123,7 +123,7 @@ If this is omitted then whether editing is enabled or disabled is defined global
 
 == Ignoring Properties
 
-By default Apache Isis will automatically render all properties in the xref:ug-vw:ROOT:about.adoc[Wicket UI] or in the xref:ug-vro:ROOT:about.adoc[REST API].
+By default Apache Isis will automatically render all properties in the xref:vw:ROOT::about.adoc[Wicket UI] or in the xref:ug-vro:ROOT:about.adoc[REST API].
 To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using `@Programmatic`.
 
 Similarly, you can tell JDO/DataNucleus to ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.

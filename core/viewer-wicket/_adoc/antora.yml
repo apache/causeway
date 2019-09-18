@@ -1,5 +1,5 @@
-name: ug-vw
-title: "User Guides - Wicket Viewer"
+name: vw
+title: "Wicket Viewer"
 version: master
 start_page: ROOT:about.adoc
 nav:

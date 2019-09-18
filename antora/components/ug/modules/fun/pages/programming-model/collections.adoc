@@ -14,7 +14,7 @@ Most collections (those that are modifiable) will also have a setter and, if per
 And collections properties will also have a number of annotations:
 
 * Apache Isis defines its own `@Collection` annotation for capturing domain semantics.
-It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ug-vw:ROOT:layout.adoc[`.layout.xml`] file)
+It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:vw:ROOT::layout.adoc[`.layout.xml`] file)
 
 * the collections of domain entities are often annotated with various JDO/DataNucleus annotations, most notably `javax.jdo.annotations.Persistent`.
 This and other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.

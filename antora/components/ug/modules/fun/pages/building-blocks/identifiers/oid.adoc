@@ -29,7 +29,7 @@ When the PDF is scanned by the mail room, the barcode could be read to attach th
 
 * similarly within implementations of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] to persist published action invocations
 
-* and of course both the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] and xref:ug-vw:ROOT:about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
+* and of course both the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] and xref:vw:ROOT::about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
 These are represented as ``Bookmark``s, obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[``BookmarkService``].
