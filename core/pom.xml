@@ -2470,9 +2470,9 @@
 		<module>testsupport/unittestsupport</module>
 		<module>testsupport/integtestsupport</module>
 
-		<module>viewer-restfulobjects-applib</module>
-		<module>viewer-restfulobjects-rendering</module>
-		<module>viewer-restfulobjects-server</module>
+		<module>viewer-restfulobjects/applib</module>
+		<module>viewer-restfulobjects/rendering</module>
+		<module>viewer-restfulobjects/server</module>
 
 		<module>viewer-wicket-model</module>
 		<module>viewer-wicket-ui</module>
