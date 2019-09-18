@@ -67,10 +67,10 @@ object RoMenuBar {
             for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
                 val menuLink = buildMenuAction(me.action.id)
                 dd.add(menuLink)
-                val execLink = me.action.getInvokeLink()!!
+                val l = me.action.getInvokeLink()!!
                 menuLink.onClick {
                     //TODO pass in action.id?
-                    ActionAggregator().invoke(execLink)
+                    ActionAggregator().invoke(l)
                 }
             }
         }

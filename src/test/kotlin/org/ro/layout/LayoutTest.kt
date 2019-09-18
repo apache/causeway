@@ -59,12 +59,6 @@ class LayoutTest : IntegrationTest() {
             assertEquals("fixtureScriptClassName", properties[1].id)
             assertEquals("key", properties[2].id)
             assertEquals("object", properties[3].id)
-            //TODO where do these labels come from?
-
-            // (1) property.link.href "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/properties/className"
-            // (2) links[describedBy].href ->
-            // (3) http://localhost:8080/restful/domain-types/isisApplib.FixtureResult/properties/className -> extensions.friendlyName
-            // (4)
         }
     }
 

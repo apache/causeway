@@ -25,7 +25,6 @@ class DisplayList(val title: String) {
         }
     }
 
-    // List<MemberExposer<TObject>>
     fun addData(obj: TObject) {
         val exo = Exposer(obj)
         data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
@@ -56,7 +55,6 @@ class DisplayList(val title: String) {
                 }
             }
         }
-        console.log(members)
         return members
     }
 

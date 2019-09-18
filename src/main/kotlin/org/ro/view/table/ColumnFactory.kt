@@ -37,11 +37,14 @@ class ColumnFactory {
 
         //TODO use propertyLabels for sequence of columns?
         val properties = displayList.getMembers()
-        for (m in properties) {
+        val propertyLabels = displayList.propertyLabels
+        for (pl in propertyLabels) {
+            val id = pl.key
+            val friendlyName = pl.value
             var cd = ColumnDefinition<Exposer>(
-                    title = m.key,
-                    field = m.value)
-            if (m.value == "object") {
+                    title = friendlyName,
+                    field = id)
+            if (id == "object") {
                 cd = buildLink()
             }
             columns.add(cd)

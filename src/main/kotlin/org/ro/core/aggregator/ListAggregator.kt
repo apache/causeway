@@ -43,17 +43,17 @@ class ListAggregator(private val actionTitle: String) : BaseAggregator() {
 
     private fun handleList(resultList: ResultList) {
         val result = resultList.result!!
-        val members = result.value
-        for (l: Link in members) {
+        val links = result.value
+        for (l: Link in links) {
             invoke(l)
         }
     }
 
     private fun handleObject(obj: TObject) {
         list.addData(obj)
-        val link = obj.getLayoutLink()
-        if (link != null) {
-            invoke(link)
+        val l = obj.getLayoutLink()
+        if (l != null) {
+            invoke(l)
         }
     }
 
@@ -71,8 +71,8 @@ class ListAggregator(private val actionTitle: String) : BaseAggregator() {
             list.addPropertyLabel(p)
         } else {
             list.addProperty(p)
-            val descLink = p.descriptionLink()!!
-            invoke(descLink)
+            val l = p.descriptionLink()!!
+            invoke(l)
         }
     }
 

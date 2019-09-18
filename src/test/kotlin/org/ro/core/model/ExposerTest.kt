@@ -8,6 +8,7 @@ import org.ro.urls.CFG_1
 import org.ro.urls.SO_0
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @UnstableDefault
 class ExposerTest {
@@ -33,9 +34,7 @@ new.*:fa-plus,add.*:fa-plus-square,create.*:fa-plus,update.*:fa-edit,delete.*:fa
         assertEquals("domainapp.application.manifest.DomainAppAppManifest", actValue)
 
         val members = to.members
-        for (m in members) {
-            //TODO iterate over members?
-        }
+        assertFalse(members.isEmpty())
     }
 
     @Test
@@ -62,7 +61,6 @@ new.*:fa-plus,add.*:fa-plus-square,create.*:fa-plus,update.*:fa-edit,delete.*:fa
         assertEquals(null, actValue)
 
         val members = to.members
-        for (m in members) {
-        }
+        assertFalse(members.isEmpty())
     }
 }

@@ -18,7 +18,6 @@ class LogEntryTest {
         // then
         assertTrue(0 <= le.duration)
 
-        //TODO extend test to catch negative values
         if (le.duration < 0 && le.cacheHits == 0) {
             console.log("[LogEntry.calculate] duration out of range")
             console.log(this)

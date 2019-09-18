@@ -22,7 +22,7 @@ class RoDialog(
                 closeButton = true,
                 animation = true,
                 size = ModalSize.LARGE
-        ) { //TODO  in order to have it draggable&resizeable use Window
+        ) { //TODO  #18 in order to have it draggable&resizeable use Window
 
     var panel: FormPanel<String>? = null
     private val loginButton = Button("OK", "fa-check", ButtonStyle.SUCCESS).onClick {
