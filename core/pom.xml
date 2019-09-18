@@ -2467,8 +2467,8 @@
 
 		<module>security</module>
 
-		<module>unittestsupport</module>
-		<module>integtestsupport</module>
+		<module>testsupport/unittestsupport</module>
+		<module>testsupport/integtestsupport</module>
 
 		<module>viewer-restfulobjects-applib</module>
 		<module>viewer-restfulobjects-rendering</module>
