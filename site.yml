@@ -25,7 +25,7 @@ content:
     branches: HEAD
   - url: .
     branches: HEAD
-    start_path: antora/components/rg
+    start_path: core/_adoc-rg
   - url: .
     start_path: examples/apps/helloworld/_adoc
     branches: HEAD
