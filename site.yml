@@ -18,7 +18,7 @@ content:
     start_path: antora/components/ug-tst
     branches: HEAD
   - url: .
-    start_path: antora/components/ug-vro
+    start_path: core/viewer-restfulobjects/_adoc
     branches: HEAD
   - url: .
     start_path: core/viewer-wicket/_adoc

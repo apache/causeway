@@ -53,7 +53,7 @@ the service with the lowest xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@Dom
 == Implementation
 
 The framework provides `GridSystemServiceBS3`, an implementation that encodes the bootstrap3 grid system.
-(The framework also provides xref:ug:vw:about.adoc[Wicket viewer] components that are capable of interpreting and rendering this metadata).
+(The framework also provides xref:vw:ROOT:about.adoc[Wicket viewer] components that are capable of interpreting and rendering this metadata).
 
 
 

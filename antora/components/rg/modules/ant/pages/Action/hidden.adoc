@@ -9,7 +9,7 @@ Actions can be hidden at the domain-level, indicating that they are not visible 
 
 [TIP]
 ====
-It is also possible to use xref:rg:ant:ActionLayout/hidden.adoc[`@ActionLayout#hidden()`] or xref:ug:vw:layout/file-based.adoc[file-based layouts] such that the action can be hidden at the view layer.
+It is also possible to use xref:rg:ant:ActionLayout/hidden.adoc[`@ActionLayout#hidden()`] or xref:vw:ROOT:layout/file-based.adoc[file-based layouts] such that the action can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 

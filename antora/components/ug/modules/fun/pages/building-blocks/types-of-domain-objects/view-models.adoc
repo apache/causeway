@@ -8,7 +8,7 @@ End users interact with view models in the same way as a domain entity, indeed t
 
 However, whereas domain entities are mapped to a datastore, view models are not.
 Instead they are recreated dynamically by serializing their state, ultimately into the URL itself (meaning their state it is in effect implicitly managed by the client browser).
-You will notice that the URL for view models (as shown in xref:vw:ROOT::about.adoc[Wicket viewer] or xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer]) tends to be quite long.
+You will notice that the URL for view models (as shown in xref:vw:ROOT::about.adoc[Wicket viewer] or xref:vro:ROOT::about.adoc[RestfulObjects viewer]) tends to be quite long.
 
 This capability opens up a number of more advanced use cases:
 
@@ -101,10 +101,10 @@ However, if the application needs to integrate with other systems, or if the app
 
 DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carry data between processes".
 
-If those two processes are parts of the same overall application (the same team builds and deploys both server and client) then there's generally no need to define a DTO; just access the entities using Apache Isis' xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer].
+If those two processes are parts of the same overall application (the same team builds and deploys both server and client) then there's generally no need to define a DTO; just access the entities using Apache Isis' xref:vro:ROOT::about.adoc[RestfulObjects viewer].
 
 On the other hand, if the client consuming the DTO is a different application -- by which we mean developed/deployed by a different (possible third-party) team -- then the DTOs act as a formal contract between the provider and the consumer.
-In such cases, exposing domain entities over xref:ug-vro:ROOT:about.adoc[RestfulObjects] would be "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be easily changed by the producer.
+In such cases, exposing domain entities over xref:vro:ROOT::about.adoc[RestfulObjects] would be "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be easily changed by the producer.
 
 To support this use case, a view model can be defined such that it can act as a DTO.
 This is done by annotating the class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.
@@ -124,7 +124,7 @@ Details of how to consume such DTOs can be found xref:ug:fun:programming-model/v
 
 == For REST Clients
 
-The xref:ug-vro:ROOT:about.adoc[Restful Objects] viewer automatically provides a REST API for both domain entities.
+The xref:vro:ROOT::about.adoc[Restful Objects] viewer automatically provides a REST API for both domain entities.
 Or, you can use it to only expose view models, taking care to map the state of the domain entity/ies into a view model.
 
 Which beckons the question: when is it safe to safe to expose domain entities directly as REST resources, and when should view models be exposed instead.

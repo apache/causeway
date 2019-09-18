@@ -100,7 +100,7 @@ Scratchpad scratchpad;
 <1> look for the `ToDoItemBulkUpdate` in the scratchpad...
 <2> ... and add one if there isn't one (ie for the first object returned).
 
-If using the xref:ug:vw:about.adoc[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
+If using the xref:vw:ROOT:about.adoc[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
 
 
 

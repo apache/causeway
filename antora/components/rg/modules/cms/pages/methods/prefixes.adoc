@@ -42,7 +42,7 @@ Param
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:methods/prefixes/removeFrom.adoc[`removeFrom...()`]`
@@ -140,7 +140,7 @@ See also xref:rg:cms:methods/prefixes/clear.adoc[`clear...()`]`.
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:methods/prefixes/addTo.adoc[`addTo...()`]`
@@ -175,7 +175,7 @@ AddTo...()`]
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:methods/prefixes/validateRemoveFrom.adoc[`validateRemoveFrom...()`], and xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`] for properties and actions.
@@ -191,7 +191,7 @@ RemoveFrom...()`]
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ug:vw:about.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 ====
 
 See also xref:rg:cms:methods/prefixes/validateAddTo.adoc[`validateAddTo...()`], and xref:rg:cms:methods/prefixes/validate.adoc[`validate...()`] for properties and actions.

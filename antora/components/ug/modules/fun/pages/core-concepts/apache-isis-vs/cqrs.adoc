@@ -42,6 +42,6 @@ In CQRS the commands correspond to the business logic that mutates the system.
 Whether this logic is part of the command class (`PlaceOrderCommand`) or whether that command delegates to methods on the domain object is an implementation detail; but it certainly is common for the business logic to be wholly within the command object and for the domain object to be merely a data holder of the data within the command/write datastore.
 
 In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins].
-In the UI (surfaced by the xref:vw:ROOT::about.adoc[Wicket viewer]) or in the REST API (surfaced by the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
+In the UI (surfaced by the xref:vw:ROOT::about.adoc[Wicket viewer]) or in the REST API (surfaced by the xref:vro:ROOT::about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
 
 

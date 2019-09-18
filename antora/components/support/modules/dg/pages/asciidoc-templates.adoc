@@ -307,7 +307,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugvw`
-//|`\xref:ug:vw:about.adoc#xxx[ttt]`
+//|`\xref:vw:ROOT:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Wicket viewer guide, where:
 //
@@ -316,13 +316,13 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:vw:customisation.adoc[Customisation]`
+//`\xref:vw:ROOT:customisation.adoc[Customisation]`
 //
-//|xref:ug:vw:customisation.adoc[Customisation]
+//|xref:vw:ROOT:customisation.adoc[Customisation]
 //
 //
 //|`adugvro`
-//|`\xref:ug-vro:ROOT:about.adoc#xxx[ttt]`
+//|`\xref:vro:ROOT::about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 //
@@ -331,9 +331,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug-vro:ROOT:ro-spec.adoc[RestfulObjects specification]`
+//`\xref:vro:ROOT::ro-spec.adoc[RestfulObjects specification]`
 //
-//|xref:ug-vro:ROOT:ro-spec.adoc[RestfulObjects specification]
+//|xref:vro:ROOT::ro-spec.adoc[RestfulObjects specification]
 //
 //
 //

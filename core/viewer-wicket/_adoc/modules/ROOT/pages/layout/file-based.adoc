@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-Metadata providing UI hints can be specified either xref:ug:vw:layout/annotation-based.adoc[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
+Metadata providing UI hints can be specified either xref:vw:ROOT:layout/annotation-based.adoc[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
 
 File-based layouts offer a number of benefits:
 
@@ -59,7 +59,7 @@ The layout file distinguishes between two types of element:
 
 * those that define a grid structure, of: rows, columns, tab groups and tabs. +
 +
-The rows and columns are closely modelled on link:http://getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:ug:vw:about.adoc[Wicket viewer]).
+The rows and columns are closely modelled on link:http://getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:vw:ROOT:about.adoc[Wicket viewer]).
 
 * those that defines common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 
@@ -142,7 +142,7 @@ This corresponds to the following XML:
 
 
 You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.
-This topic is discussed in more detail xref:ug:vw:layout/file-based/adoc#unreferenced[below].
+This topic is discussed in more detail xref:vw:ROOT:layout/file-based/adoc#unreferenced[below].
 
 
 
@@ -188,7 +188,7 @@ Notice how actions - such as `duplicate` and `delete` - can be associated with t
 Thereafter the fieldset lists the properties in order.
 Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
-Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ug:vw:layout/file-based.adoc#unreferenced[below].
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:vw:ROOT:layout/file-based.adoc#unreferenced[below].
 
 [NOTE]
 ====

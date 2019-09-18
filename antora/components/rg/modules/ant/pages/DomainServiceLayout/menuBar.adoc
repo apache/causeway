@@ -17,7 +17,7 @@ public class ToDoItems {
 }
 ----
 
-In the xref:ug:vw:about.adoc[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
+In the xref:vw:ROOT:about.adoc[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
 
 image::reference-annotations/DomainServiceLayout/menuBar-primary.png[width="720px",link="{imagesdir}/reference-annotations/DomainServiceLayout/menuBar-primary.png"]
 
@@ -36,6 +36,6 @@ The grouping of multiple domain services actions within a single drop-down is ma
 
 [NOTE]
 ====
-The xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] does not support this attribute.
+The xref:vro:ROOT::about.adoc[RestfulObjects viewer] does not support this attribute.
 ====
 

@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-Metadata providing UI hints can be specified either using annotations, or using a xref:ug:vw:layout/file-based.adoc[`layout.xml`] file.
+Metadata providing UI hints can be specified either using annotations, or using a xref:vw:ROOT:layout/file-based.adoc[`layout.xml`] file.
 
 In most cases you will probably want to use the file-based approach: changes to file layouts are picked up dynamically, and using a file also allows tabs and tab groups to be specified: this is not supported using annotations.
 
@@ -111,7 +111,7 @@ The property groups/fieldsets in this case are those that are inferred from the 
 
 [TIP]
 ====
-It is also possible to combine `@MemberOrder` with a xref:ug:vw:layout/file-based.adoc[file-based layout].
+It is also possible to combine `@MemberOrder` with a xref:vw:ROOT:layout/file-based.adoc[file-based layout].
 The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.
 The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
 

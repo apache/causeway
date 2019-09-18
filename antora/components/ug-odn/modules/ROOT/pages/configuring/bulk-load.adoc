@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The implementation of user interactions (meaning either an action invocations or a property edits) in the xref:ug:vw:about.adoc[Wicket viewer] is splits into two.
+The implementation of user interactions (meaning either an action invocations or a property edits) in the xref:vw:ROOT:about.adoc[Wicket viewer] is splits into two.
 The first phase performs the actual interaction, with the results (dirtied objects) flushed to the database.
 The second phase then renders the results of the interaction.
 

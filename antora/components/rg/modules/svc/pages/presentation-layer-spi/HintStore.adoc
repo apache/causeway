@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `HintStore` service defines an SPI for the xref:ug:vw:about.adoc[Wicket viewer] to store UI hints on a per-object basis.
+The `HintStore` service defines an SPI for the xref:vw:ROOT:about.adoc[Wicket viewer] to store UI hints on a per-object basis.
 For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden),
 which page of a table to render, or whether "show all" (rows) is toggled.
 
@@ -93,6 +93,6 @@ public class CustomerAndOrders implements HintStore.HintIdProvider {
 
 == Related Services
 
-The xref:ug:vw:about.adoc[Wicket viewer] exposes the xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"]
+The xref:vw:ROOT:about.adoc[Wicket viewer] exposes the xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"]
 mixin action that is for use by end-users of the application to clear any UI hints that have accumulated for a
 domain object.

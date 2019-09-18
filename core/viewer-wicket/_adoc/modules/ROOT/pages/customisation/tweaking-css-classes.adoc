@@ -91,7 +91,7 @@ div.x-myapp-highlight span.scalarName {
 }
 ----
 
-Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:ug:vw:layout/file-based.adoc[layout file].
+Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:vw:ROOT:layout/file-based.adoc[layout file].
 
 
 
@@ -186,7 +186,7 @@ For example:
 ----
 <1> the parent class identifier
 <2> the collection identifier.
-This element's class also has the entity type within the collection (as xref:ug:vw:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
+This element's class also has the entity type within the collection (as xref:vw:ROOT:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
 
 Using this, the `productRef` property could be targeted using:
 
@@ -231,7 +231,7 @@ Standalone collections will be wrapped in a ``<div>`` that identifies the action
 </div>
 ----
 <1> action identifier.
-This element's class also identifies the entity type within the collection (as xref:ug:vw:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
+This element's class also identifies the entity type within the collection (as xref:vw:ROOT:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
 
 Using this, the `quantity` property could be targeted using:
 

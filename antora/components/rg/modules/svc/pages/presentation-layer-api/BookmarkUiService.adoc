@@ -22,7 +22,7 @@ public interface BookmarkUiService {
 ----
 <1> Simply clears the current list of breadcrumbs and bookmarks.
 
-The xref:ug:vw:about.adoc[Wicket viewer] provides an implementation of this service, `o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket`.
+The xref:vw:ROOT:about.adoc[Wicket viewer] provides an implementation of this service, `o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket`.
 
 
 

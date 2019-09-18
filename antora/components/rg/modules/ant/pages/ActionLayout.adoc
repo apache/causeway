@@ -34,7 +34,7 @@ For a domain service action to be contributed, the domain services must have a x
 |Any string valid as a CSS class
 |an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]. +
 
-Supported by the xref:ug:vw:about.adoc[Wicket viewer] but currently ignored by the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer].
+Supported by the xref:vw:ROOT:about.adoc[Wicket viewer] but currently ignored by the xref:vro:ROOT::about.adoc[RestfulObjects viewer].
 
 
 |xref:rg:ant:ActionLayout/cssClassFa.adoc[`cssClassFa()`]
@@ -98,7 +98,7 @@ public class ToDoItems {
 
 [TIP]
 ====
-As an alternative to using the `@ActionLayout` annotation, a xref:ug:vw:layout/file-based.adoc[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+As an alternative to using the `@ActionLayout` annotation, a xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
 ====
 
 

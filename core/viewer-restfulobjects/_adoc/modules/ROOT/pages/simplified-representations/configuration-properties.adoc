@@ -11,6 +11,6 @@ are limited by the fact that they are global configuration settings, so cannot b
 basis (as is the case with the `Accept` header used for the Apache Isis profile). They have therefore been
 deprecated, and may be removed in the future.
 
-Details can be found in xref:ug-vro:ROOT:configuration-properties.adoc#deprecated[here].
+Details can be found in xref:vro:ROOT::configuration-properties.adoc#deprecated[here].
 
 

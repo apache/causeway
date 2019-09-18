@@ -201,7 +201,7 @@ What then remains is to update the bootstrapping code itself.
 
 There are several different contexts in which the framework needs to be bootstrapped:
 
-* the first is as a "regular" webapp (using the xref:ug:vw:about.adoc[Wicket viewer]).
+* the first is as a "regular" webapp (using the xref:vw:ROOT:about.adoc[Wicket viewer]).
 Here the `AppManifest` just needs to be specified as a configuration property, usually done using the `WEB-INF/isis.properties` configuration file: +
 +
 [source,ini]

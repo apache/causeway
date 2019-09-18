@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 Every object is represented by an icon; this is based on the domain object's simple name.
-The xref:ug:vw:about.adoc[Wicket viewer] searches for the image in the same package as the `.class` file for the domain object or in the `images` package.
+The xref:vw:ROOT:about.adoc[Wicket viewer] searches for the image in the same package as the `.class` file for the domain object or in the `images` package.
 It will find any matching name and one of the following suffixes `.png`, `.gif`, `.jpeg`, `.jpg` or `.svg`.
 If none is found, then `Default.png` will be used as fallback.
 

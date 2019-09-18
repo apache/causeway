@@ -22,7 +22,7 @@ Once you've sketched out your domain model, you can then either start-over using
 One of the original motivations for Apache Isis itself was to be able automatically generate a user interface for a domain object model.
 
 Apache Isis' has a pluggable architecture allowing different user interface technologies.
- The principal implementation (as configured by the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]) is the xref:ug:vw:about.adoc[Wicket viewer].
+ The principal implementation (as configured by the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]) is the xref:vw:ROOT:about.adoc[Wicket viewer].
   This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components.
 Some third-party components can be found in the (non-ASF) link:http://platform.incode.org[Incode Platform^].
 
@@ -40,7 +40,7 @@ REST (Representation State Transfer) is an architectural style for building high
 Many commercial web APIs (twitter, facebook, Amazon) are implemented as either pure REST APIs or some approximation therein.
 
 The http://restfulobjects.org[Restful Objects specification] defines a means by a domain object model can be exposed as RESTful resources using JSON representations over HTTP.
-Apache Isis' xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
+Apache Isis' xref:vro:ROOT::about.adoc[RestfulObjects viewer] is an implementation of that spec, making any Apache Isis domain object automatically available via REST.
 
 There are two main use cases for deploying Apache Isis as a RESTful web service are:
 

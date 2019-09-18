@@ -100,7 +100,7 @@ If a view model has been specified using the equivalent xref:rg:ant:DomainObject
 
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:ug:vw:layout/file-based.adoc[`.layout.xml`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:vw:ROOT:layout/file-based.adoc[`.layout.xml`] file (only for properties, collections and actions are supported).
 ====
 
 

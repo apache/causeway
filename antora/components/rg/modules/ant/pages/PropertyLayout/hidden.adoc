@@ -8,7 +8,7 @@ The `hidden()` attribute indicates where (in the UI) the property should be hidd
 
 [TIP]
 ====
-It is also possible to use xref:rg:ant:PropertyLayout/hidden.adoc[`@PropertyLayout#hidden()`] or a xref:ug:vw:layout/file-based.adoc[file-based layout] such that the property can be hidden at the view layer.
+It is also possible to use xref:rg:ant:PropertyLayout/hidden.adoc[`@PropertyLayout#hidden()`] or a xref:vw:ROOT:layout/file-based.adoc[file-based layout] such that the property can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -62,13 +62,13 @@ tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 [NOTE]
 ====
-The xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] has only partial support for these `Where` enums.
+The xref:vro:ROOT::about.adoc[RestfulObjects viewer] has only partial support for these `Where` enums.
 ====
 
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
 
 == See also
 

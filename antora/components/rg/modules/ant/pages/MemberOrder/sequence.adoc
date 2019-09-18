@@ -7,4 +7,4 @@ include::_attributes.adoc[]
 
 Broadly speaking the `sequence()` attribute orders members once they have been grouped.
 
-As this is an important topic, there is a xref:ug:vw:layout.adoc[separate chapter] that discussed object layout in full.
+As this is an important topic, there is a xref:vw:ROOT:layout.adoc[separate chapter] that discussed object layout in full.

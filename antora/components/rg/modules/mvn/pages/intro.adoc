@@ -12,7 +12,7 @@ This runs the `MetaModelValidator` that is also run when the application is star
 
 * `swagger` +
 +
-Uses the xref:rg:svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer].
+Uses the xref:rg:svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT::about.adoc[RestfulObjects viewer].
 
 * `xsd` +
 +

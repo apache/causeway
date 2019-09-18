@@ -1,5 +1,5 @@
-name: ug-vro
-title: "User Guides - Restful Objects Viewer"
+name: vro
+title: "Restful Objects Viewer"
 version: master
 start_page: ROOT:about.adoc
 nav:

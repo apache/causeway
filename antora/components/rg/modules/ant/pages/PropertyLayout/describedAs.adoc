@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `describedAs()` attribute is used to provide a short description of the property to the user.  In the xref:ug:vw:about.adoc[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:rg:ant:CollectionLayout/describedAs.adoc[collections],  xref:rg:ant:ActionLayout/describedAs.adoc[actions], xref:rg:ant:ParameterLayout/describedAs.adoc[parameters], xref:rg:ant:DomainObjectLayout/describedAs.adoc[domain objects] and xref:rg:ant:ViewModelLayout/describedAs.adoc[view models].
+The `describedAs()` attribute is used to provide a short description of the property to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:rg:ant:CollectionLayout/describedAs.adoc[collections],  xref:rg:ant:ActionLayout/describedAs.adoc[actions], xref:rg:ant:ParameterLayout/describedAs.adoc[parameters], xref:rg:ant:DomainObjectLayout/describedAs.adoc[domain objects] and xref:rg:ant:ViewModelLayout/describedAs.adoc[view models].
 
 For example:
 
@@ -20,4 +20,4 @@ public class Customer {
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.

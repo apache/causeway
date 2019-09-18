@@ -9,18 +9,18 @@ The `bookmarking()` attribute indicates if an action (with safe xref:rg:ant:Acti
 
 
 
-In the xref:ug:vw:about.adoc[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
+In the xref:vw:ROOT:about.adoc[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
 
 image::reference-annotations/ActionLayout/bookmarking.png[width="720px",link="{imagesdir}/reference-annotations/ActionLayout/bookmarking.png"]
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 [TIP]
 ====
-The xref:ug:vw:about.adoc[Wicket viewer] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
+The xref:vw:ROOT:about.adoc[Wicket viewer] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
 ====
 
 
@@ -50,7 +50,7 @@ The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmar
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
 
 
 == See also

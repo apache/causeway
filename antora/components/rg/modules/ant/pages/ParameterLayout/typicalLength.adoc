@@ -9,7 +9,7 @@ It is ignored for parameters of other types.
 The attribute is also supported for xref:rg:ant:PropertyLayout/typicalLength.adoc[properties].
 
 The information is intended as a hint to the UI to determine the space that should be given to render a particular string parameter.
-That said, note that the xref:ug:vw:about.adoc[Wicket viewer] uses the maximum space available for all fields, so in effect ignores this attribute.
+That said, note that the xref:vw:ROOT:about.adoc[Wicket viewer] uses the maximum space available for all fields, so in effect ignores this attribute.
 
 For example:
 

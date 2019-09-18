@@ -12,7 +12,7 @@ See also hints-n-tips chapters in the:
 
 * the xref:vw:ROOT::hints-and-tips.adoc[Wicket viewer] guide
 
-* the xref:ug-vro:ROOT:hints-and-tips.adoc[Restful Objects viewer] guide
+* the xref:vro:ROOT::hints-and-tips.adoc[Restful Objects viewer] guide
 
 * the xref:ug-odn:ROOT:hints-and-tips.adoc[Datanucleus ObjectStore] guide
 

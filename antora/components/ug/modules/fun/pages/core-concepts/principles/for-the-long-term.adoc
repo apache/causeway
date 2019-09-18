@@ -21,7 +21,7 @@ The diagram below illustrates this:
 .decoupled applications
 image::core-concepts/philosophy/decoupled-applications.png[width="800px",link="{imagesdir}/core-concepts/philosophy/decoupled-applications.png"]
 
-Here, the presentation layer (xref:vw:ROOT::about.adoc[Wicket UI] or xref:ug-vro:ROOT:about.adoc[REST API]) is handled by the framework, while the developer focusses on just the domain layer.
+Here, the presentation layer (xref:vw:ROOT::about.adoc[Wicket UI] or xref:vro:ROOT::about.adoc[REST API]) is handled by the framework, while the developer focusses on just the domain layer.
 The framework encourages splitting this functionality into modules; each such module has its counterpart (typically tables within a given RDBMS database schema) within the persistence layer.
 
 This architecture means that it's impossible for business logic to leach out into the adjacent presentation layer because the developer doesn't (can't) write any code for presentation layer.

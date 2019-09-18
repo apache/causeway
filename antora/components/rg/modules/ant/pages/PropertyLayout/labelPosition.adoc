@@ -29,7 +29,7 @@ public class ToDoItem {
 ----
 
 
-To get an idea of how these are rendered (in the xref:ug:vw:about.adoc[Wicket viewer]), we can look at the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] that happens to have examples of most of these various label positions.
+To get an idea of how these are rendered (in the xref:vw:ROOT:about.adoc[Wicket viewer]), we can look at the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] that happens to have examples of most of these various label positions.
 
 The default `LEFT` label positioning is used by the `cost` property:
 
@@ -82,7 +82,7 @@ If these are not present then Apache Isis will render according to internal defa
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
 
 
 

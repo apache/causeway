@@ -73,5 +73,5 @@ The above annotations mean that titles usually "just work", altering according t
 
 [TIP]
 ====
-It is also possible to configure the Wicket viewer to xref:ug:vw:configuration-properties.adoc#presentation.[abbreviate titles or suppress them] completely.
+It is also possible to configure the Wicket viewer to xref:vw:ROOT:configuration-properties.adoc#presentation.[abbreviate titles or suppress them] completely.
 ====

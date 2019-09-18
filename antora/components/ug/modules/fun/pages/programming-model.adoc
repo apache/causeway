@@ -49,7 +49,7 @@ Indeed, they can additionally be annotated using `@XmlTypeAdapter` if required.
 As for view models, which is used is a matter of personal preference.
 
 * finally, *domain services*` are annotated with `@DomainService(nature=...)` where the nature is either `VIEW` (for domain services whose actions appear in the viewers, eg on the top-level menu bars), or `DOMAIN` (for domain services whose
-functionality is simply for other domain objects to invoke programmatically), or `VIEW_REST_ONLY` (for domain services whose functionality is surfaced only by the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer]).
+functionality is simply for other domain objects to invoke programmatically), or `VIEW_REST_ONLY` (for domain services whose functionality is surfaced only by the xref:vro:ROOT::about.adoc[RestfulObjects viewer]).
 
 You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 

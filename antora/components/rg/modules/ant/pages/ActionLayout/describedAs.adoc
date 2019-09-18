@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:ug:vw:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
+The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
 
 
 For example:
@@ -22,7 +22,7 @@ public class Customer {
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
 
 
 

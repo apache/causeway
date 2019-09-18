@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 // TODO: v2: a lot of this has changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 
 
-Apache Isis provides two different viewers, the xref:vw:ROOT::about.adoc[Wicket viewer] and the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer].
+Apache Isis provides two different viewers, the xref:vw:ROOT::about.adoc[Wicket viewer] and the xref:vro:ROOT::about.adoc[RestfulObjects viewer].
 You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.
 The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
 
@@ -466,7 +466,7 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 
 === `IsisTransactionFilterForRestfulObjects`
 
-The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all calls routed to the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer].
+The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all calls routed to the xref:vro:ROOT::about.adoc[RestfulObjects viewer].
 
 Its definition is:
 

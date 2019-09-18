@@ -26,7 +26,7 @@ The following configuration properties are supported:
 |`isis.viewer.restfulobjects.` +
 `honorUiHints`
 | `true`,`false` (`_false_`)
-|A mechanism for reducing the number of round-trips by eagerly rendering collections; discussed xref:ug-vro:ROOT:ro-spec.adoc#honor-ui-hints[here].
+|A mechanism for reducing the number of round-trips by eagerly rendering collections; discussed xref:vro:ROOT::ro-spec.adoc#honor-ui-hints[here].
 
 |`isis.viewer.restfulobjects.` +
 `strictAcceptChecking`
@@ -35,7 +35,7 @@ The following configuration properties are supported:
 `ContentNegotiationServiceForRestfulObjectsV1_0` service). Will otherwise accept anything.  +
 
 This is convenient because it allows the `Accept` header to be set to that of the
-xref:ug-vro:ROOT:simplified-representations.adoc[Apache Isis profile] for all resources, rather than simply the
+xref:vro:ROOT::simplified-representations.adoc[Apache Isis profile] for all resources, rather than simply the
 handful of resources that supported that profile.
 
 |===
@@ -135,7 +135,7 @@ isis.viewer.restfulobjects.suppressMemberDisabledReason=true
 
 [NOTE]
 ====
-If these configuration settings are set in conjunction with using the xref:ug-vro:ROOT:simplified-representations.adoc#apache-isis-profile[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
+If these configuration settings are set in conjunction with using the xref:vro:ROOT::simplified-representations.adoc#apache-isis-profile[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
 ====
 
 

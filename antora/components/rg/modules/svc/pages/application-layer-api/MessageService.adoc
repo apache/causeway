@@ -29,11 +29,11 @@ public interface MessageService {
     ...
 }
 ----
-<1> display as a transient message to the user (not requiring acknowledgement).  In the xref:ug:vw:about.adoc[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
+<1> display as a transient message to the user (not requiring acknowledgement).  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
 <2> ditto, but with translatable string, for xref:ug:btb:i18n.adoc[i18n support].
-<3> warn the user about a situation with the specified message.  In the xref:ug:vw:about.adoc[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
+<3> warn the user about a situation with the specified message.  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
 <4> ditto, but with translatable string, for i18n support.
-<5> show the user an unexpected application error.  In the xref:ug:vw:about.adoc[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.
+<5> show the user an unexpected application error.  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.
 <6> ditto, but with translatable string, for i18n support.
 
 The i18n versions of these methods all have an override which simply creates a single context string from the `contextClass` and `contextMethod` parameters (eg "com.mycompany.Customer#placeOrder").

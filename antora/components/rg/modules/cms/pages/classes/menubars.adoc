@@ -14,7 +14,7 @@ Service actions are grouped into menu sections.
 
 All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://isis.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:rg:svc:presentation-layer-spi/MenuBarsLoaderService.adoc[`MenuBarsLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
-It also allows the menu bars to be exposed through the REST API provided by the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer], as either XML or JSON.
+It also allows the menu bars to be exposed through the REST API provided by the xref:vro:ROOT::about.adoc[Restful Objects viewer], as either XML or JSON.
 
 The service action component also allows a link to be associated with it.
 Each such link is populated by the framework automatically when exposing the menu bars layout through the REST API, pointing back to the standard Restful Objects resources.
@@ -29,7 +29,7 @@ The menu classes reside in the `org.apache.isis.applib.layout.menubars.bootstrap
 
 +
 The top-level structure that define three fields: a primary `BS3MenuBar`, secondary `BS3MenuBar` and tertiary `BS3MenuBar`.
-The xref:ug:vw:about.adoc[Wicket viewer] places the primary bar to the left, the secondary bar aligned right, and the tertiary bar (expected to consist of just one `BS3Menu`) under the user names.
+The xref:vw:ROOT:about.adoc[Wicket viewer] places the primary bar to the left, the secondary bar aligned right, and the tertiary bar (expected to consist of just one `BS3Menu`) under the user names.
 
 * `BS3MenuBar`
 
@@ -40,7 +40,7 @@ consisting of one or many ``BS3Menu``s.
 
 +
 consisting of one or many ``BS3MenuSection``s.
-The xref:ug:vw:about.adoc[Wicket viewer] renders a separator between each section.
+The xref:vw:ROOT:about.adoc[Wicket viewer] renders a separator between each section.
 
 * `BS3MenuSection`
 

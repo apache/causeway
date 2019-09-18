@@ -38,7 +38,7 @@ public class Customer {
 <3> give the action an abbreviated name, because the fact that the "status" property is to be updated is implied by its positioning
 
 
-The default is `BELOW`, which is rendered (by the xref:ug:vw:about.adoc[Wicket viewer]) as shown below:
+The default is `BELOW`, which is rendered (by the xref:vw:ROOT:about.adoc[Wicket viewer]) as shown below:
 
 image::reference-annotations/ActionLayout/position-BELOW.png[width="720px",link="{imagesdir}/reference-annotations/ActionLayout/position-BELOW.png"]
 
@@ -67,6 +67,6 @@ If there are multiple actions associated with a single property then the positio
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
 
 The fact that the layout is dynamic (does not require a rebuild/restart) is particularly useful in that the look-n-feel can be easily experimented with and adjusted.

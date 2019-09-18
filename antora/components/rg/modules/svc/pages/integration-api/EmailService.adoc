@@ -227,7 +227,7 @@ The socket connection timeout, defaulting to 2000ms.
 If you wish to write an alternative implementation, be aware that it should process the message body as HTML (as opposed to plain text or any other format).
 
 Also, note that (unlike most Apache Isis domain services) the implementation is also instantiated and injected by Google Guice.
-This is because `EmailService` is used as part of the xref:ug:vw:features/user-registration.adoc[user registration] functionality and is used by Wicket pages that are accessed outside of the usual Apache Isis runtime.
+This is because `EmailService` is used as part of the xref:vw:ROOT:features/user-registration.adoc[user registration] functionality and is used by Wicket pages that are accessed outside of the usual Apache Isis runtime.
 This implies a couple of additional constraints:
 
 * first, implementation class should also be annotated with `@com.google.inject.Singleton`

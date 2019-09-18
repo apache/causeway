@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 The `@XmlRootElement` annotation provides an alternative way to define a
 xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view model], in particular one intended to act as a DTO for use within
-xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
+xref:vro:ROOT::about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
 
 A view model is a non-persisted domain object whose state is converted to/from a string memento.  In the case of a
 JAXB-annotated object this memento is its XML representation.  JAXB generally requires that the root element of the
@@ -16,7 +16,7 @@ xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has
 significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the
-xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] in combination with the
+xref:vro:ROOT::about.adoc[RestfulObjects viewer] in combination with the
 xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`]. +
 +
 This provides a stable and

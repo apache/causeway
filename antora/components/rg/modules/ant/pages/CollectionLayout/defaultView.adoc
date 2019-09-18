@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The xref:ug:vw:about.adoc[Wicket viewer] allows additional views to be configured to render collections of objects; at the time of writing thesee include the excel, fullcalendar2 and gmap3 provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^].
+The xref:vw:ROOT:about.adoc[Wicket viewer] allows additional views to be configured to render collections of objects; at the time of writing thesee include the excel, fullcalendar2 and gmap3 provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^].
 If the objects to be rendered have the correct "shape", then the appropriate view will be made available.  For example, objects with a date can be rendered using `calendar`; objects with locations can be rendered using `map`.
 
 The `defaultView()` attribute is used to select which of these views should be used by default for a given collection.
@@ -33,5 +33,5 @@ This attribute takes precedence over any value for the xref:rg:ant:CollectionLay
 == Alternatives
 
 
-As an alternative to using the annotation, the dynamic xref:ug:vw:layout/file-based.adoc[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
 

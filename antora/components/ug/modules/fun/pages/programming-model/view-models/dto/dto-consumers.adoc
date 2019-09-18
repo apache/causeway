@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The actual consumers of DTOs will generally obtain the XML of the view models either by requesting the XML directly, eg using the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer], or may have the XML sent to them asynchronously using an ESB such as Apache Camel.
+The actual consumers of DTOs will generally obtain the XML of the view models either by requesting the XML directly, eg using the xref:vro:ROOT::about.adoc[RestfulObjects viewer], or may have the XML sent to them asynchronously using an ESB such as Apache Camel.
 
 In the former case, the consumer requests the DTO by calling the REST API with the appropriate HTTP `Accept` header.
 An appropriate implementation of xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] can then be used to return the appropriate DTO (as XML).
@@ -23,7 +23,7 @@ In our case we focus on the validation (to determine the nature of the inbound m
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module provides an out-of-the-box solution of this design.
 It provides an implementation of the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], but which simply publishes instances of xref:rg:cms:schema/ixn.adoc[`InteractionDto`] to an ActiveMQ queue.
 Camel (or similar) can then be hooked up to consume these events from this queue, and use a processor to parse the action memento to determine what has changed on the source system.
-Thereafter, a subsequent Camel processor can then call back to the source - via the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer] - to enrich the message with additional details using a DTO.
+Thereafter, a subsequent Camel processor can then call back to the source - via the xref:vro:ROOT::about.adoc[Restful Objects viewer] - to enrich the message with additional details using a DTO.
 
 
 

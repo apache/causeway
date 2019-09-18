@@ -34,7 +34,7 @@ public class Order {
 ----
 
 
-To get an idea of how these are rendered (in the xref:ug:vw:about.adoc[Wicket viewer]), see xref:rg:ant:PropertyLayout/labelPosition.adoc[PropertyLayout#labelPosition()].
+To get an idea of how these are rendered (in the xref:vw:ROOT:about.adoc[Wicket viewer]), see xref:rg:ant:PropertyLayout/labelPosition.adoc[PropertyLayout#labelPosition()].
 
 
 == See also

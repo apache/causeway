@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-This chapter describes the usage of various classes and interfaces that are not otherwise associated with xref:rg:svc:about.adoc[domain services], xref:ug:vw:layout.adoc[object layout] or xref:rg:cfg:about[configuration].
+This chapter describes the usage of various classes and interfaces that are not otherwise associated with xref:rg:svc:about.adoc[domain services], xref:vw:ROOT:layout.adoc[object layout] or xref:rg:cfg:about[configuration].
 
 
 

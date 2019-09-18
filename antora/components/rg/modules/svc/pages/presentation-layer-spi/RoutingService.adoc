@@ -18,7 +18,7 @@ of the implementation to figure out what the "owning" object might be.
 +
 For example, return the home page (eg as defined by the xref:rg:ant:HomePage.adoc[`@HomePage`] annotation).
 
-Currently the routing service is used only by the xref:ug:vw:about.adoc[Wicket viewer]; it is ignored by the xref:ug-vro:ROOT:about.adoc[Restful Objects] viewer.
+Currently the routing service is used only by the xref:vw:ROOT:about.adoc[Wicket viewer]; it is ignored by the xref:vro:ROOT::about.adoc[Restful Objects] viewer.
 
 
 [NOTE]

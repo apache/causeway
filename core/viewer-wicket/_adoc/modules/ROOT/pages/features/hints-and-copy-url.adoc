@@ -19,7 +19,7 @@ The following screenshots are taken from the https://github.com/estatio/estatio[
 
 === Copy URL
 
-This screenshot (nb: using a pre 1.8.0 version of the xref:ug:vw:about.adoc[Wicket viewer] UI) shows the copy URL button (top right):
+This screenshot (nb: using a pre 1.8.0 version of the xref:vw:ROOT:about.adoc[Wicket viewer] UI) shows the copy URL button (top right):
 
 image::copy-link/010-copy-link-button.png[width="800px",link="{imagesdir}/copy-link/010-copy-link-button.png"]
 

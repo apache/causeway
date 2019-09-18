@@ -64,7 +64,7 @@ Walking through the main classes that make up the SimpleApp: `SimpleObject` pers
 
 
 |link:https://www.youtube.com/watch?v=KCJ1ZPPB3pA[004^] +
-Using the optional `Xxx.layout.xml` file to provide xref:ug:vw:layout/file-based.adoc[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
+Using the optional `Xxx.layout.xml` file to provide xref:vw:ROOT:layout/file-based.adoc[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
 ||x|||||||||
 
 
@@ -108,7 +108,7 @@ Writing end-to-end xref:ug:tst:integ-test-support.adoc[integration tests] for a 
 include::partial$_screencasts-playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=lkZxRSS0Zwg[009^] +
-Using the Swagger UI to access the xref:ug-vro:ROOT:about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
+Using the Swagger UI to access the xref:vro:ROOT::about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
 ||||||||||x|
 
 
@@ -139,7 +139,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:ug:vw:layout/file-based.adoc[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:vw:ROOT:layout/file-based.adoc[dynamic (XML) layouts].
 |x||||||||x||
 
 
@@ -198,7 +198,7 @@ Extending a xref:ug:tst:fixture-scripts.adoc[fixture script] to more easily demo
 
 
 |link:https://www.youtube.com/watch?v=39Hpd7C4Kvo[018^] +
-Using xref:ug:vw:layout/file-based.adoc[dynamic (XML) layouts] to specify the page size for a domain object's collection.
+Using xref:vw:ROOT:layout/file-based.adoc[dynamic (XML) layouts] to specify the page size for a domain object's collection.
 ||||x|||||||
 
 
@@ -212,20 +212,20 @@ Using xref:ug:vw:layout/file-based.adoc[dynamic (XML) layouts] to specify the pa
 include::partial$_screencasts-playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
-Demonstrates how Apache Isis' xref:ug:vw:about.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
+Demonstrates how Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
  application can clear these UI hints using the (framework-provided) xref:rg:cms:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action.
 |||x||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=Kqch-XNlBMA[020^] +
-Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:ug:vw:about.adoc[Wicket viewer].
+Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer].
 |||x||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ug:vw:about.adoc[Wicket viewer], and how the developer can ensure that xref:rg:ant:DomainObjectLayout/bookmarking.adoc[domain objects] and (xref:rg:ant:Action/semantics.adoc[query-only]) xref:rg:ant:ActionLayout/bookmarking.adoc[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:rg:ant:DomainObjectLayout/bookmarking.adoc[domain objects] and (xref:rg:ant:Action/semantics.adoc[query-only]) xref:rg:ant:ActionLayout/bookmarking.adoc[actions] can be bookmarked.
 |||x||||||||
 
 
@@ -425,7 +425,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=esujf_DFeWA[041^] +
-Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:ug:vw:about.adoc[Wicket viewer].
+Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:vw:ROOT:about.adoc[Wicket viewer].
 |||||||x||x|x|
 
 
@@ -549,7 +549,7 @@ The (very simple) steps required to rename a domain entity class.
 
 
 |link:https://www.youtube.com/watch?v=J5xobU6X0ng[057^] +
-How to rename a menu (on the top-level menubar) as rendered in the  xref:ug:vw:about.adoc[Wicket viewer].
+How to rename a menu (on the top-level menubar) as rendered in the  xref:vw:ROOT:about.adoc[Wicket viewer].
 |x||||||||||
 
 
