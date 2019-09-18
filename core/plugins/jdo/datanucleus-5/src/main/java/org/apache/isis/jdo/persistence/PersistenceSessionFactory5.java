@@ -24,6 +24,7 @@ import java.util.Objects;
 
 import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -35,6 +36,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.jdo.entities.JdoEntityTypeRegistry;
+import org.apache.isis.jdo.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
@@ -61,7 +63,8 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
-
+    
+    private StoreLifecycleListener storeLifecycleListener;
     private IsisConfiguration configuration;
 
     @Getter(onMethod=@__({@Override})) 
@@ -76,6 +79,8 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         // Why? because that method causes entity classes to be loaded which register with DN's EnhancementHelper,
         // which are then cached in DN.  It results in our CreateSchema listener not firing.
         _Blackhole.consume(applicationComponents.get());
+        
+        this.storeLifecycleListener = new JdoStoreLifecycleListenerForIsis();
     }
 
 
@@ -180,6 +185,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             applicationComponents.clear();
         }
         this.configuration = null;
+        this.storeLifecycleListener = null;
     }
 
     /**
@@ -202,10 +208,10 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         return new PersistenceSession5(
                 authenticationSession, 
                 persistenceManagerFactory,
+                storeLifecycleListener,
                 this);
     }
-
-
+    
     // [ahuber] JRebel support, not tested at all
     private void guardAgainstStaleState() {
         if(!applicationComponents.isMemoized()) {

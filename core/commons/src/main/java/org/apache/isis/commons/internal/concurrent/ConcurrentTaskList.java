@@ -164,7 +164,7 @@ public class ConcurrentTaskList {
         }
         
         log.printf(Level.INFO, 
-                "TaskList[%s] running %d/%d tasks %s, took %.3f milliseconds ",
+                "TaskList '%s' running %d/%d tasks %s, took %.3f milliseconds ",
                 getName(),
                 tasksExecuted.longValue(),
                 tasks.size(),

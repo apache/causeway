@@ -77,7 +77,7 @@ public class Book extends Product {
             String isbn, 
             String publisher) {
 
-        super(name, description, price);
+        super(name, description, price, /*comments*/null);
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;

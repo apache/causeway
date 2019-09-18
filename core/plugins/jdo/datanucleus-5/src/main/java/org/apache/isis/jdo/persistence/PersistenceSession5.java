@@ -35,6 +35,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.identity.SingleFieldIdentity;
 import javax.jdo.listener.InstanceLifecycleListener;
+import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
@@ -116,18 +117,22 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private ObjectAdapterContext objectAdapterContext;
     @Getter private final TransactionService transactionService;
+    private final StoreLifecycleListener storeLifecycleListener;
 
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
+     * @param storeLifecycleListener 
      */
     public PersistenceSession5(
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
+            final StoreLifecycleListener storeLifecycleListener, 
             final FixturesInstalledStateHolder stateHolder) {
 
         super(authenticationSession, jdoPersistenceManagerFactory, stateHolder);
-        transactionService = IsisContext.getTransactionService();
+        this.transactionService = IsisContext.getTransactionService();
+        this.storeLifecycleListener = storeLifecycleListener;
     }
 
     // -- open
@@ -169,7 +174,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         postConstructOnRequestScopedServices();
 
         if(metricsService instanceof InstanceLifecycleListener) {
-            final InstanceLifecycleListener metricsService = (InstanceLifecycleListener) this.metricsService;
+            val metricsService = (InstanceLifecycleListener) this.metricsService;
             persistenceManager.addInstanceLifecycleListener(metricsService, (Class[]) null);
         }
 
@@ -186,6 +191,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         commandContext.setCommand(command);
         interactionContext.setInteraction(interaction);
+        
+        persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
 
         this.state = State.OPEN;
     }
@@ -253,6 +260,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // ... and then remove those underlying services from the thread-local
         endRequestOnRequestScopeServices();
 
+        persistenceManager.removeInstanceLifecycleListener(storeLifecycleListener);
+        
         try {
             persistenceManager.close();
         } catch(final Throwable ex) {
