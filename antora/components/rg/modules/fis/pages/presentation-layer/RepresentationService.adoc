@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `RepresentationService` is the main plug-in point for the xref:ug:vro:about.adoc[RestfulObjects viewer] to generate representations.
+The `RepresentationService` is the main plug-in point for the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] to generate representations.
 
 The default implementations ultimately generate representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 However, it also delegates to the xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.

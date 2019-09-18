@@ -75,7 +75,7 @@ In essence, if an exception is recognized then it is also categorized.
 This lets the viewer act accordingly.
 For example, if an exception is raised from the loading of an individual object, then this is passed by the registered ``ExceptionRecognizer``s.
 If any of these recognize the exception as representing a not-found exception, then an Apache Isis `ObjectNotFoundException` is raised.
-Both the viewers interprets this correctly (the xref:ug:vw:about.adoc[Wicket viewer] as a suitable error page, the xref:ug:vro:about.adoc[Restful Objects viewer] as a 404 status return code).
+Both the viewers interprets this correctly (the xref:ug:vw:about.adoc[Wicket viewer] as a suitable error page, the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer] as a 404 status return code).
 
 
 If the implementation recognizes the exception then it returns a user-friendly message to be rendered (by the viewer) back to the user; otherwise it returns `null`.

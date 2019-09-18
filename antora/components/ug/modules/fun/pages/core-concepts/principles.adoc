@@ -5,8 +5,8 @@ include::_attributes.adoc[]
 
 
 Apache Isis is primarily aimed at custom-built "enterprise" applications.
-The UI provided by the xref:ug:vw:about.adoc[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.
-The REST API exposed by the xref:ug:vro:about.adoc[RestfulObjects viewer] allows custom apps to be developed -- eg using Angular or similar -- for use by those requiring more guidance; typically end-users outside of the organization.
+The UI provided by the xref:ug-vw:ROOT:about.adoc[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.
+The REST API exposed by the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] allows custom apps to be developed -- eg using Angular or similar -- for use by those requiring more guidance; typically end-users outside of the organization.
 This section describes some of the core principles and values that the framework aims to honour and support.
 
 

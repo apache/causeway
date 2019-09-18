@@ -62,7 +62,7 @@ tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 [NOTE]
 ====
-The xref:ug:vro:about.adoc[RestfulObjects viewer] has only partial support for these `Where` enums.
+The xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] has only partial support for these `Where` enums.
 ====
 
 

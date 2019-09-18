@@ -18,7 +18,7 @@ This is an ORM that implements the JDO and JPA APIs, and which can map domain ob
 Apache Isis recognizes a number of the JDO annotations such as `@javax.jdo.annotations.Column(allowsNull=...)`.
 
 In addition, the framework builds up the metamodel for each domain object using
-xref:ug:vw:layout.adoc[layout hints], such as `Customer.layout.xml`.
+xref:ug-vw:ROOT:layout.adoc[layout hints], such as `Customer.layout.xml`.
 These provide metadata such as grouping elements of the UI together, using multi-column layouts, and so on.
 The layout file can be modified while the application is still running, and are picked up automatically; a useful way to speed up feedback.
 

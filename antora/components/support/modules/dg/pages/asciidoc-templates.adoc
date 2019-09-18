@@ -322,7 +322,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugvro`
-//|`\xref:ug:vro:about.adoc#xxx[ttt]`
+//|`\xref:ug-vro:ROOT:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 //
@@ -331,9 +331,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:vro:ro-spec.adoc[RestfulObjects specification]`
+//`\xref:ug-vro:ROOT:ro-spec.adoc[RestfulObjects specification]`
 //
-//|xref:ug:vro:ro-spec.adoc[RestfulObjects specification]
+//|xref:ug-vro:ROOT:ro-spec.adoc[RestfulObjects specification]
 //
 //
 //

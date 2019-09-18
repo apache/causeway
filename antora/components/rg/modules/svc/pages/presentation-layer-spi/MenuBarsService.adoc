@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `MenuBarsService` is responsible for returning a xref:rg:cms:classes/menubars.adoc[`MenuBars`] instance, a data structure representing the arrangement of domain service actions across multiple menu bars, menus and sections.
-This is used by the Wicket viewer to build up the menu, and is also served as the "menuBars" resource by the xref:ug:vro:about.adoc[Restful Objects] viewer.
+This is used by the Wicket viewer to build up the menu, and is also served as the "menuBars" resource by the xref:ug-vro:ROOT:about.adoc[Restful Objects] viewer.
 
 
 

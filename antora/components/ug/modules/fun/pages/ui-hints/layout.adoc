@@ -7,6 +7,6 @@ The most significant aspect of the UI is the layout of the object's members: its
 These can be organized into columns, rows and tabs.
 
 This can be accomplished using either annotations or through a separate file-based layout.
-Since this is a large topic, it has its own xref:ug:vw:layout.adoc[layout chapter] in the Wicket viewer guide.
+Since this is a large topic, it has its own xref:ug-vw:ROOT:layout.adoc[layout chapter] in the Wicket viewer guide.
 
 

@@ -7,8 +7,8 @@ The user guides available are:
 
 * xref:ug:fun:about.adoc[Fundamentals]
 * xref:ug:vw:about.adoc[Wicket viewer]
-* xref:ug:vro:about.adoc[Restful Objects viewer]
-* xref:ug:odn:about.adoc[DataNucleus object store]
+* xref:ug-vro:ROOT:about.adoc[Restful Objects viewer]
+* xref:ug-odn:ROOT:about.adoc[DataNucleus object store]
 * xref:ug:sec:about.adoc[Security]
 * xref:ug:tst:about.adoc[Testing]
 * xref:ug:btb:about.adoc[Beyond the Basics]

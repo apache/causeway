@@ -108,7 +108,7 @@ Writing end-to-end xref:ug:tst:integ-test-support.adoc[integration tests] for a 
 include::partial$_screencasts-playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=lkZxRSS0Zwg[009^] +
-Using the Swagger UI to access the xref:ug:vro:about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
+Using the Swagger UI to access the xref:ug-vro:ROOT:about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
 ||||||||||x|
 
 

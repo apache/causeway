@@ -11,7 +11,7 @@ In addition, the following other properties are searched for and if present also
 
 * `viewer_wicket.properties` - if the xref:ug:vw:about.adoc[Wicket viewer] is in use
 
-* `viewer_restfulobjects.properties` - if the xref:ug:vro:about.adoc[RestfulObjects viewer] is in use
+* `viewer_restfulobjects.properties` - if the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] is in use
 
 * `viewer.properties` - for any other viewer configuration (but there are none currently)
 

@@ -40,7 +40,7 @@ image::hints-and-tips/are-you-sure.png[link="{imagesdir}/hints-and-tips/are-you-
 
 [NOTE]
 ====
-Note that these screenshots shows an earlier version of the xref:ug:vw:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots shows an earlier version of the xref:ug-vw:ROOT:about.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 If the user checks the box:

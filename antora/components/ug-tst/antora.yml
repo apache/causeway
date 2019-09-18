@@ -1,0 +1,6 @@
+name: ug-tst
+title: "User Guides - Testing"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

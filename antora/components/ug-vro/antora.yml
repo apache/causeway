@@ -1,0 +1,6 @@
+name: ug-vro
+title: "User Guides - Restful Objects Viewer"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

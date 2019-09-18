@@ -9,6 +9,21 @@ content:
     start_path: antora/components/ug
     branches: HEAD
   - url: .
+    start_path: antora/components/ug-odn
+    branches: HEAD
+  - url: .
+    start_path: antora/components/ug-sec
+    branches: HEAD
+  - url: .
+    start_path: antora/components/ug-tst
+    branches: HEAD
+  - url: .
+    start_path: antora/components/ug-vro
+    branches: HEAD
+  - url: .
+    start_path: antora/components/ug-vw
+    branches: HEAD
+  - url: .
     branches: HEAD
     start_path: antora/components/rg
   - url: .

@@ -137,6 +137,6 @@ RepositoryService repositoryService;
 
 [TIP]
 ====
-See the xref:ug:odn:about.adoc[DataNucleus objectstore guide] for further information on annotating domain entities.
+See the xref:ug-odn:ROOT:about.adoc[DataNucleus objectstore guide] for further information on annotating domain entities.
 ====
 

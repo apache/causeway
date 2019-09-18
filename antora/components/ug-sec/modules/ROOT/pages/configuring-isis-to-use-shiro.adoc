@@ -1,0 +1,108 @@
+= Configuring to use Shiro
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Apache Isis' security mechanism is configurable, specifying an `Authenticator` and an `Authorizor` (non-public) APIs.
+The Shiro security mechanism is an integration wih Apache Shiro that implements both interfaces.
+
+[TIP]
+====
+Both the xref:helloworld:ROOT:about.adoc[HelloWorld] and xref:simpleapp:ROOT:about.adoc[SimpleApp] archetypes are pre-configured to use Apache Shiro, so much of what follows may well have been set up already.
+====
+
+
+== Telling Apache Isis to use Shiro
+
+To tell Apache Isis to use Shiro when using an xref:rg:cms:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
+
+For example, the xref:helloworld:ROOT:about.adoc[HelloWorld archetype] bootstraps using:
+
+[source,java]
+----
+public class HelloWorldAppManifest extends AppManifestAbstract {
+
+    public static final Builder BUILDER = Builder
+            .forModules(HelloWorldModule.class)
+            .withAuthMechanism("shiro");                        // <1>
+            ...
+}
+----
+<1> configures Shiro.
+
+This installs the appropriate implementation (the `ShiroAuthenticatorOrAuthorizor` class) that use Shiro's APIs to perform authentication and authorization:
+
+image::security/security-apis-impl/configure-isis-to-use-shiro.png[width="600px",link="{imagesdir}/security/security-apis-impl/configure-isis-to-use-shiro.png"]
+
+The figure above doesn't tell the whole story; we haven't yet seen how Shiro itself is configured to use realms.
+The `ShiroAuthenticatorOrAuthorizor` is in essence the glue between the Apache Isis runtime and Shiro.
+
+
+== Configuring Shiro Authenticator
+
+The `ShiroAuthenticatorOrAuthorizor` class itself supports a single optional property.
+This can be configured in `authentication_shiro.properties` file:
+
+[source,ini]
+----
+isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated=false
+----
+
+This configuration property only comes into effect for the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer]; if set then the Shiro subject - if found to be still authenticated - will be logged out anyway and then re-authenticated.
+
+[WARNING]
+====
+There should generally be no need to change this property from its default (`false`).
+Setting it to `true` may cause a race condition resulting in exceptions being logged.
+====
+
+
+
+== Bootstrapping Shiro
+
+TODO: v2: this configuration is no longer required in `web.xml`, instead is configured programmatically by the framework (`WebModule_Shiro`).
+
+
+The Shiro environment (in essence, thread-locals holding the security credentials) needs to be bootstrapped using the following settings in the `WEB-INF/web.xml` file:
+
+[source,xml]
+----
+<listener>
+    <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+</listener>
+<filter>
+    <filter-name>ShiroFilter</filter-name>
+    <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>ShiroFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+----
+
+Based on this Shiro will then read `WEB-INF/shiro.ini` file to configure its Realm definitions for authentication and authorization.
+
+
+
+== `WEB-INF/shiro.ini`
+
+The `shiro.ini` file is used to specify the realm(s) that Shiro will delegate to:
+
+[source,ini]
+----
+securityManager.realms = $realmName
+----
+
+Shiro's ini file supports a "poor-man's" dependency injection (link:https://shiro.apache.org/configuration.html[their words]), and so `$realmName` in the above example is a reference to a realm defined elsewhere in `shiro.ini`.
+The subsequent sections describe the specifics for thevarious realm implementations available to you.
+
+
+It's also possible to configure Shiro to support multiple realms.
+
+[source,ini]
+----
+securityManager.realms = $realm1,$realm2
+----
+
+You can learn more about Shiro realms in the link:http://shiro.apache.org/realm.html[Shiro documentation].
+

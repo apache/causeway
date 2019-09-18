@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 Although it has evolved since, the _Apache Isis_ framework started out as an open source implementation of the naked objects pattern.
-Indeed, the generic user interfaces provided by Apache Isis xref:ug:vw:about.adoc[Wicket] viewer and the xref:ug:vro:about.adoc[Restful Objects] viewer are both "just" naked objects implementations; the first serves up a default generic representation of domain objects for human interaction, the latter serving up representation intended for machine consumption rather than human beings.
+Indeed, the generic user interfaces provided by Apache Isis xref:ug:vw:about.adoc[Wicket] viewer and the xref:ug-vro:ROOT:about.adoc[Restful Objects] viewer are both "just" naked objects implementations; the first serves up a default generic representation of domain objects for human interaction, the latter serving up representation intended for machine consumption rather than human beings.
 
 If the idea of naked objects is of interest, then there are a couple of books on the topic that you might want to read.
 
@@ -61,4 +61,4 @@ Dan Haywood
 The http://restfulobjects.org[Restful Objects specification] defines a set of RESTful resources, and corresponding JSON representations, for accessing and manipulating a domain object model.
 
 This is a comprehensive specification, running to over 200 pages in length.
-It is implemented by Apache Isis' xref:ug:vro:about.adoc[Restful Objects] viewer, and is also implemented by another (non-Apache) open source project, http://nakedobjects.codeplex.com[Naked Objects MVC].
+It is implemented by Apache Isis' xref:ug-vro:ROOT:about.adoc[Restful Objects] viewer, and is also implemented by another (non-Apache) open source project, http://nakedobjects.codeplex.com[Naked Objects MVC].

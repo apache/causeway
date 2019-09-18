@@ -40,8 +40,8 @@ include::_attributes.adoc[]
 
 * *xref:ug:fun:about.adoc[Fundamentals]*
 *  xref:ug:vw:about.adoc[Wicket Viewer]
-*  xref:ug:vro:about.adoc[Restful Objects Viewer]
-*  xref:ug:odn:about.adoc[DataNucleus Object Store]
+*  xref:ug-vro:ROOT:about.adoc[Restful Objects Viewer]
+*  xref:ug-odn:ROOT:about.adoc[DataNucleus Object Store]
 *  xref:ug:sec:about.adoc[Security]
 * *xref:ug:tst:about.adoc[Testing]*
 *  xref:ug:btb:about.adoc[Beyond the Basics]

@@ -69,7 +69,7 @@ within the metamodel.
 |xref:rg:svc:metadata-api/SwaggerService.adoc[`o.a.i.applib.` +
 `services.swagger` +
 `SwaggerService`]
-|Generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:ug:vro:about.adoc[RestfulObjects viewer].  These can then be used with the link:http://swagger.io/swagger-ui/[Swagger UI] page to explore the REST API, or used to generate client-side stubs using the link:http://swagger.io/swagger-codegen/[Swagger codegen] tool, eg for use in a custom REST client app.
+|Generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer].  These can then be used with the link:http://swagger.io/swagger-ui/[Swagger UI] page to explore the REST API, or used to generate client-side stubs using the link:http://swagger.io/swagger-codegen/[Swagger codegen] tool, eg for use in a custom REST client app.
 |`SwaggerServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``

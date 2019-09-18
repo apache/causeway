@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `ContentNegotiationService` is a plug-in point for the xref:ug:vro:about.adoc[RestfulObjects viewer] so that it can generate representations according to HTTP `Accept` header of the request.  This idea is discussed in section 34.1 of the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+The `ContentNegotiationService` is a plug-in point for the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer] so that it can generate representations according to HTTP `Accept` header of the request.  This idea is discussed in section 34.1 of the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
 The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
 
@@ -16,7 +16,7 @@ Instead you need to create some sort of stable facade over your domain entities,
 +
 If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.
 
-* a second option is to solve the problem at the persistence layer, but defining a (SQL) view in the database and then xref:ug:odn:jdo-mappings/mapping-to-a-view.adoc[mapping this] to a (read-only) entity.  Again this is surfaced by the RO viewer.  +
+* a second option is to solve the problem at the persistence layer, but defining a (SQL) view in the database and then xref:ug-odn:ROOT:jdo-mappings/mapping-to-a-view.adoc[mapping this] to a (read-only) entity.  Again this is surfaced by the RO viewer.  +
 +
 If the underlying tables change (as the result of a change in their corresponding domain entities) then once more the view must be refactored so that it still presents the same structure.
 
@@ -131,7 +131,7 @@ This can be useful for generic viewers.
 
 * `ContentNegotiationServiceOrgApacheIsisV1` +
 +
-which returns xref:ug:vro:simplified-representations.adoc[simplified representations]
+which returns xref:ug-vro:ROOT:simplified-representations.adoc[simplified representations]
 
 
 

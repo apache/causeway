@@ -1,0 +1,6 @@
+name: ug-sec
+title: "User Guides - Security"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

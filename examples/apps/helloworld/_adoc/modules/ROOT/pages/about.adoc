@@ -327,7 +327,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `helloworld` archetype generates a single WAR file, configured to run both the xref:ug:vw:about.adoc[Wicket viewer] and the xref:ug:vro:about.adoc[Restful Objects viewer].
+The `helloworld` archetype generates a single WAR file, configured to run both the xref:ug:vw:about.adoc[Wicket viewer] and the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer].
 The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
@@ -377,7 +377,7 @@ image::helloworld-before-launch.png[width="600px",link="{imagesdir}/helloworld-b
 
 == Using the App
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ug:vw:about.adoc[Wicket viewer] or the xref:ug:vro:about.adoc[Restful Objects viewer]:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ug:vw:about.adoc[Wicket viewer] or the xref:ug-vro:ROOT:about.adoc[Restful Objects viewer]:
 
 image::using-hello-world/010-root-page.png[width="600px",link="{imagesdir}/using-hello-world/010-root-page.png"]
 

@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 This chapter shows the idioms for creating, reading, updating and deleting xref:ug:fun:building-blocks/types-of-domain-objects/domain-entities.adoc[domain entities].
 The main domain services used for this are xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] and xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
 
-It also shows how to instantiate xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models] and how to programmatically instantiate xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] (useful primarily for xref:ug:tst:integ-test-support.adoc[integration testing]).
+It also shows how to instantiate xref:ug:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models] and how to programmatically instantiate xref:ug:fun:building-blocks/types-of-domain-objects/mixins.adoc[mixins] (useful primarily for xref:ug-tst:ROOT:integ-test-support.adoc[integration testing]).
 
 
 

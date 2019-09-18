@@ -24,7 +24,7 @@ public interface DeepLinkService {
 
 The xref:ug:vw:about.adoc[Wicket viewer] provides an implementation of this service `o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket`.
 
-For the xref:ug:vro:about.adoc[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
+For the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
 
 
 

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `swagger` goal of the `isis-maven-plugin` uses the xref:rg:svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to
-generate link:http://swagger.io[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:ug:vro:about.adoc[RestfulObjects viewer].
+generate link:http://swagger.io[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:ug-vro:ROOT:about.adoc[RestfulObjects viewer].
 
 These spec files, once generated, can then be used in the build pipeline to generate client-side stubs, typically using Swagger's own link:https://github.com/swagger-api/swagger-codegen/tree/master/modules/swagger-codegen-maven-plugin[swagger-codegen-maven] plugin.
 

@@ -24,7 +24,7 @@ public void renew() {
 }
 ----
 
-Alternatively, you can specify these hints dynamically in the xref:ug:vw:layout.adoc[`Xxx.layout.xml`] for the entity:
+Alternatively, you can specify these hints dynamically in the xref:ug-vw:ROOT:layout.adoc[`Xxx.layout.xml`] for the entity:
 
 [source,xml]
 ----

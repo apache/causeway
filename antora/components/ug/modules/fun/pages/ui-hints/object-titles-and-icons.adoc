@@ -10,7 +10,7 @@ The icon is often the same for all instances of a particular class, but it's als
 This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
 It is also possible for an object to provide a CSS class hint.
-In conjunction with xref:ug:vw:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with xref:ug-vw:ROOT:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 == Object Title
@@ -173,7 +173,7 @@ If there is no requirement to customize the icon (the normal case), then the ico
 For example, the icon for a class `org.mydomain.myapp.Customer` will be `org/mydomain/myapp/Customer.png` (if it exists).
 
 Alternatively, a font-awesome icon can be used.
-This is specified using the xref:rg:ant:DomainObjectLayout/cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute or in the xref:ug:vw:layout/file-based.adoc[layout.xml] file.
+This is specified using the xref:rg:ant:DomainObjectLayout/cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute or in the xref:ug-vw:ROOT:layout/file-based.adoc[layout.xml] file.
 
 For example:
 
@@ -257,14 +257,14 @@ public class OrderSubscriptions extends AbstractSubscriber {
 == Object CSS Styling
 
 It is also possible for an object to return a xref:rg:cms:methods/reserved/cssClass.adoc[CSS class].
-In conjunction with xref:ug:vw:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with xref:ug-vw:ROOT:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 
 === Declarative style
 
 To render an object with a particular CSS, use
-xref:rg:ant:DomainObjectLayout/cssClass.adoc[`@DomainObjectLayout#cssClass()`] or in the xref:ug:vw:layout/file-based.adoc[layout.xml] file.
+xref:rg:ant:DomainObjectLayout/cssClass.adoc[`@DomainObjectLayout#cssClass()`] or in the xref:ug-vw:ROOT:layout/file-based.adoc[layout.xml] file.
 
 When the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.
 Or, when the domain object is rendered as a row in a collection, then the CSS class will appear in a `<div>` wrapped by the `<tr>` of the row.
