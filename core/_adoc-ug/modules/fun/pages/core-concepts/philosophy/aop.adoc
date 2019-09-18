@@ -1,9 +1,10 @@
 = Aspect Oriented
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 
 
-Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:ug:fun:core-concepts/philosophy/naked-objects-pattern.adoc[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
+Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:ug:fun:core-concepts.adoc#naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
 Richard Pawson -- the originator of Naked Objects pattern -- lists Alan Kay as a key influence.
 
 It's certainly true that to develop an Apache Isis application you will need to have good object oriented modelling skills.
@@ -53,7 +54,7 @@ Finally, Isis also a feature that is akin to AOP mix-ins.
 A "contributed action" is one that is implemented on a domain service but that appears to be a behaviour of rendered domain object.
 In other words, we can dissociate behaviour from data.
 That's not always the right thing to do of course.
-In Richard Pawson's description of the xref:ug:fun:core-concepts/philosophy/naked-objects-pattern.adoc[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulated the data.
+In Richard Pawson's description of the xref:ug:fun:core-concepts.adoc#naked-objects-pattern.adoc[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulated the data.
 But on the other hand sometimes the behaviour and data structures change at different rates.
 The link:http://en.wikipedia.org/wiki/Single_responsibility_principle[single responsibility principle] says we should only lump code together that changes at the same rate.
 Apache Isis' support for contributions (not only contributed actions, but also contributed properties and contributed collections) enables this.

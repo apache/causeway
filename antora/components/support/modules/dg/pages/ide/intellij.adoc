@@ -143,7 +143,6 @@ The live templates have a prefix of either:
 * `is` : for Apache Isis domain objects
 * `ju` : for JUnit tests
 * `jm` : for JMock mocks or libraries
-//* `ad` : for Asciidoc documentation; a full list can be found in the xref:support:dg:asciidoc-templates.adoc[appendix].
 
 The live templates are also provided as a settings JAR file, namely *link:resources/intellij/isis-settings-live-templates.jar[isis-settings-live-templates.jar]*.
 Download and import (as for the previous settings JAR files).

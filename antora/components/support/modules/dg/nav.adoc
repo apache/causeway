@@ -28,9 +28,6 @@
 ** xref:asciidoc-syntax.adoc[Asciidoc Syntax]
 
 
-//** xref:asciidoc-templates.adoc[Asciidoc Templates]
-
-
 ** xref:project-lombok.adoc[Project Lombok]
 
 

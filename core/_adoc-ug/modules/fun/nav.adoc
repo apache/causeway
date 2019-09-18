@@ -3,29 +3,6 @@
 
 ** xref:core-concepts.adoc[Core Concepts]
 
-*** xref:core-concepts/philosophy.adoc[Philosophy]
-**** xref:core-concepts/philosophy/domain-driven-design.adoc[Domain Driven Design]
-**** xref:core-concepts/philosophy/naked-objects-pattern.adoc[Naked Objects Pattern]
-**** xref:core-concepts/philosophy/hexagonal-architecture.adoc[Hexagonal Architecture]
-**** xref:core-concepts/philosophy/aop.adoc[AOP]
-// **** xref:core-concepts/philosophy/dci.adoc[DCI] // FIXME: incomplete
-**** xref:core-concepts/philosophy/how-eases-ddd.adoc[How eases DDD]
-
-*** xref:core-concepts/principles.adoc[Principles]
-**** xref:core-concepts/principles/build-not-buy.adoc[Build not Buy]
-**** xref:core-concepts/principles/for-the-long-term.adoc[For the Long Term]
-//**** xref:core-concepts/principles/testable.adoc[Testable] // FIXME: incomplete
-//**** xref:core-concepts/principles/lego-blocks.adoc[Lego Blocks] // FIXME: incomplete
-//**** xref:core-concepts/principles/isis-itself.adoc[Isis Itself] // FIXME: incomplete
-//***** xref:core-concepts/principles/isis-itself/full-stack-but-extensible.adoc[Full Stack but Extensible] // FIXME: incomplete
-//***** xref:core-concepts/principles/isis-itself/focuses-on-its-usp.adoc[Focuses on its USP] // FIXME: incomplete
-
-*** xref:core-concepts/apache-isis-vs.adoc[Apache Isis vs.]
-**** xref:core-concepts/apache-isis-vs/mvc-server-side.adoc[MVC Server Side]
-**** xref:core-concepts/apache-isis-vs/cqrs.adoc[CQRS]
-**** xref:core-concepts/apache-isis-vs/event-sourcing.adoc[Event Sourcing]
-
-*** xref:core-concepts/deployment-options.adoc[Deployment Options]
 
 
 
