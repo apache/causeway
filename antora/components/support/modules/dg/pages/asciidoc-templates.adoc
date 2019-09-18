@@ -353,7 +353,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugtst`
-//|`\xref:ug:tst:about.adoc#xxx[ttt]`
+//|`\xref:testing:ROOT:about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Testing guide, where:
 //
@@ -362,9 +362,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:tst:bdd-spec-support.adoc[BDD Spec Support]`
+//`\xref:testing:ROOT:bdd-spec-support.adoc[BDD Spec Support]`
 //
-//|xref:ug:tst:bdd-spec-support.adoc[BDD Spec Support]
+//|xref:testing:ROOT:bdd-spec-support.adoc[BDD Spec Support]
 //
 //
 //|`adugbtb`

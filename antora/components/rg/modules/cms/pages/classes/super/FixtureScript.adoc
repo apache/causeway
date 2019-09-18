@@ -15,5 +15,5 @@ protected abstract void execute(final ExecutionContext executionContext);
 In this method the fixture script can in theory do anything, but in practice it is recommended that it uses injected domain services to set up data.
 The provided `ExecutionContext` is used to invoke child fixture scripts, and alsocan be used to store references to any created objects (so that the calling test can access these objects/so that they are rendered in the view model).
 
-See the see the xref:ug:tst:fixture-scripts.adoc[user guide's testing chapter] for further discussion on the use of fixture scripts, in particular xref:ug:tst:fixture-scripts/api-and-usage.adoc[fixture scripts' API and usage].
+See the see the xref:testing:ROOT:fixture-scripts.adoc[user guide's testing chapter] for further discussion on the use of fixture scripts, in particular xref:testing:ROOT:fixture-scripts/api-and-usage.adoc[fixture scripts' API and usage].
 

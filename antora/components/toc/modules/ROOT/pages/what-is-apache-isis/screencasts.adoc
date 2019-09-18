@@ -79,7 +79,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=pH02g0l2GKY[005^] +
-Using xref:ug:tst:fixture-scripts.adoc[fixture scripts] to initialize the database, eg while prototyping and for demos
+Using xref:testing:ROOT:fixture-scripts.adoc[fixture scripts] to initialize the database, eg while prototyping and for demos
 ||x|||||||||
 
 
@@ -90,13 +90,13 @@ Implementing xref:ug:fun:business-rules.adoc[business rules]for domain object me
 |x||||||||||
 
 |link:https://www.youtube.com/watch?v=imHfxQGUgV8[007^] +
-Writing xref:ug:tst:unit-test-support.adoc[unit tests] for a domain object responsibility
+Writing xref:testing:ROOT:unit-test-support.adoc[unit tests] for a domain object responsibility
 ||x|||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=-lAt4UWiBjE[008^] +
-Writing end-to-end xref:ug:tst:integ-test-support.adoc[integration tests] for a domain object responsibility
+Writing end-to-end xref:testing:ROOT:integ-test-support.adoc[integration tests] for a domain object responsibility
 ||x|||||||||
 
 
@@ -187,7 +187,7 @@ How to implement a derived collection on a domain object.
 
 
 |link:https://www.youtube.com/watch?v=l_oZymgb65I[017^] +
-Extending a xref:ug:tst:fixture-scripts.adoc[fixture script] to more easily demonstrate new functionality.
+Extending a xref:testing:ROOT:fixture-scripts.adoc[fixture script] to more easily demonstrate new functionality.
 ||x|||||||||
 
 
@@ -284,7 +284,7 @@ Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cm
 
 
 |link:https://www.youtube.com/watch?v=yi52Gbd3lmY[027^] +
-How to write an xref:ug:tst:integ-test-support.adoc[integration test] for an xref:rg:ant:Mixin.adoc[mixin].
+How to write an xref:testing:ROOT:integ-test-support.adoc[integration test] for an xref:rg:ant:Mixin.adoc[mixin].
 ||x|||||||||
 
 
@@ -367,7 +367,7 @@ How to provide a set of xref:rg:cms:methods/prefixes/choices.adoc[choices] (a dr
 
 
 |link:https://www.youtube.com/watch?v=fKo6aTPK-gk[035^] +
-How to use the xref:rg:cms:methods/prefixes/choices.adoc[choices] supporting methods as a source for default values within a xref:ug:tst:fixture-scripts.adoc[fixture script].
+How to use the xref:rg:cms:methods/prefixes/choices.adoc[choices] supporting methods as a source for default values within a xref:testing:ROOT:fixture-scripts.adoc[fixture script].
 ||x|||||||x||
 
 

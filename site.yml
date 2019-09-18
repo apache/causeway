@@ -15,7 +15,7 @@ content:
     start_path: core/security/_adoc
     branches: HEAD
   - url: .
-    start_path: antora/components/ug-tst
+    start_path: core/testsupport/_adoc
     branches: HEAD
   - url: .
     start_path: core/viewer-restfulobjects/_adoc

@@ -10,7 +10,7 @@ The user guides available are:
 * xref:vro:ROOT::about.adoc[Restful Objects viewer]
 * xref:odn:ROOT:about.adoc[DataNucleus object store]
 * xref:security:ROOT::about.adoc[Security]
-* xref:ug-tst:ROOT:about.adoc[Testing]
+* xref:testing:ROOT::about.adoc[Testing]
 * xref:ug:btb:about.adoc[Beyond the Basics]
 
 The reference guides are:

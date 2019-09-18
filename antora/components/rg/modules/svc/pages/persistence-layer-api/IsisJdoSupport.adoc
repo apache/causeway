@@ -143,7 +143,7 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 
 == Fixture support
 
-When writing xref:ug:tst:integ-test-support.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc#executing-sql[above].
+When writing xref:testing:ROOT:integ-test-support.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc#executing-sql[above].
 
 Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 

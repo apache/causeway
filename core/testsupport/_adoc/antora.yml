@@ -1,5 +1,5 @@
-name: ug-tst
-title: "User Guides - Testing"
+name: testing
+title: "Testing"
 version: master
 start_page: ROOT:about.adoc
 nav:
