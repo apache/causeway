@@ -1,5 +1,5 @@
 name: ug
-title: "Guides - User Guides"
+title: "User Guide"
 version: master
 start_page: ROOT:about.adoc
 nav:

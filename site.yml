@@ -6,7 +6,7 @@ site:
 content:
   sources:
   - url: .
-    start_path: antora/components/ug
+    start_path: core/_adoc-ug
     branches: HEAD
   - url: .
     start_path: core/plugins/jdo/_adoc
