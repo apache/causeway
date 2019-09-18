@@ -1,4 +1,4 @@
-/* 
+/*
 
 I will show you how to change a height of a standard Bootstrap navbar.
 
@@ -27,4 +27,13 @@ I will show you how to change a height of a standard Bootstrap navbar.
         padding-bottom: 26.5px;
         line-height: 27px;
     }
+}
+
+.btn-link {
+    height: 35px;
+    margin-top: -8px;
+}
+
+div.tabulator-cell {
+    height: 35px;
 }
