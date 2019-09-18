@@ -2482,7 +2482,7 @@
 		<module>plugins/jaxrs-resteasy-4</module>
 		<module>plugins/jdo/common</module>
 		<module>plugins/jdo/datanucleus-5</module>
-		<module>plugins/security-shiro</module>
+		<module>security/plugins/shiro</module>
 
 		<!-- to break cyclic dependencies some tests needed to be moved to their 
 			own modules -->
