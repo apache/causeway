@@ -107,7 +107,7 @@ com.mycompany.myapp                          # ditto
 
 [TIP]
 ====
-The format of the permissions string is configurable in Shiro, and Apache Isis uses this to provide an extended wildcard format, described xref:ug:sec:shiro-isis-enhanced-wildcard-permission.adoc[here].
+The format of the permissions string is configurable in Shiro, and Apache Isis uses this to provide an extended wildcard format, described xref:security:ROOT::shiro-isis-enhanced-wildcard-permission.adoc[here].
 ====
 
 

@@ -385,7 +385,7 @@ The Wicket viewer provides a human usable web UI (implemented, as you might have
 
 image::using-hello-world/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}/using-hello-world/020-login-to-wicket-viewer.png"]
 
-The app itself is configured to run using xref:ug:sec:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
+The app itself is configured to run using xref:security:ROOT::about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
 
 * username: _sven_
 * password: _pass_

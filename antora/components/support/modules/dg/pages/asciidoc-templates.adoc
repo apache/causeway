@@ -338,7 +338,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adugsec`
-//|`\xref:ug:sec:about.adoc#xxx[ttt]`
+//|`\xref:security:ROOT::about.adoc#xxx[ttt]`
 //
 //A hyperlink to a bookmark within the Secrurity guide, where:
 //
@@ -347,9 +347,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:sec:hints-and-tips/shiro-caching.adoc[Caching and other Shiro Features]`
+//`\xref:security:ROOT::hints-and-tips/shiro-caching.adoc[Caching and other Shiro Features]`
 //
-//|xref:ug:sec:hints-and-tips/shiro-caching.adoc[Caching and other Shiro Features]
+//|xref:security:ROOT::hints-and-tips/shiro-caching.adoc[Caching and other Shiro Features]
 //
 //
 //|`adugtst`

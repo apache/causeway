@@ -1,5 +1,5 @@
-name: ug-sec
-title: "User Guides - Security"
+name: security
+title: "Security"
 version: master
 start_page: ROOT:about.adoc
 nav:

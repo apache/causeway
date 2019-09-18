@@ -12,7 +12,7 @@ content:
     start_path: core/plugins/jdo/_adoc
     branches: HEAD
   - url: .
-    start_path: antora/components/ug-sec
+    start_path: core/security/_adoc
     branches: HEAD
   - url: .
     start_path: antora/components/ug-tst
