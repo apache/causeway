@@ -159,8 +159,12 @@ class MetaModelExporter {
             final MetaModelService.Config config) {
         
         val prefixes = config.getPackagePrefixes();
-        if(prefixes.contains("*")) {
-            return true; // wildcard support to export them all  
+        if(prefixes.isEmpty()) {
+            return false; // export none
+        }
+        
+        if(config.isPackagePrefixAny()) {
+            return true; // export all  
         }
         
         val canonicalName = specification.getCorrespondingClass().getCanonicalName();
