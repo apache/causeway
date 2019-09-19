@@ -57,6 +57,8 @@ import org.apache.isis.schema.metamodel.v1.ScalarParam;
 import org.apache.isis.schema.metamodel.v1.VectorParam;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
+import lombok.val;
+
 class MetaModelExporter {
 
     SpecificationLoader specificationLookup;
@@ -155,9 +157,15 @@ class MetaModelExporter {
     private boolean inPackagePrefixes(
             final ObjectSpecification specification,
             final MetaModelService.Config config) {
-        final String canonicalName = specification.getCorrespondingClass().getCanonicalName();
-        for (final String s : config.getPackagePrefixes()) {
-            if(canonicalName.startsWith(s)) {
+        
+        val prefixes = config.getPackagePrefixes();
+        if(prefixes.isEmpty()) {
+            return true; // treat no prefixes configured as a wildcard to export them all  
+        }
+        
+        val canonicalName = specification.getCorrespondingClass().getCanonicalName();
+        for (val prefix : prefixes) {
+            if(canonicalName.startsWith(prefix)) {
                 return true;
             }
         }

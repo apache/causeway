@@ -96,6 +96,7 @@ public final class IsisPresets  {
     public static final String DataNucleusAutoCreate = "classpath:/presets/DataNucleusAutoCreate.properties";
     
     public static final String DebugPersistence = "classpath:/presets/DebugPersistence.properties";
+    public static final String DebugDiscovery = "logging.level.org.apache.isis.config.registry.IsisBeanTypeRegistry=DEBUG";
     
     
     /**

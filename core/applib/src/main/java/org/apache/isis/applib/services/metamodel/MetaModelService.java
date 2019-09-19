@@ -18,17 +18,20 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
+
+import lombok.val;
 
 /**
  * This service provides a formal API into Isis' metamodel.
@@ -92,14 +95,19 @@ public interface MetaModelService {
         private static final int IGNORE_MIXINS = 16;
 
         private final int mask;
-        private final List<String> packagePrefixes;
+        
+        private final Set<String> packagePrefixes = _Sets.newHashSet();
 
         public Config() {
             this(0, Collections.emptyList());
         }
-        private Config(final int mask, final List<String> packagePrefixes) {
+        private Config(final int mask, final Collection<String> packagePrefixes) {
             this.mask = mask;
-            this.packagePrefixes = Collections.unmodifiableList(packagePrefixes);
+            this.packagePrefixes.addAll(packagePrefixes);
+        }
+        
+        public Set<String> getPackagePrefixes() {
+            return Collections.unmodifiableSet(packagePrefixes);
         }
 
         public Config withIgnoreNoop() {
@@ -123,10 +131,15 @@ public interface MetaModelService {
             return new Config(mask | x, packagePrefixes);
         }
 
+        /**
+         * Returns a new {@code Config} with given {@code packagePrefix} added to the set of 
+         * this {@code Config}'s packagePrefixes.
+         * @param packagePrefix - prefix to be added
+         */
         public Config withPackagePrefix(final String packagePrefix) {
-            final List<String> prefixes = _Lists.newArrayList(this.packagePrefixes);
-            prefixes.add(packagePrefix);
-            return new Config(mask, prefixes);
+            val newPrefixes = _Sets.newHashSet(this.packagePrefixes);
+            newPrefixes.add(packagePrefix);
+            return new Config(mask, newPrefixes);
         }
 
         public boolean isIgnoreNoop() {
@@ -147,14 +160,10 @@ public interface MetaModelService {
             return hasFlag(IGNORE_MIXINS);
         }
 
-        public List<String> getPackagePrefixes() {
-            return packagePrefixes;
-        }
-
         private boolean hasFlag(final int x) {
             return (mask & x) == x;
         }
-
+        
     }
 
     MetamodelDto exportMetaModel(final Config config);

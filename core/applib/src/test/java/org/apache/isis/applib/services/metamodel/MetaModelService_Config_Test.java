@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class MetaModelService_Config_Test {
 
@@ -59,7 +60,7 @@ public class MetaModelService_Config_Test {
         // then
         assertNotSame(config, config2);
         assertThat(config2.getPackagePrefixes().size(), is(equalTo(1)));
-        assertThat(config2.getPackagePrefixes().get(0), is(equalTo("org.foo")));
+        assertThat(config2.getPackagePrefixes().iterator().next(), is(equalTo("org.foo")));
 
         // and when
         MetaModelService.Config config3 = config2.withPackagePrefix("org.bar");
@@ -68,7 +69,7 @@ public class MetaModelService_Config_Test {
         assertNotSame(config, config3);
         assertNotSame(config2, config3);
         assertThat(config3.getPackagePrefixes().size(), is(equalTo(2)));
-        assertThat(config3.getPackagePrefixes().get(0), is(equalTo("org.foo")));
-        assertThat(config3.getPackagePrefixes().get(1), is(equalTo("org.bar")));
+        assertTrue(config3.getPackagePrefixes().contains("org.foo"));
+        assertTrue(config3.getPackagePrefixes().contains("org.bar"));
     }
 }
