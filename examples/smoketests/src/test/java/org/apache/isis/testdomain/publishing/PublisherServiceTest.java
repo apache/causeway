@@ -44,7 +44,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import lombok.val;
 
 /**
- * Depends on {@link TimestampingTest} to succeed.
+ * Depends on {@link SupportingMethodTest} to succeed.
  */
 @SpringBootTest(
         classes = { 

@@ -53,7 +53,8 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
                 @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})}
         )
 @PropertySources({
-    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties"),
+    @PropertySource("classpath:/org/apache/isis/testdomain/conf/isis-non-changing.properties"),
+    @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-persistence.properties"),
     @PropertySource(IsisPresets.H2InMemory),
     @PropertySource(IsisPresets.NoTranslations),
 })

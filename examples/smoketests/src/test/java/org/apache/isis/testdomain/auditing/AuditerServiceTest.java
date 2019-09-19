@@ -44,7 +44,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Depends on {@link TimestampingTest} to succeed.
+ * Depends on {@link SupportingMethodTest} to succeed.
  */
 @SpringBootTest(
         classes = { 
