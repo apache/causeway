@@ -18,6 +18,7 @@ import org.ro.view.IconManager
 class Exposer(val delegate: TObject) {
 
     var iconName = ""
+    var selected = false //TODO add attribute dynamically???
 
     fun dynamise(): dynamic {
         val thys = this.asDynamic()

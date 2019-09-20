@@ -8,6 +8,8 @@ object IconManager {
     /* Recreate from configuration value*/
     val word2Icon = mapOf<String, String>(
             "Create" to "fa-plus",
+            "Edit" to "fa-pencil",
+            "Delete" to "fa-trash",
             "Find" to "fa-search",
             "List" to "fa-list",
             "Download" to "fa-download",

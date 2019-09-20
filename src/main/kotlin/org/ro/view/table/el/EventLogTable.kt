@@ -22,7 +22,12 @@ import pl.treksoft.kvision.utils.px
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
-    private val faFormatterParams = obj { allowEmpty = true; allowTruthy = true; tickElement = "<i class='fa fa-ellipsis-h'></i>"; crossElement = "<i class='fa fa-ellipsis-h'></i>" }
+    private val faFormatterParams = obj {
+        allowEmpty = true
+        allowTruthy = true
+        tickElement = "<i class='fa fa-ellipsis-v'></i>"
+        crossElement = "<i class='fa fa-ellipsis-v'></i>"
+    }
 
     private val columns = listOf(
             ColumnDefinition<LogEntry>("Title", "title",
@@ -32,6 +37,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                             console.log(data.title)
                         }
                     }),
+            ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT),
             ColumnDefinition("Method", "method", width = "100"),
             ColumnDefinition("req.len", field = "requestLength", width = "100", align = Align.RIGHT),
             ColumnDefinition("resp.len", field = "responseLength", width = "100", align = Align.RIGHT),

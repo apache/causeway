@@ -2,11 +2,17 @@ package org.ro.view.table
 
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
+import org.ro.org.ro.view.table.ContextMenuFactory
+import org.w3c.dom.events.MouseEvent
+import org.w3c.dom.events.MouseEventInit
+import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.tabulator.Align
 import pl.treksoft.kvision.tabulator.ColumnDefinition
+import pl.treksoft.kvision.tabulator.Editor
 import pl.treksoft.kvision.tabulator.Formatter
+import pl.treksoft.kvision.tabulator.js.Tabulator
 import pl.treksoft.kvision.utils.obj
 
 /**
@@ -14,11 +20,18 @@ import pl.treksoft.kvision.utils.obj
  */
 class ColumnFactory {
 
-    private val faFormatterParams = obj {
-        allowEmpty = true;
-        allowTruthy = true;
-        tickElement = "<i class='fa fa-square-o'></i>";
-        crossElement = "<i class='fa fa-check'></i>"
+    private val checkFormatterParams = obj {
+        allowEmpty = true
+        allowTruthy = true
+        tickElement = "<i class='fa fa-square-o'></i>"
+        crossElement = "<i class='fa fa-check-square-o'></i>"
+    }
+
+    private val menuFormatterParams = obj {
+        allowEmpty = true
+        allowTruthy = true
+        tickElement = "<i class='fa fa-ellipsis-v'></i>"
+        crossElement = "<i class='fa fa-ellipsis-v'></i>"
     }
 
     fun buildColumns(displayList: DisplayList, withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
@@ -41,12 +54,17 @@ class ColumnFactory {
             val friendlyName = pl.value
             var cd = ColumnDefinition<Exposer>(
                     title = friendlyName,
-                    field = id)
+                    field = id,
+                    headerFilter = Editor.INPUT)
             if (id == "object") {
                 cd = buildLink()
             }
             columns.add(cd)
         }
+
+        val menu = buildMenu()
+        columns.add(menu)
+
         return columns
     }
 
@@ -64,36 +82,81 @@ class ColumnFactory {
     }
 
     private fun buildLink(): ColumnDefinition<Exposer> {
-        val icon = ColumnDefinition<dynamic>(
+        return ColumnDefinition<dynamic>(
                 title = "Result",
                 field = "result",
+                headerFilter = Editor.INPUT,
                 formatterComponentFunction = { _, _, data ->
                     Button(text = data["object"].title, icon = "fa-star-o", style = ButtonStyle.LINK).onClick {
                         console.log(data)
                     }
                 })
-        return icon
     }
 
     private fun buildCheckBox(): ColumnDefinition<Exposer> {
         return ColumnDefinition<Exposer>(
-                title = "selected", //TODO add 'selected' attribute dynamically???
-                field = "key",
+                title = "",
+                field = "selected",
                 formatter = Formatter.TICKCROSS,
-                formatterParams = faFormatterParams,
+                formatterParams = checkFormatterParams,
+ /*               formatterComponentFunction = { cell, _, _ ->
+                    if (isSelected(cell)) {
+                        obj {"<i class='fa fa-check-square-o'></i>"}
+                    } else {
+                        obj {"<i class='fa fa-square-o'></i>"}
+                    }
+                }, */
                 align = Align.CENTER,
-                width = "100",
+                width = "40",
                 headerSort = false,
                 cellClick = { evt, cell ->
                     evt.stopPropagation()
-                    showDetails(cell)
+                    toggleSelection(cell)
                 })
     }
 
-    private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {
+    private fun buildMenu(): ColumnDefinition<Exposer> {
+        return ColumnDefinition("",
+                field = "iconName", // any existing field can be used
+                formatter = Formatter.TICKCROSS,
+                formatterParams = menuFormatterParams,
+                align = Align.CENTER,
+                width = "40",
+                headerSort = false,
+                cellClick = { evt, cell ->
+                    evt.stopPropagation()
+                    showContextMenu(evt, cell)
+                })
+    }
+
+    private fun showContextMenu(mouseEvent: MouseEvent, cell: Tabulator.CellComponent): ContextMenu {
+        val exposer = getData(cell)
+        val tObject = exposer.delegate
+        val contextMenu = ContextMenuFactory().buildFor(tObject)
+        val mei = MouseEventInit(
+                clientX = mouseEvent.clientX - 250,
+                clientY = mouseEvent.clientY - 500)
+        val positionedEvent = MouseEvent("", mei)
+        contextMenu.positionMenu(positionedEvent)
+        return contextMenu
+    }
+
+    private fun getData(cell: Tabulator.CellComponent): Exposer {
         val row = cell.getRow()
-        val data = row.getData()
-        console.log("[CF.showDetails] $data")
+        val data = row.getData().asDynamic()
+        val exposer = data as Exposer
+        return exposer
+    }
+
+    private fun toggleSelection(cell: Tabulator.CellComponent) {
+        val exposer = getData(cell)
+        val oldValue = exposer.selected
+        exposer.selected = !oldValue
+        console.log(exposer)
+    }
+
+    private fun isSelected(cell: Tabulator.CellComponent): Boolean {
+        return getData(cell).selected
     }
 
 }
