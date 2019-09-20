@@ -21,6 +21,7 @@ package org.apache.isis.jdo.metamodel.facets.object.query;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.Hierarchical;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -54,6 +55,7 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
             return;
         }
         validationFailures.add(
+                Identifier.classIdentifier(className),
                 "%s: error in JDOQL query, class name after '%s' clause should be same as class name on which annotated, or one of its supertypes (JDOQL : %s)",
                 className, clause, query);
     }

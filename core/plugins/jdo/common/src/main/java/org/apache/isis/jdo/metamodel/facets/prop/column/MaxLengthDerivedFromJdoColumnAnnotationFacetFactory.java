@@ -131,6 +131,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                     if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForMaxLengthAnnotationOnProperty) {
                         if(facet.value() != underlying.value()) {
                             validationFailures.add(
+                                    association.getIdentifier(),
                                     "%s: inconsistent lengths specified in Isis' @MaxLength(...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
                                     association.getIdentifier().toClassAndNameIdentityString());
                         }
@@ -138,6 +139,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                     if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
                         if(facet.value() != underlying.value()) {
                             validationFailures.add(
+                                    association.getIdentifier(),
                                     "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
                                     association.getIdentifier().toClassAndNameIdentityString());
                         }

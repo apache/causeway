@@ -16,12 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.model.good;
+package org.apache.isis.testdomain.model.bad;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ValidDomain {
-
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class UnresolvableReferencedAction {
+    
+    public void disableSomething() {
+        
+    }
+    
 }

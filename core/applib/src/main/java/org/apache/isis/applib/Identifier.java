@@ -112,7 +112,7 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     /**
-     * Helper, used within contructor chaining
+     * Helper, used within constructor chaining
      */
     private static List<String> classNamesOf(final Class<?>[] parameterClasses) {
         if (parameterClasses == null) {

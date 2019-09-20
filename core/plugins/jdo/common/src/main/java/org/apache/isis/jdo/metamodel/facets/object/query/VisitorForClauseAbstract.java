@@ -20,6 +20,7 @@ package org.apache.isis.jdo.metamodel.facets.object.query;
 
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -75,6 +76,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
         final String className = objectSpec.getCorrespondingClass().getName();
         if (getSpecificationLoader().loadSpecification(classNameFromClause)==null) {
             validationFailures.add(
+                    Identifier.classIdentifier(className),
                     "%s: error in JDOQL query, class name for '%s' clause not recognized (JDOQL : %s)",
                     className, clause, query);
             return;

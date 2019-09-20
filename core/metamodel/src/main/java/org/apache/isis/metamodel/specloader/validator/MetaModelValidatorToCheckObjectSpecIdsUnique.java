@@ -22,12 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.val;
 
 public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValidatorComposite {
 
@@ -70,12 +73,15 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
             @Override
             public void summarize(final ValidationFailures validationFailures) {
                 for (final ObjectSpecId specId : specsById.keySet()) {
-                    final List<ObjectSpecification> specList = specsById.get(specId);
+                    val specList = specsById.get(specId);
                     int numSpecs = specList.size();
                     if(numSpecs > 1) {
-                        String csv = asCsv(specList);
+                        val csv = asCsv(specList);
                         validationFailures.add(
-                                "Object type '%s' mapped to multiple classes: %s", specId.asString(), csv);
+                                Identifier.classIdentifier(specId.asString()),
+                                "Object type '%s' mapped to multiple classes: %s", 
+                                specId.asString(), 
+                                csv);
                     }
                 }
             }

@@ -19,8 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.mmverror;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -58,7 +58,7 @@ public class MmvErrorPage extends WebPage {
     private static final String ID_ERROR = "error";
     private static final String ID_ERROR_MESSAGE = "errorMessage";
 
-    public MmvErrorPage(Set<String> validationErrors) {
+    public MmvErrorPage(Collection<String> validationErrors) {
         this(Model.ofList(_Lists.newArrayList(validationErrors)));
     }
 

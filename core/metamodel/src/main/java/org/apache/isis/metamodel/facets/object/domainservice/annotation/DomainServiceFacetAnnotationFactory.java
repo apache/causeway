@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.object.domainservice.annotation;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -79,8 +80,10 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
         switch (domainServiceFacet.getNatureOfService()) {
         case VIEW:
             mixinOnlyValidator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "%s: menu/contributed services (nature == VIEW) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
-                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
+                    cls.getName(), 
+                    ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
             break;
             //TODO[2142] remove deprecated case          
             //        case VIEW_CONTRIBUTIONS_ONLY:
@@ -130,6 +133,7 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
                     }
 
                     validationFailures.add(
+                            thisSpec.getIdentifier(),
                             "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                             thisSpec.getFullIdentifier(),
                             ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY,

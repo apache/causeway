@@ -24,7 +24,8 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 
-public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory<T extends Enum<T>> extends ValueFacetUsingSemanticsProviderFactory<T> {
+public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory 
+extends ValueFacetUsingSemanticsProviderFactory<Enum<?>> {
 
     public EnumFacetUsingValueFacetUsingSemanticsProviderFactory() {
         super();
@@ -39,12 +40,11 @@ public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory<T extends Enu
             return;
         }
 
-        addFacets(new EnumValueSemanticsProvider<T>(holder, _Casts.uncheckedCast(cls)));
+        EnumValueSemanticsProvider<? extends Enum<?>> enumValueSemanticsProvider =  
+                new EnumValueSemanticsProvider<>(holder, _Casts.uncheckedCast(cls));
+        
+        addFacets(_Casts.uncheckedCast(enumValueSemanticsProvider));
         FacetUtil.addFacet(new ChoicesFacetEnum(holder, cls.getEnumConstants()));
-    }
-
-    protected Class<T> asT(final Class<?> cls) {
-        return _Casts.uncheckedCast(cls);
     }
 
 }

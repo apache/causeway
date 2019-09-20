@@ -56,7 +56,7 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
 
     private MetaModelValidator createMetaModelValidator() {
 
-        log.debug("About to create the MetaModelValidator.");
+        log.debug("About to create the composite MetaModelValidator.");
         
         val metaModelValidatorClassName =
                 configuration.getString(
@@ -77,13 +77,15 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
         
         if(log.isDebugEnabled()) {
             
-            val refinersCount = metaModelRefiners.size();
+            val refinerCount = metaModelRefiners.size();
+            val validatorCount = mmValidatorComposite.size();
             
-            log.debug("MetaModelValidator created with {} refiners.", 
-                    refinersCount);    
+            log.debug("Collected {} validators after also asking {} refiners.",
+                    validatorCount,
+                    refinerCount);    
         }
 
-        return mmValidator;
+        return mmValidatorComposite;
     }
 
 }

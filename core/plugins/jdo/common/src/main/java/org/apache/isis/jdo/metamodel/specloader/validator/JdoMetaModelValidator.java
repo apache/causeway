@@ -35,7 +35,6 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
         addValidatorToCheckForUnsupportedAnnotations();
     }
 
-
     private void addValidatorToEnsureIdentityType() {
         MetaModelValidatorVisiting.Visitor ensureIdentityType = new MetaModelValidatorVisiting.Visitor(){
             @Override
@@ -59,6 +58,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
                     // in fact, at the time of writing there are no others, so this is theoretical in case there is
                     // a future change to the JDO spec
                     validationFailures.add(
+                            objSpec.getIdentifier(),
                             "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
                             objSpec.getFullIdentifier(),
                             identityType);
@@ -76,6 +76,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
             public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
                 if (objSpec.containsDoOpFacet(ParentedCollectionFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
                     validationFailures.add(
+                            objSpec.getIdentifier(),
                             "%s: DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
                             objSpec.getFullIdentifier());
                 }

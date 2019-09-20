@@ -18,25 +18,26 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
-import org.apache.isis.schema.metamodel.v1.DomainClassDto;
+import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.testdomain.conf.Configuration_headless;
-import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
+import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,
-                Configuration_usingValidDomain.class
+                Configuration_usingInvalidDomain.class
         }, 
         properties = {
                 "isis.reflector.introspector.mode=FULL"
@@ -46,42 +47,26 @@ import lombok.val;
     IsisPresets.DebugProgrammingModel,
     
 })
-class SupportingMethodTest {
+class BadDomainTest {
     
-    @Inject private MetaModelService metaModelService;
-    
-//    @BeforeAll
-//    static void beforeAll() {
-//        val typeMetaData = TypeMetaData.of(AValidDomainObject.class.getName());
-//        val typeRegistry = IsisBeanTypeRegistry.current();
-//        typeRegistry.isIoCManagedType(typeMetaData); // as a side-effect adds class to the meta model
-//    }
-
-    @Test //TODO under construction
-    void reservedPrefix_shouldBeAllowedForMembers() {
+    @Test
+    void validationOnBadDomain_shouldFail() {
            
+        val validateDomainModel = new ValidateDomainModel();
         
-        val config = new MetaModelService.Config()
-//              .withIgnoreNoop()
-//              .withIgnoreAbstractClasses()
-//              .withIgnoreBuiltInValueTypes()
-//              .withIgnoreInterfaces()
-                //.withPackagePrefix("*")
-                .withPackagePrefix("org.apache.isis.testdomain.")
-                ;
+        assertThrows(DomainModelException.class, validateDomainModel::run);
         
-        val metamodelDto = metaModelService.exportMetaModel(config);
-
-        System.out.println("!!! listing MM");
+        val hasTitleConflict = validateDomainModel
+        .streamFailuresMatchingOriginatingClass(AmbiguousTitle.class)
+        .anyMatch(failure->
+            failure.getMessage().contains("conflict for determining a strategy for retrieval of title"));
         
-        for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
-            System.out.println("dc: " + domainClass.getId());
-        }
-        
-        System.out.println("!!! ---");
-        
-        new ValidateDomainModel().run();
+        assertTrue(hasTitleConflict);
         
     }
+    
+    // -- HELPER
+    
+    
 
 }

@@ -20,53 +20,65 @@ package org.apache.isis.metamodel.specloader.validator;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
+import java.util.stream.Collectors;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Sets;
 
-public final class ValidationFailures implements Iterable<String> {
+import lombok.val;
 
-    private final Set<String> messages = _Sets.newLinkedHashSet();
+public final class ValidationFailures implements Iterable<ValidationFailure> {
 
-    public void add(final String pattern, final Object... arguments) {
-        final String message = String.format(pattern, arguments);
-        messages.add(message);
+    
+    private final Set<ValidationFailure> failures = _Sets.newTreeSet();
+
+    public void add(Identifier origin, String pattern, Object... arguments) {
+        val message = String.format(pattern, arguments);
+        failures.add(ValidationFailure.of(origin, message));
     }
 
-    public void addAll(final Iterable<String> messages) {
-        for (final String message : messages) {
-            this.messages.add(message);
+    public void addAll(Iterable<ValidationFailure> failures) {
+        for (val failure : failures) {
+            this.failures.add(failure);
         }
     }
 
-    public void add(final ValidationFailures validationFailures) {
-        addAll(validationFailures.getMessages());
+    public void add(ValidationFailures validationFailures) {
+        addAll(validationFailures.getFailures());
+    }
+
+    public Set<ValidationFailure> getFailures() {
+        return Collections.unmodifiableSet(failures);
+    }
+    
+    public List<String> getMessages() {
+        val messages = failures.stream() // already sorted
+        .map(ValidationFailure::getMessage)
+        .collect(Collectors.toList());
+        
+        return Collections.unmodifiableList(messages);
+    }
+
+    public int getNumberOfFailures() {
+        return failures.size();
+    }
+
+    @Override
+    public Iterator<ValidationFailure> iterator() {
+        return getFailures().iterator();
+    }
+    
+    public boolean occurred() {
+        return !failures.isEmpty();
     }
 
     public MetaModelDeficiencies getDeficienciesIfAny() {
         if (!occurred()) {
             return null;
         }
-        final SortedSet<String> sortedMessages = _Sets.newTreeSet(messages);
-        return MetaModelDeficiencies.of(sortedMessages);
-    }
-
-    public boolean occurred() {
-        return !messages.isEmpty();
-    }
-
-    public Set<String> getMessages() {
-        return Collections.unmodifiableSet(messages);
-    }
-
-    public int getNumberOfMessages() {
-        return messages.size();
-    }
-
-    @Override
-    public Iterator<String> iterator() {
-        return getMessages().iterator();
+        return MetaModelDeficiencies.of(getMessages());
     }
 
 

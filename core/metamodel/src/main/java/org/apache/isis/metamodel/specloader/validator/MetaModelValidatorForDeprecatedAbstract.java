@@ -20,7 +20,10 @@ package org.apache.isis.metamodel.specloader.validator;
 
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.FacetFactory;
+
+import lombok.val;
 
 public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract {
 
@@ -34,20 +37,19 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
     /**
      * @param facet
      */
-    public <T extends Facet> T flagIfPresent(final T facet) {
-        if(facet != null) {
-            failures.add(failureMessageFor(facet, null));
-        }
-        return facet;
+    public <T extends Facet> T flagIfPresent(T facet) {
+        return flagIfPresent(facet, null);
     }
 
     /**
      * @param facet
      * @param processMethodContext - can be null if none available.
      */
-    public <T extends Facet> T flagIfPresent(final T facet, final FacetFactory.AbstractProcessWithMethodContext processMethodContext) {
+    public <T extends Facet> T flagIfPresent(T facet, FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext) {
         if(facet != null) {
-            failures.add(failureMessageFor(facet, processMethodContext));
+            val holder = (IdentifiedHolder) facet.getFacetHolder();
+            val identifier = holder.getIdentifier();
+            failures.add(identifier, failureMessageFor(facet, processMethodContext));
         }
         return facet;
     }
@@ -55,7 +57,7 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
     /**
      * Convenience for subclasses.
      */
-    static boolean isInherited(final FacetFactory.AbstractProcessWithMethodContext<?> processContext) {
+    static boolean isInherited(FacetFactory.AbstractProcessWithMethodContext<?> processContext) {
         if (processContext == null) {
             return false;
         }
@@ -64,17 +66,17 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
         return introspectedCls != declaringClass;
     }
 
-    protected abstract String failureMessageFor(final Facet facet, final FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext);
+    protected abstract String failureMessageFor(Facet facet, FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext);
 
     @Override
-    public void validate(final ValidationFailures validationFailures) {
+    public void validate(ValidationFailures validationFailures) {
         if(configuration.getBoolean(ISIS_REFLECTOR_ALLOW_DEPRECATED_KEY, ISIS_REFLECTOR_ALLOW_DEPRECATED_DEFAULT)) {
             return;
         }
         validationFailures.addAll(failures);
     }
 
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setConfiguration(IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 

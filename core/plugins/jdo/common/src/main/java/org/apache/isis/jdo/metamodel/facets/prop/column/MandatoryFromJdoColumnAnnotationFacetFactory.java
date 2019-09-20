@@ -155,6 +155,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
                     if(association.isNotPersisted()) {
                         validationFailures.add(
+                                association.getIdentifier(),
                                 "%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)",
                                 association.getIdentifier().toClassAndNameIdentityString());
                         return;
@@ -166,9 +167,15 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add(
+                                association.getIdentifier(),
+                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                association.getIdentifier().toClassAndNameIdentityString());
                     } else {
-                        validationFailures.add("%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add(
+                                association.getIdentifier(),
+                                "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                association.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
 
@@ -184,9 +191,15 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                     }
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add(
+                                association.getIdentifier(),
+                                "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                association.getIdentifier().toClassAndNameIdentityString());
                     } else {
-                        validationFailures.add("%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add(
+                                association.getIdentifier(),
+                                "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", 
+                                association.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
             }

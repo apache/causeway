@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.facets.object.mixin;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
 public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValidationFailures {
@@ -36,8 +37,11 @@ public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValida
         if (mixinType) {
             return true;
         }
-        addFailure("%s: annotated with %s annotation but does not have a public 1-arg constructor",
-                candidateMixinType.getName(), annotation);
+        addFailure(
+                Identifier.classIdentifier(candidateMixinType),
+                "%s: annotated with %s annotation but does not have a public 1-arg constructor",
+                candidateMixinType.getName(), 
+                annotation);
         return false;
     }
 

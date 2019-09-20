@@ -71,8 +71,10 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
                         final Class<? extends Comparator<?>> cls = facet.value();
                         if(!Comparator.class.isAssignableFrom(cls)) {
                             validationFailures.add(
+                                    objectSpec.getIdentifier(),
                                     "%s#%s: is annotated with @SortedBy, but the class specified '%s' is not a Comparator",
-                                    objectSpec.getIdentifier().getClassName(), objectCollection.getId(),
+                                    objectSpec.getIdentifier().getClassName(), 
+                                    objectCollection.getId(),
                                     facet.value().getName());
                         }
                     }

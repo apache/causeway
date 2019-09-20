@@ -122,6 +122,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
                 } else if (evaluators.size()>1) {
 
                     validationFailures.add(
+                            objectSpec.getIdentifier(),
                             "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                     + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
                                     objectSpec.getIdentifier().getClassName(),
@@ -141,6 +142,7 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
                     if(!fieldEvaluator.getGetter(cls).isPresent()) {
 
                         validationFailures.add(
+                                objectSpec.getIdentifier(),
                                 "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                         + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
                                         objectSpec.getIdentifier().getClassName(),

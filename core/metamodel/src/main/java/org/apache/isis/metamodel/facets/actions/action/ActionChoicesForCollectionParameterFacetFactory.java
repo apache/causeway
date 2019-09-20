@@ -116,11 +116,14 @@ implements MetaModelValidatorRefiner {
                             // exact type List, Set, SortedSet or Collection.
                             if(!collectionSemantics.value().isSupportedInterfaceForActionParameters()) {
                                 validationFailures.add(
+                                        objectSpec.getIdentifier(),
                                         "Collection action parameter found that is not exactly one "
                                                 + "of the following supported types: "
                                                 + "List, Set, SortedSet, Collection or Array.  "
                                                 + "Class: %s action: %s parameter %d",
-                                                objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
+                                        objectSpec.getFullIdentifier(), 
+                                        objectAction.getName(), 
+                                        paramNum);
                                 return;
                             }
                         }
@@ -139,10 +142,13 @@ implements MetaModelValidatorRefiner {
                         }
 
                         validationFailures.add(
+                                objectSpec.getIdentifier(),
                                 "Collection action parameter found without supporting "
                                         + "choices or autoComplete facet.  "
                                         + "Class: %s action: %s parameter %d",
-                                        objectSpec.getFullIdentifier(), objectAction.getName(), paramNum);
+                                objectSpec.getFullIdentifier(), 
+                                objectAction.getName(), 
+                                paramNum);
                     }
                 });
         metaModelValidator.add(validator);

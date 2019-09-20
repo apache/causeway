@@ -21,7 +21,8 @@ package org.apache.isis.metamodel.specloader.validator;
 
 import org.apache.isis.metamodel.MetaModelContext;
 
-public abstract class MetaModelValidatorAbstract implements MetaModelValidator, MetaModelContext.Delegating {
+public abstract class MetaModelValidatorAbstract 
+implements MetaModelValidator, MetaModelContext.Delegating {
 
     @Override
     public void init() {

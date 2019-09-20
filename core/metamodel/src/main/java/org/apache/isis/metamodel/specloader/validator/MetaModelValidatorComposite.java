@@ -23,20 +23,27 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.val;
+
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
     private final List<MetaModelValidator> validators = _Lists.newArrayList();
 
-
-    public MetaModelValidatorComposite add(final MetaModelValidator validator) {
-        validators.add(validator);
+    public MetaModelValidatorComposite add(MetaModelValidator validator) {
+        
+        if(validator instanceof MetaModelValidatorComposite) {
+            // flatten the structure ... don't allow composites to contain composites, 
+            // such that the size() operation is a simple one
+            val composite = (MetaModelValidatorComposite) validator;
+            validators.addAll(composite.validators);
+        } else {
+            validators.add(validator);    
+        }
         return this;
     }
 
-    public MetaModelValidatorComposite addAll(
-            final MetaModelValidator... validators) {
-
-        for (final MetaModelValidator validator : validators) {
+    public MetaModelValidatorComposite addAll(MetaModelValidator... validators) {
+        for (val validator : validators) {
             add(validator);
         }
         return this;
@@ -46,22 +53,25 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
     @Override
     public void init() {
         super.init();
-        for (final MetaModelValidator validator : validators) {
+        for (val validator : validators) {
             validator.init();
         }
     }
 
 
     @Override
-    public void validate(final ValidationFailures validationFailures)  {
-        for (final MetaModelValidator validator : validators) {
+    public void validate(ValidationFailures validationFailures)  {
+        for (val validator : validators) {
             validator.validate(validationFailures);
         }
     }
 
+    public int size() {
+        return validators.size(); 
+    }
 
-    public static MetaModelValidatorComposite asComposite(final MetaModelValidator baseMetaModelValidator) {
-        final MetaModelValidatorComposite metaModelValidatorComposite = new MetaModelValidatorComposite();
+    public static MetaModelValidatorComposite asComposite(MetaModelValidator baseMetaModelValidator) {
+        val metaModelValidatorComposite = new MetaModelValidatorComposite();
         metaModelValidatorComposite.add(baseMetaModelValidator);
         return metaModelValidatorComposite;
     }

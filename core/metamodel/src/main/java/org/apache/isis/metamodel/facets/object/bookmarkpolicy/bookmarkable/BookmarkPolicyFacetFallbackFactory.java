@@ -77,9 +77,10 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
                     final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                     if(semanticsFacet == null || semanticsFacet.isNoop() || !semanticsFacet.value().isSafeInNature()) {
                         validationFailures.add(
+                                objectAction.getIdentifier(),
                                 "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
                                         "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
-                                        objectAction.getIdentifier().toClassAndNameIdentityString());
+                                objectAction.getIdentifier().toClassAndNameIdentityString());
                     }
                 });
 

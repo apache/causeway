@@ -34,6 +34,8 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposit
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
+import lombok.val;
+
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
@@ -86,7 +88,7 @@ implements MethodPrefixBasedFacetFactory {
 
                         if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
 
-                            final String explanation =
+                            val explanation =
                                     objectAction.getParameterCount() > 0 && noParamsOnly &&
                                     (Objects.equals(prefix, MethodPrefixConstants.HIDE_PREFIX) || Objects.equals(prefix, MethodPrefixConstants.DISABLE_PREFIX))
                                     ? " (note that such methods must have no parameters, '"
@@ -94,13 +96,14 @@ implements MethodPrefixBasedFacetFactory {
                                     + "' config property)"
                                     : "";
 
-                                    final String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
-                                    validationFailures.add(
-                                            message,
-                                            objectSpec.getIdentifier().getClassName(),
-                                            actionId,
-                                            prefix,
-                                            explanation);
+                            val message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
+                            validationFailures.add(
+                                    objectSpec.getIdentifier(),
+                                    message,
+                                    objectSpec.getIdentifier().getClassName(),
+                                    actionId,
+                                    prefix,
+                                    explanation);
                         }
                     }
                 });

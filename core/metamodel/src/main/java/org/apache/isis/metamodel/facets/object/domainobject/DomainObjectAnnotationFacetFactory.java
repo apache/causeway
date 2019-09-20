@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -221,6 +222,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
             }
         }
         autoCompleteMethodInvalid.addFailure(
+                Identifier.classIdentifier(cls),
                 "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;
@@ -534,11 +536,12 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                         continue;
                     }
                     validationFailures.add(
+                            existingSpec.getIdentifier(),
                             "%s: cannot have two entities with same object type (@Discriminator, @DomainObject(objectType=...), @ObjectType or @PersistenceCapable(schema=...)); %s " +
                                     "has same value (%s).",
-                                    existingSpec.getFullIdentifier(),
-                                    otherSpec.getFullIdentifier(),
-                                    objectSpecId);
+                            existingSpec.getFullIdentifier(),
+                            otherSpec.getFullIdentifier(),
+                            objectSpecId);
                 }
 
                 final AutoCompleteFacet autoCompleteFacet = thisSpec.getFacet(AutoCompleteFacet.class);
@@ -548,6 +551,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                     final boolean isRegistered = getServiceRegistry().isService(repositoryClass);
                     if(!isRegistered) {
                         validationFailures.add(
+                                thisSpec.getIdentifier(),
                                 "@DomainObject annotation on %s specifies unknown repository '%s'",
                                 thisSpec.getFullIdentifier(), repositoryClass.getName());
                     }

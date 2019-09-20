@@ -154,12 +154,14 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
                         if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
                             validationFailures.add(
+                                    association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
                                     association.getIdentifier().toClassAndNameIdentityString());
                         }
 
                         if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
                             validationFailures.add(
+                                    association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(scale=...) different from @javax.validation.constraint.Digits(fraction=...)",
                                     association.getIdentifier().toClassAndNameIdentityString());
                         }

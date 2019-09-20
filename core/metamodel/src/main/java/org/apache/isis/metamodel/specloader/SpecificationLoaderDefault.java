@@ -131,7 +131,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         //facetProcessor.setServicesInjector(servicesInjector);
 
         // initialize subcomponents
-        this.programmingModel.init();
+        programmingModel.init();
         facetProcessor.init();
 
         postProcessor.init();

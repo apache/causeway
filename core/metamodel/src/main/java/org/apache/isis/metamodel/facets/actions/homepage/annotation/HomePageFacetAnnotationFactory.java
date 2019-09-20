@@ -19,10 +19,13 @@
 
 package org.apache.isis.metamodel.facets.actions.homepage.annotation;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -41,6 +44,8 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
+
+import lombok.val;
 
 public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner{
 
@@ -69,7 +74,7 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
     private Visitor newValidatorVisitor() {
         return new MetaModelValidatorVisiting.SummarizingVisitor() {
 
-            private final List<String> annotated = _Lists.newArrayList();
+            private final List<Identifier> annotated = _Lists.newArrayList();
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
@@ -79,12 +84,12 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
 
-                    final String fullIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
+                    val identifier = objectAction.getIdentifier();
 
                     // TODO: it would good to flag if the facet is found on any non-services, however
                     // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession exists.
                     // this ought to be improved upon at some point...
-                    annotated.add(fullIdentifier);
+                    annotated.add(identifier);
                 });
 
                 return true; // keep searching
@@ -93,13 +98,19 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             @Override
             public void summarize(ValidationFailures validationFailures) {
                 if(annotated.size()>1) {
-                    for (String actionId : annotated) {
-
-                        final String nonServiceNamesStr = annotated.stream()
+                    
+                    final Set<String> annotatedIdSet = annotated.stream()
+                            .map(Identifier::toClassAndNameIdentityString)
+                            .collect(Collectors.toCollection(HashSet::new));
+                    
+                    for (val actionIdentifier : annotated) {
+                        val actionId = actionIdentifier.toClassAndNameIdentityString();
+                        val nonServiceNamesStr = annotatedIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 
                         validationFailures.add(
+                                actionIdentifier,
                                 "%s: other actions also specified as home page: %s ",
                                 actionId, nonServiceNamesStr);
                     }

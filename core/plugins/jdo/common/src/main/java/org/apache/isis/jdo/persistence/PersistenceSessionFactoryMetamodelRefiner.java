@@ -59,8 +59,7 @@ public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefin
     }
 
     @Override
-    public void refineMetaModelValidator(
-            MetaModelValidatorComposite metaModelValidator) {
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new JdoMetaModelValidator());
         metaModelValidator.add(new MetaModelValidatorToCheckObjectSpecIdsUnique());
         metaModelValidator.add(new MetaModelValidatorToCheckModuleExtent());

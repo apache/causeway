@@ -131,13 +131,15 @@ implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
                         val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
                         if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
                             validationFailures.add(
+                                    objectSpec.getIdentifier(),
                                     "%s: the object type must be specified explicitly ('%s' config property). "
                                             + "Defaulting the object type from the package/class/package name can lead "
                                             + "to data migration issues for apps deployed to production (if the class is "
                                             + "subsequently refactored). "
                                             + "Use @Discriminator, @DomainObject(objectType=...) or "
                                             + "@PersistenceCapable(schema=...) to specify explicitly.",
-                                            objectSpec.getFullIdentifier(), ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY);
+                                    objectSpec.getFullIdentifier(), 
+                                    ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY);
                         }
                     }
 

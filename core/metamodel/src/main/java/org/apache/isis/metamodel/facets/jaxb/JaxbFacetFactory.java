@@ -285,7 +285,9 @@ implements MetaModelValidatorRefiner {
                 return;
             }
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter.class) or equivalent.",
+            validationFailures.add(
+                    property.getIdentifier(),
+                    "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
                     propertyType.getName());
@@ -325,7 +327,9 @@ implements MetaModelValidatorRefiner {
             }
 
             // else
-            validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
+            validationFailures.add(
+                    property.getIdentifier(),
+                    "JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
                     jodaType.getName());
@@ -339,7 +343,10 @@ implements MetaModelValidatorRefiner {
                 final ValidationFailures validationFailures) {
 
             if(objectSpec.isAbstract()) {
-                validationFailures.add("JAXB view model '%s' is abstract", objectSpec.getFullIdentifier());
+                validationFailures.add(
+                        objectSpec.getIdentifier(),
+                        "JAXB view model '%s' is abstract", 
+                        objectSpec.getFullIdentifier());
             }
         }
     }
@@ -352,11 +359,20 @@ implements MetaModelValidatorRefiner {
 
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             if(correspondingClass.isAnonymousClass()) {
-                validationFailures.add("JAXB view model '%s' is an anonymous class", objectSpec.getFullIdentifier());
+                validationFailures.add(
+                        objectSpec.getIdentifier(),
+                        "JAXB view model '%s' is an anonymous class", 
+                        objectSpec.getFullIdentifier());
             } else if(correspondingClass.isLocalClass()) {
-                validationFailures.add("JAXB view model '%s' is a local class", objectSpec.getFullIdentifier());
+                validationFailures.add(
+                        objectSpec.getIdentifier(),
+                        "JAXB view model '%s' is a local class", 
+                        objectSpec.getFullIdentifier());
             } else if(correspondingClass.isMemberClass() && !Modifier.isStatic(correspondingClass.getModifiers())) {
-                validationFailures.add("JAXB view model '%s' is an non-static inner class", objectSpec.getFullIdentifier());
+                validationFailures.add(
+                        objectSpec.getIdentifier(),
+                        "JAXB view model '%s' is an non-static inner class", 
+                        objectSpec.getFullIdentifier());
             }
         }
     }
@@ -373,13 +389,17 @@ implements MetaModelValidatorRefiner {
                 if(constructor.getParameterTypes().length == 0) {
                     if (!Modifier.isPublic(constructor.getModifiers())) {
                         validationFailures
-                        .add("JAXB view model '%s' has a no-arg constructor, however it is not public",
+                        .add(objectSpec.getIdentifier(),
+                                "JAXB view model '%s' has a no-arg constructor, however it is not public",
                                 objectSpec.getFullIdentifier());
                     }
                     return;
                 }
             }
-            validationFailures.add("JAXB view model '%s' does not have a public no-arg constructor", objectSpec.getFullIdentifier());
+            validationFailures.add(
+                    objectSpec.getIdentifier(),
+                    "JAXB view model '%s' does not have a public no-arg constructor", 
+                    objectSpec.getFullIdentifier());
         }
     }
 }

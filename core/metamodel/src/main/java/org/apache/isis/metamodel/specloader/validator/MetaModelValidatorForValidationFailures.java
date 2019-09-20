@@ -18,9 +18,12 @@
  */
 package org.apache.isis.metamodel.specloader.validator;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
+
+import lombok.val;
 
 public class MetaModelValidatorForValidationFailures extends MetaModelValidatorAbstract {
 
@@ -30,17 +33,19 @@ public class MetaModelValidatorForValidationFailures extends MetaModelValidatorA
     }
 
     @Override
-    public void validate(final ValidationFailures validationFailures) {
+    public void validate(ValidationFailures validationFailures) {
         validationFailures.addAll(failures);
     }
 
-    public void addFailure(final String pattern, final Object... arguments) {
-        failures.add(pattern, arguments);
+    public void addFailure(Identifier identifier, String pattern, Object... arguments) {
+        failures.add(identifier, pattern, arguments);
     }
 
-    public Facet addFailure(final Facet facet, final String message) {
+    public Facet addFailure(Facet facet, String message) {
         if(facet != null) {
-            failures.add(message + ((IdentifiedHolder) facet.getFacetHolder()).getIdentifier().toFullIdentityString());
+            val holder = (IdentifiedHolder) facet.getFacetHolder();
+            val identifier = holder.getIdentifier();
+            failures.add(identifier, message + " " + identifier.toFullIdentityString());
         }
         return facet;
     }

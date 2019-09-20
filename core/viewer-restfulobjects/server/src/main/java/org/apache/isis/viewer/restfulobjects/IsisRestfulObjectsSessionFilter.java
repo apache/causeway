@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -389,8 +388,8 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
 
         if(metaModelDeficiencies != null) {
-            final Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
-            final StringBuilder buf = new StringBuilder();
+            val validationErrors = metaModelDeficiencies.getValidationErrors();
+            val buf = new StringBuilder();
             for (String validationError : validationErrors) {
                 buf.append(validationError).append("\n");
             }

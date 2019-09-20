@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -369,7 +370,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                         : UUID.randomUUID().toString();
     }
 
-    private void log(final Set<String> validationErrors) {
+    private void log(final Collection<String> validationErrors) {
         log("");
         logBanner();
         log("");

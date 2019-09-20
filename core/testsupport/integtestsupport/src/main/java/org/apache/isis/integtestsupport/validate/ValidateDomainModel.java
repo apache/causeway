@@ -19,10 +19,21 @@
 package org.apache.isis.integtestsupport.validate;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailure;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.runtime.system.context.IsisContext;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -35,10 +46,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ValidateDomainModel implements Runnable {
 
+    private ValidationFailures validationFailures;
+
+    @Override
     public void run() {
 
         val specificationLoader = IsisContext.getSpecificationLoader();
-        val validationFailures = specificationLoader.validate();
+        this.validationFailures = specificationLoader.validate();
 
         val objectSpecifications = specificationLoader.currentSpecifications();
         
@@ -50,9 +64,32 @@ public class ValidateDomainModel implements Runnable {
 
         if (validationFailures.occurred()) {
             throwFailureException(
-                    validationFailures.getNumberOfMessages() + " problems found.", 
+                    validationFailures.getNumberOfFailures() + " problems found.", 
                     validationFailures.getMessages());
         }
+    }
+    
+    public Set<ValidationFailure> getFailures() {
+        if(validationFailures==null) {
+            return Collections.emptySet();
+        }
+        return validationFailures.getFailures(); // already wrapped unmodifiable
+    }
+    
+    public Stream<ValidationFailure> streamFailures(@Nullable Predicate<Identifier> filter) {
+        if(validationFailures==null) {
+            return Stream.empty();
+        }
+        if(filter==null) {
+            return validationFailures.getFailures().stream();
+        }
+        return validationFailures.getFailures().stream()
+                .filter(failure->filter.test(failure.getOrigin()));
+    }
+    
+    public Stream<ValidationFailure> streamFailuresMatchingOriginatingClass(Class<?> cls) {
+        requires(cls, "cls");
+        return streamFailures(origin->origin.getClassName().equals(cls.getName()));
     }
     
     // -- HELPER
@@ -64,13 +101,10 @@ public class ValidateDomainModel implements Runnable {
     
     private void logErrors(Collection<String> logMessages) {
         log.error("");
-        log.error("");
-        log.error("");
+        log.error("### Domain Model Deficiencies");
         for (String logMessage : logMessages) {
             log.error(logMessage);
         }
-        log.error("");
-        log.error("");
         log.error("");
     }
 

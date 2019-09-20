@@ -107,6 +107,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
                 final Facet underlyingFacet = facet != null ? facet.getUnderlyingFacet() : null;
                 if(underlyingFacet != null && underlyingFacet.getClass() != facet.getClass()) {
                     validationFailures.add(
+                            objectSpec.getIdentifier(),
                             "%s: has multiple incompatible annotations/interfaces indicating that " +
                                     "it is a recreatable object of some sort (%s and %s)",
                                     objectSpec.getFullIdentifier(),

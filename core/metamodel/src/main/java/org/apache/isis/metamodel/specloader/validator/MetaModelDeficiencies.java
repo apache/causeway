@@ -19,17 +19,18 @@
 package org.apache.isis.metamodel.specloader.validator;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Collection;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName="of")
 public class MetaModelDeficiencies implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter private final Set<String> validationErrors;
+    @Getter private final Collection<String> validationErrors;
 
     public String getValidationErrorsAsString() {
         return concatenate(validationErrors);
@@ -37,10 +38,10 @@ public class MetaModelDeficiencies implements Serializable {
 
     // //////////////////////////////////////
 
-    private static String concatenate(Set<String> messages) {
-        final StringBuilder buf = new StringBuilder();
+    private static String concatenate(Collection<String> messages) {
+        val buf = new StringBuilder();
         int i=0;
-        for (String message : messages) {
+        for (val message : messages) {
             buf.append(++i).append(": ").append(message).append("\n");
         }
         return buf.toString();

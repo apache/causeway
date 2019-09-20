@@ -23,6 +23,8 @@ import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 
+import lombok.val;
+
 public class MetaModelValidatorForConflictingOptionality extends MetaModelValidatorAbstract {
 
     private final ValidationFailures failures = new ValidationFailures();
@@ -37,7 +39,9 @@ public class MetaModelValidatorForConflictingOptionality extends MetaModelValida
 
     private Facet addFailure(final Facet facet, final String message) {
         if(facet != null) {
-            failures.add(message + ": " + ((IdentifiedHolder) facet.getFacetHolder()).getIdentifier().toFullIdentityString());
+            val holder = (IdentifiedHolder) facet.getFacetHolder();
+            val identifier = holder.getIdentifier();
+            failures.add(identifier, message + ": " + identifier.toFullIdentityString());
         }
         return facet;
     }

@@ -78,7 +78,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(ValidAnnotatedWithViewModelAndViewModelLayout.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(0));
+        assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(ValidAnnotatedDomainObjectAndDomainObjectLayout.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(0));
+        assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(InvalidAnnotatedViewModelAndDomainObjectLayout.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(1));
+        assertThat(validationFailures.getNumberOfFailures(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with both @ViewModel and @DomainObjectLayout (annotate with @ViewModelLayout instead of @DomainObjectLayout, or annotate with @DomainObject instead of @ViewModel)"));
     }
 
@@ -115,7 +115,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(InvalidAnnotatedDomainObjectAndViewModelLayout.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(1));
+        assertThat(validationFailures.getNumberOfFailures(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @ViewModelLayout and also be annotated with @DomainObject (annotate with @ViewModel instead of @DomainObject, or instead annotate with @DomainObjectLayout instead of @ViewModelLayout)"));
     }
 
@@ -134,7 +134,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(ValidDomainObjectWithViewModelNatureImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(0));
+        assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(ValidDomainObjectWithNatureExternalEntityImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(0));
+        assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
     @Test
@@ -170,7 +170,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(ValidDomainObjectWithNatureInmemoryEntityImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(0));
+        assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(1));
+        assertThat(validationFailures.getNumberOfFailures(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of NOT_SPECIFIED and also implement RecreatableDomainObject (specify a nature of EXTERNAL_ENTITY, INMEMORY_ENTITY or VIEW_MODEL)"));
     }
 
@@ -207,7 +207,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         }
 
         final ValidationFailures validationFailures = processThenRefine(InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
-        assertThat(validationFailures.getNumberOfMessages(), is(1));
+        assertThat(validationFailures.getNumberOfFailures(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of JDO_ENTITY and also implement RecreatableDomainObject (specify a nature of EXTERNAL_ENTITY, INMEMORY_ENTITY or VIEW_MODEL)"));
     }
 

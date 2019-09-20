@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -201,8 +200,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
                 val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
                 if(metaModelDeficiencies != null) {
-                    final Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
-                    final MmvErrorPage mmvErrorPage = new MmvErrorPage(validationErrors);
+                    val validationErrors = metaModelDeficiencies.getValidationErrors();
+                    val mmvErrorPage = new MmvErrorPage(validationErrors);
                     return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
                 }
 
@@ -311,7 +310,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 } else {
                     val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
                     if(metaModelDeficiencies != null) {
-                        Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
+                        val validationErrors = metaModelDeficiencies.getValidationErrors();
                         return new MmvErrorPage(validationErrors);
                     }
                     // not sure whether this can ever happen now...

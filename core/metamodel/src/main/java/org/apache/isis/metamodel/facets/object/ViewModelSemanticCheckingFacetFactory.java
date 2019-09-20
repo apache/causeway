@@ -19,6 +19,7 @@
 package org.apache.isis.metamodel.facets.object;
 
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -72,6 +73,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
 
         if(implementsViewModel && implementsRecreatableDomainObject) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %s should not implement both %s and %s interfaces (implement one or the other)",
                     cls.getName(),
                     org.apache.isis.applib.ViewModel.class.getSimpleName(),
@@ -80,6 +82,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         }
         if(implementsViewModel && annotatedWithDomainObject) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not implement %2$s and be annotated with @%3$s (annotate with %4$s instead of %2$s, or implement %5s instead of %2$s)",
                     cls.getName(),
                     org.apache.isis.applib.ViewModel.class.getSimpleName(),
@@ -90,6 +93,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         }
         if(implementsViewModel && annotatedWithDomainObjectLayout) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not implement %2$s and be annotated with @%3$s (annotate with @%4$s instead of %3$s, or implement %5$s instead of %2$s)",
                     cls.getName(),
                     org.apache.isis.applib.ViewModel.class.getSimpleName(),
@@ -101,6 +105,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
 
         if(annotatedWithViewModel && implementsRecreatableDomainObject) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with @%2$s but implement @%3$s (implement %4$s instead of %3$s, or annotate with @%5$s with nature of %6s, %7s or %8s instead of annotating with @%2$s)",
                     cls.getName(),
                     org.apache.isis.applib.annotation.ViewModel.class.getSimpleName(),
@@ -114,6 +119,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         }
         if(annotatedWithViewModel && annotatedWithDomainObject) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with both @%2$s and @%3$s (annotate with one or the other)",
                     cls.getName(),
                     org.apache.isis.applib.annotation.ViewModel.class.getSimpleName(),
@@ -122,6 +128,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         }
         if(annotatedWithViewModel && annotatedWithDomainObjectLayout) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with both @%2$s and @%3$s (annotate with @%4$s instead of @%3$s, or annotate with @%5$s instead of @%2$s)",
                     cls.getName(),
                     org.apache.isis.applib.annotation.ViewModel.class.getSimpleName(),
@@ -132,6 +139,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
 
         if(annotatedWithViewModelLayout && implementsRecreatableDomainObject) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with @%2$s but implement @%3$s (implement %4$s instead of %3$s, or annotate with %5$s instead of %2$s)",
                     cls.getName(),
                     org.apache.isis.applib.annotation.ViewModelLayout.class.getSimpleName(),
@@ -141,6 +149,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         }
         if(annotatedWithViewModelLayout && annotatedWithDomainObject) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with @%2$s and also be annotated with @%3$s (annotate with @%4$s instead of @%3$s, or instead annotate with @%5$s instead of @%2$s)",
                     cls.getName(),
                     org.apache.isis.applib.annotation.ViewModelLayout.class.getSimpleName(),
@@ -150,6 +159,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         }
         if(annotatedWithViewModelLayout && annotatedWithDomainObjectLayout) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with both @%2$s and @%3$s (annotate with one or the other)",
                     cls.getName(),
                     org.apache.isis.applib.annotation.ViewModel.class.getSimpleName(),
@@ -161,6 +171,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
                 (domainObject.nature() == Nature.NOT_SPECIFIED || domainObject.nature() == Nature.JDO_ENTITY) &&
                 implementsRecreatableDomainObject) {
             validator.addFailure(
+                    Identifier.classIdentifier(cls),
                     "Inconsistent view model / domain object semantics; %1$s should not be annotated with @%2$s with nature of %3$s and also implement %4$s (specify a nature of %5$s, %6$s or %7$s)",
                     cls.getName(),
                     DomainObject.class.getSimpleName(),
