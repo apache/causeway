@@ -48,6 +48,10 @@ object UiManager {
         RoStatusBar.updateUser(user)
     }
 
+    fun updatePower(by: String) {
+        RoStatusBar.updatePower(by)
+    }
+
     fun handleView(displayList: DisplayList) {
         val title: String = extractTitle(displayList)
         val panel = RoTable(displayList)

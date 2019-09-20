@@ -13,19 +13,17 @@ data class TObject(val links: List<Link> = emptyList(),
 ) : TransferObject {
 
     fun getProperties(): MutableList<Member> {
-        val result = mutableListOf<Member>()
-        for (m in members) {
-            if (m.value.memberType == MemberType.PROPERTY.type) {
-                result.add(m.value)
-            }
-        }
-        return result
+        return getMembersOfType(MemberType.PROPERTY.type)
     }
 
     fun getActions(): MutableList<Member> {
+        return getMembersOfType(MemberType.ACTION.type)
+    }
+
+    private fun getMembersOfType(type: String): MutableList<Member> {
         val result = mutableListOf<Member>()
         for (m in members) {
-            if (m.value.memberType == MemberType.ACTION.type) {
+            if (m.value.memberType == type) {
                 result.add(m.value)
             }
         }

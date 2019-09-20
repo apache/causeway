@@ -11,10 +11,12 @@ import pl.treksoft.kvision.panel.HPanel
 
 object RoStatusBar {
 
+    private var powerLabel = Span()
     private var urlLabel = Span()
     private var userLabel = Span()
     private var bar = HPanel(justify = FlexJustify.SPACEBETWEEN) {
         add(urlLabel)
+        add(powerLabel)
         add(userLabel)
     }
     var navbar: Navbar
@@ -24,9 +26,14 @@ object RoStatusBar {
             height = CssSize(8, UNIT.mm)
             minHeight = CssSize(8, UNIT.mm)
             add(bar)
+            powerLabel.content = ""
             urlLabel.content = ""
             userLabel.content = ""
         }
+    }
+
+    fun updatePower(by: String) {
+        powerLabel.content = by
     }
 
     fun updateUser(user: String) {

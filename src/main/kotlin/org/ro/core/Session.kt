@@ -13,6 +13,7 @@ object Session {
         this.pw = pw
         this.url = url
         UiManager.updateUser(user)
+        UiManager.updatePower("Powered By: Apache Isis")
     }
 
     fun getCredentials(): String {

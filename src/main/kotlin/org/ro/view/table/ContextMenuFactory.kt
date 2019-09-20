@@ -13,7 +13,7 @@ class ContextMenuFactory {
     fun buildFor(tObject: TObject): ContextMenu {
         val type = tObject.domainType
         val actions = tObject.getActions()
-        val contextMenu = ContextMenu {
+        return ContextMenu {
             header(I18n.tr("Actions for $type"))
             actions.forEach {
                 val title = it.id
@@ -31,7 +31,6 @@ class ContextMenuFactory {
 
             }
         }
-        return contextMenu
     }
 
 }
