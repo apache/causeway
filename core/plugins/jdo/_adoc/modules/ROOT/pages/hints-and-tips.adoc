@@ -7,15 +7,15 @@ This chapter provides some solutions for problems we've encountered ourselves or
 
 See also hints-n-tips chapters in the:
 
-* the xref:support:dg:hints-and-tips.adoc[Developers'] guide
+* the xref:toc:devguide:hints-and-tips.adoc[Developers'] guide
 
 * the xref:vw:ROOT:hints-and-tips.adoc[Wicket viewer] guide
 
-* the xref:vro:ROOT::hints-and-tips.adoc[Restful Objects viewer] guide
+* the xref:vro:ROOT:hints-and-tips.adoc[Restful Objects viewer] guide
 
 * the xref:odn:ROOT:hints-and-tips.adoc[Datanucleus ObjectStore] guide (this chapter)
 
-* the xref:security:ROOT::hints-and-tips.adoc[Security] guide
+* the xref:security:ROOT:hints-and-tips.adoc[Security] guide
 
 * the xref:ug:btb:hints-and-tips.adoc[Beyond the Basics] guide.
 

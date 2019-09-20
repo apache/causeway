@@ -39,7 +39,7 @@ There are also, of course, commercial products such as JRebel.
 [TIP]
 ====
 Details on how to actually write a mixin (the programming model for mixins) is
-xref:ug:fun:programming-model/mixins.adoc[here].
+xref:ug:fun:programming-model.adoc#mixins[here].
 ====
 
 

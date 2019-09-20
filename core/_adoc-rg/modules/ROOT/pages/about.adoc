@@ -7,9 +7,9 @@ The user guides available are:
 
 * xref:ug:fun:about.adoc[Fundamentals]
 * xref:vw:ROOT:about.adoc[Wicket viewer]
-* xref:vro:ROOT::about.adoc[Restful Objects viewer]
+* xref:vro:ROOT:about.adoc[Restful Objects viewer]
 * xref:odn:ROOT:about.adoc[DataNucleus object store]
-* xref:security:ROOT::about.adoc[Security] (this guide)
+* xref:security:ROOT:about.adoc[Security] (this guide)
 * xref:testing:ROOT:about.adoc[Testing]
 * xref:ug:btb:about.adoc[Beyond the Basics]
 
@@ -24,6 +24,6 @@ The reference guides are:
 
 The remaining guides are:
 
-* xref:support:dg:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
-* xref:support:cgcom:about.adoc[Committers' Guide]
+* xref:toc:devguide:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
+* xref:toc:comguide:about.adoc[Committers' Guide]
 

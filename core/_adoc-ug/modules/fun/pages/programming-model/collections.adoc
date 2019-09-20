@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 A collection is an instance variable of a domain object, of a collection type that holds references to other domain objects.
 For example, a `Customer` may have a collection of ``Order``s).
 
-It's ok for a xref:ug:fun:programming-model/domain-entities.adoc[domain entity] to reference another domain entity, and for a xref:ug:fun:programming-model/view-models.adoc[view model] to reference both view model and domain entities.
+It's ok for a xref:ug:fun:programming-model.adoc#view-models[view model] to reference both view model and domain entities.
 However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
 
 Formally speaking, a collection is simply a regular JavaBean getter, returning a collection type (subtype of `java.util.Collection`).
@@ -15,7 +15,7 @@ Most collections (those that are modifiable) will also have a setter and, if per
 And collections properties will also have a number of annotations:
 
 * Apache Isis defines its own `@Collection` annotation for capturing domain semantics.
-It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:vw:ROOT::layout.adoc[`.layout.xml`] file)
+It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:vw:ROOT:layout.adoc[`.layout.xml`] file)
 
 * the collections of domain entities are often annotated with various JDO/DataNucleus annotations, most notably `javax.jdo.annotations.Persistent`.
 This and other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
@@ -24,8 +24,8 @@ This and other annotations can be used to specify if the association is bidirect
 
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
-Unlike xref:ug:fun:programming-model/properties.adoc[properties], the framework does not allow collections to be "edited".
-Instead, xref:ug:fun:programming-model/actions.adoc[action]s can be written that will modify the contents of the collection as a side-effect.
+Unlike xref:ug:fun:programming-model.adoc#properties[properties], the framework does not allow collections to be "edited".
+Instead, xref:ug:fun:programming-model.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
 For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.

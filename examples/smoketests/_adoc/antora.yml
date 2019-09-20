@@ -1,0 +1,6 @@
+name: smoketests
+title: SmokeTest App
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

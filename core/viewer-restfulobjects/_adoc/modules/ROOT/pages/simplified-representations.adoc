@@ -14,7 +14,7 @@ link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
 Apache Isis also provides support for its own simplified representation for the most commonly-used representations.
 This is implemented using the `ContentNegotiationService` described in the
-xref:vro:ROOT::architecture.adoc[architecture] chapter.
+xref:vro:ROOT:architecture.adoc[architecture] chapter.
 
 
 

@@ -1,0 +1,35 @@
+= Committers' Guide
+include::_attributes.adoc[]
+
+This committers' guide is for committers of Apache Isis itself who want guidance on release process, publishing documents and other related procedures.
+
+
+** xref:applying-patches.adoc[Applying Patches]
+
+** xref:merging-a-pull-request.adoc[Merging a Pull Request]
+
+** xref:cutting-a-release.adoc[Cutting a Release]
+
+** xref:verifying-releases.adoc[Verifying Releases]
+
+** xref:post-release-successful.adoc[Post Release (successful)]
+
+** xref:post-release-unsuccessful.adoc[Post Release (unsuccessful)]
+
+** xref:release-process-for-snapshots.adoc[Release Process for Snapshots]
+
+** xref:release-process-for-interim-releases.adoc[Release Process for Interim Releases]
+
+** xref:asciidoc-publish-procedure.adoc[Asciidoc Publish Procedure]
+
+** xref:key-generation.adoc[Key Generation]
+
+** xref:release-process-prereqs.adoc[Release Process Prereqs]
+
+** xref:policies.adoc[Policies]
+*** xref:policies/versioning-policy.adoc[Versioning Policy]
+*** xref:policies/git-policy.adoc[Git Policy]
+
+** xref:pmc-notes.adoc[PMC Notes]
+
+

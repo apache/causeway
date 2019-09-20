@@ -117,7 +117,7 @@ If non-`null`, this method specifies the authentication mechanism to use.
 The valid values are currently `"shiro"`  or `"bypass"`.
 If null is returned then the value of the `isis.authentication` configuration property (in `isis.properties` file) is used instead.
 
-See the xref:security:ROOT::about.adoc[security guide] for further details on configuring shiro or bypass security.
+See the xref:security:ROOT:about.adoc[security guide] for further details on configuring shiro or bypass security.
 
 [NOTE]
 ====
@@ -132,7 +132,7 @@ If non-`null`, this method specifies the authorization mechanism to use.
 The valid values are currently `"shiro"`  or `"bypass"`.
 If null is returned then the value of the `isis.authorization` configuration property (in `isis.properties` file) is used instead.
 
-See the xref:security:ROOT::about.adoc[security guide] for further details on configuring shiro or bypass security.
+See the xref:security:ROOT:about.adoc[security guide] for further details on configuring shiro or bypass security.
 
 [NOTE]
 ====

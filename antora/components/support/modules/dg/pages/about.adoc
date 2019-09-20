@@ -1,4 +1,0 @@
-= Developers' Guide
-include::_attributes.adoc[]
-
-This guide provides guidance to anyone in the community wanting to contribute to Apache Isis' ongoing development.

@@ -19,7 +19,7 @@ The component classes, meanwhile, are broadly equivalent to the "layout" annotat
 
 All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://isis.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://isis.apache.org/applib/layout/grid/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:rg:svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
-It also allows the grid to be exposed through the REST API provided by the xref:vro:ROOT::about.adoc[Restful Objects viewer], as either XML or JSON.
+It also allows the grid to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects viewer], as either XML or JSON.
 
 The various components (properties, collections, actions and domain object) also allow a link to be associated with each.
 These links are populated by the framework automatically when exposing the object layout grid through the REST API, pointing back to the standard Restful Objects resources.

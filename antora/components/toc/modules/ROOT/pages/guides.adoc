@@ -1,0 +1,3 @@
+= Guides
+include::_attributes.adoc[]
+

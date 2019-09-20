@@ -12,7 +12,7 @@ include::building-blocks/types-of-domain-objects.adoc[leveloffset=+1]
 include::building-blocks/types-of-domain-objects/domain-entities.adoc[leveloffset=+2]
 include::building-blocks/types-of-domain-objects/domain-services.adoc[leveloffset=+2]
 include::building-blocks/types-of-domain-objects/view-models.adoc[leveloffset=+2]
-include::building-blocks/types-of-domain-objects/mixins.adocleveloffset=+2]
+include::building-blocks/types-of-domain-objects/mixins.adoc[leveloffset=+2]
 
 
 

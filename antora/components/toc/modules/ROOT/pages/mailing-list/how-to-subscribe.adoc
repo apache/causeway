@@ -1,0 +1,64 @@
+= Mailing lists
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+Apache Isis has two public mailing lists.
+
+.Table caption
+[cols="2,3,2,3", options="header"]
+|===
+
+|Mailing list
+|Email
+|Mail archives
+|Subscribe
+
+
+|Users
+|mailto:users@isis.apache.org[users@isis.apache.org]
+|https://lists.apache.org/list.html?users&#0064;isis.apache.org[Pony mail] +
+http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[Markmail] +
+http://mail-archives.apache.org/mod_mbox/isis-users/[mbox]
+|mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
+
+
+|Contributors
+|mailto:dev@isis.apache.org[dev@isis.apache.org]
+|https://lists.apache.org/list.html?dev&#0064;isis.apache.org[Pony mail] +
+http://markmail.org/search/isis-dev+list:org.apache.incubator.isis-dev[Markmail] +
+http://mail-archives.apache.org/mod_mbox/isis-dev/[mbox]
+|mailto:dev-subscribe@isis.apache.org[dev-subscribe@isis.apache.org]
+
+
+|===
+
+
+The Markmail archives span both our current (TLP) mailing lists and also our original mailing lists while in the Apache incubator; the ASF archives span just our TLP mailing lists.
+
+
+
+== How to subscribe
+
+To subscribe to the `users` mailing list:
+
+* send a blank email to link:mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
+* You'll then get back a confirmation email.
+* To confirm, all you generally need to do is to send a blank reply (there are more detailed instructions inside that confirmation mail if that doesn't work)
+
+Then, to ask questions, simply mail to link:mailto:users@isis.apache.org[users@isis.apache.org] (nb: no `-subscribe` suffix this time). 
+
+If you ever want to unsubscribe, then you can send a mail to the `users-unsubscribe` email address.
+
+
+== Mailing list etiquette
+
+Just a couple of rules/suggestions:
+
+* if you are referencing links, then in the body of the mail, number then [1], [2], [3] etc and then list them at the end.
+* reply to a previous post in the link:http://en.wikipedia.org/wiki/Posting_style#Interleaved_style[interleaved style] (adding your replies in-line).
+Try not to link:http://en.wikipedia.org/wiki/Posting_style#Top-posting)[top-post].
+
+

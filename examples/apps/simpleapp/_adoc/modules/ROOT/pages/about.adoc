@@ -23,7 +23,7 @@ Apache Isis is a Java based framework, so in terms of prerequisites, you'll need
 * Java 8 JDK
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
-You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:support:dg:ide.adoc[Developers' Guide] we have detailed setup instructions for using these two IDEs.
+You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:toc:devguide:ide.adoc[Developers' Guide] we have detailed setup instructions for using these two IDEs.
 If you're a NetBeans user you should have no problems as it too has strong support for Maven.
 
 When building and running within an IDE, you'll also need to configure the Datanucleus enhancer.
@@ -575,7 +575,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the xref:vw:ROOT:about.adoc[Wicket viewer] and the xref:vro:ROOT::about.adoc[Restful Objects viewer].
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:vw:ROOT:about.adoc[Wicket viewer] and the xref:vro:ROOT:about.adoc[Restful Objects viewer].
 The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
@@ -652,14 +652,14 @@ Once more, see link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-
 === From within the IDE
 
 Most of the time, though, you'll probably want to run the app from within your IDE.
-The mechanics of doing this will vary by IDE; see the xref:support:dg:ide.adoc[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
-Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:support:dg:hints-and-tips/datanucleus-enhancer.adoc[DataNucleus enhancer] has properly processed all domain entities.
+The mechanics of doing this will vary by IDE; see the xref:toc:devguide:ide.adoc[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
+Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:toc:devguide:hints-and-tips/datanucleus-enhancer.adoc[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::simpleapp-webapp.png[width="600px",link="{imagesdir}/simpleapp-webapp.png"]
 
-with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:support:dg:hints-and-tips/datanucleus-enhancer.adoc[here]) before launch defined as:
+with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:toc:devguide:hints-and-tips/datanucleus-enhancer.adoc[here]) before launch defined as:
 
 image::simpleapp-webapp-before-launch.png[width="600px",link="{imagesdir}/simpleapp-webapp-before-launch.png"]
 
@@ -777,5 +777,5 @@ docker run -p 8080:8080 -d danhaywood/simpleapp:20180315.0935.master.4521215
 Once you are familiar with the generated app, you'll want to start modifying it.
 There is plenty of guidance on this site; start with this guide (fundamentals) and then look at the other guides linked to from the top-level menu or from the main xref:toc:ROOT:about.adoc[table of contents].
 
-If you use IntelliJ IDEA or Eclipse, do also install the xref:support:dg:ide/intellij.adoc#live-templates[live templates (for IntelliJ)] / xref:support:dg:ide/eclipse.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
+If you use IntelliJ IDEA or Eclipse, do also install the xref:toc:devguide:ide/intellij.adoc#live-templates[live templates (for IntelliJ)] / xref:toc:devguide:ide/eclipse.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 

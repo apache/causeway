@@ -1,3 +1,4 @@
+[[aop]]
 = Aspect Oriented
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -61,4 +62,4 @@ Apache Isis' support for contributions (not only contributed actions, but also c
 And again, to loop back to the topic of this section, it's an AOP concept that being implemented by the framework.
 
 The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially - just focus on implementing your domain object.
-Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for (xref:ug:fun:building-blocks.adoc#mixins[mixins]), (xref:ug:fun:programming-model/domain-services/contributions.adoc[contributed services]) and interceptors (the xref:ug:fun:building-blocks.adoc#domain-events[event bus]) to ensure that your codebase remains maintainable.
+Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for xref:ug:fun:building-blocks.adoc#mixins[mixins] and interceptors (using the xref:ug:fun:building-blocks#domain-events[event bus]) to ensure that your codebase remains maintainable.

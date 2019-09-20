@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `@XmlRootElement` annotation provides an alternative way to define a xref:ug:fun:building-blocks.adoc#view-models[view model], in particular one intended to act as a DTO for use within xref:vro:ROOT::about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
+The `@XmlRootElement` annotation provides an alternative way to define a xref:ug:fun:building-blocks.adoc#view-models[view model], in particular one intended to act as a DTO for use within xref:vro:ROOT:about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
 
 A view model is a non-persisted domain object whose state is converted to/from a string memento.
 In the case of a JAXB-annotated object this memento is its XML representation.
@@ -12,7 +12,7 @@ Apache Isis makes this a mandatory requirement.
 
 In comparison to using either the xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface or the xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of significant advantages:
 
-* the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT::about.adoc[RestfulObjects viewer] in combination with the
+* the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in combination with the
 xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`].
 +
 This provides a stable and versioned API to access data in XML format using whatever client-side technology may be appropriate.

@@ -9,40 +9,6 @@
 
 
 ** xref:programming-model.adoc[Programming Model]
-*** xref:programming-model/domain-entities.adoc[Domain Entities]
-
-*** xref:programming-model/domain-services.adoc[Domain Services]
-**** xref:programming-model/domain-services/organizing-services.adoc[Organizing Services]
-**** xref:programming-model/domain-services/repository-and-factory.adoc[Repository and Factory]
-**** xref:programming-model/domain-services/menu.adoc[Menu]
-**** xref:programming-model/domain-services/event-subscribers.adoc[Event Subscribers]
-**** xref:programming-model/domain-services/scoped-services.adoc[Scoped Services]
-**** xref:programming-model/domain-services/registering.adoc[Registering]
-**** xref:programming-model/domain-services/initialization.adoc[Initialization]
-
-*** xref:programming-model/properties.adoc[Properties]
-*** xref:programming-model/collections.adoc[Collections]
-*** xref:programming-model/actions.adoc[Actions]
-p*** xref:programming-model/properties-vs-parameters.adoc[Properties vs Parameters]
-*** xref:programming-model/inject-services.adoc[Inject Services]
-
-*** xref:programming-model/view-models.adoc[View Models]
-**** xref:programming-model/view-models/jaxb.adoc[JAXB]
-***** xref:programming-model/view-models/jaxb/referencing-domain-entities.adoc[Referencing Domain Entities]
-***** xref:programming-model/view-models/jaxb/joda-datatypes.adoc[JODA Datatypes]
-**** xref:programming-model/view-models/dto.adoc[DTO]
-***** xref:programming-model/view-models/dto/versioning.adoc[Versioning]
-***** xref:programming-model/view-models/dto/generating-xsds.adoc[Generating XSDs]
-***** xref:programming-model/view-models/dto/dto-consumers.adoc[DTO Consumers]
-**** xref:programming-model/view-models/non-jaxb.adoc[Non JAXB]
-
-*** xref:programming-model/mixins.adoc[Mixins]
-**** xref:programming-model/mixins/contributed-collection.adoc[Contributed Collection]
-**** xref:programming-model/mixins/contributed-property.adoc[Contributed Property]
-**** xref:programming-model/mixins/contributed-action.adoc[Contributed Action]
-**** xref:programming-model/mixins/inferred-name.adoc[Inferred Name]
-**** xref:programming-model/mixins/nested-static-classes.adoc[Nested Static Classes]
-**** xref:programming-model/mixins/programmatic-usage.adoc[Programming Usage]
 
 
 

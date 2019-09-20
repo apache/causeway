@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 Domain service APIs for the presentation layer allow the domain objects to control aspects of the user interface.
-The implementations are specific to the particular viewer (xref:vw:ROOT:about.adoc[Wicket viewer] or xref:vro:ROOT::about.adoc[Restful Objects viewer]) so the domain code must guard against them being unavailable in some cases.
+The implementations are specific to the particular viewer (xref:vw:ROOT:about.adoc[Wicket viewer] or xref:vro:ROOT:about.adoc[Restful Objects viewer]) so the domain code must guard against them being unavailable in some cases.
 
 
 The table below summarizes the presentation layer APIs defined by Apache Isis.
@@ -27,7 +27,7 @@ It also lists their corresponding implementation.
 |`AcceptHeaderServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-viewer-restfulobjects-rendering``
-|Implementation only usable within the xref:vro:ROOT::about.adoc[Restful Objects viewer].
+|Implementation only usable within the xref:vro:ROOT:about.adoc[Restful Objects viewer].
 
 
 |xref:rg:svc:presentation-layer-api/BookmarkUiService.adoc[`o.a.i.applib.` +

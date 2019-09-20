@@ -1,0 +1,3 @@
+= Maven Mixins
+include::_attributes.adoc[]
+

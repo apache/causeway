@@ -1,6 +1,0 @@
-= Committers' Guide
-include::_attributes.adoc[]
-
-This committers' guide is for committers of Apache Isis itself who want guidance on release process, publishing documents and other related procedures.
-
-

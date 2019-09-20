@@ -1,3 +1,4 @@
+[[cqrs]]
 = Apache Isis vs CQRS
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -43,6 +44,6 @@ In CQRS the commands correspond to the business logic that mutates the system.
 Whether this logic is part of the command class (`PlaceOrderCommand`) or whether that command delegates to methods on the domain object is an implementation detail; but it certainly is common for the business logic to be wholly within the command object and for the domain object to be merely a data holder of the data within the command/write datastore.
 
 In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:ug:fun:building-blocks.adoc#mixins[mixins].
-In the UI (surfaced by the xref:vw:ROOT::about.adoc[Wicket viewer]) or in the REST API (surfaced by the xref:vro:ROOT::about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
+In the UI (surfaced by the xref:vw:ROOT:about.adoc[Wicket viewer]) or in the REST API (surfaced by the xref:vro:ROOT:about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
 
 

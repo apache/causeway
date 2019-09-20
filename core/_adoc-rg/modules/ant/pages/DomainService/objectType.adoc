@@ -11,7 +11,7 @@ This can appear in several contexts, including:
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
  (see xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`])
 * in the serialization of `OidDto` in the xref:rg:cms:schema/cmd.adoc[command] and xref:rg:cms:schema/ixn.adoc[interaction] schemas
-* in the URLs of the xref:vro:ROOT::about.adoc[RestfulObjects viewer]
+* in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
 * in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (specifically, for bookmarked actions)
 
 
@@ -46,7 +46,7 @@ The rules of precedence are:
 This might be obvious, but to make explicit: we recommend that you always specify an object type for your domain services.
 
 Otherwise, if you refactor your code (change class name or move package), then any externally held references to the OID of the service will break.
-At best this will require a data migration in the database; at worst it could cause external clients accessing data through the xref:vro:ROOT::about.adoc[Restful Objects] viewer to break.
+At best this will require a data migration in the database; at worst it could cause external clients accessing data through the xref:vro:ROOT:about.adoc[Restful Objects] viewer to break.
 ====
 
 [NOTE]

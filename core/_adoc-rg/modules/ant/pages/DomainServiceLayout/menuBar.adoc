@@ -36,6 +36,6 @@ The grouping of multiple domain services actions within a single drop-down is ma
 
 [NOTE]
 ====
-The xref:vro:ROOT::about.adoc[RestfulObjects viewer] does not support this attribute.
+The xref:vro:ROOT:about.adoc[RestfulObjects viewer] does not support this attribute.
 ====
 

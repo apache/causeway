@@ -9,7 +9,7 @@ The `paged()` attribute specifies the number of rows to display in a (parented) 
 
 [WARNING]
 ====
-The xref:vro:ROOT::about.adoc[RestfulObjects viewer] currently does not support paging.
+The xref:vro:ROOT:about.adoc[RestfulObjects viewer] currently does not support paging.
 The xref:vw:ROOT:about.adoc[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
 
 We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).

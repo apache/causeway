@@ -125,7 +125,7 @@ Accept: application/xml;x-ro-domain-type="com.mycompany.viewmodels.v2.CustomerVi
 
 The server will use the xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] to attempt to
 transform the domain object into the requested `x-ro-domain-type`.  The whole process is discussed in more detail in
-the xref:vro:ROOT::architecture.adoc[architecture] chapter.
+the xref:vro:ROOT:architecture.adoc[architecture] chapter.
 
 
 ==== Apache Isis profile
@@ -137,7 +137,7 @@ link:http://angular-ui.github.io/bootstrap/[Angular Bootstrap],
 link:http://vitalets.github.io/angular-xeditable/[Angular XEditable],
 link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
-This support is discussed further in the xref:vro:ROOT::simplified-representations.adoc[simplified representations]
+This support is discussed further in the xref:vro:ROOT:simplified-representations.adoc[simplified representations]
 chapter.
 
 
@@ -145,7 +145,7 @@ chapter.
 
 The Restful Objects viewer supports the `x-ro-follow-links` query parameter in a way very similar to that suggested
 in the RO spec, the main point being to avoid the "N+1" problem of too many (slow) network calls.  For example, using
-this feature one can load a grid of data in a single call.  (That said, the xref:vro:ROOT::simplified-representations.adoc[simplified representations]
+this feature one can load a grid of data in a single call.  (That said, the xref:vro:ROOT:simplified-representations.adoc[simplified representations]
 supported by Restful Objects viewer also support this use case, albeit in way that deviates from the RO spec).
 
 This link:https://www.youtube.com/watch?v=hSKnqqBQ7Zo[screencast] demonstrates the Restful Object viewer's support for `x-ro-follow-links` parameter, using the (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app as the example,

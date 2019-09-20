@@ -13,7 +13,7 @@ UI events have higher precedence than the other mechanisms of supplying a title.
 If annotated with xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
  Similarly for xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`cssClassUiEvent()`].
 
-This can be particularly useful for xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Isis framework.
+This can be particularly useful for xref:ug:fun:programming-model.adoc#jaxb[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Isis framework.
 Here a subscriber on the default events can provide a title and icon for such an object.
 Behaviour on such DTOs can also be provided using xref:ug:fun:building-blocks.adoc#mixins[mixins].
 

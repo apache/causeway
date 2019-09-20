@@ -1,0 +1,87 @@
+= Introduction
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The Apache Isis Maven plugin defines three goals:
+
+* `validate` +
++
+Use to verify at build time that the metamodel of an application is valid.
+This runs the `MetaModelValidator` that is also run when the application is started up.
+
+* `swagger` +
++
+Uses the xref:rg:svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
+
+* `xsd` +
++
+Uses the xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
++
+This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:rg:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:rg:cms:schema/common.adoc[common schema]).
+
+The `validate` goal is by default bound to the `test` phase, and the `swagger` goal is by default bound to the `package` phase; both are typically of your application's `dom` sub-module.
+The `xsd` goal meanwhile defaults to the `generate-resources` phase, and this is generally used in a completely separate sub-module.
+An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app; the separate submodule that uses the `xsd` goal is (also) called `todoapp-xsd`.
+
+All of these goals require an xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
+This is discussed below, followed by sections on configuring the two goals.
+
+
+
+== `AppManifest`
+
+As noted in the introduction, all the goals require an xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
+
+This can be extremely minimal; it isn't necessary to use the main `AppManifest` (in the `app` module) used to bootstrap the application, you can instead use a cut-down one.
+This then allows the plugins to be run during the build of the `dom` module, rather than having to run in the context of the `integtest` module.
+
+For example, the xref:simpleapp:ROOT:about.adoc[SimpleApp]'s
+manifest is:
+
+[source,java]
+----
+package domainapp.dom;
+...
+public class DomainAppDomManifest implements AppManifest {
+    @Override
+    public List<Class<?>> getModules() {
+        return Arrays.asList(
+                DomainAppDomainModule.class  // domain (entities and repositories)
+        );
+    }
+    @Override
+    public List<Class<?>> getAdditionalServices() { return Collections.emptyList(); }
+    @Override
+    public String getAuthenticationMechanism() { return null; }
+    @Override
+    public String getAuthorizationMechanism() { return null; }
+    @Override
+    public List<Class<? extends FixtureScript>> getFixtures() { return null; }
+    @Override
+    public Map<String, String> getConfigurationProperties() { return null; }
+}
+----
+
+where `DomainAppDomainModule` simply identifies the package for the manifest to search under:
+
+[source,java]
+----
+package domainapp.dom;
+public final class DomainAppDomainModule { }
+----
+
+
+The downside of using a minimal `AppManifest` in the ``dom`` module is that any contributed actions/associations will be ignored.
+
+We recommend the following:
+
+* run the `validate` goal in the `dom` submodule; this will give early warning if there are any syntactic errors in the model, eg orphaned supporting methods
+
+* run the `swagger` goal in the `integtest` submodule; this ensures that the generated Swagger schema definition files correctly include any contributed actions/associations.
+
+* run the `xsd` plugin in a new `xsd` submodule; contributed actions are irrelevant for this particular goal; having a separate submodule allows the configuration of both the `xsd` goal (to generate the XSD schemas) and any other XSD-related configuration to be kept in a single place.
+
+The xref:simpleapp:ROOT:about.adoc[SimpleApp archetype] reflects these recommendations for the `validate` and `swagger` goals.
+You can find an example of the `xsd` plugin in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] application.
+

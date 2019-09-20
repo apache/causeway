@@ -5,7 +5,7 @@
 ** xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
 
-* Getting Started
+* Quick Start
 
 ** xref:helloworld:ROOT:about.adoc[HelloWorld archetype]
 ** xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]
@@ -21,9 +21,9 @@
 
 ** *xref:ug:fun:about.adoc[Fundamentals]*
 **  xref:vw:ROOT:about.adoc[Wicket Viewer]
-**  xref:vro:ROOT::about.adoc[Restful Objects Viewer]
+**  xref:vro:ROOT:about.adoc[Restful Objects Viewer]
 **  xref:odn:ROOT:about.adoc[DataNucleus Object Store]
-**  xref:security:ROOT::about.adoc[Security]
+**  xref:security:ROOT:about.adoc[Security]
 ** *xref:testing:ROOT:about.adoc[Testing]*
 **  xref:ug:btb:about.adoc[Beyond the Basics]
 
@@ -46,8 +46,8 @@
 
 * Get involved
 
-** *xref:support:dg:about.adoc[Developers' Guide]*
-** xref:support:cgcom:about.adoc[Committers' Guide]
+** *xref:toc:devguide:about.adoc[Developers' Guide]*
+** xref:toc:comguide:about.adoc[Committers' Guide]
 ** Source files: xref:support:ad:about.adoc[Architecture &amp; Design]
 
 

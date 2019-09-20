@@ -6,80 +6,111 @@ include::_attributes.adoc[]
 [cols="1a,1a,1a",frame="none", grid="none", stripes="none"]
 |===
 
+
+
 | *What is Apache Isis?*
 
 * *xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]*
 * xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
+
+| *Examples*
+
 * xref:what-is-apache-isis/screencasts.adoc[Screencasts]
 * xref:what-is-apache-isis/powered-by.adoc[Powered By]
-
 
 | *Starter Apps*
 
 * xref:helloworld:ROOT:about.adoc[HelloWorld]
 * xref:simpleapp:ROOT:about.adoc[SimpleApp]
 
-*Learning by Example*
+| *User Guides*
 
-* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic Tutorial]
+* *xref:ug:ROOT:about.adoc[Fundamentals & Beyond]*
 * *xref:demoapp:ROOT:about.adoc[Demo App]*
 
+_Also:_
 
-|*Releases*
+* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic Tutorial]
 
- * xref:downloads:rn:about.adoc[Release Notes]
- * xref:downloads:mn:about.adoc[Migration Notes]
-
-*Developer Resources*
-
-* *xref:developer-resources/cheat-sheet.adoc[Cheat Sheet]*
-* xref:developer-resources/icons.adoc[Icons]
-
-
-|*User Guides*
-
-* *xref:ug:fun:about.adoc[Fundamentals]*
-*  xref:vw:ROOT:about.adoc[Wicket Viewer]
-*  xref:vro:ROOT::about.adoc[Restful Objects Viewer]
-*  xref:odn:ROOT:about.adoc[DataNucleus Object Store]
-*  xref:security:ROOT::about.adoc[Security]
-* *xref:testing:ROOT:about.adoc[Testing]*
-*  xref:ug:btb:about.adoc[Beyond the Basics]
-
-
-|*Reference Guides*
+| *Reference Guides*
 
 * *xref:rg:ant:about.adoc[Annotations]*
 * *xref:rg:svc:about.adoc[Domain Services]*
 *  xref:rg:cfg:about.adoc[Core Config'n Properties]
-*  xref:rg:cms:about.adoc[Classes, Methods and Schema]
-*  xref:rg:mvn:about.adoc[Apache Isis Maven plugin]
+*  xref:rg:cms:about.adoc[Classes, Methods & Schema]
+
+| *Testing & Prototyping*
+
+* *xref:testing:ROOT:about.adoc[Testing]*
+* xref:ext-fixtures:ROOT:about.adoc[Fixtures (extension)]
+* xref:ext-specsupport:ROOT:about.adoc[BDD (extension)]
+
+
+
+
+| *Wicket Viewer*
+
+*  xref:vw:ROOT:about.adoc[User Guide]
+
+_Extensions_
+
+*  xref:ext-viewer-wicket-excel:ROOT:about.adoc[Excel Download]
+*  xref:ext-asciidoc:ROOT:about.adoc[Asciidoc value type ]
+* xref:ext-markdown:ROOT:about.adoc[Markdown value type]
+
+| *Restful Objects Viewer*
+
+*  xref:vro:ROOT:about.adoc[User Guide]
+
+*DataNucleus Object Store*
+
+*  xref:odn:ROOT:about.adoc[User Guide]
+
+| *Security*
+
+*  xref:security:ROOT:about.adoc[User Guide]
+
+_Extensions_
+
+* xref:ext-secman:ROOT:about.adoc[Security Manager]
+
+| *Support Resources*
+
+* xref:toc:devguide:about.adoc[Developers' Guide]
+** xref:toc:devguide:ide/intellij.adoc[IntelliJ] & xref:toc:devguide:ide/eclipse.adoc[Eclipse]
+** xref:toc:devguide:contributing.adoc[Pull requests]
+//** xref:toc:devguide:asciidoc-syntax.adoc[Asciidoc syntax]
+
+* xref:mavendeps:ROOT:about.adoc[Maven mixins]
+
+| *Help*
+
+* xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
+
+* link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
+_for bug reports & feature requests_
+
+|*Releases*
+
+ * xref:toc:ROOT:downloads/how-to.adoc[Downloads]
+ * xref:relnotes:ROOT:about.adoc[Release Notes]
+ * xref:mignotes:ROOT:about.adoc[Migration Notes]
+
+
+
+
+|*Committers*
+
+*  xref:toc:comguide:about.adoc[Committers' Guide]
+** xref:toc:comguide:cutting-a-release.adoc[Cutting a Release]
+** xref:toc:comguide:verifying-releases.adoc[Verifying a Release]
+
+
+|*Implementation*
+
+*  xref:archdesign:ROOT:about.adoc[Architecture & Design]
 *  xref:rg:fis:about.adoc[Framework Internal Services]
-
-
-|*Extensions*
-
-* Testing & Prototyping
-** xref:ext-fixtures:ROOT:about.adoc[Fixtures]
-** xref:ext-specsupport:ROOT:about.adoc[(BDD) Spec Support]
-* Modules
-**  xref:ext-secman:ROOT:about.adoc[Security Manager]
-**  xref:ext-viewer-wicket-excel:ROOT:about.adoc[Excel Download (Wicket)]
-* Values Types
-**  xref:ext-asciidoc:ROOT:about.adoc[Asciidoc], xref:ext-markdown:ROOT:about.adoc[Markdown]
-
-|*Get involved*
-
-* *xref:support:dg:about.adoc[Developers' Guide]*
-** xref:support:dg:ide/intellij.adoc[IntelliJ] & xref:support:dg:ide/eclipse.adoc[Eclipse]
-** xref:support:dg:contributing.adoc[Pull requests]
-** xref:support:dg:asciidoc-syntax.adoc[Asciidoc syntax]
-
-*  xref:support:cgcom:about.adoc[Committers' Guide]
-** xref:support:cgcom:cutting-a-release.adoc[Cutting] & xref:support:cgcom:verifying-releases.adoc[Verifying]
-
-* xref:support:ad:about.adoc[Architecture & Design]
-
+*  xref:smoketests:ROOT:about.adoc[SmokeTest App]
 
 
 
@@ -89,27 +120,28 @@ include::_attributes.adoc[]
 * xref:going-deeper/books.adoc[Books]
 * link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
 
-Other academia:
-
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Masters dissertation, Ginn)
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
 
 
-|*Third party* footnoteref:[ASF, Not Apache Software Foundation projects.]
 
-*Libraries*
+|*3rd party*
 
 * https://platform.incode.org[Incode Platform]
 
-*Example Apps*
+* https://github.com/incodehq/incode-examples[Incode Domain Examples]
+* https://github.com/incodehq/incode-camel[Incode Camel App]
+
+_nb: not ASF_
+
+| *Real-world Apps*
 
 * https://github.com/estatio/estatio[Estatio]
 * https://github.com/incodehq/contactapp[ContactApp]
 * https://github.com/incodehq/ecpcrm[ECP CRM]
+
+*Example Apps*
+
 * https://github.com/isisaddons/isis-app-todoapp[TodoApp]
 * https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
-* https://github.com/incodehq/incode-examples[Incode Domain Examples]
-* https://github.com/incodehq/incode-camel[Incode Camel App]
 * https://github.com/isisaddons/isis-app-quickstart[Quickstart]
 
 *Experiments*
@@ -118,7 +150,11 @@ Other academia:
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
 
 
+| *Other academia:*
 
-3+|For bug reports and feature requests see: *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board]* (JIRA)
+* https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Masters dissertation, Ginn)
+* https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
+
+
 |===
 

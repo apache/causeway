@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<templates><template autoinsert="true" context="java-members" deleted="false" description="Action" enabled="true" name="isa">// {{ ${actionName} (action)&#13;
+${:import(org.apache.isis.applib.annotation.MemberOrder)}@MemberOrder(sequence="1")&#13;
+public ${ReturnType} ${actionName}(final ${ParameterType} ${parameterType}) {&#13;
+	return ${cursor}null; // TODO: business logic here&#13;
+}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Action argument N choices" enabled="true" name="isacho">${:import(java.util.Collections,java.util.List)}public List&lt;${ParameterType}&gt; choices${ParameterNumThenCapitalizedActionName}() {&#13;
+	return ${cursor}Collections.emptyList(); // TODO: return list of choices for argument N&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Action argument defaults" enabled="true" name="isadef">public ${ParameterType} default${ParameterNumThenCapitalizedActionName}() {&#13;
+	return ${cursor}null; // TODO: return default for argument N&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Action disabling" enabled="true" name="isadis">public String disable${ActionName}() {&#13;
+	return ${cursor}null; // TODO: return reason why action disabled, null if enabled&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Action hiding" enabled="true" name="isahid">public boolean hide${ActionName}() {&#13;
+	return ${cursor}false; // TODO: return true if action is hidden, false if visible&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Action validation" enabled="true" name="isaval">public String validate${ActionName}(final ${ParameterType} ${parameterType}) {&#13;
+	return ${cursor}null; // TODO: return reason why action arguments are invalid, null if ok&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (1:m bidir parent)" enabled="true" name="isc-1m">public void addTo${ChildCollectionName}(final ${ChildElementType} ${childElementName}) {&#13;
+	// check for no-op&#13;
+	if (${childElementName} == null || &#13;
+		get${ChildCollectionName}().contains(${childElementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate arg from its current parent (if any).&#13;
+	${childElementName}.clear${ParentPropertyNameInChild}();&#13;
+	// associate arg&#13;
+	${childElementName}.set${ParentPropertyNameInChild}(this);&#13;
+	get${ChildCollectionName}().add(${childElementName});&#13;
+	// additional business logic&#13;
+	onAddTo${ChildCollectionName}(${childElementName});&#13;
+}&#13;
+public void removeFrom${ChildCollectionName}(final ${ChildElementType} ${childElementName}) {&#13;
+	// check for no-op&#13;
+	if (${childElementName} == null || &#13;
+		!get${ChildCollectionName}().contains(${childElementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate arg&#13;
+	${childElementName}.set${ParentPropertyNameInChild}(null);&#13;
+	get${ChildCollectionName}().remove(${childElementName});&#13;
+	// additional business logic&#13;
+	onRemoveFrom${ChildCollectionName}(${childElementName});&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (m:m bidir child)" enabled="true" name="isc-mmc">public void addTo${ParentCollectionName}(final ${ParentElementType} ${parentElementName}) {&#13;
+	// check for no-op&#13;
+	if (${parentElementName} == null || &#13;
+		get${ParentCollectionName}().contains(${parentElementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// delegate to parent to add&#13;
+	${parentElementName}.addTo${ChildCollectionNameInParent}(this);&#13;
+	// additional business logic&#13;
+	onAddTo${ParentCollectionName}(${parentElementName});&#13;
+}&#13;
+public void removeFrom${ParentCollectionName}(final ${ParentElementType} ${parentElementName}) {&#13;
+	// check for no-op&#13;
+	if (${parentElementName} == null || &#13;
+		!get${ParentCollectionName}().contains(${parentElementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// delegate to parent to remove&#13;
+	${parentElementName}.removeFrom${ChildCollectionNameInParent}(this);&#13;
+	// additional business logic&#13;
+	onRemoveFrom${ParentCollectionName}(${parentElementName});&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (m:m bidir parent)" enabled="true" name="isc-mmp">public void addTo${ChildCollectionName}(final ${ChildElementType} ${childElementName}) {&#13;
+	// check for no-op&#13;
+	if (${childElementName} == null || &#13;
+		get${ChildCollectionName}().contains(${childElementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate arg from its current parent (if any).&#13;
+	${childElementName}.removeFrom${ParentCollectionNameInChild}(this);&#13;
+	// associate arg&#13;
+	${childElementName}.get${ParentCollectionNameInChild}().add(this);&#13;
+	get${ChildCollectionName}().add(${childElementName});&#13;
+	// additional business logic&#13;
+	onAddTo${ChildCollectionName}(${childElementName});&#13;
+}&#13;
+public void removeFrom${ChildCollectionName}(final ${ChildElementType} ${childElementName}) {&#13;
+	// check for no-op&#13;
+	if (${childElementName} == null || &#13;
+		!get${ChildCollectionName}().contains(${childElementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate arg&#13;
+	${childElementName}.get${ParentCollectionNameInChild}().remove(this);&#13;
+	get${ChildCollectionName}().remove(${childElementName});&#13;
+	// additional business logic&#13;
+	onRemoveFrom${ChildCollectionName}(${childElementName});&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection disabling" enabled="true" name="iscdis">public String disable${CollectionName}() {&#13;
+	return ${cursor}null; // TODO: return reason why collection read-only, null if editable&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection hiding" enabled="true" name="ischid">public boolean hide${CollectionName}() {&#13;
+	return ${cursor}false; // TODO: return true if hidden, false otherwise&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (list)" enabled="true" name="iscl">// {{ ${CollectionName} (Collection)&#13;
+${:import(java.util.List,java.util.ArrayList,org.apache.isis.applib.annotation.MemberOrder)}private List&lt;${ElementType}&gt; ${collectionName} = new ArrayList&lt;${ElementType}&gt;();&#13;
+@MemberOrder(sequence="1")&#13;
+public List&lt;${ElementType}&gt; get${CollectionName}() {&#13;
+	return ${collectionName};&#13;
+}&#13;
+public void set${CollectionName}(final List&lt;${ElementType}&gt; ${collectionName}) {&#13;
+	this.${collectionName} = ${collectionName};&#13;
+}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Collection modify" enabled="true" name="iscmod">public void addTo${CollectionName}(final ${ElementType} ${elementName}) {&#13;
+	// check for no-op&#13;
+	if (${elementName} == null || &#13;
+		get${CollectionName}().contains(${elementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// associate new&#13;
+	get${CollectionName}().add(${elementName});&#13;
+    // additional business logic&#13;
+    onAddTo${CollectionName}(${elementName});&#13;
+}&#13;
+public void removeFrom${CollectionName}(final ${ElementType} ${elementName}) {&#13;
+	// check for no-op&#13;
+	if (${elementName} == null || &#13;
+		!get${CollectionName}().contains(${elementName})) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate existing&#13;
+	get${CollectionName}().remove(${elementName});&#13;
+    // additional business logic&#13;
+    onRemoveFrom${CollectionName}(${elementName});&#13;
+}&#13;
+protected void onAddTo${CollectionName}(final ${ElementType} ${elementName}) {&#13;
+}&#13;
+protected void onRemoveFrom${CollectionName}(final ${ElementType} ${elementName}) {&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (set)" enabled="true" name="iscs">// {{ ${CollectionName} (Collection)&#13;
+${:import(java.util.Set,java.util.LinkedHashSet,org.apache.isis.applib.annotation.MemberOrder)}private Set&lt;${ElementType}&gt; ${collectionName} = new LinkedHashSet&lt;${ElementType}&gt;();&#13;
+@MemberOrder(sequence="1")&#13;
+public Set&lt;${ElementType}&gt; get${CollectionName}() {&#13;
+	return ${collectionName};&#13;
+}&#13;
+public void set${CollectionName}(final Set&lt;${ElementType}&gt; ${collectionName}) {&#13;
+	this.${collectionName} = ${collectionName};&#13;
+}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Collection validation" enabled="true" name="iscval">public String validateAddTo${CollectionName}(final ${ElementType} ${elementName}) {&#13;
+	return ${cursor}null; // TODO: return reason why argument cannot be added, null if ok to add&#13;
+}&#13;
+public String validateRemoveFrom${CollectionName}(final ${ElementType} ${elementName}) {&#13;
+	return null; // TODO: return reason why argument cannot be removed, null if ok to remove&#13;
+}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Dependencies region" enabled="true" name="isd">// {{ injected dependencies&#13;
+${cursor}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Dependencies - injected service" enabled="true" name="isds">// {{ injected: ${ServiceType}&#13;
+private ${ServiceType} ${serviceType};&#13;
+public void set${ServiceType}(final ${ServiceType} ${serviceType}) {&#13;
+	this.${serviceType} = ${serviceType};&#13;
+}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Factory - new instance (persistent)" enabled="true" name="isfp">// {{ Create new (already persisted) ${Type}&#13;
+public ${Type} new${Type}() {&#13;
+	${Type} ${type} = newTransientInstance(${Type}.class);&#13;
+	${cursor}// TODO: set up any properties&#13;
+&#13;
+	persist(${type});&#13;
+	return ${type};&#13;
+}&#13;
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="Factory - new instance (transient)" enabled="true" name="isft">// {{ Create new (still transient) ${Type}&#13;
+public ${Type} new${InstanceOfType}() {&#13;
+	${Type} ${type} = newTransientInstance(${Type}.class);&#13;
+	${cursor}// TODO: set up any properties&#13;
+&#13;
+	return ${type};&#13;
+}&#13;
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="Identification region" enabled="true" name="isid">// {{ Identification&#13;
+${cursor}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Identification - icon" enabled="true" name="isidicon">public String iconName() {&#13;
+	return ${cursor}null; // TODO: return name of image file (without suffix)&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Identification - title" enabled="true" name="isidtitle">public String title() {&#13;
+    ${:import(org.apache.isis.applib.util.TitleBuffer)}final TitleBuffer buf = new TitleBuffer();&#13;
+    ${cursor}// TODO: append to TitleBuffer, typically value properties&#13;
+	return buf.toString();&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Collection (1:n bidir, foreign key)" enabled="true" name="isjdc-1n-b-fk">// {{ ${CollectionName} (Collection)
+${:import(java.util.SortedSet,java.util.TreeSet,org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Persistent)}@Persistent(mappedBy="${elementNameInChild}", dependentElement="${trueOrFalse}")
+private SortedSet&lt;${ElementType}&gt; ${collectionName} = new TreeSet&lt;${ElementType}&gt;();
+@MemberOrder(sequence="1")
+public SortedSet&lt;${ElementType}&gt; get${CollectionName}() {
+return ${collectionName};
+}
+public void set${CollectionName}(final SortedSet&lt;${ElementType}&gt; ${collectionName}) {
+this.${collectionName} = ${collectionName};
+}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Collection (1:n bidir, join table)" enabled="true" name="isjdc-1n-b-jt">// {{ ${CollectionName} (Collection)
+${:import(java.util.SortedSet,java.util.TreeSet,org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Persitent,javax.jdo.annotations.Join)}@Persistent(mappedBy="${elementNameInChild}", dependentElement="${trueOrFalse}")
+@Join
+private SortedSet&lt;${ElementType}&gt; ${collectionName} = new TreeSet&lt;${ElementType}&gt;();
+@MemberOrder(sequence="1")
+public SortedSet&lt;${ElementType}&gt; get${CollectionName}() {
+return ${collectionName};
+}
+public void set${CollectionName}(final SortedSet&lt;${ElementType}&gt; ${collectionName}) {
+this.${collectionName} = ${collectionName};
+}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Collection (1:n unidir, foreign key)" enabled="true" name="isjdc-1n-u-fk">// {{ ${CollectionName} (Collection)
+${:import(java.util.SortedSet,java.util.TreeSet,org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Element)}
+@Element(column="${ColumnName}", dependent="${trueOrFalse}")
+private SortedSet&lt;${ElementType}&gt; ${collectionName} = new TreeSet&lt;${ElementType}&gt;();
+@MemberOrder(sequence="1")
+public SortedSet&lt;${ElementType}&gt; get${CollectionName}() {
+return ${collectionName};
+}
+public void set${CollectionName}(final SortedSet&lt;${ElementType}&gt; ${collectionName}) {
+this.${collectionName} = ${collectionName};
+}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Collection (1:n unidir, join table)" enabled="true" name="isjdc-1n-u-jt">// {{ ${CollectionName} (Collection)
+${:import(java.util.SortedSet,java.util.TreeSet,org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Join,javax.jdo.annotations.Element)}@Join
+@Element(dependent="${trueOrFalse}")
+private SortedSet&lt;${ElementType}&gt; ${collectionName} = new TreeSet&lt;${ElementType}&gt;();
+@MemberOrder(sequence="1")
+public SortedSet&lt;${ElementType}&gt; get${CollectionName}() {
+return ${collectionName};
+}
+public void set${CollectionName}(final SortedSet&lt;${ElementType}&gt; ${collectionName}) {
+this.${collectionName} = ${collectionName};
+}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Collection (m:n bidir - child)" enabled="true" name="isjdc-mn-ub-c">// {{ ${CollectionName} (Collection)
+${:import(java.util.SortedSet,java.util.TreeSet,org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Persistent)}@Persistent(mappedBy="${ChildCollectionNameInParent}")
+private SortedSet&lt;${ElementType}&gt; ${collectionName} = new TreeSet&lt;${ElementType}&gt;();
+public SortedSet&lt;${ElementType}&gt; get${CollectionName}() {
+return ${collectionName};
+}
+public void set${CollectionName}(final SortedSet&lt;${ElementType}&gt; ${collectionName}) {
+this.${collectionName} = ${collectionName};
+}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Collection (m:n unidir &amp; bidir - parent)" enabled="true" name="isjdc-mn-ub-p">// {{ ${CollectionName} (Collection)
+${:import(java.util.SortedSet,java.util.TreeSet,org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Persistent,javax.jdo.annotations.Join,javax.jdo.annotations.Element)}@Persistent(table="${TableName}")
+@Join(column="${ThisEntityFieldName}")
+@Element(column="${RelatedEntityFieldName}")
+private SortedSet&lt;${ElementType}&gt; ${collectionName} = new TreeSet&lt;${ElementType}&gt;();@MemberOrder(sequence="1")
+
+public SortedSet&lt;${ElementType}&gt; get${CollectionName}() {
+	return ${collectionName};
+}
+public void set${CollectionName}(final SortedSet&lt;${ElementType}&gt; ${collectionName}) {
+	this.${collectionName} = ${collectionName};
+}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Property (simple - 1:1 unidir &amp; bidir - parent)" enabled="true" name="isjdp">// {{ ${PropertyName} (property)&#13;
+private ${PropertyType} ${propertyName};&#13;
+${:import(org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Column)}@MemberOrder(sequence="1")&#13;
+@Column(allowsNull="${trueOrFalse}")&#13;
+public ${PropertyType} get${PropertyName}() {&#13;
+	return ${propertyName};&#13;
+}&#13;
+public void set${PropertyName}(final ${PropertyType} ${propertyName}) {&#13;
+	this.${propertyName} = ${propertyName};&#13;
+}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="JDO Property (1:1 child)" enabled="true" name="isjdp-11c">// {{ ${PropertyName} (property)
+private ${PropertyType} ${propertyName};
+${:import(org.apache.isis.applib.annotation.MemberOrder,javax.jdo.annotations.Column,javax.jdo.annotations.Persistent)}@MemberOrder(sequence="1")
+@Column(allowsNull="${trueOrFalse}")
+@Persistent(mappedBy="${fieldOnChild}")
+public ${PropertyType} get${PropertyName}() {
+	return ${propertyName};
+}
+public void set${PropertyName}(final ${PropertyType} ${propertyName}) {
+	this.${propertyName} = ${propertyName};
+}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="Lifecycle region" enabled="true" name="isl">// {{ Lifecycle methods&#13;
+${cursor}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Lifecycle - create" enabled="true" name="islc">public void created() {&#13;
+    ${cursor}// TODO: post-create&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Lifecycle - load" enabled="true" name="isll">public void loading() {&#13;
+    ${cursor}// TODO: pre-load&#13;
+}&#13;
+public void loaded() {&#13;
+    // TODO: post-load&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Lifecycle - persist" enabled="true" name="islp">public void persisting() {&#13;
+    ${cursor}// TODO: pre-persist&#13;
+}&#13;
+public void persisted() {&#13;
+    // TODO: post-persist&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Lifecycle - remove" enabled="true" name="islr">public void removing() {&#13;
+    ${cursor}// TODO: pre-remove&#13;
+}&#13;
+public void removed() {&#13;
+    // TODO: post-remove&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Lifecycle - update" enabled="true" name="islu">public void updating() {&#13;
+    ${cursor}// TODO: pre-update&#13;
+}&#13;
+public void updated() {&#13;
+    // TODO: post-update&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property" enabled="true" name="isp">// {{ ${PropertyName} (property)&#13;
+private ${PropertyType} ${propertyName};&#13;
+${:import(org.apache.isis.applib.annotation.MemberOrder)}@MemberOrder(sequence="1")&#13;
+public ${PropertyType} get${PropertyName}() {&#13;
+	return ${propertyName};&#13;
+}&#13;
+public void set${PropertyName}(final ${PropertyType} ${propertyName}) {&#13;
+	this.${propertyName} = ${propertyName};&#13;
+}&#13;
+// }}&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Property (1:1 bidir child)" enabled="true" name="isp-11c">public void modify${ParentPropertyName}(final ${ParentPropertyType} ${parentPropertyName}) {&#13;
+    ${ParentPropertyType} current${ParentPropertyName} = get${ParentPropertyName}();&#13;
+	// check for no-op&#13;
+	if (${parentPropertyName} == null || &#13;
+		${parentPropertyName}.equals(current${ParentPropertyName})) {&#13;
+		return;&#13;
+	}&#13;
+	// delegate to parent to associate&#13;
+	${parentPropertyName}.modify${ChildPropertyNameInParent}(this);&#13;
+	// additional business logic&#13;
+	onModify${ParentPropertyName}(current${ParentPropertyName}, ${parentPropertyName});&#13;
+}&#13;
+public void clear${PropertyName}() {&#13;
+    ${ParentPropertyType} current${ParentPropertyName} = get${ParentPropertyName}();&#13;
+	// check for no-op&#13;
+	if (current${ParentPropertyName} == null) {&#13;
+		return;&#13;
+	}&#13;
+	// delegate to parent to dissociate&#13;
+	current${ParentPropertyName}.clear${ChildPropertyNameInParent}();&#13;
+	// additional business logic&#13;
+	onClear${ParentPropertyName}(current${ParentPropertyName});&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property (1:1 bidir parent)" enabled="true" name="isp-11p">public void modify${ChildPropertyName}(final ${ChildPropertyType} ${childPropertyName}) {&#13;
+    ${ChildPropertyType} current${ChildPropertyName} = get${ChildPropertyName}();&#13;
+	// check for no-op&#13;
+	if (${childPropertyName} == null || &#13;
+		${childPropertyName}.equals(current${ChildPropertyName})) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate existing&#13;
+	clear${ChildPropertyName}();&#13;
+	// associate new&#13;
+	${childPropertyName}.set${ParentPropertyNameInChild}(this);&#13;
+	set${ChildPropertyName}(${childPropertyName});&#13;
+	// additional business logic&#13;
+	onModify${ChildPropertyName}(current${ChildPropertyName}, ${childPropertyName});&#13;
+}&#13;
+public void clear${ChildPropertyName}() {&#13;
+    ${ChildPropertyType} current${ChildPropertyName} = get${ChildPropertyName}();&#13;
+	// check for no-op&#13;
+	if (current${ChildPropertyName} == null) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate existing&#13;
+	current${ChildPropertyName}.set${ParentPropertyNameInChild}(null);&#13;
+	set${ChildPropertyName}(null);&#13;
+	// additional business logic&#13;
+	onClear${ChildPropertyName}(current${ChildPropertyName});&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property (m:1 bidir child)" enabled="true" name="isp-m1">public void modify${ParentPropertyName}(final ${ParentPropertyType} ${parentPropertyName}) {&#13;
+    ${ParentPropertyType} current${ParentPropertyName} = get${ParentPropertyName}();&#13;
+	// check for no-op&#13;
+	if (${parentPropertyName} == null || &#13;
+		${parentPropertyName}.equals(current${ParentPropertyName})) {&#13;
+		return;&#13;
+	}&#13;
+	// delegate to parent to associate&#13;
+	${parentPropertyName}.addTo${ChildCollectionNameInParent}(this);&#13;
+	// additional business logic&#13;
+	onModify${ParentPropertyName}(current${ParentPropertyName}, ${parentPropertyName});&#13;
+}&#13;
+public void clear${ParentPropertyName}() {&#13;
+    ${ParentPropertyType} current${ParentPropertyName} = get${ParentPropertyName}();&#13;
+	// check for no-op&#13;
+	if (current${ParentPropertyName} == null) {&#13;
+		return;&#13;
+	}&#13;
+	// delegate to parent to dissociate&#13;
+	current${ParentPropertyName}.removeFrom${ChildCollectionNameInParent}(this);&#13;
+	// additional business logic&#13;
+	onClear${ParentPropertyName}(current${ParentPropertyName});&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property choices" enabled="true" name="ispcho">${:import(java.util.List)}public List&lt;${PropertyType}&gt; choices${PropertyName}() {&#13;
+	return ${cursor}null; // TODO: return list of choices for property&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property defaults" enabled="true" name="ispdef">public ${PropertyType} default${PropertyName}() {&#13;
+	return ${cursor}null; // TODO: return default for property when first created&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property disabling" enabled="true" name="ispdis">public String disable${PropertyName}() {&#13;
+	return ${cursor}null; // TODO: return reason why property is disabled, null if editable&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property hiding" enabled="true" name="isphid">public boolean hide${PropertyName}() {&#13;
+	return ${cursor}false; // TODO: return true if hidden, false if visible&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property modify" enabled="true" name="ispmod">public void modify${PropertyName}(final ${PropertyType} ${propertyName}) {&#13;
+    ${PropertyType} current${PropertyName} = get${PropertyName}();&#13;
+	// check for no-op&#13;
+	if (${propertyName} == null || &#13;
+		${propertyName}.equals(current${PropertyName})) {&#13;
+		return;&#13;
+	}&#13;
+	// associate new&#13;
+	set${PropertyName}(${propertyName});&#13;
+	// additional business logic&#13;
+	onModify${PropertyName}(current${PropertyName}, ${propertyName});&#13;
+}&#13;
+public void clear${PropertyName}() {&#13;
+    ${PropertyType} current${PropertyName} = get${PropertyName}();&#13;
+	// check for no-op&#13;
+	if (current${PropertyName} == null) {&#13;
+		return;&#13;
+	}&#13;
+	// dissociate existing&#13;
+	set${PropertyName}(null);&#13;
+	// additional business logic&#13;
+	onClear${PropertyName}(current${PropertyName});&#13;
+}&#13;
+protected void onModify${PropertyName}(final ${PropertyType} old${PropertyName}, final ${PropertyType} new${PropertyName}) {&#13;
+}&#13;
+protected void onClear${PropertyName}(final ${PropertyType} old${PropertyName}) {&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property validation" enabled="true" name="ispval">public String validate${PropertyName}(final ${PropertyType} ${propertyName}) {&#13;
+	if (${propertyName} == null) return null;&#13;
+	return ${cursor}null; // TODO: return reason why proposed value is invalid, null if valid&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Isis Section" enabled="true" name="iss">// {{ ${SectionName}
+${cursor}
+// }}</template><template autoinsert="true" context="java-members" deleted="false" description="Search for all" enabled="true" name="issa">// {{ all ${TypePlural}&#13;
+${:import(org.apache.isis.applib.annotation.Exploration,java.util.List)}@Exploration&#13;
+public List&lt;${Type}&gt; all${TypePlural}() {&#13;
+	return allInstances(${Type}.class);&#13;
+}&#13;
+// }}&#13;
+&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Search for all matching" enabled="true" name="issafil">// {{ all ${TypePlural} that ${filterDescription}&#13;
+${:import(org.apache.isis.applib.annotation.Exploration,org.apache.isis.applib.Filter,java.util.List)}@Exploration&#13;
+public List&lt;${Type}&gt; all${TypePlural}Matching(final Filter&lt;${Type}&gt; filter) {&#13;
+	return allMatches(${Type}.class, filter);&#13;
+}&#13;
+// }}&#13;
+&#13;
+&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Search for first matching" enabled="true" name="issffil">// {{ first ${Type} that ${filterDescription}&#13;
+${:import(org.apache.isis.applib.annotation.Exploration,org.apache.isis.applib.Filter,java.util.List)}@Exploration&#13;
+public ${Type} first${Type}Matching(final Filter&lt;${Type}&gt; filter) {&#13;
+	return firstMatch(${Type}.class, filter);&#13;
+}&#13;
+// }}&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Search for unique matching" enabled="true" name="issufil">// {{ unique ${Type} that ${filterDescription}&#13;
+${:import(org.apache.isis.applib.annotation.Exploration,org.apache.isis.applib.Filter,java.util.List)}@Exploration&#13;
+public ${Type} unique${Type}Matching(final Filter&lt;${Type}&gt; filter) {&#13;
+	return uniqueMatch(${Type}.class, filter);&#13;
+}&#13;
+// }}&#13;
+</template><template autoinsert="true" context="java-members" deleted="false" description="Object-level validation" enabled="true" name="isval">public String validate() {&#13;
+    ${cursor}// TODO: return reason why object is in invalid state (and so cannot be saved/updated), or null if ok&#13;
+}</template></templates>

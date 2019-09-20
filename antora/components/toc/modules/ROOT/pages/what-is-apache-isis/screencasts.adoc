@@ -52,7 +52,7 @@ Generating an app using the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]
 
 
 |link:https://www.youtube.com/watch?v=6GPtec5Hu5Q[002^] +
-Importing the generated app into an xref:support:dg:ide.adoc[IDE] +
+Importing the generated app into an xref:toc:devguide:ide.adoc[IDE] +
 
 |x||x||||||||
 
@@ -108,7 +108,7 @@ Writing end-to-end xref:testing:ROOT:integ-test-support.adoc[integration tests] 
 include::partial$_screencasts-playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=lkZxRSS0Zwg[009^] +
-Using the Swagger UI to access the xref:vro:ROOT::about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
+Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
 ||||||||||x|
 
 
@@ -514,22 +514,22 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=puG-pzxRSd0[052^] +
-How to write a xref:ug:fun:programming-model/view-models/jaxb.adoc[(JAXB) view model], holding references to two domain objects.
+How to write a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model], holding references to two domain objects.
 |x||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=tdBkmA2CCZY[053^] +
-Updating the title, icon and layout of a xref:ug:fun:programming-model/view-models/jaxb.adoc[(JAXB) view model].
+Updating the title, icon and layout of a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model].
 ||||x|||||||
 
 
 |link:https://www.youtube.com/watch?v=TKF0FB_od00[054^] +
-How to expose information from underlying domain entities referenced by a xref:ug:fun:programming-model/view-models/jaxb.adoc[(JAXB) view model] using derived properties
+How to expose information from underlying domain entities referenced by a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model] using derived properties
 ||||||||||x|
 
 
 |link:https://www.youtube.com/watch?v=TMMeVhRNi8A[055^] +
-Adding an action to a xref:ug:fun:programming-model/view-models/jaxb.adoc[(JAXB) view model], and adjusting the layout using custom CSS.
+Adding an action to a xref:ug:fun:programming-model.adoc#jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
 ||||x|||||||
 
 

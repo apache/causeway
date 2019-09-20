@@ -108,7 +108,7 @@ This mixin calls xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`] to
 
 == `openRestApi()`
 
-The `Object_openRestApi` mixin provides an action to navigate to the URL of the xref:vro:ROOT::about.adoc[Restful Objects resource] corresponding to the domain object.
+The `Object_openRestApi` mixin provides an action to navigate to the URL of the xref:vro:ROOT:about.adoc[Restful Objects resource] corresponding to the domain object.
 It has the following signature:
 
 [source,java]

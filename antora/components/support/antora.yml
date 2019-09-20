@@ -1,9 +1,0 @@
-name: support
-title: Support
-version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc
-- modules/cgcom/nav.adoc
-- modules/dg/nav.adoc
-- modules/ad/nav.adoc

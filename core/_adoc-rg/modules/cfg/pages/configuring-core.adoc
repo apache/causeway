@@ -6,7 +6,7 @@ This section lists the core/runtime configuration properties recognized by Apach
 
 [NOTE]
 ====
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:odn:ROOT:configuring.adoc[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:vw:ROOT:configuration-properties.adoc[here for Wicket viewer], and xref:vro:ROOT::configuration-properties.adoc[here for the Restful Objects viewer].
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:odn:ROOT:configuring.adoc[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:vw:ROOT:configuration-properties.adoc[here for Wicket viewer], and xref:vro:ROOT:configuration-properties.adoc[here for the Restful Objects viewer].
 ====
 
 
@@ -437,7 +437,7 @@ Note that the application must be bootstrapped using an `AppManifest2`.
 (`false`)
 | Whether to check that the class has an object type explicitly specified somehow.
 
-The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] and xref:vro:ROOT::about.adoc[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
+The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] and xref:vro:ROOT:about.adoc[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`].
 In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
 
 If the object type is not specified explicitly, then this can cause data migration issues if the class is subsequently refactored (eg renamed, or moved to a different package).
@@ -449,21 +449,21 @@ This configuration property can be used to enforce a rule that the object type m
 `NotAbstract`
 |`true`,`false` +
 (`true`)
-|Ensures that all xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB view model]s are not `abstract` (so can be instantiated).
+|Ensures that all xref:ug:fun:programming-model.adoc#jaxb[JAXB view model]s are not `abstract` (so can be instantiated).
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `NotInnerClass`
 |`true`,`false` +
 (`true`)
-| Ensures that all xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB view model]s are not inner classes (so can be instantiated).
+| Ensures that all xref:ug:fun:programming-model.adoc#jaxb[JAXB view model]s are not inner classes (so can be instantiated).
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `NoArgConstructor`
 |`true`,`false` +
 (`false`)
-| Ensures that all xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB view model]s have a `public` no-arg constructor. +
+| Ensures that all xref:ug:fun:programming-model.adoc#jaxb[JAXB view model]s have a `public` no-arg constructor. +
 
 This isn't actually required (hence not enabled by default) but is arguably good practice.
 
@@ -472,14 +472,14 @@ This isn't actually required (hence not enabled by default) but is arguably good
 `ReferenceTypeAdapter`
 |`true`,`false` +
 (`true`)
-| Ensures that for all xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB view model]s with properties that reference persistent entities, that those entities are annotated with `@XmlJavaTypeAdapter`.
+| Ensures that for all xref:ug:fun:programming-model.adoc#jaxb[JAXB view model]s with properties that reference persistent entities, that those entities are annotated with `@XmlJavaTypeAdapter`.
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `DateTimeTypeAdapter`
 |`true`,`false` +
 (`true`)
-| Ensures that for all xref:ug:fun:programming-model/view-models/jaxb.adoc[JAXB view model]s with properties that are dates or times, that those properties are annotated with `@XmlJavaTypeAdapter`.
+| Ensures that for all xref:ug:fun:programming-model.adoc#jaxb[JAXB view model]s with properties that are dates or times, that those properties are annotated with `@XmlJavaTypeAdapter`.
 
 |`isis.reflector.validator.` +
 `jdoqlFromClause`
@@ -514,7 +514,7 @@ This is by way of possibly deprecating and eventually moving contributed service
 | When searching for  xref:rg:cms:methods/prefixes/disable.adoc[`disableXxx()`] or xref:rg:cms:methods/prefixes/hide.adoc[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
 If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
-Note that this in effect means that xref:ug:fun:building-blocks.adoc#mixins[mixins] must be used instead of xref:ug:fun:programming-model/domain-services/contributions.adoc[contributed services].
+Note that this in effect means that xref:ug:fun:building-blocks.adoc#mixins[mixins] must be used instead of xref:ug:fun:programming-model.adoc#contributions[contributed services].
 
 
 |`isis.reflector.validator.` +
@@ -705,7 +705,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the xref:vw:ROOT:about.adoc[Wicket viewer] and the xref:vro:ROOT::about.adoc[Restful Objects viewer], and also by the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
+Filtering is supported by the xref:vw:ROOT:about.adoc[Wicket viewer] and the xref:vro:ROOT:about.adoc[Restful Objects viewer], and also by the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
 
 [NOTE]
 ====

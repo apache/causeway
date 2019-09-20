@@ -1,3 +1,4 @@
+[[oid]]
 = OIDs
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -30,7 +31,7 @@ When the PDF is scanned by the mail room, the barcode could be read to attach th
 
 * similarly within implementations of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] to persist published action invocations
 
-* and of course both the xref:vro:ROOT::about.adoc[RestfulObjects viewer] and xref:vw:ROOT::about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
+* and of course both the xref:vro:ROOT:about.adoc[RestfulObjects viewer] and xref:vw:ROOT:about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
 These are represented as ``Bookmark``s, obtained from the xref:rg:svc:integration-api/BookmarkService.adoc[``BookmarkService``].

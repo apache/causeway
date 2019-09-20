@@ -50,7 +50,7 @@ public interface AppManifest {
 
 These can return either:
 
-    * "shiro" - enable integration with Apache Shiro, as described in the xref:security:ROOT::about.adoc[security] user guide
+    * "shiro" - enable integration with Apache Shiro, as described in the xref:security:ROOT:about.adoc[security] user guide
     * "bypass" - bypass security (in effect, configure a no-op implementation that allows everything).
 
 Note that these are actually aliases for concrete implementations.

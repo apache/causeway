@@ -5,8 +5,6 @@
 
 
 ** xref:headless-access.adoc[Headless Access]
-*** xref:headless-access/AbstractIsisSessionTemplate.adoc[`AbstractIsisSessionTemplate`]
-*** xref:headless-access/BackgroundCommandExecution.adoc[`BackgroundCommandExecution`]
 
 
 

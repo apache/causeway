@@ -1,7 +1,6 @@
 = Programming Model
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
-:page-partial:
 
 
 Apache Isis works by building a metamodel of the domain objects: entities, domain services, view models and mixins.
@@ -50,7 +49,7 @@ Indeed, they can additionally be annotated using `@XmlTypeAdapter` if required.
 As for view models, which is used is a matter of personal preference.
 
 * finally, *domain services*` are annotated with `@DomainService(nature=...)` where the nature is either `VIEW` (for domain services whose actions appear in the viewers, eg on the top-level menu bars), or `DOMAIN` (for domain services whose
-functionality is simply for other domain objects to invoke programmatically), or `VIEW_REST_ONLY` (for domain services whose functionality is surfaced only by the xref:vro:ROOT::about.adoc[RestfulObjects viewer]).
+functionality is simply for other domain objects to invoke programmatically), or `VIEW_REST_ONLY` (for domain services whose functionality is surfaced only by the xref:vro:ROOT:about.adoc[RestfulObjects viewer]).
 
 You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 
@@ -59,12 +58,53 @@ If a domain service does hold state (eg the `Scratchpad` service noted above) th
 
 The framework also defines supplementary annotations, `@DomainObjectLayout` and `@DomainServiceLayout`.
 These provide hints relating to the layout of the domain object in the user interface.
-(Alternatively, these UI hints can be defined in a supplementary xref:vw:ROOT::layout.adoc[`.layout.xml`] file.
+(Alternatively, these UI hints can be defined in a supplementary xref:vw:ROOT:layout.adoc[`.layout.xml`] file.
 
 
 
 
 
+include::programming-model/domain-entities.adoc[leveloffset=+1]
+
+
+include::programming-model/domain-services.adoc[leveloffset=+1]
+include::programming-model/domain-services/organizing-services.adoc[leveloffset=+2]
+include::programming-model/domain-services/repository-and-factory.adoc[leveloffset=+2]
+include::programming-model/domain-services/menu.adoc[leveloffset=+2]
+include::programming-model/domain-services/event-subscribers.adoc[leveloffset=+2]
+include::programming-model/domain-services/scoped-services.adoc[leveloffset=+2]
+include::programming-model/domain-services/registering.adoc[leveloffset=+2]
+include::programming-model/domain-services/initialization.adoc[leveloffset=+2]
+
+
+
+include::programming-model/properties.adoc[leveloffset=+1]
+include::programming-model/collections.adoc[leveloffset=+1]
+include::programming-model/actions.adoc[leveloffset=+1]
+include::programming-model/properties-vs-parameters.adoc[leveloffset=+1]
+include::programming-model/inject-services.adoc[leveloffset=+1]
+
+
+
+include::programming-model/view-models.adoc[leveloffset=+1]
+include::programming-model/view-models/jaxb.adoc[leveloffset=+2]
+include::programming-model/view-models/jaxb/referencing-domain-entities.adoc[leveloffset=+3]
+include::programming-model/view-models/jaxb/joda-datatypes.adoc[leveloffset=+3]
+include::programming-model/view-models/dto.adoc[leveloffset=+2]
+include::programming-model/view-models/dto/versioning.adoc[leveloffset=+3]
+include::programming-model/view-models/dto/generating-xsds.adoc[leveloffset=+3]
+include::programming-model/view-models/dto/dto-consumers.adoc[leveloffset=+3]
+include::programming-model/view-models/non-jaxb.adoc[leveloffset=+2]
+
+
+
+include::programming-model/mixins.adoc[leveloffset=+1]
+include::programming-model/mixins/contributed-collection.adoc[leveloffset=+2]
+include::programming-model/mixins/contributed-property.adoc[leveloffset=+2]
+include::programming-model/mixins/contributed-action.adoc[leveloffset=+2]
+include::programming-model/mixins/inferred-name.adoc[leveloffset=+2]
+include::programming-model/mixins/nested-static-classes.adoc[leveloffset=+2]
+include::programming-model/mixins/programmatic-usage.adoc[leveloffset=+2]
 
 
 

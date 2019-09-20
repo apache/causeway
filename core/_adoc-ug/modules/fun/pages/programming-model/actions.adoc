@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-While xref:ug:fun:programming-model/properties.adoc[properties] and xref:ug:fun:programming-model/collections.adoc[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
+While xref:ug:fun:programming-model.adoc#collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
 
 An application whose domain objects have only/mostly "know-what" responsibilities is pretty dumb: it requires that the end-user know the business rules and doesn't modify the state of the domain objects such that they are invalid (for example, an "end date" being before a "start date").
 Such applications are often called CRUD applications (create/read/update/delete).
@@ -154,12 +154,12 @@ public List<Product> autoComplete0AddToBasket(@MinLength(3) String searchTerm) {
 }
 ----
 
-As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:ug:fun:programming-model/actions.adoc#reference-parameter-types[above]).
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:ug:fun:programming-model.adoc#actions#reference-parameter-types[above]).
 
 
 == Optional Parameters
 
-Whereas the xref:ug:fun:programming-model/properties.adoc#optional-properties[optionality of properties] is defined using xref:rg:ant:Column#allowsNull.adoc[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
+Whereas the xref:ug:fun:programming-model.adoc#properties.adoc#optional-properties[optionality of properties] is defined using xref:rg:ant:Column#allowsNull[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
 Instead, either the xref:rg:ant:Nullable.adoc[`@Nullable`] annotation or the xref:rg:ant:Parameter/optionality.adoc[`@Parameter#optionality()`]  annotation/attribute is used.
 
 For example:
@@ -184,7 +184,7 @@ public Order invoice(
 <1> Specifies the property is optional.
 <2> Specifies the corresponding parameter is optional.
 
-See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties vs parameters].
+See also xref:ug:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
 
 == ``String`` Parameters (Length)
 
@@ -224,7 +224,7 @@ Incidentally, note in the above example that the new value is assigned to the pr
 This is important, because it allows JDO/DataNucleus to keep track that this instance variable is "dirty" and so needs flushing to the database table before the transaction completes.
 ====
 
-See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties vs parameters].
+See also xref:ug:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
 
 == ``BigDecimal``s (Precision)
 
@@ -250,7 +250,7 @@ public Order updateDiscount(
 <1> Specifies the property precision using xref:rg:ant:Column#scale.adoc[`@Column#scale()`]
 <2> Specifies the corresponding parameter precision using xref:rg:ant:Digits.adoc[`@Digits#fraction()`].
 
-See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties vs parameters].
+See also xref:ug:fun:programming-model.adoc#properties-vs-parameters[properties vs parameters].
 
 
 

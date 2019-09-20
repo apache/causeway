@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 It's quite common for view models to be "backed by" (be projections of) some underlying domain entity.
-For example, the `CompareCustomers` view model described xref:ug:fun:programming-model/view-models/jaxb.adoc[above] actually references two underlying ``Customer`` entities.
+For example, the `CompareCustomers` view model described xref:ug:fun:programming-model.adoc#jaxb[above] actually references two underlying ``Customer`` entities.
 
 It wouldn't make sense to serialize out the state of a persistent entity.
 However, the identity of the underlying entity is well defined; Apache Isis defines the xref:rg:cms:schema/common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
@@ -57,7 +57,7 @@ public class CompareCustomers {
 }
 ----
 
-This capability is particularly useful when the JAXB view model is being used as a xref:ug:fun:programming-model/view-models/dto.adoc[DTO].
+This capability is particularly useful when the JAXB view model is being used as a xref:ug:fun:programming-model.adoc#dto[DTO].
 
 
 

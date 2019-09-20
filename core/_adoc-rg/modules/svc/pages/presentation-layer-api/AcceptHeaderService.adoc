@@ -32,7 +32,7 @@ The default implementation is provided by `o.a.i.v.ro.rendering.service.accepthe
 
 [NOTE]
 ====
-Note that the service will only return a list when the request is initiated through the xref:vro:ROOT::about.adoc[Restful Objects viewer].  Otherwise the service will return `null`.
+Note that the service will only return a list when the request is initiated through the xref:vro:ROOT:about.adoc[Restful Objects viewer].  Otherwise the service will return `null`.
 ====
 
 To use an alternative implementation, use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).

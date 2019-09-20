@@ -1,0 +1,3 @@
+= Components
+include::_attributes.adoc[]
+
