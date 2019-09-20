@@ -20,8 +20,9 @@ package org.apache.isis.applib.services.iactn;
 
 import javax.enterprise.context.RequestScoped;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
@@ -30,8 +31,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
  * {@link DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
-@RequestScoped
+@RequestScoped @Service
 public class InteractionContext {
 
     private Interaction interaction;
