@@ -22,6 +22,16 @@ data class TObject(val links: List<Link> = emptyList(),
         return result
     }
 
+    fun getActions(): MutableList<Member> {
+        val result = mutableListOf<Member>()
+        for (m in members) {
+            if (m.value.memberType == MemberType.ACTION.type) {
+                result.add(m.value)
+            }
+        }
+        return result
+    }
+
     fun getProperty(key: String): Member? {
         for (m in members) {
             if (m.key == key) {

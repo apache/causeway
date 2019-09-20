@@ -39,8 +39,8 @@ class RoTable(displayList: DisplayList) : VPanel() {
                 height = "calc(100vh - 128px)",
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
-                persistenceMode = false,
-                selectable = true
+                persistenceMode = false//,
+                //selectable = true
         )
 
         tabulator(model, options = options) {
