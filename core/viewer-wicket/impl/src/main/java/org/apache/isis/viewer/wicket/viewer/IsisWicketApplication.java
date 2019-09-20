@@ -60,8 +60,8 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ApplicationSettings;
 
-import org.apache.isis.commons.internal.concurrent.ConcurrentContext;
-import org.apache.isis.commons.internal.concurrent.ConcurrentTaskList;
+import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
+import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
@@ -232,7 +232,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         try {
             super.init();
 
-            backgroundInitializationTasks.submit(ConcurrentContext.sequential());
+            backgroundInitializationTasks.submit(_ConcurrentContext.sequential());
 
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
@@ -333,9 +333,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     }
 
-    protected ConcurrentTaskList createBackgroundInitializationTasks() {
+    protected _ConcurrentTaskList createBackgroundInitializationTasks() {
         
-        return ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
+        return _ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
                .addRunnable("Configure WebJars",            this::configureWebJars)
                .addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
                .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);

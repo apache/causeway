@@ -36,7 +36,7 @@ import lombok.val;
  *
  * @since 2.0
  */
-public abstract class ConcurrentTask<T> implements Runnable {
+public abstract class _ConcurrentTask<T> implements Runnable {
     
     public static enum State {
         NOT_STARTED,
@@ -99,13 +99,13 @@ public abstract class ConcurrentTask<T> implements Runnable {
     
     // -- NAMING
     
-    public ConcurrentTask<T> withName(String name) {
+    public _ConcurrentTask<T> withName(String name) {
         
         requires(name, "name");
         
         val delegate = this;
         
-        return new ConcurrentTask<T>() {
+        return new _ConcurrentTask<T>() {
             
             @Override
             public T innerCall() throws Exception {
@@ -121,13 +121,13 @@ public abstract class ConcurrentTask<T> implements Runnable {
         
     }
     
-    public ConcurrentTask<T> withName(Supplier<String> nameSupplier) {
+    public _ConcurrentTask<T> withName(Supplier<String> nameSupplier) {
         
         requires(nameSupplier, "nameSupplier");
         
         val delegate = this;
         
-        return new ConcurrentTask<T>() {
+        return new _ConcurrentTask<T>() {
             
             @Override
             public T innerCall() throws Exception {
@@ -146,11 +146,11 @@ public abstract class ConcurrentTask<T> implements Runnable {
 
     // -- FACTORIES
     
-    public static ConcurrentTask<Void> of(Runnable runnable) {
+    public static _ConcurrentTask<Void> of(Runnable runnable) {
         
         requires(runnable, "runnable");
         
-        return new ConcurrentTask<Void>() {
+        return new _ConcurrentTask<Void>() {
             
             @Override
             public Void innerCall() throws Exception {
@@ -166,11 +166,11 @@ public abstract class ConcurrentTask<T> implements Runnable {
         };
     }
     
-    public static <X> ConcurrentTask<X> of(Callable<X> callable) {
+    public static <X> _ConcurrentTask<X> of(Callable<X> callable) {
         
         requires(callable, "callable");
         
-        return new ConcurrentTask<X>() {
+        return new _ConcurrentTask<X>() {
             
             @Override
             public X innerCall() throws Exception {

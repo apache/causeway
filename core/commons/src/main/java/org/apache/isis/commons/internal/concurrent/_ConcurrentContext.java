@@ -34,18 +34,18 @@ import lombok.Builder;
  * @since 2.0
  */
 @Builder
-public class ConcurrentContext {
+public class _ConcurrentContext {
     
     @Builder.Default final ExecutorService executorService = null;
     @Builder.Default final boolean enableExecutionLogging = true;
     
-    public static ConcurrentContextBuilder forkJoin() {
-        return ConcurrentContext.builder()
+    public static _ConcurrentContextBuilder forkJoin() {
+        return _ConcurrentContext.builder()
                 .executorService(ForkJoinPool.commonPool());
     }
     
-    public static ConcurrentContextBuilder sequential() {
-        return ConcurrentContext.builder();
+    public static _ConcurrentContextBuilder sequential() {
+        return _ConcurrentContext.builder();
     }
 
     public boolean shouldRunSequential() {

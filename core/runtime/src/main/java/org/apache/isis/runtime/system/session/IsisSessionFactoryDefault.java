@@ -37,8 +37,8 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.concurrent.ConcurrentContext;
-import org.apache.isis.commons.internal.concurrent.ConcurrentTaskList;
+import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
+import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
@@ -108,7 +108,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         runtimeEventService.fireAppPreMetamodel();
 
-        val taskList = ConcurrentTaskList.named("IsisSessionFactoryDefault Concurrent Tasks");
+        val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Concurrent Tasks");
 
         taskList.addRunnable("SpecificationLoader.init()", ()->{
             // time to initialize...
@@ -139,7 +139,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         taskList.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
         taskList.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
 
-        taskList.submit(ConcurrentContext.sequential());
+        taskList.submit(_ConcurrentContext.sequential());
         taskList.await();
 
         runtimeEventService.fireAppPostMetamodel();

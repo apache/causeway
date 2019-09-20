@@ -42,24 +42,24 @@ import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "named") 
 @Log4j2
-public class ConcurrentTaskList {
+public class _ConcurrentTaskList {
 
     @Getter private final String name;
     
-    private final List<ConcurrentTask<?>> tasks = _Lists.newArrayList();
+    private final List<_ConcurrentTask<?>> tasks = _Lists.newArrayList();
     private final AtomicBoolean wasStarted = new AtomicBoolean();
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
     private final AwaitableLatch awaitableLatch = AwaitableLatch.of(countDownLatch);
     private final LongAdder tasksExecuted = new LongAdder();
     private long executionTimeNanos;
     
-    public List<ConcurrentTask<?>> getTasks() {
+    public List<_ConcurrentTask<?>> getTasks() {
         return Collections.unmodifiableList(tasks);
     }
 
     // -- ASSEMBLING
 
-    public ConcurrentTaskList addTask(ConcurrentTask<?> task) {
+    public _ConcurrentTaskList addTask(_ConcurrentTask<?> task) {
         synchronized (tasks) {
             if(wasStarted.get()) {
                 val msg = "Tasks already started execution, can no longer modify collection of tasks!"; 
@@ -70,7 +70,7 @@ public class ConcurrentTaskList {
         return this;
     }
 
-    public ConcurrentTaskList addTasks(Collection<? extends ConcurrentTask<?>> tasks) {
+    public _ConcurrentTaskList addTasks(Collection<? extends _ConcurrentTask<?>> tasks) {
         synchronized (this.tasks) {
             if(wasStarted.get()) {
                 val msg = "Tasks already started execution, can no longer modify collection of tasks!"; 
@@ -83,7 +83,7 @@ public class ConcurrentTaskList {
     
     // -- EXECUTION
     
-    public ConcurrentTaskList submit(ConcurrentContext context) {
+    public _ConcurrentTaskList submit(_ConcurrentContext context) {
         
         synchronized (tasks) {
             if(wasStarted.get()) {
@@ -96,7 +96,7 @@ public class ConcurrentTaskList {
         val t0 = System.nanoTime();
         
         if(context.shouldRunSequential()) {
-            for(ConcurrentTask<?> task : tasks) {
+            for(_ConcurrentTask<?> task : tasks) {
                 task.run();
                 tasksExecuted.increment();
             }
@@ -108,7 +108,7 @@ public class ConcurrentTaskList {
         
         val futures = new ArrayList<Future<?>>(tasks.size());
         
-        for(ConcurrentTask<?> task : tasks) {
+        for(_ConcurrentTask<?> task : tasks) {
             futures.add(context.executorService.submit(task));
         }
 
@@ -158,7 +158,7 @@ public class ConcurrentTaskList {
     
     // -- EXECUTION LOGGING
     
-    private void logExecutionSummary(ConcurrentContext context) {
+    private void logExecutionSummary(_ConcurrentContext context) {
         if(!context.enableExecutionLogging) {
             return;
         }
@@ -175,11 +175,11 @@ public class ConcurrentTaskList {
 
     // -- SHORTCUTS
 
-    public ConcurrentTaskList addRunnable(String name, Runnable runnable) {
-        return addTask(ConcurrentTask.of(runnable).withName(name));
+    public _ConcurrentTaskList addRunnable(String name, Runnable runnable) {
+        return addTask(_ConcurrentTask.of(runnable).withName(name));
     }
     
-    public ConcurrentTaskList submit(ConcurrentContext.ConcurrentContextBuilder contextBuilder) {
+    public _ConcurrentTaskList submit(_ConcurrentContext._ConcurrentContextBuilder contextBuilder) {
         return submit(contextBuilder.build());
     }
    
