@@ -29,7 +29,7 @@ The table widget allows filtering/sorting on the client and scrolling behavior w
 In the left upper corner you will find a burger icon with an drop down menu. Click and select -> Connect, edit/confirm the settings and press OK.
 ![Preview](./images/Connect1.png)
 
-The defaut url is localhost:8080/
+The default url is localhost:8080/
 ![Preview](./images/Connect2.png)
 
 The menu gets populated and you may select Prototyping -> runFixtureScript:
