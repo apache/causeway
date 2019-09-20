@@ -1,46 +1,42 @@
 ![Preview](../images/WheatFieldWithCrows.png)
 
-# Patterns 
-## Transfer Object (JEE / EAA)
+# Design
+## Overview
+![Preview](../images/uml-overview.png)
+## Handler Chain
+![Preview](../images/uml-handler.png)
+
+## Patterns 
+### Transfer Object (JEE / EAA)
 TO's are created from JSON responses
-## Event Sourcing (EAA)
+### Event Sourcing (EAA)
 Requests, reponses, and resulting TO's are logged. 
 Before requests are sent out to the server this log is consulted and used as a cache.
-## Proxy (GOF)
+### Proxy (GOF)
 The event source acts as a Proxy and thereby saves time and bandwidth.
-## Aggregator (EAI)
+### Aggregator (EAI)
 Various aggregators are responsible to collect or assemble displayable objects.
 Once all layout information is there, the UI will be rendered, even if not all elements of a list 
 have arrived. Those elements will be added as they arrive. This is done with the help of
 mutable lists. 
-## Chain of Responsibility (GOF)
+### Chain of Responsibility (GOF)
 A chain of handlers is used to identify what kind of TO is to be generated from the 
 JSON response. Handlers are responsible for initial assignment of aggregators.
-## Template Method (GOF)
+### Template Method (GOF)
 The Handler base class makes use of this pattern. Some methods have to be implemented
 in each subsclass, in some cases the default implementation in the base class is used.
-## Composite Pattern (GOF)
+### Composite Pattern (GOF)
 UI elements are hierarchically grouped, cf. *layout.xml
-## Factory (GOF)
+### Factory (GOF)
 Used for building tables dynamically.
-## Remote Facade
+### Remote Facade
 The Restful Objects API.
-## Redux
+### Redux
 The implementaion here is an (independent) reinvention of Redux. 
 I prefer the name Aggregator over Reducer though - IIRC it's even older.
-## Half Object Protocol
+### Half Object Protocol
 The HOP pattern dates back to the early 2000, namely CanooULC.
 IMO Naked Objects together with the PO API and kroViz resembles something similar.
-
-# Design
-## Overview
-![Preview](../images/uml-overview.png)
-## TransferObjects
-![Preview](../images/uml-to.png)
-## Handler Chain
-![Preview](../images/uml-handler.png)
-## Layout
-![Preview](../images/uml-layout.png)
 
 
 # Toolchain

@@ -1,5 +1,5 @@
-![kroViz Logo](./images/kroviz-logo.svg )
-# kroViz 
+![kroviz Logo](./images/kroviz-logo.svg )
+# kroviz 
 (to be pronounced: [krous]) is a viewer for [Restful Objects](http://www.restfulobjects.org) written in [Kotlin/JS](https://github.com/JetBrains/kotlin/tree/master/js), using [kvision](https://rjaros.github.io/kvision) for the UI part. 
 
 
@@ -8,7 +8,7 @@
 [![License: Apache 2](https://img.shields.io/badge/license-Apache%202-blue)](https://opensource.org/licenses/Apache-2.0)
 ## About
 
-kroViz is a generic client for applications that implement the Restful Objects Specification, namely:
+kroviz is a generic client for applications that implement the Restful Objects Specification, namely:
 
 * [Apache Isis](https://isis.apache.org/)
 * [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml)
@@ -24,25 +24,30 @@ A [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml) application
 ## User Interface
 
 The GUI will be similar to the well known Wicket-UI of Apache Isis, but will make use of Tabs for Lists and Objects instead of Bookmarking URLs.
-The table widget allows filtering/sorting on the client and scrolling behavior will be more like in traditional Desktop applications.  
+The table widget allows filtering/sorting on the client and scrolling behavior will be more like in traditional desktop applications.  
 
 In the left upper corner you will find a burger icon with an drop down menu. Click and select -> Connect, edit/confirm the settings and press OK.
-The menu gets populated. 
+![Preview](./images/Connect1.png)
 
-* Prototyping -> runFixtureScript
-* SimpleObjects -> listAll
-* Configuration -> configuration
+The defaut url is localhost:8080/
+![Preview](./images/Connect2.png)
 
+The menu gets populated and you may select Prototyping -> runFixtureScript:
+![Preview](./images/RunFixtureScript1.png)
+![Preview](./images/RunFixtureScript2.png)
+![Preview](./images/RunFixtureScript3.png)
+In order to filter the list, enter a string:
+![Preview](./images/RunFixtureScript4.png)
 
-![Preview](./images/SimpleObjects.png)
+Other lists work the same way, eg. SimpleObjects -> listAll:
+![Preview](./images/ListAll1.png)
+Clicking on the icon with three dots on the right will open a context menu:
+![Preview](./images/ListAll2.png)
 
-'Burger' -> Log Entries  creates another tab showing logged XmlHttpRequests:
-
-![Preview2](./images/LogEntries.png)
-
-TIP: Remote applications (here: [SEMAT](http://semat.ofbizian.com/)) can be used as well, and even mixed with local apps. 
-
-![Remote Application](./images/SEMAT.png)
+'Burger' -> Log Entries  creates another tab showing logged XmlHttpRequests, sorted by number of 'cache hits'.
+![Preview](./images/LogEntries1.png)
+Not only XHR's are logged, but 'screen events' as well (filtered for type VIEW)
+![Preview2](./images/LogEntries2.png)
 
 
 # Contributing
