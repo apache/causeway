@@ -1,0 +1,64 @@
+= Concurrent Task List
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::_attributes.adoc[]
+
+Dan::
+I also saw you were doing some work on async background jobs, are you happy with the design ?
+
+
+Andi::
+the 'wrapper' got an extension to also run actions asynchronous; thats cool but I'm missing a means to get hold of the Future object that is produced in the background, that would be really nice
+
+Dan::
+Perhaps a request scoped service could pull them together as they are created?
+
+Andi::
+another thing is, I removed the ThreadPoolSupport in favour of a more convenient concept: ConcurrentTask and ConcurrentTaskList
+
+Dan::
+^ yes, that was what I noticed.
++
+The TPS was for internal use to perform parallel introspection etc, so does ConcurrentTask list provide the same capability?
+and does the wrapper use this new concept also?
+
+Andi::
+Basically I've replaced all 'concurrent executors' with the common ForkJoinPool ... ForkJoinPool.commonPool();
++
+this might or might not be the better default
++
+ConcurrentTaskList however allows to provide a custom executor if needed. I believe the JDK does provide good ready to use executors, so that we don't need to write our own.
+
+Dan::
+OK, good enough for me.
+
+Andi::
+ConcurrentTaskList and its co-operator classes reside in the internal API section of the 'commons' module, however they don't follow the _ prefixed scheme. I was in conflict with whether to move them up in the package hierarchy to make them also official usable by Isis coders. I decided 'not-yet' so we might want to add the prefixes.
+
+Dan::
+Yes, I'd prefer that : "_" to mean internal.  If we do decide to make them formal API, we can refactor our internal code that uses it
+
+Andi::
+most simple usecase scenario ...
++
+[source,java]
+----
+val taskList = ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
+.addRunnable("Configure WebJars",            this::configureWebJars)
+.addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
+.addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);
+
+taskList.submit(ConcurrentContext.sequential()); // runs these tasks within provided execution context
+
+taskList.await(); // block current thread and wait for all tasks to complete
+----
++
+taskList also provides access to all the tasks it contains, and one can check their individual stati; this is also easily extensible
+
+
+Andi::
+any exceptions that occur in individual tasks are stored in their corresponding ConcurrentTask object, along with execution time;
++
+whether to log or not log a summary of the task list execution result is decided by a flag in the ConcurrentContext as provided to the submit method
++
+NOTE: I've recently learned, that with newer JDKs (unfortunately not in 8) one could emit flight recorder events to the JVM, such that you would see these events in eg. Java Mission Control. This would allow to record task execution timings directly to the JVM.
