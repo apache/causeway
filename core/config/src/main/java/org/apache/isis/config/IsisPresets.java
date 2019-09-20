@@ -19,75 +19,12 @@
 package org.apache.isis.config;
 
 /**
- * Introduced to support Spring's {@code @PropertySource} annotation.
+ * Supports Spring's {@code @PropertySource} annotation.
  * 
  * @since 2.0
  *
  */
 public final class IsisPresets  {
-
-//    public static final String ISIS_PERSISTOR                   = "isis.persistor.";
-//    public static final String ISIS_PERSISTOR_DATANUCLEUS       = ISIS_PERSISTOR + "datanucleus.";
-//    public static final String ISIS_PERSISTOR_DATANUCLEUS_IMPL  = ISIS_PERSISTOR_DATANUCLEUS + "impl.";
-
-//    @RequiredArgsConstructor
-//    private static enum Providers {
-//
-//        H2InMemory(Providers::withH2InMemoryProperties),
-//        HsqlDbInMemory(Providers::withHsqlDbInMemoryProperties),
-//        DataNucleusAutoCreate(Providers::withDataNucleusProperties),
-//        IsisIntegTest(Providers::withIsisIntegTestProperties),
-//        NoTranslations(map->map.put("isis.services.translation.po.mode", "disable")),
-//        ;
-//
-//        private final Consumer<Map<String, String>> populator;
-//
-//        private static Map<String,String> withH2InMemoryProperties(final Map<String, String> map) {
-//            //map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:h2:mem:test-" + UUID.randomUUID().toString());
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:h2:mem:test");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.h2.Driver");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
-//
-//            return map;
-//        }
-//
-//        private static Map<String,String> withHsqlDbInMemoryProperties(final Map<String, String> map) {
-//            //map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test-" + UUID.randomUUID().toString());
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
-//
-//            return map;
-//        }
-//
-//        private static Map<String,String> withDataNucleusProperties(final Map<String, String> map) {
-//
-//            // Don't do validations that consume setup time.
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.schema.autoCreateAll", "true");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.schema.validateAll", "false");
-//
-//            // other properties as per WEB-INF/persistor_datanucleus.properties
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.persistenceByReachabilityAtCommit", "false");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.identifier.case", "MixedCase");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.cache.level2.type"  ,"none");
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.cache.level2.mode", "ENABLE_SELECTIVE");
-//
-//            return map;
-//        }
-//
-//        private static Map<String,String> withIsisIntegTestProperties(final Map<String, String> map) {
-//
-//            // automatically install any fixtures that might have been registered
-//            map.put(ISIS_PERSISTOR_DATANUCLEUS + "install-fixtures", "true");
-//            map.put(ISIS_PERSISTOR + "enforceSafeSemantics", "false");
-//            map.put("isis.services.eventbus.allowLateRegistration", "true");
-//
-//            return map;
-//        }
-//
-//    }
 
     public static final String NoTranslations = "classpath:/presets/NoTranslations.properties";
     
@@ -96,8 +33,9 @@ public final class IsisPresets  {
     public static final String DataNucleusAutoCreate = "classpath:/presets/DataNucleusAutoCreate.properties";
     
     public static final String DebugPersistence = "classpath:/presets/DebugPersistence.properties";
-    public static final String DebugDiscovery = "logging.level.org.apache.isis.config.registry.IsisBeanTypeRegistry=DEBUG";
-    
+    public static final String DebugDiscovery = "classpath:/presets/DebugDiscovery.properties";
+    public static final String DebugProgrammingModel = "classpath:/presets/DebugProgrammingModel.properties";
+    public static final String DebugValidation = "classpath:/presets/DebugValidation.properties";
     
     /**
      * @deprecated seems no longer required anyway
@@ -105,28 +43,6 @@ public final class IsisPresets  {
     @Deprecated
     public static final String IsisIntegTest = "classpath:/presets/IsisIntegTest.properties";
     
-
-
-//    public static class Factory implements PropertySourceFactory {
-//
-//        @Override
-//        public PropertySource<?> createPropertySource(
-//                String name,
-//                EncodedResource resource) throws IOException {
-//
-//            val map = new HashMap<String, String>(); 
-//            Providers.valueOf(name).populator.accept(map);
-//
-//            val widenedMap = new HashMap<String, Object>();
-//            widenedMap.putAll(map);
-//
-//            val propSource = new MapPropertySource(name, widenedMap);
-//
-//            return propSource;
-//        }
-//
-//    }
-
     /**
      * Use PROTOTYPING mode as the default. Does not override if the system-property 
      * 'PROTOTYPING' was already set.

@@ -28,7 +28,10 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPo
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
-@Singleton
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@Singleton @Log4j2
 public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     @Override
@@ -44,12 +47,24 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
             _Lazy.threadSafe(this::createProgrammingModel);
 
     private ProgrammingModel createProgrammingModel() {
+        
+        log.debug("About to create the ProgrammingModel.");
 
-        final DeprecatedPolicy deprecatedPolicy = DeprecatedPolicy.parse(configuration);
+        val deprecatedPolicy = DeprecatedPolicy.parse(configuration);
 
-        final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava8(deprecatedPolicy);
+        val programmingModel = new ProgrammingModelFacetsJava8(deprecatedPolicy);
         ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
         ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
+        
+        if(log.isDebugEnabled()) {
+            
+            val facetFactoryCount = programmingModel.getList().size();
+            val postProcessorCount = programmingModel.getPostProcessors().size();
+            
+            log.debug("ProgrammingModel created with {} factories and {} post-processors.", 
+                    facetFactoryCount, postProcessorCount);    
+        }
+        
         return programmingModel;
     }
 

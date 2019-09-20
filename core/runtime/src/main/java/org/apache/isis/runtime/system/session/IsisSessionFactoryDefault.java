@@ -50,7 +50,6 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.runtime.system.MessageRegistry;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
-import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
@@ -67,7 +66,7 @@ import lombok.extern.log4j.Log4j2;
  * a thread-local.
  *
  * <p>
- *     The class can in considered as analogous to (and is in many ways a wrapper for) a JDO
+ *     The class is considered as analogous to (and is in many ways a wrapper for) a JDO
  *     <code>PersistenceManagerFactory</code>.
  * </p>
  *
@@ -110,7 +109,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         runtimeEventService.fireAppPreMetamodel();
 
         val taskList = ConcurrentTaskList.named("IsisSessionFactoryDefault Concurrent Tasks");
-        
+
         taskList.addRunnable("SpecificationLoader.init()", ()->{
             // time to initialize...
             specificationLoader.init();
@@ -146,84 +145,85 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         runtimeEventService.fireAppPostMetamodel();
 
         //initServicesAndRunFixtures();
+        //doInSession(this::initServices);
     }
 
-    @Override
-    public void initServices() {
+    private void initServices() {
 
-        doInSession(()->{
+        //
+        // postConstructInSession
+        //
 
-            //
-            // postConstructInSession
-            //
+        //            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
+        //            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
 
-            //            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
-            //            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
+        //
+        // translateServicesAndEnumConstants
+        //
+        val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
 
-            //
-            // translateServicesAndEnumConstants
-            //
-            val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
+        final Stream<Object> domainServices = serviceRegistry
+                .streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
+                .map(BeanAdapter::getInstance)
+                .filter(Bin::isCardinalityOne)
+                .map(Bin::getSingleton)
+                .map(Optional::get)
+                ;
 
-            final Stream<Object> domainServices = serviceRegistry
-                    .streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
-                    .map(BeanAdapter::getInstance)
-                    .filter(Bin::isCardinalityOne)
-                    .map(Bin::getSingleton)
-                    .map(Optional::get)
-                    ;
-
-            domainServices.forEach(domainService->{
-                final String unused = titleService.titleOf(domainService);
-                _Blackhole.consume(unused);
-            });
+        domainServices.forEach(domainService->{
+            final String unused = titleService.titleOf(domainService);
+            _Blackhole.consume(unused);
+        });
 
 
-            // (previously we took a protective copy to avoid a concurrent modification exception,
-            // but this is now done by SpecificationLoader itself)
-            for (final ObjectSpecification objSpec : IsisContext.getSpecificationLoader().currentSpecifications()) {
-                final Class<?> correspondingClass = objSpec.getCorrespondingClass();
-                if(correspondingClass.isEnum()) {
-                    final Object[] enumConstants = correspondingClass.getEnumConstants();
-                    for (Object enumConstant : enumConstants) {
-                        final String unused = titleService.titleOf(enumConstant);
-                        _Blackhole.consume(unused);
-                    }
+        // (previously we took a protective copy to avoid a concurrent modification exception,
+        // but this is now done by SpecificationLoader itself)
+        for (final ObjectSpecification objSpec : IsisContext.getSpecificationLoader().currentSpecifications()) {
+            final Class<?> correspondingClass = objSpec.getCorrespondingClass();
+            if(correspondingClass.isEnum()) {
+                final Object[] enumConstants = correspondingClass.getEnumConstants();
+                for (Object enumConstant : enumConstants) {
+                    final String unused = titleService.titleOf(enumConstant);
+                    _Blackhole.consume(unused);
                 }
             }
+        }
 
-            // as used by the Wicket UI
-            final TranslationService translationService = 
-                    serviceRegistry.lookupServiceElseFail(TranslationService.class);
+        // as used by the Wicket UI
+        final TranslationService translationService = 
+                serviceRegistry.lookupServiceElseFail(TranslationService.class);
 
-            final String context = IsisSessionFactory.class.getName();
-            final MessageRegistry messageRegistry = new MessageRegistry();
-            final List<String> messages = messageRegistry.listMessages();
-            for (String message : messages) {
-                translationService.translate(context, message);
+        final String context = IsisSessionFactory.class.getName();
+        final MessageRegistry messageRegistry = new MessageRegistry();
+        final List<String> messages = messageRegistry.listMessages();
+        for (String message : messages) {
+            translationService.translate(context, message);
+        }
+
+        // meta-model validation ...            
+        val mmDeficiencies = specificationLoader.validate().getDeficienciesIfAny(); 
+        if(mmDeficiencies!=null) {
+            // no need to use a higher level, such as error(...); the calling code will expose any metamodel
+            // validation errors in their own particular way.
+            if(log.isDebugEnabled()) {
+                log.debug("Meta model invalid", mmDeficiencies.getValidationErrorsAsString());
             }
-
-            // meta-model validation ...            
-            val mmDeficiencies = specificationLoader.validate().getDeficienciesIfAny(); 
-            if(mmDeficiencies!=null) {
-                // no need to use a higher level, such as error(...); the calling code will expose any metamodel
-                // validation errors in their own particular way.
-                if(log.isDebugEnabled()) {
-                    log.debug("Meta model invalid", mmDeficiencies.getValidationErrorsAsString());
-                }
-                _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
-            }
-
-        },
-                new InitialisationSession());
+            _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
+        }
 
     }
 
     @PreDestroy
-    @Override
-    public void destroyServicesAndShutdown() {
+    public void shutdown() {
         // call might originate from a different thread than main
-        shutdown();
+
+        // just in case we still have an open session, must also work if called from a different thread than 'main'
+        openSessions.forEach(IsisSession::close);
+        openSessions.clear();
+
+        runtimeEventService.fireAppPreDestroy();
+        authenticationManager.shutdown();
+        //specificationLoader.shutdown(); //[2112] lifecycle is managed by IoC
     }
 
     // -- 
@@ -301,17 +301,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         return authenticationManager;
     }
 
-    // -- HELPER
 
-    private void shutdown() {
-
-        // just in case we still have an open session, must also work if called from a different thread than 'main'
-        openSessions.forEach(IsisSession::close);
-        openSessions.clear();
-
-        runtimeEventService.fireAppPreDestroy();
-        authenticationManager.shutdown();
-        //specificationLoader.shutdown(); //[2112] lifecycle is managed by IoC
-    }
 
 }

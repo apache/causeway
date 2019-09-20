@@ -19,7 +19,6 @@
 package org.apache.isis.webapp;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -50,9 +49,9 @@ import lombok.extern.log4j.Log4j2;
  */
 //@WebListener //[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
 //with skinny war deployment requires additional configuration, so for now we disable this annotation
-@Log4j2 @Singleton
+@Log4j2 //@Singleton
 public class IsisWebAppContextListener implements ServletContextListener {
-
+    
     private @Inject ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned 
 
     // -- INTERFACE IMPLEMENTATION

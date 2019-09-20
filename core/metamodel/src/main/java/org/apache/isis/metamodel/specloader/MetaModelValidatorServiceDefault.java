@@ -32,11 +32,12 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposit
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorService;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0
  */
-@Singleton
+@Singleton @Log4j2
 public class MetaModelValidatorServiceDefault implements MetaModelValidatorService {
 
     @Override
@@ -55,7 +56,9 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
 
     private MetaModelValidator createMetaModelValidator() {
 
-        final String metaModelValidatorClassName =
+        log.debug("About to create the MetaModelValidator.");
+        
+        val metaModelValidatorClassName =
                 configuration.getString(
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
@@ -71,6 +74,14 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
         }
 
         programmingModel.refineMetaModelValidator(mmValidatorComposite);
+        
+        if(log.isDebugEnabled()) {
+            
+            val refinersCount = metaModelRefiners.size();
+            
+            log.debug("MetaModelValidator created with {} refiners.", 
+                    refinersCount);    
+        }
 
         return mmValidator;
     }

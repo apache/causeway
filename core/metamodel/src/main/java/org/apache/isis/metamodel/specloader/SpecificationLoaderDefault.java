@@ -28,7 +28,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.concurrent.ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;

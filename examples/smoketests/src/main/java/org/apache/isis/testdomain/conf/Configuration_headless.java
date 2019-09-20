@@ -57,43 +57,33 @@ public class Configuration_headless {
 
             @Override
             public TransactionId currentTransactionId() {
-                // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
             public void flushTransaction() {
-                // TODO Auto-generated method stub
-                
             }
 
             @Override
             public TransactionState currentTransactionState() {
-                // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
             public void executeWithinTransaction(Runnable task) {
-                // TODO Auto-generated method stub
-                
             }
 
             @Override
             public <T> T executeWithinTransaction(Supplier<T> task) {
-                // TODO Auto-generated method stub
                 return null;
             }
 
             @Override
             public void executeWithinNewTransaction(Runnable task) {
-                // TODO Auto-generated method stub
-                
             }
 
             @Override
             public <T> T executeWithinNewTransaction(Supplier<T> task) {
-                // TODO Auto-generated method stub
                 return null;
             }
 
@@ -106,20 +96,15 @@ public class Configuration_headless {
             
             @Override
             public void rollback(TransactionStatus status) throws TransactionException {
-                // TODO Auto-generated method stub
-                
             }
             
             @Override
             public TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
-                // TODO Auto-generated method stub
                 return null;
             }
             
             @Override
             public void commit(TransactionStatus status) throws TransactionException {
-                // TODO Auto-generated method stub
-                
             }
         };
     }

@@ -93,6 +93,8 @@ public interface MetaModelService {
         private static final int IGNORE_ABSTRACT_CLASSES = 4;
         private static final int IGNORE_BUILT_IN_VALUE_TYPES = 8;
         private static final int IGNORE_MIXINS = 16;
+        
+        private static final String WILDCARD = "*";
 
         private final int mask;
         
@@ -131,6 +133,16 @@ public interface MetaModelService {
             return new Config(mask | x, packagePrefixes);
         }
 
+        public Config withPackagePrefixAny() {
+            val newPrefixes = _Sets.<String>newHashSet();
+            newPrefixes.add(WILDCARD);
+            return new Config(mask, newPrefixes);
+        }
+        
+        public boolean isPackagePrefixAny() {
+            return packagePrefixes.contains(WILDCARD);
+        }
+        
         /**
          * Returns a new {@code Config} with given {@code packagePrefix} added to the set of 
          * this {@code Config}'s packagePrefixes.
