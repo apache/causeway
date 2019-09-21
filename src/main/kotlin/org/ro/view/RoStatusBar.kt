@@ -32,8 +32,8 @@ object RoStatusBar {
         }
     }
 
-    fun updatePower(by: String) {
-        powerLabel.content = by
+    fun brand(colorCode: String) {
+        navbar.setAttribute(name = "color", value = "#00FF00")
     }
 
     fun updateUser(user: String) {

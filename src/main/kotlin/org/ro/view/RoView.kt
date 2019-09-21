@@ -1,10 +1,9 @@
 package org.ro.view
 
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
+import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.panel.TabPanel
 import pl.treksoft.kvision.panel.VPanel
+
 
 object RoView {
     val tabPanel = TabPanel()
@@ -33,6 +32,15 @@ object RoView {
     fun removeTab(tab: VPanel) {
         tabPanel.remove(tab)
         tabCount--
+    }
+
+    fun updatePowered(by: String) {
+        val color = Col.GOLD
+        val bg = Background(
+                //image = "fa fa-cube"
+                color = color
+        )
+        tabPanel.background = bg
     }
 
 }

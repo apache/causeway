@@ -49,7 +49,8 @@ object UiManager {
     }
 
     fun updatePower(by: String) {
-        RoStatusBar.updatePower(by)
+        RoView.updatePowered(by)
+        RoStatusBar.brand("#FF00FF")
     }
 
     fun handleView(displayList: DisplayList) {
