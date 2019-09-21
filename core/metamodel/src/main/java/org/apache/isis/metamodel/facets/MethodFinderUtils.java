@@ -26,8 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import lombok.val;
 
 public final class MethodFinderUtils {
 
@@ -41,6 +44,8 @@ public final class MethodFinderUtils {
         }
         return method;
     }
+    
+    private static final _MethodCache methodCache = new _MethodCache(); //TODO could be share on the context
 
     /**
      * Returns a specific public methods that: have the specified prefix; have
@@ -60,13 +65,9 @@ public final class MethodFinderUtils {
             final String name,
             final Class<?> returnType,
             final Class<?>[] paramTypes) {
-
-        Method method;
-        try {
-            method = type.getMethod(name, paramTypes);
-        } catch (final SecurityException e) {
-            return null;
-        } catch (final NoSuchMethodException e) {
+        
+        val method = methodCache.lookupMethod(type, name, paramTypes);
+        if(method == null) {
             return null;
         }
 
@@ -104,6 +105,7 @@ public final class MethodFinderUtils {
 
         return method;
     }
+    
 
     public static Method findMethod(
             final Class<?> type,

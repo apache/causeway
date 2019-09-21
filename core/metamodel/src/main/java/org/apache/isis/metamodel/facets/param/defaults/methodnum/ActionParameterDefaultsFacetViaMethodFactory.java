@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.param.defaults.methodnum;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.metamodel.commons.ListExtensions;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -35,6 +35,8 @@ import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import lombok.val;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
@@ -94,38 +96,41 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
             FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, i, paramAsHolder));
         }
     }
-
+    
     /**
      * search successively for the default method, trimming number of param types each loop
      */
     private static Method findDefaultNumMethod(ProcessMethodContext processMethodContext, int n) {
+        
+        val cls = processMethodContext.getCls();
+        val actionMethod = processMethodContext.getMethod();
+        Class<?>[] paramTypes = actionMethod.getParameterTypes();
+        val returnType = paramTypes[n];
+        val capitalizedName =
+                MethodPrefixConstants.DEFAULT_PREFIX + n +
+                StringExtensions.asCapitalizedName(actionMethod.getName());
 
-        final Method actionMethod = processMethodContext.getMethod();
-        final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
-
-        final int numParamTypes = paramTypes.size();
-
-        for(int i=0; i< numParamTypes+1; i++) {
-            final Method method = findDefaultNumMethod(processMethodContext, n, paramTypes.toArray(new Class<?>[]{}));
+        for(;;) {
+            val method = MethodFinderUtils.findMethod(
+                    cls, 
+                    MethodScope.OBJECT, 
+                    capitalizedName, 
+                    returnType, 
+                    paramTypes);
+            
             if(method != null) {
                 return method;
             }
-            // remove last, and search again
-            if(!paramTypes.isEmpty()) {
-                paramTypes.remove(paramTypes.size()-1);
+            
+            if(paramTypes.length==0) {
+                break;
             }
+            
+            // remove last, and search again
+            paramTypes = _Arrays.removeByIndex(paramTypes, paramTypes.length-1);
         }
-
+        
         return null;
     }
-
-    private static Method findDefaultNumMethod(final ProcessMethodContext processMethodContext, int n, Class<?>[] paramTypes) {
-        final Class<?> cls = processMethodContext.getCls();
-        final Method actionMethod = processMethodContext.getMethod();
-        final Class<?> returnType = actionMethod.getParameterTypes()[n];
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + n + capitalizedName, returnType, paramTypes);
-    }
-
 
 }

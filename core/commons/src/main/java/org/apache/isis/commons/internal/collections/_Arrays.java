@@ -233,10 +233,10 @@ public final class _Arrays {
      * @return
      */
     public static <T> T[] removeByIndex(T[] array, int index) {
-        if(array==null || array.length<=1) {
+        if(array==null || array.length<1) {
             throw new IllegalArgumentException("Array must be of lenght 1 or larger.");
         }
-        if(index>=array.length) {
+        if(index<0 || index>=array.length) {
             val msg = String.format("Array index %d is out of bounds [0, %d]", index, array.length-1);
             throw new IllegalArgumentException(msg);
         }
