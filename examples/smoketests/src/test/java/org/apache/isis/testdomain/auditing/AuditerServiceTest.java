@@ -44,7 +44,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Depends on {@link SupportingMethodTest} to succeed.
+ * Depends on {@link DomainModelTest_usingGoodDomain} to succeed.
  */
 @SpringBootTest(
         classes = { 

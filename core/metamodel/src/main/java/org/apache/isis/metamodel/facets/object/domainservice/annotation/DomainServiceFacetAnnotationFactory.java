@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -40,57 +39,64 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValid
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
-public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+import lombok.val;
 
+public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract 
+implements MetaModelValidatorRefiner {
+
+    @Deprecated
     public static final String ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY =
             "isis.reflector.validator.serviceActionsOnly";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_DEFAULT = false;
+    public static final boolean ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_DEFAULT = true;
 
+    @Deprecated
     public static final String ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY =
             "isis.reflector.validator.mixinsOnly";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_DEFAULT = false;
+    public static final boolean ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_DEFAULT = true;
 
-    private MetaModelValidatorForValidationFailures mixinOnlyValidator = new MetaModelValidatorForValidationFailures();
+    private MetaModelValidatorForValidationFailures mixinOnlyValidator = 
+            new MetaModelValidatorForValidationFailures();
 
     public DomainServiceFacetAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
+    @SuppressWarnings("deprecation") // because we specifically want to handle deprecated enum use here
     @Override
     public void process(ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final DomainService annotation = Annotations.getAnnotation(cls, DomainService.class);
-        if (annotation == null) {
+        val cls = processClassContext.getCls();
+        val domainServiceAnnotation = Annotations.getAnnotation(cls, DomainService.class);
+        if (domainServiceAnnotation == null) {
             return;
         }
-        FacetHolder facetHolder = processClassContext.getFacetHolder();
-        DomainServiceFacet domainServiceFacet = new DomainServiceFacetAnnotation(
+        val facetHolder = processClassContext.getFacetHolder();
+        val domainServiceFacet = new DomainServiceFacetAnnotation(
                 facetHolder,
-                annotation.repositoryFor(), annotation.nature());
+                domainServiceAnnotation.repositoryFor(), domainServiceAnnotation.nature());
         FacetUtil.addFacet(domainServiceFacet);
 
 
         FacetUtil.addFacet(
                 new IconFacetDerivedFromDomainServiceAnnotation(
                         facetHolder,
-                        annotation.repositoryFor()));
+                        domainServiceAnnotation.repositoryFor()));
 
-
-        // the mixinOnlyValidator is only added if the config property is set.
-        switch (domainServiceFacet.getNatureOfService()) {
-        case VIEW:
-            mixinOnlyValidator.addFailure(
-                    Identifier.classIdentifier(cls),
-                    "%s: menu/contributed services (nature == VIEW) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
-                    cls.getName(), 
+        val natureOfService = domainServiceFacet.getNatureOfService();
+        
+        // Note: mixinOnlyValidator is only added to metaModelValidator if config option
+        // isis.reflector.validator.mixinsOnly == true
+        // see code at the end of #refineMetaModelValidator(...)
+        
+        switch (natureOfService) {
+        case VIEW_CONTRIBUTIONS_ONLY:
+            val msg = String.format("%s: menu/contributed services (nature == %s) are prohibited ('%s' config property);"
+                    + " convert into a mixin (@Mixin annotation) instead",
+                    cls.getName(),
+                    natureOfService,
                     ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
+            
+            mixinOnlyValidator.addFailure(Identifier.classIdentifier(cls), msg);
             break;
-            //TODO[2142] remove deprecated case          
-            //        case VIEW_CONTRIBUTIONS_ONLY:
-            //            mixinOnlyValidator.addFailure(
-            //                    "%s: contributed services (nature == VIEW_CONTRIBUTIONS_ONLY) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
-            //                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
-            //            break;
         default:
             // no op
         }
@@ -150,5 +156,6 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
         }
 
     }
+    
 
 }

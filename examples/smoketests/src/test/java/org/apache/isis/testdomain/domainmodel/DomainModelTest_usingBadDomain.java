@@ -28,6 +28,7 @@ import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
+import org.apache.isis.testdomain.model.bad.UnresolvableReferencedAction;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,25 +48,30 @@ import lombok.val;
     IsisPresets.DebugProgrammingModel,
     
 })
-class BadDomainTest {
+class DomainModelTest_usingBadDomain {
     
     @Test
-    void validationOnBadDomain_shouldFail() {
+    void ambiguousTitle_shouldFail() {
            
         val validateDomainModel = new ValidateDomainModel();
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
-        
-        val hasTitleConflict = validateDomainModel
-        .streamFailuresMatchingOriginatingClass(AmbiguousTitle.class)
-        .anyMatch(failure->
-            failure.getMessage().contains("conflict for determining a strategy for retrieval of title"));
-        
-        assertTrue(hasTitleConflict);
-        
+        assertTrue(validateDomainModel.anyMatchesContaining(
+                AmbiguousTitle.class, 
+                "conflict for determining a strategy for retrieval of title"));
     }
     
-    // -- HELPER
+    @Test
+    void unresolvableReferencedAction_shouldFail() {
+           
+        val validateDomainModel = new ValidateDomainModel();
+        
+        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertTrue(validateDomainModel.anyMatchesContaining(
+                UnresolvableReferencedAction.class, 
+                " ")); //TODO no validator written yet
+    }
+
     
     
 

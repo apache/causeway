@@ -92,6 +92,17 @@ public class ValidateDomainModel implements Runnable {
         return streamFailures(origin->origin.getClassName().equals(cls.getName()));
     }
     
+    // -- SHORTCUTS
+    
+    /**
+     * primarily used for testing 
+     */
+    public boolean anyMatchesContaining(Class<?> cls, String messageSnippet) {
+        return streamFailuresMatchingOriginatingClass(cls)
+                .anyMatch(failure->
+                    failure.getMessage().contains(messageSnippet));
+    }
+    
     // -- HELPER
     
     private void throwFailureException(String errorMessage, Collection<String> logMessages) {

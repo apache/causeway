@@ -18,8 +18,6 @@
  */
 package org.apache.isis.metamodel.facets;
 
-import org.apache.isis.metamodel.commons.StringExtensions;
-
 public class MethodPrefixConstants {
 
     public static final String GET_PREFIX = "get";
@@ -39,10 +37,9 @@ public class MethodPrefixConstants {
     public static final String DISABLE_PREFIX = "disable";
 
     public static final String VALIDATE_PREFIX = "validate";
-    public static final String VALIDATE_ADD_TO_PREFIX = VALIDATE_PREFIX + ADD_TO_PREFIX;
-    public static final String VALIDATE_ADD_TO_PREFIX_2 = VALIDATE_PREFIX + StringExtensions.capitalize(ADD_TO_PREFIX);
-    public static final String VALIDATE_REMOVE_FROM_PREFIX = VALIDATE_PREFIX + REMOVE_FROM_PREFIX;
-    public static final String VALIDATE_REMOVE_FROM_PREFIX_2 = VALIDATE_PREFIX + StringExtensions.capitalize(REMOVE_FROM_PREFIX);
+    
+    public static final String VALIDATE_ADD_TO_PREFIX = "validateAddTo";
+    public static final String VALIDATE_REMOVE_FROM_PREFIX = "validateRemoveFrom";
 
     public static final String CREATED_PREFIX = "created";
     public static final String LOADED_PREFIX = "loaded";

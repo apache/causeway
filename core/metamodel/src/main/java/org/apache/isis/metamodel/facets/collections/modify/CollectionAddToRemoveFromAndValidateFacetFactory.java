@@ -140,13 +140,6 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
                 new Class<?>[]{String.class, TranslatableString.class},
                 paramTypes);
         if (validateAddToMethod == null) {
-            validateAddToMethod = MethodFinderUtils.findMethod(
-                    cls, MethodScope.OBJECT,
-                    MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX_2 + capitalizedName,
-                    new Class<?>[]{String.class, TranslatableString.class},
-                    MethodFinderUtils.paramTypesOrNull(collectionType));
-        }
-        if (validateAddToMethod == null) {
             return;
         }
         processMethodContext.removeMethod(validateAddToMethod);
@@ -172,13 +165,6 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
                 MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX + capitalizedName,
                 new Class<?>[]{String.class, TranslatableString.class},
                 paramTypes);
-        if (validateRemoveFromMethod == null) {
-            validateRemoveFromMethod = MethodFinderUtils.findMethod(
-                    cls, MethodScope.OBJECT,
-                    MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX_2 + capitalizedName,
-                    new Class<?>[]{String.class, TranslatableString.class},
-                    MethodFinderUtils.paramTypesOrNull(collectionType));
-        }
         if (validateRemoveFromMethod == null) {
             return;
         }

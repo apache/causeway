@@ -27,9 +27,14 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
+import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
+import org.apache.isis.testdomain.model.bad.UnresolvableReferencedAction;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -39,14 +44,15 @@ import lombok.val;
                 Configuration_usingValidDomain.class
         }, 
         properties = {
-                "isis.reflector.introspector.mode=FULL"
+                "isis.reflector.introspector.mode=FULL",
+                "isis.reflector.validator.explicitObjectType=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
     IsisPresets.DebugValidation,
     IsisPresets.DebugProgrammingModel,
     
 })
-class SupportingMethodTest {
+class DomainModelTest_usingGoodDomain {
     
     @Inject private MetaModelService metaModelService;
     
@@ -80,8 +86,14 @@ class SupportingMethodTest {
         
         System.out.println("!!! ---");
         
-        new ValidateDomainModel().run();
+        val validateDomainModel = new ValidateDomainModel();
+        
+        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertTrue(validateDomainModel.anyMatchesContaining(
+                UnresolvableReferencedAction.class, 
+                "conflict for determining a strategy for retrieval of title"));
         
     }
+    
 
 }
