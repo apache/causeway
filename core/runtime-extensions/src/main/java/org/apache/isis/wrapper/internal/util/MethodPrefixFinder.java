@@ -22,7 +22,56 @@ package org.apache.isis.wrapper.internal.util;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
-public final class MethodPrefixFinder {
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.ADD_TO_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.CHOICES_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.CLEAR_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.DEFAULT_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.DISABLE_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.GET_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.HIDE_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.MODIFY_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.REMOVE_FROM_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.SET_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.VALIDATE_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX;
+
+@Deprecated //no longer used
+final class MethodPrefixFinder {
+    
+    public final static String TITLE_METHOD_NAME = "title";
+    public final static String TO_STRING_METHOD_NAME = "toString";
+
+
+    public final static String[] PROPERTY_PREFIXES = { 
+            GET_PREFIX, 
+            SET_PREFIX, 
+            MODIFY_PREFIX, 
+            CLEAR_PREFIX, 
+            DISABLE_PREFIX, 
+            VALIDATE_PREFIX, 
+            HIDE_PREFIX, 
+            DEFAULT_PREFIX, 
+            CHOICES_PREFIX };
+    
+    public final static String[] COLLECTION_PREFIXES = { 
+            GET_PREFIX, 
+            SET_PREFIX, 
+            ADD_TO_PREFIX, 
+            REMOVE_FROM_PREFIX, 
+            DISABLE_PREFIX, 
+            VALIDATE_ADD_TO_PREFIX, 
+            VALIDATE_REMOVE_FROM_PREFIX, 
+            HIDE_PREFIX, 
+            DEFAULT_PREFIX, 
+            CHOICES_PREFIX };
+    
+    public final static String[] ACTION_PREFIXES = { 
+            VALIDATE_PREFIX, 
+            DISABLE_PREFIX, 
+            HIDE_PREFIX, 
+            DEFAULT_PREFIX,
+            CHOICES_PREFIX, };
 
     // a Linked Hash Set is used to ensure that the ordering is preserved.
     public final static LinkedHashSet<String> ALL_PREFIXES = new LinkedHashSet<String>() {
@@ -30,9 +79,9 @@ public final class MethodPrefixFinder {
         {
             // collection prefixes are added first because we want to
             // test validateAddTo and validateRemoveFrom before validate
-            addAll(Arrays.asList(Constants.COLLECTION_PREFIXES));
-            addAll(Arrays.asList(Constants.PROPERTY_PREFIXES));
-            addAll(Arrays.asList(Constants.ACTION_PREFIXES));
+            addAll(Arrays.asList(COLLECTION_PREFIXES));
+            addAll(Arrays.asList(PROPERTY_PREFIXES));
+            addAll(Arrays.asList(ACTION_PREFIXES));
         }
     };
 
