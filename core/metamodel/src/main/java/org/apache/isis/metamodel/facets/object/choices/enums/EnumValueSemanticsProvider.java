@@ -76,10 +76,10 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
                 EqualByContent.HONOURED,
                 defaultFor(adaptedClass));
 
-        titleMethod = MethodFinderUtils.findMethod(
-                getAdaptedClass(), MethodScope.OBJECT,
+        titleMethod = MethodFinderUtils.findMethod_returningText(
+                getAdaptedClass(), 
+                MethodScope.OBJECT,
                 TITLE,
-                new Class<?>[]{String.class, TranslatableString.class},
                 null);
 
     }

@@ -29,13 +29,13 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 public class DisableForSessionFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.DISABLE_PREFIX };
 
 
     /**
@@ -63,7 +63,7 @@ public class DisableForSessionFacetViaMethodFactory extends MethodPrefixBasedFac
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method disableForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, new Class[] { UserMemento.class });
+        final Method disableForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodLiteralConstants.DISABLE_PREFIX + capitalizedName, String.class, new Class[] { UserMemento.class });
 
         if (disableForSessionMethod == null) {
             return;

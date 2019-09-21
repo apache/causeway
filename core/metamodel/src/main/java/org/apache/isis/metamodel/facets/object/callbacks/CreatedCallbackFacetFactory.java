@@ -29,12 +29,12 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.CREATED_PREFIX, };
+    private static final String[] PREFIXES = { MethodLiteralConstants.CREATED_PREFIX, };
 
     public CreatedCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -49,7 +49,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             facets.add(new CreatedCallbackFacetViaMethod(method, holder));

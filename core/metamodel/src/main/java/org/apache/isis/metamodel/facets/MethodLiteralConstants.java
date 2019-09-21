@@ -18,7 +18,13 @@
  */
 package org.apache.isis.metamodel.facets;
 
-public class MethodPrefixConstants {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class MethodLiteralConstants {
+    
+    // -- PREFIXES
 
     public static final String GET_PREFIX = "get";
     public static final String IS_PREFIX = "is";
@@ -35,7 +41,6 @@ public class MethodPrefixConstants {
     public static final String HIDE_PREFIX = "hide";
 
     public static final String DISABLE_PREFIX = "disable";
-
     public static final String VALIDATE_PREFIX = "validate";
     
     public static final String VALIDATE_ADD_TO_PREFIX = "validateAddTo";
@@ -54,5 +59,12 @@ public class MethodPrefixConstants {
     public static final String REMOVING_PREFIX = "removing";
     public static final String UPDATED_PREFIX = "updated";
     public static final String UPDATING_PREFIX = "updating";
+    
+    // -- LITERALS
+    
+    public static final String DISABLED = "disabled"; // for batch disabling all members
+    public static final String TITLE = "title";
+    public static final String TO_STRING = "toString";
+    
 
 }

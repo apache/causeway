@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.object.validating.validateobject.method
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -31,9 +30,9 @@ import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
-public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_PREFIX;
 
-    private static final String VALIDATE_PREFIX = "validate";
+public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { VALIDATE_PREFIX, };
 
@@ -46,10 +45,9 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(
+        final Method method = MethodFinderUtils.findMethod_returningText(
                 cls, MethodScope.OBJECT,
                 VALIDATE_PREFIX,
-                new Class<?>[]{String.class, TranslatableString.class},
                 NO_PARAMETERS_TYPES);
         if (method != null) {
             final TranslationService translationService = getTranslationService();

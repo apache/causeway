@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.members.disabled.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -30,14 +29,14 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.DISABLE_PREFIX };
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -71,18 +70,16 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         boolean searchExactMatch = !noParamsOnly;
         if(searchExactMatch) {
             // search for exact match
-            disableMethod = MethodFinderUtils.findMethod(
+            disableMethod = MethodFinderUtils.findMethod_returningText(
                     cls, MethodScope.OBJECT,
-                    MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
-                    new Class<?>[]{String.class, TranslatableString.class},
+                    MethodLiteralConstants.DISABLE_PREFIX + capitalizedName,
                     method.getParameterTypes());
         }
         if (disableMethod == null) {
             // search for no-arg version
-            disableMethod = MethodFinderUtils.findMethod(
+            disableMethod = MethodFinderUtils.findMethod_returningText(
                     cls, MethodScope.OBJECT,
-                    MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
-                    new Class<?>[]{String.class, TranslatableString.class},
+                    MethodLiteralConstants.DISABLE_PREFIX + capitalizedName,
                     new Class<?>[0]);
         }
         if (disableMethod == null) {

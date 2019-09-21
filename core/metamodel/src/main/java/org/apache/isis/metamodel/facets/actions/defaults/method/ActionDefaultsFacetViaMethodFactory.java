@@ -30,7 +30,7 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 /**
@@ -38,7 +38,7 @@ import org.apache.isis.metamodel.methodutils.MethodScope;
  */
 public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.DEFAULT_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.DEFAULT_PREFIX };
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -79,7 +79,7 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final String name = MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName;
+        final String name = MethodLiteralConstants.DEFAULT_PREFIX + capitalizedName;
 
         final Class<?> cls = processMethodContext.getCls();
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, _Constants.emptyClasses);

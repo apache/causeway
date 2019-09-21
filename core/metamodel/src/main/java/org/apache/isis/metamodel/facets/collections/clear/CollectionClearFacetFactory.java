@@ -27,13 +27,13 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.CLEAR_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.CLEAR_PREFIX };
 
 
     public CollectionClearFacetFactory() {
@@ -52,7 +52,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName, void.class, null);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CLEAR_PREFIX + capitalizedName, void.class, null);
         processMethodContext.removeMethod(method);
 
         final FacetHolder collection = processMethodContext.getFacetHolder();

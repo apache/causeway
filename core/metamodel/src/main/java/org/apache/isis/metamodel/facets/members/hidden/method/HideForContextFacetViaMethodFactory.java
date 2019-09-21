@@ -28,13 +28,13 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.HIDE_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.HIDE_PREFIX };
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -59,7 +59,7 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        Method hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
+        Method hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
         if (hideMethod == null) {
 
             boolean noParamsOnly = getConfiguration().getBoolean(
@@ -67,7 +67,7 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
                     ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
-                hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, getMethod.getParameterTypes());
+                hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, getMethod.getParameterTypes());
             }
         }
 

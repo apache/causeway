@@ -29,12 +29,14 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.REMOVED_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.REMOVING_PREFIX;
 
 public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.REMOVED_PREFIX, MethodPrefixConstants.REMOVING_PREFIX, };
+    private static final String[] PREFIXES = { REMOVED_PREFIX, REMOVING_PREFIX, };
 
     public RemoveCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -49,7 +51,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = MethodFinderUtils
-                .findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVING_PREFIX, void.class,
+                .findMethod(cls, MethodScope.OBJECT, REMOVING_PREFIX, void.class,
                         NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
@@ -61,7 +63,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final RemovedCallbackFacet facet = facetHolder.getFacet(RemovedCallbackFacet.class);

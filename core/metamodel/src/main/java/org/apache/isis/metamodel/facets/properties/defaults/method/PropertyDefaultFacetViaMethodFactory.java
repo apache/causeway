@@ -27,12 +27,12 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.DEFAULT_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.DEFAULT_PREFIX };
 
 
     public PropertyDefaultFacetViaMethodFactory() {
@@ -52,7 +52,7 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName, returnType, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.DEFAULT_PREFIX + capitalizedName, returnType, NO_PARAMETERS_TYPES);
         if (method == null) {
             return;
         }

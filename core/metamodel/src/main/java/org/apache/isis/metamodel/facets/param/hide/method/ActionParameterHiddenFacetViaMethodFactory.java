@@ -30,17 +30,19 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+
+import lombok.val;
 
 /**
  * Sets up {@link ActionParameterHiddenFacet}.
  */
 public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.HIDE_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.HIDE_PREFIX };
 
     public ActionParameterHiddenFacetViaMethodFactory() {
         super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -59,16 +61,16 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
         final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
-        final String hideName = MethodPrefixConstants.HIDE_PREFIX + param + capitalizedName;
+        final String hideName = MethodLiteralConstants.HIDE_PREFIX + param + capitalizedName;
 
         final int numParamTypes = paramTypes.size();
 
         for(int i=0; i< numParamTypes+1; i++) {
-            final Method hideMethod = MethodFinderUtils.findMethod(
+            val hideMethod = MethodFinderUtils.findMethod(
                     cls, onClass,
                     hideName,
-                    new Class<?>[]{boolean.class},
-                    paramTypes.toArray(new Class<?>[]{}));
+                    boolean.class,
+                    NO_PARAMETERS_TYPES);
 
             if (hideMethod != null) {
                 processParameterContext.removeMethod(hideMethod);

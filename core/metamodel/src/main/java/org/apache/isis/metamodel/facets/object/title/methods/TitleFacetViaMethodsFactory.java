@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -33,10 +32,10 @@ import org.apache.isis.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
-public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.TITLE;
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.TO_STRING;
 
-    private static final String TO_STRING = "toString";
-    private static final String TITLE = "title";
+public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { TO_STRING, TITLE, };
 
@@ -53,11 +52,10 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        Method method = MethodFinderUtils.findMethod(
+        Method method = MethodFinderUtils.findMethod_returningText(
                 cls, MethodScope.OBJECT,
                 TITLE,
-                new Class<?>[]{String.class, TranslatableString.class},
-                null);
+                NO_PARAMETERS_TYPES);
         if (method != null) {
             processClassContext.removeMethod(method);
             final TranslationService translationService = getTranslationService();

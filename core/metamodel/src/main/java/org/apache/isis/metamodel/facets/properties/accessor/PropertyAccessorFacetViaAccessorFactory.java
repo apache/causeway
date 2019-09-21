@@ -26,14 +26,14 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.GET_PREFIX, MethodPrefixConstants.IS_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.GET_PREFIX, MethodLiteralConstants.IS_PREFIX };
 
     public PropertyAccessorFacetViaAccessorFactory() {
         super(FeatureType.PROPERTIES_ONLY, PREFIXES);
@@ -64,10 +64,10 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
     @Override
     public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
         final String methodName = method.getName();
-        if (methodName.startsWith(MethodPrefixConstants.GET_PREFIX)) {
+        if (methodName.startsWith(MethodLiteralConstants.GET_PREFIX)) {
             return true;
         }
-        if (methodName.startsWith(MethodPrefixConstants.IS_PREFIX) && method.getReturnType() == boolean.class) {
+        if (methodName.startsWith(MethodLiteralConstants.IS_PREFIX) && method.getReturnType() == boolean.class) {
             return true;
         }
         return false;
@@ -93,8 +93,8 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
 
     @Override
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-        appendMatchingMethods(methodRemover, MethodPrefixConstants.IS_PREFIX, boolean.class, methodListToAppendTo);
-        appendMatchingMethods(methodRemover, MethodPrefixConstants.GET_PREFIX, Object.class, methodListToAppendTo);
+        appendMatchingMethods(methodRemover, MethodLiteralConstants.IS_PREFIX, boolean.class, methodListToAppendTo);
+        appendMatchingMethods(methodRemover, MethodLiteralConstants.GET_PREFIX, Object.class, methodListToAppendTo);
     }
 
     private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix, final Class<?> returnType, final List<Method> methodListToAppendTo) {

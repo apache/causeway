@@ -27,12 +27,12 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.CHOICES_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.CHOICES_PREFIX };
 
     public PropertyChoicesFacetViaMethodFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -51,7 +51,7 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method choicesMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CHOICES_PREFIX + capitalizedName, (Class<?>)null, NO_PARAMETERS_TYPES);
+        final Method choicesMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CHOICES_PREFIX + capitalizedName, (Class<?>)null, NO_PARAMETERS_TYPES);
         if (choicesMethod == null) {
             return;
         }

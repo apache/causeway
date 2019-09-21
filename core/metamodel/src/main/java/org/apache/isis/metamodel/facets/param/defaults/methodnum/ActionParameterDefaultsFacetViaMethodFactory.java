@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -107,7 +107,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         Class<?>[] paramTypes = actionMethod.getParameterTypes();
         val returnType = paramTypes[n];
         val capitalizedName =
-                MethodPrefixConstants.DEFAULT_PREFIX + n +
+                MethodLiteralConstants.DEFAULT_PREFIX + n +
                 StringExtensions.asCapitalizedName(actionMethod.getName());
 
         for(;;) {

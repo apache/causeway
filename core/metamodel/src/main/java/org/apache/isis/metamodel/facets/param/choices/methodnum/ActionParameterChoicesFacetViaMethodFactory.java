@@ -34,7 +34,7 @@ import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -135,7 +135,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final String name = MethodPrefixConstants.CHOICES_PREFIX + n + capitalizedName;
+        final String name = MethodLiteralConstants.CHOICES_PREFIX + n + capitalizedName;
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, paramTypes);
     }
 

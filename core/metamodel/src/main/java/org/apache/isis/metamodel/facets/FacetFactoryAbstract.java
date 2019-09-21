@@ -26,7 +26,7 @@ import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 
 public abstract class FacetFactoryAbstract implements FacetFactory, MetaModelContext.Delegating {
-
+    
     private final List<FeatureType> featureTypes;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
@@ -50,7 +50,11 @@ public abstract class FacetFactoryAbstract implements FacetFactory, MetaModelCon
     public void processParams(final ProcessParameterContext processParameterContext) {
     }
 
-    // -- dependencies
+    // -- METHOD UTILITITES
+    
+    protected static final Class<?>[] NO_PARAMETERS_TYPES = new Class<?>[0];
+    
+    // -- DEPENDENCIES
 
     @Override
     public MetaModelContext getMetaModelContext() {

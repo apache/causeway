@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaClearMethod;
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
@@ -37,7 +37,7 @@ import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.SET_PREFIX, MethodPrefixConstants.CLEAR_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.SET_PREFIX, MethodLiteralConstants.CLEAR_PREFIX };
 
     public PropertySetAndClearFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -66,7 +66,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        final Method setMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
+        final Method setMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
@@ -92,7 +92,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final FacetHolder property = processMethodContext.getFacetHolder();
 
         final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
-        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
+        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
 
         if (clearMethod == null) {
             return null;

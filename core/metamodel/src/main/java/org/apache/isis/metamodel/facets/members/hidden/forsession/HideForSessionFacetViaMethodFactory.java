@@ -29,13 +29,13 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 public class HideForSessionFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.HIDE_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.HIDE_PREFIX };
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -64,7 +64,7 @@ public class HideForSessionFacetViaMethodFactory extends MethodPrefixBasedFacetF
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method hideForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] { UserMemento.class });
+        final Method hideForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] { UserMemento.class });
 
         if (hideForSessionMethod == null) {
             return;

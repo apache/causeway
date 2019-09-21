@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.metamodel.methodutils.MethodScope;
@@ -36,7 +36,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 public class CollectionAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.GET_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.GET_PREFIX };
 
     public CollectionAccessorFacetViaAccessorFactory() {
         super(FeatureType.COLLECTIONS_ONLY, PREFIXES);
@@ -69,7 +69,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
-        return method.getName().startsWith(MethodPrefixConstants.GET_PREFIX);
+        return method.getName().startsWith(MethodLiteralConstants.GET_PREFIX);
     }
 
     @Override
@@ -96,7 +96,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
             final List<Method> methodListToAppendTo) {
 
         final List<Method> list =
-                methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX,
+                methodRemover.removeMethods(MethodScope.OBJECT, MethodLiteralConstants.GET_PREFIX,
                         Collection.class, false, 0);
         methodListToAppendTo.addAll(list);
     }

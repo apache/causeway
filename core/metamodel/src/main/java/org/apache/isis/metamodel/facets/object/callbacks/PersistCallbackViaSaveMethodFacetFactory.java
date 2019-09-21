@@ -29,12 +29,12 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.SAVED_PREFIX, MethodPrefixConstants.SAVING_PREFIX, };
+    private static final String[] PREFIXES = { MethodLiteralConstants.SAVED_PREFIX, MethodLiteralConstants.SAVING_PREFIX, };
 
     public PersistCallbackViaSaveMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -49,7 +49,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final PersistingCallbackFacet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
@@ -60,7 +60,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final PersistedCallbackFacet facet = facetHolder.getFacet(PersistedCallbackFacet.class);

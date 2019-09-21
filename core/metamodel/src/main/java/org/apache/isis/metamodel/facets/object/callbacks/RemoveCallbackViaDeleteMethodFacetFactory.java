@@ -29,12 +29,15 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.DELETED_PREFIX;
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.DELETING_PREFIX;
 
 public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.DELETED_PREFIX, MethodPrefixConstants.DELETING_PREFIX, };
+    private static final String[] PREFIXES = { DELETED_PREFIX, DELETING_PREFIX, };
 
     public RemoveCallbackViaDeleteMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -49,7 +52,7 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DELETING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DELETING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final RemovingCallbackFacet facet = holder.getFacet(RemovingCallbackFacet.class);
@@ -60,7 +63,7 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DELETED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DELETED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final RemovedCallbackFacet facet = holder.getFacet(RemovedCallbackFacet.class);

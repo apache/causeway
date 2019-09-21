@@ -27,13 +27,13 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.MODIFY_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.MODIFY_PREFIX };
 
     public PropertyModifyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -54,7 +54,7 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final Class<?>[] paramTypes = new Class[] { returnType };
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method modifyMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
+        final Method modifyMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
 
         if (modifyMethod == null) {
             return;

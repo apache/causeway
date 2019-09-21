@@ -87,11 +87,10 @@ class DomainModelTest_usingGoodDomain {
         System.out.println("!!! ---");
         
         val validateDomainModel = new ValidateDomainModel();
+        validateDomainModel.run(); // should not throw
         
-        assertThrows(DomainModelException.class, validateDomainModel::run);
-        assertTrue(validateDomainModel.anyMatchesContaining(
-                UnresolvableReferencedAction.class, 
-                "conflict for determining a strategy for retrieval of title"));
+        //ReservedPrefixedMember
+ 
         
     }
     

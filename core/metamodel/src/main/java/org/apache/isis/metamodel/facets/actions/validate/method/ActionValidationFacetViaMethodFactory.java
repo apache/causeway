@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.actions.validate.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -29,8 +28,8 @@ import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -39,7 +38,7 @@ import org.apache.isis.metamodel.methodutils.MethodScope;
  */
 public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
+    private static final String[] PREFIXES = { MethodLiteralConstants.VALIDATE_PREFIX };
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -68,10 +67,9 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
         final Class<?>[] paramTypes = actionMethod.getParameterTypes();
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
-        final Method validateMethod = MethodFinderUtils.findMethod(
+        final Method validateMethod = MethodFinderUtils.findMethod_returningText(
                 cls, onClass,
-                MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName,
-                new Class<?>[]{String.class, TranslatableString.class},
+                MethodLiteralConstants.VALIDATE_PREFIX + capitalizedName,
                 paramTypes);
         if (validateMethod == null) {
             return;
@@ -97,11 +95,10 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
         final Class<?>[] paramTypes = actionMethod.getParameterTypes();
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
-        final String validateName = MethodPrefixConstants.VALIDATE_PREFIX + param + capitalizedName;
-        final Method validateMethod = MethodFinderUtils.findMethod(
+        final String validateName = MethodLiteralConstants.VALIDATE_PREFIX + param + capitalizedName;
+        final Method validateMethod = MethodFinderUtils.findMethod_returningText(
                 cls, onClass,
                 validateName,
-                new Class<?>[]{String.class, TranslatableString.class},
                 new Class<?>[]{paramTypes[param]});
         if (validateMethod == null) {
             return;

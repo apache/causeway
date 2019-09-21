@@ -24,8 +24,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
+import java.util.Optional;import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.reflection._MethodCache;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.methodutils.MethodScope;
@@ -45,8 +44,6 @@ public final class MethodFinderUtils {
         return method;
     }
     
-    //private static final _MethodCache methodCache = new _MethodCache(); //TODO could be share on the context
-
     /**
      * Returns a specific public methods that: have the specified prefix; have
      * the specified return type (or some subtype), and has the
@@ -109,15 +106,15 @@ public final class MethodFinderUtils {
         return method;
     }
     
-
-    public static Method findMethod(
+    public static Method findMethod_returningAnyOf(
+            final Class<?>[] returnTypes,
             final Class<?> type,
             final MethodScope methodScope,
             final String name,
-            final Class<?>[] returnTypes,
             final Class<?>[] paramTypes) {
-        for (Class<?> returnType : returnTypes) {
-            final Method method = findMethod(type, methodScope, name, returnType, paramTypes);
+        
+        for (val returnType : returnTypes) {
+            val method = findMethod(type, methodScope, name, returnType, paramTypes);
             if(method != null) {
                 return method;
             }
@@ -236,6 +233,21 @@ public final class MethodFinderUtils {
         }
         postConstructMethods.put(clz, nullableMethod);
         return nullableMethod;
+    }
+
+    // -- SHORTCUTS
+    
+    public static final Class<?>[] TEXT_TYPES = new Class<?>[]{
+        String.class, 
+        TranslatableString.class};
+
+    
+    public static Method findMethod_returningText(
+            final Class<?> type,
+            final MethodScope methodScope,
+            final String name,
+            final Class<?>[] paramTypes) {
+        return findMethod_returningAnyOf(TEXT_TYPES, type, methodScope, name, paramTypes);
     }
 
 }

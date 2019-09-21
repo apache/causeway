@@ -23,13 +23,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -47,8 +45,6 @@ implements MethodPrefixBasedFacetFactory {
 
     private final List<String> prefixes;
 
-    protected static final Class<?>[] NO_PARAMETERS_TYPES = new Class<?>[0];
-
     private final OrphanValidation orphanValidation;
 
     protected enum OrphanValidation {
@@ -61,7 +57,7 @@ implements MethodPrefixBasedFacetFactory {
         this.orphanValidation = orphanValidation;
         this.prefixes = Collections.unmodifiableList(Arrays.asList(prefixes));
     }
-
+    
     @Override
     public List<String> getPrefixes() {
         return prefixes;
@@ -77,24 +73,27 @@ implements MethodPrefixBasedFacetFactory {
             @Override
             public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
 
-                boolean noParamsOnly = _Config.getConfiguration().getBoolean(
-                        MethodPrefixBasedFacetFactoryAbstract.ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
-                        MethodPrefixBasedFacetFactoryAbstract.ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
+                final boolean noParamsOnly = _Config.getConfiguration().getBoolean(
+                        ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
+                        ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
 
-                final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
-                objectActions.forEach(objectAction->{
+                val objectActionStream = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+                
+                objectActionStream.forEach(objectAction->{
                     for (final String prefix : prefixes) {
                         String actionId = objectAction.getId();
 
                         if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
 
                             val explanation =
-                                    objectAction.getParameterCount() > 0 && noParamsOnly &&
-                                    (Objects.equals(prefix, MethodPrefixConstants.HIDE_PREFIX) || Objects.equals(prefix, MethodPrefixConstants.DISABLE_PREFIX))
+                                    objectAction.getParameterCount() > 0 && 
+                                    noParamsOnly &&
+                                    (Objects.equals(prefix, MethodLiteralConstants.HIDE_PREFIX) || 
+                                            Objects.equals(prefix, MethodLiteralConstants.DISABLE_PREFIX))
                                     ? " (note that such methods must have no parameters, '"
-                                    + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
-                                    + "' config property)"
-                                    : "";
+                                        + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
+                                        + "' config property)"
+                                            : "";
 
                             val message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
                             validationFailures.add(
@@ -112,4 +111,5 @@ implements MethodPrefixBasedFacetFactory {
             }
         }));
     }
+
 }

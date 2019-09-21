@@ -31,8 +31,8 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
@@ -95,8 +95,13 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final String name = MethodPrefixConstants.AUTO_COMPLETE_PREFIX + paramNum + capitalizedName;
-        return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnTypes, new Class[]{String.class});
+        final String name = MethodLiteralConstants.AUTO_COMPLETE_PREFIX + paramNum + capitalizedName;
+        return MethodFinderUtils.findMethod_returningAnyOf(
+                returnTypes,
+                cls, 
+                MethodScope.OBJECT, 
+                name, 
+                new Class[]{String.class});
     }
 
 }

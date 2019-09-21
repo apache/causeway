@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.properties.validating.method;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -29,12 +28,13 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.VALIDATE_PREFIX;
 
 public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
+    private static final String[] PREFIXES = { VALIDATE_PREFIX };
 
     public PropertyValidateFacetViaMethodFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -55,10 +55,9 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         final Class<?>[] paramTypes = new Class[] { returnType };
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method method = MethodFinderUtils.findMethod(
+        final Method method = MethodFinderUtils.findMethod_returningText(
                 cls, MethodScope.OBJECT,
-                MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName,
-                new Class<?>[]{String.class, TranslatableString.class},
+                VALIDATE_PREFIX + capitalizedName,
                 paramTypes);
         if (method == null) {
             return;

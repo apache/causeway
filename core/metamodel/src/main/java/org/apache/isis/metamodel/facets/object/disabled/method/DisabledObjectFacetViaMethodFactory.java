@@ -19,12 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.disabled.method;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
@@ -35,6 +30,10 @@ import org.apache.isis.metamodel.facets.object.disabled.DisabledObjectFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
+
+import static org.apache.isis.metamodel.facets.MethodLiteralConstants.DISABLED;
+
+import lombok.val;
 
 /**
  * Installs the {@link DisabledObjectFacetViaMethod} on the
@@ -49,9 +48,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectMember;
  */
 public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String DISABLED_PREFIX = "disabled";
-
-    private static final String[] PREFIXES = { DISABLED_PREFIX, };
+    private static final String[] PREFIXES = { DISABLED };
 
     public DisabledObjectFacetViaMethodFactory() {
         super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
@@ -59,22 +56,20 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        final Class<?>[] paramTypes = new Class<?>[1];
-        paramTypes[0] = Identifier.Type.class;// String.class;
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val paramTypes = new Class<?>[] {Identifier.Type.class};
 
-        final Method method = MethodFinderUtils.findMethod(
-                cls, MethodScope.OBJECT, DISABLED_PREFIX,
-                new Class<?>[]{String.class, TranslatableString.class},
+        val method = MethodFinderUtils.findMethod_returningText(
+                cls, MethodScope.OBJECT, DISABLED,
                 paramTypes);
         if (method == null) {
             return;
         }
 
-        final TranslationService translationService = getTranslationService();
+        val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
-        final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+        val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
         FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
 
         processClassContext.removeMethod(method);

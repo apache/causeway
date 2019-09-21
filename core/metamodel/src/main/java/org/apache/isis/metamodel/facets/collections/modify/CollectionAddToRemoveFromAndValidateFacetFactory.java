@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
@@ -31,8 +30,8 @@ import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
 import org.apache.isis.metamodel.methodutils.MethodScope;
@@ -66,11 +65,11 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         final Class<?> cls = processMethodContext.getCls();
 
         // add
-        final Method addToMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.ADD_TO_PREFIX + capitalizedName, void.class);
+        final Method addToMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.ADD_TO_PREFIX + capitalizedName, void.class);
         processMethodContext.removeMethod(addToMethod);
 
         // remove
-        final Method removeFromMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVE_FROM_PREFIX + capitalizedName, void.class);
+        final Method removeFromMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.REMOVE_FROM_PREFIX + capitalizedName, void.class);
         processMethodContext.removeMethod(removeFromMethod);
 
         // add facets
@@ -134,10 +133,9 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
-        Method validateAddToMethod = MethodFinderUtils.findMethod(
+        Method validateAddToMethod = MethodFinderUtils.findMethod_returningText(
                 cls, MethodScope.OBJECT,
-                MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX + capitalizedName,
-                new Class<?>[]{String.class, TranslatableString.class},
+                MethodLiteralConstants.VALIDATE_ADD_TO_PREFIX + capitalizedName,
                 paramTypes);
         if (validateAddToMethod == null) {
             return;
@@ -160,10 +158,9 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
-        Method validateRemoveFromMethod = MethodFinderUtils.findMethod(
+        Method validateRemoveFromMethod = MethodFinderUtils.findMethod_returningText(
                 cls, MethodScope.OBJECT,
-                MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX + capitalizedName,
-                new Class<?>[]{String.class, TranslatableString.class},
+                MethodLiteralConstants.VALIDATE_REMOVE_FROM_PREFIX + capitalizedName,
                 paramTypes);
         if (validateRemoveFromMethod == null) {
             return;
