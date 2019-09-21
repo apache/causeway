@@ -28,15 +28,36 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.val;
 
+/**
+ * <h1>- internal use only -</h1>
+ * <p>
+ * JDK reflection API has no Class.getMethod(name, ...) variant that does not produce an expensive 
+ * stack-trace, when no such method exists. 
+ * 
+ * @apiNote thread-save 
+ * 
+ * </p>
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
+ * </p>
+ * @since 2.0
+ */
 public final class _MethodCache {
 
+    /**
+     * A drop-in replacement for {@link Class#getMethod(String, Class...)} that does not throw 
+     * a {@link ClassNotFoundException}   
+     */
     public Method lookupMethod(Class<?> type, String name, Class<?>[] paramTypes) {
         
-        if(!inspectedTypes.contains(type)) {
-            for(val method : type.getDeclaredMethods()) {
-                methodsByKey.put(Key.of(type, method), method);
+        synchronized(inspectedTypes) {
+            if(!inspectedTypes.contains(type)) {
+                for(val method : type.getMethods()) {
+                    methodsByKey.put(Key.of(type, method), method);
+                }
+                inspectedTypes.add(type);
             }
-            inspectedTypes.add(type);
         }
         
         return methodsByKey.get(Key.of(type, name, nullify(paramTypes)));
