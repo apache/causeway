@@ -58,6 +58,7 @@ import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
+import lombok.val;
 
 class Generation {
 
@@ -127,29 +128,31 @@ class Generation {
     void appendServicePathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        for (final ObjectSpecification objectSpec : specificationLoader.currentSpecifications()) {
+        for (val spec : specificationLoader.currentSpecifications()) {
 
-            final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
+            val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet == null) {
                 continue;
             }
-            if (visibility.isPublic() &&
-                    domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_REST_ONLY) {
-                continue;
+            val natureOfService = domainServiceFacet.getNatureOfService();
+            
+            if (natureOfService.isProgrammatic()) {
+                continue; // ignore programmatic services
             }
-            if (    domainServiceFacet.getNatureOfService() != NatureOfService.VIEW &&
-                    domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_REST_ONLY) {
-                continue;
+            
+            if (visibility.isPublic() && !natureOfService.isRestAlso()) {
+                continue; // ignore services that don't publicly contribute to rest
             }
 
-            final List<ObjectAction> serviceActions = Util.actionsOf(objectSpec, visibility, classExcluder);
+            val serviceActions = Util.actionsOf(spec, visibility, classExcluder);
             if(serviceActions.isEmpty()) {
                 continue;
             }
-            appendServicePath(objectSpec);
+            
+            appendServicePath(spec);
 
-            for (final ObjectAction serviceAction : serviceActions) {
-                appendServiceActionInvokePath(objectSpec, serviceAction);
+            for (val serviceAction : serviceActions) {
+                appendServiceActionInvokePath(spec, serviceAction);
             }
         }
     }

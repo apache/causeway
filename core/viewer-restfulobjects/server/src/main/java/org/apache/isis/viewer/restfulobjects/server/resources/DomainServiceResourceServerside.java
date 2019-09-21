@@ -33,7 +33,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
@@ -58,16 +57,15 @@ import lombok.val;
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
-    private final static Predicate<ObjectAdapter> NATURE_OF_MENU = (final ObjectAdapter input) -> {
+    private final static Predicate<ObjectAdapter> NATURE_REST_ALSO = (final ObjectAdapter input) -> {
         final ObjectSpecification specification = input.getSpecification();
         final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
         if (facet == null) {
             // not expected, because we know these are domain services.
             return false;
         }
-        final NatureOfService natureOfService = facet.getNatureOfService();
-        return  natureOfService == NatureOfService.VIEW ||
-                natureOfService == NatureOfService.VIEW_REST_ONLY;
+        val natureOfService = facet.getNatureOfService();
+        return natureOfService.isRestAlso();
     };
 
     @Override
@@ -80,7 +78,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         val metaModelContext = MetaModelContext.current();
 
         final Stream<ObjectAdapter> serviceAdapters = metaModelContext.streamServiceAdapters()
-                .filter(NATURE_OF_MENU);
+                .filter(NATURE_REST_ALSO);
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())

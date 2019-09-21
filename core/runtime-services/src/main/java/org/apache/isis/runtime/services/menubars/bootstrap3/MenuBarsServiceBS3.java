@@ -344,8 +344,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
         if (domainServiceFacet != null) {
             final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-            if (natureOfService == NatureOfService.VIEW_REST_ONLY ||
-                    natureOfService == NatureOfService.DOMAIN) {
+            if (!natureOfService.isView()) {
                 return Stream.empty();
             }
         }

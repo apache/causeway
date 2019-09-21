@@ -35,7 +35,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import lombok.val;
 
 @DomainService(
-        nature = NatureOfService.VIEW_REST_ONLY,
+        nature = NatureOfService.REST,
         objectType = "testdomain.InventoryResource")
 public class InventoryResource {
 
