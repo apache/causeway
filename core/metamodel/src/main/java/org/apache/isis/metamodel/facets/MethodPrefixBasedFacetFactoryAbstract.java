@@ -65,51 +65,61 @@ implements MethodPrefixBasedFacetFactory {
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
-            return;
-        }
-        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
-
-            @Override
-            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
-
-                final boolean noParamsOnly = _Config.getConfiguration().getBoolean(
-                        ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
-                        ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
-
-                val objectActionStream = objectSpec.streamObjectActions(Contributed.EXCLUDED);
-                
-                objectActionStream.forEach(objectAction->{
-                    for (final String prefix : prefixes) {
-                        String actionId = objectAction.getId();
-
-                        if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
-
-                            val explanation =
-                                    objectAction.getParameterCount() > 0 && 
-                                    noParamsOnly &&
-                                    (Objects.equals(prefix, MethodLiteralConstants.HIDE_PREFIX) || 
-                                            Objects.equals(prefix, MethodLiteralConstants.DISABLE_PREFIX))
-                                    ? " (note that such methods must have no parameters, '"
-                                        + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
-                                        + "' config property)"
-                                            : "";
-
-                            val message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
-                            validationFailures.add(
-                                    objectSpec.getIdentifier(),
-                                    message,
-                                    objectSpec.getIdentifier().getClassName(),
-                                    actionId,
-                                    prefix,
-                                    explanation);
-                        }
-                    }
-                });
-
-                return true;
-            }
-        }));
     }
+
+//TODO[2161] remove prefix checks    
+//    @Override
+//    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+//        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
+//            return;
+//        }
+//
+//        val noParamsOnly = _Config.getConfiguration().getBoolean(
+//                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
+//                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
+//
+//        
+//        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+//
+//            @Override
+//            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
+//
+//                
+//                val objectActionStream = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+//                
+//                objectActionStream.forEach(objectAction->{
+//                    for (final String prefix : prefixes) {
+//                        String actionId = objectAction.getId();
+//
+//                        if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
+//
+//                            System.err.println("self: " + self);
+//                            
+//                            val explanation =
+//                                    objectAction.getParameterCount() > 0 && 
+//                                    noParamsOnly &&
+//                                    (Objects.equals(prefix, MethodLiteralConstants.HIDE_PREFIX) || 
+//                                            Objects.equals(prefix, MethodLiteralConstants.DISABLE_PREFIX))
+//                                    ? " (note that such methods must have no parameters, '"
+//                                        + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
+//                                        + "' config property)"
+//                                            : "";
+//
+//                            val message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
+//                            validationFailures.add(
+//                                    objectSpec.getIdentifier(),
+//                                    message,
+//                                    objectSpec.getIdentifier().getClassName(),
+//                                    actionId,
+//                                    prefix,
+//                                    explanation);
+//                        }
+//                    }
+//                });
+//
+//                return true;
+//            }
+//        }));
+//    }
 
 }

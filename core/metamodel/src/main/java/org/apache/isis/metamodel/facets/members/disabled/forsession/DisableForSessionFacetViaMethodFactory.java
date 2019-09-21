@@ -63,7 +63,12 @@ public class DisableForSessionFacetViaMethodFactory extends MethodPrefixBasedFac
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method disableForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodLiteralConstants.DISABLE_PREFIX + capitalizedName, String.class, new Class[] { UserMemento.class });
+        final Method disableForSessionMethod = MethodFinderUtils.findMethod(
+                cls, 
+                MethodScope.CLASS, 
+                MethodLiteralConstants.DISABLE_PREFIX + capitalizedName, 
+                String.class, 
+                new Class[] { UserMemento.class });
 
         if (disableForSessionMethod == null) {
             return;

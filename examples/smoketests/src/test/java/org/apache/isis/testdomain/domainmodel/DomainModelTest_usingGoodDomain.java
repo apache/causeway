@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
@@ -55,6 +56,7 @@ import lombok.val;
 class DomainModelTest_usingGoodDomain {
     
     @Inject private MetaModelService metaModelService;
+    @Inject private JaxbService jaxbService;
     
 //    @BeforeAll
 //    static void beforeAll() {
@@ -76,12 +78,19 @@ class DomainModelTest_usingGoodDomain {
                 .withPackagePrefix("org.apache.isis.testdomain.")
                 ;
         
-        val metamodelDto = metaModelService.exportMetaModel(config);
 
         System.out.println("!!! listing MM");
-        
+
+        val metamodelDto = metaModelService.exportMetaModel(config);
         for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
+            
             System.out.println("dc: " + domainClass.getId());
+            val xmlString = jaxbService.toXml(domainClass);
+            System.out.println(xmlString);
+            
+            //for(val act : domainClass.getActions().getAct()) {
+            
+            
         }
         
         System.out.println("!!! ---");

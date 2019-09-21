@@ -13,11 +13,17 @@ public class ReservedPrefixedMember {
     
     // should be allowed since 2.0
     @Action 
-    public void disableSomething() {
-        
+    public String disableSomething() {
+        return null;
     }
     
-    // should be allowed since 2.0
+    // should be identified as support
+    public String disableDisableSomething() {
+        return null;
+    }
+    
+    
+    // should be allowed
     @Property
     @Getter @Setter
     private String disableProperty;
