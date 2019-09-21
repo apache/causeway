@@ -60,8 +60,12 @@ public class MethodFinderUtilsTest {
     }
 
     @Parameters
-    public static Collection parameters() {
-        return Arrays.asList(new Object[][] { { MethodScope.OBJECT, staticMethod, false }, { MethodScope.CLASS, staticMethod, true }, { MethodScope.OBJECT, instanceMethod, true }, { MethodScope.CLASS, instanceMethod, false }, });
+    public static Collection<?> parameters() {
+        return Arrays.asList(new Object[][] { 
+            { MethodScope.OBJECT, staticMethod, false }, 
+            { MethodScope.CLASS, staticMethod, true }, 
+            { MethodScope.OBJECT, instanceMethod, true }, 
+            { MethodScope.CLASS, instanceMethod, false }, });
     }
 
     public static void someStaticMethod() {

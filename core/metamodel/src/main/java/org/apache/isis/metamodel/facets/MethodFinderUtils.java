@@ -45,7 +45,7 @@ public final class MethodFinderUtils {
         return method;
     }
     
-    private static final _MethodCache methodCache = new _MethodCache(); //TODO could be share on the context
+    //private static final _MethodCache methodCache = new _MethodCache(); //TODO could be share on the context
 
     /**
      * Returns a specific public methods that: have the specified prefix; have
@@ -65,6 +65,9 @@ public final class MethodFinderUtils {
             final String name,
             final Class<?> returnType,
             final Class<?>[] paramTypes) {
+        
+        
+        val methodCache = _MethodCache.getInstance();
         
         val method = methodCache.lookupMethod(type, name, paramTypes);
         if(method == null) {

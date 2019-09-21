@@ -247,7 +247,22 @@ public final class _Arrays {
         System.arraycopy(array, index+1, result, index, remaining);
         return result;
     }
-
+    
+    /**
+     * Returns {@code null} if given {@code array} is {@code null} or of length zero, 
+     * returns given {@code array} otherwise.
+     *  
+     * @param <T>
+     * @param array
+     * @return null for empty arrays
+     */
+    public static @Nullable <T> T[] emptyToNull(T[] array) {
+        if(array!=null && array.length==0) {
+            return null;
+        }
+        return array;
+    }
+    
     // -- COMPONENT TYPE INFERENCE
 
     /**
