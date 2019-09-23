@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -38,6 +39,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.base._NullSafe;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 /**
  * <h1>- internal use only -</h1>
@@ -209,6 +211,7 @@ public final class _Sets {
 
     /**
      * Returns the intersection (set theory) of two given sets, not retaining any order.
+     * Any {@code null} elements are ignored and will not be contained in the resulting set.
      * @param a
      * @param b
      * @return non null, unmodifiable
@@ -222,12 +225,15 @@ public final class _Sets {
         }
         return Collections.unmodifiableSet(
                 a.stream()
+                .filter(Objects::nonNull)
                 .filter(b::contains)
                 .collect(Collectors.toSet()) );
     }
 
     /**
-     * Returns the intersection (set theory) of two given sets, retaining order.
+     * Returns the intersection (set theory) of two given (sorted) sets, 
+     * retaining order only when natural order.
+     * Any {@code null} elements are ignored and will not be contained in the resulting set.
      * @param a
      * @param b
      * @return non null, unmodifiable
@@ -241,7 +247,54 @@ public final class _Sets {
         }
         return Collections.unmodifiableSortedSet(
                 a.stream()
+                .filter(Objects::nonNull)
                 .filter(b::contains)
+                .collect(Collectors.toCollection(TreeSet::new)));
+    }
+
+    /**
+     * Returns a new set containing all the elements of {@code a} that are not in {@code b}, 
+     * not retaining any order. 
+     * Any {@code null} elements are ignored and will not be contained in the resulting set.
+     * @param <T>
+     * @param a
+     * @param b
+     * @return {@code a - b}, non null, unmodifiable 
+     */
+    public static <T> Set<T> minus(@Nullable Set<T> a, @Nullable Set<T> b) {
+        if(a==null || a.isEmpty()) {
+            return Collections.emptySet();
+        }
+        if(b==null || b.isEmpty()) {
+            return Collections.unmodifiableSet(new HashSet<>(a));
+        }
+        return Collections.unmodifiableSet(
+                a.stream()
+                .filter(Objects::nonNull)
+                .filter(not(b::contains))
+                .collect(Collectors.toSet()) );
+    }
+    
+    /**
+     * Returns a new (sorted) set containing all the elements of {@code a} that are not in {@code b}, 
+     * retaining order only when natural order. 
+     * Any {@code null} elements are ignored and will not be contained in the resulting set.
+     * @param <T>
+     * @param a
+     * @param b
+     * @return {@code a - b}, non null, unmodifiable 
+     */
+    public static <T> SortedSet<T> minusSorted(@Nullable SortedSet<T> a, @Nullable SortedSet<T> b) {
+        if(a==null || a.isEmpty()) {
+            return Collections.emptySortedSet();
+        }
+        if(b==null || b.isEmpty()) {
+            return Collections.unmodifiableSortedSet(new TreeSet<>(a));
+        }
+        return Collections.unmodifiableSortedSet(
+                a.stream()
+                .filter(Objects::nonNull)
+                .filter(not(b::contains))
                 .collect(Collectors.toCollection(TreeSet::new)));
     }
 

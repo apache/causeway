@@ -73,15 +73,17 @@ public final class _Predicates {
      * @param predicate
      */
     public static <T> Predicate<T> not(Predicate<T> predicate) {
-        return null;
+        return predicate.negate();
     }
 
     /**
-     * @param superClass
-     * @return a Predicate that tests for the operand to be an instance of {@code superClass}
+     * @param cls
+     * @return a Predicate that tests for the operand to be an instance of {@code cls}
+     * @deprecated use Class::isInstance instead
      */
-    public static Predicate<Object> instanceOf(Class<?> superClass) {
-        return obj->superClass.isAssignableFrom(obj.getClass());
+    @Deprecated
+    public static Predicate<Object> instanceOf(Class<?> cls) {
+        return cls::isInstance;
     }
 
 }
