@@ -37,9 +37,9 @@ implements MethodPrefixBasedFacetFactory {
 
     private final List<String> prefixes;
 
-    private final OrphanValidation orphanValidation;
+    private final OrphanValidation orphanValidation; 
 
-    protected enum OrphanValidation {
+    protected enum OrphanValidation { // remove?
         VALIDATE,
         DONT_VALIDATE
     }

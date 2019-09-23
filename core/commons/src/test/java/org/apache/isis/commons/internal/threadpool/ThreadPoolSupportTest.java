@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
+@Deprecated
 class ThreadPoolSupportTest {
 
     private ThreadPoolSupport pool;

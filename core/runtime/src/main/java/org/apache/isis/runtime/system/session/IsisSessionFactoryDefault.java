@@ -31,7 +31,11 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.context.annotation.DependsOn;
+
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.collections.Bin;
@@ -71,7 +75,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  */
-@Singleton @Log4j2
+@Singleton @Log4j2 
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Inject private ServiceRegistry serviceRegistry;
@@ -96,9 +100,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);
 
-        val serviceRegistry = IsisContext.getServiceRegistry();
-        val authenticationManager = IsisContext.getAuthenticationManager();
-        val authorizationManager = IsisContext.getAuthorizationManager();
         val runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
 
         // ... and make IsisSessionFactory available via the IsisContext static for those
@@ -109,32 +110,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         runtimeEventService.fireAppPreMetamodel();
 
         val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Concurrent Tasks");
-
-        taskList.addRunnable("SpecificationLoader.init()", ()->{
-            // time to initialize...
-            specificationLoader.init();
-
-            // we need to do this before checking if the metamodel is valid.
-            //
-            // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
-            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
-            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
-            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
-            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
-            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
-            // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
-            //
-            // also, required so that can still call isisSessionFactory#doInSession
-            //
-            // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
-            // (including the metamodel invalid page)
-            // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
-            // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
-
-            authenticationManager.init();
-            authorizationManager.init();
-        });
-
+        
+        taskList.addRunnable("SpecificationLoader.init()", this::initMetamodel);
         taskList.addRunnable("ChangesDtoUtils.init()", ChangesDtoUtils::init);
         taskList.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
         taskList.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
@@ -143,19 +120,41 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         taskList.await();
 
         runtimeEventService.fireAppPostMetamodel();
+        //TODO[2158] start validation here?
+        
 
         //initServicesAndRunFixtures();
-        //doInSession(this::initServices);
+        //doInSession(this::validateMetamodel);
     }
 
-    private void initServices() {
+    private void initMetamodel() {
+        val authorizationManager = IsisContext.getAuthorizationManager();
+        
+        specificationLoader.init();
 
+        // we need to do this before checking if the metamodel is valid.
         //
-        // postConstructInSession
+        // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
+        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
+        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
+        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
+        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
+        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
+        // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
         //
+        // also, required so that can still call isisSessionFactory#doInSession
+        //
+        // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
+        // (including the metamodel invalid page)
+        // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+        // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
 
-        //            IsisTransactionManagerJdoInternal transactionManager = getTransactionManagerElseFail();
-        //            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
+        authenticationManager.init();
+        authorizationManager.init();
+    }
+    
+    private void validateMetamodel() {
+        //TODO[2158] these are all validations, hence should be implemented as validation refiners!
 
         //
         // translateServicesAndEnumConstants

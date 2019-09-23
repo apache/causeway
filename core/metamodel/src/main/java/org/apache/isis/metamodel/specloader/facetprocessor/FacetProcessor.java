@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.MetaModelContext;
@@ -48,9 +49,15 @@ import org.apache.isis.metamodel.facets.PropertyOrCollectionIdentifyingFacetFact
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+@RequiredArgsConstructor
 public class FacetProcessor {
 
-    private final ProgrammingModel programmingModel;
+    @NonNull private final ProgrammingModel programmingModel;
+    private ServiceInjector serviceInjector;
 
     /**
      * Class<FacetFactory> => FacetFactory
@@ -117,19 +124,14 @@ public class FacetProcessor {
      */
     private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
 
-    public FacetProcessor(final ProgrammingModel programmingModel) {
-        this.programmingModel = programmingModel;
-    }
-
     // //////////////////////////////////////////////////
     // init, shutdown (application scoped)
     // //////////////////////////////////////////////////
 
     public void init() {
-        final List<FacetFactory> facetFactoryList = programmingModel.getList();
-        for (final FacetFactory facetFactory : facetFactoryList) {
-            registerFactory(facetFactory);
-        }
+        serviceInjector = MetaModelContext.current().getServiceInjector();
+        val facetFactoryList = programmingModel.getList();
+        facetFactoryList.forEach(this::registerFactory);
     }
 
     public void shutdown() {
@@ -148,7 +150,7 @@ public class FacetProcessor {
      * processing.
      */
     public void injectDependenciesInto(final FacetFactory factory) {
-        MetaModelContext.current().getServiceInjector().injectServicesInto(factory);
+        serviceInjector.injectServicesInto(factory);
     }
 
     /**
@@ -249,6 +251,8 @@ public class FacetProcessor {
     }
 
     private List<ObjectSpecIdFacetFactory> objectSpecIfFacetFactoryList = null;
+
+    
     private List<ObjectSpecIdFacetFactory> getObjectSpecIfFacetFactoryList() {
         if(objectSpecIfFacetFactoryList == null) {
             List<ObjectSpecIdFacetFactory> facetFactories = _Lists.newArrayList();
