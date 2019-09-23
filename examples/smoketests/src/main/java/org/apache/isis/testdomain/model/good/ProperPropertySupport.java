@@ -16,27 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.testdomain.model.good;
 
-package org.apache.isis.applib.annotation;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Model;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * Indicates that a method is a supporting-method, one that contributes (hide, validate, ...) 
- * to an <em>Action</em>.
- * <p>
- * While optional, it marks a clear intent by the programmer and allows for the metamodel to enforce 
- * validation rules.
- *
- * @since 2.0
- */
-@Inherited
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Support {
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class ProperPropertySupport {
 
+    // proper property
+    @Property @Getter @Setter
+    private String myProperty;
+    
+    // proper support
+    @Model
+    public boolean hideMyProperty() {
+        return false;
+    }
+    
 }

@@ -19,14 +19,11 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import java.util.Map;
-
 import org.apache.isis.metamodel.consent.Allow;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionAdvisor;
 import org.apache.isis.metamodel.consent.Veto;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 /**
  * Used by {@link Consent} (specifically the main implementations {@link Allow}
@@ -44,53 +41,5 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
  */
 public interface InteractionAdvisorFacet extends InteractionAdvisor, Facet {
 
-    /**
-     * For testing purposes only.
-     */
-    public static InteractionAdvisorFacet NOOP = new InteractionAdvisorFacet() {
-        @Override
-        public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        }
-
-        @Override
-        public boolean alwaysReplace() {
-            return false;
-        }
-
-        @Override
-        public Class<? extends Facet> facetType() {
-            return null;
-        }
-
-        @Override
-        public FacetHolder getFacetHolder() {
-            return null;
-        }
-
-        @Override
-        public boolean isNoop() {
-            return true;
-        }
-
-        @Override
-        public void setFacetHolder(final FacetHolder facetHolder) {
-        }
-
-        @Override
-        public Facet getUnderlyingFacet() {
-            return null;
-        }
-
-        @Override
-        public void setUnderlyingFacet(final Facet underlyingFacet) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean isDerived() {
-            return false;
-        }
-
-    };
 
 }

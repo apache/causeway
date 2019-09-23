@@ -24,14 +24,17 @@ import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
@@ -58,7 +61,7 @@ import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
-import static org.apache.isis.commons.internal.functions._Predicates.instanceOf;
+import lombok.val;
 
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the
@@ -101,8 +104,8 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
         return streamObjectActions(Contributed.INCLUDED)
-                .filter(instanceOf(MixedInMember.class))
-                .map(member->(MixedInMember) member)
+                .filter(MixedInMember.class::isInstance)
+                .map(MixedInMember.class::cast)
                 .filter(member->member.getMixinType() == onType)
                 .findAny();
     }
@@ -407,6 +410,21 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
         }
 
         return newInstance; 
+    }
+
+    /**
+     * Streams all FacetHolders associated with this spec. 
+     * @since 2.0
+     */
+    default Stream<FacetHolder> streamFacetHolders(){
+        
+        val self = Stream.of(this);
+        val actions = streamObjectActions(Contributed.EXCLUDED);
+        val properties = streamProperties(Contributed.EXCLUDED);
+        val collections = streamCollections(Contributed.EXCLUDED);
+
+        return _Streams.concat(self, actions, properties, collections);
+        
     }
 
 

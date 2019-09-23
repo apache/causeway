@@ -19,7 +19,11 @@
 
 package org.apache.isis.metamodel.consent;
 
+import java.util.Map;
+
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.interactions.InteractionAdvisorFacet;
 
 /**
  * Marker interface for implementations (specifically, {@link Facet}s) that can
@@ -32,7 +36,50 @@ public interface InteractionAdvisor {
     /**
      * For testing purposes only.
      */
-    public static InteractionAdvisor NOOP = new InteractionAdvisor() {
+    public static InteractionAdvisor NOOP = new InteractionAdvisorFacet() {
+        @Override
+        public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        }
+
+        @Override
+        public boolean alwaysReplace() {
+            return false;
+        }
+
+        @Override
+        public Class<? extends Facet> facetType() {
+            return null;
+        }
+
+        @Override
+        public FacetHolder getFacetHolder() {
+            return null;
+        }
+
+        @Override
+        public boolean isNoop() {
+            return true;
+        }
+
+        @Override
+        public void setFacetHolder(final FacetHolder facetHolder) {
+        }
+
+        @Override
+        public Facet getUnderlyingFacet() {
+            return null;
+        }
+
+        @Override
+        public void setUnderlyingFacet(final Facet underlyingFacet) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean isDerived() {
+            return false;
+        }
+
     };
 
 }

@@ -22,17 +22,9 @@ package org.apache.isis.metamodel.facets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
-
-import lombok.val;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
@@ -63,13 +55,12 @@ implements MethodPrefixBasedFacetFactory {
         return prefixes;
     }
 
+ 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-    }
-
-//TODO[2161] remove prefix checks    
-//    @Override
-//    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+        
+//XXX[2161] replaced by SupportingMethodValidatorRefinerFactory, which changes behavior!     
+        
 //        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
 //            return;
 //        }
@@ -78,7 +69,6 @@ implements MethodPrefixBasedFacetFactory {
 //                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
 //                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
 //
-//        
 //        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
 //
 //            @Override
@@ -93,8 +83,6 @@ implements MethodPrefixBasedFacetFactory {
 //
 //                        if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
 //
-//                            System.err.println("self: " + self);
-//                            
 //                            val explanation =
 //                                    objectAction.getParameterCount() > 0 && 
 //                                    noParamsOnly &&
@@ -120,6 +108,6 @@ implements MethodPrefixBasedFacetFactory {
 //                return true;
 //            }
 //        }));
-//    }
+    }
 
 }

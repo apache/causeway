@@ -30,6 +30,7 @@ import org.apache.isis.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
+import org.apache.isis.metamodel.facets.actions.support.SupportingMethodValidatorRefinerFactory;
 import org.apache.isis.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
@@ -409,6 +410,10 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(new TranslationFacetFactory());
 
         addFactory(new ViewModelSemanticCheckingFacetFactory());
+        
+        // possibly required at the very end
+        addFactory(new SupportingMethodValidatorRefinerFactory());
+
     }
 
     @Override

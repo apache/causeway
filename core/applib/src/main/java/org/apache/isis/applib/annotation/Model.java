@@ -16,19 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.model.bad;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Support;
+package org.apache.isis.applib.annotation;
 
-@DomainObject(nature = Nature.VIEW_MODEL)
-public class UnresolvableReferencedAction {
-    
-    // should fail, because there is no action named 'something'
-    @Support
-    public boolean hideSomething() {
-        return false;
-    }
-    
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Indicates that a method is a supporting-method, one that contributes (hide, validate, ...) 
+ * to an <em>Action/</em>.
+ * <p>
+ * By placing the {@link Model} annotation on a method, a contract with the metamodel is enforced, 
+ * such that this method must be recognized and can not be be ignored.
+ *
+ * @since 2.0
+ */
+@Inherited
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Model {
+
 }

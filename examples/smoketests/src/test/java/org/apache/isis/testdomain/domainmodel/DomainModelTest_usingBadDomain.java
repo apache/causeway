@@ -28,7 +28,9 @@ import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
-import org.apache.isis.testdomain.model.bad.UnresolvableReferencedAction;
+import org.apache.isis.testdomain.model.bad.OrphanedActionSupport;
+import org.apache.isis.testdomain.model.bad.OrphanedCollectionSupport;
+import org.apache.isis.testdomain.model.bad.OrphanedPropertySupport;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -62,16 +64,48 @@ class DomainModelTest_usingBadDomain {
     }
     
     @Test
-    void unresolvableReferencedAction_shouldFail() {
+    void orphanedActionSupport_shouldFail() {
            
         val validateDomainModel = new ValidateDomainModel();
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
-                UnresolvableReferencedAction.class, 
-                " ")); //TODO no validator written yet
+                OrphanedActionSupport.class, 
+                "is assumed to support"));
     }
+    
+//    @Test
+//    void orphanedActionSupportNotEnforced_shouldFail() {
+//           
+//        val validateDomainModel = new ValidateDomainModel();
+//        
+//        assertThrows(DomainModelException.class, validateDomainModel::run);
+//        assertTrue(validateDomainModel.anyMatchesContaining(
+//                OrphanedPrefixedAction.class, 
+//                "is assumed to support"));
+//    }
 
+    @Test
+    void orphanedPropertySupport_shouldFail() {
+           
+        val validateDomainModel = new ValidateDomainModel();
+        
+        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertTrue(validateDomainModel.anyMatchesContaining(
+                OrphanedPropertySupport.class, 
+                "is assumed to support"));
+    }
+    
+    @Test
+    void orphanedCollectionSupport_shouldFail() {
+           
+        val validateDomainModel = new ValidateDomainModel();
+        
+        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertTrue(validateDomainModel.anyMatchesContaining(
+                OrphanedCollectionSupport.class, 
+                "is assumed to support"));
+    }
     
     
 
