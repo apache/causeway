@@ -1,6 +1,8 @@
+[[intellij]]
 = Developing using IntelliJ IDEA
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 
 
 
@@ -103,7 +105,7 @@ Next we recommend you import a set of standard file templates.  These are used t
 .File templates
 image::intellij-idea/030-import-settings/040-file-templates.png[width="400px",link="{imagesdir}/intellij-idea/030-import-settings/040-file-templates.png"]
 
-The file templates are provided as a settings JAR file, namely *link:intellij/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.  Download this file.
+The file templates are provided as a settings JAR file, namely *link:{attachmentsdir}/intellij/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.  Download this file.
 
 Next, import using `File > Import Settings`, specifying the directory that you have downloaded the file to:
 
@@ -144,7 +146,7 @@ The live templates have a prefix of either:
 * `ju` : for JUnit tests
 * `jm` : for JMock mocks or libraries
 
-The live templates are also provided as a settings JAR file, namely *link:resources/intellij/isis-settings-live-templates.jar[isis-settings-live-templates.jar]*.
+The live templates are also provided as a settings JAR file, namely *link:{attachmentsdir}/resources/intellij/isis-settings-live-templates.jar[isis-settings-live-templates.jar]*.
 Download and import (as for the previous settings JAR files).
 
 
@@ -153,7 +155,7 @@ Download and import (as for the previous settings JAR files).
 === Coding Standards
 
 Next, we suggest you import settings for standard ASF/Apache Isis coding conventions.  This file is also
-provided as a settings file, namely *link:intellij/isis-settings-code-style.jar[isis-settings-code-style.jar]*.  Download and import (as for the above settings JAR files).
+provided as a settings file, namely *link:{attachmentsdir}/intellij/isis-settings-code-style.jar[isis-settings-code-style.jar]*.  Download and import (as for the above settings JAR files).
 
 
 
@@ -322,7 +324,7 @@ If this radio button is set to one of the other options then you may obtain clas
 
 
 
-
+[[intellij-hints-and-tips]]
 == Hints and Tips
 
 === Keyboard Cheat Sheets
@@ -362,6 +364,7 @@ For all of the following, you don't need to type every letter, typing "ab" will 
 * search for any file: `shift-shift`
 
 Navigating around:
+
 * find callers of a method (the call hierarchy): `ctrl-alt-H`
 * find subclasses or overrides: `ctrl-alt-B`
 * find superclasses/interface/declaration: `ctrl-B`
@@ -468,7 +471,7 @@ If you hit an error of "duplicate classes":
 
 image::intellij-idea/060-troubleshooting/010-duplicate-classes.png[width="600px",link="{imagesdir}/intellij-idea/060-troubleshooting/010-duplicate-classes.png"]
 
-then make sure you have correctly configured the xref:toc:devguide:ide/intellij.adoc#other-settings-compiler[annotation processor]
+then make sure you have correctly configured the xref:toc:devguide:about.adoc#other-settings-compiler[annotation processor]
 settings.  Pay attention in particular to the "Production sources directory" and "Test sources directory", that these
 are set up correctly.
 
@@ -482,7 +485,7 @@ In this section are several options that will reduce the time it takes between m
 
 === Using Grade to compile/enhance
 
-Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:toc:devguide:ide/intellij.adoc#running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
+Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:toc:devguide:about.adoc#running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
 
 Alternative, you can use the following `build.gradle` script in your `dom` module:
 

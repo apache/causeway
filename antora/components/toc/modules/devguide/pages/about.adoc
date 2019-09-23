@@ -4,45 +4,29 @@ include::_attributes.adoc[]
 This guide provides guidance to anyone in the community wanting to contribute to Apache Isis' ongoing development.
 
 
-* xref:about.adoc[About]
+include::ide.adoc[leveloffset=+1]
+include::ide/intellij.adoc[leveloffset=+2]
+include::ide/eclipse.adoc[leveloffset=+2]
 
-** xref:ide.adoc[IDE]
-*** xref:ide/intellij.adoc[IntelliJ]
-*** xref:ide/eclipse.adoc[Eclipse]
+include::hints-and-tips.adoc[leveloffset=+1]
+include::hints-and-tips/datanucleus-enhancer.adoc[leveloffset=+2]
+include::hints-and-tips/enabling-logging.adoc[leveloffset=+2]
+include::hints-and-tips/enhance-only.adoc[leveloffset=+2]
+include::hints-and-tips/how-run-fixtures-on-app-startup.adoc[leveloffset=+2]
 
+include::building-apache-isis.adoc[leveloffset=+1]
 
-** xref:hints-and-tips.adoc[Hints-n-Tips]
-*** xref:hints-and-tips/datanucleus-enhancer.adoc[Datanucleus Enhancer]
-*** xref:hints-and-tips/enabling-logging.adoc[Enabling Logging]
-*** xref:hints-and-tips/enhance-only.adoc[Enhance Only]
-*** xref:hints-and-tips/how-run-fixtures-on-app-startup.adoc[How to run Fixtures on App Startup]
+include::contributing.adoc[leveloffset=+1]
 
+include::git-cookbook.adoc[leveloffset=+1]
 
-** xref:building-apache-isis.adoc[Building Apache Isis]
+include::working-with-many-repos.adoc[leveloffset=+1]
 
+include::asciidoc-syntax.adoc[leveloffset=+1]
 
+include::project-lombok.adoc[leveloffset=+1]
 
-** xref:contributing.adoc[Contributing]
+include::agilej.adoc[leveloffset=+1]
 
-
-** xref:git-cookbook.adoc[Git Cookbook]
-
-
-** xref:working-with-many-repos.adoc[Working with many Repos]
-
-
-** xref:asciidoc-syntax.adoc[Asciidoc Syntax]
-
-
-** xref:project-lombok.adoc[Project Lombok]
-
-
-** xref:agilej.adoc[AgileJ]
-
-
-
-
-TODO: incorporate:
-
-* *xref:developer-resources/cheat-sheet.adoc[Cheat Sheet]*
-* xref:developer-resources/icons.adoc[Icons]
+include::resources/cheat-sheet.adoc[leveloffset=+1]
+include::resources/icons.adoc[leveloffset=+1]

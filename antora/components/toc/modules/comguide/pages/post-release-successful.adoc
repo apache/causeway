@@ -1,5 +1,8 @@
+[[post-release-successful]]
 = Post Release (Successful)
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
 
 
 
@@ -8,11 +11,11 @@
 
 The release process consists of:
 
-* the release manager xref:toc:comguide:cutting-a-release.adoc[cutting the release]
+* the release manager xref:toc:comguide:about.adoc#cutting-a-release[cutting the release]
 
-* members of the Apache Isis PMC xref:toc:comguide:verifying-releases.adoc[verifying] and voting on the release
+* members of the Apache Isis PMC xref:toc:comguide:about.adoc#verifying-releases[verifying] and voting on the release
 
-* the release manager performing post-release tasks, for either a successful or an xref:toc:comguide:post-release-unsuccessful.adoc[unsuccessful] vote (former documented below)
+* the release manager performing post-release tasks, for either a successful or an xref:toc:comguide:about.adoc#post-release-unsuccessful[unsuccessful] vote (former documented below)
 
 For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.
 If there are not +3 votes after this time then it is perfectly permissible to keep the vote open longer.

@@ -1,5 +1,8 @@
+[[verifying-releases]]
 = Verifying a Release
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
 
 
 
@@ -8,9 +11,9 @@
 
 The release process consists of:
 
-* the release manager xref:toc:comguide:cutting-a-release.adoc[cutting the release]
+* the release manager xref:toc:comguide:about.adoc#cutting-a-release[cutting the release]
 * members of the Apache Isis PMC verifying and voting on the release (documented below)
-* the release manager performing post-release tasks, for either a xref:toc:comguide:post-release-successful.adoc[successful] or an xref:toc:comguide:post-release-unsuccessful.adoc[unsuccessful] vote.
+* the release manager performing post-release tasks, for either a xref:toc:comguide:about.adoc#post-release-successful.adoc[successful] or an xref:toc:comguide:post-release-unsuccessful[unsuccessful] vote.
 
 This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 
@@ -18,7 +21,7 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 == Background
 
-Whenever a release manager announces a vote on a release (as per the xref:toc:comguide:release-process.adoc[release process]) on the xref:toc:ROOT:support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
+Whenever a release manager announces a vote on a release (as per the xref:toc:comguide:about.adoc#release-process[release process]) on the xref:toc:ROOT:support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
 Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
@@ -178,7 +181,7 @@ If you forget to deactive the profile, there should be no adverse effects; Maven
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
 
-The main release auditing tool, http://creadur.apache.org/rat[Apache RAT] is used in the xref:toc:comguide:cutting-a-release.adoc[release process].
+The main release auditing tool, http://creadur.apache.org/rat[Apache RAT] is used in the xref:toc:comguide:about.adoc#cutting-a-release[release process].
 
 Creadur's remaining tools - link:http://creadur.apache.org/tentacles/[Tentacles] and link:http://creadur.apache.org/whisker/[Whisker] - are to support the verification process.
 

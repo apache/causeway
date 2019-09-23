@@ -5,8 +5,8 @@ include::_attributes.adoc[]
 == Committers
 
 *  xref:toc:comguide:about.adoc[Committers' Guide]
-** xref:toc:comguide:cutting-a-release.adoc[Cutting a Release]
-** xref:toc:comguide:verifying-releases.adoc[Verifying a Release]
+** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
+** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
 
 
 == Implementation

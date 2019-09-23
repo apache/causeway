@@ -62,7 +62,7 @@ Learn more xref:toc:devguide:about.adoc[here]
 
 _How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
 
-Learn more xref:toc:devguide:ide/intellij.adoc[here]
+Learn more xref:toc:devguide:about.adoc#intellij[here]
 
 |video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
 

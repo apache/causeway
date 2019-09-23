@@ -84,7 +84,7 @@ _Extensions:_
 | *Support Resources*
 
 * xref:toc:devguide:about.adoc[Developers' Guide]
-** xref:toc:devguide:ide/intellij.adoc[IntelliJ] & xref:toc:devguide:ide/eclipse.adoc[Eclipse]
+** xref:toc:devguide:about.adoc#intellij[IntelliJ] & xref:toc:devguide:about.adoc#eclipse[Eclipse]
 ** xref:toc:devguide:contributing.adoc[Pull requests]
 //** xref:toc:devguide:asciidoc-syntax.adoc[Asciidoc syntax]
 
@@ -109,8 +109,8 @@ _for bug reports & feature requests_
 |*Committers*
 
 *  xref:toc:comguide:about.adoc[Committers' Guide]
-** xref:toc:comguide:cutting-a-release.adoc[Cutting a Release]
-** xref:toc:comguide:verifying-releases.adoc[Verifying a Release]
+** xref:toc:comguide:about.adoc#cutting-a-release[Cutting a Release]
+** xref:toc:comguide:about.adoc#verifying-releases[Verifying a Release]
 
 
 |*Implementation*

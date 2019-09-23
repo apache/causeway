@@ -84,7 +84,7 @@ If both are specified, Apache Isis will check when it initializes for any contra
 
 
 
-
+[[rg-ant-hints-and-tips]]
 == Hints and Tips
 
 This seems to be a good place to describe some additional common mappings that use `@Column`.  Unlike the sections above, the attributes specified in these hints and tips aren't actually part of Apache Isis metamodel.

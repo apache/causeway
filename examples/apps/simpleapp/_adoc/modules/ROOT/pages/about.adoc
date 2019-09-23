@@ -777,5 +777,5 @@ docker run -p 8080:8080 -d danhaywood/simpleapp:20180315.0935.master.4521215
 Once you are familiar with the generated app, you'll want to start modifying it.
 There is plenty of guidance on this site; start with this guide (fundamentals) and then look at the other guides linked to from the top-level menu or from the main xref:toc:ROOT:about.adoc[table of contents].
 
-If you use IntelliJ IDEA or Eclipse, do also install the xref:toc:devguide:ide/intellij.adoc#live-templates[live templates (for IntelliJ)] / xref:toc:devguide:ide/eclipse.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
+If you use IntelliJ IDEA or Eclipse, do also install the xref:toc:devguide:about.adoc#live-templates[live templates (for IntelliJ)] / xref:toc:devguide:about.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 

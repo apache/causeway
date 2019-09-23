@@ -1,5 +1,8 @@
+[[cutting-a-release]]
 = Cutting a Release
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
 
 
 
@@ -8,8 +11,8 @@
 The release process consists of:
 
 * the release manager cutting the release (documented below)
-* Members of the Apache Isis PMC xref:toc:comguide:verifying-releases.adoc[verifying] and voting on the release
-* the release manager performing post-release tasks, for either a xref:toc:comguide:post-release-successful.adoc[successful] or an xref:toc:comguide:post-release-unsuccessful.adoc[unsuccessful] vote.
+* Members of the Apache Isis PMC xref:toc:comguide:about.adoc#verifying-releases[verifying] and voting on the release
+* the release manager performing post-release tasks, for either a xref:toc:comguide:about.adoc#post-release-successful.adoc[successful] or an xref:toc:comguide:post-release-unsuccessful[unsuccessful] vote.
 
 Apache Isis itself consists of three separately releasable modules; relative to the link:https://github.com/apache/isis[source code root] there are:
 
@@ -18,9 +21,9 @@ Apache Isis itself consists of three separately releasable modules; relative to 
 * `component/example/archetypes/simpleapp`
 
 This section details the process for formally releasing Isis modules.  It describes the process for both `core` and then the archetypes.
-The subsequent sections describe how other committers can xref:toc:comguide:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:toc:comguide:post-release.adoc[post-release] activities and set up for the next development iteration.
+The subsequent sections describe how other committers can xref:toc:comguide:about.adoc#verifying-releases.adoc[verify a release] and how the release manager can then perform xref:toc:comguide:post-release[post-release] activities and set up for the next development iteration.
 
-If you've not performed a release before, then note that there are some configuration xref:toc:comguide:release-process-prereqs.adoc[prerequisites] that must be configured first.
+If you've not performed a release before, then note that there are some configuration xref:toc:comguide:about.adoc#release-process-prereqs[prerequisites] that must be configured first.
 In particular, you'll need signed public/private keys, and the ASF Nexus staging repo inlocal `~/.m2/settings.xml` file.
 
 These release notes using bash command line tools.
@@ -35,7 +38,7 @@ Before releasing `core`, ensure there is consensus on the xref:toc:ROOT:support.
 The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released.
-This should be in line with our xref:toc:comguide:versioning-policy.adoc[semantic versioning policy].
+This should be in line with our xref:toc:comguide:about.adoc#versioning-policy[semantic versioning policy].
 
 
 Make sure you have a JIRA ticket open against which to perform all commits.
@@ -64,7 +67,7 @@ env | grep ISIS | sort
 (One should exist already, xref:toc:comguide:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
 <3> adjust as required (Tomcat is used to smoke test the simpleapp archetype)
 
-Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:toc:comguide:post-release-unsuccessful.adoc[unsuccessful] release.
+Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:toc:comguide:about.adoc#post-release-unsuccessful[unsuccessful] release.
 
 [IMPORTANT]
 ====
@@ -749,7 +752,7 @@ Use `gpg --keyserver hkp://pgp.mit.edu --recv-keys nnnnnnnn` to confirm that the
 
 [NOTE]
 ====
-Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See xref:toc:comguide:key-generation.adoc[Key Generation] for more details.
+Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See xref:toc:comguide:about.adoc#key-generation[Key Generation] for more details.
 ====
 
 
@@ -867,7 +870,7 @@ and
     popd
 
 
-For more details, see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
+For more details, see https://isis.apache.org/toc/comguide/about.html#verifying-releases
 
 Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
 
@@ -882,7 +885,7 @@ Remember to update:
 * the release candidate number (`RC1` or whatever)
 * the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`10xx` or whatever)
 
-Note that the email also references the procedure for other committers to xref:toc:comguide:verifying-releases.adoc[verify the release].
+Note that the email also references the procedure for other committers to xref:toc:comguide:about.adoc#verifying-releases[verify the release].
 
 
 

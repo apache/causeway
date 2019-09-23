@@ -1,28 +1,19 @@
-= Support
+[[cheat-sheet]]
+= Appendix: Cheat Sheet
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
-
-== Resources
-
-* xref:toc:devguide:about.adoc[Developers' Guide]
-** xref:toc:devguide:about.adoc#intellij[IntelliJ] & xref:toc:devguide:about.adoc#eclipse[Eclipse]
-** xref:toc:devguide:contributing.adoc[Pull requests]
-//** xref:toc:devguide:asciidoc-syntax.adoc[Asciidoc syntax]
-
-[external]
-* xref:mavendeps:ROOT:about.adoc[Maven mixins]
+:page-partial:
 
 
-== Help
 
-* xref:toc:ROOT:mailing-list/how-to-subscribe.adoc[How to subscribe]
+This "one-pager" cheat sheet summarises the main programming conventions to follow when writing an Apache Isis application.
 
-* link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA] +
-_for bug reports & feature requests_
+pass:[<br/>]
 
-== Releases
 
-* xref:toc:ROOT:downloads/how-to.adoc[Downloads]
-* xref:relnotes:ROOT:about.adoc[Release Notes]
-* xref:mignotes:ROOT:about.adoc[Migration Notes]
+image::resources/IsisCheatSheet.png[width="800px",link="{attachmentsdir}/resources/IsisCheatSheet.pdf"]
 
+
+pass:[<br/>]
+
+You can download the cheat sheet as either a link:{attachmentsdir}/resources/IsisCheatSheet.pdf[Acrobat PDF] or as an link:{attachmentsdir}/resources/IsisCheatSheet.docx[MS Word .docx] file.

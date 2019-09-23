@@ -517,7 +517,7 @@ The REST API implemented by Apache Isis is specified in the link:http://www.rest
 Once you are familiar with the generated app, try modifying it.
 There is plenty more guidance on this site; start with this guide (fundamentals) and then look at the other guides linked to from the top-level menu or from the main xref:toc:ROOT:about.adoc[table of contents].
 
-If you use IntelliJ IDEA or Eclipse, do also install the xref:toc:devguide:ide/intellij.adoc#live-templates[live templates (for IntelliJ)] / xref:toc:devguide:ide/eclipse.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
+If you use IntelliJ IDEA or Eclipse, do also install the xref:toc:devguide:about.adoc#live-templates[live templates (for IntelliJ)] / xref:toc:devguide:about.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 
 If you run into issues, please don't hesitate to ask for help on the link:http://isis.apache.org/help.html[users mailing list].
 

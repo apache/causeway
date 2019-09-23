@@ -1,5 +1,8 @@
+[[release-process-prereqs]]
 = Appendix: Release Prereqs
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+:page-partial:
 
 
 
@@ -7,7 +10,7 @@
 
 
 
-This section (appendix) describes the prerequisites for the xref:toc:comguide:release-process.adoc[release process].
+This section (appendix) describes the prerequisites for the xref:toc:comguide:about.adoc#release-process[release process].
 
 
 
@@ -22,7 +25,7 @@ Ensure that Java 7 is installed and the toolchains plugin is configured, as desc
 
 The most important configuration you require is to set up public/private key pair.
 This is used by the `maven-release-plugin` to sign the code artifacts.
-See the page on xref:toc:comguide:key-generation.adoc[key generation] for more details.
+See the page on xref:toc:comguide:about.adoc#key-generation[key generation] for more details.
 
 In order to prepare the release, you'll (need to) have a `~/.gnupg` directory with the relevant files (`gpg.conf`, `pubring.gpg`, `secring.gpg` etc), and have `gpg` on your operating system PATH.
 

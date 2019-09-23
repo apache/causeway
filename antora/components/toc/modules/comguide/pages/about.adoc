@@ -1,35 +1,37 @@
 = Committers' Guide
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
+
 
 This committers' guide is for committers of Apache Isis itself who want guidance on release process, publishing documents and other related procedures.
 
 
-** xref:applying-patches.adoc[Applying Patches]
+include::applying-patches.adoc[leveloffset=+1]
 
-** xref:merging-a-pull-request.adoc[Merging a Pull Request]
+include::merging-a-pull-request.adoc[leveloffset=+1]
 
-** xref:cutting-a-release.adoc[Cutting a Release]
+include::cutting-a-release.adoc[leveloffset=+1]
 
-** xref:verifying-releases.adoc[Verifying Releases]
+include::verifying-releases.adoc[leveloffset=+1]
 
-** xref:post-release-successful.adoc[Post Release (successful)]
+include::post-release-successful.adoc[leveloffset=+1]
 
-** xref:post-release-unsuccessful.adoc[Post Release (unsuccessful)]
+include::post-release-unsuccessful.adoc[leveloffset=+1]
 
-** xref:release-process-for-snapshots.adoc[Release Process for Snapshots]
+include::release-process-for-snapshots.adoc[leveloffset=+1]
 
-** xref:release-process-for-interim-releases.adoc[Release Process for Interim Releases]
+include::release-process-for-interim-releases.adoc[leveloffset=+1]
 
-** xref:asciidoc-publish-procedure.adoc[Asciidoc Publish Procedure]
+include::asciidoc-publish-procedure.adoc[leveloffset=+1]
 
-** xref:key-generation.adoc[Key Generation]
+include::key-generation.adoc[leveloffset=+1]
 
-** xref:release-process-prereqs.adoc[Release Process Prereqs]
+include::release-process-prereqs.adoc[leveloffset=+1]
 
-** xref:policies.adoc[Policies]
-*** xref:policies/versioning-policy.adoc[Versioning Policy]
-*** xref:policies/git-policy.adoc[Git Policy]
+include::policies.adoc[leveloffset=+1]
+include::policies/versioning-policy.adoc[leveloffset=+2]
+include::policies/git-policy.adoc[leveloffset=+2]
 
-** xref:pmc-notes.adoc[PMC Notes]
+include::pmc-notes.adoc[leveloffset=+1]
 
 

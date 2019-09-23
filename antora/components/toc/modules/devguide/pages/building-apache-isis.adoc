@@ -1,6 +1,8 @@
+[[building-apache-isis]]
 = Building Apache Isis
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
+:page-partial:
 
 
 
@@ -128,7 +130,7 @@ For further reading, see:
 
 Apache Isis is compatible with Java 7 and Java 8.  For every-day use, the framework is usually compiled against Java 8.
 
-Releases however are xref:toc:comguide:cutting-a-release.adoc[cut] using Java 7, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
+Releases however are xref:toc:comguide:about.adoc#cutting-a-release[cut] using Java 7, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
 
 Therefore install either/both of Java 7 JDK and Java 8 JDK.  Note that the JRE is _not_ sufficient.
 
