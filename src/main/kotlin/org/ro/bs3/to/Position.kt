@@ -1,4 +1,4 @@
-package org.ro.to.bs3
+package org.ro.bs3.to
 
 //@XmlType(name = "position", namespace = "http://isis.apache.org/applib/layout/component")
 enum class Position {

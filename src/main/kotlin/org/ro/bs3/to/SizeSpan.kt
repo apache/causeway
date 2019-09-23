@@ -1,4 +1,4 @@
-package org.ro.to.bs3
+package org.ro.bs3.to
 
 class SizeSpan(
         val isOffset: Boolean,

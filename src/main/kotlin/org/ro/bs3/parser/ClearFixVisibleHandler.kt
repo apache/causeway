@@ -1,11 +1,11 @@
-package org.ro.org.ro.bs3.parser
+package org.ro.bs3.parser
 
 import org.ro.bs3.parser.BaseXmlHandler
 import org.ro.bs3.to.Bs3Object
 import org.ro.bs3.to.ClearFixHidden
 import org.ro.bs3.to.Size
 
-class ClearFixHiddenHandler : BaseXmlHandler() {
+class ClearFixVisibleHandler : BaseXmlHandler() {
     override fun doHandle() {
 //        logEntry.aggregator = NavigationAggregator()
         //      update()

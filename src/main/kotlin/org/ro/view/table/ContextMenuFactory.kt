@@ -1,4 +1,4 @@
-package org.ro.org.ro.view.table
+package org.ro.view.table
 
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.to.TObject

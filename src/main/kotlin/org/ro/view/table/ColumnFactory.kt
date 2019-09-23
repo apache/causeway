@@ -2,7 +2,7 @@ package org.ro.view.table
 
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
-import org.ro.org.ro.view.table.ContextMenuFactory
+import org.ro.view.table.ContextMenuFactory
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.MouseEventInit
 import pl.treksoft.kvision.dropdown.ContextMenu

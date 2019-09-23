@@ -1,4 +1,6 @@
-package org.ro.org.ro.bs3.parser
+package org.ro.bs3.parser
 
-class DefaultXmlHandler {
+import org.ro.bs3.parser.BaseXmlHandler
+
+class DefaultXmlHandler : BaseXmlHandler(){
 }

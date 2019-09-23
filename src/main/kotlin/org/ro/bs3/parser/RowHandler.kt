@@ -1,10 +1,11 @@
 package org.ro.bs3.parser
 
+import org.ro.bs3.parser.BaseXmlHandler
 import org.ro.bs3.to.Bs3Object
+import org.ro.bs3.to.Bs3RowContent
 import org.ro.bs3.to.Row
-import org.ro.bs3.to.Tab
 
-class TabHandler : BaseXmlHandler() {
+class RowHandler : BaseXmlHandler() {
     override fun doHandle() {
 //        logEntry.aggregator = NavigationAggregator()
         //      update()
@@ -12,9 +13,11 @@ class TabHandler : BaseXmlHandler() {
 
     override fun parse(xmlStr: String): Bs3Object? {
         //TODO dive into sub elements, create objects and use in constructor
-        val rows = mutableListOf<Row>()
-        val name = ""
+
+        val colOrClearFixVisibleOrClearFixHidden: List<Bs3RowContent>? = ArrayList<Bs3RowContent>()
+        var metadataError = ""
+        var id = ""
         val cssClass = ""
-        return Tab(rows, name, cssClass)
+        return Row(colOrClearFixVisibleOrClearFixHidden, metadataError, id, cssClass)
     }
 }

@@ -1,4 +1,4 @@
-package org.ro.to.bs3
+package org.ro.bs3.to
 
 class TabGroup(
         protected var tab: List<Tab>? = ArrayList<Tab>(),

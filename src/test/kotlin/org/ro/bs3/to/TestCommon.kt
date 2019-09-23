@@ -1,4 +1,4 @@
-package org.ro.org.ro.to.bs3
+package org.ro.to.bs3
 
 /*
  * Copyright (c) 2019.

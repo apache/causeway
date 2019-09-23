@@ -51,6 +51,10 @@ object UiManager {
     fun updatePower(by: String) {
         RoView.updatePowered(by)
         RoStatusBar.brand("#FF00FF")
+       // https://www.w3schools.com/css/css3_gradients.asp
+      //  #grad {
+        //    background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
+       // }
     }
 
     fun handleView(displayList: DisplayList) {

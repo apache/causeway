@@ -13,6 +13,7 @@ enum class EventState(val id: String, val iconName: String) {
     ERROR("ERROR", "fa-exclamation-circle"),
     SUCCESS("SUCCESS", "fa-check-circle"),
     VIEW("VIEW", "fa-info-circle"),
+    CACHE_USED ("CACHE_USED", "fa-caret-circle-left"),
     CLOSED("CLOSED", "fa-times-circle")
 }
 
@@ -76,6 +77,10 @@ data class LogEntry(
         calculate()
         this.responseLength = response.length
         state = EventState.SUCCESS
+    }
+
+    fun setCached() {
+        state = EventState.CACHE_USED
     }
 
     fun getObj(): TransferObject? {

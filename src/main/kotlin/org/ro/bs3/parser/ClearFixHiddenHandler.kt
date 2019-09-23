@@ -1,45 +1,24 @@
-package org.ro.org.ro.bs3.parser
+package org.ro.bs3.parser
 
 import org.ro.bs3.parser.BaseXmlHandler
-import org.ro.bs3.to.*
+import org.ro.bs3.to.Bs3Object
+import org.ro.bs3.to.ClearFixVisible
+import org.ro.bs3.to.CssDisplay
+import org.ro.bs3.to.Size
 
-class ColHandler : BaseXmlHandler() {
+class ClearFixHiddenHandler : BaseXmlHandler() {
     override fun doHandle() {
 //        logEntry.aggregator = NavigationAggregator()
         //      update()
     }
 
     override fun parse(xmlStr: String): Bs3Object? {
-        //TODO dive into sub elements, create objects and use in constructor
-
-        var sizeSpan: List<SizeSpan>? = ArrayList<SizeSpan>()
-        var domainObject = DomainObjectHandler().parse(xmlStr) as DomainObject
-        var action: List<Action>? = ArrayList()
-        var row: List<Row>? = ArrayList<Row>()
-        var tabGroup: List<TabGroup>? = ArrayList<TabGroup>()
-        var fieldSet: List<FieldSet>? = ArrayList<FieldSet>()
-        var collection: List<Collection>? = ArrayList<Collection>()
-        var metadataError = ""
-        var id = ""
-        var span: Int = 0
-        var isUnreferencedActions = false
-        var isUnreferencedCollections = false
-
+        //TODO dive into sub elements, create objects and use in constructor     #
+        val cssDisplay= CssDisplay.BLOCK
         val size = Size.LG
         val cssClass = ""
-        return Col(
-                sizeSpan,
-                domainObject,
-                action,
-                row,
-                tabGroup,
-                fieldSet,
-                collection,
-                metadataError,
-                id,
-                span,
-                isUnreferencedActions,
-                isUnreferencedCollections,
+        return ClearFixVisible(
+                cssDisplay,
                 size,
                 cssClass)
     }

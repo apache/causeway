@@ -1,25 +1,37 @@
-package org.ro.handler
-
-import org.ro.core.event.LogEntry
+package org.ro.bs3.parser
 
 /**
  * Delegates responses to handlers, acts as Facade.
  * @See: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
-object ResponseHandler {
-    private var delegate: IResponseHandler;
+object LayoutXmlHandler {
+    private var delegate: IXmlHandler;
 
-    //TODO sequence of handlers should follow frequency of invocation in order minimize the time taken by unneeded calls to 'canHandle()'
-    private var _1 = ResultHandler()
-    private var _2 = ActionHandler()
-    private var _3 = ServiceHandler()
-    private var _4 = ResultListHandler()
-    private var _5 = TObjectHandler()
-    private var _6 = LayoutHandler()
-    private var _7 = PropertyHandler()
-    private var _8 = MemberHandler()
-    private var _10 = HttpErrorHandler()
-    private var last = DefaultHandler()
+    private var _1 = TabHandler()
+    private var _2 = RowHandler()
+    private var _3 = TabGroupHandler()
+    private var _4 = ColHandler()
+    private var _5 = ClearFixHiddenHandler()
+    private var _6 = ClearFixVisibleHandler()
+    //Action
+    //BookmarkPolicy
+    //Collection
+    private var _7 = DomainObjectHandler()
+    //FieldSet
+    //Grid
+    private var _8 = LinkHandler()
+    //Property
+    //ServiceAction
+    //SizeSpan
+
+    //E CssClassFaPosition
+    //E CssDisplay
+    //E LabelPosition
+    //E Position
+    //E PrompStyle
+    //E Size
+    //E Where
+    private var last = DefaultXmlHandler()
 
     init {
         _1.successor = _2
@@ -29,14 +41,13 @@ object ResponseHandler {
         _5.successor = _6
         _6.successor = _7
         _7.successor = _8
-        _8.successor = _10
-        _10.successor = last
+        _8.successor = last
 
         delegate = _1
     }
 
-    fun handle(logEntry: LogEntry) {
-        delegate.handle(logEntry)
+    fun handle(xmlStr: String) {
+        delegate.handle(xmlStr)
     }
 
 }

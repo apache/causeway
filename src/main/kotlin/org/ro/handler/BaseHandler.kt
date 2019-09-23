@@ -42,7 +42,7 @@ abstract class BaseHandler : IResponseHandler {
             answer = true
         } catch (ex: Exception) {
         }
-        return answer;
+        return answer
     }
 
     /**

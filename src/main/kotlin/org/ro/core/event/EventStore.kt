@@ -52,9 +52,7 @@ object EventStore {
 
     fun close(url: String) {
         val entry = findView(url)
-        if (null == entry) {
-            // Happens with 'Log Entries (x)'
-        } else {
+        if (null != entry) {
             entry.setClose()
             updateStatus(entry)
         }
@@ -76,6 +74,12 @@ object EventStore {
         updateStatus(entry)
     }
 
+    private fun cached(url: String) {
+        val entry: LogEntry? = find(url)
+        entry!!.setCached()
+        updateStatus(entry)
+    }
+
     private fun updateStatus(entry: LogEntry) {
         UiManager.updateStatus(entry)
     }
@@ -88,6 +92,7 @@ object EventStore {
     fun find(url: String): LogEntry? {
         val isRedundant = urlContains(url, "object-layout") || urlContains(url, "/properties/")
         if (isRedundant) {
+//            cached(url)
             return findEquivalent(url)
         } else {
             return findExact(url)

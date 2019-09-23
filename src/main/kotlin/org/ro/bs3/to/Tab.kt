@@ -1,4 +1,4 @@
-package org.ro.to.bs3
+package org.ro.bs3.to
 
 class Tab(
         //@XmlElement(required = true)
@@ -6,4 +6,4 @@ class Tab(
         //@XmlAttribute(name = "name", required = true)
         var name: String,
         cssClass: String
-) : Bs3ElementAbstract(cssClass)
+) : Bs3ElementAbstract(cssClass), Bs3Object

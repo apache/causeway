@@ -1,4 +1,4 @@
-package org.ro.to.bs3
+package org.ro.bs3.to
 
 class Row(
         protected var colOrClearFixVisibleOrClearFixHidden: List<Bs3RowContent>? = ArrayList<Bs3RowContent>(),

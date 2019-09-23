@@ -5,7 +5,7 @@ import org.ro.core.MenuEntry
 import org.ro.core.UiManager
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
-import org.ro.org.ro.view.ImagePanel
+import org.ro.view.ImagePanel
 import org.ro.view.table.el.EventLogTable
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT

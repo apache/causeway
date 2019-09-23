@@ -1,4 +1,4 @@
-package org.ro.to.bs3
+package org.ro.bs3.to
 
 class DomainObject(
         var named: String,
@@ -12,4 +12,4 @@ class DomainObject(
         var cssClassFa: String,
         var cssClassFaPosition: CssClassFaPosition,
 //    @XmlAttribute(name = "namedEscaped")
-        var isNamedEscaped: Boolean)
+        var isNamedEscaped: Boolean) : Bs3Object

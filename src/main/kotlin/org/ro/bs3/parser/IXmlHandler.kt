@@ -1,11 +1,11 @@
-package org.ro.org.ro.bs3.parser
+package org.ro.bs3.parser
 
-import org.ro.to.TransferObject
+import org.ro.bs3.to.Bs3Object
 
-interface XmlHandler {
+interface IXmlHandler {
     fun handle(xmlStr: String)
     fun canHandle(xmlStr: String): Boolean
     fun doHandle()
-    fun parse(xmlStr: String): TransferObject?
+    fun parse(xmlStr: String): Bs3Object?
 }
 
