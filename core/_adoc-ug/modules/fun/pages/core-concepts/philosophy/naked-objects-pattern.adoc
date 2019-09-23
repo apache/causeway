@@ -49,7 +49,7 @@ The visible and tangible object would get very complex if it should be able to s
 In Apache Isis the responsibility of rendering an object is not the object itself, it is the framework.
 Rather, the object inspects the object and uses that to decide how to render the object.
 This is also extensible.
-In the (non-ASF) link:http://platform.incode.org[Incode Platform^] the gmap3 wicket extension renders any object with latitude/longitude on a map, while fullcalendar2 renders any object with date(s) on a calendar.
+In the (non-ASF) link:https://platform.incode.org[Incode Platform^] the gmap3 wicket extension renders any object with latitude/longitude on a map, while fullcalendar2 renders any object with date(s) on a calendar.
 ====
 
 

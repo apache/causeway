@@ -13,3 +13,8 @@ It also shows how to instantiate xref:ug:fun:building-blocks.adoc#view-models[vi
 
 
 
+include::crud/instantiating.adoc[leveloffset=+1]
+include::crud/persisting.adoc[leveloffset=+1]
+include::crud/finding.adoc[leveloffset=+1]
+include::crud/updating.adoc[leveloffset=+1]
+include::crud/deleting.adoc[leveloffset=+1]

@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^] provides a number of reusable modules for Apache Isis, focusing either on specific technologies, technical cross-cutting concerns, or providing business logic for generic subdomains.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^] provides a number of reusable modules for Apache Isis, focusing either on specific technologies, technical cross-cutting concerns, or providing business logic for generic subdomains.
 Some of these modules implement SPIs defined by the framework.
 
 

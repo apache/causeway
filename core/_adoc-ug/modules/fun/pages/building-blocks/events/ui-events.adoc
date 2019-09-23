@@ -18,6 +18,6 @@ Here a subscriber on the default events can provide a title and icon for such an
 Behaviour on such DTOs can also be provided using xref:ug:fun:building-blocks.adoc#mixins[mixins].
 
 Events also allow one module to influence/fine-tune the title of entities provided by some other module.
-One such case is when reusing library modules, eg as provided by (non-ASF) link:http://platform.incode.org[Incode Platform^].
+One such case is when reusing library modules, eg as provided by (non-ASF) link:https://platform.incode.org[Incode Platform^].
 
 

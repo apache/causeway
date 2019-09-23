@@ -9,7 +9,7 @@ include::_attributes.adoc[]
 
 * Reusable building blocks +
 +
-(non-ASF) link:http://platform.incode.org[Incode Platform^]
+(non-ASF) link:https://platform.incode.org[Incode Platform^]
 
 
 

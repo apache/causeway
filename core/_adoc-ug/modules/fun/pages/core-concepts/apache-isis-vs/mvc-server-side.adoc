@@ -17,13 +17,13 @@ The most obvious difference when developing an Apache Isis application is its de
 More sophisticated UIs can be built either by xref:vw:ROOT:extending.adoc[extending Apache Isis' Wicket viewer] or by writing a bespoke UI leveraging the REST (hypermedia) API automatically exposed by Apache Isis' xref:vro:ROOT:about.adoc[Restful Objects] viewer.
 Other frameworks can also be used to implement REST APIs, of course, but generally they require a significant amount of development to get anywhere near the level of sophistication provided automatically by Apache Isis' REST API.
 
-Although these frameworks all provide their own ecosystems of extensions, Apache Isis' equivalent link:http://platform.incode.org[Incode Platform^] modules (non-ASF) tend to work at a higher-level of abstraction.
-For example, each of these frameworks will integrate with various security mechanism, but the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module provides a full subdomain of users, roles, features and permissions that can be plugged into any Apache Isis application.
-Similarly, the link:http://platform.incode.org[Incode Platform^]'s command and audit modules in combination provide a support for auditing and traceability that can also be used for out of the box profiling.
+Although these frameworks all provide their own ecosystems of extensions, Apache Isis' equivalent link:https://platform.incode.org[Incode Platform^] modules (non-ASF) tend to work at a higher-level of abstraction.
+For example, each of these frameworks will integrate with various security mechanism, but the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module provides a full subdomain of users, roles, features and permissions that can be plugged into any Apache Isis application.
+Similarly, the link:https://platform.incode.org[Incode Platform^]'s command and audit modules in combination provide a support for auditing and traceability that can also be used for out of the box profiling.
 Again, these addons can be plugged into any Isis app.
 
 In terms of testing support, each of these other frameworks provide mechanisms to allow the webapp to be tested from within a JUnit test harness.
 Apache Isis' support is similar.
 Where Apache Isis differs though is that it enables end-to-end testing without the need for slow and fragile Selenium tests.
 Instead, Apache Isis provides a "xref:testing:ROOT:integ-test-support/wrapper-factory.adoc[WrapperFactory]" domain service that allows the generic UI provided to in essence be simulated.
-On a more pragmatic level, the link:http://platform.incode.org[Incode Platform^]'s fakedata module does "what it says on the tin", allowing both unit- and integration-tests to focus on the salient data and fake out the rest.
+On a more pragmatic level, the link:https://platform.incode.org[Incode Platform^]'s fakedata module does "what it says on the tin", allowing both unit- and integration-tests to focus on the salient data and fake out the rest.

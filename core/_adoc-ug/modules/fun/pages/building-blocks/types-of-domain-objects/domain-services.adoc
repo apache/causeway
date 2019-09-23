@@ -50,7 +50,7 @@ It's worth extending the xref:ug:fun:core-concepts.adoc#hexagonal-architecture[H
 .The hexagonal architecture with Isis addons
 image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px",link="{imagesdir}/core-concepts/philosophy/hexagonal-architecture-addons.png"]
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^] provide SPI implementations of the common cross-cutting concerns.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^] provide SPI implementations of the common cross-cutting concerns.
 They also provide a number of APIs for domain objects to invoke (not shown in the diagram).
 You can also write your own domain services as well, for example to interface with some external CMS system, say.
 

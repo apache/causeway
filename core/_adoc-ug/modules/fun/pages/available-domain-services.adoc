@@ -10,3 +10,5 @@ Some of these are provided by the framework, while others are third-party (but s
 This chapter surveys some of the domain services currently available.
 
 
+include::available-domain-services/framework-provided.adoc[leveloffset=+1]
+include::available-domain-services/incode-platform.adoc[leveloffset=+1]

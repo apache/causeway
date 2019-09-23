@@ -9,3 +9,8 @@ These range from their title (so an end-user can distinguish one object from ano
 
 
 
+include::ui-hints/layout.adoc[leveloffset=+1]
+include::ui-hints/object-titles-and-icons.adoc[leveloffset=+1]
+include::ui-hints/action-icons-and-css.adoc[leveloffset=+1]
+include::ui-hints/names-and-descriptions.adoc[leveloffset=+1]
+include::ui-hints/eager-rendering.adoc[leveloffset=+1]

@@ -5,46 +5,17 @@
 
 ** xref:ug:fun:building-blocks.adoc[Building Blocks]
 
-
-
-
 ** xref:programming-model.adoc[Programming Model]
 
-
-
 ** xref:ui-hints.adoc[UI Hints]
-*** xref:ui-hints/layout.adoc[Layout]
-*** xref:ui-hints/object-titles-and-icons.adoc[Object Titles and Icons]
-*** xref:ui-hints/action-icons-and-css.adoc[Action Icons and CSS]
-*** xref:ui-hints/names-and-descriptions.adoc[Names and Descriptions]
-*** xref:ui-hints/eager-rendering.adoc[Eager Rendering]
-
-
-
 
 ** xref:crud.adoc[CRUD]
-*** xref:crud/instantiating.adoc[Instantiating]
-*** xref:crud/persisting.adoc[Persisting]
-*** xref:crud/finding.adoc[Finding]
-*** xref:crud/updating.adoc[Updating]
-*** xref:crud/deleting.adoc[Deleting]
-
-
 
 ** xref:business-rules.adoc[Business Rules]
-*** xref:business-rules/visibility.adoc[Visibility]
-*** xref:business-rules/usability.adoc[Usability]
-*** xref:business-rules/validity.adoc[Validity]
-*** xref:business-rules/actions.adoc[Actions]
-*** xref:business-rules/side-effects.adoc[Side effects]
-
 
 ** xref:drop-downs-and-defaults.adoc[Drop downs and Defaults]
 
-
 ** xref:available-domain-services.adoc[Available Domain Services]
-*** xref:available-domain-services/framework-provided.adoc[Framework Provided]
-*** xref:available-domain-services/incode-platform.adoc[Incode Platform]
 
 
 

@@ -34,3 +34,8 @@ One decoupled approach is using xref:ug:fun:building-blocks.adoc#domain-events[d
 A simpler approach is to just implement the business rules imperatively in the domain object, or in a mixin for the object.
 
 
+include::business-rules/visibility.adoc[leveloffset=+1]
+include::business-rules/usability.adoc[leveloffset=+1]
+include::business-rules/validity.adoc[leveloffset=+1]
+include::business-rules/actions.adoc[leveloffset=+1]
+include::business-rules/side-effects.adoc[leveloffset=+1]
