@@ -95,7 +95,7 @@ public class Customer {
 [NOTE]
 ====
 An alternative and almost equivalent design would be to publish an event using the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and implement the domain services as subscribers to the event.
-This alternative design is used in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s poly module, for example.
+This alternative design is used in the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s poly module, for example.
 ====
 
 

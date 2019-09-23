@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 The metadata APIs provide access to the framework's internal metamodel.  These are generally of use to support development-time activities, for example creating custom UIs through Swagger.
 
 The table below summarizes the metadata APIs defined by Apache Isis.
-It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules.
 
 
 .Metadata API

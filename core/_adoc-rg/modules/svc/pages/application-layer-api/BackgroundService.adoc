@@ -78,7 +78,7 @@ One could imagine more complex designs where only the final command executed not
 
 However, an alternative is to rely on the fact that the `BackgroundService` will automatically hint that the `Command` representing the original interaction (to `submitCustomerInvoices()` in the example above) should be persisted.
 This will be available if the related xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] and xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] domain services are configured, and the `CommandService` supports persistent commands.
-Note that (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module does indeed provide such an implementation of `CommandService` (as well as of the required `BackgroundCommandService`).
+Note that (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module does indeed provide such an implementation of `CommandService` (as well as of the required `BackgroundCommandService`).
 
 Thus, the original action can run a query to obtain it corresponding `Command`, and return this to the user.
 The upshot is that the child ``Command``s created by the `BackgroundService` will then be associated with `Command` for the original action.
@@ -111,7 +111,7 @@ The `CommandContext` service is responsible for providing a parent `Command` wit
 The latter is analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s.
 
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way.
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] and xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]).
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] and xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]).
 
 The xref:rg:fis:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
 (In earlier versions, xref:rg:svc:integration-api/MementoService.adoc[`MementoService`] was used for this purpose).

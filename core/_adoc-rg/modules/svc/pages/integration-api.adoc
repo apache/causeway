@@ -7,7 +7,7 @@ The integration APIs provide functionality to the domain objects to integrate wi
 
 
 The table below summarizes the integration APIs defined by Apache Isis.
-It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules.
 
 
 .Integration API

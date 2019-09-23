@@ -23,7 +23,7 @@ better traceability as the `Command` is also correlated with any published event
 information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
 the action) through the `transactionId` GUID
 
-However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
+However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module.
 
 
 
@@ -64,7 +64,7 @@ The framework will automatically have set the `completedAt` property of the `Com
 
 == Implementation
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.
 It further provides a number of supporting services:
 
 * `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
@@ -82,7 +82,7 @@ If contributions are not required in the UI, these can be suppressed either usin
 
 == Alternative Implementations
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
 This module also provides service implementations of the xref:rg:svc:application-layer-spi/CommandService.adoc[`BackgroundCommandService`].
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].

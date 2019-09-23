@@ -6,14 +6,14 @@ include::_attributes.adoc[]
 This is a maintenance release with a number of minor improvements and bug fixes.
 If these the main improvement is that the simpleapp archetype has been substantially reworked to be more modular.
 
-This release also closes the ticket to provide a better DB migration story; this has been implemented by way of the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s flywaydb module.
+This release also closes the ticket to provide a better DB migration story; this has been implemented by way of the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s flywaydb module.
 
 
 
 == New Feature
 
 * link:https://issues.apache.org/jira/browse/ISIS-1542[ISIS-1542] - Update simpleapp application/archetype to provide access to HSQL DB Manager (via their Swing UI) when running in-memory
-* link:https://issues.apache.org/jira/browse/ISIS-1471[ISIS-1471] - Integrate Flyway or Liquibase or something similar (see (non-ASF) link:http://platform.incode.org[Incode Platform^]'s flywaydb module.
+* link:https://issues.apache.org/jira/browse/ISIS-1471[ISIS-1471] - Integrate Flyway or Liquibase or something similar (see (non-ASF) link:https://platform.incode.org[Incode Platform^]'s flywaydb module.
 
 
 == Improvement

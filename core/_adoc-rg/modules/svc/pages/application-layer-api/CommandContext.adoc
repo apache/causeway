@@ -8,7 +8,7 @@ The `CommandContext` service is a xref:rg:ant:RequestScoped.adoc[request-scoped]
 
 By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone.
 The optional supporting xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] enables the implementation of `Command` to be pluggable.
-With an appropriate implementation (eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`]) the `Command` may then be persisted.
+With an appropriate implementation (eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`]) the `Command` may then be persisted.
 
 The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`], or implicitly by way of the xref:rg:ant:Action/command.adoc[`@Action#command()`] annotation.
 
@@ -18,7 +18,7 @@ There are a number of related use cases:
 * if a xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
 * if a xref:rg:svc:spi/AuderService.adoc[`AuditerService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
 
-However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
+However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module.
 
 
 
@@ -150,7 +150,7 @@ public class ToDoItem ... {
 
 When a background command is invoked, the user is returned the command object itself (to provide a handle to the command being invoked).
 
-This requires that an implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] that persists the commands (such as the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's `CommandService`) is configured.
+This requires that an implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] that persists the commands (such as the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's `CommandService`) is configured.
 It also requires that a scheduler is configured to execute the background commands, see xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]).
 
 

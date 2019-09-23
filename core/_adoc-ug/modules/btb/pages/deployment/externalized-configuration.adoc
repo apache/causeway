@@ -123,7 +123,7 @@ Further details an be found in the link:https://logging.apache.org/log4j/1.2/man
 == Spring Config
 
 Although Apache Isis does not use Spring, it's possible that your app may use other components that do use Spring.
-For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module uses ActiveMQ and Camel to support publishing; both of these leverage Spring.
+For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module uses ActiveMQ and Camel to support publishing; both of these leverage Spring.
 
 There are several ways to externalized Spring config, but the mechanism described here is similar in nature to those that we use for externalizing Apache Isis' and Shiro's configuration.
 In your `web.xml`, you will probably load the Spring application context using code such as:

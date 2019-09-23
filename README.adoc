@@ -19,13 +19,13 @@ Isis automatically generates the UI from the domain classes.
 The following screenshots are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example], which you are free to fork and use as you will.
 The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here].
 
-The todoapp also integrates with a number of other modules provided by the link:http://platform.incode.org[Incode Platform].
+The todoapp also integrates with a number of other modules provided by the link:https://platform.incode.org[Incode Platform].
 Please note that these modules are not part of ASF, but they *are* all licensed under Apache License 2.0 and are maintained by Apache the Isis committers.
 
 === Sign-in
 
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro].
-The core framework supports file-based realms, while the (non-ASF) link:http://platform.incode.org[Incode Platform]'s link:http://platform.incode.org/modules/spi/security/spi-security.html[security module] provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel.
+The core framework supports file-based realms, while the (non-ASF) link:https://platform.incode.org[Incode Platform]'s link:https://platform.incode.org/modules/spi/security/spi-security.html[security module] provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel.
 The example todoapp integrates with the security module.
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/010-login.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/010-login.png"]
@@ -134,11 +134,11 @@ image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/as
 
 As well as providing extensions to the UI, the (non-ASF) Incode Platform provides a rich set of modules to support various cross-cutting concerns.
 
-Under the activity menu are four sets of services which provide support for link:http://platform.incode.org/modules/spi/sessionlogger/spi-sessionlogger.html[user session logging/auditing], link:http://platform.incode.org/modules/spi/command/spi-command[command profiling], link:http://platform.incode.org/modules/spi/audit/spi-audit.html[(object change) auditing] (shown) and (inter-system) link:http://platform.incode.org/modules/spi/publishmq/spi-publishmq[event publishing]:
+Under the activity menu are four sets of services which provide support for link:https://platform.incode.org/modules/spi/sessionlogger/spi-sessionlogger.html[user session logging/auditing], link:https://platform.incode.org/modules/spi/command/spi-command[command profiling], link:https://platform.incode.org/modules/spi/audit/spi-audit.html[(object change) auditing] (shown) and (inter-system) link:https://platform.incode.org/modules/spi/publishmq/spi-publishmq[event publishing]:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/120-auditing.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/120-auditing.png"]
 
-In the security menu is access to the rich set of functionality provided by the link:http://platform.incode.org/modules/spi/security/spi-security.html[security module]:
+In the security menu is access to the rich set of functionality provided by the link:https://platform.incode.org/modules/spi/security/spi-security.html[security module]:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/130-security.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/130-security.png"]
 
@@ -147,21 +147,21 @@ This file can then be translated into multiple languages so that your app can su
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/140-i18n.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/140-i18n.png"]
 
-The Incode Platform also provides a module for managing link:http://platform.incode.org/modules/dom/settings/dom-settings.html[application and user settings].
+The Incode Platform also provides a module for managing link:https://platform.incode.org/modules/dom/settings/dom-settings.html[application and user settings].
 Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/150-appsettings.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/150-appsettings.png"]
 
 === Multi-tenancy support
 
-Of the various modules in the Incode Platform, the link:http://platform.incode.org/modules/spi/security/spi-security.html[security module] has the most features.
+Of the various modules in the Incode Platform, the link:https://platform.incode.org/modules/spi/security/spi-security.html[security module] has the most features.
 One significant feature is the ability to associate users and objects with a "tenancy".
 The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
 A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/160-switch-tenancy.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/160-switch-tenancy.png"]
 
-For more details, see the security module's link:http://platform.incode.org/modules/spi/security/spi-security.html[README].
+For more details, see the security module's link:https://platform.incode.org/modules/spi/security/spi-security.html[README].
 
 === Me
 

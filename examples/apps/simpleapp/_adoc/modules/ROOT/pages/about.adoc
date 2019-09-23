@@ -12,7 +12,7 @@ We'll talk more about the structure of the generated app xref:about.adoc#structu
 
 [TIP]
 ====
-The (non-ASF) Incode Platform's link:http://platform.incode.org/quickstart/quickstart.html[quickstart archetype] builds upon the simpleapp archetype, but also adds in support for various Incode Platform modules such as security, auditing, commands and publishing.
+The (non-ASF) Incode Platform's link:https://platform.incode.org/quickstart/quickstart.html[quickstart archetype] builds upon the simpleapp archetype, but also adds in support for various Incode Platform modules such as security, auditing, commands and publishing.
 ====
 
 

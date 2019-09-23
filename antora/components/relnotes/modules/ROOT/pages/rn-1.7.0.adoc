@@ -53,7 +53,7 @@ include::_attributes.adoc[]
 
 === Removed features
 
-Moved to (non-ASF) link:http://www.isisaddons.org[Isis Addons] (as of 1.15.0, part of (non-ASF) link:http://platform.incode.org[Incode Platform^]).
+Moved to (non-ASF) link:http://www.isisaddons.org[Isis Addons] (as of 1.15.0, part of (non-ASF) link:https://platform.incode.org[Incode Platform^]).
 
 * link:https://issues.apache.org/jira/browse/ISIS-851[ISIS-851] - Remove modules from Apache Isis core (available instead through isisaddons).
 * link:https://issues.apache.org/jira/browse/ISIS-887[ISIS-887] - xxx modules, as now in isisaddons.

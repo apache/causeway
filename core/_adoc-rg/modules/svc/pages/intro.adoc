@@ -199,6 +199,6 @@ Likewise, the `PublishedObjects` class passed to the `PublisherService` at the e
 This can be converted into XML using the `ChangesDtoUtils` utility class.
 
 One final point: multiple xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] implementations are supported because different implementations may have different responsibilities.
-For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module is responsible for publishing messages onto an ActiveMQ event bus, for inter-system communication.
+For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module is responsible for publishing messages onto an ActiveMQ event bus, for inter-system communication.
 However, the SPI can also be used for profiling; each execution within the call-graph contains metrics of the number of objects loaded or modified as a result of that execution, and thus could be used for application profiling.
 The framework provides a default `PublisherServiceLogging` implementation that logs this using SLF4J.

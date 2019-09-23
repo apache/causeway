@@ -23,7 +23,7 @@ public interface HasTransactionId {
 <1> unique identifier (a GUID) of this request/interaction.
 
 
-Modules in the (non-ASF) link:http://platform.incode.org[Incode Platform^] that have domain entity/ies that implement this interface, and/or services that contribute this interface are:
+Modules in the (non-ASF) link:https://platform.incode.org[Incode Platform^] that have domain entity/ies that implement this interface, and/or services that contribute this interface are:
 
 * audit module: `AuditEntry` entity, `AuditingServiceContributions` service
 * command module: `CommandJdo` entity, `CommandServiceJdoContributions` service

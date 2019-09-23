@@ -16,7 +16,7 @@ That said, we do recommend that you read and keep in mind the link:https://isis.
 
 [NOTE]
 ====
-The supporting (non-ASF) link:http://isisaddons.org[Isis Addons] and link:http://catalog.incode.org[Incode Catalog] have also been combined into a single link:http://platform.incode.org["Incode Platform"].
+The supporting (non-ASF) link:http://isisaddons.org[Isis Addons] and link:http://catalog.incode.org[Incode Catalog] have also been combined into a single link:https://platform.incode.org["Incode Platform"].
 
 While each module can still be consumed individually, the new platform versions consistently (a change in any one module will result in a re-release of all).
 This should make these modules easier to consume, and easier to maintain/develop.
@@ -129,7 +129,7 @@ All the modules remain open source, still licensed under the ASF v2.0 license.
 
 == Incode Platform
 
-Implemented in the (non-ASF) link:http://platform.incode.org[Incode Platform^].
+Implemented in the (non-ASF) link:https://platform.incode.org[Incode Platform^].
 
 * link:https://issues.apache.org/jira/browse/ISIS-513[ISIS-513] - [ADDONS] Wicket: Pdf.js display in browser natively
 

@@ -9,7 +9,7 @@ of a business.  You can get a feel for it from this screenshot:
 
 image::powered-by/commapp/screenshot-1.png[width="900px",link="{imagesdir}/powered-by/commapp/screenshot-1.png"]
 
-which shows how the app integrates a number of the (non-ASF) link:http://platform.incode.org[Incode Platform^] components
+which shows how the app integrates a number of the (non-ASF) link:https://platform.incode.org[Incode Platform^] components
 (excel, fullcalendar2, gmap3 and wickedcharts).
 
 
@@ -24,7 +24,7 @@ So we added Apache Isis to our evaluation, and we found it to be open in many as
 Our main focus in the code is given to the business domain, with business logic treated as a first class citizen.
 And because our code simply uses non-proprietary Java, we've been able to extend it the normal way.
 Very little code in our application so far can be considered to be framework-specific, the few that is only because we chose to use some
-of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules that provide our applications with high value, and which are
+of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules that provide our applications with high value, and which are
 open source also.
 
 When creating our prototype and then subsequent application, we've found quite amazing support: most of the time the

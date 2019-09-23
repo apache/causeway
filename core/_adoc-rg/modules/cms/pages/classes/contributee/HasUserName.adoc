@@ -15,7 +15,7 @@ public interface HasUsername {
 }
 ----
 
-Modules in the (non-ASF) link:http://platform.incode.org[Incode Platform^] that either have domain entity that implement and/or services that contribute this interface are:
+Modules in the (non-ASF) link:https://platform.incode.org[Incode Platform^] that either have domain entity that implement and/or services that contribute this interface are:
 
 * security module: `ApplicationUser` entity, `HasUsernameContributions` service
 * audit module: `AuditEntry` entity

@@ -10,7 +10,7 @@ This can appear in several contexts, including:
 
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
  (see xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`])
- ** and thus in the "table-of-two-halves" pattern, as per the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s poly module
+ ** and thus in the "table-of-two-halves" pattern, as per the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s poly module
 * in the serialization of `OidDto` in the xref:rg:cms:schema/cmd.adoc[command] and xref:rg:cms:schema/ixn.adoc[interaction] schemas
 * in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
 * in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (in general and in particular if xref:vw:ROOT:features/hints-and-copy-url.adoc[copying URLs])

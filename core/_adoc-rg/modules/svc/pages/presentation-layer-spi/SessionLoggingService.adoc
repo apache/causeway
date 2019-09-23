@@ -35,5 +35,5 @@ public interface SessionLoggingService {
 The framework provides an implementation, `SessionLoggingService.Stderr` that just prints out to standard error.
 This is not registered by default, but can be easily registered manually using `AppManifestAbstract.Builder#withAdditionalServices(...)`.
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s sessionlogger module provides an implementation that logs each session as a JDO entity.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s sessionlogger module provides an implementation that logs each session as a JDO entity.
 

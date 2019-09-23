@@ -45,7 +45,7 @@ Note that `isis-mavendeps-webapp` has been updated with support for running with
 
 == (non-ASF) Incode Platform
 
-The generic subdomain modules of the (non-ASF) link:http://platform.incode.org["Incode Platform"] have been demoted to instead act as examples.
+The generic subdomain modules of the (non-ASF) link:https://platform.incode.org["Incode Platform"] have been demoted to instead act as examples.
 
 Rather than consume as binaries, the recommendation is to copy in the source code into your application and adapt as required.
 

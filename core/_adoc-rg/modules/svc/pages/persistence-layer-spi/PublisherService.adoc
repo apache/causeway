@@ -91,7 +91,7 @@ To indicate that:
 
 == Alternative Implementations
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also provides an implementation (`o.ia.m.publishmq.dom.servicespi.PublisherServiceUsingActiveMq`).
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module also provides an implementation (`o.ia.m.publishmq.dom.servicespi.PublisherServiceUsingActiveMq`).
 This implementation:
 
 * publishes each member execution as an event on an link:http://activemq.apache.org[ActiveMQ] message queue.

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
 
-All the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules do this.
+All the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules do this.
 For example:
 
 

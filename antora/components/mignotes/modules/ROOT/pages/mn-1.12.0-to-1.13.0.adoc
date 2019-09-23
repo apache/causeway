@@ -39,7 +39,7 @@ As a side-effect of this work, note also that:
 The link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] SPI service has been deprecated, instead replaced by the link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
 
 There can be more than one implementation of this new SPI, and a framework-provided implementation (`AuditerServiceLogging`) will log to a file.
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module also implements the new SPI.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s audit module also implements the new SPI.
 
 
 == Publishing
@@ -47,7 +47,7 @@ The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module a
 The link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI service and its supporting link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_EventSerializer[`EventSerializer`] domain service, have both deprecated, instead replaced by the link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
 There can be more than one implementation of this new SPI, and a framework-provided implementation (`PublisherServiceLogging`) will log to a file.
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also implements the new SPI.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module also implements the new SPI.
 
 The new service also supports the notion of published property edits; the new link:https://isis.apache.org/versions/1.13.0/guides/rgant/rgant.html#_rgant-Property_publishing[`@Property#publishing()`] annotation attribute can be used to specify.
 The ` isis.services.publish.properties` configuration property can be used to specify a fallback default for properties where the attribute is not set explicitly.

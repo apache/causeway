@@ -8,7 +8,7 @@ The persistence layer SPIs influence how the framework persists domain objects, 
 
 
 The table below summarizes the persistence layer SPIs defined by Apache Isis.
-It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules.
 
 
 .Persistence Layer SPI

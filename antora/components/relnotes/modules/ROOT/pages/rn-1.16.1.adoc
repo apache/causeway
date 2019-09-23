@@ -17,7 +17,7 @@ As part of this change, the new `@Action(associateWith="...")` attribute can be 
 * link:https://issues.apache.org/jira/browse/ISIS-1569[ISIS-1569] provides infrastructure to enable commands to be replayed from master to slave (for regression testing purposes).
 
 +
-The majority of the implementation is provided in the (non-ASF) (non-ASF) link:http://platform.incode.org[Incode Platform]'s new link:http://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay] library.
+The majority of the implementation is provided in the (non-ASF) (non-ASF) link:https://platform.incode.org[Incode Platform]'s new link:https://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay] library.
 
 Applications written against v1.16.0 should run against v1.16.1 with few if any changes.
 

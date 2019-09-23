@@ -8,7 +8,7 @@ The actions of domain services are made available as menu items on menus.
 By default each domain service corresponds to a single menu on this menu bar, with its actions as the drop-down menu items.
 This is rarely exactly what is required, however; it often makes sense to group menu items for similar domain services together.
 
-For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules provides services whose actions appear into two top-level menus:
+For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules provides services whose actions appear into two top-level menus:
 
 * its `ApplicationUsers`, `ApplicationRoles`, `ApplicationPermission`, `ApplicationFeatureViewModels` and `ApplicationTenancies` domain services are all grouped together in a single "Security" top-level menu, on the SECONDARY menu bar
 

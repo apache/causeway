@@ -141,7 +141,7 @@ public class RecreateSimpleObjects extends FixtureScript {                   // 
 ----
 <1> inherit from `org.apache.isis.applib.fixturescripts.FixtureScript`
 <2> a hard-coded list of values for the names.
-Note that the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fakedata module could also have been used
+Note that the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedata module could also have been used
 <3> whether the script is "discoverable"; in other words whether it should be rendered in the drop-down by the `FixtureScripts` service
 <4> input property: the number of objects to create, up to 10; for the calling test to specify, but note this is optional and has a default (see below).
 It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
@@ -347,7 +347,7 @@ And for more complex entity -where there might be many potential values that nee
 - the builder script can automatically default some or even all of these values.
 
 For example, for a customer's date of birth, the buider could default to a date making the customer an adult, aged between 18 and 65, say.
-For an email address or postal address, or an image, or some "lorem ipsum" text, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fakedata module could provide randomised values.
+For an email address or postal address, or an image, or some "lorem ipsum" text, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedata module could provide randomised values.
 
 The benefit of an intelligent builder is that it further simplifies the test.
 The developer reading the test then knows that everything that has been specified exactly is of significance.

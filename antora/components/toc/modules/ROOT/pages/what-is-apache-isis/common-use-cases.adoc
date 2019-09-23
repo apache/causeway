@@ -24,7 +24,7 @@ One of the original motivations for Apache Isis itself was to be able automatica
 Apache Isis' has a pluggable architecture allowing different user interface technologies.
  The principal implementation (as configured by the xref:simpleapp:ROOT:about.adoc[SimpleApp archetype]) is the xref:vw:ROOT:about.adoc[Wicket viewer].
   This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components.
-Some third-party components can be found in the (non-ASF) link:http://platform.incode.org[Incode Platform^].
+Some third-party components can be found in the (non-ASF) link:https://platform.incode.org[Incode Platform^].
 
 
 Deploying on Apache Isis means that the framework also manages object persistence.

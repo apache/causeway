@@ -122,7 +122,7 @@ public class MyAppAppManifest implements AppManifest {
 ----
 <1> the module classes, whose packages specify the existence of domain services and/or persistent entities.
 If your app uses (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules, then include the module classes for these addons in `getModules()`.
-For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module provides the `org.isisaddons.module.security.SecurityModule` class.
+For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module provides the `org.isisaddons.module.security.SecurityModule` class.
 <2> any additional services, as per `isis.services` configuration property.
 
 

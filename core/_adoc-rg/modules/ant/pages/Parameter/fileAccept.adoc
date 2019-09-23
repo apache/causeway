@@ -24,7 +24,7 @@ public class Scanner {
 <1> as per link:http://www.w3schools.com/tags/att_input_accept.asp[reference docs], either a media type (such as
 `image/*`) or a file type extension (such as `.png`).
 <2> the `@ParameterLayout(named=...)` attribute is required for Java 7; for Java 8 it can be omitted if the
-(non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension is used.
+(non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension is used.
 
 
 

@@ -10,7 +10,7 @@ In fact, the service requires that the implementation of the `Command` being exe
 This allows the xref:rg:cms:schema/cmd.adoc[`CommandDto`] memento to be extracted, from which the action can be invoked/property edited.
 
 The primary use case for this service is to allow the replay of commands, eg for regression testing.
-This is implemented by the (non-ASF) link:http://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay module].
+This is implemented by the (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay module].
 (The command replay module also provides a decorator implementation of this service that allows the command to be re-executed at the same _time_ as the original command, leveraging the `TickingClock` implementation provided by the framework).
 
 

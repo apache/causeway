@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module provides a complete security subdomain for users, roles, permissions; all are persisted as domain entities.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module provides a complete security subdomain for users, roles, permissions; all are persisted as domain entities.
 
 What that means, of course, that they can also be administered through your Apache Isis application.
 Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".

@@ -74,9 +74,9 @@ The typical way to indicate that an object should be audited is to annotate it w
 
 == Alternative Implementations
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of this service (`AuditerService`), and also provides a number of related domain services (`AuditingServiceMenu`, `AuditingServiceRepository` and `AuditingServiceContributions`).
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s audit module provides an implementation of this service (`AuditerService`), and also provides a number of related domain services (`AuditingServiceMenu`, `AuditingServiceRepository` and `AuditingServiceContributions`).
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module also provides an implementation, `org.isisaddons.module.audit.dom.AuditerServiceUsingJdo`.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s audit module also provides an implementation, `org.isisaddons.module.audit.dom.AuditerServiceUsingJdo`.
 This creates an audit record for each changed property (ie every time that `AuditerService#audit(...)` is called.
 
 The module also provides:

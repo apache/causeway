@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 We tend to use Maven modules as a way to group related domain objects together; we can then reason about all the classes in that module as a single unit.
 By convention there will be a single top-level package corresponding to the module.
 
-For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s http://platform.incode.org/modules/lib/excel/lib-excel.html[Excel] module has a top-level package of `org.incode.module.excel`.
+For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s http://platform.incode.org/modules/lib/excel/lib-excel.html[Excel] module has a top-level package of `org.incode.module.excel`.
 Within the module there may be various subpackages, but it's the module that defines the namespace.
 
 [NOTE]

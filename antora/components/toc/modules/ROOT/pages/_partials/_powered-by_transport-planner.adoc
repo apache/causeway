@@ -22,16 +22,16 @@ is necessary).
 [cols="2a,2a"]
 |===
 
-|TransportPlanner allows schedules of journeys to be planned.  It uses the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s gmap3 wicket component to provide the map.
+|TransportPlanner allows schedules of journeys to be planned.  It uses the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component to provide the map.
 
 |image::https://www.assembla.com/code/transportplanner/git/node/blob/screenshots/TransportDemand.png?raw=1&rev=a9d5184ecb05c3d95dafec587c84cfcbc7a25b8b[width="530px",link="https://www.assembla.com/code/transportplanner/git/node/blob/screenshots/TransportDemand.png?raw=1&rev=a9d5184ecb05c3d95dafec587c84cfcbc7a25b8b"]
 
 
-|TransportPlanner uses the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s wickedcharts wicket extension to provide custom graphs
+|TransportPlanner uses the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s wickedcharts wicket extension to provide custom graphs
 |image::https://www.assembla.com/code/transportplanner/git/node/blob/screenshots/TPM_CostPie.png?raw=1&rev=a9d5184ecb05c3d95dafec587c84cfcbc7a25b8b[width="530px",link="https://www.assembla.com/code/transportplanner/git/node/blob/screenshots/TPM_CostPie.png?raw=1&rev=a9d5184ecb05c3d95dafec587c84cfcbc7a25b8b"]
 
 
-|Another example of TransportPlanner's use of (non-ASF) link:http://platform.incode.org[Incode Platform^]'s wickedcharts component.
+|Another example of TransportPlanner's use of (non-ASF) link:https://platform.incode.org[Incode Platform^]'s wickedcharts component.
 |image::https://www.assembla.com/code/transportplanner/git/node/blob/screenshots/Tpm_ResourceUsage.png?raw=1&rev=a9d5184ecb05c3d95dafec587c84cfcbc7a25b8b[width="530px",link="https://www.assembla.com/code/transportplanner/git/node/blob/screenshots/Tpm_ResourceUsage.png?raw=1&rev=a9d5184ecb05c3d95dafec587c84cfcbc7a25b8b"]
 
 |===

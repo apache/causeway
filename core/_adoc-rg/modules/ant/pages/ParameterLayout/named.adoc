@@ -12,7 +12,7 @@ This can be sufficient for application-specific reference types (eg `ToDoItem`) 
 The `named()` attribute is therefore often required to specify the parameter name.
 
 As of Java 8, the Java reflection API has been extended.
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension provides support for this.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension provides support for this.
 Note that your application must (obviously) be running on Java 8, and be compiled with the `-parameters` compile flag for javac.
 
 

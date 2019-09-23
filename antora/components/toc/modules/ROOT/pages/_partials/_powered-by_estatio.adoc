@@ -25,7 +25,7 @@ Since the initial release - as the scope of the application has grown - the team
 
 == Supporting Open Source
 
-Much of Apache Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.  Much of the (non-ASF) link:http://platform.incode.org[Incode Platform^] also originate from the requirements of Estatio.
+Much of Apache Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.  Much of the (non-ASF) link:https://platform.incode.org[Incode Platform^] also originate from the requirements of Estatio.
 
 Estatio itself is also open source, licensed under Apache Software License and available on link:https://github.com/estatio/estatio[github].
 

@@ -26,7 +26,7 @@ However, using this first approach does create a maintenance effort; if the doma
 The second approach (using an `.orm` file) is therefore often more useful than the first, because the metadata provided overrides rather than replaces the annotations (and annotations not overridden continue to be honoured).
 
 A typical use case is to change the database schema for an entity.
-For example, the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules use schemas for each entity. For example, the `AuditEntry` entity in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module is annotated as:
+For example, the various (non-ASF) link:https://platform.incode.org[Incode Platform^] modules use schemas for each entity. For example, the `AuditEntry` entity in the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s audit module is annotated as:
 
 [source,java]
 ----

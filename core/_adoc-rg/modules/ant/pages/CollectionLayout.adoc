@@ -26,7 +26,7 @@ The table below summarizes the annotation's attributes.
 |`table`, `excel`, `calendar`, `map`, ...
 |Which view is selected by default, if multiple views are available.
 
-See the (non-ASF) link:http://platform.incode.org[Incode Platform^] for further Wicket components providing views.
+See the (non-ASF) link:https://platform.incode.org[Incode Platform^] for further Wicket components providing views.
 
 
 

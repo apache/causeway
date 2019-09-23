@@ -8,7 +8,7 @@ The last part of the puzzle is to actually run the (appropriate implementation o
 This could be run in a batch job overnight, or run continually by, say, the http://quartz-scheduler.org[Quartz] scheduler or by link:http://camel.apache.org[Apache Camel].
 This section looks at configuring Quartz.
 
-If using (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module, then note that this already provides a suitable concrete implementation, namely `org.isisaddons.module.command.dom.BackgroundCommandExecutionFromBackgroundCommandServiceJdo`.
+If using (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module, then note that this already provides a suitable concrete implementation, namely `org.isisaddons.module.command.dom.BackgroundCommandExecutionFromBackgroundCommandServiceJdo`.
 We therefore just need to schedule this to run as a Quartz job.
 
 

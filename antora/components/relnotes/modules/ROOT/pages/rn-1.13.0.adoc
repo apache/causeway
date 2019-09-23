@@ -17,8 +17,8 @@ replaced by link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html
 link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  It is now possible to have multiple implementations
 of each.
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module has been reworked to
-implement link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_spi_AuditService[`AuditService`], while the new (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module implements
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module has been reworked to
+implement link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_spi_AuditService[`AuditService`], while the new (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module implements
 link:https://isis.apache.org/versions/1.13.0/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] to publish interaction events to an ActiveMQ bus (and
 to allow such events to be replayed if necessary).
 

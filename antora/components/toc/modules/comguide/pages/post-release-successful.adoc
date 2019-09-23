@@ -585,5 +585,5 @@ git push
 
 == Release (non-ASF) Modules
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^] should also be released, as per their link:http://platform.incode.org/pages/committers-guide/committers-guide.html#_release_to_maven_central[release guide].
+The (non-ASF) link:https://platform.incode.org[Incode Platform^] should also be released, as per their link:https://platform.incode.org/pages/committers-guide/committers-guide.html#_release_to_maven_central[release guide].
 

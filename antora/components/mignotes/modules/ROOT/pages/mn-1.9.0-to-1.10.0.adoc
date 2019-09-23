@@ -41,7 +41,7 @@ Therefore, in the parent `pom.xml` of your own domain applications, remove:
 One possible issue is that (as per link:https://issues.apache.org/jira/browse/ISIS-830[ISIS-830]) the link:https://isis.apache.org/versions/1.10.0/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_EventBusService[`EventBusService`] is now initialized as one of the first domain
 services; this is to ensure that any object lifecycle events caused by domain services initializing themselves can be
 posted on the event bus for subscribers.  The typical case for such lifecycle events to occur is from domain services
-that seed reference data; one such example can be found in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module.
+that seed reference data; one such example can be found in the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module.
 
 In previous releases, the ordering of initialization for the `EventBusService` was undefined (but would typically be towards the
 "end" of the list of services.  What this meant in practice is that it generally didn't matter whether (domain service)

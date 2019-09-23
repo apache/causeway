@@ -7,7 +7,7 @@ Bootstrapping SPIs influence how the framework locates the components that make 
 
 
 The table below summarizes the bootstrapping SPI defined by Apache Isis.
-It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules.
 
 .Bootstrapping SPI
 [cols="2,4a,1,1", options="header"]

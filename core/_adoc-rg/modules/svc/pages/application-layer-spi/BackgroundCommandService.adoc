@@ -55,7 +55,7 @@ The developer is required to implement this hook method in a subclass.
 
 == Implementation
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.BackgroundCommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides an implementation (`org.isisaddons.module.command.dom.BackgroundCommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.
 It further provides a number of supporting services:
 
 * `org.isisaddons.module.command.dom.BackgroundCommandServiceJdoRepository` is a repository to search for persisted background ``Command``s
@@ -85,7 +85,7 @@ The imperative approach involves explicitly calling the xref:rg:svc:application-
 
 == Alternative Implementations
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`BackgroundCommandService`), and also provides a number of related domain services (`BackgroundCommandServiceJdo`, `BackgroundCommandJdoRepository` and `BackgroundCommandServiceJdoContributions`).
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`BackgroundCommandService`), and also provides a number of related domain services (`BackgroundCommandServiceJdo`, `BackgroundCommandJdoRepository` and `BackgroundCommandServiceJdoContributions`).
 This module also provides service implementations of the xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`].
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
@@ -99,7 +99,7 @@ As discussed above, this service supports the xref:rg:svc:application-layer-api/
 
 There is also a tie-up with the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] and its supporting xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] domain service. The `CommandContext` service is responsible for providing a parent `Command` with which the background `Command`s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s (analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s). The `BackgroundCommandService` ensures that these background `Command`s are associated with the parent "foreground" `Command`.
 
-What that means is that the implementations of `CommandService` and `BackgroundCommandService` go together, hence both implemented in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s  command module.).
+What that means is that the implementations of `CommandService` and `BackgroundCommandService` go together, hence both implemented in the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s  command module.).
 
 
 

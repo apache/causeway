@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 Domain service SPIs for the presentation layer influence how the Apache Isis viewers behave.
 
 The table below summarizes the presentation layer SPIs defined by Apache Isis.
-It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules.
 
 
 .Presentation Layer SPI

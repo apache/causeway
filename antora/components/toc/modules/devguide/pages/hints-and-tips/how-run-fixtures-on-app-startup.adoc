@@ -18,7 +18,7 @@ These can be run in on start-up typically by being specified in the xref:rg:cms:
 
 Alternatively just set `isis.fixtures` and `isis.persistor.datanucleus.install-fixtures` properties.
 
-In terms of implementations, you might also want to check out the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s excel module, by using `ExcelFixture` and overriding `ExcelFixtureRowHandler`.
+In terms of implementations, you might also want to check out the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel module, by using `ExcelFixture` and overriding `ExcelFixtureRowHandler`.
 
 An example can be found in this (non ASF) link:https://github.com/incodehq/contactapp[contactapp], see link:https://github.com/incodehq/contactapp/blob/master/backend/fixture/src/main/java/org/incode/eurocommercial/contactapp/fixture/scenarios/demo/ContactImport.java[`ContactRowHandler`].
 

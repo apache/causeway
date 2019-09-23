@@ -83,7 +83,7 @@ Learn more xref:toc:devguide:about.adoc#intellij[here]
 
 _Configuring the command and auditing add-on modules for the xref:simpleapp:ROOT:about.adoc[SimpleApp]._ +
 
-Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command and audit SPI modules
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit SPI modules
 
 |video::g01tK58MxJ8[youtube,width="420px",height="236px"]
 
@@ -92,7 +92,7 @@ Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s 
 
 _Configuring the security add-on module for for the xref:simpleapp:ROOT:about.adoc[SimpleApp]._ +
 
-Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security SPI module.
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security SPI module.
 
 |video::bj8735nBRR4[youtube,width="420px",height="236px"]
 
@@ -102,7 +102,7 @@ Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s 
 
 _A run-through of the command (profiling) service, auditing service, publishing service.  Also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation._ +
 
-Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command and audit modules (also the obsolete http://github.com/isisaddons-legacy/isis-module-publishing[publishing] modules).
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules (also the obsolete http://github.com/isisaddons-legacy/isis-module-publishing[publishing] modules).
 
 |video::tqXUZkPB3EI[youtube,width="420px",height="210px"]
 
@@ -110,7 +110,7 @@ Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s 
 
 |Bulk updates in Apache Isis (v1.5.0) +
 
-_Using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s excel module and view models to perform bulk updates)._
+_Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel module and view models to perform bulk updates)._
     
 |video::8SsRDhCUuRc[youtube,width="420px",height="315px"]
 
@@ -130,7 +130,7 @@ _Using the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s excel m
 
 |Customizing the Wicket viewer +
 
-_How to customize the Wicket viewer, integrating the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s gmap3 wicket component._
+_How to customize the Wicket viewer, integrating the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component._
 
 |video::9o5zAME8LrM[youtube,width="420px",height="315px"]
 

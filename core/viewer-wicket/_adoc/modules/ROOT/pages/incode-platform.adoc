@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^] provides a number of extensions to the Wicket viewer (leveraging the APIs described in xref:vw:ROOT:extending.adoc[Extending the Wicket viewer] section, later.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^] provides a number of extensions to the Wicket viewer (leveraging the APIs described in xref:vw:ROOT:extending.adoc[Extending the Wicket viewer] section, later.
 While you are free to fork and adapt any of them to your needs, they are also intended for use "out-of-the-box".
 
 At the time of writing the addons available are:
@@ -25,7 +25,7 @@ At the time of writing the addons available are:
 * Wickedcharts Wicket component - low-level integration with Highcharts charting library
 
 
-Check the link:http://platform.incode.org[website^] for the most up-to-date list.
+Check the link:https://platform.incode.org[website^] for the most up-to-date list.
 
 
 NOTE: The Incode Platform, although maintained by Apache Isis committers, is not part of the ASF.

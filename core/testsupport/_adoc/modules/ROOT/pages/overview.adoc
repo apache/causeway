@@ -137,7 +137,7 @@ We want our tests to be easily understood, and we want the reader's eye to be dr
 
 One way to do this is to use random (or fake) values for any insignificant data.  This in effect tells the reader that "any value will do".  Moreover, if it turns out that any data won't do, and that there's some behaviour that is sensitive to the value, then the test will start to flicker, passing and then failing depending on inputs.  This is A Good Thing&#8482;.
 
-Apache Isis does not, itself, ship with a fake data library.  However, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fakedata module (non-ASF) does provide exactly this capability.
+Apache Isis does not, itself, ship with a fake data library.  However, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedata module (non-ASF) does provide exactly this capability.
 
 [TIP]
 ====
@@ -153,7 +153,7 @@ Writing automated tests is just good development practice.  Also good practice i
 
 Sometimes, though, a feature will take longer to implement than your iteration cycle.  In such a case, how do you use continuous integration to keep everyone working on the mainline without revealing a half-implemented feature on your releases?  One option is to use link:http://martinfowler.com/bliki/FeatureToggle.html[feature toggle]s.
 
-Apache Isis does not, itself, ship with a feature toggle library.  However, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s togglz module does provide exactly this capability.
+Apache Isis does not, itself, ship with a feature toggle library.  However, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s togglz module does provide exactly this capability.
 
 
 

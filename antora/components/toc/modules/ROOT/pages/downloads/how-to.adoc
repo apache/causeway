@@ -105,7 +105,7 @@ The http://projects.apache.org/doap.html[description of a project] RDF file for 
 
 == Incode Platform
 
-The link:http://platform.incode.org[Incode Platform^] provides a number of (open source, but not ASF) supporting modules and extensions for you to use:
+The link:https://platform.incode.org[Incode Platform^] provides a number of (open source, but not ASF) supporting modules and extensions for you to use:
 
 * technical libraries, such as excel, word and freemarker
 

@@ -34,7 +34,7 @@ The service and its actions are only intended to be invoked programmatically; th
 
 The actual class name of the domain service is only rendered for the `VIEW`, `VIEW_MENU_ONLY` and `VIEW_REST_ONLY` natures.
 Thus, you might also want to adopt naming conventions for your domain classes so you can infer the nature from the class.
-For example, the naming convention adopted (by and large) by the (non-ASF) link:http://platform.incode.org[Incode Platform^] is `ProgrammaticServices` or `Repository` as a suffix for `DOMAIN` services, and `Contributions` as a suffix for `VIEW_CONTRIBUTIONS_ONLY` services.
+For example, the naming convention adopted (by and large) by the (non-ASF) link:https://platform.incode.org[Incode Platform^] is `ProgrammaticServices` or `Repository` as a suffix for `DOMAIN` services, and `Contributions` as a suffix for `VIEW_CONTRIBUTIONS_ONLY` services.
 
 For example:
 

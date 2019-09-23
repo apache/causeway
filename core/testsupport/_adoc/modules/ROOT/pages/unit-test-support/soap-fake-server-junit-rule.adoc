@@ -12,7 +12,7 @@ The `SoapEndpointPublishingRule` is a simple JUnit rule that allows you to run a
 
 [TIP]
 ====
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module provides a full example of how to integrate and test an Apache Isis application with a (faked out) external system.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module provides a full example of how to integrate and test an Apache Isis application with a (faked out) external system.
 ====
 
 

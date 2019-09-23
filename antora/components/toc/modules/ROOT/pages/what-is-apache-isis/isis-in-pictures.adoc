@@ -11,7 +11,7 @@ On this page we want to show you what a modern Apache Isis application looks lik
 The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will.
 The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/master/dom/src/main/java/todoapp/dom/todoitem[here].
 
-The todoapp also integrates with a number of other modules from the (non-ASF) link:http://platform.incode.org[Incode Platform^].
+The todoapp also integrates with a number of other modules from the (non-ASF) link:https://platform.incode.org[Incode Platform^].
 Because we expect that most apps will end up using one or more of these modules, we've chosen to include screenshots of those too.
 
 [NOTE]
@@ -27,7 +27,7 @@ Let's start with the basics...
 === Sign-in
 
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro].
-The core framework supports file-based realms, while the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
+The core framework supports file-based realms, while the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
 The example todoapp integrates with the security module.
 
 
@@ -133,7 +133,7 @@ For example, when a collection of objects is rendered, this is just one of sever
 image::what-is-apache-isis/isis-in-pictures/070-pluggable-views.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/070-pluggable-views.png"]
 
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^] provides a number of such extensions.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^] provides a number of such extensions.
 For example, the gmap3 component will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
 
 image::what-is-apache-isis/isis-in-pictures/080-gmap3-view.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/080-gmap3-view.png"]
@@ -141,7 +141,7 @@ image::what-is-apache-isis/isis-in-pictures/080-gmap3-view.png[width="800px",lin
 
 
 
-Similarly the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s fullcalendar2 component will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
+Similarly the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 component will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
 
 image::what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png"]
 
@@ -149,7 +149,7 @@ image::what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png[width="80
 
 
 
-Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s excel Wicket component
+Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel Wicket component
 This provides a download button to the table as a spreadsheet:
 
 image::what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png"]
@@ -158,7 +158,7 @@ image::what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[width="8
 
 
 The screenshot above also shows an "export to Word" action.
-This is _not_ a view but instead is a (contributed) action that uses the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s docx module to perform a "mail-merge":
+This is _not_ a view but instead is a (contributed) action that uses the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s docx module to perform a "mail-merge":
 
 image::what-is-apache-isis/isis-in-pictures/110-docx.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/110-docx.png"]
 
@@ -177,13 +177,13 @@ Please note that the Isis Addons are not part of ASF, but they _are_ all license
 
 As well as providing extensions to the UI, the (non ASF) Isis Addons provide a rich set of modules to support various cross-cutting concerns.
 
-Under the activity menu are four sets of services which provide support for (non-ASF) link:http://platform.incode.org[Incode Platform^]'s sessionlogger module (for user session logging/auditing) , command module (audit/profiling), audit module (audit object changes) (shown) and (inter-system) event publishing:
+Under the activity menu are four sets of services which provide support for (non-ASF) link:https://platform.incode.org[Incode Platform^]'s sessionlogger module (for user session logging/auditing) , command module (audit/profiling), audit module (audit object changes) (shown) and (inter-system) event publishing:
 
 image::what-is-apache-isis/isis-in-pictures/120-auditing.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/120-auditing.png"]
 
 
 
-In the security menu is access to the rich set of functionality provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module:
+In the security menu is access to the rich set of functionality provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module:
 
 image::what-is-apache-isis/isis-in-pictures/130-security.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/130-security.png"]
 
@@ -199,7 +199,7 @@ image::what-is-apache-isis/isis-in-pictures/140-i18n.png[width="800px",link="{im
 
 
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^] also provides a module for managing application and user settings.
+The (non-ASF) link:https://platform.incode.org[Incode Platform^] also provides a module for managing application and user settings.
 Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
 image::what-is-apache-isis/isis-in-pictures/150-appsettings.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/150-appsettings.png"]
@@ -209,7 +209,7 @@ image::what-is-apache-isis/isis-in-pictures/150-appsettings.png[width="800px",li
 
 === Multi-tenancy support
 
-One significant feature of the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module is the ability to associate users and objects with a "tenancy".
+One significant feature of the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module is the ability to associate users and objects with a "tenancy".
 The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
 A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
@@ -217,12 +217,12 @@ image::what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png[width="800px"
 
 
 
-For more details, see the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module README.
+For more details, see the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module README.
 
 
 === Me
 
-Most of the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module's services are on the security menu, which would normally be provided only to administrators.
+Most of the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module's services are on the security menu, which would normally be provided only to administrators.
 Kept separate is the "me" action:
 
 image::what-is-apache-isis/isis-in-pictures/170-me.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/170-me.png"]
