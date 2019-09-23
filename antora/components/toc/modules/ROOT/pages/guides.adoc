@@ -1,3 +1,26 @@
 = Guides
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
+
+== User Guides
+
+* xref:ug:ROOT:about.adoc[Fundamentals & Beyond]
+* xref:demoapp:ROOT:about.adoc[Demo App]
+
+== Reference Guides
+
+* xref:rg:ant:about.adoc[Annotations]
+* xref:rg:svc:about.adoc[Domain Services]
+* xref:rg:cfg:about.adoc[Core Configuration Properties]
+* xref:rg:cms:about.adoc[Classes, Methods & Schemas]
+
+== Testing & Prototyping
+
+* xref:testing:ROOT:about.adoc[Unit & Integration Testing]
+
+_Extensions_
+
+* xref:ext-fixtures:ROOT:about.adoc[Fixtures]
+* xref:ext-specsupport:ROOT:about.adoc[BDD]
+
 

@@ -4,6 +4,7 @@ version: master
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
-- modules/devguide/nav.adoc
-- modules/comguide/nav.adoc
+# not required because referenced from main nav.adoc
+#- modules/devguide/nav.adoc
+#- modules/comguide/nav.adoc
 #- modules/doc-template/nav.adoc
