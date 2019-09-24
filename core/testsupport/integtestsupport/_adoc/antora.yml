@@ -1,0 +1,7 @@
+name: integ-test-support
+title: "Integ Test Support"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc
+#- modules/mvn/nav.adoc  # TODO: this will be converted to utilities, perhaps as extensions.

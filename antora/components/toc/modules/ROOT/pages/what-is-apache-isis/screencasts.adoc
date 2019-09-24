@@ -90,13 +90,13 @@ Implementing xref:ug:fun:business-rules.adoc[business rules]for domain object me
 |x||||||||||
 
 |link:https://www.youtube.com/watch?v=imHfxQGUgV8[007^] +
-Writing xref:testing:ROOT:unit-test-support.adoc[unit tests] for a domain object responsibility
+Writing xref:unit-test-support:ROOT:about.adoc[unit tests] for a domain object responsibility
 ||x|||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=-lAt4UWiBjE[008^] +
-Writing end-to-end xref:testing:ROOT:integ-test-support.adoc[integration tests] for a domain object responsibility
+Writing end-to-end xref:integ-test-support:ROOT:about.adoc[integration tests] for a domain object responsibility
 ||x|||||||||
 
 
@@ -284,7 +284,7 @@ Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cm
 
 
 |link:https://www.youtube.com/watch?v=yi52Gbd3lmY[027^] +
-How to write an xref:testing:ROOT:integ-test-support.adoc[integration test] for an xref:rg:ant:Mixin.adoc[mixin].
+How to write an xref:integ-test-support:ROOT:about.adoc[integration test] for an xref:rg:ant:Mixin.adoc[mixin].
 ||x|||||||||
 
 

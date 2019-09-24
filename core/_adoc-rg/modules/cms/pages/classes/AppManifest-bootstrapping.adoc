@@ -221,7 +221,7 @@ java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtur
 
 * the third case is within an integration test. +
 +
-The code to boostrap an integration test is shown in the xref:testing:ROOT:integ-test-support.adoc#bootstrapping[testing guide], but once again an `AppManifest` is required.
+The code to boostrap an integration test is shown in the xref:integ-test-support:ROOT:about.adoc#bootstrapping[testing guide], but once again an `AppManifest` is required.
 
 In some cases an integration test uses the exact same `AppManifest` as the regular webapp.
 Sometimes though it is necessary to "tweak" the `AppManifest`:

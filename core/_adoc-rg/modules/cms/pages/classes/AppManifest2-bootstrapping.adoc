@@ -185,6 +185,6 @@ The `AppManifest` implementation must (necessarily) reference all the modules wt
 (As noted above), the `IntegrationTestAbstract3` adapter class is bootstrapped from a `Module` rather than an `AppManifest`.
 This therefore allows the integration tests to reside alongside the module that they exercise, and to bootstrap only the subset of the application required (that is, the module being tested and any of its transitive dependencies)..
 
-For more on `IntegrationTestAbstract3`, see the xref:testing:ROOT:integ-test-support.adoc#bootstrapping[testing user guide].
+For more on `IntegrationTestAbstract3`, see the xref:integ-test-support:ROOT:about.adoc#bootstrapping[testing user guide].
 
 

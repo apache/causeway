@@ -15,12 +15,12 @@ Said another way: interactions are performed "as if" they are through the viewer
 
 [NOTE]
 ====
-For a discussion of the use of the `WrapperFactory` within integration tests (the primary or at least original use case for this service) can be found xref:testing:ROOT:integ-test-support.adoc#wrapper-factory[here]
+For a discussion of the use of the `WrapperFactory` within integration tests (the primary or at least original use case for this service) can be found xref:integ-test-support:ROOT:about.adoc#wrapper-factory[here]
 ====
 
 This capability goes beyond enforcing the (imperative) constraints within the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it also enforces (declarative) constraints such as those represented by annotations, eg `@Parameter(maxLength=...)` or `@Property(mustSatisfy=...)`.
 
-This capability is frequently used within xref:testing:ROOT:integ-test-support.adoc[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
+This capability is frequently used within xref:integ-test-support:ROOT:about.adoc[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
 
 
 

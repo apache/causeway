@@ -47,16 +47,16 @@ public class DomainAppFixtureScriptsSpecificationProvider
 
 Here's how the domain service looks like in the UI:
 
-image::testing/fixture-scripts/prototyping-menu.png[width="700px",link="{imagesdir}/testing/fixture-scripts/prototyping-menu.png"]
+image::prototyping-menu.png[width="700px",link="{imagesdir}/prototyping-menu.png"]
 
 and here's what the `runFixtureScript` action prompt looks like:
 
-image::testing/fixture-scripts/prompt.png[width="700px",link="{imagesdir}/testing/fixture-scripts/prompt.png"]
+image::prompt.png[width="700px",link="{imagesdir}/prompt.png"]
 
 
 when this is executed, the resultant objects (actually, instances of FixtureResult`) are shown in the UI:
 
-image::testing/fixture-scripts/result-list.png[width="700px",link="{imagesdir}/testing/fixture-scripts/result-list.png"]
+image::result-list.png[width="700px",link="{imagesdir}/result-list.png"]
 
 
 
@@ -158,7 +158,7 @@ Note that although the fixture script is a view model, it's fine to simply insta
 Because this script has exposed a "number" property, it's possible to set this from within the UI.
 For example:
 
-image::testing/fixture-scripts/prompt-specifying-number.png[width="700px",link="{imagesdir}/testing/fixture-scripts/prompt-specifying-number.png"]
+image::prompt-specifying-number.png[width="700px",link="{imagesdir}/prompt-specifying-number.png"]
 
 When this is executed, the framework will parse the text and attempt to reflectively set the corresponding properties on the fixture result.
 So, in this case, when the fixture script is executed we actually get 6 objects created.
