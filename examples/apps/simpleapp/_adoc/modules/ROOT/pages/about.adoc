@@ -408,7 +408,7 @@ public class SimpleModule extends ModuleAbstract {
 }
 ----
 
-In the `fixture` subpackage is the `SimpleObject_persona` "persona" which uses the corresponding `SimpleObjectBuilder` builder script; further discussion on this pattern xref:testing:ROOT:fixture-scripts/api-and-usage#persona-and-builders.adoc[here].
+In the `fixture` subpackage is the `SimpleObject_persona` "persona" which uses the corresponding `SimpleObjectBuilder` builder script; further discussion on this pattern xref:ext-fixtures:ROOT:about.adoc#persona-and-builders.adoc[here].
 These fixtures are also used by "local" integration tests, which reside under `src/test/java`.
 
 There are also unit tests and "glue" for the BDD specs:
@@ -670,7 +670,7 @@ image::simpleapp-webapp-before-launch.png[width="600px",link="{imagesdir}/simple
 == Running with Fixtures
 
 It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.
-This is done by specifying a xref:testing:ROOT:fixture-scripts.adoc[fixture script] on the command line.
+This is done by specifying a xref:ext-fixtures:ROOT:about.adoc[fixture script] on the command line.
 
 If you are running the app from an IDE, then you can specify the fixture script using the `--fixture` flag.  The archetype provides the `domainapp.fixture.scenarios.RecreateSimpleObjects` fixture script, for example:
 

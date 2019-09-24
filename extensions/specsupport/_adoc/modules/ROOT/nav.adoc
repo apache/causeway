@@ -1,2 +1,2 @@
-* xref:about.adoc[About]
+include::testing:ROOT:partial$nav.adoc[]
 

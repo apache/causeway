@@ -5,5 +5,5 @@
 ** xref:testing:ROOT:overview.adoc[Overview]
 ** xref:testing:ROOT:unit-test-support.adoc[Unit Test Support]
 ** xref:testing:ROOT:integ-test-support.adoc[Integ Test Support]
-** xref:testing:ROOT:bdd-spec-support.adoc[BDD Spec Support]
-** xref:ext-fixtures:ROOT:about.adoc[Fixture Scripts]
+** xref:ext-specsupport:ROOT:about.adoc[BDD Spec Support (extension)]
+** xref:ext-fixtures:ROOT:about.adoc[Fixture Scripts (extension)]

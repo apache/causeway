@@ -29,8 +29,6 @@
 * Testing & Prototyping
 
 ** *xref:testing:ROOT:about.adoc[Testing]*
-** xref:ext-fixtures:ROOT:about.adoc[Fixtures (extension)]
-** xref:ext-specsupport:ROOT:about.adoc[BDD (extension)]
 
 * Wicket Viewer
 

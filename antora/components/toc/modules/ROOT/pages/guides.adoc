@@ -19,11 +19,8 @@ This page lists the user and reference guides available for developers to create
 
 == Testing & Prototyping
 
-* xref:testing:ROOT:about.adoc[Unit & Integration Testing]
-
-_Extensions_
-
-* xref:ext-fixtures:ROOT:about.adoc[Fixtures]
-* xref:ext-specsupport:ROOT:about.adoc[BDD]
+* xref:testing:ROOT:about.adoc[Testing]
++
+Support for unit tests and for integration tests, also extensions to support BDD support and fixtures.
 
 

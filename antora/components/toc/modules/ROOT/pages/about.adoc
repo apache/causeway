@@ -42,10 +42,6 @@ _Tutorials:_
 
 * *xref:testing:ROOT:about.adoc[Testing]*
 
-_Extensions_
-
-* xref:ext-fixtures:ROOT:about.adoc[Fixtures]
-* xref:ext-specsupport:ROOT:about.adoc[BDD]
 
 
 
