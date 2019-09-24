@@ -1,5 +1,6 @@
 = Domain Services
 include::_attributes.adoc[]
+:page-partial:
 
 
 

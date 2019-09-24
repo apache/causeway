@@ -1,6 +1,7 @@
 = Introduction
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 :numbered:
 
 
@@ -34,7 +35,7 @@ Importantly, this also minimizes the coupling between your code and Apache Isis,
 The framework also defines a number of "internal" services.
 These are not part of the framework's formal API, in that they use classes that are outside of the applib.
 These internal framework services should be thought of as part of the internal design of the framework, and are liable to change from release to release.
-The internal framework services are documented in the xref:rg:fis:about.adoc[Framework Internal Services] guide.
+The internal framework services are documented in the xref:fis:ROOT:about.adoc[Framework Internal Services] guide.
 
 
 
@@ -171,15 +172,15 @@ Whether this occurs depends on whether the action/property has been annotated (u
 +
 (Note that susbcribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
-* As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:rg:fis:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service.
+* As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service.
 Metrics as to which objects are merely loaded into memory are also captured using the xref:rg:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
-xref:rg:fis:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:rg:ant:Action.adoc#publishing[`@Action#publishing()`] or xref:rg:ant:Property.adoc#publishing[`@Property#publishing()`]).
+xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:rg:ant:Action.adoc#publishing[`@Action#publishing()`] or xref:rg:ant:Property.adoc#publishing[`@Property#publishing()`]).
 +
 The internal service delegates in turn to any registered xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`]s (there may be more than one).
 
-* At the end of each transaction, details of all changed objects are published, again through the (internal) xref:rg:fis:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
+* At the end of each transaction, details of all changed objects are published, again through the (internal) xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
 Only domain objects specified to be published with xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] are published. +
 +
 [NOTE]
@@ -187,7 +188,7 @@ Only domain objects specified to be published with xref:rg:ant:DomainObject.adoc
 Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`].
 ====
 
-* Also at the end of each transaction, details of all changed properties are passed to any registered xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] domain service.
+* Also at the end of each transaction, details of all changed properties are passed to any registered xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:fis:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] domain service.
 
 Implementations of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:rg:cms:schema.adoc#cmd[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).

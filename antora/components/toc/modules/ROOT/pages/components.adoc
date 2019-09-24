@@ -3,6 +3,9 @@
 include::_attributes.adoc[]
 
 
+This page provides user/config guides for each of the main components of the frameworks (viewer, object store and security).
+
+
 == Wicket Viewer
 
 * xref:vw:ROOT:about.adoc[User Guide]

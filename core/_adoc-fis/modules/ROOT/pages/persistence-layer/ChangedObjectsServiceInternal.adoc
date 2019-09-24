@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 The `ChangedObjectsServiceInternal` class is an (internal) request-scoped domain service that is responsible for collecting the details of all changes to domain objects within an interaction.
-This is then used by various other  (internal) domain services, notably xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] and xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`].
+This is then used by various other  (internal) domain services, notably xref:fis:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] and xref:fis:ROOT:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`].
 
 
 
@@ -33,9 +33,9 @@ public class ChangedObjectsServiceInternal {
 ----
 <1> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
 <2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`]).
-<3> Used by xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] to obtain details of and
+<3> Used by xref:fis:ROOT:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] to obtain details of and
 counters of all objects changed within the transaction.
-<4> Used by xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] to obtain all pairs of
+<4> Used by xref:fis:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] to obtain all pairs of
 pre/post values of changed properties
 <5> Called by the framework to for clean up after auditing and publishing has completed.
 
@@ -56,4 +56,4 @@ Apache Isis' default implementation of `ChangedObjectsServiceInternal` class is 
 
 == Related Classes
 
-Both the xref:rg:fis:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] and xref:rg:fis:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] (internal) domain services query this object.
+Both the xref:fis:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] and xref:fis:ROOT:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] (internal) domain services query this object.

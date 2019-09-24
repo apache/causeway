@@ -63,7 +63,6 @@
 *** xref:toc:devguide:about.adoc#intellij[IntelliJ]
 *** xref:toc:devguide:about.adoc#eclipse[EclipseJ]
 *** xref:toc:devguide:about.adoc#contributing[Pull requests]p
-[external]
 ** xref:mavendeps:ROOT:about.adoc[Maven mixins]
 
 * Help
@@ -76,7 +75,9 @@ _for bug reports & feature requests_
 * Releases
 
 ** xref:toc:ROOT:downloads/how-to.adoc[Downloads]
+[external]
 ** xref:relnotes:ROOT:about.adoc[Release Notes]
+[external]
 ** xref:mignotes:ROOT:about.adoc[Migration Notes]
 
 
@@ -90,8 +91,11 @@ _for bug reports & feature requests_
 
 * Implementation
 
+[external]
 **  xref:archdesign:ROOT:about.adoc[Architecture & Design]
-**  xref:rg:fis:about.adoc[Framework Internal Services]
+[external]
+**  xref:fis:ROOT:about.adoc[Framework Internal Services]
+[external]
 **  xref:smoketests:ROOT:about.adoc[SmokeTest App]
 
 

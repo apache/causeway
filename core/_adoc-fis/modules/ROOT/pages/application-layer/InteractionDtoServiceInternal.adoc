@@ -38,5 +38,5 @@ The service is implemented by `o.a.i.core.runtime.services.ixn.InteractionDtoSer
 == Related Services
 
 The design of this service is similar to that of
-xref:rg:fis:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`], used to create the `CommandDto`
+xref:fis:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`], used to create the `CommandDto`
 (from the xref:rg:cms:schema.adoc#cmd["cmd" schema]).

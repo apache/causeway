@@ -1,0 +1,6 @@
+name: fis
+title: "Framework Internal Services"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc
