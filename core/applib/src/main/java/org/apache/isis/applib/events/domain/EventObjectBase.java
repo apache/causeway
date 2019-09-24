@@ -61,7 +61,7 @@ public abstract class EventObjectBase<T> {
      */
     public void initSource(T source) {
         if(this.source!=null) {
-            throw _Exceptions.unrecoverable(getClass().getName() + " cannot init when source is alreay set");
+            throw _Exceptions.unrecoverable(getClass().getName() + " cannot init when source is already set");
         }
         requires(source, "source");
         this.source = source;
