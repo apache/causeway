@@ -7,19 +7,6 @@ include::_attributes.adoc[]
 
 This chapter provides some solutions for problems we've encountered ourselves or have been raised on the Apache Isis mailing lists.
 
-See also hints-n-tips chapters in the:
-
-* the xref:toc:devguide:hints-and-tips.adoc[Developers'] guide
-
-* the xref:vw:ROOT:hints-and-tips.adoc[Wicket viewer] guide (this chapter)
-
-* the xref:vro:ROOT:hints-and-tips.adoc[Restful Objects viewer] guide
-
-* the xref:odn:ROOT:hints-and-tips.adoc[Datanucleus ObjectStore] guide
-
-* the xref:security:ROOT:hints-and-tips.adoc[Security] guide
-
-* the xref:ug:btb:hints-and-tips.adoc[Beyond the Basics] guide.
 
 
 

@@ -396,7 +396,7 @@ Metamodel validation is only done if full introspection is configured, see the `
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
 
-See xref:ug:btb:programming-model/custom-validator.adoc[Custom Validator] to learn more.
+See xref:ug:btb:about.adoc#custom-validator[Custom Validator] to learn more.
 
 |`isis.reflector.validator.` +
 `actionCollection` +
@@ -598,27 +598,27 @@ See xref:ug:fun:ui-hints/action-icons-and-css.adoc[UI hints] for more details.
 |This property is now IGNORED.
 
 It was previously used to customize the programming model, this should now be done using `facets.exclude` and `facets.include`.
-See xref:ug:btb:programming-model/finetuning.adoc[finetuning the programming model] for more details.
+See xref:ug:btb:about.adoc#finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
 
-See xref:ug:btb:programming-model/finetuning.adoc[finetuning the programming model] for more details.
+See xref:ug:btb:about.adoc#finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `include`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:ug:btb:programming-model/finetuning.adoc[finetuning the programming model] for more details.
+See xref:ug:btb:about.adoc#finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:vw:ROOT:layout/file-based.adoc[file-based layout]s. +
 
-See xref:ug:btb:programming-model/layout-metadata-reader.adoc[Layout Metadata Reader] for more information.
+See xref:ug:btb:about.adoc#layout-metadata-reader[Layout Metadata Reader] for more information.
 
 
 

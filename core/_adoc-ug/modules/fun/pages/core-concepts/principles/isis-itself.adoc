@@ -7,3 +7,5 @@ include::_attributes.adoc[]
 
 This section discusses some of the principles and values we apply to the development of the Apache Isis framework itself.
 
+//include::full-stack-but-extensible.adoc[leveloffset=+1] // FIXME: incomplete
+//include::focuses-on-its-usp.adoc[leveloffset=+1] // FIXME: incomplete

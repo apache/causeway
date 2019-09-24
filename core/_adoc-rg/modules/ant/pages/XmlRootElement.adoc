@@ -29,7 +29,7 @@ This adapter converts any references to such domain entities using the `oidDto` 
 ====
 The memento string for view models is converted into a form compatible with use within a URL.
 This is performed by the xref:rg:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`], the default implementation of which simply encodes to base 64.
-If the view model XML graph is too large to be serialized to a string, then an alternative implementation (eg which maps XML strings to a GUID, say) can be configured using the technique described in xref:ug:btb:hints-and-tips/replacing-default-service-implementations.adoc[here] in the user guide.
+If the view model XML graph is too large to be serialized to a string, then an alternative implementation (eg which maps XML strings to a GUID, say) can be configured using the technique described in xref:ug:btb:about.adoc#replacing-default-service-implementations[here] in the user guide.
 ====
 
 

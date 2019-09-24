@@ -10,28 +10,12 @@ We've also added some new insights and made sure the material we've used is rele
 
 
 include::core-concepts/philosophy.adoc[leveloffset=+1]
-include::core-concepts/philosophy/domain-driven-design.adoc[leveloffset=+2]
-include::core-concepts/philosophy/naked-objects-pattern.adoc[leveloffset=+2]
-include::core-concepts/philosophy/hexagonal-architecture.adoc[leveloffset=+2]
-include::core-concepts/philosophy/aop.adoc[leveloffset=+2]
-// include::core-concepts/philosophy/dci.adoc[leveloffset=+2] // FIXME: incomplete
-include::core-concepts/philosophy/how-eases-ddd.adoc[leveloffset=+2]
 
 
 include::core-concepts/principles.adoc[leveloffset=+1]
-include::core-concepts/principles/build-not-buy.adoc[leveloffset=+2]
-include::core-concepts/principles/for-the-long-term.adoc[leveloffset=+2]
-//include::core-concepts/principles/testable.adoc[leveloffset=+2] // FIXME: incomplete
-//include::core-concepts/principles/lego-blocks.adoc[leveloffset=+2] // FIXME: incomplete
-//include::core-concepts/principles/isis-itself.adoc[leveloffset=+2] // FIXME: incomplete
-//include::core-concepts/principles/isis-itself/full-stack-but-extensible.adoc[leveloffset=+3] // FIXME: incomplete
-//include::core-concepts/principles/isis-itself/focuses-on-its-usp.adoc[leveloffset=+3] // FIXME: incomplete
 
 
 include::core-concepts/apache-isis-vs.adoc[leveloffset=+1]
-include::core-concepts/apache-isis-vs/mvc-server-side.adoc[leveloffset=+2]
-include::core-concepts/apache-isis-vs/cqrs.adoc[leveloffset=+2]
-include::core-concepts/apache-isis-vs/event-sourcing.adoc[leveloffset=+2]
 
 
 include::core-concepts/deployment-options.adoc[leveloffset=+1]

@@ -8,3 +8,6 @@ Many other frameworks promise rapid application development and provide automati
 
 
 
+include::apache-isis-vs/mvc-server-side.adoc[leveloffset=+1]
+include::apache-isis-vs/cqrs.adoc[leveloffset=+1]
+include::apache-isis-vs/event-sourcing.adoc[leveloffset=+1]

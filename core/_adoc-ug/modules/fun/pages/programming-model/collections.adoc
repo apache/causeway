@@ -94,7 +94,7 @@ If you do wish to use this collection type, then annotate the getter with `@Prog
 Apache Isis can (currently) only provide a UI for collections of references.
 While you can use DataNucleus to persist collections/arrays of value types, such properties must be annotated as `@Programmatic` so that they are ignored by Apache Isis.
 
-If you want to visualize an array of value types in Apache Isis, then one option is to wrap value in a view model, as explained xref:ug:btb:hints-and-tips/simulating-collections-of-values.adoc[elsewhere].
+If you want to visualize an array of value types in Apache Isis, then one option is to wrap value in a view model, as explained xref:ug:btb:about.adoc#simulating-collections-of-values[elsewhere].
 
 
 

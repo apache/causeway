@@ -9,18 +9,6 @@
 
 
 ** xref:hints-and-tips.adoc[Hints-n-Tips]
-*** xref:hints-and-tips/are-you-sure.adoc[Are you Sure]
-*** xref:hints-and-tips/replacing-default-service-implementations.adoc[Replacing Default Service Implementations]
-*** xref:hints-and-tips/vetoing-visibility.adoc[Vetoing Visibility]
-*** xref:hints-and-tips/transactions-and-errors.adoc[Transactions and Errors]
-*** xref:hints-and-tips/persisted-title.adoc[Persisted Title]
-*** xref:hints-and-tips/view-model-instantiation.adoc[View Model Instantiation]
-*** xref:hints-and-tips/simulating-collections-of-values.adoc[Simulating Collections of Values]
-*** xref:hints-and-tips/how-to-handle-void-and-null-results.adoc[How to handle void and null results]
-*** xref:hints-and-tips/multi-tenancy.adoc[Multi-tenancy]
-*** xref:hints-and-tips/subclass-properties-in-tables.adoc[Subclass properties in tables]
-*** xref:hints-and-tips/pushing-changes.adoc[Pushing Changes]
-*** xref:hints-and-tips/how-to-implement-a-spellchecker.adoc[How to implement a spellchecker]
 
 
 ** xref:programming-model.adoc[Programming Model]

@@ -14,3 +14,8 @@ This section describes some of the core principles and values that the framework
 
 
 
+include::principles/build-not-buy.adoc[leveloffset=+1]
+include::principles/for-the-long-term.adoc[leveloffset=+1]
+//include::principles/testable.adoc[leveloffset=+1] // FIXME: incomplete
+//include::principles/lego-blocks.adoc[leveloffset=+1] // FIXME: incomplete
+//include::principles/isis-itself.adoc[leveloffset=+1] // FIXME: incomplete

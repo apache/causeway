@@ -65,11 +65,11 @@ Apache Isis' xref:vro:ROOT:about.adoc[RestfulObjects viewer] is an implementatio
 
 There are a number of use cases for deploying Isis as a REST API, including:
 
-* to allow a custom UI to be built against the RESTful API +
+* to allow a custom UI to be built against the RESTful API
 +
-For example, using Angular or some other RIA technology such as Flex, JavaFX, Silverlight
+For example, using Angular or some other RIA technology such as Flex or JavaFX
 
-* to enable integration between systems +
+* to enable integration between systems
 +
 REST is designed to be machine-readable, and so is an excellent choice for synchronous data interchange scenarios.
 

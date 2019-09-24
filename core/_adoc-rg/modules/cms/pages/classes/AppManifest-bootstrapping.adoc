@@ -211,7 +211,7 @@ isis.appManifest=domainapp.app.MyAppAppManifest
 
 * the second is also as a webapp, but from within the context of the IDE. +
 +
-Here, it's common to use the `org.apache.isis.WebServer` class to launch your application from the xref:ug:btb:deployment/cmd-line.adoc[command line].
+Here, it's common to use the `org.apache.isis.WebServer` class to launch your application from the xref:ug:btb:about.adoc#cmd-line[command line].
 This allows the `AppManifest` to be specified using the `-m` (or `--manifest`) flag: +
 +
 [source,ini]

@@ -1,5 +1,6 @@
 = Beyond the Basics
 include::_attributes.adoc[]
+:page-partial:
 
 
 This guide provides xref:ug:btb:other-techniques.adoc[more advanced] guidance on writing maintainable larger

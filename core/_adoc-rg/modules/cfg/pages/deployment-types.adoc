@@ -66,7 +66,7 @@ Wicket's mechanism for specifying the "configuration" is to use a context parame
 
 Most Apache Isis applications will consist of at least the xref:vw:ROOT:about.adoc[Wicket viewer] and optionally the xref:vro:ROOT:about.adoc[RestfulObjects viewer].  When both viewers are deployed in the same app, then the bootstrapping is performed by Wicket, and so the deployment type is configured as described in the previous section.
 
-In some cases though you may be using Apache Isis to provide a REST API only, that is, you won't have deployed the Wicket viewer.  In these cases your app will be bootstrapped using  Apache Isis' xref:ug:btb:web-xml/servlet-context-listeners.adoc[ `IsisWebAppBootstrapper`].
+In some cases though you may be using Apache Isis to provide a REST API only, that is, you won't have deployed the Wicket viewer.  In these cases your app will be bootstrapped using  Apache Isis' xref:ug:btb:about.adoc#servlet-context-listeners[ `IsisWebAppBootstrapper`].
 
 In this case the deployment type is specified through an Apache Isis-specific context parameter, called `isis.deploymentType`:
 

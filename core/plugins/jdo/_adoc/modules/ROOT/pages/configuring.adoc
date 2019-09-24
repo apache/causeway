@@ -7,6 +7,6 @@ Apache Isis programmatically configures DataNucleus; any Apache Isis properties 
 DataNucleus will for itself also and read the `META-INF/persistence.xml`; at a minimum this defines the name of the "persistence unit".
 In theory it could also hold mappings, though in Apache Isis we tend to use annotations instead.
 
-Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.  A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].  The metadata in these XML can be used to override the annotations of annotated entities; see xref:ug:btb:other-techniques/overriding-jdo-annotations.adoc[Overriding JDO Annotatons] for further discussion.
+Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.  A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].  The metadata in these XML can be used to override the annotations of annotated entities; see xref:ug:btb:about.adoc#overriding-jdo-annotations[Overriding JDO Annotatons] for further discussion.
 
 

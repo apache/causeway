@@ -6,3 +6,9 @@ include::_attributes.adoc[]
 
 This section describes some of the core ideas and architectural patterns upon which Apache Isis builds.
 
+include::philosophy/domain-driven-design.adoc[leveloffset=+1]
+include::philosophy/naked-objects-pattern.adoc[leveloffset=+1]
+include::philosophy/hexagonal-architecture.adoc[leveloffset=+1]
+include::philosophy/aop.adoc[leveloffset=+1]
+// include::philosophy/dci.adoc[leveloffset=+1] // FIXME: incomplete
+include::philosophy/how-eases-ddd.adoc[leveloffset=+1]

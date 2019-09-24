@@ -54,12 +54,12 @@ It relies on the `LocaleProvider` service (to return the `Locale` of the current
 
 The framework also provides a supporting `TranslationServicePoMenu` provides menu items under the "Prototyping" secondary menu for controlling this service and downloading `.pot` files for translation.
 
-If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:about.adoc#vetoing-visibility[vetoing subscriber].
 
 For more details on the implementation, see xref:ug:btb:i18n.adoc[i18n support].
 
 
-If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:about.adoc#vetoing-visibility[vetoing subscriber].
 
 === Configuration Properties
 
