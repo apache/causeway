@@ -2,7 +2,7 @@
 include::_attributes.adoc[]
 
 
-Apache Isis' own configuration properties are simple key-value pairs, typically held in the `WEBINF/isis.properties`
+Apache Isis' own configuration properties are simple key-value pairs, typically held in the `WEB-INF/isis.properties`
 file and other related files.
 This guide describes how to configure an Apache Isis application.
 

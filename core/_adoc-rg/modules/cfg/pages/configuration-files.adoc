@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 When running an Apache Isis webapp, configuration properties are read from configuration files held in the `WEB-INF` directory.
 
-The `WEBINF/isis.properties` file is always read and must exist.
+The `WEB-INF/isis.properties` file is always read and must exist.
 
 In addition, the following other properties are searched for and if present also read:
 
