@@ -2,7 +2,7 @@
 = Common Schema
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
-
+:page-partial:
 
 The "common" schema defines a number of complex types that are used by other higher-level schemas.
 
@@ -59,7 +59,7 @@ If none is specified, then the fully qualified class name will be used.
 <5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.
 In previous versions of the schema the attribute was defaulted to "persistent"; the "persistent" state is assumed if the attribute is omitted.
 <6> Models a list of OIDs.
-This is used by the xref:rg:cms:schema/cmd.adoc["cmd" schema] to represent the
+This is used by the xref:rg:cms:schema.adoc#cmd["cmd" schema] to represent the
 intention to perform a bulk actions (against a number of selected objects).
 
 In previous versions of the schema the object type and object identifers of `oidDto` were modelled as an element rather than an attribute.
@@ -72,11 +72,11 @@ xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]), that reference domain entit
 +
 These references are serialized instead into OIDs
 
-* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:rg:cms:schema/cmd.adoc["cmd" (command)] schema.
+* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:rg:cms:schema.adoc#cmd["cmd" (command)] schema.
 +
 They are also used to represent references to any action arguments/properties that take domain object entities/view models.
 
-* third, as references to the target of an interaction capturing the actual execution of an action invocation or property edit, as described by the xref:rg:cms:schema/ixn.adoc["ixn" (interaction)] schema.
+* third, as references to the target of an interaction capturing the actual execution of an action invocation or property edit, as described by the xref:rg:cms:schema.adoc#ixn["ixn" (interaction)] schema.
 
 
 == `collectionDto` etc
@@ -170,7 +170,7 @@ This is primarily to save storage space if the resultant XML is persisted as a m
 
 == Ancillary types
 
-The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:rg:cms:schema/cmd.adoc["cmd"] and xref:rg:cms:schema/ixn.adoc["ixn"] schemas.
+The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:rg:cms:schema.adoc#cmd["cmd"] and xref:rg:cms:schema.adoc#ixn["ixn"] schemas.
 
 [source,xml]
 ----
@@ -239,6 +239,6 @@ The common schema also defines a number of ancillary types, used either by the c
 <5> Captures a pair of numbers representing a difference.
 Used for example to capture metrics (number objects modified before and after).
 <6> Whether this command/interaction with a member is invoking an action, or editing a property.
-Used by both the xref:rg:cms:schema/cmd.adoc["cmd"] and xref:rg:cms:schema/ixn.adoc["ixn"] schemas.
+Used by both the xref:rg:cms:schema.adoc#cmd["cmd"] and xref:rg:cms:schema.adoc#ixn["ixn"] schemas.
 <7> Contains a list of OIDs, eg for use in "bulk" actions that apply to multiple targets.
 

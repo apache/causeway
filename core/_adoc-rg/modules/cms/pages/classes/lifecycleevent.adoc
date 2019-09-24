@@ -1,6 +1,7 @@
 = Lifecycle Events
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 
 
 This section catalogues the various lifecycle event classes defined by Apache Isis.
@@ -20,7 +21,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#AbstractLifecycleEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#AbstractLifecycleEvent[`o.a.i.applib.` +
 `AbstractLifecycleEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -29,7 +30,7 @@ Impl'n (g: a:)
 |Superclass of the other lifecycle events, listed below in this table.
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#ObjectCreatedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectCreatedDomainEvent[`o.a.i.applib.` +
 `ObjectCreatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -40,7 +41,7 @@ Impl'n (g: a:)
 `#instantiate(...)` method.
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#ObjectLoadedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectLoadedDomainEvent[`o.a.i.applib.` +
 `ObjectLoadedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -50,7 +51,7 @@ Impl'n (g: a:)
 |Broadcast when an object is retrieved from the database.
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#ObjectPersistedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectPersistedDomainEvent[`o.a.i.applib.` +
 `ObjectPersistedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -61,7 +62,7 @@ Impl'n (g: a:)
 `#persist(...)` method.
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#ObjectPersistingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectPersistingDomainEvent[`o.a.i.applib.` +
 `ObjectPersistingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -72,7 +73,7 @@ Impl'n (g: a:)
 `#persist(...)` method.
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#ObjectRemovingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectRemovingDomainEvent[`o.a.i.applib.` +
 `ObjectRemovingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -83,7 +84,7 @@ Impl'n (g: a:)
 `#remove(...)` method.
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#ObjectUpdatedDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectUpdatedDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
@@ -94,7 +95,7 @@ Impl'n (g: a:)
 This is done either explicitly when the current transaction is flushed using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
-|xref:rg:cms:classes/lifecycleevent.adoc#ObjectUpdatingDomainEvent[`o.a.i.applib.` +
+|xref:rg:cms:classes.adoc#ObjectUpdatingDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +

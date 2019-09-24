@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `InteractionDtoServiceInternal` internal domain service is used by the framework to create and update DTOs representing member executions, ie the invocation of an action or the editing of a property.  The DTO is in all cases a subclass of `MemberExecutionDto`, from the xref:rg:cms:schema/ixn.adoc["ixn" schema], and subsequently accessible from the `Interaction` object (per the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service).
+The `InteractionDtoServiceInternal` internal domain service is used by the framework to create and update DTOs representing member executions, ie the invocation of an action or the editing of a property.  The DTO is in all cases a subclass of `MemberExecutionDto`, from the xref:rg:cms:schema.adoc#ixn["ixn" schema], and subsequently accessible from the `Interaction` object (per the xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] service).
 
 
 == SPI & Implementation
@@ -29,7 +29,7 @@ public interface InteractionDtoServiceInternal {
 }
 ----
 <1> called by the framework when invoking an action, to create a DTO capturing the details of the action invocation (target, arguments etc).
-<2> called by the framework when editing a property, to create a DTO (for the xref:rg:cms:schema/ixn.adoc["ixn" schema]) capturing the details of the property edit (target, new value etc).
+<2> called by the framework when editing a property, to create a DTO (for the xref:rg:cms:schema.adoc#ixn["ixn" schema]) capturing the details of the property edit (target, new value etc).
 <3> called by the framework to attach the result of an action invocation to the aforementioned DTO.
 
 The service is implemented by `o.a.i.core.runtime.services.ixn.InteractionDtoServiceInternalDefault`.
@@ -39,4 +39,4 @@ The service is implemented by `o.a.i.core.runtime.services.ixn.InteractionDtoSer
 
 The design of this service is similar to that of
 xref:rg:fis:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`], used to create the `CommandDto`
-(from the xref:rg:cms:schema/cmd.adoc["cmd" schema]).
+(from the xref:rg:cms:schema.adoc#cmd["cmd" schema]).

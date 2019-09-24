@@ -2,6 +2,7 @@
 = `HasTransactionId`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 
 
 The `HasTransactionId` interface is a mix-in for any domain objects that reference a transaction id, such as
@@ -42,7 +43,7 @@ public interface RepresentsInteractionMemberExecution extends HasTransactionId {
 }
 ----
 
-Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:rg:cms:schema/ixn.adoc[`InteractionDto`]) that has at least one member execution (cf xref:rg:cms:schema/ixn/memberExecutionDto.adoc[`memberExecutionDto`]).
+Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:rg:cms:schema.adoc#ixn[`InteractionDto`]) that has at least one member execution (cf xref:rg:cms:schema.adoc#ixn/memberExecutionDto[`memberExecutionDto`]).
 
 If the interaction (almost certainly an action) calls other actions by way of xref:rg:svc:WrapperFactory.adoc[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
 

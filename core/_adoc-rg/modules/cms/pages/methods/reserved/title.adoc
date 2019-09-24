@@ -43,7 +43,7 @@ public String title() {
     return buf.toString();
 }
 ----
-<1> simple xref:rg:cms:classes/utility.adoc#TitleBuffer[utility class] to help construct the title string
+<1> simple xref:rg:cms:classes.adoc#TitleBuffer[utility class] to help construct the title string
 <2> imperative conditional logic
 <3> using the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
 <4> ... but ignore if not
@@ -59,7 +59,7 @@ In many cases, though, you may be able to use the xref:rg:ant:Title.adoc[`@Title
 
 See also:
 
-* xref:rg:cms:methods/reserved.adoc#iconName[`iconName()`]
-* xref:rg:cms:methods/reserved.adoc#cssClass[`cssClass()`]
-* xref:rg:cms:methods/reserved.adoc#layout[`layout()`]
+* xref:rg:cms:methods.adoc#iconName[`iconName()`]
+* xref:rg:cms:methods.adoc#cssClass[`cssClass()`]
+* xref:rg:cms:methods.adoc#layout[`layout()`]
 

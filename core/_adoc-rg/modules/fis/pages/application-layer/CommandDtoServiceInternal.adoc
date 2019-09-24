@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 The `CommandDtoServiceInternal` is responsible for creating an memento of the current action
 invocation or property edit, to store in the `Command` object (from
 xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`]).  This memento is a JAXB DTO being an instance of the
-xref:rg:cms:schema/cmd.adoc["cmd" schema], so can be reified so that its execution can be deferred until later,
+xref:rg:cms:schema.adoc#cmd["cmd" schema], so can be reified so that its execution can be deferred until later,
 as a xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[background command].
 
 
@@ -36,7 +36,7 @@ public interface CommandDtoServiceInternal {
             final ObjectAdapter valueAdapter);
 }
 ----
-<1> Returns a JAXB DTO being an instance of the xref:rg:cms:schema/cmd.adoc["cmd" schema] (hence convertible to
+<1> Returns a JAXB DTO being an instance of the xref:rg:cms:schema.adoc#cmd["cmd" schema] (hence convertible to
 XML) that represents the __intention__ to invoke an action on a target object (or possibly many targets, for
 bulk actions).  If an action, it can also be either mixin action or a contributed action.
 <2> Returns a JAXB DTO that represents the intention to edit (set or clear) a property on a target (or possibly many
@@ -52,4 +52,4 @@ The SPI is implemented by `o.a.i.c.r.s.command.CommandDtoServiceInternalServiceD
 
 The design of this service is similar to that of
 xref:rg:fis:application-layer/InteractionDtoServiceInternal.adoc[`InteractionDtoServiceInternal`], used to create the
-`MemberExecutionDto` (from the xref:rg:cms:schema/ixn.adoc["ixn" schema]).
+`MemberExecutionDto` (from the xref:rg:cms:schema.adoc#ixn["ixn" schema]).

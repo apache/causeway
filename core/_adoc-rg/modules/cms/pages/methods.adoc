@@ -10,3 +10,6 @@ This chapter documents the supporting methods and the reserved methods.  It also
 
 
 
+include::methods/prefixes.adoc[leveloffset=+1]
+include::methods/reserved.adoc[leveloffset=+1]
+include::methods/lifecycle.adoc[leveloffset=+1]

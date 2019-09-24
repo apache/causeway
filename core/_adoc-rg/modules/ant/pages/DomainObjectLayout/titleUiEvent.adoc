@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 Whenever a domain object is to be rendered, the framework fires off a title UI event to obtain a title for the object.
-This is as an alternative to implementing xref:rg:cms:methods/reserved.adoc#title[`title()`] reserved method, or using the xref:rg:ant:Title.adoc[`@Title`] annotation, within the class itself.
+This is as an alternative to implementing xref:rg:cms:methods.adoc#title[`title()`] reserved method, or using the xref:rg:ant:Title.adoc[`@Title`] annotation, within the class itself.
 (If either `title()` or `@Title` are present, then they will take precedence).
 
 Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can

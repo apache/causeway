@@ -511,7 +511,7 @@ This is by way of possibly deprecating and eventually moving contributed service
 `noParamsOnly`
 |`true`,`false` +
 (`false`)
-| When searching for  xref:rg:cms:methods/prefixes.adoc#disable[`disableXxx()`] or xref:rg:cms:methods/prefixes.adoc#hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
+| When searching for  xref:rg:cms:methods.adoc#disable[`disableXxx()`] or xref:rg:cms:methods.adoc#hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
 If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
 Note that this in effect means that xref:ug:fun:building-blocks.adoc#mixins[mixins] must be used instead of xref:ug:fun:programming-model.adoc#contributions[contributed services].

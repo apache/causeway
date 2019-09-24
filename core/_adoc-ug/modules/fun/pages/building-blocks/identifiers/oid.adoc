@@ -38,6 +38,6 @@ These are represented as ``Bookmark``s, obtained from the xref:rg:svc:integratio
 Deep links meanwhile can be obtained from the xref:rg:svc:presentation-layer-api/DeepLinkService.adoc[``DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.
-The xref:rg:cms:schema/common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
+The xref:rg:cms:schema.adoc#common[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
 
 

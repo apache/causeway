@@ -42,6 +42,6 @@ If `switchToEditMode()` action is invoked, then the UI will attempt to render th
 
 See also:
 
-* xref:rg:cms:methods/reserved.adoc#title[`title()`]
-* xref:rg:cms:methods/reserved.adoc#iconName[`iconName()`]
-* xref:rg:cms:methods/reserved.adoc#cssClass[`cssClass()`]
+* xref:rg:cms:methods.adoc#title[`title()`]
+* xref:rg:cms:methods.adoc#iconName[`iconName()`]
+* xref:rg:cms:methods.adoc#cssClass[`cssClass()`]

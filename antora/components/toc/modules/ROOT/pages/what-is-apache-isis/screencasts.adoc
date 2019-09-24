@@ -103,7 +103,7 @@ Writing end-to-end xref:testing:ROOT:integ-test-support.adoc[integration tests] 
 
 
 
-11+| [big]#*Swagger UI*#
+12+| [big]#*Swagger UI*#
 
 include::partial$_screencasts-playlists.adoc[]
 
@@ -159,7 +159,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
-Using the xref:rg:cms:methods/reserved.adoc#title[`title()`], xref:rg:cms:methods/reserved.adoc#iconName[`iconName()`] and xref:rg:cms:methods/reserved.adoc#cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
+Using the xref:rg:cms:methods.adoc#title[`title()`], xref:rg:cms:methods.adoc#iconName[`iconName()`] and xref:rg:cms:methods.adoc#cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
 |x||x||||||x||
 
 
@@ -252,7 +252,7 @@ Shows how to refactor a domain object to move (derived) collections out of the d
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscriber] to xref:ug:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:rg:cms:methods/prefixes.adoc#validate[validation]).
+Using a domain event xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscriber] to xref:ug:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:rg:cms:methods.adoc#validate[validation]).
 ||||||x|||||
 
 
@@ -271,7 +271,7 @@ Using a domain event xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscribe
 
 
 |link:https://www.youtube.com/watch?v=qj4bMkQRBUY[026^] +
-Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cms:methods/reserved.adoc#title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
+Using the xref:rg:ant:Title.adoc[`@Title`] annotation (instead of the xref:rg:cms:methods.adoc#title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
 |x||||||||x||
 
 
@@ -322,7 +322,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=ORoEYlg6XFM[030^] +
-How to validate action parameters using a supporting xref:rg:cms:methods/prefixes.adoc#validate[`validateNXxx()`] method.
+How to validate action parameters using a supporting xref:rg:cms:methods.adoc#validate[`validateNXxx()`] method.
 |x||||||||x||
 
 
@@ -355,19 +355,19 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=cQ06PoMNDPw[033^] +
-How to provide a set of xref:rg:cms:methods/prefixes.adoc#choices[choices] (a drop-down list) when editing a property.
+How to provide a set of xref:rg:cms:methods.adoc#choices[choices] (a drop-down list) when editing a property.
 |x||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=afEnYKljBQs[034^] +
-How to provide a set of xref:rg:cms:methods/prefixes.adoc#choices[choices] (a drop-down list) when invoking an action.
+How to provide a set of xref:rg:cms:methods.adoc#choices[choices] (a drop-down list) when invoking an action.
 |||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=fKo6aTPK-gk[035^] +
-How to use the xref:rg:cms:methods/prefixes.adoc#choices[choices] supporting methods as a source for default values within a xref:testing:ROOT:fixture-scripts.adoc[fixture script].
+How to use the xref:rg:cms:methods.adoc#choices[choices] supporting methods as a source for default values within a xref:testing:ROOT:fixture-scripts.adoc[fixture script].
 ||x|||||||x||
 
 
@@ -446,7 +446,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Rt4JoV4ssVY[043^] +
-How to use the supporting xref:rg:cms:methods/prefixes.adoc#default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
+How to use the supporting xref:rg:cms:methods.adoc#default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
 |x||||||||x||
 
 
@@ -456,12 +456,12 @@ How to use xref:rg:ant:DomainObject.adoc#bounding[`@DomainObject#bounding()`] so
 
 
 |link:https://www.youtube.com/watch?v=0ro_YhXOpJU[045^] +
-How to use the xref:rg:cms:methods/prefixes.adoc#choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:rg:cms:methods.adoc#choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=K36IJQ_hDfs[046^] +
-How to use the xref:rg:cms:methods/prefixes.adoc#autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:rg:cms:methods.adoc#autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 

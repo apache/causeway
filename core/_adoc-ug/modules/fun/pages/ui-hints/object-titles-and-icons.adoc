@@ -88,7 +88,7 @@ could return "Arthur C. Clarke".
 
 === Imperative style
 
-Alternatively, the title can be provided simply by implementing the xref:rg:cms:methods/reserved.adoc#title[`title()`] reserved method.
+Alternatively, the title can be provided simply by implementing the xref:rg:cms:methods.adoc#title[`title()`] reserved method.
 
 For example:
 
@@ -191,7 +191,7 @@ public class InvoiceRun {
 
 === Imperative style
 
-To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:methods/reserved.adoc#iconName[`iconName()`] method.
+To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:methods.adoc#iconName[`iconName()`] method.
 
 For example:
 
@@ -257,7 +257,7 @@ public class OrderSubscriptions extends AbstractSubscriber {
 
 == Object CSS Styling
 
-It is also possible for an object to return a xref:rg:cms:methods/reserved.adoc#cssClass[CSS class].
+It is also possible for an object to return a xref:rg:cms:methods.adoc#cssClass[CSS class].
 In conjunction with xref:vw:ROOT:customisation/tweaking-css-classes.adoc[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
@@ -277,7 +277,7 @@ One possible use case would be to render the most important object types with a 
 === Imperative style
 
 
-To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:methods/reserved.adoc#cssClass[`cssClass()`] method.
+To customise the icon on an instance-by-instance basis, we implement the reserved xref:rg:cms:methods.adoc#cssClass[`cssClass()`] method.
 
 For example:
 

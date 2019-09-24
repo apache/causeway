@@ -32,7 +32,7 @@ public class Currency {
 [TIP]
 ====
 There is nothing to prevent you from using this attribute for regular mutable entities, and indeed this is sometimes worth doing during early prototyping.
-However, if there is no realistic upper bound to the number of instances of an entity that might be created, generally you should use xref:rg:cms:methods/prefixes.adoc#autoComplete[`autoComplete...()`] supporting method or the xref:rg:ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository()`] attribute instead.
+However, if there is no realistic upper bound to the number of instances of an entity that might be created, generally you should use xref:rg:cms:methods.adoc#autoComplete[`autoComplete...()`] supporting method or the xref:rg:ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository()`] attribute instead.
 ====
 
 

@@ -103,6 +103,7 @@ Note that Shiro is more flexible than Apache Isis; it will read its configuratio
 By default Apache Isis configures log4j to read the `logging.properties` file in the `WEB-INF` directory.
 This can be overridden by setting the `log4j.properties` system property to the URL of the log4j properties file.
 
+[[log4j-config-tomcat]]
 === Tomcat
 
 For example, if deploying to Tomcat7 or Tomcat8, this amounts to adding the following to the `CATALINA_OPTS` flags:

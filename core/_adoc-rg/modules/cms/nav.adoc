@@ -1,39 +1,7 @@
 * xref:about.adoc[Classes, Methods & Schema]
 
 ** xref:methods.adoc[Methods]
-
-*** xref:methods/prefixes.adoc[Prefixes]
-*** xref:methods/reserved.adoc[Reserved]
-*** xref:methods/lifecycle.adoc[Lifecycle]
-
-
 ** xref:classes.adoc[Classes]
-
-*** xref:classes/AppManifest-bootstrapping.adoc[AppManifest Bootstrapping]
-*** xref:classes/AppManifest2-bootstrapping.adoc[AppManifest2 Bootstrapping]
-*** xref:classes/super.adoc[Super Classes]
-*** xref:classes/domainevent.adoc[Domain Event Classes]
-*** xref:classes/uievent.adoc[UI Event Classes]
-*** xref:classes/lifecycleevent.adoc[Lifecycle Event Classes]
-*** xref:classes/value-types.adoc[Value Types]
-*** xref:classes/utility.adoc[Utility Classes]
-*** xref:classes/spec.adoc[Specification Classes]
-*** xref:classes/i18n.adoc[i18n Classes]
-*** xref:classes/contributee.adoc[Contributee]
-*** xref:classes/roles.adoc[Roles]
-*** xref:classes/mixins.adoc[Mixins]
-*** xref:classes/layout.adoc[(Object) Layout]
-*** xref:classes/menubars.adoc[Menubars]
-
-
-
 ** xref:schema.adoc[Schema]
-
-//*** xref:schema/aim.adoc[aim: ActionInvocationMemento] // replaced in 1.13.0
-*** xref:schema/mml.adoc[mml: Metamodel]
-*** xref:schema/cmd.adoc[cmd: Command]
-*** xref:schema/ixn.adoc[ixn: Interaction]
-*** xref:schema/chg.adoc[chg: Change]
-*** xref:schema/common.adoc[Common]
 
 

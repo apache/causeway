@@ -105,8 +105,8 @@ Similarly if an action has a `validateXxx()` method and the supplied arguments a
 
 In addition, the following methods may also be called:
 
-* the xref:rg:cms:methods/reserved.adoc#title[`title()`] and `toString()` methods
-* any xref:rg:cms:methods/prefixes.adoc#default[`default...()`], xref:rg:cms:methods/prefixes.adoc#choices[`choices...()`] or xref:rg:cms:methods/prefixes.adoc#autoComplete[`autoComplete...()`] methods
+* the xref:rg:cms:methods.adoc#title[`title()`] and `toString()` methods
+* any xref:rg:cms:methods.adoc#default[`default...()`], xref:rg:cms:methods.adoc#choices[`choices...()`] or xref:rg:cms:methods.adoc#autoComplete[`autoComplete...()`] methods
 
 An exception will be thrown if any other methods are thrown.
 

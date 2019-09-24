@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 Whenever a domain object is to be rendered, the framework fires off an icon UI event to obtain an icon (name) for the object (if possible).
-This is as an alternative to implementing xref:rg:cms:methods/reserved.adoc#iconName[`iconName()`] reserved method.
+This is as an alternative to implementing xref:rg:cms:methods.adoc#iconName[`iconName()`] reserved method.
 (If `iconName()` is present, then it will take precedence).
 
 Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.

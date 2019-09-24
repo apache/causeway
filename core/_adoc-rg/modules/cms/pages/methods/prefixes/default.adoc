@@ -180,7 +180,7 @@ public class ShoppingCartItem {
 
 There are, in fact, two other ways to set properties of a newly instantiated object to default values.
 
-The first is to use the xref:rg:cms:methods/lifecycle.adoc#created[`created()`] callback, called by the framework when xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService#instantiate(...)`] or xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(...)`] is called.
+The first is to use the xref:rg:cms:methods.adoc#created[`created()`] callback, called by the framework when xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService#instantiate(...)`] or xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(...)`] is called.
 This method is called after any services have been injected into the domain object.
 
 The second is more straightforward: simply initialize properties in the constructor.

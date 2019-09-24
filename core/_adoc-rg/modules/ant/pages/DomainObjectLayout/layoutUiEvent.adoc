@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 Whenever a domain object is to be rendered, the framework fires off an layout UI event to obtain an alternative layout name with which to render the domain object.
-This is as an alternative to implementing xref:rg:cms:methods/reserved.adoc#layout[`layout()`] reserved method.
+This is as an alternative to implementing xref:rg:cms:methods.adoc#layout[`layout()`] reserved method.
 (If `layout()` is present, then it will take precedence).
 
 Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.

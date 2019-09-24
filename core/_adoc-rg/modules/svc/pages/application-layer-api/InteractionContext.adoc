@@ -125,7 +125,7 @@ turn via the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFacto
 execution of this action invocation/property edit.
 <8> The date/time at which this execution started/completed.
 <9> The object returned by the action invocation/property edit, or the exception thrown.  For `void` methods and for actions returning collections, the value will be `null`.
-<10> A DTO (instance of the xref:rg:cms:schema/ixn.adoc["ixn" schema]) being a serializable representation of this action invocation/property edit.
+<10> A DTO (instance of the xref:rg:cms:schema.adoc#ixn["ixn" schema]) being a serializable representation of this action invocation/property edit.
 
 
 

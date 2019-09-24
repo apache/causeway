@@ -2,7 +2,7 @@
 = Command
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
-
+:page-partial:
 
 The command ("cmd") schema defines the serialized form of the __intention__ to invoke an action or to edit a property.
 It can be supplemented with optional timings capturing the actual invocation of a command (introduced to support the replication of commands in a master/slave arrangement).
@@ -62,12 +62,12 @@ The `commandDto` root element is defined as:
 ----
 <1> the command schema has a namespace URI of "http://isis.apache.org/schema/cmd".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> uses complex types defined in the xref:rg:cms:schema/common.adoc["common" schema].
+<2> uses complex types defined in the xref:rg:cms:schema.adoc#common["common" schema].
 <3> definition of the `commandDto` root element.
 The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this command is created.
-The transaction Id is used to correlate to the xref:rg:cms:schema/interaction.adoc[interaction] that executes the command, and to any xref:rg:cms:schema/changes.adoc[changes] to domain objects occurring as a side-effect of that interaction.
+The transaction Id is used to correlate to the xref:rg:cms:schema.adoc#interaction[interaction] that executes the command, and to any xref:rg:cms:schema.adoc#changes[changes] to domain objects occurring as a side-effect of that interaction.
 <6> the name of the user who created the command (whose intention it is to invoke the action/edit the property).
 <7> the target object (or objects) to be invoked.
 A bulk action will create multiple commands, each with only a single target.
@@ -127,12 +127,12 @@ Its primary responsibility is simply to identify the member (action or property)
 <3> the "logical" formal identifier (object type, as per `@DomainObject(objectType=)`, + member name) of the member being interacted with (action or property).
 <4> the `interactionType` attribute indicates whether the member is an action or a property.
 <5> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to invoke the action.
-The `paramsDto` type is defined xref:rg:cms:schema/cmd/ancillary.adoc[below].
+The `paramsDto` type is defined xref:rg:cms:schema.adoc#cmd/ancillary[below].
 <6> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
 
 In general the `logicalMemberIdentifier` should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
 
-Note also that there is a corresponding xref:rg:cms:schema/ixn/memberExecutionDto.adoc[`memberExecutionDto`]
+Note also that there is a corresponding xref:rg:cms:schema.adoc#ixn/memberExecutionDto[`memberExecutionDto`]
 complex type in the "ixn" schema that is for the actual execution (capturing metrics about its execution and also the return value if an action invocation).
 
 
@@ -163,4 +163,4 @@ The schema also defines a small number of supporting types:
 <1> the `paramsDto` is simply the list of parameter/arguments.
 <2> the `paramDto` complex type essentially combines a parameter with its corresponding argument: a named value that has a type.
 It extends the `valueWithTypeDto` complex type taken from the
-xref:rg:cms:schema/common.adoc["common"] schema.
+xref:rg:cms:schema.adoc#common["common"] schema.

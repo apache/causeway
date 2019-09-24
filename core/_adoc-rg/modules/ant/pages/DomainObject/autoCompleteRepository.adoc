@@ -14,7 +14,7 @@ Or it could search for a country based on its ISO-3 code or user-friendly name.
 
 [TIP]
 ====
-If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:rg:cms:methods/prefixes.adoc#autoComplete[`autoComplete...()`] supporting method instead.
+If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:rg:cms:methods.adoc#autoComplete[`autoComplete...()`] supporting method instead.
 ====
 
 

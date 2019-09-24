@@ -35,7 +35,7 @@ A domain object may also have multiple layouts.
 For example, there may be the capability to switch into an "edit" mode, which perhaps hides some class members, shows others (perhaps mixins specific to data entry).
 Another reason might be to support different tenancies/user groups, where different business processes might require a slightly different UI representation.
 
-One way in which the domain object can specify an alternate layout is through its xref:rg:cms:methods/reserved.adoc#layout[`layout()`] method.
+One way in which the domain object can specify an alternate layout is through its xref:rg:cms:methods.adoc#layout[`layout()`] method.
 If this returns a non-null value, say "edit", then this is used to locate an alternative layout, in the form `Xxx-edit.layout.xml`.
 
 
