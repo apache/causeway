@@ -106,7 +106,7 @@ implements LayoutFacet {
     private LayoutUiEvent<Object> newLayoutUiEvent(final Object domainObject) {
         try {
             final LayoutUiEvent<Object> layoutUiEvent = (LayoutUiEvent<Object>) layoutUiEventClass.newInstance();
-            layoutUiEvent.setSource(domainObject);
+            layoutUiEvent.initSource(domainObject);
             return layoutUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new NonRecoverableException(ex);

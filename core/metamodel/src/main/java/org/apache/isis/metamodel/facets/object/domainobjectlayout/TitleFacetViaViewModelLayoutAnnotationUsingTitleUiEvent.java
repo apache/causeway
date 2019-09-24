@@ -123,7 +123,7 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
     private TitleUiEvent<Object> newTitleUiEvent(final Object domainObject) {
         try {
             final TitleUiEvent<Object> titleUiEvent = _Casts.uncheckedCast(titleUiEventClass.newInstance());
-            titleUiEvent.setSource(domainObject);
+            titleUiEvent.initSource(domainObject);
             return titleUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new NonRecoverableException(ex);

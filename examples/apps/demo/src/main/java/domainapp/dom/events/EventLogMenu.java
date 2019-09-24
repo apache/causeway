@@ -42,9 +42,7 @@ public class EventLogMenu {
         return eventLog.listAll();
     }
 
-    public static class EventTestProgrammaticEvent extends ActionDomainEvent<EventLogMenu>  {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class EventTestProgrammaticEvent extends ActionDomainEvent<EventLogMenu>  {}
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")

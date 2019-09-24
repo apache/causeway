@@ -109,7 +109,7 @@ implements CssClassFacet {
     private CssClassUiEvent<Object> newCssClassUiEventForPojo(final Object domainObject) {
         try {
             final CssClassUiEvent<Object> cssClassUiEvent = _Casts.uncheckedCast(cssClassUiEventClass.newInstance());
-            cssClassUiEvent.setSource(domainObject);
+            cssClassUiEvent.initSource(domainObject);
             return cssClassUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new NonRecoverableException(ex);

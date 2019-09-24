@@ -48,9 +48,7 @@ import org.apache.isis.commons.internal.base._Strings;
 public class LayoutServiceMenu {
 
     public static abstract class ActionDomainEvent
-    extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {}
 
     private final MimeType mimeTypeApplicationZip;
 
@@ -62,9 +60,7 @@ public class LayoutServiceMenu {
         }
     }
 
-    public static class DownloadLayoutsDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class DownloadLayoutsDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = DownloadLayoutsDomainEvent.class,
@@ -88,9 +84,7 @@ public class LayoutServiceMenu {
         return LayoutService.Style.NORMALIZED;
     }
 
-    public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = DownloadMenuBarsLayoutDomainEvent.class,

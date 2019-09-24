@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.events.domain;
 
-import java.util.EventObject;
 import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
@@ -29,15 +28,14 @@ import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
-
-    private static final long serialVersionUID = 1L;
+public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
     /**
      * If used then the framework will set state via (non-API) setters.
      *
      * <p>
-     *     Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
+     *     Because the {@link EventObjectBase} superclass prohibits a null source, 
+     *     a dummy value is temporarily used.
      * </p>
      */
     public AbstractDomainEvent() {
@@ -47,12 +45,8 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public AbstractDomainEvent(
             final S source,
             final Identifier identifier) {
-        super(sourceElseDummy(source));
+        super(source);
         this.identifier = identifier;
-    }
-
-    private static Object sourceElseDummy(final Object source) {
-        return source != null ? source : new Object();
     }
 
     // - mixedIn
@@ -137,22 +131,6 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public void setEventPhase(Phase phase) {
         this.phase = phase;
     }
-
-
-    // -- source (downcast to S)
-    @Override
-    @SuppressWarnings("unchecked")
-    public S getSource() {
-        return (S)source;
-    }
-
-    /**
-     * Not API, set by the framework if the no-arg constructor is used.
-     */
-    public void setSource(S source) {
-        this.source = source;
-    }
-
 
     // -- identifier
     /**

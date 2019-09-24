@@ -34,8 +34,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class CollectionRemoveFromEvent extends ValidityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     private final Object proposed;
 
     public CollectionRemoveFromEvent(final Object source, final Identifier collectionIdentifier, final Object proposed) {

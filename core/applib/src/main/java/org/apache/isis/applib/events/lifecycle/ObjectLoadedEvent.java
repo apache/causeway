@@ -20,7 +20,7 @@ package org.apache.isis.applib.events.lifecycle;
 
 public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
 
-    private static final long serialVersionUID = 1L;
+    
 
     // -- Default class
     /**
@@ -29,15 +29,7 @@ public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends ObjectLoadedEvent<Object> {
-        private static final long serialVersionUID = 1L;
-        public Default() {}
-
-        @Override
-        public String toString() {
-            return "ObjectLoadedEvent$Default{source=" + getSource() + "}";
-        }
-    }
+    public static class Default extends ObjectLoadedEvent<Object> {}
 
 
     // -- Noop class
@@ -46,9 +38,7 @@ public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends ObjectLoadedEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Noop extends ObjectLoadedEvent<Object> {}
 
 
     // -- Doop class
@@ -57,15 +47,12 @@ public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends ObjectLoadedEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
-
-
+    public static class Doop extends ObjectLoadedEvent<Object> {}
 
 
     public ObjectLoadedEvent() {
     }
+    
     public ObjectLoadedEvent(final S source) {
         super(source);
     }

@@ -42,8 +42,7 @@ import domainapp.modules.simple.dom.types.Name;
         )
 public class SimpleObjects {
 
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {
-        private static final long serialVersionUID = 1L;}
+    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
 
     @Action(domainEvent = CreateDomainEvent.class)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)

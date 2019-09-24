@@ -18,16 +18,12 @@
  */
 package org.apache.isis.applib.events.ui;
 
-import java.util.EventObject;
-
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**
  * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>title()</tt> supporting method).
  */
 public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
-
-    private static final long serialVersionUID = 1L;
 
     // -- Default class
     /**
@@ -36,9 +32,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends TitleUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Default extends TitleUiEvent<Object> {}
 
 
     // -- Noop class
@@ -47,9 +41,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property seting for the {@link Default} event.
      */
-    public static class Noop extends TitleUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Noop extends TitleUiEvent<Object> {}
 
 
     // -- Doop class
@@ -58,9 +50,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends TitleUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Doop extends TitleUiEvent<Object> {}
 
 
     // -- constructors

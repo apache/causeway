@@ -31,8 +31,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class ObjectTitleEvent extends AccessEvent {
 
-    private static final long serialVersionUID = 1L;
-
     private final String title;
 
     public ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title) {

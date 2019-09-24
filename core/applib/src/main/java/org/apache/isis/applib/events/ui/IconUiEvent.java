@@ -18,14 +18,11 @@
  */
 package org.apache.isis.applib.events.ui;
 
-import java.util.EventObject;
 
 /**
  * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>iconName()</tt> supporting method).
  */
 public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
-
-    private static final long serialVersionUID = 1L;
 
     // -- constructors
     /**
@@ -52,9 +49,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends IconUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Default extends IconUiEvent<Object> { }
 
 
     // -- Noop class
@@ -63,9 +58,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends IconUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Noop extends IconUiEvent<Object> { }
 
 
     // -- Doop class
@@ -74,9 +67,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends IconUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Doop extends IconUiEvent<Object> { }
 
 
 

@@ -33,8 +33,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class CollectionAccessEvent extends AccessEvent {
 
-    private static final long serialVersionUID = 1L;
-
     public CollectionAccessEvent(final Object source, final Identifier collectionIdentifier) {
         super(source, collectionIdentifier);
     }

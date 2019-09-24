@@ -18,54 +18,25 @@
  */
 package org.apache.isis.applib.events.ui;
 
-import java.util.EventObject;
 import java.util.Map;
 
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ToString;
+import org.apache.isis.applib.events.domain.EventObjectBase;
 import org.apache.isis.commons.internal.collections._Maps;
 
-public abstract class AbstractUiEvent<S> extends EventObject {
-
-    private static final long serialVersionUID = 1L;
+public abstract class AbstractUiEvent<S> extends EventObjectBase<S> {
 
     // -- constructors
     /**
      * If used then the framework will set state via (non-API) setters.
      *
-     * <p>
-     *     Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
-     * </p>
      */
     public AbstractUiEvent() {
         this(null);
     }
 
     public AbstractUiEvent(final S source) {
-        super(sourceElseDummy(source));
+        super(source);
     }
-
-    private static Object sourceElseDummy(final Object source) {
-        return source != null ? source : new Object();
-    }
-
-
-    // -- source
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public S getSource() {
-        return (S)source;
-    }
-
-    /**
-     * Not API, set by the framework if the no-arg constructor is used.
-     */
-    public void setSource(S source) {
-        this.source = source;
-    }
-
-
 
     // -- userData
     /**
@@ -84,15 +55,6 @@ public abstract class AbstractUiEvent<S> extends EventObject {
      */
     public void put(Object key, Object value) {
         userData.put(key, value);
-    }
-
-
-    private final static ToString<AbstractUiEvent<?>> toString = ObjectContracts
-            .toString("source", AbstractUiEvent::getSource);
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
     }
 
 }

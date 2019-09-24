@@ -19,10 +19,10 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import java.util.EventObject;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.events.domain.EventObjectBase;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a domain object or a particular feature
@@ -33,9 +33,7 @@ import org.apache.isis.applib.Identifier;
  * {@link UsabilityEvent usability} and {@link ValidityEvent validity}.
  *
  */
-public abstract class InteractionEvent extends EventObject {
-
-    private static final long serialVersionUID = 1L;
+public abstract class InteractionEvent extends EventObjectBase<Object> {
 
     private final Identifier identifier;
     private String reason;

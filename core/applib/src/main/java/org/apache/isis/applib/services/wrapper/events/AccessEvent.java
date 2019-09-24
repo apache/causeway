@@ -37,11 +37,6 @@ import org.apache.isis.applib.Identifier;
  */
 public abstract class AccessEvent extends InteractionEvent {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-
     public AccessEvent(final Object source, final Identifier identifier) {
         super(source, identifier);
     }

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.events.ui;
 
-import java.util.EventObject;
-
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 
 /**
@@ -27,15 +25,10 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
  */
 public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
 
-    private static final long serialVersionUID = 1L;
-
     // -- constructors
     /**
      * If used then the framework will set state via (non-API) setters.
      *
-     * <p>
-     *     Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
-     * </p>
      */
     public CssClassUiEvent() {
         this(null);
@@ -45,8 +38,6 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-
-
     // -- Default class
     /**
      * This class is the default for the
@@ -54,9 +45,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.cssClassUiEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends CssClassUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Default extends CssClassUiEvent<Object> {}
 
 
     // -- Noop class
@@ -65,9 +54,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends CssClassUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Noop extends CssClassUiEvent<Object> {}
 
 
     // -- Doop class
@@ -76,9 +63,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends CssClassUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Doop extends CssClassUiEvent<Object> {}
 
 
     // -- cssClass

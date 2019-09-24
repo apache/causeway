@@ -45,8 +45,6 @@ import org.apache.isis.applib.Identifier;
  */
 public abstract class ValidityEvent extends InteractionEvent implements ProposedHolderEvent {
 
-    private static final long serialVersionUID = 1L;
-
     public ValidityEvent(final Object source, final Identifier identifier) {
         super(source, identifier);
     }

@@ -32,8 +32,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class PropertyAccessEvent extends AccessEvent {
 
-    private static final long serialVersionUID = 1L;
-
     public PropertyAccessEvent(final Object source, final Identifier propertyIdentifier, final Object value) {
         super(source, propertyIdentifier);
         this.value = value;

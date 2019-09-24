@@ -20,8 +20,6 @@ package org.apache.isis.applib.events.lifecycle;
 
 public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
 
-    private static final long serialVersionUID = 1L;
-
     // -- Default class
     /**
      * This class is the default for the
@@ -29,15 +27,7 @@ public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends ObjectCreatedEvent<Object> {
-        private static final long serialVersionUID = 1L;
-        public Default() {}
-
-        @Override
-        public String toString() {
-            return "ObjectCreatedEvent$Default{source=" + getSource() + "}";
-        }
-    }
+    public static class Default extends ObjectCreatedEvent<Object> {}
 
 
     // -- Noop class
@@ -46,9 +36,7 @@ public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends ObjectCreatedEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Noop extends ObjectCreatedEvent<Object> {}
 
 
     // -- Doop class
@@ -57,13 +45,12 @@ public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends ObjectCreatedEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Doop extends ObjectCreatedEvent<Object> {}
 
 
     public ObjectCreatedEvent() {
     }
+    
     public ObjectCreatedEvent(final S source) {
         super(source);
     }

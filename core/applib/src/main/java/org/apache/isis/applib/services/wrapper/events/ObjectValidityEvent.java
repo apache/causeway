@@ -33,8 +33,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class ObjectValidityEvent extends ValidityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     public ObjectValidityEvent(final Object source, final Identifier classIdentifier) {
         super(source, classIdentifier);
     }

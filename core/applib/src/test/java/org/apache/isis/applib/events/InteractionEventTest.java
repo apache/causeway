@@ -55,7 +55,7 @@ public class InteractionEventTest {
     public void getIdentifier() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         assertThat(interactionEvent.getIdentifier(), is(identifier));
     }
@@ -64,7 +64,7 @@ public class InteractionEventTest {
     public void getSource() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         assertThat(interactionEvent.getSource(), is(source));
     }
@@ -73,7 +73,7 @@ public class InteractionEventTest {
     public void getClassName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         assertThat(interactionEvent.getClassName(), equalTo("CustomerOrder"));
     }
@@ -82,7 +82,7 @@ public class InteractionEventTest {
     public void getClassNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         assertThat(interactionEvent.getClassNaturalName(), equalTo("Customer Order"));
     }
@@ -91,7 +91,7 @@ public class InteractionEventTest {
     public void getMember() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         assertThat(interactionEvent.getMemberName(), equalTo("cancelOrder"));
     }
@@ -100,7 +100,7 @@ public class InteractionEventTest {
     public void getMemberNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         assertThat(interactionEvent.getMemberNaturalName(), equalTo("Cancel Order"));
     }
@@ -109,7 +109,7 @@ public class InteractionEventTest {
     public void shouldInitiallyNotVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         assertThat(interactionEvent.isVeto(), is(false));
     }
@@ -118,7 +118,7 @@ public class InteractionEventTest {
     public void afterAdvisedShouldVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         interactionEvent.advised("some reason", this.getClass());
         assertThat(interactionEvent.isVeto(), is(true));
@@ -128,7 +128,7 @@ public class InteractionEventTest {
     public void afterAdvisedShouldReturnReason() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         interactionEvent.advised("some reason", this.getClass());
         assertThat(interactionEvent.isVeto(), is(true));
@@ -138,7 +138,7 @@ public class InteractionEventTest {
     public void afterAdvisedShouldReturnAdvisorClass() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-            private static final long serialVersionUID = 1L;
+            
         };
         interactionEvent.advised("some reason", advisorClass);
         assertEquals(interactionEvent.getAdvisorClass(), advisorClass);

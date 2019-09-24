@@ -57,7 +57,7 @@ import org.apache.isis.schema.metamodel.v1.MetamodelDto;
         )
 public class MetaModelServicesMenu {
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> { private static final long serialVersionUID = 1L; }
+    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> { }
 
     final MimeType mimeTypeTextCsv;
     final MimeType mimeTypeTextXml;
@@ -73,7 +73,7 @@ public class MetaModelServicesMenu {
 
     // //////////////////////////////////////
 
-    public static class DownloadMetaModelEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }
+    public static class DownloadMetaModelEvent extends ActionDomainEvent { }
 
 
     @Action(
@@ -103,17 +103,15 @@ public class MetaModelServicesMenu {
         return "metamodel.csv";
     }
 
-    private String toXml(MetamodelDto model) {
-        return jaxbService.toXml(model);
-    }
+//    private String toXml(MetamodelDto model) {
+//        return jaxbService.toXml(model);
+//    }
 
 
     // //////////////////////////////////////
 
 
-    public static class DownloadMetaModelXmlEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class DownloadMetaModelXmlEvent extends ActionDomainEvent { }
 
     @Action(
             domainEvent = DownloadMetaModelXmlEvent.class,

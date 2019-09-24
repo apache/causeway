@@ -35,8 +35,6 @@ import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 @Deprecated
 public class ActionArgumentVisibilityEvent extends VisibilityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     private final Object[] args;
     private final int position;
 

@@ -31,8 +31,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class ActionUsabilityEvent extends UsabilityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     public ActionUsabilityEvent(final Object source, final Identifier actionIdentifier) {
         super(source, actionIdentifier);
     }

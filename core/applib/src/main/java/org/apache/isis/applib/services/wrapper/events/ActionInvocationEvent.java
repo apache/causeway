@@ -34,8 +34,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class ActionInvocationEvent extends ValidityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     public ActionInvocationEvent(final Object source, final Identifier actionIdentifier, final Object[] args) {
         super(source, actionIdentifier);
         this.args = args;

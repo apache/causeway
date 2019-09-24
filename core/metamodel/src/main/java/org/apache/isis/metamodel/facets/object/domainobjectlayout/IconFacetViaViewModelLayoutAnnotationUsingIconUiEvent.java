@@ -105,7 +105,7 @@ public class IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent extends IconF
     private IconUiEvent<Object> newIconUiEventForPojo(final Object domainObject) {
         try {
             final IconUiEvent<Object> iconUiEvent = _Casts.uncheckedCast(iconUiEventClass.newInstance());
-            iconUiEvent.setSource(domainObject);
+            iconUiEvent.initSource(domainObject);
             return iconUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new NonRecoverableException(ex);

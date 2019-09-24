@@ -36,9 +36,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
         public String foo(final int x, final String y) { return null; }
     }
 
-    public static class SomeDomainObjectFooInvokedDomainEvent extends ActionDomainEvent<SomeDomainObject> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class SomeDomainObjectFooInvokedDomainEvent extends ActionDomainEvent<SomeDomainObject> {}
 
     @Test
     public void defaultEventType() throws Exception {

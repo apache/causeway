@@ -31,8 +31,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class ObjectVisibilityEvent extends VisibilityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     public ObjectVisibilityEvent(final Object source, final Identifier classIdentifier) {
         super(source, classIdentifier);
     }

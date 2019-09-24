@@ -18,47 +18,16 @@
  */
 package org.apache.isis.applib.events.lifecycle;
 
-import java.util.EventObject;
+import org.apache.isis.applib.events.domain.EventObjectBase;
 
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.ToString;
-
-public abstract class AbstractLifecycleEvent<S> extends EventObject {
-
-    private static final long serialVersionUID = 1L;
+public abstract class AbstractLifecycleEvent<S> extends EventObjectBase<S> {
 
     public AbstractLifecycleEvent() {
         this(null);
     }
 
-    public AbstractLifecycleEvent(final S source) {
-        super(sourceElseDummy(source));
+    public AbstractLifecycleEvent(S source) {
+        super(source);
     }
 
-    private static Object sourceElseDummy(final Object source) {
-        return source != null ? source : new Object();
-    }
-
-    // -- source (downcast to S)
-    @Override
-    @SuppressWarnings("unchecked")
-    public S getSource() {
-        return (S)source;
-    }
-
-    /**
-     * Not API, set by the framework if the no-arg constructor is used.
-     */
-    public void setSource(S source) {
-        this.source = source;
-    }
-
-
-    private final static ToString<AbstractLifecycleEvent<?>> toString = ObjectContracts
-            .toString("source", AbstractLifecycleEvent::getSource);
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
-    }
 }

@@ -32,8 +32,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class PropertyModifyEvent extends ValidityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     private final Object proposed;
 
     public PropertyModifyEvent(final Object source, final Identifier propertyIdentifier, final Object proposed) {

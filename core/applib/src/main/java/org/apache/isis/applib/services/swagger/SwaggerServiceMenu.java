@@ -45,8 +45,8 @@ import org.apache.isis.commons.internal.resources._Resources;
         )
 public class SwaggerServiceMenu {
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<SwaggerServiceMenu> { private static final long serialVersionUID = 1L; }
-    public static class OpenSwaggerUiDomainEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }
+    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<SwaggerServiceMenu> { }
+    public static class OpenSwaggerUiDomainEvent extends ActionDomainEvent { }
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -61,7 +61,7 @@ public class SwaggerServiceMenu {
         return new LocalResourcePath("/swagger-ui/index.template.html");
     }
 
-    public static class OpenRestApiDomainEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }
+    public static class OpenRestApiDomainEvent extends ActionDomainEvent { }
 
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -76,7 +76,7 @@ public class SwaggerServiceMenu {
         return new LocalResourcePath("/"+_Resources.getRestfulPathIfAny()+"/");
     }
 
-    public static class DownloadSwaggerSpecDomainEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }
+    public static class DownloadSwaggerSpecDomainEvent extends ActionDomainEvent { }
 
     @Action(
             semantics = SemanticsOf.SAFE,

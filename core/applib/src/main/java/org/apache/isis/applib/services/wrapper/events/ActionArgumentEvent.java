@@ -35,8 +35,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class ActionArgumentEvent extends ValidityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     private final Object[] args;
     private final int position;
     private final Object proposed;

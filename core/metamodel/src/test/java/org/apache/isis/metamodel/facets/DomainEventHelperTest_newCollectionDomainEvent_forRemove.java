@@ -37,9 +37,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     }
     public static class SomeReferencedObject {}
 
-    public static class SomeDomainObjectCollectionRemovedFromDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class SomeDomainObjectCollectionRemovedFromDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> { }
 
     @Test
     public void defaultEventType() throws Exception {

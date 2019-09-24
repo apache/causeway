@@ -27,7 +27,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class CollectionMethodEvent extends AccessEvent {
 
-    private static final long serialVersionUID = 1L;
     private final Object domainObject;
     private final String methodName;
     private final Object[] args;

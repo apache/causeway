@@ -25,6 +25,8 @@ import org.apache.isis.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.system.context.session.RuntimeContext;
 
+import lombok.val;
+
 /**
  * package private mixin for ObjectAdapterContext
  * <p>
@@ -43,14 +45,15 @@ class ObjectAdapterContext_LifecycleEventSupport {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     void postLifecycleEventIfRequired(
-            final ManagedObject adapter,
-            final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
-        final LifecycleEventFacet facet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
-        if(facet != null) {
-            final Class<? extends AbstractLifecycleEvent<?>> eventType = facet.getEventType();
-            final Object instance = InstanceUtil.createInstance(eventType);
-            final Object pojo = adapter.getPojo();
-            postEvent((AbstractLifecycleEvent) instance, pojo);
+            ManagedObject adapter,
+            Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
+        
+        val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
+        if(lifecycleEventFacet != null) {
+            final Class<? extends AbstractLifecycleEvent<?>> eventType = lifecycleEventFacet.getEventType();
+            val instance = (AbstractLifecycleEvent) InstanceUtil.createInstance(eventType);
+            val pojo = adapter.getPojo();
+            postEvent(instance, pojo);
         }
     }
 
@@ -58,7 +61,7 @@ class ObjectAdapterContext_LifecycleEventSupport {
 
     private void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
         if(eventBusService!=null) {
-            event.setSource(pojo);
+            event.initSource(pojo);
             eventBusService.post(event);
         }
     }

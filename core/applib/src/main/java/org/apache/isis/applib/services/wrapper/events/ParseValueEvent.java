@@ -32,8 +32,6 @@ import org.apache.isis.applib.Identifier;
  */
 public class ParseValueEvent extends ValidityEvent {
 
-    private static final long serialVersionUID = 1L;
-
     private static Object coalesce(final Object source, final String proposed) {
         return source != null ? source : proposed;
     }

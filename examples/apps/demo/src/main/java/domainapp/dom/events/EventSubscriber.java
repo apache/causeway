@@ -45,9 +45,7 @@ public class EventSubscriber {
     @Inject private EventLogRepository eventLogRepository;
     @Inject private TransactionService transactionService;
 
-    public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {}
 
     @PostConstruct
     public void init() {

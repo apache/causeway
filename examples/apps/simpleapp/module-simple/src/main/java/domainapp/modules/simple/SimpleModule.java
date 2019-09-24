@@ -33,14 +33,12 @@ public class SimpleModule /*extends ModuleAbstract*/ {
     //    }
 
     public static class PropertyDomainEvent<S,T>
-    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {
-        private static final long serialVersionUID = 1L;}
+    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
     
     public static class CollectionDomainEvent<S,T>
-    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {
-        private static final long serialVersionUID = 1L;}
+    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {}
     
     public static class ActionDomainEvent<S> extends
-    org.apache.isis.applib.events.domain.ActionDomainEvent<S> {
-        private static final long serialVersionUID = 1L;}
+    org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
+    
 }

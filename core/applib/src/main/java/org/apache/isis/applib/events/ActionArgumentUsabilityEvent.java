@@ -23,7 +23,8 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is disabled
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> 
+ * represents a check as to whether a particular argument for an action is disabled
  * or not.
  * 
  * <p>
@@ -34,8 +35,6 @@ import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
  */
 @Deprecated
 public class ActionArgumentUsabilityEvent extends UsabilityEvent {
-
-    private static final long serialVersionUID = 1L;
 
     private final Object[] args;
     private final int position;

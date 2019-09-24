@@ -30,8 +30,7 @@ public class InventoryManager {
 
     // -- UPDATE PRODUCT PRICE
 
-    public static class UpdateProductPriceEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class UpdateProductPriceEvent extends ActionDomainEvent {}
 
     @Action(domainEvent = UpdateProductPriceEvent.class)
     public Product updateProductPrice(Product product, double newPrice) {

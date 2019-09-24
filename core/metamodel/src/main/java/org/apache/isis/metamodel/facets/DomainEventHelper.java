@@ -125,7 +125,9 @@ public class DomainEventHelper {
             final Class<? extends ActionDomainEvent<S>> type,
                     final Identifier identifier,
                     final S source,
-                    final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+                    final Object... arguments) 
+        throws InstantiationException, IllegalAccessException, IllegalArgumentException, 
+        InvocationTargetException, NoSuchMethodException, SecurityException {
 
         final Constructor<?>[] constructors = type.getConstructors();
 
@@ -136,7 +138,7 @@ public class DomainEventHelper {
                 final Object event = constructor.newInstance();
                 final ActionDomainEvent<S> ade = uncheckedCast(event);
 
-                ade.setSource(source);
+                ade.initSource(source);
                 ade.setIdentifier(identifier);
                 ade.setArguments(asList(arguments));
                 return ade;
@@ -233,7 +235,7 @@ public class DomainEventHelper {
             if(parameterTypes.length == 0) {
                 final Object event = constructor.newInstance();
                 final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
-                pde.setSource(source);
+                pde.initSource(source);
                 pde.setIdentifier(identifier);
                 pde.setOldValue(oldValue);
                 pde.setNewValue(newValue);
@@ -323,7 +325,7 @@ public class DomainEventHelper {
                 final Object event = constructor.newInstance();
                 final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
 
-                cde.setSource(source);
+                cde.initSource(source);
                 cde.setIdentifier(identifier);
                 cde.setOf(of);
                 cde.setValue(value);

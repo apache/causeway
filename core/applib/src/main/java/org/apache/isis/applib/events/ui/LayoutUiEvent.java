@@ -18,16 +18,12 @@
  */
 package org.apache.isis.applib.events.ui;
 
-import java.util.EventObject;
-
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 
 /**
  * Emitted for subscribers to obtain a layout hint (equivalent to the <tt>layout()</tt> supporting method).
  */
 public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
-
-    private static final long serialVersionUID = 1L;
 
     //region > constructors
     /**
@@ -54,9 +50,7 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
      * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.layoutUiEvent.postForDefault"
      * configuration property.
      */
-    public static class Default extends LayoutUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Default extends LayoutUiEvent<Object> { }
     //endregion
 
     //region > Noop class
@@ -65,9 +59,7 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
-    public static class Noop extends LayoutUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Noop extends LayoutUiEvent<Object> { }
     //endregion
 
     //region > Doop class
@@ -76,9 +68,7 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
-    public static class Doop extends LayoutUiEvent<Object> {
-        private static final long serialVersionUID = 1L;
-    }
+    public static class Doop extends LayoutUiEvent<Object> { }
     //endregion
 
     //region > layout
@@ -94,9 +84,7 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
     /**
      * For subscribers to call to provide a layout for this object.
      */
-    public void setLayout(final String layout) {
-        this.layout = layout;
-    }
+    public void setLayout(final String layout) { }
     //endregion
 
 }

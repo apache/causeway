@@ -31,7 +31,7 @@ public class AbstractDomainEvent_veto_Test {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    AbstractDomainEvent<?> ev = new AbstractDomainEvent<Object>() { private static final long serialVersionUID = 1L; };
+    AbstractDomainEvent<?> ev = new AbstractDomainEvent<Object>() {  };
 
     @Test
     public void hidden_phase_and_veto_using_null() throws Exception {
@@ -87,7 +87,7 @@ public class AbstractDomainEvent_veto_Test {
     public void disable_phase_and_attempt_to_veto_with_null() throws Exception {
 
         // given
-        final AbstractDomainEvent<?> ev = new AbstractDomainEvent<Object>() { private static final long serialVersionUID = 1L; };
+        final AbstractDomainEvent<?> ev = new AbstractDomainEvent<Object>() {  };
         ev.setEventPhase(AbstractDomainEvent.Phase.DISABLE);
 
         // expect

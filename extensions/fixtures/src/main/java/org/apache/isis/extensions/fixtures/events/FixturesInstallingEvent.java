@@ -19,11 +19,9 @@
 
 package org.apache.isis.extensions.fixtures.events;
 
-import java.util.EventObject;
+import org.apache.isis.applib.events.domain.EventObjectBase;
 
-public class FixturesInstallingEvent extends EventObject {
-
-    private static final long serialVersionUID = 1L;
+public class FixturesInstallingEvent extends EventObjectBase<Object> {
 
     public FixturesInstallingEvent(final Object source) {
         super(source);
