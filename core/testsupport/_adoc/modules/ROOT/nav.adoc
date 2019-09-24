@@ -24,9 +24,9 @@
 
 
 ** xref:bdd-spec-support.adoc[BDD Spec Support]
-*** xref:how-it-works.adoc[How it Works]
-*** xref:writing-a-bdd-spec.adoc[Writing a BDD Spec]
-*** xref:maven-configuration.adoc[Maven Configuration]
+*** xref:bdd-spec-support/how-it-works.adoc[How it Works]
+*** xref:bdd-spec-support/writing-a-bdd-spec.adoc[Writing a BDD Spec]
+*** xref:bdd-spec-support/maven-configuration.adoc[Maven Configuration]
 
 
 
