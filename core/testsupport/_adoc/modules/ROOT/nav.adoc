@@ -1,7 +1,3 @@
-* xref:about.adoc[Testing]
+include::testing:ROOT:partial$nav.adoc[]
+//include::testing:ROOT:nav.adoc[]
 
-** xref:overview.adoc[Overview]
-** xref:unit-test-support.adoc[Unit Test Support]
-** xref:integ-test-support.adoc[Integ Test Support]
-** xref:bdd-spec-support.adoc[BDD Spec Support]
-** xref:fixture-scripts.adoc[Fixture Scripts]
