@@ -16,7 +16,7 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:Parameter/fileAccept.adoc[`fileAccept()`]
+|xref:rg:ant:Parameter.adoc#fileAccept[`fileAccept()`]
 |Media type or file extension
 |Hints the file type to be uploaded for xref:rg:cms:classes/value-types/Blob.adoc[`Blob`]
  or xref:rg:cms:classes/value-types/Clob.adoc[`Clob`]. +
@@ -25,23 +25,23 @@ The table below summarizes the annotation's attributes.
 
 
 
-|xref:rg:ant:Parameter/maxLength.adoc[`maxLength()`]
+|xref:rg:ant:Parameter.adoc#maxLength[`maxLength()`]
 |Positive integer
 |maximum number of characters for string parameters; ignored otherwise
 
 
 
-|xref:rg:ant:Parameter/mustSatisfy.adoc[`mustSatisfy()`]
+|xref:rg:ant:Parameter.adoc#mustSatisfy[`mustSatisfy()`]
 |implementation of `o.a.i.applib.spec.Specification`
 |allows arbitrary validation to be applied
 
 
-|xref:rg:ant:Parameter/optionality.adoc[`optionality()`]
+|xref:rg:ant:Parameter.adoc#optionality[`optionality()`]
 |`MANDATORY`, `OPTIONAL` (`MANDATORY`)
 |specifies a parameter is optional rather than mandatory
 
 
-|xref:rg:ant:Parameter/regexPattern.adoc[regexPattern()]
+|xref:rg:ant:Parameter.adoc#regexPattern[regexPattern()]
 |regular expression
 |validates the contents of a string parameter against the regular expression pattern
 
@@ -91,3 +91,8 @@ public class Customer {
 
 
 
+include:Parameter/fileAccept.adoc[leveloffset=+1]
+include:Parameter/maxLength.adoc[leveloffset=+1]
+include:Parameter/mustSatisfy.adoc[leveloffset=+1]
+include:Parameter/optionality.adoc[leveloffset=+1]
+include:Parameter/regexPattern.adoc[leveloffset=+1]

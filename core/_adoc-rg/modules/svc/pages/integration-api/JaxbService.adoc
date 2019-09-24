@@ -41,7 +41,7 @@ a persistent entity).  The enum indicates whether these schemas should be includ
 
 Apache Isis provides a default implementation of the service, `o.a.i.applib.services.jaxb.JaxbServiceDefault`.
 
-To use an alternative implementation, implement `JaxbService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement `JaxbService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 

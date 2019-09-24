@@ -24,18 +24,18 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:DomainObjectLayout/bookmarking.adoc[`bookmarking()`]
+|xref:rg:ant:DomainObjectLayout.adoc#bookmarking[`bookmarking()`]
 |`AS_ROOT`, `AS_CHILD`, `NEVER` +
 (`NEVER`)
 |whether (and how) this domain object should be automatically bookmarked
 
 
-|xref:rg:ant:DomainObjectLayout/cssclass.adoc[`cssClass()`]
+|xref:rg:ant:DomainObjectLayout.adoc#cssclass[`cssClass()`]
 |Any string valid as a CSS class
 |the css class that a domain class (type) should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:rg:ant:DomainObjectLayout/cssClassFa.adoc[`cssClassFa()`]
+|xref:rg:ant:DomainObjectLayout.adoc#cssClassFa[`cssClassFa()`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -46,43 +46,43 @@ The table below summarizes the annotation's attributes.
 |Currently unused.
 
 
-|xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`cssClassUiEvent()`]
+|xref:rg:ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`]
 |subtype of `CssClassUiEvent` +
 (`CssClassUiEvent.Default`)
 |the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
 
-|xref:rg:ant:DomainObjectLayout/describedAs.adoc[`describedAs()`]
+|xref:rg:ant:DomainObjectLayout.adoc#describedAs[`describedAs()`]
 |String.
 |description of this class, eg to be rendered in a tooltip.
 
-|xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`iconUiEvent()`]
+|xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`]
 |subtype of `IconUiEvent` +
 (`IconUiEvent.Default`)
 |the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
 
-|xref:rg:ant:DomainObjectLayout/layoutUiEvent.adoc[`layoutUiEvent()`]
+|xref:rg:ant:DomainObjectLayout.adoc#layoutUiEvent[`layoutUiEvent()`]
 |subtype of `LayoutUiEvent` +
 (`LayoutUiEvent.Default`)
 |the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
 
-|xref:rg:ant:DomainObjectLayout/named.adoc[`named()`]
+|xref:rg:ant:DomainObjectLayout.adoc#named[`named()`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
-|xref:rg:ant:DomainObjectLayout/paged.adoc[`paged()`]
+|xref:rg:ant:DomainObjectLayout.adoc#paged[`paged()`]
 |Positive integer
 |the page size for instances of this class when rendered within a table (as returned from an action invocation)
 
 
-|xref:rg:ant:DomainObjectLayout/plural.adoc[`plural()`]
+|xref:rg:ant:DomainObjectLayout.adoc#plural[`plural()`]
 |String.
 |the plural name of the class
 
 
-|xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`titleUiEvent()`]
+|xref:rg:ant:DomainObjectLayout.adoc#titleUiEvent[`titleUiEvent()`]
 |subtype of `TitleUiEvent` +
 (`TitleUiEvent.Default`)
 |the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
@@ -122,3 +122,14 @@ Note that there is (currently) no support for specifying UI hints for domain obj
 
 
 
+include:DomainObjectLayout/bookmarking.adoc[leveloffset=+1]
+include:DomainObjectLayout/cssClass.adoc[leveloffset=+1]
+include:DomainObjectLayout/cssClassFa.adoc[leveloffset=+1]
+include:DomainObjectLayout/cssClassUiEvent.adoc[leveloffset=+1]
+include:DomainObjectLayout/describedAs.adoc[leveloffset=+1]
+include:DomainObjectLayout/iconUiEvent.adoc[leveloffset=+1]
+include:DomainObjectLayout/layoutUiEvent.adoc[leveloffset=+1]
+include:DomainObjectLayout/named.adoc[leveloffset=+1]
+include:DomainObjectLayout/paged.adoc[leveloffset=+1]
+include:DomainObjectLayout/plural.adoc[leveloffset=+1]
+include:DomainObjectLayout/titleUiEvent.adoc[leveloffset=+1]

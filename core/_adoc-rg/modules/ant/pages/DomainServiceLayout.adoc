@@ -23,17 +23,17 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:DomainServiceLayout/menuBar.adoc[`menuBar()`]
+|xref:rg:ant:DomainServiceLayout.adoc#menuBar[`menuBar()`]
 |`PRIMARY`, `SECONDARY`, `TERTIARY` (`PRIMARY`).
 |the menubar in which the menu that holds this service's actions should reside.
 
 
-|xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`menuOrder()`]
+|xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`menuOrder()`]
 |
 |the order of the service's menu with respect to other service's.
 
 
-|xref:rg:ant:DomainServiceLayout/named.adoc[`named()`]
+|xref:rg:ant:DomainServiceLayout.adoc#named[`named()`]
 |string, eg "Customers"
 |name of this class (overriding the name derived from its name in code)
 
@@ -71,3 +71,6 @@ Note that there is (currently) no support for specifying UI hints for domain ser
 
 
 
+include::DomainServiceLayout/menuBar.adoc[leveloffset=+1]
+include::DomainServiceLayout/menuOrder.adoc[leveloffset=+1]
+include::DomainServiceLayout/named.adoc[leveloffset=+1]

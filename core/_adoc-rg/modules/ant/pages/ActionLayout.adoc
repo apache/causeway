@@ -16,28 +16,28 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:ActionLayout/bookmarking.adoc[`bookmarking()`]
+|xref:rg:ant:ActionLayout.adoc#bookmarking[`bookmarking()`]
 |`AS_ROOT`, `NEVER` +
 (`NEVER`)
-|indicates if an action (with safe xref:rg:ant:Action/semantics.adoc[action semantics]) is automatically bookmarked.
+|indicates if an action (with safe xref:rg:ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
 
 
-|xref:rg:ant:ActionLayout/contributedAs.adoc[`contributedAs()`]
+|xref:rg:ant:ActionLayout.adoc#contributedAs[`contributedAs()`]
 |`AS_BOTH`, `AS_ACTION`, `AS_ASSOCIATION`, `AS_NEITHER` +
 (`AS_BOTH`)
 |for a domain service action that can be contributed, whether to contribute as an action or as an association (ie a property or collection). +
 
-For a domain service action to be contributed, the domain services must have a xref:rg:ant:DomainService/nature.adoc[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:rg:ant:Action/semantics.adoc[safe action semantics], and takes a single argument, namely the contributee domain object.
+For a domain service action to be contributed, the domain services must have a xref:rg:ant:DomainService.adoc#nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:rg:ant:Action.adoc#semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
 
 
-|xref:rg:ant:ActionLayout/cssClass.adoc[`cssClass()`]
+|xref:rg:ant:ActionLayout.adoc#cssClass[`cssClass()`]
 |Any string valid as a CSS class
 |an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]. +
 
 Supported by the xref:vw:ROOT:about.adoc[Wicket viewer] but currently ignored by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
 
 
-|xref:rg:ant:ActionLayout/cssClassFa.adoc[`cssClassFa()`]
+|xref:rg:ant:ActionLayout.adoc#cssClassFa[`cssClassFa()`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -48,24 +48,24 @@ Supported by the xref:vw:ROOT:about.adoc[Wicket viewer] but currently ignored by
 |Positioning of the icon on the button/menu item.
 
 
-|xref:rg:ant:ActionLayout/describedAs.adoc[`describedAs()`]
+|xref:rg:ant:ActionLayout.adoc#describedAs[`describedAs()`]
 |String.
 |provides a short description of the action, eg for rendering as a 'tool tip'.
 
 
-|xref:rg:ant:ActionLayout/hidden.adoc[`hidden()`]
+|xref:rg:ant:ActionLayout.adoc#hidden[`hidden()`]
 |`EVERYWHERE`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 
 
-|xref:rg:ant:ActionLayout/named.adoc[`named()`]
+|xref:rg:ant:ActionLayout.adoc#named[`named()`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
-|xref:rg:ant:ActionLayout/position.adoc[`position()`]
+|xref:rg:ant:ActionLayout.adoc#position[`position()`]
 |`BELOW`, `RIGHT`, `PANEL`, `PANEL_DROPDOWN` (`BELOW`)
 |for actions associated (using xref:rg:ant:MemberOrder.adoc[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
 
@@ -111,3 +111,11 @@ As an alternative to using the `@ActionLayout` annotation, a xref:vw:ROOT:layout
 
 
 
+include::ActionLayout/bookmarking.adoc[leveloffset=+1]
+include::ActionLayout/contributedAs.adoc[leveloffset=+1]
+include::ActionLayout/cssClass.adoc[leveloffset=+1]
+include::ActionLayout/cssClassFa.adoc[leveloffset=+1]
+include::ActionLayout/describedAs.adoc[leveloffset=+1]
+include::ActionLayout/hidden.adoc[leveloffset=+1]
+include::ActionLayout/named.adoc[leveloffset=+1]
+include::ActionLayout/position.adoc[leveloffset=+1]

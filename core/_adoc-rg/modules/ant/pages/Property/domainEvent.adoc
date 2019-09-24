@@ -154,6 +154,6 @@ However, events can be raised programmatically by wrapping the target object usi
 
 This attribute is also supported for:
 
-* xref:rg:ant:Action/domainEvent.adoc[actions] and
-* xref:rg:ant:Property/domainEvent.adoc[properties].
+* xref:rg:ant:Action.adoc#domainEvent[actions] and
+* xref:rg:ant:Property.adoc#domainEvent[properties].
 

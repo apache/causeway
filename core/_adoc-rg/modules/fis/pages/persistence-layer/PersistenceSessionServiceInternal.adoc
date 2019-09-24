@@ -83,12 +83,8 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 ----
 
 
-== Runtime vs Noop implementation
+== Implementation
 
-The framework provides two implementations:
+The framework provides a single implementation, `PersistenceSessionServiceInternalDefault`, provided by `isis-core-runtime`.
+This is used during normal use and in integration tests.
 
-* `PersistenceSessionServiceInternalDefault` is provided by `isis-core-runtime`, and is used during normal use and integration tests
-
-* `PersistenceSessionServiceInternalNoop` is provided as a fallback by `isis-core-metamodel`, and is provided to allow the xref:rg:mvn:about.adoc[maven plugin] to be bootstrapped without any "backend" database.
-
-The `...Default` implementation takes priority over the `...Noop` implementation.

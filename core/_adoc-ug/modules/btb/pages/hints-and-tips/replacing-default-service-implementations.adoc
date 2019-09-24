@@ -10,7 +10,7 @@ The framework provides default implementations for many of the xref:rg:svc:about
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
 For example, suppose you wanted to provide your own implementation of xref:rg:svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`].
-The trick is to use the xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] attribute, specifying a low number (typically `"1"`).
+The trick is to use the xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, specifying a low number (typically `"1"`).
 
 Here's how:
 

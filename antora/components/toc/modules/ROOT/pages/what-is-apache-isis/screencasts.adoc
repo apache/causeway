@@ -103,7 +103,7 @@ Writing end-to-end xref:testing:ROOT:integ-test-support.adoc[integration tests] 
 
 
 
-12+| [big]#*Swagger UI, Maven plugin*#
+11+| [big]#*Swagger UI*#
 
 include::partial$_screencasts-playlists.adoc[]
 
@@ -113,10 +113,10 @@ Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatica
 
 
 
-
-|link:https://www.youtube.com/watch?v=yOh3WphhR1E[010^] +
-Using the xref:rg:mvn:about.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
-||||||||x|||
+// FIXME: currently removed in v2, may reinstate
+//|link:https://www.youtube.com/watch?v=yOh3WphhR1E[010^].
+//Using the xref:rg:mvn:about.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
+//||||||||x|||
 
 
 
@@ -145,7 +145,7 @@ Implementing business logic using a (no-arg) action, and associating with a prop
 
 
 |link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
-Invoking (no-arg) action on multiple objects at once (using xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`], and using the xref:rg:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
+Invoking (no-arg) action on multiple objects at once (using xref:rg:ant:Action.adoc#invokeOn[`@Action#invokeOn()`], and using the xref:rg:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
 |||x||||||x||
 
 
@@ -165,7 +165,7 @@ Using the xref:rg:cms:methods/reserved/title.adoc[`title()`], xref:rg:cms:method
 
 
 |link:https://www.youtube.com/watch?v=7ToRKBOeemM[015^] +
-Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rg:cms:classes/uievent/IconUiEvent.adoc[`IconUiEvent`] as per the xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] annotation
+Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rg:cms:classes/uievent/IconUiEvent.adoc[`IconUiEvent`] as per the xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
 ||||||x|||||
 
 
@@ -225,7 +225,7 @@ Demonstrates how the end-user can copy and share URLs for domain objects - inclu
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:rg:ant:DomainObjectLayout/bookmarking.adoc[domain objects] and (xref:rg:ant:Action/semantics.adoc[query-only]) xref:rg:ant:ActionLayout/bookmarking.adoc[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:rg:ant:DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:rg:ant:Action.adoc#semantics[query-only]) xref:rg:ant:ActionLayout.adoc#bookmarking[actions] can be bookmarked.
 |||x||||||||
 
 
@@ -307,7 +307,7 @@ Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from
 
 
 |link:https://www.youtube.com/watch?v=AXuxULuRtm0[029^] +
-Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension to remove boilerplate from your domain object (xref:rg:ant:ParameterLayout/named.adoc[`@ParameterLayout#named()`] annotation attribute on action parameters).
+Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension to remove boilerplate from your domain object (xref:rg:ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`] annotation attribute on action parameters).
 |||||x|||x|||
 
 
@@ -328,7 +328,7 @@ How to validate action parameters using a supporting xref:rg:cms:methods/prefixe
 
 
 |link:https://www.youtube.com/watch?v=1Vlzob89pYI[031^] +
-How to validate action parameters using the xref:rg:ant:Parameter/mustSatisfy.adoc[`@Parameter#mustSatisfy()`]  and the Specification interface.
+How to validate action parameters using the xref:rg:ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
 |||||||||x||
 
 
@@ -387,7 +387,7 @@ include::partial$_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=1SCyBlMM2Bo[037^] +
-How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rg:ant:PropertyLayout/hidden.adoc[`@PropertyLayout#hidden()`]).
+How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rg:ant:PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`]).
 ||||x|||||||
 
 
@@ -451,7 +451,7 @@ How to use the supporting xref:rg:cms:methods/prefixes/default.adoc[`defaultXxx(
 
 
 |link:https://www.youtube.com/watch?v=qAJDGxztWIQ[044^] +
-How to use xref:rg:ant:DomainObject/bounding.adoc[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
+How to use xref:rg:ant:DomainObject.adoc#bounding[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
 |||||||||x||
 
 

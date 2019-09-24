@@ -88,7 +88,7 @@ If the object is not wrapped, returns back unchanged.
 
 <8> whether the supplied object has been wrapped.
 
-If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped -  a xref:rg:ant:Action/command.adoc[command]s will be created and pre- and post-execute xref:rg:ant:Action/domainEvent.adoc[domain event]s) will be fired
+If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped -  a xref:rg:ant:Action.adoc#command[command]s will be created and pre- and post-execute xref:rg:ant:Action.adoc#domainEvent[domain event]s) will be fired
 
 
 The service works by returning a "wrapper" around a supplied domain object (using a byte manipulation library such as link:http://www.javassist.org[javassist] or link:https://bytebuddy.net/[byte buddy]), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.

@@ -25,7 +25,7 @@ public class BusRoute {
 
 [NOTE]
 ====
-This attribute takes precedence over any value for the xref:rg:ant:CollectionLayout/render.adoc[`@CollectionLayout#render()`] attribute.  For example, if the
+This attribute takes precedence over any value for the xref:rg:ant:CollectionLayout.adoc#render[`@CollectionLayout#render()`] attribute.  For example, if the
 `defaultView` attribute is defined to "table", then the table will be show even if `render` is set to `LAZILY`.
 ====
 

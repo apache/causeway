@@ -8,7 +8,7 @@ Collections can be hidden at the domain-level, indicating that they are not visi
 
 [TIP]
 ====
-It is also possible to use xref:rg:ant:CollectionLayout/hidden.adoc[`@CollectionLayout#hidden()`] or using xref:vw:ROOT:layout/file-based.adoc[file-based layout] such that the collection can be hidden at the view layer.
+It is also possible to use xref:rg:ant:CollectionLayout.adoc#hidden[`@CollectionLayout#hidden()`] or using xref:vw:ROOT:layout/file-based.adoc[file-based layout] such that the collection can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -57,5 +57,5 @@ The xref:vro:ROOT:about.adoc[RestfulObjects viewer] by default suppress collecti
 
 This attribute can also be applied to:
 
-* xref:rg:ant:Action/hidden.adoc[actions]
-* xref:rg:ant:Property/hidden.adoc[properties].
+* xref:rg:ant:Action.adoc#hidden[actions]
+* xref:rg:ant:Property.adoc#hidden[properties].

@@ -9,3 +9,5 @@ This chapter explains the main APIs to extend or alter the programming conventio
 build up its metamodel.
 
 
+include::programming-model/custom-validator.adoc[leveloffset=+1]
+include::programming-model/finetuning.adoc[leveloffset=+1]

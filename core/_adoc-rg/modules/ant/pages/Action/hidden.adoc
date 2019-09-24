@@ -9,7 +9,7 @@ Actions can be hidden at the domain-level, indicating that they are not visible 
 
 [TIP]
 ====
-It is also possible to use xref:rg:ant:ActionLayout/hidden.adoc[`@ActionLayout#hidden()`] or xref:vw:ROOT:layout/file-based.adoc[file-based layouts] such that the action can be hidden at the view layer.
+It is also possible to use xref:rg:ant:ActionLayout.adoc#hidden[`@ActionLayout#hidden()`] or xref:vw:ROOT:layout/file-based.adoc[file-based layouts] such that the action can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -41,7 +41,7 @@ The other values of the `Where` enum have no meaning for a collection.
 
 [NOTE]
 ====
-For actions of domain services the visibility is dependent upon its xref:rg:ant:DomainService/nature.adoc[`@DomainService#nature()`] and also on whether it is contributed (as per  xref:rg:ant:ActionLayout/contributedAs.adoc[`@ActionLayout#contributedAs()`]).
+For actions of domain services the visibility is dependent upon its xref:rg:ant:DomainService.adoc#nature[`@DomainService#nature()`] and also on whether it is contributed (as per  xref:rg:ant:ActionLayout.adoc#contributedAs[`@ActionLayout#contributedAs()`]).
 ====
 
 
@@ -50,6 +50,6 @@ For actions of domain services the visibility is dependent upon its xref:rg:ant:
 
 This attribute can also be applied to:
 
-* xref:rg:ant:Property/hidden.adoc[properties]
-* xref:rg:ant:Collection/hidden.adoc[collections].
+* xref:rg:ant:Property.adoc#hidden[properties]
+* xref:rg:ant:Collection.adoc#hidden[collections].
 

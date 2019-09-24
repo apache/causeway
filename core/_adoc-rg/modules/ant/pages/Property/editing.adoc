@@ -43,5 +43,5 @@ To reiterate, it is _not_ possible to enable editing for a property if editing h
 
 This attribute can also be specified for:
 
-* xref:rg:ant:Collection/editing.adoc[collections]
-* xref:rg:ant:DomainObject/editing.adoc[domain object].
+* xref:rg:ant:Collection.adoc#editing[collections]
+* xref:rg:ant:DomainObject.adoc#editing[domain object].

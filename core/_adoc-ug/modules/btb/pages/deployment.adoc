@@ -11,3 +11,10 @@ This chapter provides guidance on some common deployment scenarios.
 
 
 
+include::deployment/cmd-line.adoc[leveloffset=+1]
+include::deployment/externalized-configuration.adoc[leveloffset=+1]
+include::deployment/tomcat.adoc[leveloffset=+1]
+include::deployment/docker.adoc[leveloffset=+1]
+include::deployment/gae.adoc[leveloffset=+1]
+include::deployment/neo4j.adoc[leveloffset=+1]
+include::deployment/jvm-flags.adoc[leveloffset=+1]

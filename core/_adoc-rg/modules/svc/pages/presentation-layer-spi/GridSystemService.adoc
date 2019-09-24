@@ -16,7 +16,7 @@ The framework provides a single such grid implementation, namely for Bootstrap3.
 Unlike most other domain services, the framework will check _all_ available implementations of `GridSystemService` to
 obtain available grid systems, rather than merely the first implementation found; in other words it uses the
 chain-of-responsibility pattern.  Services are called in the order defined by
-xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`]).
+xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]).
 
 Note though that each concrete implementation must also provide corresponding Wicket viewer components capable of
 interpreting the grid layout.
@@ -40,7 +40,7 @@ public interface GridSystemService<G extends Grid> {
 }
 ----
 <1> The concrete subclass of `Grid` supported by this implementation. As noted in the introduction, there can be multiple implementations of this service,  but there can only be one implementation per concrete subclass.  As is normal practice,
-the service with the lowest xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] takes precedence.
+the service with the lowest xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] takes precedence.
 <2> the target namespace for this grid system.  This is used when generating the XML.  The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3`.
 <3> the schema location for the XSD.  The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
 <4> a default grid, eg two columns in ratio 4:8.  Used when no existing grid layout exists for a domain class.

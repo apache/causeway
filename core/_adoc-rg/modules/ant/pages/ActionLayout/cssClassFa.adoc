@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered on the action's representation as a button or menu item.    The related `cssClassFaPosition()` attribute specifies the positioning of the icon, to the left or the right of the text.
 
-These attributes can also be applied to xref:rg:ant:DomainObjectLayout/cssClassFa.adoc[domain objects] and to xref:rg:ant:ViewModelLayout/cssClassFa.adoc[view models] to specify the object's icon.
+These attributes can also be applied to xref:rg:ant:DomainObjectLayout.adoc#cssClassFa[domain objects] and to xref:rg:ant:ViewModelLayout.adoc#cssClassFa[view models] to specify the object's icon.
 
 
 For example:
@@ -36,6 +36,6 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 [NOTE]
 ====
-The similar xref:rg:ant:ActionLayout/cssClass.adoc[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:rg:ant:ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
 

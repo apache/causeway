@@ -17,7 +17,7 @@ The workaround is to create add/remove actions and use xref:rg:ant:MemberOrder.a
 
 Whether a collection is enabled or disabled depends upon these factors:
 
-* whether the domain object has been configured as immutable through the xref:rg:ant:DomainObject/editing.adoc[`@DomainObject#editing()`] attribute
+* whether the domain object has been configured as immutable through the xref:rg:ant:DomainObject.adoc#editing[`@DomainObject#editing()`] attribute
 
 * else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.objects.editing`.
 If set to `false`, then the object's collections (and properties) are *not* editable
@@ -51,6 +51,6 @@ To reiterate, it is _not_ possible to enable editing for a collection if editing
 
 This attribute can also be specified for:
 
-* xref:rg:ant:Property/editing.adoc[properties]
-* xref:rg:ant:DomainObject/editing.adoc[domain object]
+* xref:rg:ant:Property.adoc#editing[properties]
+* xref:rg:ant:DomainObject.adoc#editing[domain object]
 

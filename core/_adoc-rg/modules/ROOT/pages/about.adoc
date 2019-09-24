@@ -1,29 +1,10 @@
 = Reference Guides
 include::_attributes.adoc[]
 
-Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
-
-The user guides available are:
-
-* xref:ug:fun:about.adoc[Fundamentals]
-* xref:vw:ROOT:about.adoc[Wicket viewer]
-* xref:vro:ROOT:about.adoc[Restful Objects viewer]
-* xref:odn:ROOT:about.adoc[DataNucleus object store]
-* xref:security:ROOT:about.adoc[Security] (this guide)
-* xref:testing:ROOT:about.adoc[Testing]
-* xref:ug:btb:about.adoc[Beyond the Basics]
-
 The reference guides are:
 
 * xref:rg:ant:about.adoc[Annotations]
 * xref:rg:svc:about.adoc[Domain Services]
 * xref:rg:cfg:about.adoc[Configuration Properties]
 * xref:rg:cms:about.adoc[Classes, Methods and Schema]
-* xref:rg:mvn:about.adoc[Apache Isis Maven plugin]
-* xref:rg:fis:about.adoc[Framework Internal Services]
-
-The remaining guides are:
-
-* xref:toc:devguide:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
-* xref:toc:comguide:about.adoc[Committers' Guide]
 

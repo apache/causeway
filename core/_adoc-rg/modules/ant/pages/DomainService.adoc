@@ -20,26 +20,26 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:DomainService/nature.adoc[`nature()`]
+|xref:rg:ant:DomainService.adoc#nature[`nature()`]
 |`VIEW`, `VIEW_MENU_ONLY`, `VIEW_CONTRIBUTIONS_ONLY`, `VIEW_REST_ONLY`, `DOMAIN` (`VIEW`)
 |the nature of this service: providing actions for menus, or as contributed actions, or for the xref:vro:ROOT:about.adoc[RestfulObjects REST API], or neither
 
 
-|xref:rg:ant:DomainService/objectType.adoc[`objectType()`]
+|xref:rg:ant:DomainService.adoc#objectType[`objectType()`]
 |
-|equivalent to xref:rg:ant:DomainObject/objectType.adoc[`@DomainObject#objectType()`], specifies the objectType of the service.
+|equivalent to xref:rg:ant:DomainObject.adoc#objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
 
 The instanceId for services is always "1".
 
 
-|xref:rg:ant:DomainService/repositoryFor.adoc[`repositoryFor()`]
+|xref:rg:ant:DomainService.adoc#repositoryFor[`repositoryFor()`]
 |
 |if this domain service acts as a repository for an entity type, specify that entity type.  This is used to determine an icon to use for the service (eg as shown in action prompts).
 
 
 |`menuOrder()`
 |
-|Deprecated in 1.8.0; use instead xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`]
+|Deprecated in 1.8.0; use instead xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]
 
 |===
 
@@ -65,3 +65,6 @@ public class LoanRepository {
 
 
 
+include::DomainService/nature.adoc[leveloffset=+1]
+include::DomainService/objectType.adoc[leveloffset=+1]
+include::DomainService/repositoryFor.adoc[leveloffset=+1]

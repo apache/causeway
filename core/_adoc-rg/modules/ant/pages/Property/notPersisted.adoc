@@ -63,5 +63,5 @@ public class Order {
 
 == See also
 
-This attribute is also supported for xref:rg:ant:Collection/notPersisted.adoc[collections].
+This attribute is also supported for xref:rg:ant:Collection.adoc#notPersisted[collections].
 

@@ -15,7 +15,7 @@ This section explains how.
 
 The xref:rg:ant:MemberOrder.adoc[`@MemberOrder`]  annotation is used to specify the relative order of domain class properties, collections and actions.
 
-The annotation defines two attributes, xref:rg:ant:MemberOrder/name.adoc[`name()`] and xref:rg:ant:MemberOrder/sequence.adoc[`sequence()`].
+The annotation defines two attributes, xref:rg:ant:MemberOrder.adoc#name[`name()`] and xref:rg:ant:MemberOrder.adoc#sequence[`sequence()`].
 Their usage depends on the member type:
 
 * for properties, the `name()` is used to group properties together into a member group (also called a property group or a fieldset.
@@ -29,7 +29,7 @@ The `sequence()` orders collections relative to one another
 
 * for actions, the `name()` attribute associates an action with either a property or with a collection.
 
-** If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:rg:ant:ActionLayout/position.adoc[`@ActionLayout#position()`] attribute.
+** If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:rg:ant:ActionLayout.adoc#position[`@ActionLayout#position()`] attribute.
 
 ** On the other hand if the `name() attribute matches a collection name, then the action's button is rendered on the collection's header.
 
@@ -66,7 +66,7 @@ This defines three property (or member) groups, "General", "Detail" and "Misc"; 
 Properties in the same member group are rendered together, as a fieldset.
 
 In addition, actions can optionally be associated (rendered close to) either properties or actions.
-This is done by overloading the ``@MemberOrder``'s xref:rg:ant:MemberOrder/name.adoc[`name()`] attribute, holding the value of the property or collection.
+This is done by overloading the ``@MemberOrder``'s xref:rg:ant:MemberOrder.adoc#name[`name()`] attribute, holding the value of the property or collection.
 
 For example:
 
@@ -93,7 +93,7 @@ public class ToDoItem {
 will associate the `completed()` and `notYetCompleted()` actions with the `complete` property, and will associate the `add()` and `remove()` actions with the `dependencies` collection.
 
 
-The value of xref:rg:ant:MemberOrder/sequence.adoc[`sequence()`] is a string.
+The value of xref:rg:ant:MemberOrder.adoc#sequence[`sequence()`] is a string.
 The simplest convention (as shown in the example above) is to use numbers -- 1, 2, 3 -- though it is a better idea to leave gaps in the numbers -- 10, 20, 30 perhaps -- such that a new member may be added without having to edit existing numbers.
 
 Even better is to adopt the 'dewey-decimal' notation -- 1, 1.1, 1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 -- which allows for an indefinite amount of future insertion.

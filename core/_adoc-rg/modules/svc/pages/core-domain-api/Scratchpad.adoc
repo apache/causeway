@@ -30,13 +30,13 @@ This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implement
 And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
 
-To use an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 
 == Usage
 
-The most common use-case is for xref:rg:ant:Action/invokeOn.adoc[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
+The most common use-case is for xref:rg:ant:Action.adoc#invokeOn[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
 
 For example, the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
 

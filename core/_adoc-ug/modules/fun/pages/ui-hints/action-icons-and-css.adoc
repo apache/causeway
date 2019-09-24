@@ -14,7 +14,7 @@ It is also possible to specify additional CSS for an object's members (not just 
 
 Action icons can be specified in several ways.
 
-One option is to use the xref:rg:ant:ActionLayout/cssClassFa.adoc[`@ActionLayout#cssClassFa()`].
+One option is to use the xref:rg:ant:ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa()`].
 For example:
 
 [source,java]
@@ -32,7 +32,7 @@ Alternatively, you can specify these hints dynamically in the xref:vw:ROOT:layou
 <cpt:action id="renew" cssClassFa="refresh"/>
 ----
 
-Rather than annotating every action with xref:rg:ant:ActionLayout/cssClassFa.adoc[`@ActionLayout#cssClassFa()`] and xref:rg:ant:ActionLayout/cssClass.adoc[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
+Rather than annotating every action with xref:rg:ant:ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa()`] and xref:rg:ant:ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
 Not only does this save a lot of boilerplate/editing, it helps ensure consistency across all actions.
 
 To declare fa classes globally, use the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.reflector.facet.cssClassFa.patterns` (a comma separated list of key:value pairs).
@@ -67,11 +67,11 @@ For example, "fa-plus" is applied to all action members called "newXxx"
 
 Similarly, a CSS class can be specified for object members:
 
-* xref:rg:ant:ActionLayout/cssClass.adoc[`@ActionLayout#cssClass()`] for actions
+* xref:rg:ant:ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`] for actions
 
-* xref:rg:ant:PropertyLayout/cssClass.adoc[`@PropertyLayout#cssClass()`] for properties, and
+* xref:rg:ant:PropertyLayout.adoc#cssClass[`@PropertyLayout#cssClass()`] for properties, and
 
-* xref:rg:ant:CollectionLayout/cssClass.adoc[`@CollectionLayout#cssClass()`] for collections.
+* xref:rg:ant:CollectionLayout.adoc#cssClass[`@CollectionLayout#cssClass()`] for collections.
 
 Again, this CSS class will be attached to an appropriate containing `<div>` or `<span>` on the rendered page.
 

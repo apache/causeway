@@ -40,5 +40,5 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 This attribute can also be applied to:
 
-* xref:rg:ant:DomainObjectLayout/paged.adoc[domain objects]
-* xref:rg:ant:ViewModelLayout/paged.adoc[view models].
+* xref:rg:ant:DomainObjectLayout.adoc#paged[domain objects]
+* xref:rg:ant:ViewModelLayout.adoc#paged[view models].

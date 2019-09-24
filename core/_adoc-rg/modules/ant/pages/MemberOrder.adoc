@@ -10,8 +10,8 @@ It works in conjunction with the xref:rg:ant:MemberGroupLayout.adoc[`@MemberGrou
 
 The annotation defines two attributes:
 
-* xref:rg:ant:MemberOrder/name.adoc[`name()`]
-* xref:rg:ant:MemberOrder/sequence.adoc[`sequence()`]
+* xref:rg:ant:MemberOrder.adoc#name[`name()`]
+* xref:rg:ant:MemberOrder.adoc#sequence[`sequence()`]
 
 As this is an important topic, there is a xref:vw:ROOT:layout.adoc[separate chapter] that discussed object layout in full.
 

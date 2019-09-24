@@ -39,7 +39,7 @@ This implementation is also used to discover domain services annotated with xref
 Currently this logic uses the implementation directly, so is not pluggable.
 ====
 
-To use an alternative implementation, implement the `ClassDiscoveryService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `ClassDiscoveryService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 

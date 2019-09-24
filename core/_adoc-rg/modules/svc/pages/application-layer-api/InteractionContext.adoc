@@ -13,7 +13,7 @@ invoke child actions/properties, then those sub-executions are captured as a cal
 graph structure.
 
 If a bulk action is performed (as per an action annotated using
-xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`]), then this will result in multiple ``Interaction``s, one
+xref:rg:ant:Action.adoc#invokeOn[`@Action#invokeOn()`]), then this will result in multiple ``Interaction``s, one
 per selected object (not one `Interaction` with multiple top-level ``Execution``s).
 
 
@@ -192,7 +192,7 @@ The principle distinction is that while `Command` represents the __intention__ t
 the `Interaction` (and contained ``Execution``s) represents the actual execution.
 
 Most of the time a `Command` will be followed directly by its corresponding `Interaction`.  However, if the `Command`
-is annotated to run in the background (using xref:rg:ant:Action/command.adoc[`@Action#commandExecuteIn()`], or
+is annotated to run in the background (using xref:rg:ant:Action.adoc#command[`@Action#commandExecuteIn()`], or
 is explicitly created through the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`], then the actual
 interaction/execution is deferred until some other mechanism invokes the command (eg as described
 xref:ug:btb:about.adoc#BackgroundCommandExecution[here]).

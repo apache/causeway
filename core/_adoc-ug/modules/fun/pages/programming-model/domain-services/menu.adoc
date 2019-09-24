@@ -63,7 +63,7 @@ There's no need to name the action parameters if the code is compiled using the 
 <4> the action implementation delegates to an injected repository.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
 There is further discussion of service injection xref:ug:fun:programming-model.adoc#inject-services[below].
-<5> xref:rg:ant:Action/restrictTo.adoc[Prototype] actions are rendered only in prototyping mode.
+<5> xref:rg:ant:Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.
 <6> Menu services typically delegate to an underlying repository/ies specific to the domain (rather than use `RepositoryService` directly, for example).
 

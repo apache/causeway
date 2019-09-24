@@ -113,5 +113,5 @@ However, events can be raised programmatically by calling the xref:rg:svc:core-d
 
 == See also
 
-This attribute can also be applied to xref:rg:ant:ViewModelLayout/iconNameUiEvent.adoc[view models].
+This attribute can also be applied to xref:rg:ant:ViewModelLayout.adoc#iconNameUiEvent[view models].
 

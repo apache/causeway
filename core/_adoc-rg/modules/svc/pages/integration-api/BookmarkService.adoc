@@ -7,7 +7,7 @@ The `BookmarkService2` domain service (and its various supertypes) provides the 
 
 For example, a `Customer` object with:
 
-* an object type of "custmgmt.Customer" (as per xref:rg:ant:DomainObject/objectType.adoc[`DomainObject#objectType()`] or equivalent) , and
+* an object type of "custmgmt.Customer" (as per xref:rg:ant:DomainObject.adoc#objectType[`DomainObject#objectType()`] or equivalent) , and
 * an id=123
 
 could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
@@ -55,7 +55,7 @@ public interface BookmarkService {
 
 The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceInternalDefault`
 
-To use an alternative implementation, implement `BookmarkService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement `BookmarkService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 

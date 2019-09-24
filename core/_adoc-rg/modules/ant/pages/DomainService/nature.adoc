@@ -21,7 +21,7 @@ The service's actions appear on menus and in the REST API, but are not contribut
 +
 The service's actions are intended only to be used as contributed actions/associations to domain objects and view model
 +
-The related xref:rg:ant:ActionLayout/contributedAs.adoc[`@ActionLayout#contributedAs()`] determines whether any given (1-arg) action is contributed as an association rather than an action.
+The related xref:rg:ant:ActionLayout.adoc#contributedAs[`@ActionLayout#contributedAs()`] determines whether any given (1-arg) action is contributed as an association rather than an action.
 
 * `VIEW_REST_ONLY` +
 +

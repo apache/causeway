@@ -95,6 +95,6 @@ public class Customers {
 ====
 The method specified must be an action, that is, part of the Isis metamodel.
 Said another way: it must not be annotated with xref:rg:ant:Programmatic.adoc[`@Programmatic`].
-However, it *can* be hidden or placed on a domain service with xref:rg:ant:DomainService/nature.adoc[nature] of `DOMAIN`, such that the action would not be rendered otherwise in the UI.
-Also, the action cannot be xref:rg:ant:Action/restrictTo.adoc[restricted to] prototyping only.
+However, it *can* be hidden or placed on a domain service with xref:rg:ant:DomainService.adoc#nature[nature] of `DOMAIN`, such that the action would not be rendered otherwise in the UI.
+Also, the action cannot be xref:rg:ant:Action.adoc#restrictTo[restricted to] prototyping only.
 ====

@@ -8,7 +8,7 @@ For a domain service action that _can_ be contributed, the `contributedAs()` att
 
 The distinction between property or collection is automatic: if the action returns a `java.util.Collection` (or subtype) then the action is contributed as a collection; otherwise it is contributed as a property.
 
-For a domain service action to be contributed, the domain services must have a xref:rg:ant:DomainService/nature.adoc[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:rg:ant:Action/semantics.adoc[safe action semantics], and takes a single argument, namely the contributee domain object.
+For a domain service action to be contributed, the domain services must have a xref:rg:ant:DomainService.adoc#nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:rg:ant:Action.adoc#semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
 
 For example:
 
@@ -41,7 +41,7 @@ public class OrderContributions {
 }
 ----
 
-In such cases, though, it would probably make more sense to annotate the action as either xref:rg:ant:Action/hidden.adoc[hidden] or indeed xref:rg:ant:Programmatic.adoc[`@Programmatic`].
+In such cases, though, it would probably make more sense to annotate the action as either xref:rg:ant:Action.adoc#hidden[hidden] or indeed xref:rg:ant:Programmatic.adoc[`@Programmatic`].
 
 
 

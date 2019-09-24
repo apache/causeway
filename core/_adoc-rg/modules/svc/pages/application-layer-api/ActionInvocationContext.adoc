@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 // TODO: v2: remove this domain service
 
-The `ActionInvocationContext` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`].
+The `ActionInvocationContext` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rg:ant:Action.adoc#invokeOn[`@Action#invokeOn()`].
 This allows the user to select multiple objects in a table and then invoke the same action against all of them.
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.
@@ -41,7 +41,7 @@ public static class ActionInvocationContext {
 <4> is the 0-based index to the object being acted upon.
 
 
-To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage

@@ -26,21 +26,21 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:Action/domainEvent.adoc[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:Action.adoc#domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `collectionAnnotation.` +
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:Collection/domainEvent.adoc[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:Collection.adoc#domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `propertyAnnotation.` +
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:Property/domainEvent.adoc[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:Property.adoc#domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
 
 
 
@@ -72,7 +72,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObject/createdLifecycleEvent.adoc[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObject.adoc#createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -80,7 +80,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObject/loadedLifecycleEvent.adoc[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObject.adoc#loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -88,7 +88,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObject/persistingLifecycleEvent.adoc[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObject.adoc#persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -96,7 +96,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObject/persistedLifecycleEvent.adoc[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObject.adoc#persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -104,7 +104,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObject/removingLifecycleEvent.adoc[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObject.adoc#removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -112,7 +112,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObject/updatingLifecycleEvent.adoc[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -120,7 +120,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObject/updatedLifecycleEvent.adoc[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObject.adoc#updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
 
 
 
@@ -150,28 +150,28 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `cssClassUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `iconUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `layoutUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObjectLayout/layoutUiEvent.adoc[`@DomainObjectLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObjectLayout.adoc#layoutUiEvent[`@DomainObjectLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 
 |`isis.reflector.facet.` +
@@ -179,28 +179,28 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `cssClassUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:ViewModelLayout/cssClassUiEvent.adoc[`@ViewModelLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:ViewModelLayout.adoc#cssClassUiEvent[`@ViewModelLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `viewModelLayoutAnnotation.` +
 `iconUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:ViewModelLayout/iconUiEvent.adoc[`@ViewModelLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:ViewModelLayout.adoc#iconUiEvent[`@ViewModelLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `viewModelLayoutAnnotation.` +
 `layoutUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:ViewModelLayout/layoutUiEvent.adoc[`@ViewModelLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:ViewModelLayout.adoc#layoutUiEvent[`@ViewModelLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `viewModelLayoutAnnotation.` +
 `titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg:ant:ViewModelLayout/titleUiEvent.adoc[`@ViewModelLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:ViewModelLayout.adoc#titleUiEvent[`@ViewModelLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 
 
@@ -241,14 +241,14 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `objects`
 | `all`, `none` +
 (`all`)
-|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rg:ant:DomainObject/auditing.adoc[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
+|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rg:ant:DomainObject.adoc#auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
 `command.` +
 `actions`
 | `all`, `ignoreSafe`, `none` (`none`)
-|Whether action invocations should be automatically reified into commands (for actions annotated with xref:rg:ant:Action/command.adoc[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+|Whether action invocations should be automatically reified into commands (for actions annotated with xref:rg:ant:Action.adoc#command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
@@ -256,7 +256,7 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `command.` +
 `properties`
 | `all`, `none` (`none`)
-|(Whether property edits should be automatically reified into commands (for properties annotated with xref:rg:ant:Property/command.adoc[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
+|(Whether property edits should be automatically reified into commands (for properties annotated with xref:rg:ant:Property.adoc#command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
 
 
@@ -287,20 +287,20 @@ If the setting is changed to disabled then this may reduce application start-up 
 `objects`
 | `all`, `none` +
 (`all`)
-|Whether changed objects should be automatically published (for objects annotated with xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
+|Whether changed objects should be automatically published (for objects annotated with xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
 `publish.` +
 `actions`
 | `all`, `ignoreSafe`, `none` (`none`)
-|Whether actions should be automatically published (for actions annotated with xref:rg:ant:Action/publishing.adoc[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether actions should be automatically published (for actions annotated with xref:rg:ant:Action.adoc#publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
 
 |`isis.services.` +
 `publish.` +
 `properties`
 | `all`, `none` (`none`)
-|Whether properties should be automatically published (for properties annotated with xref:rg:ant:Action/publishing.adoc[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether properties should be automatically published (for properties annotated with xref:rg:ant:Action.adoc#publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
 
 
 |`isis.services.` +
@@ -640,7 +640,7 @@ See xref:ug:btb:about.adoc#layout-metadata-reader[Layout Metadata Reader] for mo
 `editing`
 |`true`,`false` +
 (`true`)
-|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rg:ant:DomainObject/editing.adoc[`@DomainObject#editing()`]); see xref:rg:cfg:configuring-core.adoc#isis-objects-editing[below] for further discussion.
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rg:ant:DomainObject.adoc#editing[`@DomainObject#editing()`]); see xref:rg:cfg:configuring-core.adoc#isis-objects-editing[below] for further discussion.
 
 |`isis.reflector.` +
 `explicitAnnotations.` +

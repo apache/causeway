@@ -5,6 +5,6 @@ include::_attributes.adoc[]
 
 Whenever a view model is to be rendered, the framework fires off an layout UI event to obtain an alternative layout name with which to render the domain object.
 
-This attribute is the same as xref:rg:ant:DomainObjectLayout/layoutUiEvent.adoc[`@DomainObjectLayout#layoutUiEvent()`], but for view models instead of entities.
+This attribute is the same as xref:rg:ant:DomainObjectLayout.adoc#layoutUiEvent[`@DomainObjectLayout#layoutUiEvent()`], but for view models instead of entities.
 
 A default event that is emitted if none specified, unless the `isis.reflector.facet.viewModelLayoutAnnotation.layoutUiEvent.postForDefault` configuration property is set to "false".

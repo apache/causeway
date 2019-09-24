@@ -30,9 +30,9 @@ public class ToDoItem {
 
 This attribute can also be applied to:
 
-* xref:rg:ant:DomainObjectLayout/cssClass.adoc[domain objects]
-* xref:rg:ant:ViewModelLayout/cssClass.adoc[view models]
-* xref:rg:ant:ActionLayout/cssClass.adoc[actions]
-* xref:rg:ant:PropertyLayout/cssClass.adoc[properties],
-* xref:rg:ant:CollectionLayout/cssClass.adoc[collections]
-* xref:rg:ant:ParameterLayout/cssClass.adoc[parameters].
+* xref:rg:ant:DomainObjectLayout.adoc#cssClass[domain objects]
+* xref:rg:ant:ViewModelLayout.adoc#cssClass[view models]
+* xref:rg:ant:ActionLayout.adoc#cssClass[actions]
+* xref:rg:ant:PropertyLayout.adoc#cssClass[properties],
+* xref:rg:ant:CollectionLayout.adoc#cssClass[collections]
+* xref:rg:ant:ParameterLayout.adoc#cssClass[parameters].

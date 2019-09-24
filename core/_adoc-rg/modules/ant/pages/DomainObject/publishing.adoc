@@ -43,10 +43,10 @@ public class InterestRate {
 
 This attribute is also supported for:
 
-* xref:rg:ant:Action/publishing.adoc[actions]
+* xref:rg:ant:Action.adoc#publishing[actions]
 +
 where it controls whether action invocations are published as events, and for
 
-* xref:rg:ant:Property/publishing.adoc[properties]
+* xref:rg:ant:Property.adoc#publishing[properties]
 +
 where it controls whether property edits are published as events.

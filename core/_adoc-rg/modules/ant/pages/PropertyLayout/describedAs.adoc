@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `describedAs()` attribute is used to provide a short description of the property to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:rg:ant:CollectionLayout/describedAs.adoc[collections],  xref:rg:ant:ActionLayout/describedAs.adoc[actions], xref:rg:ant:ParameterLayout/describedAs.adoc[parameters], xref:rg:ant:DomainObjectLayout/describedAs.adoc[domain objects] and xref:rg:ant:ViewModelLayout/describedAs.adoc[view models].
+The `describedAs()` attribute is used to provide a short description of the property to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:rg:ant:CollectionLayout.adoc#describedAs[collections],  xref:rg:ant:ActionLayout.adoc#describedAs[actions], xref:rg:ant:ParameterLayout.adoc#describedAs[parameters], xref:rg:ant:DomainObjectLayout.adoc#describedAs[domain objects] and xref:rg:ant:ViewModelLayout.adoc#describedAs[view models].
 
 For example:
 

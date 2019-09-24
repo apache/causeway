@@ -16,13 +16,13 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:Collection/domainEvent.adoc[`domainEvent()`]
+|xref:rg:ant:Collection.adoc#domainEvent[`domainEvent()`]
 |subtype of `CollectionDomainEvent` +
 (`CollectionDomainEvent.Default`)
 |the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
-|xref:rg:ant:Collection/editing.adoc[`editing()`]
+|xref:rg:ant:Collection.adoc#editing[`editing()`]
 |`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |whether a collection can be added to or removed from within the UI
@@ -33,13 +33,13 @@ The table below summarizes the annotation's attributes.
 |if `editing()` is `DISABLED`, provides a reason as to why.
 
 
-|xref:rg:ant:Collection/hidden.adoc[`hidden()`]
+|xref:rg:ant:Collection.adoc#hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the collection should be hidden from the user.
 
 
-|xref:rg:ant:Collection/notPersisted.adoc[`notPersisted()`]
+|xref:rg:ant:Collection.adoc#notPersisted[`notPersisted()`]
 |`true`, `false` +
 (`false`)
 |whether to exclude from snapshots. +
@@ -51,7 +51,7 @@ Collection must also be annotated with `@javax.jdo.annotations.NotPersistent` in
 
 
 
-|xref:rg:ant:Collection/typeOf.adoc[`typeOf()`]
+|xref:rg:ant:Collection.adoc#typeOf[`typeOf()`]
 |
 |hints as to the run-time type of the objects within that collection (as a fallback)
 
@@ -96,3 +96,8 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 
+include::Collection/domainEvent.adoc[leveloffset=+1]
+include::Collection/editing.adoc[leveloffset=+1]
+include::Collection/hidden.adoc[leveloffset=+1]
+include::Collection/notPersisted.adoc[leveloffset=+1]
+include::Collection/typeOf.adoc[leveloffset=+1]

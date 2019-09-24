@@ -118,5 +118,5 @@ However, events can be raised programmatically either by calling the xref:rg:svc
 
 == See also
 
-This attribute can also be applied to xref:rg:ant:ViewModelLayout/cssClassUiEvent.adoc[view models].
+This attribute can also be applied to xref:rg:ant:ViewModelLayout.adoc#cssClassUiEvent[view models].
 

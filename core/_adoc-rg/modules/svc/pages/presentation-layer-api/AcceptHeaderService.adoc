@@ -35,7 +35,7 @@ The default implementation is provided by `o.a.i.v.ro.rendering.service.accepthe
 Note that the service will only return a list when the request is initiated through the xref:vro:ROOT:about.adoc[Restful Objects viewer].  Otherwise the service will return `null`.
 ====
 
-To use an alternative implementation, use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == Usage
@@ -47,7 +47,7 @@ The diagram below illustrated this:
 
 image::reference-services-api/acceptheaderservice.png[width="700px",link="{imagesdir}/reference-services-api/acceptheaderservice.png"]
 
-The REST request is submitted to a domain service with a xref:rg:ant:DomainService/nature.adoc[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
+The REST request is submitted to a domain service with a xref:rg:ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
 This uses the `AcceptHeaderService` to obtain the values of the HTTP `Accept` header.
 Based on this it delegates to the appropriate underlying domain service (with a nature of `DOMAIN` so that they are not exposed in the REST API at all).
 

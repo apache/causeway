@@ -23,7 +23,7 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:Mixin/method.adoc[`method()`]
+|xref:rg:ant:Mixin.adoc#method[`method()`]
 |Method name within the mixin
 |How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
@@ -32,6 +32,7 @@ The default "reserved" method name is `$$`.
 |===
 
 An alternative and equivalent approach is to use the
-xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
+xref:rg:ant:DomainObject.adoc#nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
 
 
+include::Mixin/method.adoc[leveloffset=+1]

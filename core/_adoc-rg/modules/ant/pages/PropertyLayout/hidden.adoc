@@ -8,7 +8,7 @@ The `hidden()` attribute indicates where (in the UI) the property should be hidd
 
 [TIP]
 ====
-It is also possible to use xref:rg:ant:PropertyLayout/hidden.adoc[`@PropertyLayout#hidden()`] or a xref:vw:ROOT:layout/file-based.adoc[file-based layout] such that the property can be hidden at the view layer.
+It is also possible to use xref:rg:ant:PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`] or a xref:vw:ROOT:layout/file-based.adoc[file-based layout] such that the property can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -74,6 +74,6 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-
 
 This attribute can also be applied to:
 
-* xref:rg:ant:Action/hidden.adoc[actions]
-* xref:rg:ant:Collection/hidden.adoc[collections].
+* xref:rg:ant:Action.adoc#hidden[actions]
+* xref:rg:ant:Collection.adoc#hidden[collections].
 

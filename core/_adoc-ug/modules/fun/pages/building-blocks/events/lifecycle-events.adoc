@@ -33,7 +33,7 @@ Note that this requires that the object is instantiated using the framework, see
 There is no lifecycle event for object creating because the framework doesn't know about newly created objects until they have been created; and there is no lifecycle event for obejcts removed because it is not valid to "touch" a domain entity once deleted.
 
 
-For example, if annotated with xref:rg:ant:DomainObject/updatingLifecycleEvent.adoc[`@DomainObjectLayout#updatingLifecycleEvent()`], the appropriate (subclass of) `ObjectUpdatingEvent` will be emitted.
- Similarly for xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`cssClassUiEvent()`].
+For example, if annotated with xref:rg:ant:DomainObject.adoc#updatingLifecycleEvent[`@DomainObjectLayout#updatingLifecycleEvent()`], the appropriate (subclass of) `ObjectUpdatingEvent` will be emitted.
+ Similarly for xref:rg:ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`].
 
 

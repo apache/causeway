@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:rg:ant:Action/semantics.adoc[@Action(semantics=...)]) actions.
+The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:rg:ant:Action.adoc#semantics[@Action(semantics=...)]) actions.
 
 Domain objects, if bookmarkable, can be nested.
 

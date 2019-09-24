@@ -33,5 +33,5 @@ public class Customer {
 
 == See also
 
-This attribute can also be specified for xref:rg:ant:Parameter/regexPattern.adoc[parameters].
+This attribute can also be specified for xref:rg:ant:Parameter.adoc#regexPattern[parameters].
 

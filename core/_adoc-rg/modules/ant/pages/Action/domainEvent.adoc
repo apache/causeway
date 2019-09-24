@@ -182,8 +182,8 @@ However, events can be raised programmatically either by calling the xref:rg:svc
 
 This attribute is also supported for:
 
-* xref:rg:ant:Collection/domainEvent.adoc[collections] and
-* xref:rg:ant:Property/domainEvent.adoc[properties].
+* xref:rg:ant:Collection.adoc#domainEvent[collections] and
+* xref:rg:ant:Property.adoc#domainEvent[properties].
 
 
 

@@ -51,7 +51,7 @@ In fact, the `MementoServiceDefault` implementation does provide a mechanism to 
 not part of the `MementoService` public API. Note also that the encoding method is not pluggable.
 ====
 
-To use an alternative implementation, implement `MementoService` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement `MementoService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 The types of objects that are supported by the `MementoService` are implementation-specific, but would typically
 include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary
@@ -83,7 +83,7 @@ As noted in the introduction, a common use case for this service is in the imple
 
 [TIP]
 ====
-Rather than implementing `ViewModel`, it's usually easier to annotate your view models with xref:rg:ant:ViewModel.adoc[`@ViewModel`] (or equivalently xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature=EXTERNAL_ENTITY`] or xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature=INMEMORY_ENTITY`].
+Rather than implementing `ViewModel`, it's usually easier to annotate your view models with xref:rg:ant:ViewModel.adoc[`@ViewModel`] (or equivalently xref:rg:ant:DomainObject.adoc#nature[`@DomainObject#nature=EXTERNAL_ENTITY`] or xref:rg:ant:DomainObject.adoc#nature[`@DomainObject#nature=INMEMORY_ENTITY`].
 ====
 
 For example, suppose you were implementing a view model that represents an external entity in a SOAP web service.  To access this service the view model needs to store (say) the hostname, port number and an id to the object.

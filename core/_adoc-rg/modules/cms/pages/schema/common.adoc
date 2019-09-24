@@ -51,7 +51,7 @@ The `oidDto` complex type is defined as:
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
 <2> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.
 The `objectState` attribute can usually be omitted (indicating a persistent object)
-<3> the object type, corresponding to either the xref:rg:ant:DomainObject/objectType.adoc[`@DomainObject#objectType()`] attribute, or to the (JDO)
+<3> the object type, corresponding to either the xref:rg:ant:DomainObject.adoc#objectType[`@DomainObject#objectType()`] attribute, or to the (JDO)
 xref:rg:ant:PersistenceCapable.adoc[`@PersistenceCapable`] annotation (`schema` and/or `table` attributes), or to the (JDO) xref:rg:ant:Discriminator.adoc[`@Discriminator`] annotation.
 If none is specified, then the fully qualified class name will be used.
 <4> the object identifier (aka primary key), converted to string form.

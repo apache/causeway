@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 The `labelPosition()` attribute determines the positioning of labels for parameters.
 
-The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.  The one exception is xref:rg:ant:ParameterLayout/multiLine.adoc[`multiLine()`] string parameters, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
+The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.  The one exception is xref:rg:ant:ParameterLayout.adoc#multiLine[`multiLine()`] string parameters, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
 For boolean parameters a positioning of `RIGHT` is also allowed; this is ignored for all other types.
 
@@ -34,10 +34,10 @@ public class Order {
 ----
 
 
-To get an idea of how these are rendered (in the xref:vw:ROOT:about.adoc[Wicket viewer]), see xref:rg:ant:PropertyLayout/labelPosition.adoc[PropertyLayout#labelPosition()].
+To get an idea of how these are rendered (in the xref:vw:ROOT:about.adoc[Wicket viewer]), see xref:rg:ant:PropertyLayout.adoc#labelPosition[PropertyLayout#labelPosition()].
 
 
 == See also
 
-This attribute can also be specified for xref:rg:ant:PropertyLayout/labelPosition.adoc[properties].
+This attribute can also be specified for xref:rg:ant:PropertyLayout.adoc#labelPosition[properties].
 

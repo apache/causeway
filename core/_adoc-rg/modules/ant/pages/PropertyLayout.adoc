@@ -17,40 +17,40 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:PropertyLayout/cssClass.adoc[`cssClass()`]
+|xref:rg:ant:PropertyLayout.adoc#cssClass[`cssClass()`]
 |Any string valid as a CSS class
 |the css class that a property should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:rg:ant:PropertyLayout/describedAs.adoc[`describedAs()`]
+|xref:rg:ant:PropertyLayout.adoc#describedAs[`describedAs()`]
 |String
 |description of this property, eg to be rendered in a tooltip.
 
 
-|xref:rg:ant:PropertyLayout/hidden.adoc[`hidden()`]
+|xref:rg:ant:PropertyLayout.adoc#hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the property should be hidden from the user.
 
 
-|xref:rg:ant:PropertyLayout/labelPosition.adoc[`labelPosition()`]
+|xref:rg:ant:PropertyLayout.adoc#labelPosition[`labelPosition()`]
 |`LEFT`, `TOP`, `RIGHT`, `NONE` +
 (`LEFT`)
 |in forms, the positioning of the label relative to the property value. +
 
-Defaults is `LEFT`, unless xref:rg:ant:PropertyLayout/multiLine.adoc[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
+Defaults is `LEFT`, unless xref:rg:ant:PropertyLayout.adoc#multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
 
 It is also possible to change the default through a xref:rg:cfg:configuring-core.adoc#isis-viewers-propertyLayout-labelPosition[configuration property]
 
 
-|xref:rg:ant:PropertyLayout/multiLine.adoc[`multiLine()`]
+|xref:rg:ant:PropertyLayout.adoc#multiLine[`multiLine()`]
 |Positive integer
 |for string properties, render as a text area over multiple lines.  +
 
-If set > 1, then xref:rg:ant:PropertyLayout/labelPosition.adoc[`labelPosition`] defaults to TOP.
+If set > 1, then xref:rg:ant:PropertyLayout.adoc#labelPosition[`labelPosition`] defaults to TOP.
 
 
-|xref:rg:ant:PropertyLayout/named.adoc[`named()`]
+|xref:rg:ant:PropertyLayout.adoc#named[`named()`]
 |String
 |to override the name inferred from the collection's name in code. +
 
@@ -63,29 +63,29 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |whether to HTML escape the name of this property.
 
 
-|xref:rg:ant:PropertyLayout/navigable.adoc[`navigable()`]
+|xref:rg:ant:PropertyLayout.adoc#navigable[`navigable()`]
 |`PARENT`, `IGNORE`, `NOT_CONFIGURED` +
 (`NOT_CONFIGURED`)
 |whether a property should be used as the navigable parent (parent breadcrumb) of this object
 
 
-|xref:rg:ant:PropertyLayout/promptStyle.adoc[`promptStyle()`]
+|xref:rg:ant:PropertyLayout.adoc#promptStyle[`promptStyle()`]
 |`DIALOG`, `INLINE`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |how a property prompt should be displayed within the UI
 
 
-|xref:rg:ant:PropertyLayout/renderedAsDayBefore.adoc[`renderedAsDayBefore()`]
+|xref:rg:ant:PropertyLayout.adoc#renderedAsDayBefore[`renderedAsDayBefore()`]
 |`true`, `false` +
 (`false`)
 |for date properties only, render the date as one day prior to the actually stored date.
 
 
-|xref:rg:ant:PropertyLayout/typicalLength.adoc[`typicalLength()`]
+|xref:rg:ant:PropertyLayout.adoc#typicalLength[`typicalLength()`]
 |Positive integer.
 |the typical entry length of a field, use to determine the optimum width for display
 
-|xref:rg:ant:PropertyLayout/unchanging.adoc[`unchanging()`]
+|xref:rg:ant:PropertyLayout.adoc#unchanging[`unchanging()`]
 |`false`, `true` +
 (`false`)
 |indicates that the value held by the property never changes over time (even if other properties of the object do change).
@@ -141,3 +141,13 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 
+include::PropertyLayout/cssClass.adoc[leveloffset=+1]
+include::PropertyLayout/describedAs.adoc[leveloffset=+1]
+include::PropertyLayout/labelPosition.adoc[leveloffset=+1]
+include::PropertyLayout/multiLine.adoc[leveloffset=+1]
+include::PropertyLayout/named.adoc[leveloffset=+1]
+include::PropertyLayout/navigable.adoc[leveloffset=+1]
+include::PropertyLayout/promptStyle.adoc[leveloffset=+1]
+include::PropertyLayout/renderedAsDayBefore.adoc[leveloffset=+1]
+include::PropertyLayout/typicalLength.adoc[leveloffset=+1]
+include::PropertyLayout/unchanging.adoc[leveloffset=+1]

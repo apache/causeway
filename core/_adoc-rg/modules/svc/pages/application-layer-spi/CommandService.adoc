@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 The `CommandService` service supports the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] service such that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
 
-The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`], or implicitly by way of the xref:rg:ant:Action/command.adoc[`@Action#command()`] annotation.
+The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:rg:svc:application-layer-api/BackgroundService.adoc[`BackgroundService`], or implicitly by way of the xref:rg:ant:Action.adoc#command[`@Action#command()`] annotation.
 
 Persistent ``Command``s also support the ability to replicate from a master to a slave instance of an application.
 One use case for this is for regression testing, allowing a production usages to be replayed against a new release candidate, eg after upgrading that application to a new version of Apache Isis itself (or some other dependency).

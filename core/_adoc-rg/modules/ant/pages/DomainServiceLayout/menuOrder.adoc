@@ -9,8 +9,8 @@ The `menuOrder()` attribute determines the ordering of a domain service's action
 
 The algorithm works as follows:
 
-* first, the xref:rg:ant:DomainServiceLayout/menuBar.adoc[`menuBar()`] determines which of the three menu bars the service's actions should be rendered
-* then, the domain service's top-level name (typically explicitly specified using xref:rg:ant:DomainServiceLayout/named.adoc[`named()`]) is used to determine the top-level menu item to be rendered on the menu bar
+* first, the xref:rg:ant:DomainServiceLayout.adoc#menuBar[`menuBar()`] determines which of the three menu bars the service's actions should be rendered
+* then, the domain service's top-level name (typically explicitly specified using xref:rg:ant:DomainServiceLayout.adoc#named[`named()`]) is used to determine the top-level menu item to be rendered on the menu bar
 * finally, if there is more than domain service that has the same name, then the `menuOrder` attribute is used to order those actions on the menu item drop-down.
 
 For example, the screenshot below shows the "prototyping" menu from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:

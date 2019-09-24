@@ -440,8 +440,9 @@ There's a role for both: local integration tests should fully exercise the modul
 With regard to the naming of these various BDD specs and integration tests, they follow the naming convention required by the (non-ASF) link:http://github.com/danhaywood/java-mavenmixin-surefire["surefire" mavenmixin] that configures the maven surefire plugin.
 Integration tests include the name "IntegTest", while unit tests contain merely "Test".
 
-The module also defines its own manifest, `SimpleModuleManifest`.
-This is used to run Isis' own xref:rg:mvn:about.adoc[maven plugin] to xref:rg:mvn:validate.adoc[validate] the domain object model (eg to detect orphaned supported methods).
+// FIXME: currently removed in v2, may reinstate
+//The module also defines its own manifest, `SimpleModuleManifest`.
+//This is used to run Isis' own xref:rg:mvn:about.adoc[maven plugin] to xref:rg:mvn:validate.adoc[validate] the domain object model (eg to detect orphaned supported methods).
 
 
 
@@ -529,7 +530,8 @@ The files in `src/main/jettyconsole` provide a splash image (if not run in headl
 +
 This uses the Dockerfile residing in `docker/Dockerfile` (under `src/main/resources`).
 
-* also, the xref:rg:mvn:about.adoc[Apache Isis Maven plugin] is also configured to generate a xref:rg:mvn:swagger.adoc[swagger] spec file for the entire application, in the `xxx-webapp` module
+// FIXME: currently removed in v2, may reinstate
+//* also, the xref:rg:mvn:about.adoc[Apache Isis Maven plugin] is also configured to generate a xref:rg:mvn:swagger.adoc[swagger] spec file for the entire application, in the `xxx-webapp` module
 
 Under `src/main/resources` there is:
 

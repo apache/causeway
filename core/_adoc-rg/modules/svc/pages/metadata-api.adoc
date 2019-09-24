@@ -73,7 +73,10 @@ within the metamodel.
 |`SwaggerServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|A `SwaggerServiceMenu` domain service is also provided which enables the swagger spec to be downloaded.  Apache Isis' xref:rg:mvn:about.adoc[Maven plugin] also provides a xref:rg:mvn:swagger.adoc[swagger goal] which allows the spec file(s) to be generated at build time (eg so that client-side stubs can then be generated in turn).
+|A `SwaggerServiceMenu` domain service is also provided which enables the swagger spec to be downloaded.
+
+// FIXME: currently removed in v2, may reinstate
+//Apache Isis' xref:rg:mvn:about.adoc[Maven plugin] also provides a xref:rg:mvn:swagger.adoc[swagger goal] which allows the spec file(s) to be generated at build time (eg so that client-side stubs can then be generated in turn).
 
 
 

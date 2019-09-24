@@ -34,7 +34,7 @@ public interface GuiceBeanProvider {
 
 The xref:vw:ROOT:about.adoc[Wicket viewer] this provides a default implementation of this service.
 
-To use an alternative implementation, implement the `GuideBeanProvider` interface and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `GuideBeanProvider` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 

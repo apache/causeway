@@ -14,7 +14,7 @@ This makes for a smoother UI.
 +
 [NOTE]
 ====
-Any properties with xref:rg:ant:PropertyLayout/unchanging.adoc[`@PropertyLayout#unchanging`] are _not_ updated.
+Any properties with xref:rg:ant:PropertyLayout.adoc#unchanging[`@PropertyLayout#unchanging`] are _not_ updated.
 ====
 
 * if set to `EVEN_IF_SAME`, then a redirect occurs and a new web page is rendered.

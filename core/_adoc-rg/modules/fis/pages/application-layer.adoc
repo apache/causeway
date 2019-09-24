@@ -38,8 +38,8 @@ Impl'n (g: a:)
 `CommandDtoServiceInternal`]
 |Creates memento of current action invocation, for use as a serializable XML reified command.  The
 most notable usage of this is to allow the execution of the `Command` to be deferred to run in the background (via
-xref:rg:ant:Action/command.adoc[`@Action#commandExecuteIn()`] or
-xref:rg:ant:Property/command.adoc[`@Property#commandExecuteIn()`].
+xref:rg:ant:Action.adoc#command[`@Action#commandExecuteIn()`] or
+xref:rg:ant:Property.adoc#command[`@Property#commandExecuteIn()`].
 |`CommandDtoService-` +
 `InternalServiceDefault` +
 ``isis-core-runtime``
