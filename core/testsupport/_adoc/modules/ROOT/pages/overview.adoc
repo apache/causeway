@@ -7,11 +7,11 @@ include::_attributes.adoc[]
 
 We divide automated tests into two broad categories:
 
-- unit tests exercise a single unit (usually a method) of a domain object, in isolation.  +
+* unit tests exercise a single unit (usually a method) of a domain object, in isolation.  +
 +
 Dependencies of that object are mocked out.  These are written by a developer and for a developer; they are to ensure that a particular "cog in the machine" works correctly
 
-- integration tests exercise the application as a whole, usually focusing on one particular business operation (action).  +
+* integration tests exercise the application as a whole, usually focusing on one particular business operation (action).  +
 +
 These are tests that represent the acceptance criteria of some business story; their intent should make sense to the domain expert (even if the domain expert is "non-technical")
 

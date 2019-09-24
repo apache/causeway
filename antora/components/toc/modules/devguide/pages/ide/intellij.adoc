@@ -247,7 +247,8 @@ Confirm that it's ok to ignore these modules:
 .IntelliJ Maven Module Management - Ignoring Modules (ctd)
 image::intellij-idea/100-maven-module-mgmt/050-ignoring-modules-2.png[width="300px",link="{imagesdir}/intellij-idea/100-maven-module-mgmt/050-ignoring-modules-2.png"]
 
-All being well you should see that the _Projects_ window now only contains the code you are working on.  Its classpath dependencies will be adjusted (eg to resolve to Apache Isis core from `.m2/repository`):
+All being well you should see that the _Projects_ window now only contains the code you are working on.
+Its classpath dependencies will be adjusted (eg to resolve to Apache Isis core from `.m2/repository`):
 
 .IntelliJ Maven Module Management - Updated Projects Window
 image::intellij-idea/100-maven-module-mgmt/060-ignored-modules.png[width="730px",link="{imagesdir}/intellij-idea/100-maven-module-mgmt/060-ignored-modules.png"]

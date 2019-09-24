@@ -25,5 +25,5 @@ Again, these addons can be plugged into any Isis app.
 In terms of testing support, each of these other frameworks provide mechanisms to allow the webapp to be tested from within a JUnit test harness.
 Apache Isis' support is similar.
 Where Apache Isis differs though is that it enables end-to-end testing without the need for slow and fragile Selenium tests.
-Instead, Apache Isis provides a "xref:testing:ROOT:integ-test-support/wrapper-factory.adoc[WrapperFactory]" domain service that allows the generic UI provided to in essence be simulated.
+Instead, Apache Isis provides a "xref:testing:ROOT:integ-test-support.adoc#wrapper-factory[WrapperFactory]" domain service that allows the generic UI provided to in essence be simulated.
 On a more pragmatic level, the link:https://platform.incode.org[Incode Platform^]'s fakedata module does "what it says on the tin", allowing both unit- and integration-tests to focus on the salient data and fake out the rest.

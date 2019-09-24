@@ -12,3 +12,6 @@ There are many BDD tools out there; Apache Isis provides an integration with lin
 
 
 
+include::bdd-spec-support/how-it-works.adoc[leveloffset=+1]
+include::bdd-spec-support/writing-a-bdd-spec.adoc[leveloffset=+1]
+include::bdd-spec-support/maven-configuration.adoc[leveloffset=+1]
