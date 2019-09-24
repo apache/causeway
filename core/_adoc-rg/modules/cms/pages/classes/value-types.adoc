@@ -62,3 +62,9 @@ A simple wrapper around a string, but never shown in plain-text.
 
 
 
+include::value-types/Blob.adoc[leveloffset=+1]
+include::value-types/Clob.adoc[leveloffset=+1]
+//include::value-types/Color.adoc[leveloffset=+1]   // FIXME: not properly supported
+include::value-types/Markup.adoc[leveloffset=+1]
+//include::value-types/Money.adoc[leveloffset=+1]   // FIXME: not properly supported
+//include::value-types/Password.adoc[leveloffset=+1]    // FIXME: not properly supported

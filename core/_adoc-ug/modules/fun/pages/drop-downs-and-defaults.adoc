@@ -7,16 +7,16 @@ include::_attributes.adoc[]
 Invoking an action whose parameters are primitives or values (int, date, string etc) is simple: the user can just type in or use a date picker.
 Invoking an action with a parameter of reference type (such as `Customer` or `Order`) requires the viewer to provide some mechanism by which the end-user can select the relevant instance.
 
-If the list of available options is fixed then the developer can provided a list a xref:rg:cms:methods/prefixes/choices.adoc[`choices...()`] supporting method (for either and action parameter or when editing a property).
+If the list of available options is fixed then the developer can provided a list a xref:rg:cms:methods/prefixes.adoc#choices[`choices...()`] supporting method (for either and action parameter or when editing a property).
 These are rendered in a drop-down.
 
-If the list of available options is much larger, then the developer can use an xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoComplete...()`] supporting method.
+If the list of available options is much larger, then the developer can use an xref:rg:cms:methods/prefixes.adoc#autoComplete[`autoComplete...()`] supporting method.
 The user user enters a few characters and this is used to search for matching reference(s), again rendered in a drop-down.
 
 Similarly, when invoking an action, there may well be suitable defaults for the action arguments.
 For example, if placing an `Order` then -- even if the `Product` argument might not have a sensible default -- the quantity argument could reasonably be defaulted to 1.
 Or, the `Product` might indeed have a default, say the product previously placed by this user.
-The developer indicates this using a xref:rg:cms:methods/prefixes/default.adoc[`default...()`] supporting method.
+The developer indicates this using a xref:rg:cms:methods/prefixes.adoc#default[`default...()`] supporting method.
 
 
 == Choices and Default

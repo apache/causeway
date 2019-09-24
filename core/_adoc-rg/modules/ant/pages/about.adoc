@@ -1,5 +1,6 @@
 = Annotations
 include::_attributes.adoc[]
+:page-partial:
 
 
 This guide describes the various annotations used by Apache Isis to provide additional metadata about the domain objects.

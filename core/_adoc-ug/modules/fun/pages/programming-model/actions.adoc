@@ -56,7 +56,7 @@ If the xref:rg:cfg:configuring-core.adoc#policy[`isis.reflector.explicitAnnotati
 Parameter types can be value types or reference types.
 In the case of primitive types, the end-user can just enter the value directly through the parameter field.
 In the case of reference types however (such as `Product`), a drop-down must be provided from which the end-user to select.
-This is done using either a supporting xref:rg:cms:methods/prefixes/choices.adoc[`choices`] or xref:rg:cms:methods/prefixes/autoComplete.adoc[`autoComplete`] method.
+This is done using either a supporting xref:rg:cms:methods/prefixes.adoc#choices[`choices`] or xref:rg:cms:methods/prefixes.adoc#autoComplete[`autoComplete`] method.
 The "choices" is used when there is a limited set of options, while "autoComplete" is used when there are large set of options such that the end-user must provide some characters to use for a search.
 
 For example, the `addToBasket(...)` action shown above might well have an autocomplete supporting method :

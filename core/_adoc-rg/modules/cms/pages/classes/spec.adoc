@@ -49,7 +49,7 @@ public class Customer {
 == `Specification2`
 
 The `Specification2` interface extends the `Specification` API to add support for i18n.
-This is done by defining an additional method that returns a xref:rg:cms:classes/i18n/TranslatableString.adoc[translatable string]:
+This is done by defining an additional method that returns a xref:rg:cms:classes/i18n.adoc#TranslatableString[translatable string]:
 
 [source,java]
 ----

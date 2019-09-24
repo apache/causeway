@@ -19,6 +19,6 @@ include::hints-and-tips/view-model-instantiation.adoc[leveloffset=+1]
 include::hints-and-tips/simulating-collections-of-values.adoc[leveloffset=+1]
 include::hints-and-tips/how-to-handle-void-and-null-results.adoc[leveloffset=+1]
 include::hints-and-tips/multi-tenancy.adoc[leveloffset=+1]
-include::hints-and-tips/subclass-properties-in-tables.adoc[leveloffset=+1
+include::hints-and-tips/subclass-properties-in-tables.adoc[leveloffset=+1]
 include::hints-and-tips/pushing-changes.adoc[leveloffset=+1]
 include::hints-and-tips/how-to-implement-a-spellchecker.adoc[leveloffset=+1]

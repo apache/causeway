@@ -102,5 +102,5 @@ The `CommandService` captures the __cause__ of an interaction (an action was inv
 
 You may also want to configure the xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 
-All three of these services collaborate implicitly by way of the xref:rg:cms:classes/mixins/HasTransactionId.adoc[`HasTransactionId`] interface.
+All three of these services collaborate implicitly by way of the xref:rg:cms:classes/mixins.adoc#HasTransactionId[`HasTransactionId`] interface.
 

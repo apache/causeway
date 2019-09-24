@@ -1,6 +1,8 @@
+[[nature]]
 = `nature()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 
 
 
@@ -55,7 +57,7 @@ For further discussion on using mixins, see xref:ug:fun:building-blocks.adoc#mix
 indicates that the domain object is conceptually part of the application layer, and exists to surfaces behaviour and/or state that is aggregate of one or more domain entities.
 
 Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.
-As such the domain object's class cannot be annotated with xref:rg:ant:ViewModel.adoc[`@ViewModel`] or implement the xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface.
+As such the domain object's class cannot be annotated with xref:rg:ant:ViewModel.adoc[`@ViewModel`] or implement the xref:rg:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.
 
 
 [NOTE]

@@ -1,116 +1,27 @@
 * xref:about.adoc[Classes, Methods & Schema]
 
-
 ** xref:methods.adoc[Methods]
 
 *** xref:methods/prefixes.adoc[Prefixes]
-**** xref:methods/prefixes/addTo.adoc[addTo]
-**** xref:methods/prefixes/autoComplete.adoc[autoComplete]
-**** xref:methods/prefixes/choices.adoc[choices]
-**** xref:methods/prefixes/clear.adoc[clear]
-**** xref:methods/prefixes/default.adoc[default]
-**** xref:methods/prefixes/disable.adoc[disable]
-**** xref:methods/prefixes/get.adoc[get]
-**** xref:methods/prefixes/hide.adoc[hide]
-**** xref:methods/prefixes/modify.adoc[modify]
-**** xref:methods/prefixes/removeFrom.adoc[removeFrom]
-**** xref:methods/prefixes/set.adoc[set]
-**** xref:methods/prefixes/validate.adoc[validate]
-**** xref:methods/prefixes/validateAddTo.adoc[validateAddTo]
-**** xref:methods/prefixes/validateRemoveFrom.adoc[validateRemoveFrom]
-
 *** xref:methods/reserved.adoc[Reserved]
-**** xref:methods/reserved/cssClass.adoc[cssClass]
-**** xref:methods/reserved/disable.adoc[disable]
-**** xref:methods/reserved/getId.adoc[getId]
-**** xref:methods/reserved/hide.adoc[hide]
-**** xref:methods/reserved/iconName.adoc[iconName]
-**** xref:methods/reserved/title.adoc[title]
-**** xref:methods/reserved/validate.adoc[validate]
-
 *** xref:methods/lifecycle.adoc[Lifecycle]
-**** xref:methods/lifecycle/created.adoc[created]
-**** xref:methods/lifecycle/loaded.adoc[loaded]
-**** xref:methods/lifecycle/persisted.adoc[persisted]
-**** xref:methods/lifecycle/persisting.adoc[persisting]
-**** xref:methods/lifecycle/removed.adoc[removed]
-**** xref:methods/lifecycle/removing.adoc[removing]
-**** xref:methods/lifecycle/updated.adoc[updated]
-**** xref:methods/lifecycle/updating.adoc[updating]
-**** xref:methods/lifecycle/jdo-api.adoc[JDO API]
-
-
-
 
 
 ** xref:classes.adoc[Classes]
 
 *** xref:classes/AppManifest-bootstrapping.adoc[AppManifest Bootstrapping]
-
+*** xref:classes/AppManifest2-bootstrapping.adoc[AppManifest2 Bootstrapping]
 *** xref:classes/super.adoc[Super Classes]
-**** xref:classes/super/AbstractService.adoc[AbstractService]
-**** xref:classes/super/AbstractSubscriber.adoc[AbstractSubscriber]
-**** xref:classes/super/AbstractViewModel.adoc[AbstractViewModel]
-**** xref:classes/super/FixtureScript.adoc[FixtureScript]
-**** xref:classes/super/FixtureScripts.adoc[FixtureScripts]
-
 *** xref:classes/domainevent.adoc[Domain Event Classes]
-**** xref:classes/domainevent/AbstractDomainEvent.adoc[AbstractDomainEvent]
-**** xref:classes/domainevent/ActionDomainEvent.adoc[ActionDomainEvent]
-**** xref:classes/domainevent/CollectionDomainEvent.adoc[CollectionDomainEvent]
-**** xref:classes/domainevent/PropertyDomainEvent.adoc[PropertyDomainEvent]
-
 *** xref:classes/uievent.adoc[UI Event Classes]
-**** xref:classes/uievent/TitleUiEvent.adoc[TitleUiEvent]
-**** xref:classes/uievent/IconUiEvent.adoc[IconUiEvent]
-**** xref:classes/uievent/CssClassUiEvent.adoc[CssClassUiEvent]
-
 *** xref:classes/lifecycleevent.adoc[Lifecycle Event Classes]
-**** xref:classes/lifecycleevent/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent]
-**** xref:classes/lifecycleevent/ObjectCreatedEvent.adoc[ObjectCreatedEvent]
-**** xref:classes/lifecycleevent/ObjectLoadedEvent.adoc[ObjectLoadedEvent]
-**** xref:classes/lifecycleevent/ObjectPersistedEvent.adoc[ObjectPersistedEvent]
-**** xref:classes/lifecycleevent/ObjectPersistingEvent.adoc[ObjectPersistingEvent]
-**** xref:classes/lifecycleevent/ObjectRemovingEvent.adoc[ObjectRemovingEvent]
-**** xref:classes/lifecycleevent/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent]
-**** xref:classes/lifecycleevent/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent]
-
 *** xref:classes/value-types.adoc[Value Types]
-**** xref:classes/value-types/Blob.adoc[Blob]
-**** xref:classes/value-types/Clob.adoc[Clob]
-//**** xref:classes/value-types/Color.adoc[Color]   // not properly supported
-**** xref:classes/value-types/Markup.adoc[Markup]
-//**** xref:classes/value-types/Money.adoc[Money]   // not properly supported
-//**** xref:classes/value-types/Password.adoc[Password]    // not properly supported
-
 *** xref:classes/utility.adoc[Utility Classes]
-**** xref:classes/utility/Enums.adoc[Enums]
-**** xref:classes/utility/ObjectContracts.adoc[ObjectContracts]
-**** xref:classes/utility/Reasons.adoc[Reasons]
-**** xref:classes/utility/TitleBuffer.adoc[TitleBuffer]
-
-
 *** xref:classes/spec.adoc[Specification Classes]
-
 *** xref:classes/i18n.adoc[i18n Classes]
-**** xref:classes/i18n/TranslatableString.adoc[TranslatableString]
-
 *** xref:classes/contributee.adoc[Contributee]
-**** xref:classes/contributee/HasTransactionId.adoc[HasTransactionId]
-**** xref:classes/contributee/HasUserName.adoc[HasUserName]
-
-
 *** xref:classes/roles.adoc[Roles]
-**** xref:classes/roles/HoldsUpdatedAt.adoc[HoldsUpdatedAt]
-**** xref:classes/roles/HoldsUpdatedBy.adoc[HoldsUpdatedBy]
-**** xref:classes/roles/Timestampable.adoc[Timestampable]
-
 *** xref:classes/mixins.adoc[Mixins]
-**** xref:classes/mixins/Object.adoc[Object]
-**** xref:classes/mixins/Dto.adoc[Dto]
-**** xref:classes/mixins/Persistable.adoc[Persistable]
-
-
 *** xref:classes/layout.adoc[(Object) Layout]
 *** xref:classes/menubars.adoc[Menubars]
 

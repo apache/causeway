@@ -1,6 +1,8 @@
+[[redirect]]
 = `redirect()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 
 
 Often an action, when invoked, will return the target (in other words, will "return this").
@@ -21,7 +23,7 @@ Any properties with xref:rg:ant:PropertyLayout.adoc#unchanging[`@PropertyLayout#
 
 * if set to `AS_CONFIGURED`, then the default behaviour is as specified by the `isis.viewer.wicket.redirectEvenIfSameObject` xref:vw:ROOT:configuration-properties.adoc[configuration property]).
 
-One use case for choosing `EVEN_IF_SAME` is if the action "returning this" is intended in some way to require that the object use a different layout, as per multiple layout support, as specified using the xref:rg:cms:methods/reserved/layout.adoc[`layout()`] method.
+One use case for choosing `EVEN_IF_SAME` is if the action "returning this" is intended in some way to require that the object use a different layout, as per multiple layout support, as specified using the xref:rg:cms:methods/reserved.adoc#layout[`layout()`] method.
 
 For example:
 

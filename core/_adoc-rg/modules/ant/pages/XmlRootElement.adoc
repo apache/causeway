@@ -10,7 +10,7 @@ In the case of a JAXB-annotated object this memento is its XML representation.
 JAXB generally requires that the root element of the XML representation is annotated with `@XmlRootElement`.
 Apache Isis makes this a mandatory requirement.
 
-In comparison to using either the xref:rg:cms:classes/super/ViewModel.adoc[`ViewModel`] interface or the xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of significant advantages:
+In comparison to using either the xref:rg:cms:classes/super.adoc#ViewModel[`ViewModel`] interface or the xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in combination with the
 xref:rg:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`].

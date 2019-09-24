@@ -24,7 +24,7 @@ It also lists their corresponding implementation, either a default implementatio
 `ClassDiscoveryService`]
 |Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:rg:ant:DomainService.adoc[`@DomainService`])
 
-Subtypes of a given type (eg xref:rg:cms:classes/super/FixtureScript.adoc[`FixtureScript`]).
+Subtypes of a given type (eg xref:rg:cms:classes/super.adoc#FixtureScript[`FixtureScript`]).
 |`ClassDiscoveryService-` +
 `UsingReflections` +
 ``o.a.i.core`` +

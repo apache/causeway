@@ -75,7 +75,7 @@ public String disable1Categorize(Category category) {
 
 == For more information
 
-For more information, see  xref:rg:cms:methods/prefixes/disable.adoc[`disable...()`] section in the appropriate reference guide.
+For more information, see  xref:rg:cms:methods/prefixes.adoc#disable[`disable...()`] section in the appropriate reference guide.
 
 
 It is also possible to hide an action parameter, based on the value of some other earlier parameter:

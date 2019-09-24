@@ -1,3 +1,4 @@
+[[AppManifest2-bootstrapping]]
 = `AppManifest2` (and `Module`)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -40,7 +41,7 @@ Specifically, only the `Builder` can specify the authentication mechanism, and o
 
 == API
 
-The `AppManifest2` interface extends xref:rg:cms:classes/AppManifest-bootstrapping/api.adoc[`AppManifest`], additionally declaring the top-level `Module` that was used to create the app manifest, and fixtures for reference data setup and for teardown:
+The `AppManifest2` interface extends xref:rg:cms:classes/AppManifest-bootstrapping.adoc#api[`AppManifest`], additionally declaring the top-level `Module` that was used to create the app manifest, and fixtures for reference data setup and for teardown:
 
 [source,java]
 ----
@@ -74,7 +75,7 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 }
 ----
 
-Additional `withXxx(...)` builder methods are inherited from xref:rg:cms:classes/AppManifest-bootstrapping/bootstrapping.adoc[`AppManifestAbstract.Builder`].
+Additional `withXxx(...)` builder methods are inherited from xref:rg:cms:classes/AppManifest-bootstrapping.adoc#bootstrapping[`AppManifestAbstract.Builder`].
 
 
 For example:
@@ -118,9 +119,9 @@ The framework calculates a full set of transitive dependencies from this.
 <2> Support for "legacy" modules that do not implement `Module`.
 These are added to the set of packages to scan for entities and domain services.
 <3> Each `Module` can define additional "legacy" domain services that have not been defined within modules,or that have not been annotated with xref:rg:ant:DomainService.adoc[`@DomainService`].
-<4> Optionally each `Module` can define a xref:rg:cms:classes/super/FixtureScript.adoc[`FixtureScript`] which holds immutable "reference data".
+<4> Optionally each `Module` can define a xref:rg:cms:classes/super.adoc#FixtureScript[`FixtureScript`] which holds immutable "reference data".
 These are automatically executed whenever running integration tests (but are ignored when bootstrapping the runtime as a webapp.
-<5> Similarly, optionally each `Module` can define a tear-down xref:rg:cms:classes/super/FixtureScript.adoc[`FixtureScript`], used to remove the contents of _all_ entities (both reference data and operational/transactional data).
+<5> Similarly, optionally each `Module` can define a tear-down xref:rg:cms:classes/super.adoc#FixtureScript[`FixtureScript`], used to remove the contents of _all_ entities (both reference data and operational/transactional data).
 <6> Optionally each module can define additional configuration properties.
 These can either be specified as key-value pair, or by way of the `PropertyResource` class.
 The `PropertyResource` class identifies a property configuration file to load from the classpath, with respect to some other context class.
@@ -176,7 +177,7 @@ Alternatively, could override `getAdditonalServices()`.
 == Bootstrapping
 
 One of the overarching goals is to ensure that integration tests and the webapp are bootstrapped in as similar a way as possible.
-xref:rg:cms:classes/AppManifest-bootstrapping/bootstrapping.adoc[Previously] this was done by using a single `AppManifest` for both the tests and the webapp.
+xref:rg:cms:classes/AppManifest-bootstrapping.adoc#bootstrapping[Previously] this was done by using a single `AppManifest` for both the tests and the webapp.
 
 However, this approach does have a significant drawback.
 The `AppManifest` implementation must (necessarily) reference all the modules wthin the application, and this therefore means that the integration tests are also scoped (or at least, have access to) the entire application.

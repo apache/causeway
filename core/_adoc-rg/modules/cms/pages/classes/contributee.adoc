@@ -7,3 +7,5 @@ The interfaces listed in this chapter act as contributees; they allow domain ser
 
 
 
+include::contributee/HasTransactionId.adoc[leveloffset=+1]
+include::contributee/HasUserName.adoc[leveloffset=+1]

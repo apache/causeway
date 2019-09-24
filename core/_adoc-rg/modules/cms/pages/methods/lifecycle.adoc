@@ -23,28 +23,28 @@ The lifecycle callback methods supported by Apache Isis are:
 |Method
 |Description
 
-|xref:rg:cms:methods/lifecycle/created.adoc[`created()`]
+|xref:rg:cms:methods/lifecycle.adoc#created[`created()`]
 |called when an object has just been created using xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(..)`] or xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService#instantiate(...)`]
 
-|xref:rg:cms:methods/lifecycle/loaded.adoc[`loaded()`]
+|xref:rg:cms:methods/lifecycle.adoc#loaded[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.
 
-|xref:rg:cms:methods/lifecycle/persisted.adoc[`persisted()`]
+|xref:rg:cms:methods/lifecycle.adoc#persisted[`persisted()`]
 |called when object has just been persisted from the object store.
 
-|xref:rg:cms:methods/lifecycle/persisting.adoc[`persisting()`]
+|xref:rg:cms:methods/lifecycle.adoc#persisting[`persisting()`]
 |called when a (not-yet-persistent) object is just about to be persisted from the object store
 
-|xref:rg:cms:methods/lifecycle/removed.adoc[`removed()`]
+|xref:rg:cms:methods/lifecycle.adoc#removed[`removed()`]
 |called when a (persistent) object has just been deleted from the object store
 
-|xref:rg:cms:methods/lifecycle/removing.adoc[`removing()`]
+|xref:rg:cms:methods/lifecycle.adoc#removing[`removing()`]
 |called when a (persistent) object is just about to be deleted from the object store
 
-|xref:rg:cms:methods/lifecycle/updated.adoc[`updated()`]
+|xref:rg:cms:methods/lifecycle.adoc#updated[`updated()`]
 |called when a (persistent) object has just been updated in the object store
 
-|xref:rg:cms:methods/lifecycle/updating.adoc[`updating()`]
+|xref:rg:cms:methods/lifecycle.adoc#updating[`updating()`]
 |called when a (persistent) object is just about to be updated in the object store
 
 |===
@@ -52,3 +52,12 @@ The lifecycle callback methods supported by Apache Isis are:
 
 
 
+include::lifecycle/created.adoc[leveloffset=+1]
+include::lifecycle/loaded.adoc[leveloffset=+1]
+include::lifecycle/persisted.adoc[leveloffset=+1]
+include::lifecycle/persisting.adoc[leveloffset=+1]
+include::lifecycle/removed.adoc[leveloffset=+1]
+include::lifecycle/removing.adoc[leveloffset=+1]
+include::lifecycle/updated.adoc[leveloffset=+1]
+include::lifecycle/updating.adoc[leveloffset=+1]
+include::lifecycle/jdo-api.adoc[leveloffset=+1]

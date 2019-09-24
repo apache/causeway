@@ -14,7 +14,7 @@ File-based layouts offer a number of benefits:
 
 * UI hints can be provided for contributed xref:ug:fun:programming-model.adoc#contributed-action[actions] that are synthesised at runtime.
 
-It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:rg:cms:classes/mixins/Object.adoc[mixin action] contributed to every domain object.
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:rg:cms:classes/mixins.adoc#Object[mixin action] contributed to every domain object.
 
 There are some downsides, though:
 
@@ -35,7 +35,7 @@ A domain object may also have multiple layouts.
 For example, there may be the capability to switch into an "edit" mode, which perhaps hides some class members, shows others (perhaps mixins specific to data entry).
 Another reason might be to support different tenancies/user groups, where different business processes might require a slightly different UI representation.
 
-One way in which the domain object can specify an alternate layout is through its xref:rg:cms:methods/reserved/layout.adoc[`layout()`] method.
+One way in which the domain object can specify an alternate layout is through its xref:rg:cms:methods/reserved.adoc#layout[`layout()`] method.
 If this returns a non-null value, say "edit", then this is used to locate an alternative layout, in the form `Xxx-edit.layout.xml`.
 
 
@@ -362,7 +362,7 @@ from the top of the page slightly, using the following CSS:
 == Migrating from earlier versions
 
 As noted earlier on, it is possible to download layout XML files using the xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.
-Alternatively the layout XML for a single domain object can be downloaded using the xref:rg:cms:classes/mixins/Object.adoc[mixin action] (contributed to every domain object).
+Alternatively the layout XML for a single domain object can be downloaded using the xref:rg:cms:classes/mixins.adoc#Object[mixin action] (contributed to every domain object).
 
 There are four "styles":
 
@@ -424,7 +424,7 @@ Download either for a single domain object, or download all domain objects (enti
 
 For more information about layouts, see:
 
-* xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rg:cms:classes/mixins/Object.adoc[mixin action]
+* xref:rg:svc:metadata-api/LayoutService.adoc[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rg:cms:classes/mixins.adoc#Object[mixin action]
 
 * xref:rg:svc:presentation-layer-spi/GridService.adoc[`GridService`] and its supporting services, xref:rg:svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`] and xref:rg:svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`]
 

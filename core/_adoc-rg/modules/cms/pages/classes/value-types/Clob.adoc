@@ -48,7 +48,7 @@ private Clob someClob;
 
 [TIP]
 ====
-For binary large objects, use xref:rg:cms:classes/value-types/Blob.adoc[`Blob`] value type.
+For binary large objects, use xref:rg:cms:classes/value-types.adoc#Blob[`Blob`] value type.
 ====
 
 

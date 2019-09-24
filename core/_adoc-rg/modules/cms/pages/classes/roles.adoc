@@ -8,3 +8,6 @@ The interfaces listed in this chapter are role interfaces; they define a contrac
 
 
 
+include::roles/HoldsUpdatedAt.adoc[leveloffset=+1]
+include::roles/HoldsUpdatedBy.adoc[leveloffset=+1]
+include::roles/Timestampable.adoc[leveloffset=+1]

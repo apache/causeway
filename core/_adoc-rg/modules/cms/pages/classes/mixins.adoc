@@ -13,3 +13,6 @@ See the xref:ug:fun:building-blocks.adoc#mixins[fundamentals user guide] for a d
 
 
 
+include::mixins/Object.adoc[leveloffset=+1]
+include::mixins/Dto.adoc[leveloffset=+1]
+include::mixins/Persistable.adoc[leveloffset=+1]
