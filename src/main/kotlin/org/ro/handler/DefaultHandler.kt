@@ -1,5 +1,7 @@
 package org.ro.handler
 
+import org.ro.org.ro.core.aggregator.UndefinedAggregator
+
 class DefaultHandler : BaseHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
@@ -7,7 +9,9 @@ class DefaultHandler : BaseHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        console.log("[DefaultHandler.doHandle] no handler for $logEntry")
+        logEntry.aggregator = UndefinedAggregator()
+        update()
+//        console.log("[DefaultHandler.doHandle] no handler for $logEntry")
     }
 
 }
