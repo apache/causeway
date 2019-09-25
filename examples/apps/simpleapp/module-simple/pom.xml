@@ -71,6 +71,11 @@
 		<!-- TESTS -->
 
 		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security-bypass</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-testing</artifactId>
 			<type>pom</type>

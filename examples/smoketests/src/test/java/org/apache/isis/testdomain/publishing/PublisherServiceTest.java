@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -69,10 +70,10 @@ class PublisherServiceTest {
     void setUp() {
 
         // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.PurgeAll);
 
         // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @Test @Order(1)

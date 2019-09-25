@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,7 +102,7 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
     @BeforeEach
     void setupSvenInDb() {
         // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
+        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.SvenApplicationUser);
     }
 
     @Test

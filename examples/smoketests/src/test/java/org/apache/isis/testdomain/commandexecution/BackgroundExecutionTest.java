@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -71,10 +72,10 @@ class BackgroundExecutionTest {
     @BeforeEach
     void setUp() {
         // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona((PersonaWithBuilderScript) JdoTestDomainPersona.PurgeAll);
 
         // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+        fixtureScripts.runPersona((PersonaWithBuilderScript) JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @Test

@@ -35,11 +35,11 @@ import org.apache.isis.testdomain.ldap.LdapConstants;
 import lombok.val;
 
 public enum JdoTestDomainPersona 
-implements PersonaWithBuilderScript<BuilderScriptAbstract<? extends Object>>  {
+implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
     PurgeAll {
         @Override
-        public BuilderScriptAbstract<?> builder() {
+        public BuilderScriptWithoutResult builder() {
             return new BuilderScriptWithoutResult() {
 
                 @Override
@@ -64,7 +64,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<? extends Object>>  {
 
     InventoryWith1Book {
         @Override
-        public BuilderScriptAbstract<?> builder() {
+        public BuilderScriptWithResult<Inventory> builder() {
             return new BuilderScriptWithResult<Inventory>() {
 
                 @Override

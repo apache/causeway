@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
@@ -99,7 +100,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     @BeforeEach
     void setupSvenInDb() {
         // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
+        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.SvenApplicationUser);
     }
 
 

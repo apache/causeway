@@ -39,6 +39,11 @@
 			<type>pom</type>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-security-bypass</artifactId>
+		</dependency>
+
 		<!-- ISIS CORE PLUGINS -->
 
 		<dependency>

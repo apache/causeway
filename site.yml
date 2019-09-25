@@ -77,10 +77,13 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: core/security/_adoc
+      start_path: core/security/api/_adoc
       branches: HEAD
     - url: .
-      start_path: core/security/plugins/shiro/_adoc
+      start_path: core/security/bypass/_adoc
+      branches: HEAD
+    - url: .
+      start_path: core/security/shiro/_adoc
       branches: HEAD
     - url: .
       branches: HEAD

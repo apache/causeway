@@ -1367,6 +1367,12 @@
 				<artifactId>isis-security</artifactId>
 				<version>${isis.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-security-bypass</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+
 
 			<!-- core plugins -->
 
@@ -2465,7 +2471,8 @@
 		<module>runtime-extensions</module>
 		<module>runtime-web</module>
 
-		<module>security/api-and-bypass</module>
+		<module>security/api</module>
+		<module>security/bypass</module>
 
 		<module>testsupport/unittestsupport</module>
 		<module>testsupport/integtestsupport</module>
@@ -2482,7 +2489,7 @@
 		<module>plugins/jaxrs-resteasy-4</module>
 		<module>plugins/jdo/common</module>
 		<module>plugins/jdo/datanucleus-5</module>
-		<module>security/plugins/shiro</module>
+		<module>security/shiro</module>
 
 		<!-- to break cyclic dependencies some tests needed to be moved to their 
 			own modules -->

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import javax.inject.Inject;
 
+import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,7 +54,7 @@ class TransactionRollbackTest {
     @BeforeEach
     void setUp() {
         // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.PurgeAll);
 
     }
     
@@ -65,7 +66,7 @@ class TransactionRollbackTest {
         
         transactionService.executeWithinTransaction(()->{
             
-            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+            fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.InventoryWith1Book);
             
         });
         
@@ -84,7 +85,7 @@ class TransactionRollbackTest {
             
             transactionService.executeWithinTransaction(()->{
                 
-                fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+                fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.InventoryWith1Book);
 
                 throw _Exceptions.unrecoverable("Test: force current tx to rollback");            
                 

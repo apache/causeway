@@ -43,7 +43,7 @@ import lombok.val;
     IsisPresets.DebugProgrammingModel,
     
 })
-class DomainModelTest_usingGoodDomain {
+public class DomainModelTest_usingGoodDomain {
     
 //    @Inject private MetaModelService metaModelService;
 //    @Inject private JaxbService jaxbService;
