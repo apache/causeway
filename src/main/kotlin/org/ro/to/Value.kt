@@ -5,7 +5,7 @@ import kotlinx.serialization.internal.StringDescriptor
 import kotlinx.serialization.internal.makeNullable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonElementTypeMismatchException
+import kotlinx.serialization.json.JsonException
 import kotlinx.serialization.json.content
 
 /**
@@ -52,7 +52,7 @@ data class Value(
                         return Value(jsct)
                     }
                 }
-            } catch (jetme: JsonElementTypeMismatchException) {
+            } catch (je: JsonException) {
                 val linkStr = jse.toString()
                 val link = Json.parse(Link.serializer(), linkStr)
                 return Value(link)
