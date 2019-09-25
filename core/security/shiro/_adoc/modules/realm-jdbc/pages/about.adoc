@@ -1,0 +1,111 @@
+= Shiro JDBC Realm
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+There is nothing to stop you from using some other `Realm` implementation (or indeed writing one yourself).  For example, you could use Shiro's own JDBC realm that loads user/password details from a database.
+
+[WARNING]
+====
+If you are happy to use a database then we strongly recommend you use the xref:ext-secman:ROOT:about.adoc[SecMan extension] instead of a vanilla JDBC; it is far more sophisticated and moreover gives you the ability to administer the system from within your Apache Isis application.
+====
+
+If you go down this route, then the architecture is as follows:
+
+image::configure-shiro-to-use-custom-jdbc-realm.png[width="600px",link="{imagesdir}/configure-shiro-to-use-custom-jdbc-realm.png"]
+
+
+
+
+There's quite a lot of configuration required (in `WEB-INF/shiro.ini`) to set up a JDBC realm, so we'll break it out into sections.
+
+First, we need to set up the connection to JDBC:
+
+[source,ini]
+----
+jdbcRealm=org.apache.shiro.realm.jdbc.JdbcRealm        # <1>
+
+jof = org.apache.shiro.jndi.JndiObjectFactory          # <2>
+jof.resourceName = jdbc/postgres                       # <3>
+jof.requiredType = javax.sql.DataSource
+jof.resourceRef = true
+
+jdbcRealm.dataSource = $jof                            # <4>
+----
+<1> instantiate the JDBC realm
+<2> instantiate factory object to lookup DataSource from servlet container
+<3> name of the datasource (as configured in `web.xml`)
+<4> instruct JDBC realm to obtain datasource from the JNDI
+
+
+We next need to tell the realm how to query the database.  Shiro supports any schema; what matters is the input search argument and the output results.
+
+[source,ini]
+----
+
+jdbcRealm.authenticationQuery =         \              # <1>
+        select password                 \
+          from users                    \
+         where username = ?
+
+jdbcRealm.userRolesQuery =              \              # <2>
+        select r.label                  \
+          from users_roles ur           \
+    inner join roles r                  \
+            on ur.role_id = r.id        \
+         where user_id = (              \
+            select id                   \
+             from users                 \
+            where username = ?);        \
+
+jdbcRealm.permissionsQuery=             \               # <3>
+        select p.permission             \
+          from roles_permissions rp     \
+    inner join permissions p            \
+            on rp.permission_id = p.id  \
+         where rp.role_id = (           \
+            select id                   \
+             from roles                 \
+            where label = ?);
+
+jdbcRealm.permissionsLookupEnabled=true                 # <4>
+----
+<1> query to find password for user
+<2> query to find roles for user
+<3> query to find permissions for role
+<4> enable permissions lookup
+
+[WARNING]
+====
+The `permissionsLookupEnabled` is very important, otherwise Shiro just returns an empty list of permissions and your users will have no access to any features(!).
+====
+
+We also should ensure that the passwords are not stored as plain-text:
+
+[source,ini]
+----
+dps = org.apache.shiro.authc.credential.DefaultPasswordService   # <1>
+pm = org.apache.shiro.authc.credential.PasswordMatcher           # <2>
+pm.passwordService = $dps
+jdbcRealm.credentialsMatcher = $pm                               # <3>
+----
+<1> mechanism to encrypts password
+<2> service to match passwords
+<3> instruct JDBC realm to use password matching service when authenticating
+
+
+And finally we need to tell Shiro to use the realm, in the usual fashion:
+
+[source,ini]
+----
+securityManager.realms = $jdbcRealm
+----
+
+Using the above configuration you will also need to setup a `DataSource`.  The details vary by servlet container, for example this is link:https://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html[how to do the setup on Tomcat 8.0].
+
+[WARNING]
+====
+The name of the `DataSource` can also vary by servlet container; see for example link:http://stackoverflow.com/questions/17441019/how-to-configure-jdbcrealm-to-obtain-its-datasource-from-jndi/23784702#23784702[this StackOverflow answer].
+====
+

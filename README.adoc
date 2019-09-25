@@ -25,8 +25,7 @@ Please note that these modules are not part of ASF, but they *are* all licensed 
 === Sign-in
 
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro].
-The core framework supports file-based realms, while the (non-ASF) link:https://platform.incode.org[Incode Platform]'s link:https://platform.incode.org/modules/spi/security/spi-security.html[security module] provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel.
-The example todoapp integrates with the security module.
+The core framework supports file-based realms, while the xref:ext-secman:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/010-login.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/010-login.png"]
 
@@ -138,7 +137,7 @@ Under the activity menu are four sets of services which provide support for link
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/120-auditing.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/120-auditing.png"]
 
-In the security menu is access to the rich set of functionality provided by the link:https://platform.incode.org/modules/spi/security/spi-security.html[security module]:
+In the security menu is access to the rich set of functionality provided by the xref:ext-secman:ROOT:about.adoc[SecMan extension]:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/130-security.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/130-security.png"]
 
@@ -155,13 +154,16 @@ image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/as
 === Multi-tenancy support
 
 Of the various modules in the Incode Platform, the link:https://platform.incode.org/modules/spi/security/spi-security.html[security module] has the most features.
-One significant feature is the ability to associate users and objects with a "tenancy".
+
+NOTE: this module has now been integrated into the Apache Isis framework itself, as the xref:ext-secman:ROOT:about.adoc[SecMan extension].
+
+One significant feature of the is the ability to associate users and objects with a "tenancy".
 The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
 A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/160-switch-tenancy.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/160-switch-tenancy.png"]
 
-For more details, see the security module's link:https://platform.incode.org/modules/spi/security/spi-security.html[README].
+For more details, see the security module's link:https://platform.incode.org/modules/spi/security/spi-security.html[README] (or xref:ext-secman:ROOT:about.adoc[SecMan extension])..
 
 === Me
 

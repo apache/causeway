@@ -22,7 +22,6 @@ To support this the framework requires three services to be registered and confi
 The Apache Isis core framework provides a default implementation of both the email notification service and the email service.
 The xref:ext-secman:ROOT:about.adoc[Security Manager] extension provides a partial implementation of xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] that you can complete for your own applications.
 
-// TODO: v2: search for references of 'security module' because this is now available as the 'secman' extension, and reference the extensions doc component.
 
 
 
@@ -66,7 +65,7 @@ image::user-registration/sign-up-after-registration.png[width="800px",link="{ima
 
 There are two prerequisites:
 
-* register an implementation of the xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] (eg by using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module)
+* register an implementation of the xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[user registration service] (eg by using the xref:ext-secman:ROOT:about.adoc[SecMan extension])
 
 * configure the xref:rg:svc:integration-api/EmailService.adoc[email service]
 

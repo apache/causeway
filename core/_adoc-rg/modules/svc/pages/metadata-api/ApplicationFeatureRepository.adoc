@@ -9,10 +9,6 @@ include::_attributes.adoc[]
 The `ApplicationFeatureRepository` provides the access to string representations of the packages, classes and
 class members (collectively: "application features") of the domain classes within the Apache Isis' internal metamodel.
 
-[TIP]
-====
-This functionality was originally implemented as part of (non-ASF) link:https://platform.incode.org[Incode Platform^] security module, where the string representations of the various features are used to represent permissions.
-====
 
 
 == API

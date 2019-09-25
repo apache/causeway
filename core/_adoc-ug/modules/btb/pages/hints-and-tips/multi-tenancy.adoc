@@ -5,10 +5,8 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-Of the various modules provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^], the security module has the most features.
-One significant feature is the ability to associate users and objects with a "tenancy".
+One significant feature provided by the xref:ext-secman:ROOT:about.adoc[SecMan extension] is the ability to associate users and objects with a "tenancy".
 
-
-For more details, see the link:https://platform.incode.org[Incode Platform^]'s security module README.
+For more details, see the xref:ext-secman:ROOT:about.adoc[SecMan extension]'s documentation.
 
 

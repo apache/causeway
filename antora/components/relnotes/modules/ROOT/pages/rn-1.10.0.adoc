@@ -5,7 +5,8 @@ include::_attributes.adoc[]
 
 
 
-Apache Isis 1.10.0 provides a couple of new domain services.  Client-side filtering of objects (eg to support (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module's multi-tenancy support) is completed so that autocomplete//choices, summary totals and components such as (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component show only filtered objects.
+Apache Isis 1.10.0 provides a couple of new domain services.
+Client-side filtering of objects (eg to support (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security module's multi-tenancy support) is completed so that autocomplete//choices, summary totals and components such as (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component show only filtered objects.
 The "are you sure" semantic and corresponding UI is also available, as well as the ability to specify the default view for collections.
 The release also introduces a new type of contribution service (mixins), as well as bringing in support for Project Lombok
 

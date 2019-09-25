@@ -15,3 +15,6 @@ to discuss:
 * webmodule architecture (programmatic web.xml)
 * use of Spring Boot & our modules for classpath scanning
 * configuration
+* extensions
+* log4j2
+* plugins

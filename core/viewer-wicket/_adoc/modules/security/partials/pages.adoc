@@ -1,0 +1,43 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+The xref:vw:ROOT:about.adoc[Wicket viewer] defines a relatively small number of pages (by which we mean subclasses of `org.apache.wicket.markup.html.WebPage`):
+
+* about page
+* entity page
+* error page
+* home page
+* standalone collection page
+* value page
+* void return page
+
+All of these (except about page) are annotated with the Wicket annotation:
+
+[source,java]
+----
+@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
+----
+
+which means that they can only be accessed by a user with an authenticated session that has this special, reserved role.
+If not, Wicket will automatically redirect the user to the sign-in page.
+
+[TIP]
+====
+The sign-in page to render is pluggable; see xref:vw:ROOT:extending/custom-pages.adoc[extensions chapter] for details.
+====
+
+In the sign-in page the viewer calls to the Isis Authenticator API, and obtains back a user/role.
+It also adds in its special reserved role (per the annotation above) and then continues on to whichever page the user was attempting to access (usually the home page).
+
+And that's really all there is to it.
+When the viewer renders a domain object it queries the Apache Isis metamodel, and suppresses from the view any object members (properties, actions etc) that are invisible.
+These may be invisible because the user has no (read ) permission, or they may be invisible because of domain object logic (eg a `hideXxx()` method).
+The viewer neither knows nor cares.
+
+Similarly, for those object members that _are_ visible, the viewer also checks if they are enabled or disabled.
+Again, an object member will be disabled if the user does not have (write) permission, or it could be disabled because of domain object logic (eg a `disableXxx()` method).
+
+

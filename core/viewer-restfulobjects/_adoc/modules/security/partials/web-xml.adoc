@@ -1,0 +1,95 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+
+Unlike the Wicket viewer, the xref:vro:ROOT:about.adoc[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter (set up by the framework's web bootstrapping).
+The authentication strategy is responsible for ensuring that a session is available for the REST resource.
+
+The API of `AuthenticationSessionStrategy` is simply:
+
+[source,java]
+----
+package org.apache.isis.core.webapp.auth;
+...
+public interface AuthenticationSessionStrategy {
+    AuthenticationSession lookupValid(     // <1>
+        ServletRequest servletRequest,
+        ServletResponse servletResponse);
+    void bind(                             // <2>
+        ServletRequest servletRequest,
+        ServletResponse servletResponse,
+        AuthenticationSession authSession);
+}
+
+----
+<1> returns a valid `AuthenticationSession` for the specified request, response
+<2> binds (associates the provided `AuthenticationSession`) to the request and response
+
+Here `AuthenticationSession` is Apache Isis' internal API that represents a signed-on user.
+
+The framework provides a number of simple strategies:
+
+* `AuthenticationSessionStrategyBasicAuth` implements the HTTP basic auth protocol (the pop-up dialog box shown by the web browser)
+* `AuthenticationSessionStrategyHeader` that simply reads the user identity from an HTTP header
+* `AuthenticationSessionStrategyTrusted` that always logs in with a special "exploration" user
+
+As you can see, none of these should be considered production-quality.
+
+The strategy is configured in `web.xml`; for example:
+
+// TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+
+[source,xml]
+----
+<filter>
+    <filter-name>IsisSessionFilterForRestfulObjects</filter-name>
+    <filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
+    <init-param>
+        <param-name>authenticationSessionStrategy</param-name>
+        <param-value>                                           <!--1-->
+    org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth
+        </param-value>
+    </init-param>
+    <init-param>
+        <param-name>whenNoSession</param-name>
+        <param-value>auto</param-value>                         <!--2-->
+    </init-param>
+    <init-param>
+        <param-name>passThru</param-name>
+        <param-value>/restful/swagger</param-value>             <!--3-->
+    </init-param>
+</filter>
+----
+<1> configure basic auth strategy
+<2> what to do if no session was found; we use `auto` so as to issue a 401 status code with basic authentication challenge if the request originated from a web browser.  (Prior to `1.11.0` this parameter was set either to `basicAuthChallenge` (which works when requested from web browser) or to `unauthorized` (which works when requested from a suitably coded custom Javascript app).
+<3> which paths are allowed to be accessed directly, without a session.  The `/restful/swagger` path provides access to the SwaggerResource that dynamically generates swagger schema definition files from the Apache Isis metamodel.
+
+
+
+The above filter must then be chained before the servlet that actually handles the REST requests:
+
+// TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+
+[source,xml]
+----
+<filter-mapping>
+    <filter-name>IsisSessionFilterForRestfulObjects</filter-name>
+    <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+</filter-mapping>
+...
+<servlet>
+    <servlet-name>RestfulObjectsRestEasyDispatcher</servlet-name>
+    <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+</servlet>
+----
+
+[NOTE]
+====
+The above `web.xml` fragments do _not_ constitute the full configuration for the Restful Objects viewer, just those parts that pertain to security.
+====
+
+
+
