@@ -47,6 +47,7 @@ import org.apache.isis.security.shiro.IsisBootSecurityShiro;
 import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.dom.DemoModule;
+import domainapp.utils.LibraryPreloadingService;
 
 /**
  * Makes the integral parts of the 'demo' web application.
@@ -69,7 +70,9 @@ import domainapp.dom.DemoModule;
     IsisBootSecmanPersistenceJdo.class,
     IsisBootSecmanEncryptionJbcrypt.class,
 
-    IsisBootFixtures.class
+    IsisBootFixtures.class,
+    
+    LibraryPreloadingService.class // just a performance enhancement
 
 })
 @ComponentScan(
