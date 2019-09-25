@@ -43,6 +43,12 @@ content:
       start_path: core/testsupport/_adoc
       branches: HEAD
     - url: .
+      start_path: core/testsupport/unittestsupport/_adoc
+      branches: HEAD
+    - url: .
+      start_path: core/testsupport/integtestsupport/_adoc
+      branches: HEAD
+    - url: .
       branches: HEAD
       start_path: extensions/fixtures/_adoc
     - url: .
@@ -72,6 +78,9 @@ content:
 
     - url: .
       start_path: core/security/_adoc
+      branches: HEAD
+    - url: .
+      start_path: core/security/plugins/shiro/_adoc
       branches: HEAD
     - url: .
       branches: HEAD

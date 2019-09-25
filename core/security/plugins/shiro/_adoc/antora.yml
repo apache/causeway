@@ -1,0 +1,6 @@
+name: security-shiro
+title: "Security - Shiro"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

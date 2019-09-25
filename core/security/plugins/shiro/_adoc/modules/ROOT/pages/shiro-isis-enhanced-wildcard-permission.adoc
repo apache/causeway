@@ -1,9 +1,11 @@
+[[shiro-isis-enhanced-wildcard-permission]]
 = Enhanced Wildcard Permission
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
+:page-partial:
 
 
-If using the text-based xref:security:ROOT:shiro-realm-implementations/ini-realm.adoc[`IniRealm`] or xref:security:ROOT:shiro-realm-implementations/isis-ldap-realm.adoc[Isis' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.  Apache Isis provides its own `IsisPermission` which introduces the concept of a "veto".
+If using the text-based xref:security-shiro:ROOT:shiro-realm-implementations/ini-realm.adoc[`IniRealm`] or xref:security-shiro:ROOT:shiro-realm-implementations/isis-ldap-realm.adoc[Isis' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.  Apache Isis provides its own `IsisPermission` which introduces the concept of a "veto".
 
 A vetoing permission is one that prevents access to a feature, rather than grants it.  This is useful in some situations where most users have access to most features, and only a small number of features are particularly sensitive.  The configuration can therefore be set up to grant fairly broad-brush permissions and then veto permission for the sensitive features for those users that do not have access.
 
