@@ -24,7 +24,7 @@ A chain of handlers is used to identify what kind of TO is to be generated from 
 JSON response. Handlers are responsible for initial assignment of aggregators.
 ### Template Method (GOF)
 The Handler base class makes use of this pattern. Some methods have to be implemented
-in each subsclass, in some cases the default implementation in the base class is used.
+in each subclass, in some cases the default implementation in the base class is used.
 ### Composite Pattern (GOF)
 UI elements are hierarchically grouped, cf. *layout.xml
 ### Factory (GOF)
@@ -36,7 +36,7 @@ The implementaion here is an (independent) reinvention of Redux.
 I prefer the name Aggregator over Reducer though - IIRC it's even older.
 ### Half Object Protocol
 The HOP pattern dates back to the early 2000, namely CanooULC.
-IMO Naked Objects together with the PO API and kroViz resembles something similar.
+IMO Naked Objects together with the RO API and kroViz resembles something similar.
 
 
 # Toolchain
