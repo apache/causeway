@@ -21,11 +21,6 @@ package org.apache.isis.applib.annotation;
 /**
  * The different sorts of domain services recognized by Isis, as specified in {@link DomainService#nature()}
  * 
- * @apiNote
- * [EXPERIMENTAL]
- * Any service might also act as a stateless <em>Viewmodel</em>, eg. when used as return type of 
- * an <em>Action</em>. 
- * It's not well defined, what a viewer will render in such cases.
  */
 public enum NatureOfService {
 
