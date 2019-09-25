@@ -39,7 +39,7 @@ class ActionPrompt(val action: Action) : Command {
             val v = p.name
             var type = "TextArea"
             var content: Any = ""
-            if (p.hasChoices()) {
+            if (p.choices.isNotEmpty()) {
                 type = "Select"
                 content = buildSelectionList(p)
             }

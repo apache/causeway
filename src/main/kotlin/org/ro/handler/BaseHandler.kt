@@ -18,9 +18,7 @@ abstract class BaseHandler : IResponseHandler {
     override fun handle(logEntry: LogEntry) {
         this.logEntry = logEntry
         val jsonStr: String? = logEntry.getResponse()
-        if (null === jsonStr) {
-//            Utils.debug("jsonStr == null : " + logEntry.url)
-        } else {
+        if (null !== jsonStr) {
             if (canHandle(jsonStr)) {
                 doHandle()
             } else {
@@ -41,6 +39,7 @@ abstract class BaseHandler : IResponseHandler {
             logEntry.setObj(obj)
             answer = true
         } catch (ex: Exception) {
+            // empty catch by purpose - answer = false (default)
         }
         return answer
     }

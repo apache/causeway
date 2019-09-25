@@ -12,10 +12,6 @@ class Parameter(val id: String,
                 @SerialName("default") val defaultChoice: Link? = null
 ) : TransferObject {
 
-    fun hasChoices(): Boolean {
-        return choices.isNotEmpty()
-    }
-
     fun getChoiceListKeys(): MutableList<String> {
         val result: MutableList<String> = mutableListOf()
         for (c in choices) {

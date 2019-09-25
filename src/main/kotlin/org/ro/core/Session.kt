@@ -3,6 +3,7 @@ package org.ro.core
 /**
  * Keep track of connected server.
  */
+//TODO convert to class in order to have multiple sessions in parallel
 object Session {
     private var user: String = ""
     private var pw: String = ""
@@ -13,7 +14,7 @@ object Session {
         this.pw = pw
         this.url = url
         UiManager.updateUser(user)
-        UiManager.updatePower("Powered By: Apache Isis")
+//TODO        UiManager.updatePower("Powered By: Apache Isis")
     }
 
     fun getCredentials(): String {
