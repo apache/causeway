@@ -42,9 +42,7 @@ public class Object_downloadLayoutXml {
     private final Object holder;
 
     public static class ActionDomainEvent
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_downloadLayoutXml> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

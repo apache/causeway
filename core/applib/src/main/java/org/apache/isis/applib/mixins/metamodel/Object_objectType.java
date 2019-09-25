@@ -41,9 +41,7 @@ public class Object_objectType {
     private final Object holder;
 
     public static class ActionDomainEvent 
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectType> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_objectType> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

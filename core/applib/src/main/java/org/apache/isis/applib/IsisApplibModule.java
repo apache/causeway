@@ -26,40 +26,26 @@ public class IsisApplibModule {
     // -- UI EVENT CLASSES
 
     public abstract static class TitleUiEvent<S>
-    extends org.apache.isis.applib.events.ui.TitleUiEvent<S> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.events.ui.TitleUiEvent<S> {}
 
     public abstract static class IconUiEvent<S>
-    extends org.apache.isis.applib.events.ui.IconUiEvent<S> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.events.ui.IconUiEvent<S> {}
 
     public abstract static class CssClassUiEvent<S>
-    extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> {}
     public abstract static class LayoutUiEvent<S>
-    extends org.apache.isis.applib.events.ui.LayoutUiEvent<S> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.events.ui.LayoutUiEvent<S> {}
 
     // -- DOMAIN EVENT CLASSES
 
     public abstract static class ActionDomainEvent<S>
-    extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
 
     public abstract static class CollectionDomainEvent<S,T>
-    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> {}
 
     public abstract static class PropertyDomainEvent<S,T>
-    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
 
 
 

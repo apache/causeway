@@ -42,9 +42,7 @@ public class Dto_downloadXml {
     private final Dto holder;
 
     public static class ActionDomainEvent
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXml> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXml> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

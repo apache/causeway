@@ -37,7 +37,7 @@ public class BookmarkHolder_lookup {
         this.bookmarkHolder = bookmarkHolder;
     }
 
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_lookup> { private static final long serialVersionUID = 1L; }
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_lookup> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

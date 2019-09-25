@@ -55,25 +55,25 @@ public enum NatureOfService {
     // -- DEPRECATIONS
     
     /**
-     * @deprecated was renamed, use {@link #REST} instead
-     * @apiNote since 2.0 used as synonym for {@link #REST} 
+     * @deprecated was renamed, use {@link #REST} instead; will be removed with 2.0.0 release!
+     * @apiNote temporarily used as synonym for {@link #REST} 
      */
     @Deprecated
     VIEW_REST_ONLY,
     
     /**
-     * @deprecated was removed, use {@link #VIEW} instead
-     * @apiNote since 2.0 used as synonym for {@link #VIEW}
+     * @deprecated was removed, use {@link #VIEW} instead; will be removed with 2.0.0 release!
+     * @apiNote temporarily used as synonym for {@link #VIEW}
      */
     @Deprecated
     VIEW_MENU_ONLY,
     
     /**
-     * @deprecated was removed, contributing actions are simply ignored
+     * @deprecated was removed, contributing actions are simply ignored; will be removed with 2.0.0 release!
      * <p>
      * Instead, for each {@code Action} write a mixin class. 
      * see {@link Mixin}
-     * @apiNote since 2.0 used as synonym for {@link #DOMAIN}
+     * @apiNote temporarily used as synonym for {@link #DOMAIN}
      */
     @Deprecated
     VIEW_CONTRIBUTIONS_ONLY,
@@ -98,9 +98,10 @@ public enum NatureOfService {
     }
     
     /**
+     * Whether a service contributes no actions at all.
      * @see {@link NatureOfService#DOMAIN}
      */
-    public boolean isDomain() {
+    public boolean isProgrammatic() {
         return this == DOMAIN || this == VIEW_CONTRIBUTIONS_ONLY;
     }
 
@@ -113,12 +114,7 @@ public enum NatureOfService {
         return isRestOnly() || isView();
     }
 
-    /**
-     * Whether a service contributes no actions at all.
-     */
-    public boolean isProgrammatic() {
-        return isDomain();
-    }
+
 
 
 }

@@ -40,9 +40,7 @@ public class Object_rebuildMetamodel {
     private final Object holder;
 
     public static class ActionDomainEvent
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_rebuildMetamodel> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

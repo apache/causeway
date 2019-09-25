@@ -46,9 +46,7 @@ public class Dto_downloadXsd {
     private final Dto holder;
 
     public static class ActionDomainEvent
-    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXsd> {
-        private static final long serialVersionUID = 1L;
-    }
+    extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXsd> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

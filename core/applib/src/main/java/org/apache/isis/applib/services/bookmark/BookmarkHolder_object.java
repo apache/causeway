@@ -37,7 +37,7 @@ public class BookmarkHolder_object {
         this.bookmarkHolder = bookmarkHolder;
     }
 
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_object> { private static final long serialVersionUID = 1L; }
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_object> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,

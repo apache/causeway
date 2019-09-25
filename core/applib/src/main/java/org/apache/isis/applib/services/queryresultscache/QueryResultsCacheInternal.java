@@ -67,16 +67,17 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         return executeWithCaching(callable, cacheKey);
     }
 
-    private <T> T execute(final Callable<T> callable, final Key cacheKey) {
-        if(isIgnoreCache()) {
-            try {
-                return callable.call();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return executeWithCaching(callable, cacheKey);
-    }
+//XXX not used    
+//    private <T> T execute(final Callable<T> callable, final Key cacheKey) {
+//        if(isIgnoreCache()) {
+//            try {
+//                return callable.call();
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//        return executeWithCaching(callable, cacheKey);
+//    }
 
     private <T> T executeWithCaching(final Callable<T> callable, final Key cacheKey) {
         try {
@@ -103,16 +104,17 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         }
     }
 
-    private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
-        return get(new Key(callingClass, methodName, keys));
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Value<T> get(final Key cacheKey) {
-        Value<T> value = (Value<T>) cache.get(cacheKey);
-        logHitOrMiss(cacheKey, value);
-        return value;
-    }
+//XXX not used    
+//    private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
+//        return get(new Key(callingClass, methodName, keys));
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    private <T> Value<T> get(final Key cacheKey) {
+//        Value<T> value = (Value<T>) cache.get(cacheKey);
+//        logHitOrMiss(cacheKey, value);
+//        return value;
+//    }
 
     private <T> void put(final Key cacheKey, final T result) {
         log.debug("PUT: {}", cacheKey);
