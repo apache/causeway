@@ -18,12 +18,9 @@
  */
 package org.apache.isis.testdomain.publishing;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -41,6 +38,8 @@ import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -70,10 +69,10 @@ class PublisherServiceTest {
     void setUp() {
 
         // cleanup
-        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
         // given
-        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.InventoryWith1Book);
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @Test @Order(1)

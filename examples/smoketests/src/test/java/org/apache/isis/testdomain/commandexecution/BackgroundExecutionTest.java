@@ -18,16 +18,12 @@
  */
 package org.apache.isis.testdomain.commandexecution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -45,6 +41,9 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.InventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
 import lombok.val;
@@ -72,10 +71,10 @@ class BackgroundExecutionTest {
     @BeforeEach
     void setUp() {
         // cleanup
-        fixtureScripts.runPersona((PersonaWithBuilderScript) JdoTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
         // given
-        fixtureScripts.runPersona((PersonaWithBuilderScript) JdoTestDomainPersona.InventoryWith1Book);
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @Test

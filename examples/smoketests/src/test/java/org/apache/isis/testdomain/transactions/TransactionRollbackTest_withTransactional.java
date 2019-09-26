@@ -18,11 +18,8 @@
  */
 package org.apache.isis.testdomain.transactions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -37,6 +34,8 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
@@ -63,12 +62,12 @@ class TransactionRollbackTest_withTransactional {
     void happyCaseTx_shouldCommit() {
         
         // cleanup just in case
-        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
         
         // expected pre condition
         assertEquals(0, repository.allInstances(Book.class).size());
             
-        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.InventoryWith1Book);
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
         
         // expected post condition
         assertEquals(1, repository.allInstances(Book.class).size());

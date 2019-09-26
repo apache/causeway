@@ -25,6 +25,7 @@ import javax.inject.Singleton;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.runtime.services.eventbus.EventBusServiceSpring;
@@ -61,7 +62,7 @@ class GenericEventPublishingTest {
 
     @Configuration
     static class TestConfig {
-
+        // no specific config required
     }
 
     @Singleton
@@ -75,14 +76,15 @@ class GenericEventPublishingTest {
 
     }
 
-    @Singleton //TODO should also work for view-models and domain-objects 
+    @Singleton 
     public static class TestListener {
 
         @Getter
         private final StringBuilder history = new StringBuilder();
 
-        //TODO find a way to have @Observes mimic the @EventListener  
-        //@EventListener(GenericEvent.class)
+        //XXX unfortunately Spring does not yet support the @Observes annotation
+        // we are lucky if it does in the future
+        @EventListener(GenericEvent.class)
         public void receiveHelloWorld(@Observes GenericEvent<String> event) {
             history.append(event.getWhat());
         }

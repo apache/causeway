@@ -18,12 +18,8 @@
  */
 package org.apache.isis.testdomain.bootstrapping;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +31,9 @@ import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -56,10 +55,10 @@ class JdoBootstrappingTest_usingFixtures {
     void setUp() {
 
         // cleanup
-        fixtureScripts.runPersona((PersonaWithBuilderScript) JdoTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
         // given
-        fixtureScripts.runPersona((PersonaWithBuilderScript) JdoTestDomainPersona.InventoryWith1Book);
+        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @Test
