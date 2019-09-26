@@ -1,7 +1,7 @@
 package org.ro.urls
 
 object RESTFUL_MENUBARS : Response(){
-    override val url = ""
+    override val url = "http://localhost:8080/restful/menuBars"
     override val str = """
             <mb3:menuBars xmlns:cpt="http://isis.apache.org/applib/layout/component"
                           xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"

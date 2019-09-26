@@ -1,6 +1,9 @@
 package org.ro.handler
 
 import org.ro.core.event.LogEntry
+import org.ro.org.ro.handler.DomainTypesHandler
+import org.ro.org.ro.handler.UserHandler
+import org.ro.org.ro.handler.VersionHandler
 
 /**
  * Delegates responses to handlers, acts as Facade.
@@ -9,7 +12,7 @@ import org.ro.core.event.LogEntry
 object ResponseHandler {
     private var delegate: IResponseHandler;
 
-    //TODO sequence of handlers should follow frequency of invocation in order minimize the time taken by unneeded calls to 'canHandle()'
+    //TODO sequence of handlers should follow frequency of invocation in order to minimize the time taken by unneeded calls to 'canHandle()'
     private var _1 = ResultHandler()
     private var _2 = ActionHandler()
     private var _3 = ServiceHandler()
@@ -18,7 +21,10 @@ object ResponseHandler {
     private var _6 = LayoutHandler()
     private var _7 = PropertyHandler()
     private var _8 = MemberHandler()
-    private var _10 = HttpErrorHandler()
+    private var _9 = HttpErrorHandler()
+    private var _10 = UserHandler()
+    private var _11 = VersionHandler()
+    private var _12 = DomainTypesHandler()
     private var last = DefaultHandler()
 
     init {
@@ -29,8 +35,11 @@ object ResponseHandler {
         _5.successor = _6
         _6.successor = _7
         _7.successor = _8
-        _8.successor = _10
-        _10.successor = last
+        _8.successor = _9
+        _9.successor = _10
+        _10.successor = _11
+        _11.successor = _12
+        _12.successor = last
 
         delegate = _1
     }

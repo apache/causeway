@@ -1,0 +1,18 @@
+package org.ro.to
+
+import kotlinx.serialization.UnstableDefault
+import org.ro.org.ro.handler.UserHandler
+import org.ro.org.ro.to.User
+import org.ro.urls.RESTFUL_USER
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+@UnstableDefault
+class UserTest {
+
+    @Test
+    fun testParse() {
+        val user = UserHandler().parse(RESTFUL_USER.str) as User
+        assertEquals("sven", user.userName)
+    }
+}
