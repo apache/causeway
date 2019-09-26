@@ -2,10 +2,8 @@ package org.ro.handler
 
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
-import org.ro.handler.BaseHandler
-import org.ro.handler.IResponseHandler
-import org.ro.to.Property
 import org.ro.to.TransferObject
+import org.ro.to.Version
 
 class VersionHandler: BaseHandler(), IResponseHandler {
 
@@ -15,7 +13,7 @@ class VersionHandler: BaseHandler(), IResponseHandler {
 
     @UnstableDefault
     override fun parse(jsonStr: String): TransferObject? {
-        return Json.parse(Property.serializer(), jsonStr)
+        return Json.parse(Version.serializer(), jsonStr)
     }
 
 }
