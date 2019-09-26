@@ -18,7 +18,7 @@ data class FieldSetLayout(val name: String? = null,
     fun build(): HBox {
         val result = HBox("FieldSetLayout")
         var fi: FormItem?
-        val form: Form = Form("new Form")
+        val form = Form("new Form")
         for (p in property) {
             val label = p.named ?: "label not set"
             val type = "Text"// if mutiline use a different type of input p.multiLine

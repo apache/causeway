@@ -28,7 +28,7 @@ class ActionPrompt(val action: Action) : Command {
     }
 
     private fun buildLabel(): String {
-        val label = Utils.deCamel(action.id);
+        val label = Utils.deCamel(action.id)
         return "Execute: $label"
     }
 
@@ -43,7 +43,7 @@ class ActionPrompt(val action: Action) : Command {
                 type = "Select"
                 content = buildSelectionList(p)
             }
-            val fi = FormItem(v, type, content);
+            val fi = FormItem(v, type, content)
             formItems.add(fi)
         }
         return formItems
@@ -53,7 +53,7 @@ class ActionPrompt(val action: Action) : Command {
         val selectionList = mutableListOf<StringPair>()
         val arguments = parameter.getChoiceListKeys()
         for (s in arguments) {
-            val sp = StringPair(s, s);
+            val sp = StringPair(s, s)
             selectionList.add(sp)
         }
         return selectionList

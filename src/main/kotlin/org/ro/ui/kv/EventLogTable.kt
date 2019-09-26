@@ -113,7 +113,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 }
             }
         }
-        return contextMenu;
+        return contextMenu
     }
 
     private fun removeTab() {
