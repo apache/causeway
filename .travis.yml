@@ -6,4 +6,19 @@ node_js:
 before_install:
   - chmod +x gradlew
 
+deploy:
+  provider: script
+  script: "cp .npmrc.template $HOME/.npmrc && npm publish"
+  skip_cleanup: true
+  on:
+    tags: true
+
+notifications:
+  email:
+    recipients:
+      - joerg.rade60@gmail.com
+    on_success: change
+    on_failure: always
+
+
 script: ./gradlew test
