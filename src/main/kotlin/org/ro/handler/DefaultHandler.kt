@@ -1,6 +1,6 @@
 package org.ro.handler
 
-import org.ro.org.ro.core.aggregator.UndefinedAggregator
+import org.ro.core.aggregator.UndefinedAggregator
 
 class DefaultHandler : BaseHandler(), IResponseHandler {
 

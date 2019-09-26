@@ -1,9 +1,9 @@
-package org.ro.org.ro.view
+package org.ro.view
 
 import org.ro.core.event.LogEntry
-import org.ro.view.Command
-import org.ro.view.RoDialog
-import org.ro.view.uicomp.FormItem
+import org.ro.ui.Command
+import org.ro.ui.RoDialog
+import org.ro.ui.uicomp.FormItem
 
 class UndefinedAlert(val logEntry: LogEntry) : Command {
 

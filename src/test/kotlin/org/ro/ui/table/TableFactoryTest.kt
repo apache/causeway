@@ -1,4 +1,4 @@
-package org.ro.view.table
+package org.ro.ui.table
 
 import org.ro.core.model.Exposer
 import org.ro.to.Extensions

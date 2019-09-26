@@ -1,10 +1,10 @@
-package org.ro.org.ro.handler
+package org.ro.handler
 
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.ro.handler.BaseHandler
 import org.ro.handler.IResponseHandler
-import org.ro.org.ro.to.DomainTypes
+import org.ro.to.DomainTypes
 import org.ro.to.TransferObject
 
 class DomainTypesHandler : BaseHandler(), IResponseHandler {

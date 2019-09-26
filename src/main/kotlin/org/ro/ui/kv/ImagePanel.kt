@@ -1,4 +1,4 @@
-package org.ro.view
+package org.ro.ui
 
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.PopoverOptions

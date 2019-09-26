@@ -3,7 +3,7 @@ package org.ro.core.aggregator
 import org.ro.core.event.LogEntry
 import org.ro.to.Action
 import org.ro.to.Method
-import org.ro.view.ActionPrompt
+import org.ro.ui.ActionPrompt
 
 class ActionAggregator : BaseAggregator() {
 

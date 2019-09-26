@@ -1,8 +1,8 @@
-package org.ro.view.table
+package org.ro.ui.table
 
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.to.TObject
-import org.ro.view.IconManager
+import org.ro.ui.IconManager
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.dropdown.Header.Companion.header
 import pl.treksoft.kvision.html.Link.Companion.link

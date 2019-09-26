@@ -1,8 +1,8 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
-import org.ro.view.uicomp.Box
-import org.ro.view.uicomp.VBox
+import org.ro.ui.uicomp.Box
+import org.ro.ui.uicomp.VBox
 
 @Serializable
 data class RowLayout(val cols: List<ColsLayout> = emptyList(),

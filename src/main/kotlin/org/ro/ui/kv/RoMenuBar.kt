@@ -1,12 +1,11 @@
-package org.ro.view
+package org.ro.ui
 
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
 import org.ro.core.UiManager
 import org.ro.core.aggregator.ActionAggregator
 import org.ro.core.event.EventStore
-import org.ro.view.ImagePanel
-import org.ro.view.table.el.EventLogTable
+import org.ro.ui.table.el.EventLogTable
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown

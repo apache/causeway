@@ -1,10 +1,10 @@
-package org.ro.view.table.el
+package org.ro.ui.table.el
 
 import com.github.snabbdom._get
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
-import org.ro.view.IconManager
-import org.ro.view.RoView
+import org.ro.ui.IconManager
+import org.ro.ui.RoView
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.dropdown.Header.Companion.header
 import pl.treksoft.kvision.html.Button

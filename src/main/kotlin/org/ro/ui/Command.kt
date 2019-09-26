@@ -1,4 +1,4 @@
-package org.ro.view
+package org.ro.ui
 
 import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Link

@@ -1,9 +1,9 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
-import org.ro.view.uicomp.TabNavigator
-import org.ro.view.uicomp.UIComponent
-import org.ro.view.uicomp.VBox
+import org.ro.ui.uicomp.TabNavigator
+import org.ro.ui.uicomp.UIComponent
+import org.ro.ui.uicomp.VBox
 
 @Serializable
 data class TabLayout(val cssClass: String? = null,

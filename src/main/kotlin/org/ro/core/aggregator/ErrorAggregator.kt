@@ -2,7 +2,7 @@ package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
 import org.ro.to.HttpError
-import org.ro.view.ErrorAlert
+import org.ro.ui.ErrorAlert
 
 class ErrorAggregator : BaseAggregator() {
 

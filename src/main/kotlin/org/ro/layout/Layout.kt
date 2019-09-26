@@ -2,7 +2,7 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.TransferObject
-import org.ro.view.uicomp.VBox
+import org.ro.ui.uicomp.VBox
 
 /**
  * Parse layout specification.

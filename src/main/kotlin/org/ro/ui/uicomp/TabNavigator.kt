@@ -1,4 +1,4 @@
-package org.ro.view.uicomp
+package org.ro.ui.uicomp
 
 class TabNavigator(override val label: String) : UIComponent() {
     var percentWidth: Int = 100

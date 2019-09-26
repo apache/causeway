@@ -3,7 +3,7 @@ package org.ro.core.model
 import kotlinx.serialization.Serializable
 import org.ro.to.MemberType
 import org.ro.to.TObject
-import org.ro.view.IconManager
+import org.ro.ui.IconManager
 
 /**
  * Makes properties of delegate available for display in Lists.

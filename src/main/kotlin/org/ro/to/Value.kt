@@ -2,7 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.StringDescriptor
-import kotlinx.serialization.internal.makeNullable
+import kotlinx.serialization.internal.nullable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonException
@@ -35,7 +35,7 @@ data class Value(
         override fun deserialize(decoder: Decoder): Value {
             var jse: JsonElement? = null
             try {
-                val nss = makeNullable(JsonElement.serializer())
+                val nss = JsonElement.serializer().nullable
                 jse = decoder.decode(nss)!!
                 val jsct = jse.content
                 when {

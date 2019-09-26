@@ -1,8 +1,8 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.org.ro.handler.VersionHandler
-import org.ro.org.ro.to.Version
+import org.ro.handler.VersionHandler
+import org.ro.to.Version
 import org.ro.urls.RESTFUL_VERSION
 import kotlin.test.Test
 import kotlin.test.assertEquals

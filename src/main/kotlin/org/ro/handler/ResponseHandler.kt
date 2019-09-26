@@ -1,16 +1,16 @@
 package org.ro.handler
 
 import org.ro.core.event.LogEntry
-import org.ro.org.ro.handler.DomainTypesHandler
-import org.ro.org.ro.handler.UserHandler
-import org.ro.org.ro.handler.VersionHandler
+import org.ro.handler.DomainTypesHandler
+import org.ro.handler.UserHandler
+import org.ro.handler.VersionHandler
 
 /**
  * Delegates responses to handlers, acts as Facade.
  * @See: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
 object ResponseHandler {
-    private var delegate: IResponseHandler;
+    private var delegate: IResponseHandler
 
     //TODO sequence of handlers should follow frequency of invocation in order to minimize the time taken by unneeded calls to 'canHandle()'
     private var _1 = ResultHandler()

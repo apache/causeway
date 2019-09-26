@@ -1,8 +1,8 @@
-package org.ro.org.ro.core.aggregator
+package org.ro.core.aggregator
 
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.event.LogEntry
-import org.ro.org.ro.view.UndefinedAlert
+import org.ro.view.UndefinedAlert
 
 class UndefinedAggregator: BaseAggregator() {
 

@@ -1,4 +1,4 @@
-package org.ro.view
+package org.ro.ui
 
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.panel.TabPanel

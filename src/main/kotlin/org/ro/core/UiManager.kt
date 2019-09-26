@@ -3,10 +3,10 @@ package org.ro.core
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
-import org.ro.view.RoMenuBar
-import org.ro.view.RoStatusBar
-import org.ro.view.RoView
-import org.ro.view.table.RoTable
+import org.ro.ui.RoMenuBar
+import org.ro.ui.RoStatusBar
+import org.ro.ui.RoView
+import org.ro.ui.table.RoTable
 import pl.treksoft.kvision.panel.VPanel
 
 /**

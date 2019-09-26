@@ -1,9 +1,9 @@
 package org.ro.layout
 
 import kotlinx.serialization.Serializable
-import org.ro.view.uicomp.Form
-import org.ro.view.uicomp.FormItem
-import org.ro.view.uicomp.HBox
+import org.ro.ui.uicomp.Form
+import org.ro.ui.uicomp.FormItem
+import org.ro.ui.uicomp.HBox
 
 @Serializable
 data class FieldSetLayout(val name: String? = null,

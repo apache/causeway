@@ -1,4 +1,4 @@
-package org.ro.view.uicomp
+package org.ro.ui.uicomp
 
 open class Box : UIComponent() {
 

@@ -1,4 +1,4 @@
-package org.ro.org.ro.to
+package org.ro.to
 
 import kotlinx.serialization.Serializable
 import org.ro.to.Extensions

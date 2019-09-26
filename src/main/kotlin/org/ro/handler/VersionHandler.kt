@@ -1,4 +1,4 @@
-package org.ro.org.ro.handler
+package org.ro.handler
 
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json

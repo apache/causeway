@@ -1,10 +1,10 @@
-package org.ro.view
+package org.ro.ui
 
 import org.ro.core.Utils
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Parameter
-import org.ro.view.uicomp.FormItem
+import org.ro.ui.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.select.Select
 import pl.treksoft.kvision.form.text.TextArea
