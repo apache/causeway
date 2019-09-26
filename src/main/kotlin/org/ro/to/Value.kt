@@ -9,7 +9,7 @@ import kotlinx.serialization.json.JsonException
 import kotlinx.serialization.json.content
 
 /**
- *  Custom data structure to handle 'untyped' value in Member and Property.
+ *  Custom data structure to handle 'untyped' value in Member, Property, Parameter
  *  "value" can either be:
  *  @Item 'null'
  *  @Item Int with format "int"
