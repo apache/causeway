@@ -372,8 +372,8 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     @Programmatic
-    public <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> persona) {
-        final BuilderScriptAbstract<T> fixtureScript = persona.builder();
+    public <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<? extends T>> persona) {
+        val fixtureScript = persona.builder();
         return runBuilder(fixtureScript);
     }
 
