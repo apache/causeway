@@ -51,8 +51,8 @@ public class LdapEmbeddedServer extends AbstractLdapTestUnit {
     }
 
     /**
-     * Launches an LDAP server, that waits for the returned latch to count down by the caller, 
-     * before it shuts down.
+     * Launches an LDAP server. Blocks until its fully launched. Then waits for the returned latch to be 
+     * count down (by the caller), before it shuts the LDAP Server down.
      * @return a {@link CountDownLatch} for the caller to count down, once the server is no longer needed.
      * @throws InitializationError
      * @throws InterruptedException

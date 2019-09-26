@@ -36,10 +36,12 @@ import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 
 import lombok.val;
 
+@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class, 

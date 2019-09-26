@@ -20,11 +20,16 @@ package org.apache.isis.testdomain.domainmodel;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
+import org.apache.isis.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.testdomain.Incubating;
+import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
@@ -37,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
+@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,
@@ -50,7 +56,13 @@ import lombok.val;
     IsisPresets.DebugProgrammingModel,
     
 })
+@Incubating
 class DomainModelTest_usingBadDomain {
+    
+    @Test
+    void fullIntrospection_shouldBeEnabledByThisTestClass() {
+        assertTrue(IntrospectionMode.isFullIntrospect());
+    }
     
     @Test
     void ambiguousTitle_shouldFail() {

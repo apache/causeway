@@ -32,8 +32,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.runners.model.InitializationError;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.apache.isis.testdomain.Smoketest;
+
 import lombok.val;
 
+@Smoketest
 @SpringBootTest(
         classes = {LdapServerService.class},
         properties = {

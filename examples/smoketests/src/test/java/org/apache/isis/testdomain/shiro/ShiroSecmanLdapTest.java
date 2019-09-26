@@ -18,15 +18,8 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
@@ -48,13 +41,23 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
+import org.apache.isis.security.shiro.WebModuleShiro;
+import org.apache.isis.testdomain.Incubating;
+import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import lombok.val;
 
+@Smoketest @Incubating
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class, 
@@ -90,6 +93,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         //    This typically only needs to be done once per class if your shiro.ini doesn't change,
         //    otherwise, you'll need to do this logic in each test that is different
         setSecurityManager("classpath:shiro-secman-ldap.ini");
+        WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
     }
 
     @AfterAll
@@ -100,7 +104,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     @BeforeEach
     void setupSvenInDb() {
         // given
-        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.SvenApplicationUser);
+        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
 
 

@@ -36,6 +36,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.config.IsisPresets;
+import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
@@ -43,6 +44,7 @@ import org.apache.isis.testdomain.ldap.LdapServerService;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class, 

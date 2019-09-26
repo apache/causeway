@@ -18,15 +18,8 @@
  */
 package org.apache.isis.testdomain.shiro;
 
-import static java.time.Duration.ofMillis;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import javax.inject.Inject;
 
-import org.apache.isis.extensions.fixtures.api.PersonaWithBuilderScript;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,14 +37,23 @@ import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
 import org.apache.isis.security.shiro.WebModuleShiro;
+import org.apache.isis.testdomain.Incubating;
+import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
 import org.apache.isis.testdomain.rest.RestService;
 import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 
+import static java.time.Duration.ofMillis;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import lombok.val;
 
+@Smoketest @Incubating
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class
@@ -90,8 +92,11 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
     
     @BeforeAll
     static void beforeClass() {
-        //WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap-cached.ini");
-        WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
+        //    Build and set the SecurityManager used to build Subject instances used in your tests
+        //    This typically only needs to be done once per class if your shiro.ini doesn't change,
+        //    otherwise, you'll need to do this logic in each test that is different
+        setSecurityManager("classpath:shiro-secman-ldap.ini");
+        //setSecurityManager("classpath:shiro-secman-ldap-cached.ini");
     }
 
     @AfterAll
@@ -102,10 +107,18 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
     @BeforeEach
     void setupSvenInDb() {
         // given
-        fixtureScripts.runPersona((PersonaWithBuilderScript)JdoTestDomainPersona.SvenApplicationUser);
+        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
+        
+        WebModuleShiro.setShiroIniResource("classpath:shiro-secman-ldap.ini");
     }
+    
+//    @AfterEach
+//    void afterEach() {
+//        tearDownShiro();
+//    }
+    
 
-    @Test
+    @Test 
     void stressTheRestEndpoint() {
 
         val useRequestDebugLogging = false;

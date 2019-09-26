@@ -32,15 +32,26 @@ import lombok.extern.log4j.Log4j2;
 public class LdapServerService {
 
     private CountDownLatch serverLatch;
-
+    private CountDownLatch startInProgress;
+    
     @PostConstruct
     public void start() throws InitializationError, InterruptedException {
+        startInProgress = new CountDownLatch(1);
         serverLatch = LdapEmbeddedServer.run();
+        startInProgress.countDown();
         log.info("Embedded LDAP Server started at port {}.", LdapConstants.PORT);
     }
 
     @PreDestroy
     public void stop() {
+        if(startInProgress!=null) {
+            try {
+                startInProgress.await();
+            } catch (InterruptedException e) {
+                // can't do anything about that
+            }    
+        }
+        
         if(serverLatch!=null) {
             serverLatch.countDown();
             serverLatch = null;

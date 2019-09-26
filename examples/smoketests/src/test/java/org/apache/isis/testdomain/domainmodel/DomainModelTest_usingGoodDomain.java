@@ -24,11 +24,13 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
+import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 
 import lombok.val;
 
+@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,

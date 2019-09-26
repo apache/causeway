@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
@@ -36,6 +37,7 @@ import static org.junit.Assert.assertNotNull;
 
 import lombok.val;
 
+@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class
