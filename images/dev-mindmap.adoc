@@ -39,6 +39,13 @@
 +++ Karma
 +++ Broswerify
 +++ ~~Mocha~~
++++ PhtantomJS
++++ coverage
+++++ istanbul
+++++ nyc
+++_ CI
++++ Travis
++++ Coveralls
 @endmindmap
 --
 ~~

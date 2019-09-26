@@ -47,7 +47,7 @@ Kotlin is straightforward and once you now it, you may not want to go back.
 ![Preview](../images/dev-mindmap.png)
 
 # Setup the Back-end
-## Toolchain Requirements
+## Requirements
 * (Oracle) JDK 1.8_181 (or higher)
 * Apache Maven 3.6.0
 
@@ -109,7 +109,7 @@ Add to webapp\src\main\webapp\WEB-INF\web.xml
 	</filter-mapping>
 ```
 
-##Put into webapp/src/main/webapp/WEB-INF/lib
+### Put into webapp/src/main/webapp/WEB-INF/lib
 * https://search.maven.org/artifact/org.eclipse.jetty/jetty-util/9.4.12.v20180830/jar
 * https://search.maven.org/artifact/org.eclipse.jetty/jetty-servlets/9.4.12.v20180830/jar
 
@@ -198,7 +198,7 @@ Host ssh.github.com
   IdentitiesOnly yes
 ```
 
-#### Corporate Firewall with SSL 'inspection'
+### Corporate Firewall with SSL 'inspection'
 There are some questionable setups in coporate settings that are based on SSL replacement.
 In order to cope with it, you may try to import the Certificate into cacerts, 
 see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584-IDEA-Ultimate-2016-3-4-throwing-unable-to-find-valid-certification-path-to-requested-target-when-trying-to-refresh-gradle
@@ -213,3 +213,20 @@ taskkill /f /im node.exe
 Linux:
 ```
 killall node 
+```
+
+### Visualize JS dependencies
+
+```
+npm -g install dependo
+dependo -f amd ./build/js/kroviz.js > dependo.html
+```
+
+### Measure Test Coverage
+
+```
+nyc npm test
+
+```
+#### References
+https://github.com/istanbuljs/nyc

@@ -32,3 +32,6 @@ Bootstrap [[https://getbootstrap.com/]] #8F5ADC-31135B
 Tabulator [[http://tabulator.info/]] #21441F|3DB549
 Chart.js [[https://www.chartjs.org/]] #f27173
 kroViz #8064A2-F79646
+
+# Convert PNG to SVG
+https://www.pngtosvg.com/
