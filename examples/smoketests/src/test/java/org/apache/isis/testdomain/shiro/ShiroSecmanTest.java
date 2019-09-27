@@ -46,7 +46,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 
 import lombok.val;
 
-@Smoketest @Incubating
+@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class, 
@@ -61,6 +61,7 @@ import lombok.val;
     IsisBootSecmanPersistenceJdo.class,
     IsisBootSecmanEncryptionJbcrypt.class,
 })
+@Incubating("does not work with surefire")
 class ShiroSecmanTest extends AbstractShiroTest {
 
     @Inject SecurityModuleConfig securityConfig;

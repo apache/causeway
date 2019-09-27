@@ -20,8 +20,6 @@ package org.apache.isis.testdomain.domainmodel;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.config.IsisPresets;
@@ -56,7 +54,7 @@ import lombok.val;
     IsisPresets.DebugProgrammingModel,
     
 })
-@Incubating
+@Incubating("does not work, when executed in sequence with other smoketests")
 class DomainModelTest_usingBadDomain {
     
     @Test

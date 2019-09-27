@@ -53,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
-@Smoketest @Incubating
+@Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class
@@ -81,6 +81,7 @@ import lombok.val;
     IsisBootSecmanPersistenceJdo.class,
     IsisBootSecmanEncryptionJbcrypt.class,
 })
+@Incubating("does not work, when executed in sequence with other smoketests")
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;

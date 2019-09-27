@@ -30,10 +30,16 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
  * To be used on test classes, that are not considered to produce stable results (incubating).
  * @deprecated not deprecated, but a trick to signal test classes that need attention
  */
-@Target({ ElementType.TYPE})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@DisabledIfSystemProperty(named = "surefire.real.class.path", matches = ".*surefire.*")
 @Documented
+@DisabledIfSystemProperty(named = "surefire.real.class.path", matches = ".*surefire.*")
 public @interface Incubating {
 
+    /**
+     * The reason this annotated test class is incubating.
+     */
+    String value() default "";
+    
+    
 }
