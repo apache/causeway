@@ -26,6 +26,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
@@ -34,11 +35,13 @@ import org.apache.isis.runtime.IsisRuntimeModule;
 import org.apache.isis.runtime.services.IsisRuntimeServicesModule;
 import org.apache.isis.wrapper.IsisWrapperModule;
 
-@Configuration 
+@Configuration
+@Import({
+    IsisConfigModule.class,
+})
 @ComponentScan(
         basePackageClasses= {
                 IsisApplibModule.class,
-                IsisConfigModule.class,
                 IsisMetamodelModule.class,
                 IsisRuntimeModule.class,
                 IsisRuntimeServicesModule.class,

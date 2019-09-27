@@ -33,29 +33,27 @@ import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+
+import lombok.val;
 
 @Singleton
 public class RepositoryServiceJdo implements RepositoryService {
 
     private boolean autoFlush;
 
-    @Inject
-    IsisConfiguration isisConfigProperties;
-
     @PostConstruct
     public void init() {
-        final boolean disableAutoFlush = isisConfigProperties.getServices().getContainer().isDisableAutoFlush();
+        val disableAutoFlush = isisConfiguration.getServices().getContainer().isDisableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
-
 
     // //////////////////////////////////////
 
@@ -217,6 +215,7 @@ public class RepositoryServiceJdo implements RepositoryService {
     @Inject WrapperFactory wrapperFactory;
     @Inject TransactionService transactionService;
     @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    @Inject IsisConfiguration isisConfiguration;
 
 
 

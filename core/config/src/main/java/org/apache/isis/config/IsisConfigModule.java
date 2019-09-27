@@ -18,9 +18,15 @@
  */
 package org.apache.isis.config;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-@XmlRootElement(name = "module")
+@Configuration
+//@Import({
+//    IsisConfiguration.class // not required
+//XXX if this module would contribute any managed beans, these would go here
+//})
+@EnableConfigurationProperties(IsisConfiguration.class)
 public class IsisConfigModule {
 
 }

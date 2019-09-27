@@ -19,8 +19,6 @@
 package org.apache.isis.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
 
@@ -34,9 +32,7 @@ import lombok.Data;
  * @since 2.0
  *
  */
-@Configuration
 @ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
-@EnableConfigurationProperties(IsisConfiguration.class)
 @Data
 public class IsisConfiguration {
 
@@ -58,12 +54,12 @@ public class IsisConfiguration {
         }
     }
 
-    private Services services;
+    private final Services services = new Services();
     
     @Data
     public static class Services {
 
-        private final Services.Container container = new Container();
+        private final Container container = new Container();
 
         @Data
         public static class Container {
