@@ -23,7 +23,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.ViewModel;
@@ -43,7 +44,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
-@Singleton 
+@Service 
 public class FactoryServiceInternalDefault implements FactoryService {
 
     @Override

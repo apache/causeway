@@ -20,7 +20,8 @@ package org.apache.isis.runtime.services.i18n.po;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -32,7 +33,7 @@ import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.config.internal._Config.getConfiguration;
 
-@Singleton
+@Service
 public class TranslationServicePo implements TranslationService {
 
     public static final String KEY_PO_MODE = "isis.services.translation.po.mode";

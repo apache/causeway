@@ -24,6 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -37,10 +39,15 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 
 /**
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
+ * 
+ * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
+ * annotated type. 
+ * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Component
 public @interface DomainObject {
 
     /**

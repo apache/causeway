@@ -30,6 +30,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
@@ -61,7 +63,7 @@ import static org.apache.isis.config.internal._Config.getConfiguration;
 
 import lombok.val;
 
-@Singleton
+@Service
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
     // -- caches

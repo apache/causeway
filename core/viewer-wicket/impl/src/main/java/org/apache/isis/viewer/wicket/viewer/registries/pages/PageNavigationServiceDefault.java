@@ -20,13 +20,13 @@
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -35,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 /**
  * Default implementation of {@link org.apache.isis.viewer.wicket.ui.pages.PageNavigationService}
  */
-@Singleton
+@Service
 public class PageNavigationServiceDefault implements PageNavigationService {
 
     private static final long serialVersionUID = 1L;

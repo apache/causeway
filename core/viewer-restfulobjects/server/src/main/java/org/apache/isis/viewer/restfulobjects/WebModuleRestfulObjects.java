@@ -18,13 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects;
 
-import javax.inject.Singleton;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
@@ -42,7 +42,7 @@ import static org.apache.isis.commons.internal.resources._Resources.putRestfulPa
  * 
  * @since 2.0
  */
-@Singleton @Order(-80)
+@Service @Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {
 
     public static final String KEY_RESTFUL_BASE_PATH = "isis.viewer.restfulobjects.basePath";

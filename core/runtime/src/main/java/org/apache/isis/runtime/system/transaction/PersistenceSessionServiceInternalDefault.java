@@ -21,7 +21,8 @@ package org.apache.isis.runtime.system.transaction;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.query.Query;
@@ -42,7 +43,7 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
-@Singleton
+@Service
 public class PersistenceSessionServiceInternalDefault 
 implements PersistenceSessionServiceInternal {
 

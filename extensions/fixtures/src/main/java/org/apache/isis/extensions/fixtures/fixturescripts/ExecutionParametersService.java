@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.fixtures.fixturescripts;
 
-import javax.inject.Singleton;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -31,7 +31,7 @@ import javax.inject.Singleton;
  *     need refinement in the future).
  * </p>
  */
-@Singleton
+@Service
 public class ExecutionParametersService {
 
     public ExecutionParameters newExecutionParameters(final String parameters) {

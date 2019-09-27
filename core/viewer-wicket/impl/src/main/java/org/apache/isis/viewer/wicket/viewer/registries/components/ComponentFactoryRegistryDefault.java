@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Multimap;
@@ -34,6 +33,7 @@ import com.google.common.collect.Multimaps;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -47,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
  * Implementation of {@link ComponentFactoryRegistry} that delegates to a
  * provided {@link ComponentFactoryRegistrar}.
  */
-@Singleton
+@Service
 public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
 
     private final Multimap<ComponentType, ComponentFactory> componentFactoriesByType;

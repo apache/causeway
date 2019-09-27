@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.ServiceLoader;
 
-import javax.inject.Singleton;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -94,7 +94,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.Enti
  * implementations loaded using {@link ServiceLoader} (ie from
  * <tt>META-INF/services</tt>).
  */
-@Singleton
+@Service
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
 
     @Override

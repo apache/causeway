@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.config.IsisPresets;
+import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -41,6 +42,7 @@ import lombok.val;
 @Smoketest
 @SpringBootTest(
         classes = { 
+                IsisBeanFactoryPostProcessorForSpring.class,
                 Configuration_usingJdo.class, 
         }, 
         properties = {

@@ -24,6 +24,8 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -32,7 +34,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 
-@Singleton
+@Service
 public class ExceptionRecognizerDocDefault
 implements ExceptionRecognizer {
 

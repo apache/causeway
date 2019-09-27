@@ -22,6 +22,8 @@ package org.apache.isis.metamodel.services.title;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -29,7 +31,7 @@ import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 
 import lombok.val;
 
-@Singleton
+@Service
 public class TitleServiceDefault implements TitleService {
 
     @Override

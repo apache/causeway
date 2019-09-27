@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.xml.bind.Marshaller;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
@@ -41,7 +43,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
-@Singleton
+@Service
 public class LayoutServiceDefault implements LayoutService {
 
     @Override

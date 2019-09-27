@@ -33,6 +33,7 @@ import org.apache.shiro.web.env.WebEnvironment;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.webapp.modules.WebModule;
@@ -50,7 +51,7 @@ import lombok.val;
  * Can be customized via static {@link WebModuleShiro#setShiroEnvironmentClass(Class)}
  * @since 2.0
  */
-@Singleton @Order(Ordered.HIGHEST_PRECEDENCE)
+@Service @Order(Ordered.HIGHEST_PRECEDENCE)
 public final class WebModuleShiro implements WebModule  {
 
     private final static String SHIRO_LISTENER_CLASS_NAME = 

@@ -21,16 +21,17 @@ package domainapp.dom.types.blob;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
 
-@Singleton
+@Service
 public class DemoBlobStore {
 
     @Inject HttpSession session;

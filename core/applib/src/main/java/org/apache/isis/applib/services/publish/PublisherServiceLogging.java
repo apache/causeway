@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.publish;
 
-import javax.inject.Singleton;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.schema.chg.v1.ChangesDto;
@@ -28,7 +28,7 @@ import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class PublisherServiceLogging implements PublisherService {
 
     @Override

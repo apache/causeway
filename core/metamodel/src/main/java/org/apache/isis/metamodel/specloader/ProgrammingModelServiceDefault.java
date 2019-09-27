@@ -19,7 +19,8 @@
 package org.apache.isis.metamodel.specloader;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfigurationLegacy;
@@ -31,7 +32,7 @@ import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     @Override

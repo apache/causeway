@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -38,7 +39,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class JdoPersistenceLifecycleService {
 
     private PersistenceSessionFactory persistenceSessionFactory;

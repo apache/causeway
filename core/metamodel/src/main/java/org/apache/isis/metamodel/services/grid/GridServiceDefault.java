@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
@@ -32,7 +34,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 
-@Singleton
+@Service
 public class GridServiceDefault implements GridService {
 
     public static final String COMPONENT_TNS = "http://isis.apache.org/applib/layout/component";

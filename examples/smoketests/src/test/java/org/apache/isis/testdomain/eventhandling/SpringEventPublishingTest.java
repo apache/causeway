@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.eventhandling;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +27,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 
@@ -70,7 +70,7 @@ class SpringEventPublishingTest {
 
     }
 
-    @Singleton
+    @Service
     public static class TestPublisher {
 
         @Inject
@@ -82,7 +82,7 @@ class SpringEventPublishingTest {
 
     }
 
-    @Singleton
+    @Service
     public static class TestListener {
 
         @Getter

@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Stack;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -35,7 +36,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
-@Singleton
+@Service
 public class UserServiceDefault implements UserService {
 
     @Override

@@ -19,12 +19,12 @@
 package org.apache.isis.webapp.modules.h2console;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
@@ -36,7 +36,7 @@ import org.apache.isis.webapp.modules.WebModuleContext;
 import lombok.Getter;
 import lombok.val;
 
-@Singleton @Order(0)
+@Service @Order(0)
 public class WebModuleH2Console implements WebModule  {
 
     @Inject private IsisConfigurationLegacy isisConfiguration;

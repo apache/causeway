@@ -22,9 +22,9 @@ import java.io.Serializable;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -46,7 +46,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
-@Singleton @Primary
+@Service @Primary
 public class ObjectAdapterServiceDefault implements ObjectAdapterService {
 
 

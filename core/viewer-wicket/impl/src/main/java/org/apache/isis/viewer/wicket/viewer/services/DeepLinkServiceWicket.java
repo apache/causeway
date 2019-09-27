@@ -22,12 +22,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.linking.DeepLinkService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -40,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
  * for Wicket Viewer
  */
-@Singleton
+@Service
 public class DeepLinkServiceWicket implements DeepLinkService {
 
     @Inject private PageClassRegistry pageClassRegistry;

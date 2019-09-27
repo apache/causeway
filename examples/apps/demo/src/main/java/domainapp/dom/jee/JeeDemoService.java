@@ -18,9 +18,9 @@
  */
 package domainapp.dom.jee;
 
-import javax.inject.Singleton;
+import org.springframework.stereotype.Service;
 
-@Singleton
+@Service
 public class JeeDemoService {
 
     public String getMessage() {

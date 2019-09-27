@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -61,7 +62,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class MenuBarsServiceBS3 implements MenuBarsService {
 
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";

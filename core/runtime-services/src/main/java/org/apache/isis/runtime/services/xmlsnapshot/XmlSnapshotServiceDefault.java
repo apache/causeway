@@ -18,9 +18,8 @@
  */
 package org.apache.isis.runtime.services.xmlsnapshot;
 
-import javax.inject.Singleton;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -36,7 +35,7 @@ import org.apache.isis.runtime.system.context.IsisContext;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@Singleton
+@Service
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
 
     static class XmlSnapshotServiceDefaultBuilder implements XmlSnapshotService.Builder{
@@ -66,7 +65,6 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     /**
      * Creates a simple snapshot of the domain object.
      */
-    @Programmatic
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
         final ObjectAdapter adapter = IsisContext.pojoToAdapter().apply(domainObject);
@@ -78,7 +76,6 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
      * properties or collections (using {@link Builder#includePath(String)} and
      * {@link Builder#includePathAndAnnotation(String, String)}) - to be created.
      */
-    @Programmatic
     @Override
     public Builder builderFor(final Object domainObject) {
         return new XmlSnapshotServiceDefaultBuilder(domainObject);

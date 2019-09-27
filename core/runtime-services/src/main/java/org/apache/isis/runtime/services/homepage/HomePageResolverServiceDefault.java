@@ -20,7 +20,8 @@ package org.apache.isis.runtime.services.homepage;
 
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.HomePage;
@@ -46,7 +47,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
 
-@Singleton
+@Service
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @Inject FactoryService factoryService;

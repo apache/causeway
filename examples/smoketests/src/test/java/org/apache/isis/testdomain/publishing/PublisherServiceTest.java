@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
@@ -121,7 +122,7 @@ class PublisherServiceTest {
 
     // -- HELPER
 
-    @Singleton
+    @Service
     public static class PublisherServiceProbe implements PublisherService {
 
         private StringBuilder history = new StringBuilder();

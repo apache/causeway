@@ -18,7 +18,6 @@
  */
 package org.apache.isis.webapp.modules.logonlog;
 
-import javax.inject.Singleton;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
@@ -27,6 +26,7 @@ import javax.servlet.ServletException;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.webapp.modules.WebModule;
@@ -41,7 +41,7 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  * 
  * @since 2.0
  */
-@Singleton @Order(Ordered.LOWEST_PRECEDENCE)
+@Service @Order(Ordered.LOWEST_PRECEDENCE)
 public final class WebModuleLogOnExceptionLogger implements WebModule  {
 
     private final static String LOGONLOGGER_FILTER_CLASS_NAME = 

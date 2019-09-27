@@ -19,9 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
-import javax.inject.Singleton;
-
 import org.apache.wicket.Page;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
@@ -42,7 +41,7 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
  * Default implementation of {@link PageClassList}, specifying the default pages
  * for each of the {@link PageType}s.
  */
-@Singleton
+@Service
 public class PageClassListDefault implements PageClassList {
 
     private static final long serialVersionUID = 1L;

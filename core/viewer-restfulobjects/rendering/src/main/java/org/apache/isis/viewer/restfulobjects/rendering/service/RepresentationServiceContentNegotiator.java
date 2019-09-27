@@ -23,9 +23,10 @@ import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -38,7 +39,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
-@Singleton
+@Service
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
 

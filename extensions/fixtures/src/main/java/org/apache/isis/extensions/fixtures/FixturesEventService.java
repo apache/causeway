@@ -20,10 +20,10 @@ package org.apache.isis.extensions.fixtures;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.extensions.fixtures.events.FixturesInstalledEvent;
@@ -32,7 +32,7 @@ import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
 /**
  * @since 2.0
  */
-@Singleton
+@Service
 public class FixturesEventService {
 
     @Inject Event<FixturesInstallingEvent> fixturesInstallingEvents;

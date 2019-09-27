@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 
 import com.google.common.base.Charsets;
@@ -36,6 +35,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
@@ -49,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * An implementation that reads from /WEB-INF/...
  */
-@Singleton @Log4j2
+@Service @Log4j2
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     @Override

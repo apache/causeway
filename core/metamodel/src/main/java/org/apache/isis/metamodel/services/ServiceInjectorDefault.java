@@ -32,6 +32,7 @@ import javax.inject.Singleton;
 
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -46,7 +47,7 @@ import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 
     private static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";

@@ -54,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         })
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class TransactionRollbackTest_withTransactional {
+class TransactionRollbackTest_usingTransactional {
     
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;

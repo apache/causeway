@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.settings;
 
-import javax.inject.Singleton;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.config.IsisConfigurationLegacy;
@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleConfigurat
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
-@Singleton
+@Service
 public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;

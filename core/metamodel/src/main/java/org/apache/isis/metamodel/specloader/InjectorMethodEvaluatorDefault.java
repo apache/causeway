@@ -21,11 +21,11 @@ package org.apache.isis.metamodel.specloader;
 
 import java.lang.reflect.Method;
 
-import javax.inject.Singleton;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 
-@Singleton
+@Service
 public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvaluator {
 
     //TODO[2112] cleanup comment

@@ -24,13 +24,15 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.security.authorization.standard.Authorizor;
 
-@Singleton
+@Service
 public class AuthorizationManagerStandard implements AuthorizationManager {
 
 

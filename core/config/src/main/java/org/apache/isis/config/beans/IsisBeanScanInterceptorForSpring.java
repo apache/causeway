@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+@Log4j2 @Deprecated
 public class IsisBeanScanInterceptorForSpring implements TypeFilter {
 
     @Getter(lazy=true) 
@@ -42,21 +42,23 @@ public class IsisBeanScanInterceptorForSpring implements TypeFilter {
             MetadataReader metadataReader, 
             MetadataReaderFactory metadataReaderFactory)
                     throws IOException {
+        
+        return false; //NOOP
 
-        val classMetadata = metadataReader.getClassMetadata();
-        if(!classMetadata.isConcrete()) {
-            return false;
-        }
-
-        //val annotationMetadata = metadataReader.getAnnotationMetadata();
-        //val annotationTypes = annotationMetadata.getAnnotationTypes();
-        val typeMetaData = TypeMetaData.of(classMetadata.getClassName()/*, annotationTypes*/);
-
-        if(log.isDebugEnabled()) {
-            log.debug("scanning concrete type {} -> {}", classMetadata.getClassName(), typeMetaData);
-        }
-
-        return getTypeRegistry().isIoCManagedType(typeMetaData);
+//        val classMetadata = metadataReader.getClassMetadata();
+//        if(!classMetadata.isConcrete()) {
+//            return false;
+//        }
+//
+//        //val annotationMetadata = metadataReader.getAnnotationMetadata();
+//        //val annotationTypes = annotationMetadata.getAnnotationTypes();
+//        val typeMetaData = TypeMetaData.of(classMetadata.getClassName()/*, annotationTypes*/);
+//
+//        if(log.isDebugEnabled()) {
+//            log.debug("scanning concrete type {} -> {}", classMetadata.getClassName(), typeMetaData);
+//        }
+//
+//        return getTypeRegistry().isIoCManagedType(typeMetaData);
     }
 
 }

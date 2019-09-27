@@ -16,21 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.appfeat;
+package org.apache.isis.testdomain.model.stereotypes;
 
-import javax.inject.Inject;
+import org.apache.isis.applib.annotation.DomainService;
 
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.applib.services.factory.FactoryService;
-
-@Service
-public class ApplicationFeatureFactory {
-
-    public ApplicationFeature newApplicationFeature() {
-        return factoryService.instantiate(ApplicationFeature.class);
-    }
-
-    @Inject FactoryService factoryService;
+@DomainService
+public class MyService {
 
 }

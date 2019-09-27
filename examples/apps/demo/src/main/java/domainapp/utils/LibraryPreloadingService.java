@@ -19,7 +19,8 @@
 package domainapp.utils;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
@@ -27,7 +28,7 @@ import org.apache.isis.extensions.asciidoc.AsciiDoc;
 
 import lombok.val;
 
-@Singleton
+@Service
 public class LibraryPreloadingService {
 
     @PostConstruct

@@ -23,11 +23,11 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.Page;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
  * Default implementation of {@link PageClassRegistry}; just delegates to an
  * underlying {@link PageClassList}.
  */
-@Singleton
+@Service
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {
 
     private static final long serialVersionUID = 1L;

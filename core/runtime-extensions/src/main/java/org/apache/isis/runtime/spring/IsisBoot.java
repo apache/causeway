@@ -29,14 +29,17 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.metamodel.IsisMetamodelModule;
+import org.apache.isis.metamodel.services.repository.RepositoryServiceJdo;
 import org.apache.isis.runtime.IsisRuntimeModule;
 import org.apache.isis.runtime.services.IsisRuntimeServicesModule;
 import org.apache.isis.wrapper.IsisWrapperModule;
 
 @Configuration
 @Import({
+    IsisBeanFactoryPostProcessorForSpring.class,
     IsisConfigModule.class,
 })
 @ComponentScan(

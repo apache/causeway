@@ -21,14 +21,15 @@ package org.apache.isis.extensions.fixtures;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.extensions.fixtures.legacy.FixtureClock;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
-@Singleton
+@Service
 public class FixturesLifecyleService {
 
     @Inject IsisSessionFactory isisSessionFactory; // depends on  

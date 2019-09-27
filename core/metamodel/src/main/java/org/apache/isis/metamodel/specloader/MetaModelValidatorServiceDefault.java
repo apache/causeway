@@ -19,7 +19,8 @@
 package org.apache.isis.metamodel.specloader;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -37,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0
  */
-@Singleton @Log4j2
+@Service @Log4j2
 public class MetaModelValidatorServiceDefault implements MetaModelValidatorService {
 
     @Override

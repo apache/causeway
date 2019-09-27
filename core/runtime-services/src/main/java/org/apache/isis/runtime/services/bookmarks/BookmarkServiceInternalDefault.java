@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -45,7 +46,7 @@ import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServi
  * This service enables a serializable 'bookmark' to be created for an entity.
  *
  */
-@Singleton
+@Service
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
 

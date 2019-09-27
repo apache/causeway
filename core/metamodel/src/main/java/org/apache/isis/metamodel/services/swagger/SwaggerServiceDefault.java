@@ -21,6 +21,8 @@ package org.apache.isis.metamodel.services.swagger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.services.swagger.internal.SwaggerSpecGenerator;
@@ -31,7 +33,7 @@ import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.resources._Resources.getRestfulPathIfAny;
 import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
 
-@Singleton 
+@Service 
 public class SwaggerServiceDefault implements SwaggerService {
 
     @Inject SpecificationLoader specificationLoader;

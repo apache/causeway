@@ -18,12 +18,12 @@
  */
 package org.apache.isis.webapp.modules.sse;
 
-import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
@@ -35,7 +35,7 @@ import lombok.val;
  * 
  * @since 2.0
  */
-@Singleton @Order(-99)
+@Service @Order(-99)
 public final class WebModuleServerSentEvents implements WebModule  {
 
     private final static String SERVLET_NAME = "ServerSentEventsServlet";

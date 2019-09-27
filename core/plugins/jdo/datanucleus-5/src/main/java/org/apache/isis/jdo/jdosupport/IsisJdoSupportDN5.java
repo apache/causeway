@@ -29,12 +29,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -53,7 +54,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  * This service provides a number of utility methods to supplement/support the capabilities of the JDO Objectstore.
  *
  */
-@Singleton
+@Service
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
 

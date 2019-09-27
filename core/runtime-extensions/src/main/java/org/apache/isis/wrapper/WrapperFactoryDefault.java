@@ -29,7 +29,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -68,7 +69,7 @@ import lombok.val;
  * be interacted with, while enforcing the hide/disable/validate rules as implied by
  * the Isis programming model.
  */
-@Singleton
+@Service
 public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();

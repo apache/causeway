@@ -25,13 +25,20 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.stereotype.Component;
+
 /**
  * An object that acts as a mix-in to some other object, contributing behaviour and/or derived state based on the
  * domain object.
+ * 
+ * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
+ * annotated type. 
+ * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Component
 public @interface Mixin {
 
     /**

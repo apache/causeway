@@ -24,7 +24,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -41,7 +42,7 @@ import lombok.val;
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
  */
-@Singleton
+@Service
 public class AuditingServiceInternal {
 
     Boolean whetherCanAudit;

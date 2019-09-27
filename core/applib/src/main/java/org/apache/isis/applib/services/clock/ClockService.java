@@ -20,11 +20,10 @@ package org.apache.isis.applib.services.clock;
 
 import java.sql.Timestamp;
 
-import javax.inject.Singleton;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.clock.Clock;
 
@@ -34,7 +33,7 @@ import org.apache.isis.applib.clock.Clock;
  * co-ordinated time management through a centralized time service.
  *
  */
-@Singleton
+@Service
 public class ClockService {
 
     public LocalDate now() {

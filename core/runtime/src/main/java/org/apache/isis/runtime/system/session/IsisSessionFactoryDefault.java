@@ -29,13 +29,10 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.collections.Bin;
@@ -75,7 +72,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  */
-@Singleton @Log4j2 
+@Service @Log4j2 
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Inject private ServiceRegistry serviceRegistry;

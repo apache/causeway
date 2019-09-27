@@ -25,16 +25,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Indicates that the class should be automatically recognized as a domain service.
  *
  * <p>
  * Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
  * </p>
+ * 
+ * @apiNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the 
+ * annotated type. 
+ * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ * 
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Service
 public @interface DomainService {
 
     /**

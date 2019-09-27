@@ -20,12 +20,12 @@ package org.apache.isis.testdomain.eventhandling;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.runtime.services.eventbus.EventBusServiceSpring;
@@ -65,7 +65,7 @@ class GenericEventPublishingTest {
         // no specific config required
     }
 
-    @Singleton
+    @Service
     public static class TestPublisher {
 
         @Inject EventBusService eventBusService;
@@ -76,7 +76,7 @@ class GenericEventPublishingTest {
 
     }
 
-    @Singleton 
+    @Service 
     public static class TestListener {
 
         @Getter

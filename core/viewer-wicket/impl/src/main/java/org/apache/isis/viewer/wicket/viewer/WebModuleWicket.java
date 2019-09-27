@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.viewer;
 
-import javax.inject.Singleton;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
@@ -26,6 +25,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.webapp.modules.WebModule;
@@ -42,7 +42,7 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
  * WebModule that provides the Wicket Viewer.
  * @since 2.0
  */
-@Singleton @Order(-80)
+@Service @Order(-80)
 public final class WebModuleWicket implements WebModule  {
 
     private final static String WICKET_FILTER_CLASS_NAME = 

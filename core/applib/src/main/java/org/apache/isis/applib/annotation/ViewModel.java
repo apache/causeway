@@ -27,6 +27,8 @@ import java.lang.annotation.Target;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.stereotype.Component;
+
 /**
  * An object that is conceptually part of the application layer, and which surfaces behaviour and/or state that
  * is aggregate of one or more domain entity.
@@ -46,10 +48,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * </p>
  *
  * @see ViewModel
+ * 
+ * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
+ * annotated type. 
+ * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Component
 public @interface ViewModel {
 
 

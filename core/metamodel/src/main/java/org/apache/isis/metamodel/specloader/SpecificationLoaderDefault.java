@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
@@ -73,7 +74,7 @@ import lombok.extern.log4j.Log4j2;
  * </ul>
  * </p>
  */
-@Singleton
+@Service
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
 

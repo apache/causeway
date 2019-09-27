@@ -32,7 +32,8 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.events.sse.EventStream;
 import org.apache.isis.applib.events.sse.EventStreamService;
@@ -56,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@Singleton @Log4j2
+@Service @Log4j2
 public class EventStreamServiceDefault implements EventStreamService {
 
     @Inject TransactionService transactionService;

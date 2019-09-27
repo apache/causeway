@@ -27,6 +27,8 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -37,7 +39,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class GridLoaderServiceDefault implements GridLoaderService {
 
 

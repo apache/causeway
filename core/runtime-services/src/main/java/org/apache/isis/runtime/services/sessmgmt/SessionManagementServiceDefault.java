@@ -20,7 +20,8 @@
 package org.apache.isis.runtime.services.sessmgmt;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.runtime.system.session.IsisSession;
@@ -28,7 +29,7 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
 import lombok.val;
 
-@Singleton
+@Service
 public class SessionManagementServiceDefault implements SessionManagementService {
 
     @Override

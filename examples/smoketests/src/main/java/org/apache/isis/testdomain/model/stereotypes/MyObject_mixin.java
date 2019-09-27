@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.services.appfeat;
+package org.apache.isis.testdomain.model.stereotypes;
 
-import javax.inject.Inject;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Mixin;
 
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
-import org.apache.isis.applib.services.factory.FactoryService;
-
-@Service
-public class ApplicationFeatureFactory {
-
-    public ApplicationFeature newApplicationFeature() {
-        return factoryService.instantiate(ApplicationFeature.class);
+@Mixin @RequiredArgsConstructor
+public class MyObject_mixin {
+    
+    private final MyObject holder;
+    
+    @Action
+    public MyObject $$() {
+        return holder;
     }
-
-    @Inject FactoryService factoryService;
 
 }

@@ -20,7 +20,8 @@ package org.apache.isis.runtime.system.context.session;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.runtime.system.persistence.JdoPersistenceLifecycleService;
 import org.apache.isis.runtime.system.session.IsisSession;
@@ -31,7 +32,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
  * @implNote listeners to runtime events are hard-wired, because these events are already fired 
  * during bootstrapping, when event handling might not work properly yet.   
  */
-@Singleton
+@Service
 public class RuntimeEventService {
 
     @Inject JdoPersistenceLifecycleService listener; // dependsOn

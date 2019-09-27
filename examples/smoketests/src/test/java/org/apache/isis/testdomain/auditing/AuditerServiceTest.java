@@ -22,11 +22,11 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.audit.AuditerService;
@@ -126,7 +126,7 @@ class AuditerServiceTest {
 
     // -- HELPER
 
-    @Singleton @Log4j2
+    @Service @Log4j2
     public static class AuditerServiceProbe implements AuditerService {
 
         private StringBuilder history = new StringBuilder();

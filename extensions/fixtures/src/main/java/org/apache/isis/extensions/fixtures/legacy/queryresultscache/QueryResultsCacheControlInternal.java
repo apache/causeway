@@ -18,9 +18,8 @@
  */
 package org.apache.isis.extensions.fixtures.legacy.queryresultscache;
 
-import javax.inject.Singleton;
-
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -31,7 +30,7 @@ import org.apache.isis.extensions.fixtures.events.FixturesInstallingEvent;
 /**
  * In separate class because {@link QueryResultsCache} itself is request-scoped
  */
-@Singleton
+@Service
 public class QueryResultsCacheControlInternal implements QueryResultCacheControl {
 
     @EventListener(FixturesInstallingEvent.class)

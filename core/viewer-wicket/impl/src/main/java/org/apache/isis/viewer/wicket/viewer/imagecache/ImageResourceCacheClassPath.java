@@ -24,12 +24,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Singleton;
-
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -45,7 +44,7 @@ import images.Images;
  * <p>
  * Searches for a fixed set of suffixes: <code>png, gif, jpeg, jpg, svg</code>.
  */
-@Singleton
+@Service
 public class ImageResourceCacheClassPath implements ImageResourceCache {
 
     private static final long serialVersionUID = 1L;

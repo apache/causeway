@@ -19,8 +19,8 @@
 package org.apache.isis.jdo.persistence;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
@@ -38,7 +38,7 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransactionManager {
 
     private static final long serialVersionUID = 1L;

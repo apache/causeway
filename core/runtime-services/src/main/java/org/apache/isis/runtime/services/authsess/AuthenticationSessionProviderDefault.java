@@ -21,7 +21,8 @@ package org.apache.isis.runtime.services.authsess;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
@@ -29,7 +30,7 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.security.authentication.standard.SimpleSession;
 
-@Singleton
+@Service
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
     /**

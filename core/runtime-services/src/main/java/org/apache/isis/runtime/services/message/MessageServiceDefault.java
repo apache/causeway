@@ -19,9 +19,9 @@
 package org.apache.isis.runtime.services.message;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.security.authentication.MessageBroker;
 
-@Singleton @Primary
+@Service @Primary
 public class MessageServiceDefault implements MessageService {
 
     @Override

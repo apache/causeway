@@ -31,6 +31,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
@@ -53,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0
  */
-@Singleton @Log4j2
+@Service @Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
 
     @Override

@@ -25,10 +25,12 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.config.IsisPresets;
 import org.apache.isis.runtime.system.context.IsisContext;
 //import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -51,6 +53,9 @@ import lombok.val;
                 // "isis.reflector.introspector.parallelize=false",
                 // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
         })
+@TestPropertySource({
+    IsisPresets.DebugDiscovery
+})
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {
 
@@ -60,7 +65,7 @@ class SpringServiceProvisioningTest {
     }
 
     @Test
-    void builtInServicesShouldBeSetUp() throws IOException {
+    void builtInServices_shouldBeSetUp() throws IOException {
 
         val serviceRegistry = IsisContext.getServiceRegistry();
         val managedServices = serviceRegistry.streamRegisteredBeans()

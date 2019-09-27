@@ -20,14 +20,15 @@ package org.apache.isis.runtime.system.persistence.events;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Service;
 
 /**
  * 
  * @since 2.0
  *
  */
-@Singleton 
+@Service 
 public class PersistenceEventService {
     
     // -- MANAGED EVENTS

@@ -22,11 +22,13 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 
 import lombok.extern.log4j.Log4j2;
 
-@Singleton @Log4j2
+@Service @Log4j2
 public class SeedSecurityModuleService {
 
     @Inject FixtureScripts fixtureScripts;

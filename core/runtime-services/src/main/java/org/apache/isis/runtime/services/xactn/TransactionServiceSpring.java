@@ -22,8 +22,8 @@ package org.apache.isis.runtime.services.xactn;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import javax.inject.Singleton;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -40,7 +40,7 @@ import org.apache.isis.runtime.system.transaction.IsisTransactionObject;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Singleton
+@Service
 @Log4j2
 public class TransactionServiceSpring implements TransactionService {
 
