@@ -18,26 +18,26 @@
  */
 package org.apache.isis.testdomain.bootstrapping;
 
-import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
-import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
-import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.runtime.system.context.IsisContext;
+//import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+
+import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
+import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -51,7 +51,7 @@ import lombok.val;
                 // "isis.reflector.introspector.parallelize=false",
                 // "logging.level.org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
         })
-@Disabled("with development work on 'v2' the reference list of services constantly changes")
+//@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {
 
     @BeforeEach
@@ -68,13 +68,21 @@ class SpringServiceProvisioningTest {
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 
-        val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-IsisBoot.json", StandardCharsets.UTF_8);
-        val singletonSet = new TreeSet<>(_Json.readJsonList(String.class, singletonJson));
+        val singletonListing = _Resources.loadAsString(
+                this.getClass(), "builtin-IsisBoot.json", StandardCharsets.UTF_8);
+        val expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
+                .collect(Collectors.toCollection(TreeSet::new));
+        
+        val servicesFound = toStringJoiningNewLine(managedServices);
+        System.out.println("--- Beans discovered by Isis ---");
+        System.out.println(servicesFound);
+        System.out.println("--------------------------------");
+        
 
         // same as managedServices.containsAll(singletonSet) but more verbose in case of
         // failure
-        assertEquals(toStringJoiningNewLine(singletonSet),
-                toStringJoiningNewLine(intersectSorted(managedServices, singletonSet)));
+        assertEquals(toStringJoiningNewLine(expectedSingletons),
+                toStringJoiningNewLine(intersectSorted(managedServices, expectedSingletons)));
 
         // TODO also test for request-scoped service (requires a means to mock a
         // request-context)

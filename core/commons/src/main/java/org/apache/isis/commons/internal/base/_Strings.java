@@ -353,7 +353,7 @@ public final class _Strings {
                 Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),
                 false); // not parallel
     }
-
+    
     /**
      * Creates a stream from the given input sequence around matches of {@code delimiterPattern}. 
      * @param input
@@ -361,13 +361,13 @@ public final class _Strings {
      * @return
      */
     public static Stream<String> splitThenStream(@Nullable final CharSequence input, Pattern delimiterPattern) {
-        requires(delimiterPattern, "delimiterPattern");
         if(isEmpty(input)) {
             return Stream.of();
         }
+        requires(delimiterPattern, "delimiterPattern");
         return delimiterPattern.splitAsStream(input);
     }
-
+    
 
     public static void splitThenAccept(
             @Nullable final String input, 
@@ -510,7 +510,28 @@ public final class _Strings {
         return suffix(fileName, prefix(fileExtension, "."));
     }
 
+    // -- SHORTCUTS
 
-
+    /**
+     * Like {@link _Strings#splitThenStream(String, String)} but also trimming each junk, then discarding
+     * empty chunks.
+     * @return empty stream if {@code input} is null
+     */
+    public static Stream<String> splitThenStreamTrimmed(@Nullable String input, String separator) {
+        return splitThenStream(input, separator)
+                .map(String::trim)
+                .filter(String::isEmpty);
+    }
+    
+    /**
+     * Like {@link _Strings#splitThenStream(CharSequence, Pattern)} but also trimming each junk, 
+     * then discarding empty chunks.
+     * @return empty stream if {@code input} is null
+     */
+    public static Stream<String> splitThenStreamTrimmed(@Nullable CharSequence input, Pattern delimiterPattern) {
+        return splitThenStream(input, delimiterPattern)
+                .map(String::trim)
+                .filter(String::isEmpty);
+    }
 
 }
