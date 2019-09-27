@@ -24,9 +24,8 @@ import java.util.Map;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
@@ -42,7 +41,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
 
     public static PromptStyleFacet create(
             final List<PropertyLayout> propertyLayouts,
-            final IsisConfigurationLegacy configuration,
+            final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         return propertyLayouts.stream()
@@ -67,7 +66,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
                             return null;
                         }
 
-                        promptStyle = PromptStyleConfiguration.parse(configuration);
+                        promptStyle = configuration.getViewer().getWicket().getPromptStyle();
                         return new PromptStyleFacetAsConfigured(promptStyle, holder);
                     default:
                     }
@@ -80,7 +79,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
                         return null;
                     }
 
-                    PromptStyle promptStyle = PromptStyleConfiguration.parse(configuration);
+                    PromptStyle promptStyle = configuration.getViewer().getWicket().getPromptStyle();
                     return new PromptStyleFacetAsConfigured(promptStyle, holder);
                 });
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.config;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -126,6 +127,8 @@ public class IsisConfiguration {
             private boolean suppressSignUp = false;
             private boolean suppressPasswordReset = false;
             private boolean clearOriginalDestination = false;
+
+            private PromptStyle promptStyle = PromptStyle.INLINE;
         }
     }
     
