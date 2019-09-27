@@ -18,6 +18,7 @@
  */
 package org.apache.isis.config;
 
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
@@ -81,6 +82,21 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean disableAutoFlush = false;
+
+        }
+
+        private final Translation translation = new Translation();
+
+        @Data
+        public static class Translation {
+
+            private final Po po = new Po();
+
+            @Data
+            public static class Po {
+
+                TranslationService.Mode mode = TranslationService.Mode.WRITE;
+            }
 
         }
     }
