@@ -18,11 +18,11 @@
  */
 package org.apache.isis.config;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import lombok.Data;
 
 /**
  * 
@@ -36,32 +36,36 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
+@EnableConfigurationProperties(IsisConfiguration.class)
+@Data
 public class IsisConfiguration {
 
-    @Getter
     private final Reflector reflector = new Reflector();
+    
+    @Data
     public static class Reflector {
 
-        @Getter
         private final ExplicitAnnotations explicitAnnotations = new ExplicitAnnotations();
+        
+        @Data
         public static class ExplicitAnnotations {
 
             /**
              * Whether or not a public method needs to be annotated with
              * @{@link org.apache.isis.applib.annotation.Action} in order to be picked up as an action in the metamodel.
              */
-            @Getter @Setter
             private boolean action = false;
         }
     }
 
-    @Getter
-    private final Services services = new Services();
+    private Services services;
+    
+    @Data
     public static class Services {
 
-        @Getter
-        private final Services.Container container = new Services.Container();
+        private final Services.Container container = new Container();
 
+        @Data
         public static class Container {
 
             /**
@@ -80,7 +84,6 @@ public class IsisConfiguration {
              *     seems the most prudent way forward.
              * </p>
              */
-            @Getter @Setter
             private boolean disableAutoFlush = false;
 
         }
