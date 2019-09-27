@@ -52,6 +52,11 @@ public class IsisConfiguration {
             private boolean action = false;
         }
 
+        private final Facet facet = new Facet();
+        @Data
+        public static class Facet {
+            private boolean filterVisibility = true;
+        }
         private final Validator validator = new Validator();
         @Data
         public static class Validator {
