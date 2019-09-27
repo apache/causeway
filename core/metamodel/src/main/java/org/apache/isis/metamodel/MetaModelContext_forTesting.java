@@ -66,7 +66,8 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     MetamodelEventService.builder()
     .build();
     
-    private IsisConfiguration configuration;
+    @Builder.Default
+    private IsisConfiguration configuration = new IsisConfiguration(); // just config defaults
 
     private SpecificationLoader specificationLoader;
 
@@ -126,6 +127,7 @@ final class MetaModelContext_forTesting implements MetaModelContext {
 
         val fields = _Lists.of(
                 getConfigurationLegacy(),
+                getConfiguration(),
                 objectAdapterProvider,
                 serviceInjector,
                 serviceRegistry,
