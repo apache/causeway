@@ -147,7 +147,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     }
 
     private boolean addCredit(final int num) {
-        final Credit credit = Credit.create(getConfiguration(), num);
+        final Credit credit = Credit.create(getConfigurationLegacy(), num);
         final WebMarkupContainer creditLink = newLink(credit);
         if(credit.isDefined()) {
             creditLink.add(new CreditImage(credit.getImageId(), credit.getImage()));
@@ -183,7 +183,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
 
     private void addBreadcrumbs() {
 
-        boolean showBreadcrumbs = getConfiguration().getBoolean(
+        boolean showBreadcrumbs = getConfigurationLegacy().getBoolean(
                 BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
         final Component breadcrumbPanel =
                 showBreadcrumbs
@@ -196,9 +196,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        final boolean showFooter = getConfiguration().getBoolean(
-                WicketViewerSettings.KEY_WICKET_VIEWER_SHOW_FOOTER,
-                WicketViewerSettings.WICKET_VIEWER_SHOW_FOOTER_DEFAULT);
+        final boolean showFooter = getConfiguration().getViewer().getWicket().isShowFooter();
 
         if(!showFooter) {
             setVisible(false);

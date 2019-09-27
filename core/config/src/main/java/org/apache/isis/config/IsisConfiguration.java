@@ -129,6 +129,8 @@ public class IsisConfiguration {
             private boolean clearOriginalDestination = false;
 
             private PromptStyle promptStyle = PromptStyle.INLINE;
+
+            private boolean showFooter = true;
         }
     }
     

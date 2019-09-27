@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -167,8 +168,12 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
         return IsisContext.pojoToAdapter();
     }
 
-    protected IsisConfigurationLegacy getConfiguration() {
+    protected IsisConfigurationLegacy getConfigurationLegacy() {
         return IsisContext.getConfigurationLegacy();
+    }
+
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
     public SpecificationLoader getSpecificationLoader() {

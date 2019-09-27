@@ -151,7 +151,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getConfiguration().getBoolean(SHOW_BREADCRUMBS_KEY, SHOW_BREADCRUMBS_DEFAULT);
+        boolean shouldShow = getConfigurationLegacy().getBoolean(SHOW_BREADCRUMBS_KEY, SHOW_BREADCRUMBS_DEFAULT);
         setVisible(shouldShow);
     }
 
