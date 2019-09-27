@@ -53,6 +53,7 @@ public class IsisConfiguration {
              */
             private boolean action = false;
         }
+
     }
 
     private final Services services = new Services();
@@ -101,5 +102,24 @@ public class IsisConfiguration {
         }
     }
 
+    private final Viewer viewer = new Viewer();
+    @Data
+    public static class Viewer {
+
+        private final Wicket wicket = new Wicket();
+        @Data
+        public static class Wicket {
+
+            private final RememberMe rememberMe = new RememberMe();
+            @Data
+            public static class RememberMe {
+                private boolean suppress = false;
+            }
+
+            private boolean suppressSignUp = false;
+            private boolean suppressPasswordReset = false;
+            private boolean clearOriginalDestination = false;
+        }
+    }
     
 }
