@@ -38,12 +38,10 @@ import lombok.Data;
 public class IsisConfiguration {
 
     private final Reflector reflector = new Reflector();
-    
     @Data
     public static class Reflector {
 
         private final ExplicitAnnotations explicitAnnotations = new ExplicitAnnotations();
-        
         @Data
         public static class ExplicitAnnotations {
 
@@ -54,10 +52,14 @@ public class IsisConfiguration {
             private boolean action = false;
         }
 
+        private final Validator validator = new Validator();
+        @Data
+        public static class Validator {
+            private boolean ensureUniqueObjectTypes = true;
+        }
     }
 
     private final Services services = new Services();
-    
     @Data
     public static class Services {
 
