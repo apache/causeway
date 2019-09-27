@@ -30,14 +30,14 @@ public final class EncoderDecoderUtil {
     private EncoderDecoderUtil() {
     }
 
-    public static final String ENCODER_DECODER_NAME_KEY_PREFIX = "isis.reflector.java.facets.encoderDecoder.";
-    public static final String ENCODER_DECODER_NAME_KEY_SUFFIX = ".encoderDecoderName";
-
-    public static String encoderDecoderNameFromConfiguration(final Class<?> type, final IsisConfigurationLegacy configuration) {
-        final String key = ENCODER_DECODER_NAME_KEY_PREFIX + type.getCanonicalName() + ENCODER_DECODER_NAME_KEY_SUFFIX;
-        final String encoderDecoderName = configuration.getString(key);
-        return !_Strings.isNullOrEmpty(encoderDecoderName) ? encoderDecoderName : null;
-    }
+//    public static final String ENCODER_DECODER_NAME_KEY_PREFIX = "isis.reflector.java.facets.encoderDecoder.";
+//    public static final String ENCODER_DECODER_NAME_KEY_SUFFIX = ".encoderDecoderName";
+//
+//    public static String encoderDecoderNameFromConfiguration(final Class<?> type, final IsisConfigurationLegacy configuration) {
+//        final String key = ENCODER_DECODER_NAME_KEY_PREFIX + type.getCanonicalName() + ENCODER_DECODER_NAME_KEY_SUFFIX;
+//        final String encoderDecoderName = configuration.getString(key);
+//        return !_Strings.isNullOrEmpty(encoderDecoderName) ? encoderDecoderName : null;
+//    }
 
     public static Class<?> encoderDecoderOrNull(final Class<?> candidateClass, final String classCandidateName) {
         final Class<?> type = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), EncoderDecoder.class, FacetHolder.class) : null;
