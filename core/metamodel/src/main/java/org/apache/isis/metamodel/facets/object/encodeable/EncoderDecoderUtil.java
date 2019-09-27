@@ -39,7 +39,7 @@ public final class EncoderDecoderUtil {
 //        return !_Strings.isNullOrEmpty(encoderDecoderName) ? encoderDecoderName : null;
 //    }
 
-    public static Class<?> encopderDecoderOrNull(final Class<?> candidateClass, final String classCandidateName) {
+    public static Class<?> encoderDecoderOrNull(final Class<?> candidateClass, final String classCandidateName) {
         final Class<?> type = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), EncoderDecoder.class, FacetHolder.class) : null;
         return type != null ? type : ClassUtil.implementingClassOrNull(classCandidateName, EncoderDecoder.class, FacetHolder.class);
     }
