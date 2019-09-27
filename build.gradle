@@ -14,7 +14,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
         classpath "org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}"
         classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:${frontendPluginVersion}"
-//        classpath "net.devrieze:xmlutil-serialization:0.12.0.0"
     }
 }
 
@@ -28,7 +27,6 @@ if (production) {
 }
 apply plugin: 'org.jetbrains.kotlin.frontend'
 apply plugin: 'kotlinx-serialization'
-//apply plugin: 'xmlutil-serialization-js'
 
 repositories {
     maven { url = "http://bintray.com/" }
@@ -58,14 +56,13 @@ dependencies {
     compile "pl.treksoft:kvision-moment:${kvisionVersion}"
     compile "pl.treksoft:kvision-tabulator:${kvisionVersion}"
     testCompile "org.jetbrains.kotlin:kotlin-test-js:${kotlinVersion}"
-//    compile "net.devrieze:xmlutil-serialization:0.12.0.0"
 }
 
 kotlinFrontend {
-    sourceMaps = true // CHANGE HERE
+    sourceMaps = true
     webpackBundle {
         bundleName = "main"
-        sourceMapEnabled = false // CHANGE HERE (it must be false!)
+        sourceMapEnabled = false
         contentPath = file('src/main/web')
         mode = production ? "production" : "development"
     }
@@ -78,7 +75,7 @@ compileKotlin2Js {
         outputFile = "$project.buildDir.path/js/${project.name}.js"
         sourceMap = !production
         sourceMapEmbedSources = "always"
-        moduleKind = 'umd'
+        moduleKind = 'commonjs'
     }
 }
 
@@ -88,7 +85,7 @@ compileTestKotlin2Js {
         outputFile = "$project.buildDir.path/js-tests/${project.name}-tests.js"
         sourceMap = !production
         sourceMapEmbedSources = "always"
-        moduleKind = 'umd'
+        moduleKind = 'commonjs'
     }
 }
 
@@ -96,17 +93,9 @@ task pot(type: GruntTask) {
     args = ["pot"]
 }
 
-task po2json(type: GruntTask) {
-    args = ["default"]
-    inputs.dir(file('translation'))
-    outputs.dir(file('build/js'))
-    outputs.dir(file('build/kotlin-js-min/main'))
-}
-
 pot.dependsOn 'installGrunt'
 pot.dependsOn 'npmInstall'
-po2json.dependsOn 'installGrunt'
-po2json.dependsOn 'npmInstall'
+
 
 task copyResources(type: Copy) {
     from "src/main/resources"
@@ -147,8 +136,8 @@ afterEvaluate {
         tasks.getByName("copyResourcesForDce") { dependsOn(runDceKotlinJs) }
     }
     tasks.getByName("webpack-bundle") {
-        dependsOn(/*po2json,*/ copyResources, copyResourcesForDce)
+        dependsOn(copyResources, copyResourcesForDce)
     }
-    tasks.getByName("webpack-run") { dependsOn(/*po2json,*/ copyResources) }
-    tasks.getByName("karma-start") { dependsOn(/*po2json,*/ copyResources) }
+    tasks.getByName("webpack-run") { dependsOn(copyResources) }
+    tasks.getByName("karma-start") { dependsOn(copyResources) }
 }
