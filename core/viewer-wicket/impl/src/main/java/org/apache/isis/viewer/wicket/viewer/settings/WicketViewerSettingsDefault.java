@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.viewer.settings;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -32,7 +32,7 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;
 
-    IsisConfiguration getConfiguration() {
+    IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

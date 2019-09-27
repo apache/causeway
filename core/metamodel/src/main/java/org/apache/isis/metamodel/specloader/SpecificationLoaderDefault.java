@@ -29,7 +29,7 @@ import javax.inject.Singleton;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -340,7 +340,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     // -- HELPER
 
-    private IsisConfiguration getConfiguration() {
+    private IsisConfigurationLegacy getConfiguration() {
         return _Config.getConfiguration();
     }	
 
@@ -367,9 +367,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
             val isManagedBean = IsisBeanTypeRegistry.current().isManagedBean(cls);
 
-            objectSpec = new ObjectSpecificationDefault(cls,
+            objectSpec = new ObjectSpecificationDefault(
+                    cls,
                     facetedMethodsBuilderContext,
-                    facetProcessor, isManagedBean, postProcessor);
+                    facetProcessor, 
+                    isManagedBean, 
+                    postProcessor);
         }
 
         return objectSpec;

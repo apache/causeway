@@ -44,7 +44,7 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
         super("time", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
 
-        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.time");
+        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.time");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

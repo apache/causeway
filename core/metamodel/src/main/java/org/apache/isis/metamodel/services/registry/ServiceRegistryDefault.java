@@ -43,7 +43,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
@@ -83,7 +83,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
     }
 
     @Bean @Singleton
-    public IsisConfiguration getConfiguration() {
+    public IsisConfigurationLegacy getConfiguration() {
         return isisConfiguration;
     }
 
@@ -100,7 +100,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
     // -- DEPS
 
     @Autowired private ConfigurableEnvironment configurableEnvironment;
-    private IsisConfiguration isisConfiguration;
+    private IsisConfigurationLegacy isisConfiguration;
 
     // -- HELPER
 

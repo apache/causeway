@@ -46,7 +46,7 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -94,7 +94,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
-        final IsisConfiguration configuration = _Config.getConfiguration();
+        final IsisConfigurationLegacy configuration = _Config.getConfiguration();
         //log.info("resource stream source: {}", configuration.getResourceStreamSource());
 
         localeInitializer.initLocale(configuration);

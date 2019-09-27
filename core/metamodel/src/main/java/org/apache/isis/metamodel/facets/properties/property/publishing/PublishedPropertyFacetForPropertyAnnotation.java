@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacetAbstract;
@@ -32,7 +32,7 @@ public class PublishedPropertyFacetForPropertyAnnotation extends PublishedProper
 
     public static PublishedPropertyFacet create(
             final List<Property> properties,
-            final IsisConfiguration configuration,
+            final IsisConfigurationLegacy configuration,
             final FacetHolder holder) {
 
         final PublishPropertiesConfiguration setting = PublishPropertiesConfiguration.parse(configuration);

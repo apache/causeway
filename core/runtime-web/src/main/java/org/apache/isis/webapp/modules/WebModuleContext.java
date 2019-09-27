@@ -30,7 +30,7 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
@@ -57,7 +57,7 @@ public class WebModuleContext {
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
-    private final IsisConfiguration isisConfiguration;
+    private final IsisConfigurationLegacy isisConfiguration;
     private List<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public class WebModuleContext {
         this.isisConfiguration = _Config.getConfiguration();
     }
 
-    public IsisConfiguration getConfiguration() {
+    public IsisConfigurationLegacy getConfiguration() {
         return isisConfiguration;
     }
 

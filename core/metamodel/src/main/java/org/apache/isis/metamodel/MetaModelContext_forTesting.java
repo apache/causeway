@@ -31,7 +31,9 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -98,10 +100,15 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     }
 
     @Override
-    public IsisConfiguration getConfiguration() {
+    public IsisConfigurationLegacy getConfigurationLegacy() {
         return _Config.getConfiguration();
     }
 
+    @Override
+    public IsisConfiguration getConfiguration() {
+        throw _Exceptions.notImplemented(); //TODO[2086] needs test integration, for legacy tests that don't use a Spring context  
+    }
+    
     @Override
     public Stream<ObjectAdapter> streamServiceAdapters() {
 
@@ -122,7 +129,7 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     public Stream<Object> streamSingletons() {
 
         val fields = _Lists.of(
-                getConfiguration(),
+                getConfigurationLegacy(),
                 objectAdapterProvider,
                 serviceInjector,
                 serviceRegistry,

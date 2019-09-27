@@ -63,7 +63,7 @@ public enum IntrospectionMode {
      */
     public static boolean isFullIntrospect() {
 
-        val config = MetaModelContext.current().getConfiguration();
+        val config = MetaModelContext.current().getConfigurationLegacy();
         val introspectionMode = SpecificationLoader.CONFIG_PROPERTY_MODE.from(config);
         val deploymentMode = _Context.getEnvironment().getDeploymentType();
 

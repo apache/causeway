@@ -33,7 +33,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -117,7 +117,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
             return "credit" + num + component;
         }
 
-        public static Credit create(final IsisConfiguration configuration, final int num) {
+        public static Credit create(final IsisConfigurationLegacy configuration, final int num) {
             String base = "isis.viewer.wicket.credit." + num + ".";
             String url = configuration.getString(base + "url");
             String name = configuration.getString(base + "name");

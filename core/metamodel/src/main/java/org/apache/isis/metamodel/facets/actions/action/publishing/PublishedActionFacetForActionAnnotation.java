@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
@@ -33,7 +33,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
 
     public static PublishedActionFacet create(
             final List<Action> actions,
-            final IsisConfiguration configuration,
+            final IsisConfigurationLegacy configuration,
             final FacetHolder holder) {
 
         final PublishActionsConfiguration setting = PublishActionsConfiguration.parse(configuration);

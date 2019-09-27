@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
 
@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "ofProperties")
-final class _Config_Instance implements IsisConfiguration {
+final class _Config_Instance implements IsisConfigurationLegacy {
 
     private final Map<String, String> properties;
     private final Function<String, Boolean> booleanParser;
@@ -125,7 +125,7 @@ final class _Config_Instance implements IsisConfiguration {
     }
 
     @Override
-    public IsisConfiguration copy() {
+    public IsisConfigurationLegacy copy() {
         val copy = _Maps.<String, String>newHashMap();
         properties.forEach(copy::put);
         return new _Config_Instance(copy, 
@@ -137,7 +137,7 @@ final class _Config_Instance implements IsisConfiguration {
     }
 
     @Override
-    public IsisConfiguration subset(@Nullable String withPrefix) {
+    public IsisConfigurationLegacy subset(@Nullable String withPrefix) {
         if(_Strings.isNullOrEmpty(withPrefix)) {
             return copy();
         }
@@ -160,7 +160,7 @@ final class _Config_Instance implements IsisConfiguration {
     }
 
     @Override
-    public IsisConfiguration subsetWithNamesStripped(String withPrefix) {
+    public IsisConfigurationLegacy subsetWithNamesStripped(String withPrefix) {
         if(_Strings.isNullOrEmpty(withPrefix)) {
             return copy();
         }

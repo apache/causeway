@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.metamodel.facets.actions.command.CommandFacetAbstract;
@@ -36,7 +36,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
             final List<Action> actions,
-            final IsisConfiguration configuration,
+            final IsisConfigurationLegacy configuration,
             final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 

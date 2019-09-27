@@ -32,7 +32,7 @@ import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.jdo.entities.JdoEntityTypeRegistry;
@@ -65,7 +65,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
     
     private StoreLifecycleListener storeLifecycleListener;
-    private IsisConfiguration configuration;
+    private IsisConfigurationLegacy configuration;
 
     @Getter(onMethod=@__({@Override})) 
     @Setter(onMethod=@__({@Override})) 

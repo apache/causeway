@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -54,7 +54,7 @@ SessionScopedComponent {
     // -- STABLE API (DRAFT)
     // -------------------------------------------------------------------------------------------------
 
-    IsisConfiguration getConfiguration();
+    IsisConfigurationLegacy getConfiguration();
     ServiceInjector getServiceInjector();
     TransactionService getTransactionService();
 

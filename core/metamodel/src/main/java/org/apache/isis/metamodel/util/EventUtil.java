@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.util;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public final class EventUtil {
 
@@ -31,7 +31,7 @@ public final class EventUtil {
             final Class<? extends T> noopClass,
             final Class<? extends T> defaultClass,
             final String configProp,
-            final IsisConfiguration configuration) {
+            final IsisConfigurationLegacy configuration) {
         if (noopClass.isAssignableFrom(eventType)) {
             return false;
         }

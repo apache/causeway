@@ -29,7 +29,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -167,7 +167,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
         return IsisContext.pojoToAdapter();
     }
 
-    protected IsisConfiguration getConfiguration() {
+    protected IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

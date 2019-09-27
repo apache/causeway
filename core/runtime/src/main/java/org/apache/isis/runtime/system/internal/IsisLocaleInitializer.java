@@ -21,7 +21,7 @@ package org.apache.isis.runtime.system.internal;
 
 import java.util.Locale;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.runtime.system.SystemConstants;
 
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisLocaleInitializer {
 
-    public void initLocale(final IsisConfiguration configuration) {
+    public void initLocale(final IsisConfigurationLegacy configuration) {
         final String localeSpec = configuration.getString(SystemConstants.LOCALE_KEY);
         if (localeSpec != null) {
             final int pos = localeSpec.indexOf('_');

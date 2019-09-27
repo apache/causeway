@@ -27,7 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
@@ -48,7 +48,7 @@ public class ImageValueSemanticsProviderAbstractTest {
     private ServiceInjector mockServicesInjector;
 
     @Mock
-    private IsisConfiguration mockConfiguration;
+    private IsisConfigurationLegacy mockConfiguration;
 
     private TestImageSemanticsProvider adapter;
 

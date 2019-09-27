@@ -146,7 +146,7 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     public Jdk8LocalDateValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        String configuredNameOrPattern = getConfiguration().getString(CFG_FORMAT_KEY, "medium").trim();
+        String configuredNameOrPattern = getConfigurationLegacy().getString(CFG_FORMAT_KEY, "medium").trim();
         updateTitleStringFormatter(configuredNameOrPattern);
     }
 

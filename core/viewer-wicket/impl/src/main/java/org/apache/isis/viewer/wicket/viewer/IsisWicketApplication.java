@@ -65,7 +65,7 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
@@ -345,14 +345,14 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    protected void configureSecurity(final IsisConfiguration configuration) {
+    protected void configureSecurity(final IsisConfigurationLegacy configuration) {
         getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
     }
 
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    protected IAuthenticationStrategy newAuthenticationStrategy(final IsisConfiguration configuration) {
+    protected IAuthenticationStrategy newAuthenticationStrategy(final IsisConfigurationLegacy configuration) {
         final String cookieKey = configuration.getString(WICKET_REMEMBER_ME_COOKIE_KEY,
                 WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT);
         final String encryptionKey = configuration.getString(WICKET_REMEMBER_ME_ENCRYPTION_KEY, defaultEncryptionKeyIfNotConfigured());
@@ -360,7 +360,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     /**
-     * As called by {@link #newAuthenticationStrategy(IsisConfiguration)}; if an encryption key for the 'rememberMe'
+     * As called by {@link #newAuthenticationStrategy(IsisConfigurationLegacy)}; if an encryption key for the 'rememberMe'
      * cookie hasn't been configured, then use a different encryption key for the 'rememberMe' cookie each time the
      * app is restarted.
      */
@@ -391,7 +391,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     protected void configureWicketSourcePluginIfNecessary() {
-        final IsisConfiguration configuration = _Config.getConfiguration();
+        final IsisConfigurationLegacy configuration = _Config.getConfiguration();
         requireNonNull(configuration, "Configuration must be prepared prior to init().");
 
         if(isWicketSourcePluginEnabled(configuration)) {
@@ -589,7 +589,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
              * If the <tt>isis.viewer.wicket.stripWicketTags</tt> is set, then this is used, otherwise the default is to strip
              * the tags because they may break some CSS rules.
              */
-            private boolean determineStripWicketTags(IsisConfiguration configuration) {
+            private boolean determineStripWicketTags(IsisConfigurationLegacy configuration) {
                 final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, STRIP_WICKET_TAGS_DEFAULT);
                 return strip;
             }
@@ -602,7 +602,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
              * <p>
              * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
              */
-            private boolean determineAjaxDebugModeEnabled(IsisConfiguration configuration) {
+            private boolean determineAjaxDebugModeEnabled(IsisConfigurationLegacy configuration) {
                 final boolean debugModeEnabled = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
                 return debugModeEnabled;
             }
@@ -613,7 +613,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
              * <p>
              * If the <tt>isis.viewer.wicket.wicketSourcePlugin</tt> is set, then this is used, otherwise the default is to disable.
              */
-            private boolean isWicketSourcePluginEnabled(IsisConfiguration configuration) {
+            private boolean isWicketSourcePluginEnabled(IsisConfigurationLegacy configuration) {
                 final boolean pluginEnabled = configuration.getBoolean(WICKET_SOURCE_PLUGIN_KEY, WICKET_SOURCE_PLUGIN_DEFAULT);
                 return pluginEnabled;
             }

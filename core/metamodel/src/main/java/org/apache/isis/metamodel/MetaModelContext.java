@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -49,6 +50,16 @@ public interface MetaModelContext {
 
     // -- INTERFACE
 
+    IsisConfigurationLegacy getConfigurationLegacy();
+    
+    /**
+     * 
+     * Configuration 'beans' with meta-data (IDE-support).
+     * 
+     * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
+     * @apiNote should ultimately replace {@link #getConfigurationLegacy()}
+     * 
+     */
     IsisConfiguration getConfiguration();
 
     ObjectAdapterProvider getObjectAdapterProvider();
@@ -107,6 +118,11 @@ public interface MetaModelContext {
 
         public MetaModelContext getMetaModelContext();
 
+        @Override
+        public default IsisConfigurationLegacy getConfigurationLegacy() {
+            return getMetaModelContext().getConfigurationLegacy();
+        }
+        
         @Override
         public default IsisConfiguration getConfiguration() {
             return getMetaModelContext().getConfiguration();
@@ -198,5 +214,6 @@ public interface MetaModelContext {
         }
 
     }
+    
 
 }

@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.specloader;
 
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
@@ -31,7 +31,7 @@ public final class ReflectorConstants {
 
     /**
      * Key used to lookup implementation of {@link ProgrammingModel} in
-     * {@link IsisConfiguration}.
+     * {@link IsisConfigurationLegacy}.
      *
      * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
@@ -41,7 +41,7 @@ public final class ReflectorConstants {
 
     /**
      * Key used to lookup implementation of {@link MetaModelValidator} in
-     * {@link IsisConfiguration}.
+     * {@link IsisConfigurationLegacy}.
      */
     public static final String META_MODEL_VALIDATOR_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.validator";
     public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT = MetaModelValidatorDefault.class.getName();

@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.url.UrlDecoderUtil;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
@@ -61,7 +61,7 @@ public class ResourceContextTest_getArg {
     @Mock ServletContext mockServletContext;
     @Mock IsisSessionFactory mockIsisSessionFactory;
     @Mock ServiceInjector mockServicesInjector;
-    @Mock IsisConfiguration mockConfiguration;
+    @Mock IsisConfigurationLegacy mockConfiguration;
     @Mock IsisSession mockIsisSession;
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock PersistenceSession mockPersistenceSession;

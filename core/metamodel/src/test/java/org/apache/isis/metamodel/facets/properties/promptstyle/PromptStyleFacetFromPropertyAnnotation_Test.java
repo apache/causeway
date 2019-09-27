@@ -31,7 +31,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
@@ -47,7 +47,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    IsisConfiguration mockConfiguration;
+    IsisConfigurationLegacy mockConfiguration;
 
     @Mock
     FacetHolder mockFacetHolder;

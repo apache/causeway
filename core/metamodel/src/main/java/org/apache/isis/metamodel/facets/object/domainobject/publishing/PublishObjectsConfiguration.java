@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobject.publishing;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum PublishObjectsConfiguration {
@@ -27,7 +27,7 @@ public enum PublishObjectsConfiguration {
 
     private static final String PUBLISH_OBJECTS_KEY = "isis.services.publish.objects";
 
-    public static PublishObjectsConfiguration parse(IsisConfiguration configuration) {
+    public static PublishObjectsConfiguration parse(IsisConfigurationLegacy configuration) {
         final String configuredValue = configuration.getString(PUBLISH_OBJECTS_KEY);
         return PublishObjectsConfiguration.parse(configuredValue);
     }

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.properties.property.publishing;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum PublishPropertiesConfiguration {
@@ -27,7 +27,7 @@ public enum PublishPropertiesConfiguration {
 
     private static final String PUBLISH_PROPERTIES_KEY = "isis.services.publish.properties";
 
-    public static PublishPropertiesConfiguration parse(IsisConfiguration configuration) {
+    public static PublishPropertiesConfiguration parse(IsisConfigurationLegacy configuration) {
         final String configuredValue = configuration.getString(PUBLISH_PROPERTIES_KEY);
         return PublishPropertiesConfiguration.parse(configuredValue);
     }

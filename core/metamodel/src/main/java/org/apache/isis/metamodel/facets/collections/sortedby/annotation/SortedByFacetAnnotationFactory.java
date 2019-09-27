@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.collections.sortedby.annotation;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
@@ -37,7 +37,7 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 /**
  * There is no check that the value is a {@link Comparator}; instead this is done through
- * the {@link #refineMetaModelValidator(MetaModelValidatorComposite, IsisConfiguration)}.
+ * the {@link #refineMetaModelValidator(MetaModelValidatorComposite, IsisConfigurationLegacy)}.
  */
 public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 

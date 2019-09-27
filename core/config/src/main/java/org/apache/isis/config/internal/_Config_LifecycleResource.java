@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -33,7 +33,7 @@ import lombok.extern.log4j.Log4j2;
 class _Config_LifecycleResource {
 
     private final Map<String, String> mutableProperties; 
-    private final _Lazy<IsisConfiguration> configuration;
+    private final _Lazy<IsisConfigurationLegacy> configuration;
 
     _Config_LifecycleResource(final Map<String, String> mutableProperties) {
         requires(mutableProperties, "mutableProperties");
@@ -41,7 +41,7 @@ class _Config_LifecycleResource {
         this.configuration = _Lazy.threadSafe(this::build);
     }
 
-    IsisConfiguration getConfiguration() {
+    IsisConfigurationLegacy getConfiguration() {
         return configuration.get();
     }
 
@@ -57,7 +57,7 @@ class _Config_LifecycleResource {
         return Optional.empty();
     }
 
-    private IsisConfiguration build() {
+    private IsisConfigurationLegacy build() {
 
         // we throw an exception, catch it and keep it for later, to provide
         // causal information, in case the builder is accessed after it already

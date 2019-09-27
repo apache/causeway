@@ -119,7 +119,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
     private Map<Pattern, String> getCssClassByPattern() {
         if (cssClassByPattern == null) {
             // build lazily
-            final String cssClassPatterns = getConfiguration().getString("isis.reflector.facet.cssClass.patterns");
+            final String cssClassPatterns = getConfigurationLegacy().getString("isis.reflector.facet.cssClass.patterns");
             this.cssClassByPattern = buildCssClassByPattern(cssClassPatterns);
         }
         return cssClassByPattern;

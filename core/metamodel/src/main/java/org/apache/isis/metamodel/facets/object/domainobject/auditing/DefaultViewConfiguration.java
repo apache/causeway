@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public enum DefaultViewConfiguration {
     HIDDEN("hidden"),
@@ -38,7 +38,7 @@ public enum DefaultViewConfiguration {
         return defaultView;
     }
 
-    public static DefaultViewConfiguration parse(IsisConfiguration configuration) {
+    public static DefaultViewConfiguration parse(IsisConfigurationLegacy configuration) {
         final String configuredValue = configuration.getString(DEFAULT_VIEW_KEY);
         return DefaultViewConfiguration.parseValue(configuredValue);
     }

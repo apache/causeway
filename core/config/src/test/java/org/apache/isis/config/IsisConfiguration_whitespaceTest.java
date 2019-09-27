@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IsisConfiguration_whitespaceTest {
 
-    IsisConfiguration configuration;
+    IsisConfigurationLegacy configuration;
 
     @BeforeEach
     void setUp() throws Exception {

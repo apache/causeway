@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 import lombok.val;
 
@@ -33,7 +33,7 @@ public class _Config {
 
     // -- CONFIG ACCESS
 
-    public static IsisConfiguration getConfiguration() {
+    public static IsisConfigurationLegacy getConfiguration() {
         return getLifecycleResource().getConfiguration();
     }
 

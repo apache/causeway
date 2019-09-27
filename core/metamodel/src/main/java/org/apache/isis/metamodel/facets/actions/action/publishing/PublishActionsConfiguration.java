@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.actions.action.publishing;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum PublishActionsConfiguration {
@@ -28,7 +28,7 @@ public enum PublishActionsConfiguration {
 
     private static final String PUBLISH_ACTIONS_KEY = "isis.services.publish.actions";
 
-    public static PublishActionsConfiguration parse(IsisConfiguration configuration) {
+    public static PublishActionsConfiguration parse(IsisConfigurationLegacy configuration) {
         final String configuredValue = configuration.getString(PUBLISH_ACTIONS_KEY);
         return PublishActionsConfiguration.parse(configuredValue);
     }

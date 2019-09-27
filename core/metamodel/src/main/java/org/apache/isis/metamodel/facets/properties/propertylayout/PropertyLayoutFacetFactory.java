@@ -96,7 +96,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
         }
 
         PromptStyleFacet promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(propertyLayout, getConfiguration(), holder);
+                .create(propertyLayout, getConfigurationLegacy(), holder);
 
         FacetUtil.addFacet(promptStyleFacet);
     }

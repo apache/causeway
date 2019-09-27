@@ -22,14 +22,14 @@ package org.apache.isis.runtime.system.internal;
 import java.util.TimeZone;
 
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class IsisTimeZoneInitializer {
 
-    public void initTimeZone(final IsisConfiguration configuration) {
+    public void initTimeZone(final IsisConfigurationLegacy configuration) {
         final String timeZoneSpec = configuration.getString(ConfigurationConstants.ROOT + "timezone");
         if (timeZoneSpec != null) {
             TimeZone timeZone;

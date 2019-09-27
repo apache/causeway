@@ -30,7 +30,7 @@ import com.google.common.collect.Iterables;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import de.agilecoders.wicket.core.settings.ITheme;
@@ -154,7 +154,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
         return enabledThemes;
     }
 
-    private IsisConfiguration getConfiguration() {
+    private IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

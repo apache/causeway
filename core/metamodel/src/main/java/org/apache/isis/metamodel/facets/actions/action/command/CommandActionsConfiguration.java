@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.actions.action.command;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum CommandActionsConfiguration {
@@ -28,7 +28,7 @@ public enum CommandActionsConfiguration {
 
     private static final String  COMMAND_ACTIONS_KEY = "isis.services.command.actions";
 
-    public static CommandActionsConfiguration parse(final IsisConfiguration configuration) {
+    public static CommandActionsConfiguration parse(final IsisConfigurationLegacy configuration) {
         return parse(configuration.getString(COMMAND_ACTIONS_KEY));
     }
 

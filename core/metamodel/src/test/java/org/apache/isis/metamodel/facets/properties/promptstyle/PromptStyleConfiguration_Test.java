@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -37,7 +37,7 @@ public class PromptStyleConfiguration_Test {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    IsisConfiguration mockIsisConfiguration;
+    IsisConfigurationLegacy mockIsisConfiguration;
 
     @Test
     public void when_none() throws Exception {

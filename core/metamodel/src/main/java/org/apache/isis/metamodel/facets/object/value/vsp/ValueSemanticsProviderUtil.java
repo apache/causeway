@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.facets.object.value.vsp;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -38,7 +38,7 @@ public final class ValueSemanticsProviderUtil {
 
     public static String semanticsProviderNameFromConfiguration(final Class<?> type) {
 
-        final IsisConfiguration configuration = _Config.getConfiguration();
+        final IsisConfigurationLegacy configuration = _Config.getConfiguration();
 
         final String key = SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
         final String semanticsProviderName = configuration.getString(key);

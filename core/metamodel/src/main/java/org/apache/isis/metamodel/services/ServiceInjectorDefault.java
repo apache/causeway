@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
@@ -52,7 +52,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
     private static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
     private static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
 
-    @Inject IsisConfiguration configuration;
+    @Inject IsisConfigurationLegacy configuration;
     @Inject ServiceRegistry serviceRegistry;
     @Inject InjectorMethodEvaluator injectorMethodEvaluator;
 
@@ -246,7 +246,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
      * JUnit Test support. 
      */
     public static ServiceInjectorDefault getInstanceAndInit(
-            IsisConfiguration configuration,
+            IsisConfigurationLegacy configuration,
             ServiceRegistry serviceRegistry,
             InjectorMethodEvaluator injectorMethodEvaluator) {
         val instance = new ServiceInjectorDefault();

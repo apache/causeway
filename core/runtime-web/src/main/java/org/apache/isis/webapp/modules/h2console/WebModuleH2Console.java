@@ -29,7 +29,7 @@ import org.springframework.core.annotation.Order;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
@@ -39,7 +39,7 @@ import lombok.val;
 @Singleton @Order(0)
 public class WebModuleH2Console implements WebModule  {
 
-    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private IsisConfigurationLegacy isisConfiguration;
 
     private final static String SERVLET_NAME = "H2Console";
     private final static String SERVLET_CLASS_NAME = "org.h2.server.web.WebServlet";

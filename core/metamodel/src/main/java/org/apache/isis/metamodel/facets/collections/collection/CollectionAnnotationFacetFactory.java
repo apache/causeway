@@ -119,7 +119,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 collectionDomainEventFacet.getEventType(),
                 CollectionDomainEvent.Noop.class,
                 CollectionDomainEvent.Default.class,
-                "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault", getConfiguration())) {
+                "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault", getConfigurationLegacy())) {
             FacetUtil.addFacet(collectionDomainEventFacet);
         }
 

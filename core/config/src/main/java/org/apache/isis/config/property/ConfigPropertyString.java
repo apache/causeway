@@ -21,14 +21,14 @@ package org.apache.isis.config.property;
 import java.util.AbstractMap;
 import java.util.Map;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public class ConfigPropertyString extends ConfigPropertyAbstract<String> {
     public ConfigPropertyString(final String key, final String defaultValue) {
         super(key, defaultValue);
     }
     @Override
-    public String from(final IsisConfiguration configuration) {
+    public String from(final IsisConfigurationLegacy configuration) {
         return configuration.getString(key, defaultValue);
     }
 

@@ -20,10 +20,10 @@ package org.apache.isis.config.property;
 
 import java.util.Map;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public interface ConfigProperty<T> {
-    T from(final IsisConfiguration configuration);
+    T from(final IsisConfigurationLegacy configuration);
 
     Map.Entry<String,String> of(final T value);
 

@@ -43,7 +43,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.collections._Lists.lastElementIfAny;
@@ -415,7 +415,7 @@ public class DomainObjectContainer {
 
 
     /**
-     * @deprecated - use {@link IsisConfiguration#getProperty(String)} instead.
+     * @deprecated - use {@link IsisConfigurationLegacy#getProperty(String)} instead.
      */
     @Deprecated
     @Programmatic
@@ -424,7 +424,7 @@ public class DomainObjectContainer {
     }
 
     /**
-     * @deprecated - use {@link IsisConfiguration#getProperty(String, String)} instead.
+     * @deprecated - use {@link IsisConfigurationLegacy#getProperty(String, String)} instead.
      */
     @Deprecated
     @Programmatic
@@ -433,7 +433,7 @@ public class DomainObjectContainer {
     }
 
     /**
-     * @deprecated - use {@link IsisConfiguration#asMap()} instead.
+     * @deprecated - use {@link IsisConfigurationLegacy#asMap()} instead.
      */
     @Deprecated
     @Programmatic

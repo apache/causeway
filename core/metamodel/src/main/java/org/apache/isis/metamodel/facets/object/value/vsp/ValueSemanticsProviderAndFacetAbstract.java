@@ -280,7 +280,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     // ///////////////////////////////////////////////////////////////////////////
 
     protected NumberFormat determineNumberFormat(final String suffix) {
-        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + suffix);
+        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + suffix);
         if (formatRequired != null) {
             return new DecimalFormat(formatRequired);
         } else {
@@ -289,7 +289,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     private Locale findLocale() {
-        final String localeStr = getConfiguration().getString(ConfigurationConstants.ROOT + "locale");
+        final String localeStr = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "locale");
 
         final Locale findLocale = LocaleUtil.findLocale(localeStr);
         return findLocale != null ? findLocale : Locale.getDefault();

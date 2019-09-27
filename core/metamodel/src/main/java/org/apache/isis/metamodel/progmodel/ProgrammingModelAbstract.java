@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
@@ -42,7 +42,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         IGNORE,
         HONOUR;
 
-        public static DeprecatedPolicy parse(final IsisConfiguration configuration) {
+        public static DeprecatedPolicy parse(final IsisConfigurationLegacy configuration) {
             boolean ignoreDep = configuration.getBoolean(KEY_IGNORE_DEPRECATED, false);
             return ignoreDep ? IGNORE : HONOUR;
         }

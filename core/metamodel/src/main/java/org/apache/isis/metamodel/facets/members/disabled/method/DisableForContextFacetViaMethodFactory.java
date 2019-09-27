@@ -64,7 +64,7 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
 
         Method disableMethod = null;
 
-        boolean noParamsOnly = getConfiguration().getBoolean(
+        boolean noParamsOnly = getConfigurationLegacy().getBoolean(
                 ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
                 ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
         boolean searchExactMatch = !noParamsOnly;

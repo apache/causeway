@@ -82,7 +82,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
         super(type(), holder, Money.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
         final String property = ConfigurationConstants.ROOT + "value.money.currency";
-        defaultCurrencyCode = getConfiguration().getString(property, LOCAL_CURRENCY_CODE);
+        defaultCurrencyCode = getConfigurationLegacy().getString(property, LOCAL_CURRENCY_CODE);
     }
 
     // //////////////////////////////////////////////////////////////////

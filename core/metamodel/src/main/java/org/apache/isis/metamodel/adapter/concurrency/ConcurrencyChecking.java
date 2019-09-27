@@ -23,14 +23,14 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 @Deprecated //TODO[2154] remove
 enum ConcurrencyChecking {
     NO_CHECK,
     CHECK;
 
-    public static boolean isGloballyDisabled(IsisConfiguration configuration) {
+    public static boolean isGloballyDisabled(IsisConfigurationLegacy configuration) {
         final boolean concurrencyCheckingGloballyDisabled =
                 configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
         return concurrencyCheckingGloballyDisabled;

@@ -73,6 +73,14 @@
         	<scope>provided</scope>
         </dependency>
         
+		<!-- IDE support (optional) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<version>${spring-boot.version}</version>
+			<optional>true</optional>
+		</dependency>
+        
         <!-- TESTS -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>

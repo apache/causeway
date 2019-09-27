@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IsisConfiguration_specialCharTest {
 
-    IsisConfiguration configuration;
+    IsisConfigurationLegacy configuration;
 
     private final static String specialCharString =
             "jdbc:sqlserver://HALCHILLBLAST;instance=.;databaseName=estatio";

@@ -21,7 +21,7 @@ package org.apache.isis.config.property;
 import java.util.AbstractMap;
 import java.util.Map;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public class ConfigPropertyBoolean extends ConfigPropertyAbstract<Boolean> {
 
@@ -33,7 +33,7 @@ public class ConfigPropertyBoolean extends ConfigPropertyAbstract<Boolean> {
      * @returns not-null
      */
     @Override
-    public Boolean from(final IsisConfiguration configuration) {
+    public Boolean from(final IsisConfigurationLegacy configuration) {
         return configuration.getBoolean(key, defaultValue);
     }
 

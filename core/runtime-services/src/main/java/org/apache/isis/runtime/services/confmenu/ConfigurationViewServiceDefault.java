@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 
 /**
@@ -57,7 +57,7 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
         _Config.getConfiguration().copyToMap().forEach((k, v)->add(k, v, map));
 
         // for convenience add some additional info to the top ...
-        add("[ Isis Version ]", IsisConfiguration.getVersion(), map);
+        add("[ Isis Version ]", IsisConfigurationLegacy.getVersion(), map);
         add("[ Deployment Type ]", _Context.getEnvironment().getDeploymentType().name(), map);
         add("[ Unit Testing ]", ""+_Context.getEnvironment().isUnitTesting(), map);
 

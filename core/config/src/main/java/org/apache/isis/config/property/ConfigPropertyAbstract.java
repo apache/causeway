@@ -18,7 +18,7 @@
  */
 package org.apache.isis.config.property;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public abstract class ConfigPropertyAbstract<T> implements ConfigProperty<T> {
     protected final String key;
@@ -28,6 +28,6 @@ public abstract class ConfigPropertyAbstract<T> implements ConfigProperty<T> {
         this.defaultValue = defaultValue;
     }
     @Override
-    public abstract T from(final IsisConfiguration configuration);
+    public abstract T from(final IsisConfigurationLegacy configuration);
 
 }

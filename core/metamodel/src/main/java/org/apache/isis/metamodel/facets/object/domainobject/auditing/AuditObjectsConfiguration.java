@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum AuditObjectsConfiguration {
@@ -27,7 +27,7 @@ public enum AuditObjectsConfiguration {
 
     private static final String AUDIT_OBJECTS_KEY = "isis.services.audit.objects";
 
-    public static AuditObjectsConfiguration parse(IsisConfiguration configuration) {
+    public static AuditObjectsConfiguration parse(IsisConfigurationLegacy configuration) {
         final String configuredValue = configuration.getString(AUDIT_OBJECTS_KEY);
         return AuditObjectsConfiguration.parse(configuredValue);
     }

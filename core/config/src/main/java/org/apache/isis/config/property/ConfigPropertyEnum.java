@@ -21,7 +21,7 @@ package org.apache.isis.config.property;
 import java.util.AbstractMap;
 import java.util.Map;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public class ConfigPropertyEnum<E extends Enum<E>> extends
 ConfigPropertyAbstract<E> {
@@ -29,7 +29,7 @@ ConfigPropertyAbstract<E> {
         super(key, defaultValue);
     }
     @Override
-    public E from(final IsisConfiguration configuration) {
+    public E from(final IsisConfigurationLegacy configuration) {
         return Enum.valueOf(defaultValue.getDeclaringClass(), configuration.getString(key, defaultValue.name()).toUpperCase());
     }
 

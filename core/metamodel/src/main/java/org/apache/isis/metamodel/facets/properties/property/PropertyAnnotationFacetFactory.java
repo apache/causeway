@@ -144,7 +144,7 @@ implements MetaModelValidatorRefiner {
                 PropertyDomainEvent.Noop.class,
                 PropertyDomainEvent.Default.class,
                 "isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault",
-                getConfiguration())) {
+                getConfigurationLegacy())) {
             FacetUtil.addFacet(propertyDomainEventFacet);
         }
 
@@ -244,7 +244,7 @@ implements MetaModelValidatorRefiner {
         }
 
         // check for @Property(command=...)
-        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder, getServiceInjector());
+        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfigurationLegacy(), holder, getServiceInjector());
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -281,7 +281,7 @@ implements MetaModelValidatorRefiner {
 
         // check for @Property(publishing=...)
         final PublishedPropertyFacet facet = PublishedPropertyFacetForPropertyAnnotation
-                .create(properties, getConfiguration(), holder);
+                .create(properties, getConfigurationLegacy(), holder);
 
         FacetUtil.addFacet(facet);
     }

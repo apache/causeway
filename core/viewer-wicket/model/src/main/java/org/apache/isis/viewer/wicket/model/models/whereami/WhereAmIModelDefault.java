@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.models.whereami;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.util.pchain.ParentChain;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -87,7 +87,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
         return new EntityModel(objectAdapter);
     }
 
-    private void overrideFromConfigIfNew(IsisConfiguration configuration) {
+    private void overrideFromConfigIfNew(IsisConfigurationLegacy configuration) {
 
         //[ahuber] without evidence that this significantly improves performance,
         // (skipping 2 hash-table lookups) we use the smart update idiom here ...

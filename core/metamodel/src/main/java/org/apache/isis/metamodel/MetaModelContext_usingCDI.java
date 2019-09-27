@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.cdi._CDI;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -54,9 +55,13 @@ import lombok.val;
 class MetaModelContext_usingCDI implements MetaModelContext {
 
     @Getter(lazy=true) 
-    private final IsisConfiguration configuration = 
+    private final IsisConfigurationLegacy configurationLegacy = 
     _Config.getConfiguration();
 
+    @Getter(lazy=true) 
+    private final IsisConfiguration configuration = 
+    _CDI.getSingletonElseFail(IsisConfiguration.class);
+    
     @Getter(lazy=true) 
     private final ObjectAdapterProvider objectAdapterProvider =
     _CDI.getSingletonElseFail(ObjectAdapterProvider.class);

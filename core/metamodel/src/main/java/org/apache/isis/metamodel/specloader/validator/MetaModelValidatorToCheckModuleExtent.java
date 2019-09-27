@@ -36,7 +36,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
 
     @Override
     public void validate(final ValidationFailures validationFailures) {
-        boolean check = getConfiguration()
+        boolean check = getConfigurationLegacy()
                 .getBoolean(ISIS_REFLECTOR_CHECK_MODULE_EXTENT_KEY,
                         ISIS_REFLECTOR_CHECK_MODULE_EXTENT_DEFAULT);
         if(!check) {

@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
@@ -41,7 +41,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     // -- HELPER
 
-    @Inject private IsisConfiguration configuration;
+    @Inject private IsisConfigurationLegacy configuration;
 
     private _Lazy<ProgrammingModel> programmingModel = 
             _Lazy.threadSafe(this::createProgrammingModel);

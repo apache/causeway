@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.ReflectorConstants;
 
@@ -64,7 +64,7 @@ public interface FacetFactorySet {
     class Util {
         private Util(){}
 
-        public static void includeFacetFactories(final IsisConfiguration configuration, final FacetFactorySet programmingModel) {
+        public static void includeFacetFactories(final IsisConfigurationLegacy configuration, final FacetFactorySet programmingModel) {
             final String[] facetFactoriesIncludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_INCLUDE_CLASS_NAME_LIST);
             if (facetFactoriesIncludeClassNames != null) {
                 for (final String facetFactoryClassName : facetFactoriesIncludeClassNames) {
@@ -74,7 +74,7 @@ public interface FacetFactorySet {
             }
         }
 
-        public static void excludeFacetFactories(final IsisConfiguration configuration, final FacetFactorySet programmingModel) {
+        public static void excludeFacetFactories(final IsisConfigurationLegacy configuration, final FacetFactorySet programmingModel) {
             final String[] facetFactoriesExcludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST);
             for (final String facetFactoryClassName : facetFactoriesExcludeClassNames) {
                 final Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);

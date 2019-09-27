@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader.validator;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.FacetFactory;
@@ -32,7 +32,7 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
 
     private final ValidationFailures failures = new ValidationFailures();
 
-    private IsisConfiguration configuration;
+    private IsisConfigurationLegacy configuration;
 
     /**
      * @param facet
@@ -76,7 +76,7 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
         validationFailures.addAll(failures);
     }
 
-    public void setConfiguration(IsisConfiguration configuration) {
+    public void setConfiguration(IsisConfigurationLegacy configuration) {
         this.configuration = configuration;
     }
 

@@ -66,7 +66,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.config.property.ConfigPropertyEnum;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -539,7 +539,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     // -- DEPS
 
-    protected IsisConfiguration getConfiguration() {
+    protected IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

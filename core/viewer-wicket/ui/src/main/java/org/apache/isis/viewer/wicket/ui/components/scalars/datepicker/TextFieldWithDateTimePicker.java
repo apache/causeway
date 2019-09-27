@@ -31,7 +31,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
@@ -162,7 +162,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         return $(this).chain("datetimepicker", config).get();
     }
 
-    IsisConfiguration getConfiguration() {
+    IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

@@ -25,7 +25,7 @@ import java.util.Map;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -39,7 +39,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
 
     public static ImmutableFacet create(
             final List<DomainObject> domainObjects,
-            final IsisConfiguration configuration,
+            final IsisConfigurationLegacy configuration,
             final FacetHolder holder) {
 
         final EditingObjectsConfiguration setting = EditingObjectsConfiguration.parse(configuration);

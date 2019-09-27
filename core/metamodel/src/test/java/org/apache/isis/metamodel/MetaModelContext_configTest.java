@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,8 +67,8 @@ class MetaModelContext_configTest {
 
     // -- HELPER
 
-    private IsisConfiguration config() {
-        return MetaModelContext.current().getConfiguration();
+    private IsisConfigurationLegacy config() {
+        return MetaModelContext.current().getConfigurationLegacy();
     }
 
 }

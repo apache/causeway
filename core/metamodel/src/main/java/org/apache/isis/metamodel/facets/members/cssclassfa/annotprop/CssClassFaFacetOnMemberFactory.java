@@ -101,7 +101,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     private Map<Pattern, String> getFaIconByPattern() {
         if (faIconByPattern == null) {
             // build lazily
-            final String cssClassFaPatterns = getConfiguration().getString("isis.reflector.facet.cssClassFa.patterns");
+            final String cssClassFaPatterns = getConfigurationLegacy().getString("isis.reflector.facet.cssClassFa.patterns");
             this.faIconByPattern = buildFaIconByPattern(cssClassFaPatterns);
         }
         return faIconByPattern;

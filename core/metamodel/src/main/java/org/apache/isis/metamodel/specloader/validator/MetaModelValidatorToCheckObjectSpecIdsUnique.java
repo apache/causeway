@@ -43,7 +43,7 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
 
     @Override
     public void validate(final ValidationFailures validationFailures) {
-        boolean check = getConfiguration()
+        boolean check = getConfigurationLegacy()
                 .getBoolean(ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_KEY,
                         ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_DEFAULT);
         if(!check) {

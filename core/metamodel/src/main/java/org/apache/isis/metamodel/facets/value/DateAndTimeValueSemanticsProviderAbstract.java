@@ -48,7 +48,7 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent) {
         super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE);
 
-        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.datetime");
+        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.datetime");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

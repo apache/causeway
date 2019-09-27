@@ -435,7 +435,7 @@ implements ImperativeFacet {
             return null;
         }
 
-        final boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
+        final boolean filterForVisibility = getConfigurationLegacy().getBoolean("isis.reflector.facet.filterVisibility", true);
         if (!filterForVisibility) {
             return resultAdapter;
         }

@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -36,7 +36,7 @@ public final class DefaultsProviderUtil {
 
     public static String defaultsProviderNameFromConfiguration(final Class<?> type) {
 
-        final IsisConfiguration configuration = _Config.getConfiguration();
+        final IsisConfigurationLegacy configuration = _Config.getConfiguration();
 
         final String key = DEFAULTS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
         final String defaultsProviderName = configuration.getString(key);

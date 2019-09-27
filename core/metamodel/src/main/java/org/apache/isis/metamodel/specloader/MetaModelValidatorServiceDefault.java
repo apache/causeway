@@ -24,7 +24,7 @@ import javax.inject.Singleton;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
@@ -47,7 +47,7 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
 
     // -- HELPER
 
-    @Inject private IsisConfiguration configuration;
+    @Inject private IsisConfigurationLegacy configuration;
     @Inject private ProgrammingModelService programmingModelService;
     @Inject private ServiceRegistry serviceRegistry; 
 

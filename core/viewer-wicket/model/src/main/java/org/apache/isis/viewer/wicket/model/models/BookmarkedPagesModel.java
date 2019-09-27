@@ -27,7 +27,7 @@ import java.util.Objects;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtime.system.context.IsisContext;
 
@@ -143,7 +143,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     // //////////////////////////////////////
 
 
-    protected IsisConfiguration getConfiguration() {
+    protected IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

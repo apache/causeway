@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
@@ -37,7 +37,7 @@ public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFa
 
     public static DefaultViewFacet create(
             final List<CollectionLayout> collectionLayouts,
-            final IsisConfiguration configuration,
+            final IsisConfigurationLegacy configuration,
             final FacetHolder holder) {
 
         final String defaultView = collectionLayouts.stream()

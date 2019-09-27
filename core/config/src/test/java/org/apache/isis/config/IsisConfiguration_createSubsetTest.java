@@ -39,7 +39,7 @@ class IsisConfiguration_createSubsetTest {
 
         val configuration = _Config.getConfiguration();
 
-        final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
+        final IsisConfigurationLegacy subset = configuration.subsetWithNamesStripped("foo");
         assertEquals(true, subset.isEmpty());
     }
 
@@ -50,7 +50,7 @@ class IsisConfiguration_createSubsetTest {
 
         val configuration = _Config.getConfiguration();
 
-        final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
+        final IsisConfigurationLegacy subset = configuration.subsetWithNamesStripped("foo");
         assertEquals(true, subset.isEmpty());
     }
 
@@ -61,7 +61,7 @@ class IsisConfiguration_createSubsetTest {
 
         val configuration = _Config.getConfiguration();
 
-        final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
+        final IsisConfigurationLegacy subset = configuration.subsetWithNamesStripped("foo");
         assertEquals(true, subset.isEmpty());
     }
 
@@ -72,7 +72,7 @@ class IsisConfiguration_createSubsetTest {
 
         val configuration = _Config.getConfiguration();
 
-        final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
+        final IsisConfigurationLegacy subset = configuration.subsetWithNamesStripped("foo");
 
         assertEquals(1, subset.copyToMap().size());
         assertEquals("fozValue", subset.getString("foz"));
@@ -86,7 +86,7 @@ class IsisConfiguration_createSubsetTest {
 
         val configuration = _Config.getConfiguration();
 
-        final IsisConfiguration subset = configuration.subsetWithNamesStripped("foo");
+        final IsisConfigurationLegacy subset = configuration.subsetWithNamesStripped("foo");
 
         assertEquals("fozValue", subset.getString("foz"));
         assertEquals("fazValue", subset.getString("faz"));

@@ -20,7 +20,7 @@ package org.apache.isis.runtime.system.context.session;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -41,7 +41,7 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 public interface RuntimeContext {
 
     AuthenticationSession getAuthenticationSession();
-    IsisConfiguration getConfiguration();
+    IsisConfigurationLegacy getConfiguration();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();
     ServiceRegistry getServiceRegistry();

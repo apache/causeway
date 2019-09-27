@@ -39,7 +39,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
@@ -120,7 +120,7 @@ public class MmvErrorPage extends WebPage {
     // System components
     // ///////////////////////////////////////////////////
 
-    protected IsisConfiguration getConfiguration() {
+    protected IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

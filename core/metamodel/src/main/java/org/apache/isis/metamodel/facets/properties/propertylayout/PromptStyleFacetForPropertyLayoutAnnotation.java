@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
@@ -42,7 +42,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
 
     public static PromptStyleFacet create(
             final List<PropertyLayout> propertyLayouts,
-            final IsisConfiguration configuration,
+            final IsisConfigurationLegacy configuration,
             final FacetHolder holder) {
 
         return propertyLayouts.stream()

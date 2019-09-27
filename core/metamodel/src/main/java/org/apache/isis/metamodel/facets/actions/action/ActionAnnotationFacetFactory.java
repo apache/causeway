@@ -120,7 +120,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     actionDomainEventFacet.getEventType(),
                     ActionDomainEvent.Noop.class,
                     ActionDomainEvent.Default.class,
-                    "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", getConfiguration())) {
+                    "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", getConfigurationLegacy())) {
                 FacetUtil.addFacet(actionDomainEventFacet);
             }
 
@@ -210,7 +210,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(command=...)
-        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfiguration(), getServiceInjector(), holder);
+        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfigurationLegacy(), getServiceInjector(), holder);
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -232,7 +232,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(publishing=...)
-        PublishedActionFacet facet = PublishedActionFacetForActionAnnotation.create(actions, getConfiguration(), holder);
+        PublishedActionFacet facet = PublishedActionFacetForActionAnnotation.create(actions, getConfigurationLegacy(), holder);
 
         FacetUtil.addFacet(facet);
     }

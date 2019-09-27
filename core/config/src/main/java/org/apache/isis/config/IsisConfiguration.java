@@ -16,230 +16,75 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.config;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Map;
-import java.util.TreeMap;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
-
-import lombok.val;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * Immutable set of properties representing the configuration of the running
- * system.
+ * 
+ * Configuration 'beans' with meta-data (IDE-support).
+ * 
+ * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
+ * @apiNote should ultimately replace {@link IsisConfigurationLegacy}
+ * 
+ * @since 2.0
+ *
  */
-public interface IsisConfiguration {
+@Configuration
+@ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
+public class IsisConfiguration {
 
-    //TODO[2112] remove comment    
-    //    /**
-    //     * How to handle the case when the configuration already contains the key being added.
-    //     */
-    //    public enum ContainsPolicy {
-    //        /**
-    //         * If the configuration already contains the key, then ignore the new value.
-    //         */
-    //        IGNORE,
-    //        /**
-    //         * If the configuration already contains the key, then overwrite with the new.
-    //         */
-    //        OVERWRITE,
-    //        /**
-    //         * If the configuration already contains the key, then throw an exception.
-    //         */
-    //        EXCEPTION
-    //    }
+    @Getter
+    private final Reflector reflector = new Reflector();
+    public static class Reflector {
 
+        @Getter
+        private final ExplicitAnnotations explicitAnnotations = new ExplicitAnnotations();
+        public static class ExplicitAnnotations {
 
-    // -- VERSION
-
-    public static String getVersion() {
-        return "2.0.0-M3";
+            /**
+             * Whether or not a public method needs to be annotated with
+             * @{@link org.apache.isis.applib.annotation.Action} in order to be picked up as an action in the metamodel.
+             */
+            @Getter @Setter
+            private boolean action = false;
+        }
     }
 
-    // --
+    @Getter
+    private final Services services = new Services();
+    public static class Services {
 
-    /**
-     * Creates a copy of this instance, that is a new IsisConfiguration populated 
-     * with a copy of the underlying key/value pairs.
-     *
-     */
-    IsisConfiguration copy();
+        @Getter
+        private final Services.Container container = new Services.Container();
 
-    /**
-     * Creates a new IsisConfiguration containing the properties starting with
-     * the specified prefix. The names of the new properties will have the
-     * prefixed stripped. This is similar to the {@link #subset(String)}
-     * method, except the property names have their prefixes removed.
-     *
-     * @see #subset(String)
-     */
-    IsisConfiguration subsetWithNamesStripped(String prefix);
+        public static class Container {
 
-    /**
-     * Creates a new IsisConfiguration containing the properties starting with
-     * the specified prefix. The names of the properties in the copy are the
-     * same as in the original, ie the prefix is not removed. This is similar to
-     * the {@link #subsetWithNamesStripped(String)} method except the names of the
-     * properties are not altered when copied.
-     *
-     * @see #subsetWithNamesStripped(String)
-     */
-    IsisConfiguration subset(String withPrefix);
+            /**
+             * Normally any queries are automatically preceded by flushing pending executions.
+             *
+             * <p>
+             * This key allows this behaviour to be disabled.
+             *
+             * <p>
+             *     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)
+             *     where it was found that the autoflush behaviour was causing a (now unrepeatable)
+             *     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.
+             *     However, that this could be circumvented by removing the call to flush().
+             *     We don't want to break existing apps that might rely on this behaviour, on the
+             *     other hand we want to fix the memory leak.  Adding this configuration property
+             *     seems the most prudent way forward.
+             * </p>
+             */
+            @Getter @Setter
+            private boolean disableAutoFlush = false;
 
-    /**
-     * Gets the boolean value for the specified name where no value or 'on' will
-     * result in true being returned; anything gives false. If no boolean
-     * property is specified with this name then false is returned.
-     *
-     * @param name
-     *            the property name
-     */
-    boolean getBoolean(String name);
-
-    /**
-     * Gets the boolean value for the specified name. If no property is
-     * specified with this name then the specified default boolean value is
-     * returned.
-     *
-     * @param name
-     *            the property name
-     * @param defaultValue
-     *            the value to use as a default
-     */
-    boolean getBoolean(String name, boolean defaultValue);
-
-    /**
-     * Gets the color for the specified name. If no color property is specified
-     * with this name then null is returned.
-     *
-     * @param name
-     *            the property name
-     */
-    Color getColor(String name);
-
-    /**
-     * Gets the color for the specified name. If no color property is specified
-     * with this name then the specified default color is returned.
-     *
-     * @param name
-     *            the property name
-     * @param defaultValue
-     *            the value to use as a default
-     */
-    Color getColor(String name, Color defaultValue);
-
-    /**
-     * Gets the font for the specified name. If no font property is specified
-     * with this name then null is returned.
-     *
-     * @param name
-     *            the property name
-     */
-    Font getFont(String name);
-
-    /**
-     * Gets the font for the specified name. If no font property is specified
-     * with this name then the specified default font is returned.
-     *
-     * @param name
-     *            the property name
-     * @param defaultValue
-     *            the color to use as a default
-     */
-    Font getFont(String name, Font defaultValue);
-
-    /**
-     * Returns a list of entries for the single configuration property with the
-     * specified name.
-     *
-     * <p>
-     * If there is no matching property then returns an empty array.
-     */
-    String[] getList(String name);
-
-    /**
-     * Returns a list of entries for the single configuration property with the
-     * specified name.
-     */
-    String[] getList(String name, String defaultListAsCommaSeparatedArray);
-
-    /**
-     * Gets the number value for the specified name. If no property is specified
-     * with this name then 0 is returned.
-     *
-     * @param name
-     *            the property name
-     */
-    int getInteger(String name);
-
-    /**
-     * Gets the number value for the specified name. If no property is specified
-     * with this name then the specified default number value is returned.
-     *
-     * @param name
-     *            the property name
-     * @param defaultValue
-     *            the value to use as a default
-     */
-    int getInteger(String name, int defaultValue);
-
-    /**
-     * Returns the configuration property with the specified name. If there is
-     * no matching property then null is returned.
-     */
-    String getString(String name);
-
-    String getString(String name, String defaultValue);
-
-    boolean hasProperty(String name);
-
-    boolean isEmpty();
-
-
-    /**
-     * A mutable copy of the current set of properties (name/values) held in this configuration.
-     */
-    Map<String, String> copyToMap();
-
-    /**
-     * pre-bootstrapping configuration
-     */
-    default public IsisSystemEnvironment getEnvironment() {
-        return _Context.getEnvironment();
+        }
     }
 
-    // -- TO STRING
-
-    default public String toStringFormatted() {
-
-        val sb = new StringBuilder();
-        val configuration = this.subset("isis");
-
-        final Map<String, String> map = 
-                ConfigurationConstants.maskIfProtected(configuration.copyToMap(), TreeMap::new);
-
-        String head = String.format("APACHE ISIS %s (%s) ", 
-                IsisConfiguration.getVersion(), getEnvironment().getDeploymentType().name());
-        final int fillCount = 46-head.length();
-        final int fillLeft = fillCount/2;
-        final int fillRight = fillCount-fillLeft;
-        head = _Strings.padStart("", fillLeft, ' ') + head + _Strings.padEnd("", fillRight, ' ');
-
-        sb.append("================================================\n");
-        sb.append("="+head+"=\n");
-        sb.append("================================================\n");
-        map.forEach((k,v)->{
-            sb.append(k+" -> "+v).append("\n");
-        });
-        sb.append("================================================\n");
-
-        return sb.toString();
-    }
-
+    
 }

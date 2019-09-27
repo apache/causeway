@@ -155,13 +155,13 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     }
 
     private int getPagedConfigSetting(final String subkey, final int defaultValue) {
-        return getConfiguration().getInteger("isis.viewers.paged." + subkey, defaultValue);
+        return getConfigurationLegacy().getInteger("isis.viewers.paged." + subkey, defaultValue);
     }
 
     private String getPropParamLayoutConfigSetting(final String layout, String... subkeys) {
         for (String subkey : subkeys) {
             final String layoutKey = "isis.viewers." + layout + "." + subkey;
-            final String value = getConfiguration().getString(layoutKey);
+            final String value = getConfigurationLegacy().getString(layoutKey);
             if(value != null) {
                 return value;
             }

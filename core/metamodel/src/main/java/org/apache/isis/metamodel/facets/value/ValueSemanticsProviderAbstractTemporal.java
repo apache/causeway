@@ -112,7 +112,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         configureFormats();
 
         this.propertyType = propertyType;
-        configuredFormat = getConfiguration().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
+        configuredFormat = getConfigurationLegacy().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
         buildFormat(configuredFormat);
 
         encodingFormat = formats().get(ISO_ENCODING_FORMAT);

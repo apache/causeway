@@ -44,7 +44,7 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
     public JodaDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue) {
         super("date", holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
 
-        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.date");
+        final String formatRequired = getConfigurationLegacy().getString(ConfigurationConstants.ROOT + "value.format.date");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

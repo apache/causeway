@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -171,7 +171,7 @@ implements MetaModelValidatorRefiner {
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final IsisConfiguration configuration = _Config.getConfiguration(); 
+        final IsisConfigurationLegacy configuration = _Config.getConfiguration(); 
         final List<TypeValidator> typeValidators = getTypeValidators(configuration);
         final List<PropertyValidator> propertyValidators = getPropertyValidators(configuration);
 
@@ -221,7 +221,7 @@ implements MetaModelValidatorRefiner {
         metaModelValidator.add(validator);
     }
 
-    private List<TypeValidator> getTypeValidators(final IsisConfiguration configuration) {
+    private List<TypeValidator> getTypeValidators(final IsisConfigurationLegacy configuration) {
 
         final List<TypeValidator> typeValidators = _Lists.newArrayList();
         if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT_DEFAULT)) {
@@ -236,7 +236,7 @@ implements MetaModelValidatorRefiner {
         return typeValidators;
     }
 
-    private List<PropertyValidator> getPropertyValidators(final IsisConfiguration configuration) {
+    private List<PropertyValidator> getPropertyValidators(final IsisConfigurationLegacy configuration) {
         final List<PropertyValidator> propertyValidators = _Lists.newArrayList();
         if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER_DEFAULT)) {
             propertyValidators.add(new PropertyValidatorForReferenceTypes());

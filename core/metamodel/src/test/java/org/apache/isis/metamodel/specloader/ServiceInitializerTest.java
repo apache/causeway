@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -51,7 +51,7 @@ public class ServiceInitializerTest {
     private Map<String,String> props;
 
     @Mock
-    private IsisConfiguration configuration;
+    private IsisConfigurationLegacy configuration;
     private ServiceInitializer serviceInitializer;
 
     @Rule

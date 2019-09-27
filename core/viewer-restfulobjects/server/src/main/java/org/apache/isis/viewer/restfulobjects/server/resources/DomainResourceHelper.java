@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -87,7 +87,7 @@ class DomainResourceHelper {
         }
 
         @Override
-        public IsisConfiguration getConfiguration() {
+        public IsisConfigurationLegacy getConfiguration() {
             return rendererContext.getConfiguration();
         }
 

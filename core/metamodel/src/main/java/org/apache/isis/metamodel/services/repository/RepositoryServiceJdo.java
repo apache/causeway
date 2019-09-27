@@ -33,7 +33,7 @@ import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.config.IsisConfigProperties;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -48,7 +48,7 @@ public class RepositoryServiceJdo implements RepositoryService {
     private boolean autoFlush;
 
     @Inject
-    IsisConfigProperties isisConfigProperties;
+    IsisConfiguration isisConfigProperties;
 
     @PostConstruct
     public void init() {

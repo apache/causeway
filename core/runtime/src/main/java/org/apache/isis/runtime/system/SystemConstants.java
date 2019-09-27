@@ -20,7 +20,7 @@
 package org.apache.isis.runtime.system;
 
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 public final class SystemConstants {
 
@@ -41,7 +41,7 @@ public final class SystemConstants {
 
     /**
      * Key by which requested fixture (eg via command line) is made available in
-     * {@link IsisConfiguration}.
+     * {@link IsisConfigurationLegacy}.
      */
     public final static String FIXTURE_KEY = ConfigurationConstants.ROOT + "fixtures";
 
@@ -57,7 +57,7 @@ public final class SystemConstants {
 
     /**
      * Key by which requested user (eg via command line) is made available in
-     * {@link IsisConfiguration} .
+     * {@link IsisConfigurationLegacy} .
      *
      * @deprecated
      */
@@ -66,7 +66,7 @@ public final class SystemConstants {
 
     /**
      * Key by which requested password (eg via command line) is made available
-     * in {@link IsisConfiguration}.
+     * in {@link IsisConfigurationLegacy}.
      *
      * @deprecated
      */

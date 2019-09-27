@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.facets.object.encodeable;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
@@ -33,7 +33,7 @@ public final class EncoderDecoderUtil {
     public static final String ENCODER_DECODER_NAME_KEY_PREFIX = "isis.reflector.java.facets.encoderDecoder.";
     public static final String ENCODER_DECODER_NAME_KEY_SUFFIX = ".encoderDecoderName";
 
-    public static String encoderDecoderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
+    public static String encoderDecoderNameFromConfiguration(final Class<?> type, final IsisConfigurationLegacy configuration) {
         final String key = ENCODER_DECODER_NAME_KEY_PREFIX + type.getCanonicalName() + ENCODER_DECODER_NAME_KEY_SUFFIX;
         final String encoderDecoderName = configuration.getString(key);
         return !_Strings.isNullOrEmpty(encoderDecoderName) ? encoderDecoderName : null;

@@ -38,7 +38,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.jdo.datanucleus.CreateSchemaObjectFromClassMetadata;
 import org.apache.isis.jdo.datanucleus.DataNucleusLifeCycleHelper;
 import org.apache.isis.jdo.datanucleus.DataNucleusPropertiesAware;
@@ -86,13 +86,13 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     ///////////////////////////////////////////////////////////////////////////
 
     private final Set<String> persistableClassNameSet;
-    private final IsisConfiguration jdoObjectstoreConfig;
+    private final IsisConfigurationLegacy jdoObjectstoreConfig;
     private final Map<String, String> datanucleusProps;
 
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents5(
-            final IsisConfiguration configuration,
+            final IsisConfigurationLegacy configuration,
             final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
 

@@ -29,7 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
@@ -156,7 +156,7 @@ public class ThemeChooser extends Panel {
         return IsisWicketThemeSupport.getInstance();
     }
 
-    private IsisConfiguration getConfiguration() {
+    private IsisConfigurationLegacy getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

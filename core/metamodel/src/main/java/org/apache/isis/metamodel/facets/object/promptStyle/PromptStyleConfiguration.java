@@ -19,7 +19,7 @@
 package org.apache.isis.metamodel.facets.object.promptStyle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 
 
 public class PromptStyleConfiguration {
@@ -28,7 +28,7 @@ public class PromptStyleConfiguration {
 
     public static final String PROMPT_STYLE_KEY = "isis.viewer.wicket.promptStyle";
 
-    public static PromptStyle parse(final IsisConfiguration configuration) {
+    public static PromptStyle parse(final IsisConfigurationLegacy configuration) {
         final String configuredValue = configuration.getString(PROMPT_STYLE_KEY);
         return PromptStyleConfiguration.parse(configuredValue);
     }

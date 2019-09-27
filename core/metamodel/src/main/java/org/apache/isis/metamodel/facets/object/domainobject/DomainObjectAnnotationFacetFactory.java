@@ -137,7 +137,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
         // check for @DomainObject(auditing=....)
         AuditableFacet auditableFacet = AuditableFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfiguration(), holder);
+                .create(domainObjects, getConfigurationLegacy(), holder);
 
         // then add
         FacetUtil.addFacet(auditableFacet);
@@ -160,7 +160,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
         // check from @DomainObject(publishing=...)
         PublishedObjectFacet publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfiguration(), facetHolder);
+                .create(domainObjects, getConfigurationLegacy(), facetHolder);
 
         // then add
         FacetUtil.addFacet(publishedObjectFacet);
@@ -247,7 +247,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
         // check from @DomainObject(editing=...)
         ImmutableFacet facet = ImmutableFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfiguration(), facetHolder);
+                .create(domainObjects, getConfigurationLegacy(), facetHolder);
 
         // then add
         FacetUtil.addFacet(facet);
@@ -351,7 +351,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectCreatedEvent.Noop.class,
                 ObjectCreatedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
-                getConfiguration())
+                getConfigurationLegacy())
                 )
         .findFirst()
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
@@ -369,7 +369,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectLoadedEvent.Noop.class,
                 ObjectLoadedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
-                getConfiguration())
+                getConfigurationLegacy())
                 )
         .findFirst()
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
@@ -387,7 +387,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectPersistingEvent.Noop.class,
                 ObjectPersistingEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
-                getConfiguration())
+                getConfigurationLegacy())
                 )
         .findFirst()
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
@@ -405,7 +405,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectPersistedEvent.Noop.class,
                 ObjectPersistedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
-                getConfiguration())
+                getConfigurationLegacy())
                 )
         .findFirst()
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
@@ -423,7 +423,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectRemovingEvent.Noop.class,
                 ObjectRemovingEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
-                getConfiguration())
+                getConfigurationLegacy())
                 )
         .findFirst()
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
@@ -441,7 +441,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectUpdatedEvent.Noop.class,
                 ObjectUpdatedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
-                getConfiguration())
+                getConfigurationLegacy())
                 )
         .findFirst()
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
@@ -459,7 +459,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectUpdatingEvent.Noop.class,
                 ObjectUpdatingEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
-                getConfiguration())
+                getConfigurationLegacy())
                 )
         .findFirst()
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(

@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -112,8 +112,8 @@ public interface IsisContext {
      * @return framework's IsisConfiguration
      * @throws NoSuchElementException - if IsisConfiguration not managed
      */
-    public static IsisConfiguration getConfiguration() {
-        return MetaModelContext.current().getConfiguration();
+    public static IsisConfigurationLegacy getConfiguration() {
+        return MetaModelContext.current().getConfigurationLegacy();
         //return _Config.getConfiguration(); 
     }
 
