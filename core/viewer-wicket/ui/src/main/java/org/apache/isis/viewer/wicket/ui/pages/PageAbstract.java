@@ -540,7 +540,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // -- DEPS
 
     protected IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getConfigurationLegacy();
     }
 
     protected ServiceRegistry getServiceRegistry() {

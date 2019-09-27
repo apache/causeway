@@ -144,7 +144,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
 
     protected IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getConfigurationLegacy();
     }
 
 

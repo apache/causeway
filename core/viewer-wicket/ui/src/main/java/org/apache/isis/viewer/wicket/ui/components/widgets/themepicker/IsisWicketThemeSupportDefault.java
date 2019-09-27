@@ -155,7 +155,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
     }
 
     private IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getConfigurationLegacy();
     }
 
 }

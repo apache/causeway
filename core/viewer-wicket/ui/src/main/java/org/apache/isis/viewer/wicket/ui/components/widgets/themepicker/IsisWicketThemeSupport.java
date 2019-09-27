@@ -59,7 +59,7 @@ public interface IsisWicketThemeSupport {
     /*private*/ static IsisWicketThemeSupport createInstance() {
 
 
-        val configuration = IsisContext.getConfiguration();
+        val configuration = IsisContext.getConfigurationLegacy();
 
         val themeSupportClassName = configuration.getString(
                 THEME_SUPPORT_PROVIDER_KEY, THEME_SUPPORT_DEFAULT_CLASS.getName());

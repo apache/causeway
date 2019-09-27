@@ -93,7 +93,7 @@ implements LinksProvider, UiHintContainer {
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
 
                 //XXX lombok issue, cannot use val here 
-                boolean isBulkLoad = IsisContext.getConfiguration().getBoolean(KEY_BULK_LOAD, false);
+                boolean isBulkLoad = IsisContext.getConfigurationLegacy().getBoolean(KEY_BULK_LOAD, false);
                 final Stream<ObjectAdapter> resolveResults = isBulkLoad
                         ? loadInBulk(entityCollectionModel)
                                 : loadOneByOne(entityCollectionModel);

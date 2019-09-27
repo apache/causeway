@@ -163,7 +163,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     }
 
     IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getConfigurationLegacy();
     }
 
     IsisSessionFactory getIsisSessionFactory() {

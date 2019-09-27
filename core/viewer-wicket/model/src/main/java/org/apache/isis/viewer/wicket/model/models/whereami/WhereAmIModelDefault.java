@@ -47,7 +47,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
     public WhereAmIModelDefault(EntityModel startOfChain) {
         this.startOfChain = startOfChain;
 
-        overrideFromConfigIfNew(IsisContext.getConfiguration());
+        overrideFromConfigIfNew(IsisContext.getConfigurationLegacy());
 
         final ObjectAdapter adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();

@@ -139,7 +139,7 @@ public class AccountManagementPageAbstract extends WebPage {
     // ///////////////////////////////////////////////////
 
     protected IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getConfigurationLegacy();
     }
 
     protected IsisSessionFactory getIsisSessionFactory() {

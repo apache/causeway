@@ -50,7 +50,7 @@ public class HsqlDbManagerMenu {
 
     @PostConstruct
     public void init() {
-        this.url = IsisContext.getConfiguration()
+        this.url = IsisContext.getConfigurationLegacy()
                 .getString("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL");
     }
 

@@ -420,7 +420,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public String getProperty(String name) {
-    	return IsisContext.getConfiguration().getString(name);
+    	return IsisContext.getConfigurationLegacy().getString(name);
     }
 
     /**
@@ -429,7 +429,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public String getProperty(String name, String defaultValue) {
-    	return IsisContext.getConfiguration().getString(name, defaultValue);
+    	return IsisContext.getConfigurationLegacy().getString(name, defaultValue);
     }
 
     /**
@@ -438,7 +438,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public List<String> getPropertyNames() {
-        return new ArrayList<>(IsisContext.getConfiguration().copyToMap().keySet());
+        return new ArrayList<>(IsisContext.getConfigurationLegacy().copyToMap().keySet());
     }
 
     /**

@@ -224,7 +224,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @Override
     protected void init() {
 
-        val configuration = IsisContext.getConfiguration();
+        val configuration = IsisContext.getConfigurationLegacy();
         val serviceRegistry = IsisContext.getServiceRegistry();
         //val serviceInjector = IsisContext.getServiceInjector();
 

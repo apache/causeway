@@ -121,7 +121,7 @@ public class MmvErrorPage extends WebPage {
     // ///////////////////////////////////////////////////
 
     protected IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getConfigurationLegacy();
     }
 
     IsisSessionFactory getIsisSessionFactory() {

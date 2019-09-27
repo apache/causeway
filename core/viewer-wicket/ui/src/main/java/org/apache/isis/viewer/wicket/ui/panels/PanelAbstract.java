@@ -168,7 +168,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
     }
 
     protected IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getConfigurationLegacy();
     }
 
     public SpecificationLoader getSpecificationLoader() {
