@@ -20,18 +20,15 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.config.IsisConfigProperties;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.commons.ToString;
@@ -159,8 +156,8 @@ public class FacetedMethodsBuilder {
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
 
-        this.explicitAnnotationsForActions = _Config.getConfiguration()
-                .getBoolean(ConfigurationConstants.Keys.Reflector.explicitAnnotationsForActions);
+        final IsisConfigProperties isisConfigProperties = _Spring.getSingletonElseFail(IsisConfigProperties.class);
+        this.explicitAnnotationsForActions = isisConfigProperties.getReflector().getExplicitAnnotations().isAction();
 
     }
 

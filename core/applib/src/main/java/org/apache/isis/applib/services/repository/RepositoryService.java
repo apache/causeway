@@ -27,24 +27,6 @@ import org.apache.isis.applib.query.Query;
 public interface RepositoryService {
 
     /**
-     * Normally any queries are automatically preceded by flushing pending executions.
-     *
-     * <p>
-     * This key allows this behaviour to be disabled.
-     *
-     * <p>
-     *     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)
-     *     where it was found that the autoflush behaviour was causing a (now unrepeatable)
-     *     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.
-     *     However, that this could be circumvented by removing the call to flush().
-     *     We don't want to break existing apps that might rely on this behaviour, on the
-     *     other hand we want to fix the memory leak.  Adding this configuration property
-     *     seems the most prudent way forward.
-     * </p>
-     */
-    String KEY_DISABLE_AUTOFLUSH = "isis.services.container.disableAutoFlush";
-
-    /**
      * Same as {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)}; provided as a
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
      */

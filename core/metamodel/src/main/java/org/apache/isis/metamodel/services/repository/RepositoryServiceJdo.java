@@ -33,6 +33,7 @@ import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.config.IsisConfigProperties;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -41,17 +42,17 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
 @Singleton
 public class RepositoryServiceJdo implements RepositoryService {
 
     private boolean autoFlush;
 
+    @Inject
+    IsisConfigProperties isisConfigProperties;
 
     @PostConstruct
     public void init() {
-        final boolean disableAutoFlush = getConfiguration().getBoolean(KEY_DISABLE_AUTOFLUSH, false);
+        final boolean disableAutoFlush = isisConfigProperties.getServices().getContainer().isDisableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
 
