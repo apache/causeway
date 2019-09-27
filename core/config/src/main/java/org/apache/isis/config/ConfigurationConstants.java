@@ -28,10 +28,11 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 public final class ConfigurationConstants {
 
-    public static final String ROOT = "isis.";
-
     public static final String LIST_SEPARATOR = ",";
     public static final String DELIMITER = ".";
+    public static final String ROOT_PREFIX = "isis";
+    public static final String ROOT = ROOT_PREFIX + DELIMITER;
+
     public static final String DEFAULT_CONFIG_DIRECTORY = "config";
     public static final String WEBINF_DIRECTORY = "WEB-INF";
     public static final String WEBINF_FULL_DIRECTORY = "src/main/webapp/" + WEBINF_DIRECTORY;
@@ -43,8 +44,6 @@ public final class ConfigurationConstants {
 
         public static final class Reflector {
 
-            public static final String explicitAnnotationsForActions = 
-                    ROOT + "reflector.explicitAnnotations.action";
 
             public static final String viewModelSemanticCheckingFacetFactoryEnable = 
                     ROOT + "reflector.facets.ViewModelSemanticCheckingFacetFactory.enable";
