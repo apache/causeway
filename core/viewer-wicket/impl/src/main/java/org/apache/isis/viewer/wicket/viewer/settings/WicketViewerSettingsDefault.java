@@ -42,19 +42,19 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     @Override
     public int getMaxTitleLengthInStandaloneTables() {
-        return getConfigurationLegacy().getInteger("isis.viewer.wicket.maxTitleLengthInStandaloneTables", getMaxTitleLengthInTables());
+        return getConfiguration().getViewer().getWicket().getMaxTitleLengthInStandaloneTables();
     }
 
     @Override
     public int getMaxTitleLengthInParentedTables() {
-        return getConfigurationLegacy().getInteger("isis.viewer.wicket.maxTitleLengthInParentedTables", getMaxTitleLengthInTables());
+        return getConfiguration().getViewer().getWicket().getMaxTitleLengthInParentedTables();
     }
 
     /**
      * Fallback for either {@link #getMaxTitleLengthInParentedTables()} and {@link #getMaxTitleLengthInParentedTables()}
      */
     private int getMaxTitleLengthInTables() {
-        return getConfigurationLegacy().getInteger("isis.viewer.wicket.maxTitleLengthInTables", 12);
+        return getConfiguration().getViewer().getWicket().getMaxTitleLengthInTables();
     }
 
     @Override

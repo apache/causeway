@@ -131,6 +131,24 @@ public class IsisConfiguration {
             private PromptStyle promptStyle = PromptStyle.INLINE;
 
             private boolean showFooter = true;
+
+            private int maxTitleLengthInTables = 12;
+
+            private Integer maxTitleLengthInParentedTables;
+            public int getMaxTitleLengthInParentedTables() {
+                return maxTitleLengthInParentedTables != null ? maxTitleLengthInParentedTables : getMaxTitleLengthInTables();
+            }
+            public void setMaxTitleLengthInParentedTables(final int val) {
+                maxTitleLengthInParentedTables = val;
+            }
+
+            private Integer maxTitleLengthInStandaloneTables;
+            public int getMaxTitleLengthInStandaloneTables() {
+                return maxTitleLengthInStandaloneTables != null ? maxTitleLengthInStandaloneTables : getMaxTitleLengthInTables();
+            }
+            public void setMaxTitleLengthInStandaloneTables(final int val) {
+                maxTitleLengthInStandaloneTables = val;
+            }
         }
     }
     
