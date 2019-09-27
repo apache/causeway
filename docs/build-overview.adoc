@@ -1,0 +1,36 @@
+.Build Overview Diagram
+[plantuml,file="build-overview.png"]
+--
+@startuml
+component gradle <<build.tool>> 
+
+component kotlin2js <<transpiler>> as K2JS
+component kotlinFrontend <<gradle.plugin>> as KF
+component npm
+
+package build {
+    rectangle karma.conf.js <<file>> as KC
+}
+
+rectangle package.json <<file>>
+
+package projectDir {
+    rectangle gradle.properties <<file>>
+    rectangle settings.gradle <<file>>
+    rectangle build.gradle <<file>> as BG
+}
+
+component DCE
+component webpack 
+
+gradle -> BG 
+gradle -> gradle.properties
+gradle -> settings.gradle
+
+gradle -> K2JS 
+BG->KF : uses 
+KF->KC : in order to generate 
+
+@enduml
+--
+ 
