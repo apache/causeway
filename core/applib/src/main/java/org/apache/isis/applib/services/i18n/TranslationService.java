@@ -57,6 +57,10 @@ public interface TranslationService {
         DISABLED(configValue->configValue != null &&
                 ("disable".equalsIgnoreCase(configValue) ||
                         "disabled".equalsIgnoreCase(configValue))),
+        
+        // synonym, needs to be defined, such that config beans (since 2.0) do work
+        DISABLE(configValue->false),
+        
         READ(configValue->configValue != null &&
         ("read".equalsIgnoreCase(configValue) ||
                 "reader".equalsIgnoreCase(configValue))),
@@ -82,7 +86,7 @@ public interface TranslationService {
             return this == WRITE;
         }
         public boolean isDisabled() {
-            return this == DISABLED;
+            return this == DISABLED || this == DISABLE;
         }
     }
 

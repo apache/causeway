@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.facets.properties.promptstyle;
 
 import java.util.Collections;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -31,7 +32,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
@@ -46,8 +46,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    IsisConfigurationLegacy mockConfiguration;
+    IsisConfiguration stubConfiguration;
 
     @Mock
     FacetHolder mockFacetHolder;
@@ -64,11 +63,11 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.DIALOG));
 
-                never(mockConfiguration);
+                never(stubConfiguration);
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
@@ -81,12 +80,12 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.INLINE));
 
-                never(mockConfiguration);
+                never(stubConfiguration);
             }});
 
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
@@ -95,19 +94,17 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
         @Test
         public void when_annotated_with_as_configured() throws Exception {
 
+            stubConfiguration.getViewer().getWicket().setPromptStyle(PromptStyle.INLINE);
             context.checking(new Expectations() {{
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.AS_CONFIGURED));
-
-                oneOf(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                will(returnValue(PromptStyle.INLINE.name()));
 
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(false));
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetAsConfigured.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
@@ -123,13 +120,10 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
-                allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                will(returnValue(null));
-
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));
         }
@@ -143,13 +137,10 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
 
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(false));
-
-                oneOf(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                will(returnValue(null));
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
             Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetAsConfigured.class)));
@@ -165,13 +156,10 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
-                allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                will(returnValue(null));
-
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Collections.singletonList(mockPropertyLayout), mockConfiguration, mockFacetHolder);
+                    .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));
         }

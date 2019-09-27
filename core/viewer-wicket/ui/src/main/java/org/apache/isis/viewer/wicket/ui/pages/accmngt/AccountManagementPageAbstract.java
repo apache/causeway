@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -138,7 +139,12 @@ public class AccountManagementPageAbstract extends WebPage {
     // System components
     // ///////////////////////////////////////////////////
 
-    protected IsisConfigurationLegacy getConfiguration() {
+
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
+
+    protected IsisConfigurationLegacy getConfigurationLegacy() {
         return IsisContext.getConfigurationLegacy();
     }
 

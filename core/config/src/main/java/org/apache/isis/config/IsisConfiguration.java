@@ -18,6 +18,8 @@
  */
 package org.apache.isis.config;
 
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
@@ -37,12 +39,10 @@ import lombok.Data;
 public class IsisConfiguration {
 
     private final Reflector reflector = new Reflector();
-    
     @Data
     public static class Reflector {
 
         private final ExplicitAnnotations explicitAnnotations = new ExplicitAnnotations();
-        
         @Data
         public static class ExplicitAnnotations {
 
@@ -52,10 +52,20 @@ public class IsisConfiguration {
              */
             private boolean action = false;
         }
+
+        private final Facet facet = new Facet();
+        @Data
+        public static class Facet {
+            private boolean filterVisibility = true;
+        }
+        private final Validator validator = new Validator();
+        @Data
+        public static class Validator {
+            private boolean ensureUniqueObjectTypes = true;
+        }
     }
 
     private final Services services = new Services();
-    
     @Data
     public static class Services {
 
@@ -83,7 +93,63 @@ public class IsisConfiguration {
             private boolean disableAutoFlush = false;
 
         }
+
+        private final Translation translation = new Translation();
+
+        @Data
+        public static class Translation {
+
+            private final Po po = new Po();
+
+            @Data
+            public static class Po {
+
+                TranslationService.Mode mode = TranslationService.Mode.WRITE;
+            }
+
+        }
     }
 
+    private final Viewer viewer = new Viewer();
+    @Data
+    public static class Viewer {
+
+        private final Wicket wicket = new Wicket();
+        @Data
+        public static class Wicket {
+
+            private final RememberMe rememberMe = new RememberMe();
+            @Data
+            public static class RememberMe {
+                private boolean suppress = false;
+            }
+
+            private boolean suppressSignUp = false;
+            private boolean suppressPasswordReset = false;
+            private boolean clearOriginalDestination = false;
+
+            private PromptStyle promptStyle = PromptStyle.INLINE;
+
+            private boolean showFooter = true;
+
+            private int maxTitleLengthInTables = 12;
+
+            private Integer maxTitleLengthInParentedTables;
+            public int getMaxTitleLengthInParentedTables() {
+                return maxTitleLengthInParentedTables != null ? maxTitleLengthInParentedTables : getMaxTitleLengthInTables();
+            }
+            public void setMaxTitleLengthInParentedTables(final int val) {
+                maxTitleLengthInParentedTables = val;
+            }
+
+            private Integer maxTitleLengthInStandaloneTables;
+            public int getMaxTitleLengthInStandaloneTables() {
+                return maxTitleLengthInStandaloneTables != null ? maxTitleLengthInStandaloneTables : getMaxTitleLengthInTables();
+            }
+            public void setMaxTitleLengthInStandaloneTables(final int val) {
+                maxTitleLengthInStandaloneTables = val;
+            }
+        }
+    }
     
 }

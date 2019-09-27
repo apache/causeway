@@ -39,11 +39,6 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS = "isis.viewer.wicket.rememberMe.suppress";
-    public static final String ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP = "isis.viewer.wicket.suppressSignUp";
-    public static final String ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET = "isis.viewer.wicket.suppressPasswordReset";
-    public static final String ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION = "isis.viewer.wicket.clearOriginalDestination";
-
     public WicketSignInPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
@@ -81,12 +76,13 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     protected SignInPanel addSignInPanel() {
 
-        final boolean rememberMeSuppress = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS, false);
+
+        final boolean rememberMeSuppress = getConfiguration().getViewer().getWicket().getRememberMe().isSuppress();
         final boolean suppressRememberMe = rememberMeSuppress;
 
-        final boolean suppressSignUpLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP, false);
-        final boolean suppressPasswordResetLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET, false);
-        final boolean clearOriginalDestination = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION, false);
+        final boolean suppressSignUpLink = getConfiguration().getViewer().getWicket().isSuppressSignUp();
+        final boolean suppressPasswordResetLink = getConfiguration().getViewer().getWicket().isSuppressPasswordReset();
+        final boolean clearOriginalDestination = getConfiguration().getViewer().getWicket().isClearOriginalDestination();
         final boolean rememberMe = !suppressRememberMe;
         final boolean signUpLink = !suppressSignUpLink;
         final boolean passwordReset = !suppressPasswordResetLink;

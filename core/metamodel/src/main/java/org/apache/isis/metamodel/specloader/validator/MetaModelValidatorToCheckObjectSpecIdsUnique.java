@@ -34,18 +34,13 @@ import lombok.val;
 
 public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValidatorComposite {
 
-    public static final String ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_KEY = "isis.reflector.validator.ensureUniqueObjectTypes";
-    public static final boolean ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_DEFAULT = true;
-
     public MetaModelValidatorToCheckObjectSpecIdsUnique() {
         addValidatorToEnsureUniqueObjectIds();
     }
 
     @Override
     public void validate(final ValidationFailures validationFailures) {
-        boolean check = getConfigurationLegacy()
-                .getBoolean(ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_KEY,
-                        ISIS_REFLECTOR_ENSURE_UNIQUE_OBJECT_IDS_DEFAULT);
+        boolean check = getConfiguration().getReflector().getValidator().isEnsureUniqueObjectTypes();
         if(!check) {
             return;
         }

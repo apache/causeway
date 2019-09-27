@@ -20,6 +20,7 @@ package org.apache.isis.runtime.services.i18n.po;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
@@ -29,14 +30,11 @@ import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.runtime.system.context.IsisContext;
-
-import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @Service
 public class TranslationServicePo implements TranslationService {
-
-    public static final String KEY_PO_MODE = "isis.services.translation.po.mode";
 
     private PoAbstract po;
 
@@ -50,12 +48,15 @@ public class TranslationServicePo implements TranslationService {
 
     // -- init, shutdown
 
+    @Inject
+    IsisConfiguration configuration;
+
     @PostConstruct
     public void init() {
 
-        final String translationMode = getConfiguration().getString(KEY_PO_MODE);
+        final Mode translationMode = configuration.getServices().getTranslation().getPo().getMode();
 
-        final boolean translationDisabled = TranslationService.Mode.DISABLED.matches(translationMode);
+        final boolean translationDisabled = (Mode.DISABLED == translationMode);
         if(translationDisabled) {
             // switch to disabled mode
             po = new PoDisabled(this);
@@ -69,7 +70,7 @@ public class TranslationServicePo implements TranslationService {
 
         final boolean prototypeOrTest = isPrototypeOrTest();
 
-        final boolean forceRead = TranslationService.Mode.READ.matches(translationMode);
+        final boolean forceRead = (Mode.READ == translationMode);
 
         if(prototypeOrTest && !forceRead) {
             // remain in write mode

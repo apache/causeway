@@ -32,14 +32,14 @@ public final class ParserUtil {
     private ParserUtil() {
     }
 
-    public static final String PARSER_NAME_KEY_PREFIX = "isis.reflector.java.facets.parser.";
-    public static final String PARSER_NAME_KEY_SUFFIX = ".parserName";
+//    public static final String PARSER_NAME_KEY_PREFIX = "isis.reflector.java.facets.parser.";
+//    public static final String PARSER_NAME_KEY_SUFFIX = ".parserName";
 
-    public static String parserNameFromConfiguration(final Class<?> type, final IsisConfigurationLegacy configuration) {
-        final String key = PARSER_NAME_KEY_PREFIX + type.getCanonicalName() + PARSER_NAME_KEY_SUFFIX;
-        final String parserName = configuration.getString(key);
-        return !_Strings.isNullOrEmpty(parserName) ? parserName : null;
-    }
+//    public static String parserNameFromConfiguration(final Class<?> type, final IsisConfigurationLegacy configuration) {
+//        final String key = PARSER_NAME_KEY_PREFIX + type.getCanonicalName() + PARSER_NAME_KEY_SUFFIX;
+//        final String parserName = configuration.getString(key);
+//        return !_Strings.isNullOrEmpty(parserName) ? parserName : null;
+//    }
 
     public static Class<? extends Parser<?>> parserOrNull(final Class<?> candidateClass, final String classCandidateName) {
 

@@ -22,8 +22,8 @@ package org.apache.isis.viewer.wicket.viewer.settings;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
@@ -32,74 +32,78 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private static final long serialVersionUID = 1L;
 
-    IsisConfigurationLegacy getConfiguration() {
+    IsisConfigurationLegacy getConfigurationLegacy() {
         return IsisContext.getConfigurationLegacy();
+    }
+
+    IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
     @Override
     public int getMaxTitleLengthInStandaloneTables() {
-        return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInStandaloneTables", getMaxTitleLengthInTables());
+        return getConfiguration().getViewer().getWicket().getMaxTitleLengthInStandaloneTables();
     }
 
     @Override
     public int getMaxTitleLengthInParentedTables() {
-        return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInParentedTables", getMaxTitleLengthInTables());
+        return getConfiguration().getViewer().getWicket().getMaxTitleLengthInParentedTables();
     }
 
     /**
      * Fallback for either {@link #getMaxTitleLengthInParentedTables()} and {@link #getMaxTitleLengthInParentedTables()}
      */
     private int getMaxTitleLengthInTables() {
-        return getConfiguration().getInteger("isis.viewer.wicket.maxTitleLengthInTables", 12);
+        return getConfiguration().getViewer().getWicket().getMaxTitleLengthInTables();
     }
 
     @Override
     public String getDatePattern() {
-        return getConfiguration().getString("isis.viewer.wicket.datePattern", "dd-MM-yyyy");
+        return getConfigurationLegacy().getString("isis.viewer.wicket.datePattern", "dd-MM-yyyy");
     }
 
     @Override
     public String getDateTimePattern() {
-        return getConfiguration().getString("isis.viewer.wicket.dateTimePattern", "dd-MM-yyyy HH:mm");
+        return getConfigurationLegacy().getString("isis.viewer.wicket.dateTimePattern", "dd-MM-yyyy HH:mm");
     }
 
     @Override
     public String getTimestampPattern() {
-        return getConfiguration().getString("isis.viewer.wicket.timestampPattern", "yyyy-MM-dd HH:mm:ss.SSS");
+        return getConfigurationLegacy().getString("isis.viewer.wicket.timestampPattern", "yyyy-MM-dd HH:mm:ss.SSS");
     }
 
     @Override
     public boolean isReplaceDisabledTagWithReadonlyTag() {
-        return getConfiguration().getBoolean("isis.viewer.wicket.replaceDisabledTagWithReadonlyTag", true);
+        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.replaceDisabledTagWithReadonlyTag", true);
     }
 
     @Override
     public boolean isPreventDoubleClickForFormSubmit() {
-        return getConfiguration().getBoolean("isis.viewer.wicket.preventDoubleClickForFormSubmit", true);
+        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.preventDoubleClickForFormSubmit", true);
     }
 
     @Override
     public boolean isPreventDoubleClickForNoArgAction() {
-        return getConfiguration().getBoolean("isis.viewer.wicket.preventDoubleClickForNoArgAction", true);
+        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.preventDoubleClickForNoArgAction", true);
     }
 
     @Override
     public boolean isUseIndicatorForFormSubmit() {
-        return getConfiguration().getBoolean("isis.viewer.wicket.useIndicatorForFormSubmit", true);
+        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.useIndicatorForFormSubmit", true);
     }
 
     @Override
     public boolean isUseIndicatorForNoArgAction() {
-        return getConfiguration().getBoolean("isis.viewer.wicket.useIndicatorForNoArgAction", true);
+        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.useIndicatorForNoArgAction", true);
     }
 
     @Override
     public PromptStyle getPromptStyle() {
-        return PromptStyleConfiguration.parse(getConfiguration());
+        return getConfiguration().getViewer().getWicket().getPromptStyle();
     }
 
     @Override
     public boolean isRedirectEvenIfSameObject() {
-        return getConfiguration().getBoolean("isis.viewer.wicket.redirectEvenIfSameObject", false);
+        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.redirectEvenIfSameObject", false);
     }
 }

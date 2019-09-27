@@ -89,7 +89,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         // promptStyle
         PromptStyleFacet promptStyleFacet = PromptStyleFacetForActionLayoutAnnotation
-                .create(actionLayouts, getConfigurationLegacy(), holder);
+                .create(actionLayouts, getConfiguration(), holder);
 
         FacetUtil.addFacet(promptStyleFacet);
 
