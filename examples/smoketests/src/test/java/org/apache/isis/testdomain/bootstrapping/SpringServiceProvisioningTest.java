@@ -19,7 +19,6 @@
 package org.apache.isis.testdomain.bootstrapping;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -38,6 +37,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import static org.apache.isis.commons.internal.collections._Collections.toStringJoiningNewLine;
 import static org.apache.isis.commons.internal.collections._Sets.intersectSorted;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import lombok.val;
 
@@ -68,10 +68,12 @@ class SpringServiceProvisioningTest {
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 
-        val singletonListing = _Resources.loadAsString(
-                this.getClass(), "builtin-IsisBoot.json", StandardCharsets.UTF_8);
+        val singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-singleton.list");
         val expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
+                .filter(entry->!entry.startsWith("#"))
                 .collect(Collectors.toCollection(TreeSet::new));
+        
+        assertFalse(expectedSingletons.isEmpty());
         
         val servicesFound = toStringJoiningNewLine(managedServices);
         System.out.println("--- Beans discovered by Isis ---");

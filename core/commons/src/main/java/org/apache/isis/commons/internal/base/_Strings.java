@@ -44,6 +44,7 @@ import static org.apache.isis.commons.internal.base._Strings_SplitIterator.split
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
+import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 /**
  * <h1>- internal use only -</h1>
@@ -520,7 +521,7 @@ public final class _Strings {
     public static Stream<String> splitThenStreamTrimmed(@Nullable String input, String separator) {
         return splitThenStream(input, separator)
                 .map(String::trim)
-                .filter(String::isEmpty);
+                .filter(not(String::isEmpty));
     }
     
     /**
@@ -531,7 +532,7 @@ public final class _Strings {
     public static Stream<String> splitThenStreamTrimmed(@Nullable CharSequence input, Pattern delimiterPattern) {
         return splitThenStream(input, delimiterPattern)
                 .map(String::trim)
-                .filter(String::isEmpty);
+                .filter(not(String::isEmpty));
     }
 
 }
