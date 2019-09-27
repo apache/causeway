@@ -158,9 +158,9 @@ public class FacetedMethodsBuilder {
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
 
-        val isisConfigProperties = MetaModelContext.current().getConfiguration();
+        val isisConfiguration = MetaModelContext.current().getConfiguration();
         
-        this.explicitAnnotationsForActions = isisConfigProperties.getReflector().getExplicitAnnotations().isAction();
+        this.explicitAnnotationsForActions = isisConfiguration.getReflector().getExplicitAnnotations().isAction();
 
     }
 

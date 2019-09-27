@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
@@ -66,6 +65,8 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     private MetamodelEventService metamodelEventService = 
     MetamodelEventService.builder()
     .build();
+    
+    private IsisConfiguration configuration;
 
     private SpecificationLoader specificationLoader;
 
@@ -102,11 +103,6 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     @Override
     public IsisConfigurationLegacy getConfigurationLegacy() {
         return _Config.getConfiguration();
-    }
-
-    @Override
-    public IsisConfiguration getConfiguration() {
-        throw _Exceptions.notImplemented(); //TODO[2086] needs test integration, for legacy tests that don't use a Spring context  
     }
     
     @Override
