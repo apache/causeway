@@ -88,7 +88,7 @@ public class WebModuleContext {
     }
 
     /**
-     *  Adds to the list of viewer names "isis.viewers"
+     *  Adds to the list of viewer names (<tt>isis.viewers</tt> context param)
      * @param viewerName
      */
     public void addViewer(String viewerName) {
@@ -99,7 +99,7 @@ public class WebModuleContext {
     }
 
     /**
-     *  Adds to the list of protected path names "isis.protected"
+     *  Adds to the list of protected path names (<tt>isis.protected</tt> context param)
      * @param path
      */
     public void addProtectedPath(String path) {
@@ -110,7 +110,7 @@ public class WebModuleContext {
     }
 
     /**
-     * Streams the protected path names "isis.protected".
+     * Streams the protected path names (<tt>isis.protected</tt> context param)
      * @param ctx
      */
     public Stream<String> streamProtectedPaths() {

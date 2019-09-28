@@ -37,7 +37,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault"
+     * raises an event or not depends upon the <tt>isis.reflector.facet.actionAnnotation.domainEvent.postForDefault</tt>
      * configuration property.
      */
     public static class Default extends ActionDomainEvent<Object> {
