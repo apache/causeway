@@ -59,42 +59,42 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     @Override
     public String getDatePattern() {
-        return getConfigurationLegacy().getString("isis.viewer.wicket.datePattern", "dd-MM-yyyy");
+        return getConfiguration().getViewer().getWicket().getDatePattern();
     }
 
     @Override
     public String getDateTimePattern() {
-        return getConfigurationLegacy().getString("isis.viewer.wicket.dateTimePattern", "dd-MM-yyyy HH:mm");
+        return getConfiguration().getViewer().getWicket().getDateTimePattern();
     }
 
     @Override
     public String getTimestampPattern() {
-        return getConfigurationLegacy().getString("isis.viewer.wicket.timestampPattern", "yyyy-MM-dd HH:mm:ss.SSS");
+        return getConfiguration().getViewer().getWicket().getTimestampPattern();
     }
 
     @Override
     public boolean isReplaceDisabledTagWithReadonlyTag() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.replaceDisabledTagWithReadonlyTag", true);
+        return getConfiguration().getViewer().getWicket().isReplaceDisabledTagWithReadonlyTag();
     }
 
     @Override
     public boolean isPreventDoubleClickForFormSubmit() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.preventDoubleClickForFormSubmit", true);
+        return getConfiguration().getViewer().getWicket().isPreventDoubleClickForFormSubmit();
     }
 
     @Override
     public boolean isPreventDoubleClickForNoArgAction() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.preventDoubleClickForNoArgAction", true);
+        return getConfiguration().getViewer().getWicket().isPreventDoubleClickForNoArgAction();
     }
 
     @Override
     public boolean isUseIndicatorForFormSubmit() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.useIndicatorForFormSubmit", true);
+        return getConfiguration().getViewer().getWicket().isUseIndicatorForFormSubmit();
     }
 
     @Override
     public boolean isUseIndicatorForNoArgAction() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.useIndicatorForNoArgAction", true);
+        return getConfiguration().getViewer().getWicket().isUseIndicatorForNoArgAction();
     }
 
     @Override
@@ -104,6 +104,6 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     @Override
     public boolean isRedirectEvenIfSameObject() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.wicket.redirectEvenIfSameObject", false);
+        return getConfiguration().getViewer().getWicket().isRedirectEvenIfSameObject();
     }
 }
