@@ -44,10 +44,6 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner {
 
-    public static final String ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_KEY =
-            "isis.reflector.validator.actionCollectionParameterChoices";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_DEFAULT = true;
-
     public ActionChoicesForCollectionParameterFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -62,10 +58,7 @@ implements MetaModelValidatorRefiner {
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final boolean doCheck = _Config.getConfiguration().getBoolean(
-                ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_KEY,
-                ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_DEFAULT);
-
+        final boolean doCheck = getConfiguration().getReflector().getValidator().isActionCollectionParameterChoices();
         if(!doCheck) {
             return;
         }
