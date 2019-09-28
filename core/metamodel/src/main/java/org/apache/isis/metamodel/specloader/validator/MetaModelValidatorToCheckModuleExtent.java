@@ -27,18 +27,13 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorComposite {
 
-    private static final String ISIS_REFLECTOR_CHECK_MODULE_EXTENT_KEY = "isis.reflector.validator.checkModuleExtent";
-    private static final boolean ISIS_REFLECTOR_CHECK_MODULE_EXTENT_DEFAULT = true;
-
     public MetaModelValidatorToCheckModuleExtent() {
         addValidatorToCheckModuleExtent();
     }
 
     @Override
     public void validate(final ValidationFailures validationFailures) {
-        boolean check = getConfigurationLegacy()
-                .getBoolean(ISIS_REFLECTOR_CHECK_MODULE_EXTENT_KEY,
-                        ISIS_REFLECTOR_CHECK_MODULE_EXTENT_DEFAULT);
+        boolean check = getConfiguration().getReflector().getValidator().isCheckModuleExtent();
         if(!check) {
             return;
         }

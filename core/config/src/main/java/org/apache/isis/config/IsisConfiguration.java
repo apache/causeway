@@ -183,7 +183,9 @@ public class IsisConfiguration {
         private final Validator validator = new Validator();
         @Data
         public static class Validator {
+
             private boolean ensureUniqueObjectTypes = true;
+            private boolean checkModuleExtent = true;
         }
     }
 
