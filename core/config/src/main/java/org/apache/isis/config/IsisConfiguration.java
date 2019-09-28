@@ -18,6 +18,7 @@
  */
 package org.apache.isis.config;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -381,6 +382,7 @@ public class IsisConfiguration {
         }
     }
 
+
     private final Viewers viewers = new Viewers();
     @Data
     public static class Viewers {
@@ -390,6 +392,20 @@ public class IsisConfiguration {
             private int parented = 12;
             private int standalone = 25;
         }
+
+        private final ParameterLayout parameterLayout = new ParameterLayout();
+        @Data
+        public static class ParameterLayout implements ConfigPropsForPropertyOrParameterLayout {
+            private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+            private LabelPosition label = LabelPosition.NOT_SPECIFIED;
+        }
+        private final PropertyLayout propertyLayout = new PropertyLayout();
+        @Data
+        public static class PropertyLayout implements ConfigPropsForPropertyOrParameterLayout {
+            private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+            private LabelPosition label = LabelPosition.NOT_SPECIFIED;
+        }
+
     }
     
 }
