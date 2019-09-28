@@ -359,7 +359,6 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
         public void whenNotAnnotatedOnStringParameter() {
 
             class Customer {
-                @SuppressWarnings("unused")
                 public void someAction(
                         @Parameter(
                                 regexPattern = "[123].*"

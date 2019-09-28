@@ -42,7 +42,6 @@ public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends Abstract
         final PropertyLayoutFacetFactory facetFactory = new PropertyLayoutFacetFactory();
 
         class Customer {
-            @SuppressWarnings("unused")
             @PropertyLayout(labelPosition = LabelPosition.LEFT)
             public String getFirstName() {
                 return null;

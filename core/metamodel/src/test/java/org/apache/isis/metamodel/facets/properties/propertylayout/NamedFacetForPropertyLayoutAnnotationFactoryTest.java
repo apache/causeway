@@ -40,7 +40,6 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
         final PropertyLayoutFacetFactory facetFactory = new PropertyLayoutFacetFactory();
 
         class Customer {
-            @SuppressWarnings("unused")
             @PropertyLayout(named = "1st name")
             public String getFirstName() {
                 return null;
@@ -69,7 +68,6 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
         final PropertyLayoutFacetFactory facetFactory = new PropertyLayoutFacetFactory();
 
         class Customer {
-            @SuppressWarnings("unused")
             @PropertyLayout(named = "1st name", namedEscaped = false)
             public String getFirstName() {
                 return null;

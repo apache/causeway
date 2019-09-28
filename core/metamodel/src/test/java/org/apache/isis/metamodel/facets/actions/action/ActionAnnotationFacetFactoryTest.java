@@ -28,11 +28,16 @@ import org.junit.After;
 import org.junit.Before;
 
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
+import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+
+import lombok.val;
 
 public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -100,12 +105,22 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     }
 
-    void allowingCommandConfigurationToReturn(final String value) {
-        _Config.put("isis.services.command.actions", value);
+    void allowingCommandConfigurationToReturn(CommandActionsConfiguration value) {
+        val config = new IsisConfiguration();
+        config.getServices().getCommand().setActions(value);
+        
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(config)
+                .build());
     }
 
-    void allowingPublishingConfigurationToReturn(final String value) {
-        _Config.put("isis.services.publish.actions", value);
+    void allowingPublishingConfigurationToReturn(PublishActionsConfiguration value) {
+        val config = new IsisConfiguration();
+        config.getServices().getPublish().setActions(value);
+        
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(config)
+                .build());
     }
 
 }

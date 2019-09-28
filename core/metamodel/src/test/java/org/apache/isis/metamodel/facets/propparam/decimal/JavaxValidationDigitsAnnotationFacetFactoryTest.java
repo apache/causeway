@@ -38,7 +38,6 @@ public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFac
         final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory facetFactory = new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory();
 
         class Order {
-            @SuppressWarnings("unused")
             @javax.validation.constraints.Digits(integer=14, fraction=4)
             public BigDecimal getCost() {
                 return null;

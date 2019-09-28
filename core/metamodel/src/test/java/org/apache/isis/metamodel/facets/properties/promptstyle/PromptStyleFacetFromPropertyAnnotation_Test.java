@@ -20,7 +20,6 @@ package org.apache.isis.metamodel.facets.properties.promptstyle;
 
 import java.util.Collections;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -32,6 +31,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
@@ -46,7 +46,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    IsisConfiguration stubConfiguration;
+    IsisConfiguration stubConfiguration = new IsisConfiguration();
 
     @Mock
     FacetHolder mockFacetHolder;
@@ -63,13 +63,13 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.DIALOG));
 
-                never(stubConfiguration);
+                //never(stubConfiguration); //can only set expectations on mock objects
             }});
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
         }
 
@@ -80,14 +80,14 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.INLINE));
 
-                never(stubConfiguration);
+                //never(stubConfiguration); //can only set expectations on mock objects
             }});
 
 
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
@@ -106,7 +106,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetAsConfigured.class)));
+            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
@@ -143,7 +143,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
                     .create(Collections.singletonList(mockPropertyLayout), stubConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
-            Assert.assertThat(facet, is((Matcher) anInstanceOf(PromptStyleFacetAsConfigured.class)));
+            Assert.assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
         }
 
         @Test
@@ -167,7 +167,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
 
     }
 
-    static <T> Matcher<T> anInstanceOf(final Class<T> expected) {
+    static <T> Matcher<? super T> anInstanceOf(final Class<T> expected) {
         return new TypeSafeMatcher<T>() {
             @Override
             public boolean matchesSafely(final T actual) {

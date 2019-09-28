@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetForActionAnnotationAsConfigured;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
@@ -62,7 +63,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         // given
-        allowingCommandConfigurationToReturn("ignoreQueryOnly");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
@@ -80,7 +81,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
 
         // given
-        allowingCommandConfigurationToReturn("ignoreQueryOnly");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
@@ -102,7 +103,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         // given
-        allowingCommandConfigurationToReturn("ignoreQueryOnly");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
@@ -114,7 +115,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
     public void given_noAnnotation_and_configurationSetToNone_thenNone() {
 
         // given
-        allowingCommandConfigurationToReturn("none");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.NONE);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
@@ -132,7 +133,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         // given
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-        allowingCommandConfigurationToReturn("all");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.ALL);
 
         // when
         facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
@@ -153,7 +154,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
             }
         }
 
-        allowingCommandConfigurationToReturn("ignoreQueryOnly");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
@@ -178,7 +179,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
             }
         }
 
-        allowingCommandConfigurationToReturn("ignoreQueryOnly");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
@@ -203,7 +204,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
             }
         }
 
-        allowingCommandConfigurationToReturn("ignoreQueryOnly");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -218,7 +219,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
             }
         }
 
-        allowingCommandConfigurationToReturn("none");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.NONE);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -242,7 +243,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        allowingCommandConfigurationToReturn("all");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.ALL);
 
         // when
         facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -267,7 +268,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // even though configuration is disabled
-        allowingCommandConfigurationToReturn("none");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.NONE);
 
         // when
         facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -290,7 +291,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // even though configuration is disabled
-        allowingCommandConfigurationToReturn("none");
+        allowingCommandConfigurationToReturn(CommandActionsConfiguration.NONE);
 
         // when
         facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
