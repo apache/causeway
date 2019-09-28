@@ -30,11 +30,6 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
 
-    public static final String ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY =
-            "isis.reflector.validator.noParamsOnly";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT = false;
-
-
     private final List<String> prefixes;
 
     private final OrphanValidation orphanValidation; 

@@ -186,6 +186,7 @@ public class IsisConfiguration {
 
             private boolean ensureUniqueObjectTypes = true;
             private boolean checkModuleExtent = true;
+            private boolean noParamsOnly = false;
         }
     }
 
