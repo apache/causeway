@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -56,26 +57,6 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
  */
 public class JaxbFacetFactory extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner {
-
-    public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT =
-            "isis.reflector.validator.jaxbViewModelNotAbstract";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT_DEFAULT = true;
-
-    public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_INNER_CLASS =
-            "isis.reflector.validator.jaxbViewModelNotInnerClass";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_INNER_CLASS_DEFAULT = true;
-
-    public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_PUBLIC_NO_ARG_CONSTRUCTOR =
-            "isis.reflector.validator.jaxbViewModelNoArgConstructor";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_PUBLIC_NO_ARG_CONSTRUCTOR_DEFAULT = false;
-
-    public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER =
-            "isis.reflector.validator.jaxbViewModelReferenceTypeAdapter";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER_DEFAULT = true;
-
-    public static final String ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_DATE_TIME_TYPE_ADAPTER =
-            "isis.reflector.validator.jaxbViewModelDateTimeTypeAdapter";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_DATE_TIME_TYPE_ADAPTER_DEFAULT = true;
 
     public JaxbFacetFactory() {
         super(FeatureType.OBJECTS_AND_PROPERTIES);
@@ -171,9 +152,8 @@ implements MetaModelValidatorRefiner {
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final IsisConfigurationLegacy configuration = _Config.getConfiguration(); 
-        final List<TypeValidator> typeValidators = getTypeValidators(configuration);
-        final List<PropertyValidator> propertyValidators = getPropertyValidators(configuration);
+        final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
+        final List<PropertyValidator> propertyValidators = getPropertyValidators(getConfiguration());
 
         final MetaModelValidator validator = new MetaModelValidatorVisiting(
                 new MetaModelValidatorVisiting.Visitor() {
@@ -221,27 +201,27 @@ implements MetaModelValidatorRefiner {
         metaModelValidator.add(validator);
     }
 
-    private List<TypeValidator> getTypeValidators(final IsisConfigurationLegacy configuration) {
+    private List<TypeValidator> getTypeValidators(IsisConfiguration configuration) {
 
         final List<TypeValidator> typeValidators = _Lists.newArrayList();
-        if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT_DEFAULT)) {
+        if(configuration.getReflector().getValidator().isJaxbViewModelNotAbstract()) {
             typeValidators.add(new JaxbViewModelNotAbstractValidator());
         }
-        if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_INNER_CLASS, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_INNER_CLASS_DEFAULT)) {
+        if(configuration.getReflector().getValidator().isJaxbViewModelNotInnerClass()) {
             typeValidators.add(new JaxbViewModelNotInnerClassValidator());
         }
-        if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_PUBLIC_NO_ARG_CONSTRUCTOR, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_PUBLIC_NO_ARG_CONSTRUCTOR_DEFAULT)) {
+        if(configuration.getReflector().getValidator().isJaxbViewModelNoArgConstructor()) {
             typeValidators.add(new JaxbViewModelPublicNoArgConstructorValidator());
         }
         return typeValidators;
     }
 
-    private List<PropertyValidator> getPropertyValidators(final IsisConfigurationLegacy configuration) {
+    private List<PropertyValidator> getPropertyValidators(IsisConfiguration configuration) {
         final List<PropertyValidator> propertyValidators = _Lists.newArrayList();
-        if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER_DEFAULT)) {
+        if(configuration.getReflector().getValidator().isJaxbViewModelReferenceTypeAdapter()) {
             propertyValidators.add(new PropertyValidatorForReferenceTypes());
         }
-        if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_DATE_TIME_TYPE_ADAPTER, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_DATE_TIME_TYPE_ADAPTER_DEFAULT)) {
+        if(configuration.getReflector().getValidator().isJaxbViewModelDateTimeTypeAdapter()) {
             propertyValidators.add(new PropertyValidatorForDateTypes(java.sql.Timestamp.class));
             propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.DateTime.class));
             propertyValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDate.class));

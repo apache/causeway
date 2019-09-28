@@ -200,6 +200,13 @@ public class IsisConfiguration {
             private boolean checkModuleExtent = true;
             private boolean noParamsOnly = false;
             private boolean actionCollectionParameterChoices = true;
+
+            private boolean jaxbViewModelNotAbstract = true;
+            private boolean jaxbViewModelNotInnerClass = true;
+            private boolean jaxbViewModelNoArgConstructor = false;
+            private boolean jaxbViewModelReferenceTypeAdapter = true;
+            private boolean jaxbViewModelDateTimeTypeAdapter = true;
+
         }
     }
 
