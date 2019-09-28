@@ -205,12 +205,12 @@ public interface MetaModelContext {
 
         @Override
         public default Stream<ObjectAdapter> streamServiceAdapters() {
-            return streamServiceAdapters();
+            return getMetaModelContext().streamServiceAdapters();
         }
 
         @Override
         default ObjectAdapter lookupServiceAdapterById(String serviceId) {
-            return lookupServiceAdapterById(serviceId);
+            return getMetaModelContext().lookupServiceAdapterById(serviceId);
         }
 
     }
