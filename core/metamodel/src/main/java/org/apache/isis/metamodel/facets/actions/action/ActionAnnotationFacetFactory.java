@@ -210,7 +210,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(command=...)
-        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfigurationLegacy(), getServiceInjector(), holder);
+        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfiguration(), getServiceInjector(), holder);
 
         FacetUtil.addFacet(commandFacet);
     }

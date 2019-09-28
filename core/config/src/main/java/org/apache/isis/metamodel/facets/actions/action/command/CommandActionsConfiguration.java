@@ -18,25 +18,21 @@
  */
 package org.apache.isis.metamodel.facets.actions.action.command;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum CommandActionsConfiguration {
     ALL,
     IGNORE_SAFE,
+    /**
+     * Alias for {@link #IGNORE_SAFE}
+     */
+    IGNORE_QUERY_ONLY,
     NONE;
 
-    private static final String  COMMAND_ACTIONS_KEY = "isis.services.command.actions";
-
-    public static CommandActionsConfiguration parse(final IsisConfigurationLegacy configuration) {
-        return parse(configuration.getString(COMMAND_ACTIONS_KEY));
+    public static CommandActionsConfiguration parse(final IsisConfiguration configuration) {
+        return configuration.getServices().getCommand().getActions();
     }
 
-    private static CommandActionsConfiguration parse(final String value) {
-        if ("ignoreQueryOnly".equalsIgnoreCase(value) || "ignoreSafe".equalsIgnoreCase(value)) {
-            return IGNORE_SAFE;
-        }
-        // must be explicitly enabled
-        return Util.parseYes(value)? ALL: NONE;
-    }
 }

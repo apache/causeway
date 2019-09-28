@@ -21,6 +21,7 @@ package org.apache.isis.config;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
@@ -203,9 +204,12 @@ public class IsisConfiguration {
     private final Services services = new Services();
     @Data
     public static class Services {
-
+        private final Command command = new Command();
+        @Data
+        public static class Command {
+            private CommandActionsConfiguration actions = CommandActionsConfiguration.NONE;
+        }
         private final Container container = new Container();
-
         @Data
         public static class Container {
 
