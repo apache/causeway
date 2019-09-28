@@ -380,5 +380,16 @@ public class IsisConfiguration {
             private boolean redirectEvenIfSameObject = false;
         }
     }
+
+    private final Viewers viewers = new Viewers();
+    @Data
+    public static class Viewers {
+        private final Paged paged = new Paged();
+        @Data
+        public static class Paged {
+            private int parented = 12;
+            private int standalone = 25;
+        }
+    }
     
 }

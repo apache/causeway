@@ -41,10 +41,6 @@ import org.apache.isis.metamodel.facets.TypedHolder;
  */
 public class FallbackFacetFactory extends FacetFactoryAbstract {
 
-    public final static int PAGE_SIZE_STANDALONE_DEFAULT = 25;
-    public final static int PAGE_SIZE_PARENTED_DEFAULT = 12;
-
-
     @SuppressWarnings("unused")
     private final static Map<Class<?>, Integer> TYPICAL_LENGTHS_BY_CLASS = new HashMap<Class<?>, Integer>() {
         private static final long serialVersionUID = 1L;
@@ -76,7 +72,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
 
-        final int pagedStandalone = getPagedConfigSetting("standalone", PAGE_SIZE_STANDALONE_DEFAULT);
+        final int pagedStandalone = getConfiguration().getViewers().getPaged().getStandalone();
         final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
 
         FacetUtil.addFacet(describedAsFacet);
@@ -115,7 +111,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             facets.add(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            facets.add(new PagedFacetFromConfiguration(getPagedConfigSetting("parented", PAGE_SIZE_PARENTED_DEFAULT), facetedMethod));
+            facets.add(new PagedFacetFromConfiguration(getConfiguration().getViewers().getPaged().getParented(), facetedMethod));
         }
 
         FacetUtil.addFacets(facets);
@@ -152,10 +148,6 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             }
         }
         return null;
-    }
-
-    private int getPagedConfigSetting(final String subkey, final int defaultValue) {
-        return getConfigurationLegacy().getInteger("isis.viewers.paged." + subkey, defaultValue);
     }
 
     private String getPropParamLayoutConfigSetting(final String layout, String... subkeys) {
