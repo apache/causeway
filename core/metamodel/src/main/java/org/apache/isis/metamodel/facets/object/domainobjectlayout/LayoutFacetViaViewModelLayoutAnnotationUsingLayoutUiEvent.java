@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -41,8 +42,8 @@ implements LayoutFacet {
     public static Facet create(
             final List<ViewModelLayout> viewModelLayouts,
             final MetamodelEventService metamodelEventService,
-            final IsisConfigurationLegacy configuration, 
-            final FacetHolder facetHolder) {
+            final IsisConfigurationLegacy configurationLegacy,
+            IsisConfiguration configuration, final FacetHolder facetHolder) {
 
         return viewModelLayouts.stream()
                 .map(ViewModelLayout::layoutUiEvent)
@@ -50,8 +51,7 @@ implements LayoutFacet {
                         layoutUiEvent,
                         LayoutUiEvent.Noop.class,
                         LayoutUiEvent.Default.class,
-                        "isis.reflector.facet.viewModelLayoutAnnotation.layoutUiEvent.postForDefault",
-                        configuration))
+                        configuration.getReflector().getFacet().getViewModelLayoutAnnotation().getLayoutUiEvent().isPostForDefault()))
                 .findFirst()
                 .map(layoutUiEvent -> {
 

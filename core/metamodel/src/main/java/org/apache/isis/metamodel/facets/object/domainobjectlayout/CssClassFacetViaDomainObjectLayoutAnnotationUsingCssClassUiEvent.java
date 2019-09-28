@@ -26,6 +26,7 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
@@ -43,7 +44,8 @@ implements CssClassFacet {
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
             final MetamodelEventService metamodelEventService,
-            final IsisConfigurationLegacy configuration, 
+            final IsisConfigurationLegacy configurationLegacy,
+            final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
         return domainObjectLayouts.stream()
@@ -52,8 +54,7 @@ implements CssClassFacet {
                         cssClassUiEventClass,
                         CssClassUiEvent.Noop.class,
                         CssClassUiEvent.Default.class,
-                        "isis.reflector.facet.domainObjectLayoutAnnotation.cssClassUiEvent.postForDefault",
-                        configuration))
+                        configuration.getReflector().getFacet().getDomainObjectLayoutAnnotation().getCssClassUiEvent().isPostForDefault()))
                 .findFirst()
                 .map(cssClassUiEventClass -> {
                     return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(

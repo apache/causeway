@@ -19,10 +19,12 @@
 package org.apache.isis.config;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
+
 
 /**
  * 
@@ -57,7 +59,127 @@ public class IsisConfiguration {
         @Data
         public static class Facet {
             private boolean filterVisibility = true;
+
+            private final ActionAnnotation actionAnnotation = new ActionAnnotation();
+            @Data
+            public static class ActionAnnotation {
+                private final DomainEvent domainEvent = new DomainEvent();
+                @Data
+                public static class DomainEvent {
+                    private boolean postForDefault = true;
+                }
+            }
+
+            private final CollectionAnnotation collectionAnnotation = new CollectionAnnotation();
+            @Data
+            public static class CollectionAnnotation {
+                private final DomainEvent domainEvent = new DomainEvent();
+                @Data
+                public static class DomainEvent {
+                    private boolean postForDefault = true;
+                }
+            }
+
+            private final DomainObjectAnnotation domainObjectAnnotation = new DomainObjectAnnotation();
+            @Data
+            public static class DomainObjectAnnotation {
+                private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
+                @Data
+                public static class CreatedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+                private final LoadedLifecycleEvent loadedLifecycleEvent = new LoadedLifecycleEvent();
+                @Data
+                public static class LoadedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+                private final PersistingLifecycleEvent persistingLifecycleEvent = new PersistingLifecycleEvent();
+                @Data
+                public static class PersistingLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+                private final PersistedLifecycleEvent persistedLifecycleEvent = new PersistedLifecycleEvent();
+                @Data
+                public static class PersistedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+                private final RemovingLifecycleEvent removingLifecycleEvent = new RemovingLifecycleEvent();
+                @Data
+                public static class RemovingLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+                private final UpdatedLifecycleEvent updatedLifecycleEvent = new UpdatedLifecycleEvent();
+                @Data
+                public static class UpdatedLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+                private final UpdatingLifecycleEvent updatingLifecycleEvent = new UpdatingLifecycleEvent();
+                @Data
+                public static class UpdatingLifecycleEvent {
+                    private boolean postForDefault = true;
+                }
+            }
+
+            private final DomainObjectLayoutAnnotation domainObjectLayoutAnnotation = new DomainObjectLayoutAnnotation();
+            @Data
+            public static class DomainObjectLayoutAnnotation {
+                private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
+                @Data
+                public static class CssClassUiEvent {
+                    private boolean postForDefault = true;
+                }
+                private final IconUiEvent iconUiEvent = new IconUiEvent();
+                @Data
+                public static class IconUiEvent {
+                    private boolean postForDefault = true;
+                }
+                private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
+                @Data
+                public static class LayoutUiEvent {
+                    private boolean postForDefault = true;
+                }
+                private final TitleUiEvent titleUiEvent = new TitleUiEvent();
+                @Data
+                public static class TitleUiEvent {
+                    private boolean postForDefault = true;
+                }
+            }
+
+            private final PropertyAnnotation propertyAnnotation = new PropertyAnnotation();
+            @Data
+            public static class PropertyAnnotation {
+                private final DomainEvent domainEvent = new DomainEvent();
+                @Data
+                public static class DomainEvent {
+                    private boolean postForDefault = true;
+                }
+            }
+            private final ViewModelLayoutAnnotation viewModelLayoutAnnotation = new ViewModelLayoutAnnotation();
+            @Data
+            public static class ViewModelLayoutAnnotation {
+                private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
+                @Data
+                public static class CssClassUiEvent {
+                    private boolean postForDefault =true;
+                }
+                private final IconUiEvent iconUiEvent = new IconUiEvent();
+                @Data
+                public static class IconUiEvent {
+                    private boolean postForDefault =true;
+                }
+                private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
+                @Data
+                public static class LayoutUiEvent {
+                    private boolean postForDefault =true;
+                }
+                private final TitleUiEvent titleUiEvent = new TitleUiEvent();
+                @Data
+                public static class TitleUiEvent {
+                    private boolean postForDefault =true;
+                }
+            }
         }
+
         private final Validator validator = new Validator();
         @Data
         public static class Validator {
