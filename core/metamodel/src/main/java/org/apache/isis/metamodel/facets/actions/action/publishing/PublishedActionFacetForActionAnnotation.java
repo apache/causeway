@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
@@ -33,7 +33,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
 
     public static PublishedActionFacet create(
             final List<Action> actions,
-            final IsisConfigurationLegacy configuration,
+            final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final PublishActionsConfiguration setting = PublishActionsConfiguration.parse(configuration);
@@ -49,6 +49,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                         switch (setting) {
                         case NONE:
                             return null;
+                        case IGNORE_QUERY_ONLY:
                         case IGNORE_SAFE:
                             if (hasSafeSemantics(holder)) {
                                 return null;
@@ -69,6 +70,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                     switch (setting) {
                     case NONE:
                         return null;
+                    case IGNORE_QUERY_ONLY:
                     case IGNORE_SAFE:
                         if (hasSafeSemantics(holder)) {
                             return null;

@@ -16,28 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.metamodel.facets.actions.action.publishing;
+package org.apache.isis.metamodel.facets.actions.action.command;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
-public enum PublishActionsConfiguration {
+public enum CommandActionsConfiguration {
     ALL,
     IGNORE_SAFE,
+    /**
+     * Alias for {@link #IGNORE_SAFE}
+     */
+    IGNORE_QUERY_ONLY,
     NONE;
 
-    private static final String PUBLISH_ACTIONS_KEY = "isis.services.publish.actions";
-
-    public static PublishActionsConfiguration parse(IsisConfigurationLegacy configuration) {
-        final String configuredValue = configuration.getString(PUBLISH_ACTIONS_KEY);
-        return PublishActionsConfiguration.parse(configuredValue);
-    }
-
-    private static PublishActionsConfiguration parse(final String value) {
-        if ("ignoreQueryOnly".equalsIgnoreCase(value) || "ignoreSafe".equalsIgnoreCase(value)) {
-            return IGNORE_SAFE;
-        }
-        return Util.parseYes(value)? ALL: NONE;
+    public static CommandActionsConfiguration parse(final IsisConfiguration configuration) {
+        return configuration.getServices().getCommand().getActions();
     }
 
 }

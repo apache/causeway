@@ -18,9 +18,12 @@
  */
 package org.apache.isis.config;
 
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
+import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
@@ -180,6 +183,15 @@ public class IsisConfiguration {
             }
         }
 
+        private final Facets facets = new Facets();
+        @Data
+        public static class Facets {
+            private final ViewModelSemanticCheckingFacetFactory viewModelSemanticCheckingFacetFactory = new ViewModelSemanticCheckingFacetFactory();
+            @Data
+            public static class ViewModelSemanticCheckingFacetFactory {
+                private boolean enable = false;
+            }
+        }
         private final Validator validator = new Validator();
         @Data
         public static class Validator {
@@ -187,15 +199,26 @@ public class IsisConfiguration {
             private boolean ensureUniqueObjectTypes = true;
             private boolean checkModuleExtent = true;
             private boolean noParamsOnly = false;
+            private boolean actionCollectionParameterChoices = true;
+
+            private boolean jaxbViewModelNotAbstract = true;
+            private boolean jaxbViewModelNotInnerClass = true;
+            private boolean jaxbViewModelNoArgConstructor = false;
+            private boolean jaxbViewModelReferenceTypeAdapter = true;
+            private boolean jaxbViewModelDateTimeTypeAdapter = true;
+
         }
     }
 
     private final Services services = new Services();
     @Data
     public static class Services {
-
+        private final Command command = new Command();
+        @Data
+        public static class Command {
+            private CommandActionsConfiguration actions = CommandActionsConfiguration.NONE;
+        }
         private final Container container = new Container();
-
         @Data
         public static class Container {
 
@@ -219,8 +242,13 @@ public class IsisConfiguration {
 
         }
 
+        // isis.services.publish.actions
+        private final Publish publish = new Publish();
+        @Data
+        public static class Publish {
+           private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
+        }
         private final Translation translation = new Translation();
-
         @Data
         public static class Translation {
 
@@ -359,6 +387,32 @@ public class IsisConfiguration {
              */
             private boolean redirectEvenIfSameObject = false;
         }
+    }
+
+
+    private final Viewers viewers = new Viewers();
+    @Data
+    public static class Viewers {
+        private final Paged paged = new Paged();
+        @Data
+        public static class Paged {
+            private int parented = 12;
+            private int standalone = 25;
+        }
+
+        private final ParameterLayout parameterLayout = new ParameterLayout();
+        @Data
+        public static class ParameterLayout implements ConfigPropsForPropertyOrParameterLayout {
+            private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+            private LabelPosition label = LabelPosition.NOT_SPECIFIED;
+        }
+        private final PropertyLayout propertyLayout = new PropertyLayout();
+        @Data
+        public static class PropertyLayout implements ConfigPropsForPropertyOrParameterLayout {
+            private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
+            private LabelPosition label = LabelPosition.NOT_SPECIFIED;
+        }
+
     }
     
 }

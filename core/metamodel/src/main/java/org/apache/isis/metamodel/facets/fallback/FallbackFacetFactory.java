@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.ConfigPropsForPropertyOrParameterLayout;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -40,10 +41,6 @@ import org.apache.isis.metamodel.facets.TypedHolder;
  *
  */
 public class FallbackFacetFactory extends FacetFactoryAbstract {
-
-    public final static int PAGE_SIZE_STANDALONE_DEFAULT = 25;
-    public final static int PAGE_SIZE_PARENTED_DEFAULT = 12;
-
 
     @SuppressWarnings("unused")
     private final static Map<Class<?>, Integer> TYPICAL_LENGTHS_BY_CLASS = new HashMap<Class<?>, Integer>() {
@@ -76,7 +73,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
 
-        final int pagedStandalone = getPagedConfigSetting("standalone", PAGE_SIZE_STANDALONE_DEFAULT);
+        final int pagedStandalone = getConfiguration().getViewers().getPaged().getStandalone();
         final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
 
         FacetUtil.addFacet(describedAsFacet);
@@ -108,14 +105,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             facets.add(new MaxLengthFacetUnlimited(facetedMethod));
             facets.add(new MultiLineFacetNone(true, facetedMethod));
 
-            facets.add(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout"));
+            facets.add(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getViewers().getPropertyLayout()));
         }
         if (featureType.isAction()) {
             facets.add(new ActionDefaultsFacetNone(facetedMethod));
             facets.add(new ActionChoicesFacetNone(facetedMethod));
         }
         if (featureType.isCollection()) {
-            facets.add(new PagedFacetFromConfiguration(getPagedConfigSetting("parented", PAGE_SIZE_PARENTED_DEFAULT), facetedMethod));
+            facets.add(new PagedFacetFromConfiguration(getConfiguration().getViewers().getPaged().getParented(), facetedMethod));
         }
 
         FacetUtil.addFacets(facets);
@@ -134,41 +131,22 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
             facets.add(new MaxLengthFacetUnlimited(typedHolder));
 
-            facets.add(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout"));
+            facets.add(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getViewers().getParameterLayout()));
         }
 
         FacetUtil.addFacets(facets);
     }
 
-    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey) {
-        final String[] subKeys = new String[]{ "labelPosition", "label"};
-        final String propParamLayout = getPropParamLayoutConfigSetting(layoutKey, subKeys);
-        if(propParamLayout != null) {
-            try {
-                final LabelPosition labelPosition = LabelPosition.valueOf(propParamLayout);
-                return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
-            } catch(IllegalArgumentException ex) {
-                // ignore
-            }
+    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+        final LabelPosition labelPosition = from(configPropsHolder);
+        return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
+    }
+
+    private static LabelPosition from(ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
+        final LabelPosition labelPosition = configPropsHolder.getLabelPosition();
+        if(labelPosition != LabelPosition.NOT_SPECIFIED) {
+            return labelPosition;
         }
-        return null;
+        return configPropsHolder.getLabel();
     }
-
-    private int getPagedConfigSetting(final String subkey, final int defaultValue) {
-        return getConfigurationLegacy().getInteger("isis.viewers.paged." + subkey, defaultValue);
-    }
-
-    private String getPropParamLayoutConfigSetting(final String layout, String... subkeys) {
-        for (String subkey : subkeys) {
-            final String layoutKey = "isis.viewers." + layout + "." + subkey;
-            final String value = getConfigurationLegacy().getString(layoutKey);
-            if(value != null) {
-                return value;
-            }
-        }
-        return null;
-    }
-
-
-
 }

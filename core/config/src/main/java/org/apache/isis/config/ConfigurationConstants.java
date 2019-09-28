@@ -33,24 +33,12 @@ public final class ConfigurationConstants {
     public static final String ROOT_PREFIX = "isis";
     public static final String ROOT = ROOT_PREFIX + DELIMITER;
 
-    public static final String DEFAULT_CONFIG_DIRECTORY = "config";
+//    public static final String DEFAULT_CONFIG_DIRECTORY = "config";
     public static final String WEBINF_DIRECTORY = "WEB-INF";
-    public static final String WEBINF_FULL_DIRECTORY = "src/main/webapp/" + WEBINF_DIRECTORY;
+//    public static final String WEBINF_FULL_DIRECTORY = "src/main/webapp/" + WEBINF_DIRECTORY;
 
-    public static final String DEFAULT_CONFIG_FILE = "isis.properties";
-    public static final String WEB_CONFIG_FILE = "web.properties";
-
-    public static final class Keys {
-
-        public static final class Reflector {
-
-
-            public static final String viewModelSemanticCheckingFacetFactoryEnable = 
-                    ROOT + "reflector.facets.ViewModelSemanticCheckingFacetFactory.enable";
-
-        }
-
-    }
+//    public static final String DEFAULT_CONFIG_FILE = "isis.properties";
+//    public static final String WEB_CONFIG_FILE = "web.properties";
 
     public static final List<String> PROTECTED_KEYS =
             _Lists.of("password", "apiKey", "authToken");

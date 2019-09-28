@@ -46,7 +46,7 @@ class _Config_LifecycleResource {
     }
 
     /**
-     * Returns an empty Optional, if getConfiguration() was called earlier. This 
+     * Returns an empty Optional, if {@link _Config_LifecycleResource#getConfiguration()} was called earlier. This
      * is to ensure, immutability once config was 'finalized'. 
      * @return
      */

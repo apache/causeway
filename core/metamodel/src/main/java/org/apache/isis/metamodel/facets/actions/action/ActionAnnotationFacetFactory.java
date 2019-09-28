@@ -210,7 +210,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(command=...)
-        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfigurationLegacy(), getServiceInjector(), holder);
+        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfiguration(), getServiceInjector(), holder);
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -232,7 +232,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(publishing=...)
-        PublishedActionFacet facet = PublishedActionFacetForActionAnnotation.create(actions, getConfigurationLegacy(), holder);
+        PublishedActionFacet facet = PublishedActionFacetForActionAnnotation.create(actions, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }
