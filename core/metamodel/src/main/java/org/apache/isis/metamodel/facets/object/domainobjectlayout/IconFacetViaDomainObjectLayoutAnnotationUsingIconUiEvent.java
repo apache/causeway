@@ -26,6 +26,7 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -40,7 +41,8 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
             final MetamodelEventService metamodelEventService,
-            final IsisConfigurationLegacy configuration,
+            final IsisConfigurationLegacy configurationLegacy,
+            final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
         return domainObjectLayouts.stream()
@@ -49,8 +51,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
                         iconUiEvent,
                         IconUiEvent.Noop.class,
                         IconUiEvent.Default.class,
-                        "isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault",
-                        configuration))
+                        configuration.getReflector().getFacet().getDomainObjectLayoutAnnotation().getIconUiEvent().isPostForDefault()))
                 .findFirst()
                 .map(iconUiEvent -> {
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(

@@ -350,8 +350,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 lifecycleEvent,
                 ObjectCreatedEvent.Noop.class,
                 ObjectCreatedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
-                getConfigurationLegacy())
+                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getCreatedLifecycleEvent().isPostForDefault())
                 )
         .findFirst()
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
@@ -368,8 +367,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 lifecycleEvent,
                 ObjectLoadedEvent.Noop.class,
                 ObjectLoadedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
-                getConfigurationLegacy())
+                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getLoadedLifecycleEvent().isPostForDefault())
                 )
         .findFirst()
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
@@ -386,8 +384,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 lifecycleEvent,
                 ObjectPersistingEvent.Noop.class,
                 ObjectPersistingEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
-                getConfigurationLegacy())
+                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getPersistingLifecycleEvent().isPostForDefault())
                 )
         .findFirst()
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
@@ -404,8 +401,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 lifecycleEvent,
                 ObjectPersistedEvent.Noop.class,
                 ObjectPersistedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
-                getConfigurationLegacy())
+                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getPersistedLifecycleEvent().isPostForDefault())
                 )
         .findFirst()
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
@@ -422,8 +418,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 lifecycleEvent,
                 ObjectRemovingEvent.Noop.class,
                 ObjectRemovingEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
-                getConfigurationLegacy())
+                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getRemovingLifecycleEvent().isPostForDefault())
                 )
         .findFirst()
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
@@ -440,8 +435,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 lifecycleEvent,
                 ObjectUpdatedEvent.Noop.class,
                 ObjectUpdatedEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
-                getConfigurationLegacy())
+                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getUpdatedLifecycleEvent().isPostForDefault())
                 )
         .findFirst()
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
@@ -458,8 +452,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 lifecycleEvent,
                 ObjectUpdatingEvent.Noop.class,
                 ObjectUpdatingEvent.Default.class,
-                "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
-                getConfigurationLegacy())
+                getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getUpdatingLifecycleEvent().isPostForDefault())
                 )
         .findFirst()
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(

@@ -47,7 +47,7 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
     /**
      * This class is the default for the
      * {@link DomainObjectLayout#layoutUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.layoutUiEvent.postForDefault"
+     * raises an event or not depends upon the <tt>isis.reflector.facet.domainObjectLayoutAnnotation.layoutUiEvent.postForDefault</tt>
      * configuration property.
      */
     public static class Default extends LayoutUiEvent<Object> { }

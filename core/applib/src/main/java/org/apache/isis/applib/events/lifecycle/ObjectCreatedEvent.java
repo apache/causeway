@@ -24,7 +24,7 @@ public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObject#createdLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault"
+     * raises an event or not depends upon the <tt>isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault</tt>
      * configuration property.
      */
     public static class Default extends ObjectCreatedEvent<Object> {}

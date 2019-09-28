@@ -29,7 +29,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault"
+     * raises an event or not depends upon the <tt>isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault</tt>
      * configuration property.
      */
     public static class Default extends TitleUiEvent<Object> {}

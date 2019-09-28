@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.bootstrapping;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -109,8 +110,8 @@ class AutoConfigurationTest {
         val discoveredTypes = registry.streamAndClearInbox()
         .map(Map.Entry::getKey)
         .collect(Collectors.toSet());
-        discoveredTypes.addAll(registry.getEntityTypes());
-        discoveredTypes.addAll(registry.getBeanTypes());
+        discoveredTypes.addAll((Set)registry.getEntityTypes());
+        discoveredTypes.addAll((Set)registry.getBeanTypes());
         
         for(val cls : nonManaged()) {
             assertTrue(discoveredTypes.contains(cls));

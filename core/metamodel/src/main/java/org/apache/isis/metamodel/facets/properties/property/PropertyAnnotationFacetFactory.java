@@ -143,8 +143,8 @@ implements MetaModelValidatorRefiner {
                 propertyDomainEventFacet.getEventType(),
                 PropertyDomainEvent.Noop.class,
                 PropertyDomainEvent.Default.class,
-                "isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault",
-                getConfigurationLegacy())) {
+                getConfiguration().getReflector().getFacet().getPropertyAnnotation().getDomainEvent().isPostForDefault()
+                )) {
             FacetUtil.addFacet(propertyDomainEventFacet);
         }
 
