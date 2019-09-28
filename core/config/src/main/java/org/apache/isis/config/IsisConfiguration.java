@@ -22,6 +22,7 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
+import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
@@ -233,8 +234,13 @@ public class IsisConfiguration {
 
         }
 
+        // isis.services.publish.actions
+        private final Publish publish = new Publish();
+        @Data
+        public static class Publish {
+           private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
+        }
         private final Translation translation = new Translation();
-
         @Data
         public static class Translation {
 
