@@ -48,10 +48,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
     public void process(final ProcessClassContext processClassContext) {
 
         // disable by default
-        final boolean enable = getConfigurationLegacy()
-                .getBoolean(
-                        ConfigurationConstants.Keys.Reflector.viewModelSemanticCheckingFacetFactoryEnable,
-                        false);
+        final boolean enable = getConfiguration().getReflector().getFacets().getViewModelSemanticCheckingFacetFactory().isEnable();
         if(!enable) {
             return;
         }

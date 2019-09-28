@@ -18,6 +18,10 @@
  */
 package org.apache.isis.metamodel.facets.object;
 
+import lombok.val;
+
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,6 +51,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     @Mock
     private ServiceInjector mockServicesInjector;
 
+
     private ViewModelSemanticCheckingFacetFactory facetFactory;
 
     private ValidationFailures processThenRefine(final Class<?> cls) {
@@ -64,7 +69,13 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
         _Context.clear();
         _Config.clear();
-        _Config.put(ConfigurationConstants.Keys.Reflector.viewModelSemanticCheckingFacetFactoryEnable, true);
+
+        val configuration = new IsisConfiguration();
+        configuration.getReflector().getFacets().getViewModelSemanticCheckingFacetFactory().setEnable(true);
+
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(configuration)
+                .build());
 
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
     }

@@ -180,6 +180,15 @@ public class IsisConfiguration {
             }
         }
 
+        private final Facets facets = new Facets();
+        @Data
+        public static class Facets {
+            private final ViewModelSemanticCheckingFacetFactory viewModelSemanticCheckingFacetFactory = new ViewModelSemanticCheckingFacetFactory();
+            @Data
+            public static class ViewModelSemanticCheckingFacetFactory {
+                private boolean enable = false;
+            }
+        }
         private final Validator validator = new Validator();
         @Data
         public static class Validator {

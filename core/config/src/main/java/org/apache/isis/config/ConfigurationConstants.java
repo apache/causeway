@@ -40,18 +40,6 @@ public final class ConfigurationConstants {
 //    public static final String DEFAULT_CONFIG_FILE = "isis.properties";
 //    public static final String WEB_CONFIG_FILE = "web.properties";
 
-    public static final class Keys {
-
-        public static final class Reflector {
-
-
-            public static final String viewModelSemanticCheckingFacetFactoryEnable = 
-                    ROOT + "reflector.facets.ViewModelSemanticCheckingFacetFactory.enable";
-
-        }
-
-    }
-
     public static final List<String> PROTECTED_KEYS =
             _Lists.of("password", "apiKey", "authToken");
 
