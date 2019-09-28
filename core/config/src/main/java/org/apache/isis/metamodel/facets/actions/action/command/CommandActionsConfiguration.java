@@ -19,8 +19,6 @@
 package org.apache.isis.metamodel.facets.actions.action.command;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum CommandActionsConfiguration {
     ALL,

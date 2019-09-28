@@ -4,8 +4,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class IsisConfiguration_getMaxTitleLengthInParentedTables_Test {
 
     private IsisConfiguration configuration;

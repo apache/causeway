@@ -22,7 +22,6 @@ import java.util.List;
 
 public class CategorizedDomainObjectComparableContractTest_compareTo extends ComparableContractTest_compareTo<CategorizedDomainObject> {
 
-    @SuppressWarnings("unchecked")
     @Override
     protected List<List<CategorizedDomainObject>> orderedTuples() {
         return listOf(
