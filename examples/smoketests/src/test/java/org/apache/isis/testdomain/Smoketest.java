@@ -28,11 +28,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 /**
- * To be used on test classes, that are not considered to produce stable results (incubating).
+ * To be used on all smoke-test classes, to allow for a convenient means to globally apply meta-annotations.
  */
 @Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS) //XXX prevents re-use of cached application-context
 @Documented
 public @interface Smoketest {
 
