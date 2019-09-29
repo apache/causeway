@@ -216,6 +216,32 @@ public interface WrapperFactory {
         return async(domainObject, ExecutionMode.EXECUTE);
     }
     
+    /**
+     * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass}, 
+     * to prepare for type-safe asynchronous action execution. 
+     * 
+     * @param <T>
+     * @param mixinClass
+     * @param mixedIn
+     * @param mode
+     * 
+     * @since 2.0
+     */
+    <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, EnumSet<ExecutionMode> mode);
+    
+    /**
+     * Shortcut for {@link #asyncMixin(Class, Object, EnumSet)} using execution mode 
+     * {@link ExecutionMode#EXECUTE}.
+     * @param <T>
+     * @param mixinClass
+     * @param mixedIn
+     * 
+     * @since 2.0
+     */
+    default <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn) {
+        return asyncMixin(mixinClass, mixedIn, ExecutionMode.EXECUTE);
+    }
+    
     // -- ITERACTION EVENT HANDLING
     
     /**

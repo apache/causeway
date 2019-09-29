@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.command.spi;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.Command;
 
 /**
@@ -30,14 +29,12 @@ public interface CommandService {
      * Simply instantiate the appropriate instance of the {@link Command}.  Its members will be populated automatically
      * by the framework (the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()} and {@link Command#getUniqueId()}).
      */
-    @Programmatic
     Command create();
 
     /**
      * Hint for this implementation to eagerly persist the {@link Command}s if possible; influences the behaviour
      * of actions annotated to execute in the {@link org.apache.isis.applib.annotation.CommandExecuteIn#BACKGROUND}.
      */
-    @Programmatic
     boolean persistIfPossible(Command command);
 
     /**
@@ -52,7 +49,6 @@ public interface CommandService {
      *     The framework will automatically have set the {@link Command#getCompletedAt()} property.
      * </p>
      */
-    @Programmatic
     void complete(final Command command);
 
 }

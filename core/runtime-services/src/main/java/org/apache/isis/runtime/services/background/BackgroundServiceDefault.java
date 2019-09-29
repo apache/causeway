@@ -120,20 +120,20 @@ public class BackgroundServiceDefault implements BackgroundService {
 
         val constructorArgTypes = initialize 
                 ? new Class<?>[] {mixedInIfAny.getClass()} 
-        : _Constants.emptyClasses;
+                    : _Constants.emptyClasses;
 
-                val constructorArgs = initialize 
-                        ? new Object[] {mixedInIfAny} 
-                : _Constants.emptyObjects;
+        val constructorArgs = initialize 
+                ? new Object[] {mixedInIfAny} 
+                    : _Constants.emptyObjects;
 
-                        val proxyFactory = ProxyFactory.<T>builder(cls)
-                                .interfaces(interfaces)
-                                .constructorArgTypes(constructorArgTypes)
-                                .build();
+        val proxyFactory = ProxyFactory.<T>builder(cls)
+                .interfaces(interfaces)
+                .constructorArgTypes(constructorArgTypes)
+                .build();
 
-                        return initialize
-                                ? proxyFactory.createInstance(methodHandler, constructorArgs)
-                                        : proxyFactory.createInstance(methodHandler, /*initialize*/false);
+        return initialize
+                ? proxyFactory.createInstance(methodHandler, constructorArgs)
+                        : proxyFactory.createInstance(methodHandler, /*initialize*/false);
     }
 
     // -- DEPENDENCIES

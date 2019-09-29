@@ -179,6 +179,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val executor = ForkJoinPool.commonPool(); // default, but can be overwritten through withers on the returned AsyncWrap
         return new AsyncWrapDefault<T>(this, domainObject, mode, executor, log::error);
     }
+    
+    @Override
+    public <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, EnumSet<ExecutionMode> mode) {
+        val mixin = factoryService.<T>mixin(mixinClass, mixedIn);
+        return async(mixin, mode);
+    }
 
     // /////////////////////////////////////////////////////////////
     // Listeners
