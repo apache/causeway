@@ -25,10 +25,8 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
@@ -36,29 +34,15 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     private final List<FacetFactory> facetFactories = _Lists.newArrayList();
     private final List<Object> facetFactoryInstancesOrClasses = _Lists.newLinkedList();
 
-    public static final String KEY_IGNORE_DEPRECATED = "isis.reflector.facets.ignoreDeprecated";
-
     public enum DeprecatedPolicy {
         IGNORE,
         HONOUR;
-
-        public static DeprecatedPolicy parse(final IsisConfigurationLegacy configuration) {
-            boolean ignoreDep = configuration.getBoolean(KEY_IGNORE_DEPRECATED, false);
-            return ignoreDep ? IGNORE : HONOUR;
-        }
-
-        //[2112]        
-        //        public static DeprecatedPolicy parse(final IsisConfigurationBuilder configuration) {
-        //            boolean ignoreDep = configuration.peekAtBoolean(KEY_IGNORE_DEPRECATED, false);
-        //            return ignoreDep ? IGNORE : HONOUR;
-        //        }
-
     }
 
     protected final DeprecatedPolicy deprecatedPolicy;
 
     public ProgrammingModelAbstract(
-            final ProgrammingModelFacetsJava8.DeprecatedPolicy deprecatedPolicy) {
+            final DeprecatedPolicy deprecatedPolicy) {
 
         this.deprecatedPolicy = deprecatedPolicy;
     }

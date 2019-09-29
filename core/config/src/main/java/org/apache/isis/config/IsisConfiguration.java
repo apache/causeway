@@ -227,6 +227,7 @@ public class IsisConfiguration {
             public static class ViewModelSemanticCheckingFacetFactory {
                 private boolean enable = false;
             }
+            private boolean ignoreDeprecated = false;
         }
         private final Validator validator = new Validator();
         @Data
