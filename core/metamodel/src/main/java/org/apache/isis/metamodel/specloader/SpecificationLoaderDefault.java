@@ -86,9 +86,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private PostProcessor postProcessor;
 
-    @Inject
-    private IsisConfiguration configuration;
-
     @PostConstruct
     public void preInit() {
         this.programmingModel = programmingModelService.get();
@@ -100,11 +97,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance (
+            final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator) {
 
         val instance = new SpecificationLoaderDefault(); 
 
+        instance.configuration = configuration;
         instance.programmingModel = programmingModel;
         instance.metaModelValidator = metaModelValidator;
 
@@ -475,8 +474,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     // -- DEPS
 
-    private @Inject ProgrammingModelService programmingModelService;
-    private @Inject MetaModelValidatorService metaModelValidatorService; 
+    @Inject private ProgrammingModelService programmingModelService;
+    @Inject private MetaModelValidatorService metaModelValidatorService; 
+    @Inject private IsisConfiguration configuration;
 
     // -- DEPRECATED
 

@@ -30,12 +30,14 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.config.IsisConfigModule;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
+        IsisConfigModule.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorDefaultTest.Producers.class,

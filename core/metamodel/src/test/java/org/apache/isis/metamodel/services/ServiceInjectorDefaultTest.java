@@ -35,6 +35,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.config.IsisConfigModule;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
@@ -48,6 +50,7 @@ import lombok.val;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
+        IsisConfigModule.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorDefaultTest.Producers.class,
@@ -122,12 +125,18 @@ class ServiceInjectorDefaultTest {
     @Inject private ServiceInjector injector;
     @Inject private ServiceRegistry registry;
     @Inject private ApplicationContext applicationContext;
+    @Inject private IsisConfiguration isisConfiguration;
 
     @BeforeEach
     void setup() {
         if(!_Spring.isContextAvailable()) {
             _Spring.init(applicationContext);    
         }
+    }
+    
+    @Test
+    void configInjector_shouldSetPrefix() {
+        assertTrue(isisConfiguration.getServices().getInjector().isSetPrefix());
     }
 
     @Test

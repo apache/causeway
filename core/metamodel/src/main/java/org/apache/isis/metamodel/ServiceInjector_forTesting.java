@@ -47,7 +47,7 @@ class ServiceInjector_forTesting implements ServiceInjector {
 
             val mmcb = (MetaModelContext_forTesting) mmc;
 
-            val configuration = requireNonNull(mmcb.getConfigurationLegacy());
+            val configuration = requireNonNull(mmcb.getConfiguration());
             val serviceRegistry = requireNonNull(mmcb.getServiceRegistry());
             val injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
 

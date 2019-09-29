@@ -30,13 +30,16 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditableFacetFromConfiguration;
@@ -46,6 +49,7 @@ import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjec
 import org.apache.isis.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
+import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetFromConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
@@ -59,6 +63,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecId;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -88,10 +94,44 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
     }
-
-    protected void allowingConfigurationToReturn(final String name, final String value) {
-        _Config.put(name, value);
+    
+    void allowingAuditObjectsToReturn(AuditObjectsConfiguration value) {
+        
+//        val config = new IsisConfiguration();
+        
+        if(value!=null) {
+          //TODO[2086] config.getServices().getAudit().setObjects(value);
+            _Config.put("isis.services.audit.objects", value.name().toLowerCase());
+        }
+        
+//        MetaModelContext.preset(MetaModelContext.builder()
+//                .configuration(config)
+//                .build());
     }
+    
+    void allowingPublishObjectsToReturn(PublishObjectsConfiguration value) {
+        val config = new IsisConfiguration();
+        if(value!=null) {
+            config.getServices().getPublish().setObjects(value);
+        }
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(config)
+                .build());
+    }
+    
+    void allowingObjectsEditingToReturn(EditingObjectsConfiguration value) {
+        
+        val config = new IsisConfiguration();
+
+        if(value!=null) {
+            config.getObjects().setEditing(value);
+        }
+        
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(config)
+                .build());
+    }
+
 
     protected void ignoringConfiguration() {
 
@@ -114,7 +154,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void ignoreHasTransactionId() {
 
-            allowingConfigurationToReturn("isis.services.audit.objects", "all");
+            allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
 
             facetFactory.processAuditing(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
 
@@ -128,7 +168,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_all() {
-                allowingConfigurationToReturn("isis.services.audit.objects", "all");
+                allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
 
                 facetFactory.processAuditing(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -141,7 +181,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_none() {
-                allowingConfigurationToReturn("isis.services.audit.objects", "none");
+                allowingAuditObjectsToReturn(AuditObjectsConfiguration.NONE);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -153,8 +193,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
 
             @Test
-            public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn("isis.services.audit.objects", "foobar");
+            public void configured_value_set_to_default() {
+                allowingAuditObjectsToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -170,7 +210,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_all() {
-                allowingConfigurationToReturn("isis.services.audit.objects", "all");
+                allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -183,7 +223,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_none() {
-                allowingConfigurationToReturn("isis.services.audit.objects", "none");
+                allowingAuditObjectsToReturn(AuditObjectsConfiguration.NONE);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -195,8 +235,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
 
             @Test
-            public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn("isis.services.audit.objects", "foobar");
+            public void configured_value_set_to_default() {
+                allowingAuditObjectsToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -212,7 +252,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn("isis.services.audit.objects", null);
+                allowingAuditObjectsToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
@@ -229,7 +269,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn("isis.services.audit.objects", "all");
+                allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
 
@@ -265,7 +305,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void ignoreHasTransactionId() {
 
-            allowingConfigurationToReturn("isis.services.publish.objects", "all");
+            allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
 
             facetFactory.process(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
 
@@ -279,7 +319,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_all() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "all");
+                allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -292,7 +332,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_none() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "none");
+                allowingPublishObjectsToReturn(PublishObjectsConfiguration.NONE);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -303,8 +343,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
 
             @Test
-            public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "foobar");
+            public void configured_value_set_to_default() {
+                allowingPublishObjectsToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -320,7 +360,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_all() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "all");
+                
+                allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
 
                 facetFactory.process(new ProcessClassContext(
                         CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
@@ -333,7 +374,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_none() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "none");
+                allowingPublishObjectsToReturn(PublishObjectsConfiguration.NONE);
 
                 facetFactory.process(new ProcessClassContext(
                         CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
@@ -345,8 +386,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
 
             @Test
-            public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "foobar");
+            public void configured_value_set_to_default() {
+                allowingPublishObjectsToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(
                         CustomerWithDomainObjectAndPublishingSetToAsConfigured.class, mockMethodRemover, facetHolder));
@@ -363,7 +404,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn("isis.services.publish.objects", null);
+                allowingPublishObjectsToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToEnabled.class, mockMethodRemover, facetHolder));
 
@@ -380,7 +421,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn("isis.services.publish.objects", "all");
+                allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToDisabled.class, mockMethodRemover, facetHolder));
 
@@ -583,7 +624,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_true() {
-                allowingConfigurationToReturn("isis.objects.editing", "true");
+                allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -595,7 +636,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_false() {
-                allowingConfigurationToReturn("isis.objects.editing", "false");
+                allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -607,8 +648,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
 
             @Test
-            public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn("isis.objects.editing", "foobar");
+            public void configured_value_set_to_defaults() {
+                //allowingConfigurationToReturn("isis.objects.editing", "foobar");
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -624,7 +665,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_true() {
-                allowingConfigurationToReturn("isis.objects.editing", "true");
+                allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -636,7 +677,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_false() {
-                allowingConfigurationToReturn("isis.objects.editing", "false");
+                allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -648,8 +689,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             }
 
             @Test
-            public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn("isis.objects.editing", "foobar");
+            public void configured_value_set_to_defaults() {
+                //allowingConfigurationToReturn("isis.objects.editing", "foobar");
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -664,7 +705,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn("isis.objects.editing", "false");
+                allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
 
                 facetFactory.process(new ProcessClassContext(
                         CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
@@ -681,7 +722,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn("isis.objects.editing", "true");
+                allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
 
                 facetFactory.process(new ProcessClassContext(
                         CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));

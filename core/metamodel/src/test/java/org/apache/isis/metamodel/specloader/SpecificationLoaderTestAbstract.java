@@ -88,8 +88,9 @@ abstract class SpecificationLoaderTestAbstract {
         }
 
         //@Produces
-        SpecificationLoader getSpecificationLoader() {
+        SpecificationLoader getSpecificationLoader(IsisConfiguration configuration) {
             return SpecificationLoaderDefault.getInstance(
+                    configuration,
                     new ProgrammingModelFacetsJava8(ProgrammingModelAbstract.DeprecatedPolicy.HONOUR),
                     new MetaModelValidatorDefault());
         }
@@ -118,7 +119,7 @@ abstract class SpecificationLoaderTestAbstract {
 
         MetaModelContext.preset(MetaModelContext.builder()
                 .configuration(isisConfiguration = producers.newConfiguration())
-                .specificationLoader(specificationLoader = producers.getSpecificationLoader())
+                .specificationLoader(specificationLoader = producers.getSpecificationLoader(isisConfiguration))
                 .translationService(producers.mockTranslationService())
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
                 .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())

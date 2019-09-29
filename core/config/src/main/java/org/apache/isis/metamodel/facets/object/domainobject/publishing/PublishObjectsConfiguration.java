@@ -19,8 +19,6 @@
 package org.apache.isis.metamodel.facets.object.domainobject.publishing;
 
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum PublishObjectsConfiguration {
     ALL,

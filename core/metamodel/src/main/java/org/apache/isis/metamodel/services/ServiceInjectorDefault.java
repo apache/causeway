@@ -29,7 +29,6 @@ import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
@@ -50,10 +49,9 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 
-    @Inject IsisConfigurationLegacy configurationLegacy;
-    @Inject IsisConfiguration configuration;
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject InjectorMethodEvaluator injectorMethodEvaluator;
+    @Inject private IsisConfiguration configuration;
+    @Inject private ServiceRegistry serviceRegistry;
+    @Inject private InjectorMethodEvaluator injectorMethodEvaluator;
 
     private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newHashMap();
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
@@ -245,12 +243,12 @@ public class ServiceInjectorDefault implements ServiceInjector {
      * JUnit Test support. 
      */
     public static ServiceInjectorDefault getInstanceAndInit(
-            IsisConfigurationLegacy configuration,
+            IsisConfiguration configuration,
             ServiceRegistry serviceRegistry,
             InjectorMethodEvaluator injectorMethodEvaluator) {
         val instance = new ServiceInjectorDefault();
 
-        instance.configurationLegacy = configuration;
+        instance.configuration = configuration;
         instance.serviceRegistry = serviceRegistry;
         instance.injectorMethodEvaluator = injectorMethodEvaluator;
 

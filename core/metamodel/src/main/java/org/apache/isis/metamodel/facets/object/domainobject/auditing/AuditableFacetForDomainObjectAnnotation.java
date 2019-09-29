@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
 import org.apache.isis.applib.annotation.Auditing;
@@ -37,9 +38,9 @@ import lombok.val;
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
 
     public static AuditableFacet create(
-            final List<DomainObject> domainObjectAnnotations,
-            final IsisConfigurationLegacy configuration,
-            final FacetHolder holder) {
+            List<DomainObject> domainObjectAnnotations,
+            IsisConfigurationLegacy configuration,
+            FacetHolder holder) {
 
         val domainObjectAnnotation = domainObjectAnnotations.stream()
                 .filter(doAnnot -> doAnnot.auditing() != Auditing.NOT_SPECIFIED)
@@ -51,18 +52,19 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
 
     @NotNull
     private static AuditableFacet create(
-            final DomainObject domainObjectAnnotation,
-            final IsisConfigurationLegacy configuration,
-            final FacetHolder holder) {
+            @Nullable DomainObject domainObjectAnnotation,
+            IsisConfigurationLegacy configuration,
+            FacetHolder holder) {
 
-        final Auditing auditing = domainObjectAnnotation != null 
+        val auditing = domainObjectAnnotation != null 
                 ? domainObjectAnnotation.auditing() 
                         : Auditing.AS_CONFIGURED;
+                
         switch (auditing) {
         case AS_CONFIGURED:
 
-            val setting = AuditObjectsConfiguration.parse(configuration);
-            switch (setting) {
+            val auditObjects = AuditObjectsConfiguration.parse(configuration);
+            switch (auditObjects) {
             case NONE:
                 return null;
             default:
@@ -83,8 +85,9 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
     }
 
     protected AuditableFacetForDomainObjectAnnotation(
-            final Enablement enablement,
-            final FacetHolder holder) {
+            Enablement enablement,
+            FacetHolder holder) {
+        
         super(holder, enablement);
     }
 }

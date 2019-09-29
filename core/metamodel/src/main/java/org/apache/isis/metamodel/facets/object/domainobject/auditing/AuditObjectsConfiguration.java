@@ -21,9 +21,6 @@ package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
-// TODO: v2: why is this enum no longer referenced?
-//  compare AuditableFacetForDomainObjectAnnotation vs PublishedObjectFacetForDomainObjectAnnotation
-//  the latter does read from the configuration, but the former does not.
 public enum AuditObjectsConfiguration {
     ALL,
     NONE;

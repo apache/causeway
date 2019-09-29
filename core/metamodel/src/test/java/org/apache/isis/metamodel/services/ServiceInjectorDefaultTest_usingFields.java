@@ -32,6 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.config.IsisConfigModule;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.hamcrest.Matchers.any;
@@ -41,6 +42,7 @@ import lombok.Getter;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
+        IsisConfigModule.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorDefaultTest.Producers.class,
