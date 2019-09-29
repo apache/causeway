@@ -20,6 +20,9 @@ package org.apache.isis.testdomain.auditing;
 
 import java.sql.Timestamp;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -30,9 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.audit.AuditerService;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -63,7 +67,7 @@ class AuditerServiceTest {
 
     @Inject private RepositoryService repository;
     @Inject private FixtureScripts fixtureScripts;
-    @Inject private BackgroundService backgroundService;
+    @Inject private WrapperFactory wrapper;
     @Inject private AuditerServiceProbe auditerService;
 
     @BeforeEach
@@ -105,7 +109,8 @@ class AuditerServiceTest {
     }
 
     @Test
-    void auditerServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() throws InterruptedException {
+    void auditerServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() 
+            throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
         val books = repository.allInstances(Book.class);
@@ -114,11 +119,11 @@ class AuditerServiceTest {
         auditerService.clearHistory();
 
         // when - running within its own background task
-        backgroundService.execute(book)
-        .setName("Book #2");
+        val future = wrapper.async(book, ExecutionMode.SKIP_RULES) //TODO why do we fail when not skipping rules?
+        .run(Book::setName, "Book #2");
 
-        Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
-
+        future.get(1000, TimeUnit.SECONDS);
+        
         // then - after the commit
         assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
                 auditerService.getHistory());

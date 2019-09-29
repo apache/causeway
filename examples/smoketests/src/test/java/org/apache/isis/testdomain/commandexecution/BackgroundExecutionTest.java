@@ -32,7 +32,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -65,9 +64,8 @@ class BackgroundExecutionTest {
 
     @Inject FixtureScripts fixtureScripts;
     @Inject RepositoryService repository;
-    @Inject BackgroundService backgroundService;
     @Inject FactoryService facoryService;
-    @Inject WrapperFactory wrapperFactory;
+    @Inject WrapperFactory wrapper;
     @Inject ActionDomainEventListener actionDomainEventListener;
 
     @BeforeEach
@@ -87,7 +85,8 @@ class BackgroundExecutionTest {
 
         assertEquals(99d, product.getPrice(), 1E-6);
 
-        backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
+        wrapper.async(inventoryManager)
+        .run(InventoryManager::updateProductPrice, product, 123d);
 
         Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
         assertEquals(123d, product.getPrice(), 1E-6);
@@ -102,8 +101,9 @@ class BackgroundExecutionTest {
         assertEquals(99d, product.getPrice(), 1E-6);
 
         actionDomainEventListener.prepareLatch();
-
-        backgroundService.execute(inventoryManager).updateProductPrice(product, 123);
+        
+        wrapper.async(inventoryManager)
+        .run(InventoryManager::updateProductPrice, product, 123d);
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()

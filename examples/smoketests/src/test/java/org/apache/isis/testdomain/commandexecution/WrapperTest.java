@@ -33,7 +33,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -65,12 +64,11 @@ import lombok.val;
         })
 class WrapperTest {
 
-    @Inject FixtureScripts fixtureScripts;
-    @Inject RepositoryService repository;
-    @Inject BackgroundService backgroundService;
-    @Inject FactoryService facoryService;
-    @Inject WrapperFactory wrapper;
-    @Inject ActionDomainEventListener actionDomainEventListener;
+    @Inject private FixtureScripts fixtureScripts;
+    @Inject private RepositoryService repository;
+    @Inject private FactoryService facoryService;
+    @Inject private WrapperFactory wrapper;
+    @Inject private ActionDomainEventListener actionDomainEventListener;
 
     @BeforeEach
     void setUp() {
@@ -112,7 +110,7 @@ class WrapperTest {
 
         Future<Product> invocationResult = wrapper.async(inventoryManager)
                 .withExecutor(Executors.newCachedThreadPool()) // use of custom executor (optional)
-                .invoke(InventoryManager::updateProductPrice, product, 123d);
+                .call(InventoryManager::updateProductPrice, product, 123d);
 
 //XXX type-safety should prevent this snippet from being compiled!        
 //        Future<String> invocationResult2 = wrapper.async(inventoryManager)

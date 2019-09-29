@@ -18,8 +18,11 @@
  */
 package org.apache.isis.testdomain.publishing;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -29,11 +32,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.Smoketest;
@@ -62,7 +66,7 @@ class PublisherServiceTest {
 
     @Inject private RepositoryService repository;
     @Inject private FixtureScripts fixtureScripts;
-    @Inject private BackgroundService backgroundService;
+    @Inject private WrapperFactory wrapper;
     @Inject private PublisherServiceProbe publisherService;
 
     @BeforeEach
@@ -102,17 +106,18 @@ class PublisherServiceTest {
     }
 
     @Test @Order(2)
-    void publisherServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() throws InterruptedException {
+    void publisherServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() 
+            throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
         val book = repository.allInstances(Book.class).listIterator().next();
         publisherService.clearHistory();
 
         // when - running within its own background task
-        backgroundService.execute(book)
-        .setName("Book #2");
+        val future = wrapper.async(book, ExecutionMode.SKIP_RULES) //TODO why do we fail when not skipping rules?
+                .run(Book::setName, "Book #2");
 
-        Thread.sleep(1000); //TODO fragile test, find another way to sync on the background task
+        future.get(1000, TimeUnit.SECONDS);
 
         // then - after the commit
         assertEquals("publishedObjects=created=0,deleted=1,loaded=0,updated=2,modified=1,",

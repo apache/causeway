@@ -49,9 +49,10 @@ import lombok.val;
  * For command-reification depends on an implementation of
  * {@link org.apache.isis.applib.services.background.BackgroundCommandService} to
  * be configured.
+ * @deprecated compare with v1.x and check whether we can cleanup the API
  */
-@Service
-public class BackgroundServiceDefault implements BackgroundService {
+//@Service
+class BackgroundServiceDefault implements BackgroundService {
 
     private InvocationHandlerFactory invocationHandlerFactory;  
 

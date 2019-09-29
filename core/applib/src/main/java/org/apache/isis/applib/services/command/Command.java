@@ -29,7 +29,6 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -55,6 +54,7 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
  * </p>
  *
  * <p>
+ *     TODO[2158], no longer true!
  *     One of the responsibilities of the command is to generate unique sequence numbers for a given transactionId.
  *     This is done by {@link #next(String)}.  There are three possible sequences that might be generated:
  *     the sequence of changed domain objects being published by the {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution)}; the

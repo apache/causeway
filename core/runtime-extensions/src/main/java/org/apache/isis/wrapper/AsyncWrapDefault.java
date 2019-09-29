@@ -68,82 +68,84 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     @Getter(onMethod = @__({@Override})) 
     @With(value = AccessLevel.PUBLIC, onMethod = @__(@Override)) 
     private Consumer<Exception> exceptionHandler;  
+
+        
+    // -- METHOD REFERENCE MATCHERS (WITH RETURN VALUE)
+    
+    @Override
+    public <R> Future<R> call(Call0<? super T, ? extends R> action) {
+        
+        if(shouldValidate()) {
+            // do validation synchronous (with the calling thread)
+            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            action.call(proxy_validateOnly);
+        }
+        
+        if(shouldExecute()) {
+            // to also trigger domain events, we need a proxy, but validation (if required)
+            // was already done above
+            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            return submit(()->action.call(proxy_executeOnly));
+        }
+        
+        return CompletableFuture.completedFuture(null);
+    }
+
+
+    @Override
+    public <R, A1> Future<R> call(Call1<? super T, ? extends R, A1> action, A1 arg1) {
+        
+        if(shouldValidate()) {
+            // do validation synchronous (with the calling thread)
+            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            action.call(proxy_validateOnly, arg1);
+        }
+        
+        if(shouldExecute()) {
+            // to also trigger domain events, we need a proxy, but validation (if required)
+            // was already done above
+            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            return submit(()->action.call(proxy_executeOnly, arg1));
+        }
+        
+        return CompletableFuture.completedFuture(null);
+    }
+
+    @Override
+    public <R, A1, A2> Future<R> call(Call2<? super T, ? extends R, A1, A2> action, A1 arg1, A2 arg2) {
+
+        if(shouldValidate()) {
+            // do validation synchronous (with the calling thread)
+            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            action.call(proxy_validateOnly, arg1, arg2);
+        }
+        
+        if(shouldExecute()) {
+            // to also trigger domain events, we need a proxy, but validation (if required)
+            // was already done above
+            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            return submit(()->action.call(proxy_executeOnly, arg1, arg2));
+        }
+        
+        return CompletableFuture.completedFuture(null);
+    }
     
 
     @Override
-    public <R> Future<R> invoke(Invoke0<? super T, ? extends R> action) {
-        
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
-            action.invoke(proxy_validateOnly);
-        }
-        
-        if(shouldExecute()) {
-            // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
-            return submit(()->action.invoke(proxy_executeOnly));
-        }
-        
-        return CompletableFuture.completedFuture(null);
-    }
-
-
-    @Override
-    public <R, A1> Future<R> invoke(Invoke1<? super T, ? extends R, A1> action, A1 arg1) {
-        
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
-            action.invoke(proxy_validateOnly, arg1);
-        }
-        
-        if(shouldExecute()) {
-            // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
-            return submit(()->action.invoke(proxy_executeOnly, arg1));
-        }
-        
-        return CompletableFuture.completedFuture(null);
-    }
-
-    @Override
-    public <R, A1, A2> Future<R> invoke(Invoke2<? super T, ? extends R, A1, A2> action, A1 arg1, A2 arg2) {
-
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
-            action.invoke(proxy_validateOnly, arg1, arg2);
-        }
-        
-        if(shouldExecute()) {
-            // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
-            return submit(()->action.invoke(proxy_executeOnly, arg1, arg2));
-        }
-        
-        return CompletableFuture.completedFuture(null);
-    }
-    
-
-    @Override
-    public <R, A1, A2, A3> Future<R> invoke(Invoke3<? super T, ? extends R, A1, A2, A3> action, 
+    public <R, A1, A2, A3> Future<R> call(Call3<? super T, ? extends R, A1, A2, A3> action, 
             A1 arg1, A2 arg2, A3 arg3) {
         
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
             val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
-            action.invoke(proxy_validateOnly, arg1, arg2, arg3);
+            action.call(proxy_validateOnly, arg1, arg2, arg3);
         }
         
         if(shouldExecute()) {
          // to also trigger domain events, we need a proxy, but validation (if required)
             // was already done above
             val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
-            return submit(()->action.invoke(proxy_executeOnly, arg1, arg2, arg3));
+            return submit(()->action.call(proxy_executeOnly, arg1, arg2, arg3));
         }
         
         return CompletableFuture.completedFuture(null);
@@ -151,20 +153,20 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
 
 
     @Override
-    public <R, A1, A2, A3, A4> Future<R> invoke(Invoke4<? super T, ? extends R, A1, A2, A3, A4> action, 
+    public <R, A1, A2, A3, A4> Future<R> call(Call4<? super T, ? extends R, A1, A2, A3, A4> action, 
             A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
 
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
             val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
-            action.invoke(proxy_validateOnly, arg1, arg2, arg3, arg4);
+            action.call(proxy_validateOnly, arg1, arg2, arg3, arg4);
         }
         
         if(shouldExecute()) {
             // to also trigger domain events, we need a proxy, but validation (if required)
             // was already done above
             val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
-            return submit(()->action.invoke(proxy_executeOnly, arg1, arg2, arg3, arg4));
+            return submit(()->action.call(proxy_executeOnly, arg1, arg2, arg3, arg4));
         }
         
         return CompletableFuture.completedFuture(null);
@@ -219,7 +221,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     private boolean shouldExecute() {
         return !executionMode.contains(ExecutionMode.SKIP_EXECUTION);
     }
-    
+
 
 
 }

@@ -47,7 +47,7 @@ org.apache.isis.metamodel.specloader.MetaModelValidatorServiceDefault
 org.apache.isis.metamodel.specloader.ProgrammingModelServiceDefault
 org.apache.isis.metamodel.specloader.SpecificationLoaderDefault
 org.apache.isis.runtime.services.authsess.AuthenticationSessionProviderDefault
-org.apache.isis.runtime.services.background.BackgroundServiceDefault
+#org.apache.isis.runtime.services.background.BackgroundServiceDefault
 org.apache.isis.runtime.services.background.CommandExecutorServiceDefault
 org.apache.isis.runtime.services.bookmarks.BookmarkServiceInternalDefault
 org.apache.isis.runtime.services.command.CommandDtoServiceInternalDefault

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.background;
 
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+
 /**
  * Submit actions to be invoked in the background.
  *
@@ -33,6 +35,8 @@ package org.apache.isis.applib.services.background;
  * &#64;javax.inject.Inject
  * private BackgroundService backgroundService;
  * </pre>
+ * 
+ * @deprecated replaced by the {@link WrapperFactory#async(Object)}
  */
 public interface BackgroundService {
 

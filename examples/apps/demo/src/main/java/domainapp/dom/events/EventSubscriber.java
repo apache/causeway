@@ -27,9 +27,8 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 import static domainapp.utils.DemoUtils.emphasize;
 
@@ -40,10 +39,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 @Component
 public class EventSubscriber {
 
-    @Inject private BackgroundService backgroundService;
+    @Inject private WrapperFactory wrapper;
     @Inject private EventBusService eventBusService;
     @Inject private EventLogRepository eventLogRepository;
-    @Inject private TransactionService transactionService;
+//    @Inject private TransactionService transactionService;
 
     public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {}
 
@@ -61,15 +60,14 @@ public class EventSubscriber {
         }
 
         log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
-
-        //backgroundService.execute(this).storeEvent(EventLogEntry.of(ev));
-
+        
         // store in event log
-        //eventLog.add(EventLogEntry.of(ev));
-
-        transactionService.executeWithinTransaction(()->{
-            storeEvent(ev);
-        });
+        wrapper.async(this)
+        .run(EventSubscriber::storeEvent, ev);
+        
+//        transactionService.executeWithinTransaction(()->{
+//            storeEvent(ev);
+//        });
 
     }
 
