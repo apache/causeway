@@ -39,6 +39,7 @@ import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjec
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
 import org.apache.isis.metamodel.facets.properties.property.command.CommandPropertiesConfiguration;
 import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPropertiesConfiguration;
+import org.apache.isis.metamodel.services.appfeat.ApplicationFeaturesInitConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -255,6 +256,11 @@ public class IsisConfiguration {
     private final Services services = new Services();
     @Data
     public static class Services {
+        private final ApplicationFeatures applicationFeatures = new ApplicationFeatures();
+        @Data
+        public static class ApplicationFeatures {
+            ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
+        }
         private final Command command = new Command();
         @Data
         public static class Command {
