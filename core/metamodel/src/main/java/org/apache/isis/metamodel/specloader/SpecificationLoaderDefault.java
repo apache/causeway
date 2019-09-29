@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -87,6 +88,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private PostProcessor postProcessor;
+
+    @Inject
+    private IsisConfiguration configuration;
 
     @PostConstruct
     public void preInit() {
@@ -418,8 +422,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private void introspect(final Collection<ObjectSpecification> specs, final IntrospectionState upTo) {
 
-        val isConcurrentFromConfig = (boolean) CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
-        
+        val isConcurrentFromConfig = configuration.getReflector().getIntrospector().isParallelize();
+
         val runSequential = !isConcurrentFromConfig || true; //FIXME concurrent specloading disabled, it deadlocks
         
         if(runSequential) { 

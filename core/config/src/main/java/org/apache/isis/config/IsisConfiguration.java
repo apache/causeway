@@ -230,6 +230,12 @@ public class IsisConfiguration {
             }
             private boolean ignoreDeprecated = false;
         }
+
+        private final Introspector introspector = new Introspector();
+        @Data
+        public static class Introspector {
+            private boolean parallelize = true;
+        }
         private final Validator validator = new Validator();
         @Data
         public static class Validator {
