@@ -33,6 +33,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
+import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
@@ -304,6 +305,12 @@ public class IsisConfiguration {
             ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
         }
 
+        private final Audit audit = new Audit();
+        @Data
+        public static class Audit {
+            private AuditObjectsConfiguration objects = AuditObjectsConfiguration.NONE;
+        }
+        
         private final Command command = new Command();
         @Data
         public static class Command {

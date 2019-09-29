@@ -36,7 +36,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PublishActionsConfiguration setting = PublishActionsConfiguration.parse(configuration);
+        final PublishActionsConfiguration setting = PublishActionsConfiguration.from(configuration);
 
         return actions.stream()
                 .map(Action::publishing)

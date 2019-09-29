@@ -28,7 +28,7 @@ public enum DefaultViewConfiguration {
         return name().toLowerCase();
     }
 
-    public static DefaultViewConfiguration parse(IsisConfiguration configuration) {
+    public static DefaultViewConfiguration from(IsisConfiguration configuration) {
         return configuration.getViewers().getCollectionLayout().getDefaultView();
     }
 

@@ -137,7 +137,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
         // check for @DomainObject(auditing=....)
         AuditableFacet auditableFacet = AuditableFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfigurationLegacy(), holder);
+                .create(domainObjects, getConfiguration(), holder);
 
         // then add
         FacetUtil.addFacet(auditableFacet);
@@ -541,8 +541,8 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 if(autoCompleteFacet != null && !autoCompleteFacet.isNoop() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
                     final AutoCompleteFacetAbstract facet = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
                     final Class<?> repositoryClass = facet.getRepositoryClass();
-                    final boolean isRegistered = getServiceRegistry().isService(repositoryClass);
-                    if(!isRegistered) {
+                    final boolean isResolvableBean = getServiceRegistry().isResolvableBean(repositoryClass);
+                    if(!isResolvableBean) {
                         validationFailures.add(
                                 thisSpec.getIdentifier(),
                                 "@DomainObject annotation on %s specifies unknown repository '%s'",

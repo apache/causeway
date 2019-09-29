@@ -24,7 +24,7 @@ public enum PublishObjectsConfiguration {
     ALL,
     NONE;
 
-    public static PublishObjectsConfiguration parse(IsisConfiguration configuration) {
+    public static PublishObjectsConfiguration from(IsisConfiguration configuration) {
         return configuration.getServices().getPublish().getObjects();
     }
 }

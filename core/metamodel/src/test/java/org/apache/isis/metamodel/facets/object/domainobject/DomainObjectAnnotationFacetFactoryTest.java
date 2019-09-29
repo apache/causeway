@@ -97,16 +97,15 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     
     void allowingAuditObjectsToReturn(AuditObjectsConfiguration value) {
         
-//        val config = new IsisConfiguration();
+        val config = new IsisConfiguration();
         
         if(value!=null) {
-          //TODO[2086] config.getServices().getAudit().setObjects(value);
-            _Config.put("isis.services.audit.objects", value.name().toLowerCase());
+            config.getServices().getAudit().setObjects(value);
         }
         
-//        MetaModelContext.preset(MetaModelContext.builder()
-//                .configuration(config)
-//                .build());
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(config)
+                .build());
     }
     
     void allowingPublishObjectsToReturn(PublishObjectsConfiguration value) {
@@ -186,24 +185,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNotNull(facet); 
-                Assert.assertThat(facet.isDisabled(), is(false));
+                Assert.assertNull(facet); 
 
                 expectNoMethodsRemoved();
             }
 
-            @Test
-            public void configured_value_set_to_default() {
-                allowingAuditObjectsToReturn(null);
-
-                facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
-
-                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNotNull(facet); 
-                Assert.assertThat(facet.isDisabled(), is(false));
-
-                expectNoMethodsRemoved();
-            }
         }
 
         public static class WithDomainObjectAnnotationWithAuditingSetToAsConfigured extends Auditing {
@@ -228,24 +214,11 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertThat(facet.isDisabled(), is(false));
+                Assert.assertNull(facet);
 
                 expectNoMethodsRemoved();
             }
 
-            @Test
-            public void configured_value_set_to_default() {
-                allowingAuditObjectsToReturn(null);
-
-                facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
-
-                final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNotNull(facet);
-                Assert.assertThat(facet.isDisabled(), is(false));
-
-                expectNoMethodsRemoved();
-            }
         }
 
         public static class WithDomainObjectAnnotationWithAuditingSetToEnabled extends Auditing {
@@ -421,19 +394,15 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
+                allowingPublishObjectsToReturn(null);
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndPublishingSetToDisabled.class, mockMethodRemover, facetHolder));
 
                 final AuditableFacet facet = facetHolder.getFacet(AuditableFacet.class);
-                Assert.assertNotNull(facet);
-
-                Assert.assertThat(facet.isDisabled(), is(false));
-                Assert.assertThat(facet.alwaysReplace(), is(true));
-                Assert.assertThat(facet.isNoop(), is(false));
-                Assert.assertThat(facet.isDerived(), is(false));
+                Assert.assertNull(facet);
 
                 expectNoMethodsRemoved();
+                
             }
         }
     }

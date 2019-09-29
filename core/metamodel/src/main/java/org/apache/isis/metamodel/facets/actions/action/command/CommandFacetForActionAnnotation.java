@@ -40,7 +40,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
             final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 
-        final CommandActionsConfiguration setting = CommandActionsConfiguration.parse(configuration);
+        final CommandActionsConfiguration setting = CommandActionsConfiguration.from(configuration);
 
         return actions.stream()
                 .filter(action -> action.command() != CommandReification.NOT_SPECIFIED)

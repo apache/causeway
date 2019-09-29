@@ -18,23 +18,14 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.facets.object.domainobject.Util;
+import org.apache.isis.config.IsisConfiguration;
 
 public enum AuditObjectsConfiguration {
     ALL,
     NONE;
 
-    private static final String AUDIT_OBJECTS_KEY = "isis.services.audit.objects";
-
-    public static AuditObjectsConfiguration parse(IsisConfigurationLegacy configuration) {
-        final String configuredValue = configuration.getString(AUDIT_OBJECTS_KEY);
-        return AuditObjectsConfiguration.parse(configuredValue);
-    }
-
-    private static AuditObjectsConfiguration parse(final String value) {
-        // must be explicitly enabled
-        return Util.parseYes(value)? ALL: NONE;
+    public static AuditObjectsConfiguration from(IsisConfiguration configuration) {
+        return configuration.getServices().getAudit().getObjects();
     }
 
 }

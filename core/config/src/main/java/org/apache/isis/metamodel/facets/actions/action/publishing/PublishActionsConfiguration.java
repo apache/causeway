@@ -29,7 +29,7 @@ public enum PublishActionsConfiguration {
     IGNORE_QUERY_ONLY,
     NONE;
 
-    public static PublishActionsConfiguration parse(IsisConfiguration configuration) {
+    public static PublishActionsConfiguration from(IsisConfiguration configuration) {
         return configuration.getServices().getPublish().getActions();
     }
 

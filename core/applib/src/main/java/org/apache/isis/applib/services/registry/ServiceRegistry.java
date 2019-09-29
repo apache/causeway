@@ -149,16 +149,6 @@ public interface ServiceRegistry {
                 .anyMatch(bean->bean.getBeanClass().isAssignableFrom(requiredType));
     }
 
-    /**
-     * Yet a synonym for {@link isResolvableBean}
-     * @param cls
-     * @deprecated marked deprecated, because the intended use if this method is unclear
-     */
-    @Deprecated //TODO [2112] marked deprecated, because the intended use if this method is unclear
-    default boolean isService(Class<?> cls) {
-        return isResolvableBean(cls);
-    }
-
     // -- PRIORITY ANNOTATION HANDLING
 
     static class InstanceByPriorityComparator implements Comparator<Object> {

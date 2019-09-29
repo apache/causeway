@@ -22,24 +22,22 @@ package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 import java.util.List;
 
 import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
 
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacetAbstract;
 
 import lombok.val;
 
-
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
 
     public static AuditableFacet create(
             List<DomainObject> domainObjectAnnotations,
-            IsisConfigurationLegacy configuration,
+            IsisConfiguration configuration,
             FacetHolder holder) {
 
         val domainObjectAnnotation = domainObjectAnnotations.stream()
@@ -50,10 +48,9 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
         return create(domainObjectAnnotation, configuration, holder);
     }
 
-    @NotNull
     private static AuditableFacet create(
             @Nullable DomainObject domainObjectAnnotation,
-            IsisConfigurationLegacy configuration,
+            IsisConfiguration configuration,
             FacetHolder holder) {
 
         val auditing = domainObjectAnnotation != null 
@@ -63,7 +60,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
         switch (auditing) {
         case AS_CONFIGURED:
 
-            val auditObjects = AuditObjectsConfiguration.parse(configuration);
+            val auditObjects = AuditObjectsConfiguration.from(configuration);
             switch (auditObjects) {
             case NONE:
                 return null;

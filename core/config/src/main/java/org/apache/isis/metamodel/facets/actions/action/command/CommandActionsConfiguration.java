@@ -29,7 +29,7 @@ public enum CommandActionsConfiguration {
     IGNORE_QUERY_ONLY,
     NONE;
 
-    public static CommandActionsConfiguration parse(final IsisConfiguration configuration) {
+    public static CommandActionsConfiguration from(final IsisConfiguration configuration) {
         return configuration.getServices().getCommand().getActions();
     }
 
