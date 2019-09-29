@@ -238,6 +238,7 @@ public class IsisConfiguration {
             private boolean serviceActionsOnly = true;
             @Deprecated
             private boolean mixinsOnly = true;
+            private boolean explicitObjectType = false;
 
             private boolean jaxbViewModelNotAbstract = true;
             private boolean jaxbViewModelNotInnerClass = true;

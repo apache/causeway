@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -49,11 +48,6 @@ import lombok.val;
 public class ObjectSpecIdFacetDerivedFromClassNameFactory
 extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
-
-    public static final String ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY =
-            "isis.reflector.validator.explicitObjectType";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_DEFAULT = false;
-
 
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
@@ -104,9 +98,7 @@ implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final boolean doCheck = _Config.getConfiguration().getBoolean(
-                ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY,
-                ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_DEFAULT);
+        final boolean doCheck = getConfiguration().getReflector().getValidator().isExplicitObjectType();
 
         if(!doCheck) {
             return;
@@ -138,8 +130,8 @@ implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
                                             + "subsequently refactored). "
                                             + "Use @Discriminator, @DomainObject(objectType=...) or "
                                             + "@PersistenceCapable(schema=...) to specify explicitly.",
-                                    objectSpec.getFullIdentifier(), 
-                                    ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY);
+                                    objectSpec.getFullIdentifier(),
+                                    "isis.reflector.validator.explicitObjectType");
                         }
                     }
 
