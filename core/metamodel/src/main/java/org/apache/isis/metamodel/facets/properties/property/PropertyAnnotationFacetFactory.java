@@ -281,7 +281,7 @@ implements MetaModelValidatorRefiner {
 
         // check for @Property(publishing=...)
         final PublishedPropertyFacet facet = PublishedPropertyFacetForPropertyAnnotation
-                .create(properties, getConfigurationLegacy(), holder);
+                .create(properties, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }

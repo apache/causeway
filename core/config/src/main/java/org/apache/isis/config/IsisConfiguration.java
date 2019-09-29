@@ -38,6 +38,7 @@ import org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultView
 import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
 import org.apache.isis.metamodel.facets.properties.property.command.CommandPropertiesConfiguration;
+import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPropertiesConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -286,8 +287,9 @@ public class IsisConfiguration {
         private final Publish publish = new Publish();
         @Data
         public static class Publish {
-           private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
+            private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
             private PublishObjectsConfiguration objects = PublishObjectsConfiguration.NONE;
+            private PublishPropertiesConfiguration properties = PublishPropertiesConfiguration.NONE;
         }
         private final Translation translation = new Translation();
         @Data
