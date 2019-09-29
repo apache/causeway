@@ -37,6 +37,7 @@ import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActions
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
+import org.apache.isis.metamodel.facets.properties.property.command.CommandPropertiesConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -256,6 +257,7 @@ public class IsisConfiguration {
         @Data
         public static class Command {
             private CommandActionsConfiguration actions = CommandActionsConfiguration.NONE;
+            private CommandPropertiesConfiguration properties = CommandPropertiesConfiguration.NONE;
         }
         private final Container container = new Container();
         @Data
