@@ -18,11 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
-import org.apache.isis.metamodel.MetaModelContext;
-
-import lombok.val;
 
 public enum IntrospectionMode {
 

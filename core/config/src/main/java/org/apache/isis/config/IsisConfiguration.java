@@ -40,6 +40,7 @@ import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishOb
 import org.apache.isis.metamodel.facets.properties.property.command.CommandPropertiesConfiguration;
 import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPropertiesConfiguration;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeaturesInitConfiguration;
+import org.apache.isis.metamodel.specloader.IntrospectionMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -65,7 +66,6 @@ public class IsisConfiguration {
     public static class Objects {
         private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
     }
-
 
     private final Reflector reflector = new Reflector();
     @Data
@@ -235,7 +235,9 @@ public class IsisConfiguration {
         @Data
         public static class Introspector {
             private boolean parallelize = true;
+            private IntrospectionMode mode = IntrospectionMode.LAZY_UNLESS_PRODUCTION;
         }
+
         private final Validator validator = new Validator();
         @Data
         public static class Validator {

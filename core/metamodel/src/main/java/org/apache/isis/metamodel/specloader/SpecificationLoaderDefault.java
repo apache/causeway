@@ -207,7 +207,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         logAfter(cachedSpecifications);
 
-        final IntrospectionMode mode = CONFIG_PROPERTY_MODE.from(getConfiguration());
+        final IntrospectionMode mode = configuration.getReflector().getIntrospector().getMode();
         if(mode.isFullIntrospect(_Context.getEnvironment().getDeploymentType())) {
             log.info("Introspecting all cached specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
             introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
@@ -247,10 +247,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * @return whether current introspection mode is 'full', dependent on current
      * deployment mode and configuration
      */
-    private static boolean isFullIntrospect() {
+    private boolean isFullIntrospect() {
 
-        val config = MetaModelContext.current().getConfigurationLegacy();
-        val introspectionMode = CONFIG_PROPERTY_MODE.from(config);
+        val introspectionMode = configuration.getReflector().getIntrospector().getMode();
         val deploymentMode = _Context.getEnvironment().getDeploymentType();
 
         return introspectionMode.isFullIntrospect(deploymentMode);
