@@ -38,13 +38,7 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
  */
 public interface SpecificationLoader {
 
-    static final ConfigPropertyBoolean CONFIG_PROPERTY_PARALLELIZE =
-            new ConfigPropertyBoolean("isis.reflector.introspector.parallelize", true);
-
-    static final ConfigPropertyEnum<IntrospectionMode> CONFIG_PROPERTY_MODE =
-            new ConfigPropertyEnum<>("isis.reflector.introspector.mode", IntrospectionMode.LAZY_UNLESS_PRODUCTION);
-
-    // -- LIVE CYCLE 
+    // -- LIVE CYCLE
 
     void init();
 

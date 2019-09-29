@@ -244,7 +244,7 @@ implements MetaModelValidatorRefiner {
         }
 
         // check for @Property(command=...)
-        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfigurationLegacy(), holder, getServiceInjector());
+        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder, getServiceInjector());
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -281,7 +281,7 @@ implements MetaModelValidatorRefiner {
 
         // check for @Property(publishing=...)
         final PublishedPropertyFacet facet = PublishedPropertyFacetForPropertyAnnotation
-                .create(properties, getConfigurationLegacy(), holder);
+                .create(properties, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }

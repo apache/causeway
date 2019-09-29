@@ -18,20 +18,8 @@
  */
 package org.apache.isis.metamodel.facets.properties.property.command;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.metamodel.facets.object.domainobject.Util;
-
 public enum CommandPropertiesConfiguration {
     ALL,
     NONE;
 
-    private static final String  COMMAND_ACTIONS_KEY = "isis.services.command.properties";
-
-    public static CommandPropertiesConfiguration parse(final IsisConfigurationLegacy configuration) {
-        return parse(configuration.getString(COMMAND_ACTIONS_KEY));
-    }
-
-    private static CommandPropertiesConfiguration parse(final String value) {
-        return Util.parseYes(value)? ALL: NONE;
-    }
 }

@@ -28,8 +28,8 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -50,10 +50,8 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class ServiceInjectorDefault implements ServiceInjector {
 
-    private static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
-    private static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
-
-    @Inject IsisConfigurationLegacy configuration;
+    @Inject IsisConfigurationLegacy configurationLegacy;
+    @Inject IsisConfiguration configuration;
     @Inject ServiceRegistry serviceRegistry;
     @Inject InjectorMethodEvaluator injectorMethodEvaluator;
 
@@ -68,8 +66,8 @@ public class ServiceInjectorDefault implements ServiceInjector {
 
     @PostConstruct
     public void init() {
-        autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, false);
-        autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, true);
+        autowireSetters = configuration.getServices().getInjector().isSetPrefix();
+        autowireInject = configuration.getServices().getInjector().isInjectPrefix();
     }
 
     // -- HELPERS
@@ -252,7 +250,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
             InjectorMethodEvaluator injectorMethodEvaluator) {
         val instance = new ServiceInjectorDefault();
 
-        instance.configuration = configuration;
+        instance.configurationLegacy = configuration;
         instance.serviceRegistry = serviceRegistry;
         instance.injectorMethodEvaluator = injectorMethodEvaluator;
 

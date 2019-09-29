@@ -18,11 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
-import org.apache.isis.metamodel.MetaModelContext;
-
-import lombok.val;
 
 public enum IntrospectionMode {
 
@@ -56,19 +52,6 @@ public enum IntrospectionMode {
             return true;
         }
     };
-
-    /**
-     * @return whether current introspection mode is 'full', dependent on current
-     * deployment mode and configuration
-     */
-    public static boolean isFullIntrospect() {
-
-        val config = MetaModelContext.current().getConfigurationLegacy();
-        val introspectionMode = SpecificationLoader.CONFIG_PROPERTY_MODE.from(config);
-        val deploymentMode = _Context.getEnvironment().getDeploymentType();
-
-        return introspectionMode.isFullIntrospect(deploymentMode);
-    }
 
     protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
 

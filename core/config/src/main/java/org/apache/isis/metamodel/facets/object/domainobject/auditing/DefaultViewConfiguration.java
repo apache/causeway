@@ -16,24 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
-package org.apache.isis.runtime.persistence;
+import org.apache.isis.config.IsisConfiguration;
 
-public final class PersistenceConstants {
+public enum DefaultViewConfiguration {
+    HIDDEN(),
+    TABLE();
 
-
-    // disabled in ISIS-921, to reinstate in ISIS-922
-    public static final String ENFORCE_SAFE_SEMANTICS = "isis.persistor.enforceSafeSemantics";
-
-    /**
-     * Default is <code>false</code> only for backward compatibility (to avoid lots of breakages in existing code);
-     * in future might change to <code>true</code>.
-     *
-     * disabled in ISIS-921, to reinstate in ISIS-922
-     */
-    public static final boolean ENFORCE_SAFE_SEMANTICS_DEFAULT = false;
-
-    private PersistenceConstants() {
+    public String toNameLower() {
+        return name().toLowerCase();
     }
+
+    public static DefaultViewConfiguration parse(IsisConfiguration configuration) {
+        return configuration.getViewers().getCollectionLayout().getDefaultView();
+    }
+
 
 }

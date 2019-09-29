@@ -160,12 +160,6 @@ SessionScopedComponent {
     // -- FIXTURE SUPPORT
 
     /**
-     * @see #isFixturesInstalled()
-     */
-    static final String INSTALL_FIXTURES_KEY = "isis.persistor.datanucleus.install-fixtures";
-    static final boolean INSTALL_FIXTURES_DEFAULT = false;
-
-    /**
      * Determine if the object store has been initialized with its set of start
      * up objects.
      *

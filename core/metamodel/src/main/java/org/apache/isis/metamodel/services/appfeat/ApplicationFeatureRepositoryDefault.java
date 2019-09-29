@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -59,7 +59,6 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.config.internal._Config.getConfiguration;
 
 import lombok.val;
 
@@ -76,8 +75,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     // -- init
 
-    private static final String KEY = "isis.services.applicationFeatures.init";
-
     @PostConstruct
     public void init() {
         if(isEagerInitialize()) {
@@ -85,10 +82,12 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
     }
 
+    @Inject
+    IsisConfiguration configuration;
+
     private boolean isEagerInitialize() {
-        final String configuredValue = getConfiguration().getString(KEY);
-        return "eager".equalsIgnoreCase(configuredValue) ||
-                "eagerly".equalsIgnoreCase(configuredValue);
+        ApplicationFeaturesInitConfiguration setting = configuration.getServices().getApplicationFeatures().getInit();
+        return setting == ApplicationFeaturesInitConfiguration.EAGER || setting == ApplicationFeaturesInitConfiguration.EAGERLY;
     }
 
     // -- initializeIfRequired

@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -87,6 +89,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private PostProcessor postProcessor;
+
+    @Inject
+    private IsisConfiguration configuration;
 
     @PostConstruct
     public void preInit() {
@@ -202,7 +207,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         logAfter(cachedSpecifications);
 
-        final IntrospectionMode mode = CONFIG_PROPERTY_MODE.from(getConfiguration());
+        final IntrospectionMode mode = configuration.getReflector().getIntrospector().getMode();
         if(mode.isFullIntrospect(_Context.getEnvironment().getDeploymentType())) {
             log.info("Introspecting all cached specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
             introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
@@ -228,7 +233,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(validationFailures == null) {
             validationFailures = new ValidationFailures();
 
-            if(IntrospectionMode.isFullIntrospect()) {
+            if(isFullIntrospect()) {
                 metaModelValidator.validate(validationFailures);
             } else {
                 log.info("Meta model validation skipped (full introspection of metamodel not configured)");
@@ -237,6 +242,19 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
         return validationFailures;
     }
+
+    /**
+     * @return whether current introspection mode is 'full', dependent on current
+     * deployment mode and configuration
+     */
+    private boolean isFullIntrospect() {
+
+        val introspectionMode = configuration.getReflector().getIntrospector().getMode();
+        val deploymentMode = _Context.getEnvironment().getDeploymentType();
+
+        return introspectionMode.isFullIntrospect(deploymentMode);
+    }
+
 
     // -- SPEC LOADING
 
@@ -418,8 +436,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private void introspect(final Collection<ObjectSpecification> specs, final IntrospectionState upTo) {
 
-        val isConcurrentFromConfig = (boolean) CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
-        
+        val isConcurrentFromConfig = configuration.getReflector().getIntrospector().isParallelize();
+
         val runSequential = !isConcurrentFromConfig || true; //FIXME concurrent specloading disabled, it deadlocks
         
         if(runSequential) { 

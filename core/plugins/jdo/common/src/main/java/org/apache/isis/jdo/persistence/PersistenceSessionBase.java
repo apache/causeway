@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
@@ -56,7 +57,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected final FixturesInstalledStateHolder fixturesInstalledStateHolder;
 
     protected final PersistenceQueryFactory persistenceQueryFactory;
-    protected final IsisConfigurationLegacy configuration;
+    protected final IsisConfigurationLegacy configurationLegacy;
     protected final SpecificationLoader specificationLoader;
     protected final AuthenticationSession authenticationSession;
 
@@ -73,6 +74,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected final MetricsService metricsService;
     protected final ClockService clockService;
     protected final UserService userService;
+    protected final IsisConfiguration configuration;
 
     /**
      * Set to System.nanoTime() when session opens.
@@ -117,7 +119,8 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.fixturesInstalledStateHolder = fixturesInstalledStateHolder;
 
         // injected
-        this.configuration = _Config.getConfiguration();
+        this.configuration = IsisContext.getConfiguration();
+        this.configurationLegacy = _Config.getConfiguration();
         this.specificationLoader = IsisContext.getSpecificationLoader();
         this.authenticationSession = authenticationSession;
 
@@ -157,9 +160,8 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     }
 
 
-    @Override
     public IsisConfigurationLegacy getConfiguration() {
-        return configuration;
+        return configurationLegacy;
     }
 
     @Override

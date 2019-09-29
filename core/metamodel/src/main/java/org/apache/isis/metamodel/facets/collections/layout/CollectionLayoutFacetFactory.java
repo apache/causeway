@@ -68,7 +68,7 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         // defaultView
         DefaultViewFacet defaultViewFacet =
-                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayouts, getConfigurationLegacy(), holder);
+                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayouts, getConfiguration(), holder);
         FacetUtil.addFacet(defaultViewFacet);
 
 

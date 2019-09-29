@@ -23,11 +23,11 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
-import org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration;
 
 public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFacetAbstract {
 
@@ -37,14 +37,14 @@ public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFa
 
     public static DefaultViewFacet create(
             final List<CollectionLayout> collectionLayouts,
-            final IsisConfigurationLegacy configuration,
+            final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final String defaultView = collectionLayouts.stream()
                 .map(CollectionLayout::defaultView)
                 .filter(_Strings::isNotEmpty)
                 .findFirst()
-                .orElseGet(() -> DefaultViewConfiguration.parse(configuration).getDefaultView());
+                .orElseGet(() -> configuration.getViewers().getCollectionLayout().getDefaultView().toNameLower());
         return new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder);
     }
 }

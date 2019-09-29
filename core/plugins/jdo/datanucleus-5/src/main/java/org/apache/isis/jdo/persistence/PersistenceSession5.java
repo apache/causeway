@@ -37,6 +37,7 @@ import javax.jdo.identity.SingleFieldIdentity;
 import javax.jdo.listener.InstanceLifecycleListener;
 import javax.jdo.listener.StoreLifecycleListener;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.datanucleus.identity.DatastoreIdImpl;
@@ -422,15 +423,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * framework will run the fixtures to initialise the object store.
      *
      * <p>
-     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the injected {@link #configuration configuration}.
+     * Implementation looks for the {@link IsisConfiguration.Persistor.Datanucleus#isInstallFixtures()} property
+     * in the injected {@link #configuration configuration}.
      *
      * <p>
      * By default this is not expected to be there, but utilities can add in on
      * the fly during bootstrapping if required.
      */
     private FixturesInstalledState initialStateFromConfig() {
-        val installFixtures = configuration.getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
-        log.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
+        val installFixtures = configuration.getPersistor().getDatanucleus().isInstallFixtures();
+        log.info("isFixturesInstalled: {} = {}", "isis.persistor.datanucleus.install-fixtures", installFixtures);
 
         val objectStoreIsFixturesInstalled = !installFixtures;
         val initialStateFromConfig = objectStoreIsFixturesInstalled

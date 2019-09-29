@@ -18,23 +18,11 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobject.editing;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
 public enum EditingObjectsConfiguration {
     TRUE,
     FALSE;
-
-    public static final String EDIT_OBJECTS_KEY = "isis.objects.editing";
-
-    public static EditingObjectsConfiguration parse(final IsisConfigurationLegacy configuration) {
-        final String configuredValue = configuration.getString(EDIT_OBJECTS_KEY);
-        return EditingObjectsConfiguration.parse(configuredValue);
-    }
-
-    private static EditingObjectsConfiguration parse(final String value) {
-        // must be explicitly disabled
-        return Util.parseNo(value)? FALSE : TRUE;
-    }
-
 }

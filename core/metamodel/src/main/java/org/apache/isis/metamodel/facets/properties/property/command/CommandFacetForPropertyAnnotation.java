@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
@@ -36,11 +37,11 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
             final List<Property> properties,
-            final IsisConfigurationLegacy configuration,
+            final IsisConfiguration configuration,
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
-        final CommandPropertiesConfiguration setting = CommandPropertiesConfiguration.parse(configuration);
+        final CommandPropertiesConfiguration setting = configuration.getServices().getCommand().getProperties();
 
         return properties.stream()
                 .filter(property -> property.command() != CommandReification.NOT_SPECIFIED)

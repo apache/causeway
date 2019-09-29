@@ -20,12 +20,13 @@ package org.apache.isis.metamodel.specloader;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 
@@ -42,7 +43,8 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     // -- HELPER
 
-    @Inject private IsisConfigurationLegacy configuration;
+    @Inject private IsisConfigurationLegacy configurationLegacy;
+    @Inject private IsisConfiguration configuration;
 
     private _Lazy<ProgrammingModel> programmingModel = 
             _Lazy.threadSafe(this::createProgrammingModel);
@@ -51,11 +53,12 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         
         log.debug("About to create the ProgrammingModel.");
 
-        val deprecatedPolicy = DeprecatedPolicy.parse(configuration);
+        boolean ignoreDep = configuration.getReflector().getFacets().isIgnoreDeprecated();
+        val deprecatedPolicy = ignoreDep ? ProgrammingModelAbstract.DeprecatedPolicy.IGNORE : ProgrammingModelAbstract.DeprecatedPolicy.HONOUR;
 
         val programmingModel = new ProgrammingModelFacetsJava8(deprecatedPolicy);
-        ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
-        ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
+        ProgrammingModel.Util.includeFacetFactories(configurationLegacy, programmingModel);
+        ProgrammingModel.Util.excludeFacetFactories(configurationLegacy, programmingModel);
         
         if(log.isDebugEnabled()) {
             

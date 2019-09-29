@@ -19,11 +19,13 @@
 package org.apache.isis.jdo.exceprecog;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 
 /**
@@ -40,14 +42,11 @@ import org.apache.isis.config.internal._Config;
 @DomainService(nature = NatureOfService.DOMAIN)
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 
-    public static final String KEY_DISABLE = 
-            "isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable";
-
     @Override
     @PostConstruct
     public void init() {
 
-        final boolean disabled = _Config.getConfiguration().getBoolean(KEY_DISABLE, false);
+        final boolean disabled = configuration.getServices().getExceptionRecognizerCompositeForJdoObjectStore().isDisable();
         if(disabled) {
             return;
         }
@@ -64,5 +63,8 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
         add(new ExceptionRecognizerForJDOObjectNotFoundException());
         add(new ExceptionRecognizerForJDODataStoreException());
     }
+
+    @Inject
+    IsisConfiguration configuration;
 
 }

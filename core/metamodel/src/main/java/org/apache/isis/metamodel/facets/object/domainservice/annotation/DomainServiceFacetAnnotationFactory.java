@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -44,17 +43,7 @@ import lombok.val;
 public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract 
 implements MetaModelValidatorRefiner {
 
-    @Deprecated
-    public static final String ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY =
-            "isis.reflector.validator.serviceActionsOnly";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_DEFAULT = true;
-
-    @Deprecated
-    public static final String ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY =
-            "isis.reflector.validator.mixinsOnly";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_DEFAULT = true;
-
-    private MetaModelValidatorForValidationFailures mixinOnlyValidator = 
+    private MetaModelValidatorForValidationFailures mixinOnlyValidator =
             new MetaModelValidatorForValidationFailures();
 
     public DomainServiceFacetAnnotationFactory() {
@@ -93,7 +82,7 @@ implements MetaModelValidatorRefiner {
                     + " convert into a mixin (@Mixin annotation) instead",
                     cls.getName(),
                     natureOfService,
-                    ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
+                    "isis.reflector.validator.mixinsOnly");
             
             mixinOnlyValidator.addFailure(Identifier.classIdentifier(cls), msg);
             break;
@@ -106,9 +95,7 @@ implements MetaModelValidatorRefiner {
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final boolean serviceActionsOnly = _Config.getConfiguration().getBoolean(
-                ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY,
-                ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_DEFAULT);
+        final boolean serviceActionsOnly = getConfiguration().getReflector().getValidator().isServiceActionsOnly();
         if (serviceActionsOnly) {
             metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
 
@@ -142,15 +129,13 @@ implements MetaModelValidatorRefiner {
                             thisSpec.getIdentifier(),
                             "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                             thisSpec.getFullIdentifier(),
-                            ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY,
+                            "isis.reflector.validator.serviceActionsOnly",
                             associationNames);
                 }
             }));
         }
 
-        boolean mixinsOnly = _Config.getConfiguration().getBoolean(
-                ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY,
-                ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_DEFAULT);
+        boolean mixinsOnly = getConfiguration().getReflector().getValidator().isMixinsOnly();
         if (mixinsOnly) {
             metaModelValidator.add(mixinOnlyValidator);
         }

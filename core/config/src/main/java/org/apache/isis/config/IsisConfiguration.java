@@ -29,10 +29,18 @@ import java.util.regex.Pattern;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
+import org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration;
+import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjectsConfiguration;
+import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
+import org.apache.isis.metamodel.facets.properties.property.command.CommandPropertiesConfiguration;
+import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPropertiesConfiguration;
+import org.apache.isis.metamodel.services.appfeat.ApplicationFeaturesInitConfiguration;
+import org.apache.isis.metamodel.specloader.IntrospectionMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -53,6 +61,42 @@ import org.springframework.stereotype.Component;
 @Data
 public class IsisConfiguration {
 
+
+    private final Objects objects = new Objects();
+    @Data
+    public static class Objects {
+        private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
+    }
+
+    // // isis.persistor.datanucleus
+    private final Persistor persistor = new Persistor();
+    @Data
+    public static class Persistor {
+        private final Datanucleus datanucleus = new Datanucleus();
+        @Data
+        public static class Datanucleus {
+            private String classMetadataLoadedListener = "org.apache.isis.jdo.datanucleus.CreateSchemaObjectFromClassMetadata";
+
+            private final Impl impl = new Impl();
+            @Data
+            public static class Impl {
+
+            }
+            private boolean installFixtures = false;
+        }
+        /**
+         * Default is <code>false</code> only for backward compatibility (to avoid lots of breakages in existing code);
+         * in future might change to <code>true</code>.
+         *
+         * <p>
+         *     currently disabled (in ISIS-921); to reinstate in ISIS-922? else delete.
+         * </p>
+         *
+         * @deprecated
+         */
+        @Deprecated
+        private boolean enforceSafeSemantics = false;
+    }
     private final Reflector reflector = new Reflector();
     @Data
     public static class Reflector {
@@ -214,15 +258,30 @@ public class IsisConfiguration {
             public static class ViewModelSemanticCheckingFacetFactory {
                 private boolean enable = false;
             }
+            private boolean ignoreDeprecated = false;
         }
+
+        private final Introspector introspector = new Introspector();
+        @Data
+        public static class Introspector {
+            private boolean parallelize = true;
+            private IntrospectionMode mode = IntrospectionMode.LAZY_UNLESS_PRODUCTION;
+        }
+
         private final Validator validator = new Validator();
         @Data
         public static class Validator {
 
+            private boolean allowDeprecated = true;
             private boolean ensureUniqueObjectTypes = true;
             private boolean checkModuleExtent = true;
             private boolean noParamsOnly = false;
             private boolean actionCollectionParameterChoices = true;
+            @Deprecated
+            private boolean serviceActionsOnly = true;
+            @Deprecated
+            private boolean mixinsOnly = true;
+            private boolean explicitObjectType = false;
 
             private boolean jaxbViewModelNotAbstract = true;
             private boolean jaxbViewModelNotInnerClass = true;
@@ -230,17 +289,29 @@ public class IsisConfiguration {
             private boolean jaxbViewModelReferenceTypeAdapter = true;
             private boolean jaxbViewModelDateTimeTypeAdapter = true;
 
+            private boolean jdoqlFromClause = true;
+            private boolean jdoqlVariablesClause = true;
+
         }
     }
 
     private final Services services = new Services();
     @Data
     public static class Services {
+
+        private final ApplicationFeatures applicationFeatures = new ApplicationFeatures();
+        @Data
+        public static class ApplicationFeatures {
+            ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
+        }
+
         private final Command command = new Command();
         @Data
         public static class Command {
             private CommandActionsConfiguration actions = CommandActionsConfiguration.NONE;
+            private CommandPropertiesConfiguration properties = CommandPropertiesConfiguration.NONE;
         }
+
         private final Container container = new Container();
         @Data
         public static class Container {
@@ -265,12 +336,27 @@ public class IsisConfiguration {
 
         }
 
-        // isis.services.publish.actions
+        private final ExceptionRecognizerCompositeForJdoObjectStore exceptionRecognizerCompositeForJdoObjectStore = new ExceptionRecognizerCompositeForJdoObjectStore();
+        @Data
+        public static class ExceptionRecognizerCompositeForJdoObjectStore {
+            private boolean disable = false;
+        }
+
+        private final Injector injector = new Injector();
+        @Data
+        public static class Injector {
+            private boolean setPrefix = false;
+            private boolean injectPrefix = true;
+        }
+
         private final Publish publish = new Publish();
         @Data
         public static class Publish {
-           private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
+            private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
+            private PublishObjectsConfiguration objects = PublishObjectsConfiguration.NONE;
+            private PublishPropertiesConfiguration properties = PublishPropertiesConfiguration.NONE;
         }
+
         private final Translation translation = new Translation();
         @Data
         public static class Translation {
@@ -416,6 +502,13 @@ public class IsisConfiguration {
     private final Viewers viewers = new Viewers();
     @Data
     public static class Viewers {
+
+        private final CollectionLayout collectionLayout = new CollectionLayout();
+        @Data
+        public static class CollectionLayout {
+            private DefaultViewConfiguration defaultView = DefaultViewConfiguration.HIDDEN;
+        }
+
         private final Paged paged = new Paged();
         @Data
         public static class Paged {
