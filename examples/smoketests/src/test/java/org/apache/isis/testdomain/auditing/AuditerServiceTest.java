@@ -109,7 +109,7 @@ class AuditerServiceTest {
     }
 
     @Test
-    void auditerServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() 
+    void auditerServiceShouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given

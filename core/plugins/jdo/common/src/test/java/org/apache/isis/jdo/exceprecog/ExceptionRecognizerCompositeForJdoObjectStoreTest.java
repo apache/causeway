@@ -21,10 +21,13 @@ package org.apache.isis.jdo.exceprecog;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
 
@@ -42,22 +45,26 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
             }
         };
     }
-
+    
     @Test
-    public void whenDisabledFlagNotSet() throws Exception {
+    public void whenDisabledFlagDefaults() throws Exception {
+
         // when
+        val config = new IsisConfiguration();
+        recog.configuration = config;
         recog.init();
 
         // then
         assertThat(called[0], is(true));
     }
 
-
     @Test
     public void whenDisabledFlagSetToTrue() throws Exception {
 
         // when
-        _Config.put("isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable", true);
+        val config = new IsisConfiguration();
+        config.getServices().getExceptionRecognizerCompositeForJdoObjectStore().setDisable(true);
+        recog.configuration = config;
         recog.init();
 
         // then
@@ -66,12 +73,17 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
 
     @Test
     public void whenDisabledFlagSetToFalse() throws Exception {
+        
         // when
-        _Config.put("isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable", false);
+        val config = new IsisConfiguration();
+        config.getServices().getExceptionRecognizerCompositeForJdoObjectStore().setDisable(false);
+        recog.configuration = config;
         recog.init();
 
         // then
         assertThat(called[0], is(true));
     }
+    
+     
 
 }

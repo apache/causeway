@@ -24,6 +24,7 @@ import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
@@ -35,7 +36,7 @@ import lombok.ToString;
 @PersistenceCapable
 @Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
 @Discriminator(value="Book")
-@DomainObject(publishing=Publishing.ENABLED)
+@DomainObject(publishing=Publishing.ENABLED, auditing = Auditing.ENABLED)
 @ToString(callSuper = true)
 public class Book extends Product {
 

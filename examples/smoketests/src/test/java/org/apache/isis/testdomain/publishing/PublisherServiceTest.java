@@ -106,7 +106,7 @@ class PublisherServiceTest {
     }
 
     @Test @Order(2)
-    void publisherServiceShouldBeAwareOfInventoryChanges_whenUsingBackgroundService() 
+    void publisherServiceShouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given

@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
 
 /**
  * Convenience implementation of the {@link ExceptionRecognizer} domain service that
