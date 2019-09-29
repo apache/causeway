@@ -242,6 +242,7 @@ public class IsisConfiguration {
         @Data
         public static class Validator {
 
+            private boolean allowDeprecated = true;
             private boolean ensureUniqueObjectTypes = true;
             private boolean checkModuleExtent = true;
             private boolean noParamsOnly = false;

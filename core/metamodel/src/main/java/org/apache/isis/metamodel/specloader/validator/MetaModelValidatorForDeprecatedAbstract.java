@@ -27,12 +27,7 @@ import lombok.val;
 
 public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract {
 
-    public static final String ISIS_REFLECTOR_ALLOW_DEPRECATED_KEY = "isis.reflector.validator.allowDeprecated";
-    public static final boolean ISIS_REFLECTOR_ALLOW_DEPRECATED_DEFAULT = true;
-
     private final ValidationFailures failures = new ValidationFailures();
-
-    private IsisConfigurationLegacy configuration;
 
     /**
      * @param facet
@@ -70,14 +65,11 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
 
     @Override
     public void validate(ValidationFailures validationFailures) {
-        if(configuration.getBoolean(ISIS_REFLECTOR_ALLOW_DEPRECATED_KEY, ISIS_REFLECTOR_ALLOW_DEPRECATED_DEFAULT)) {
+
+        if(getConfiguration().getReflector().getValidator().isAllowDeprecated()) {
             return;
         }
         validationFailures.addAll(failures);
-    }
-
-    public void setConfiguration(IsisConfigurationLegacy configuration) {
-        this.configuration = configuration;
     }
 
 }
