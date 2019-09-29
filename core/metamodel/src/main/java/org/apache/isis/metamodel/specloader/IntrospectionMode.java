@@ -57,19 +57,6 @@ public enum IntrospectionMode {
         }
     };
 
-    /**
-     * @return whether current introspection mode is 'full', dependent on current
-     * deployment mode and configuration
-     */
-    public static boolean isFullIntrospect() {
-
-        val config = MetaModelContext.current().getConfigurationLegacy();
-        val introspectionMode = SpecificationLoader.CONFIG_PROPERTY_MODE.from(config);
-        val deploymentMode = _Context.getEnvironment().getDeploymentType();
-
-        return introspectionMode.isFullIntrospect(deploymentMode);
-    }
-
     protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
 
 }

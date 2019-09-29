@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -232,7 +233,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(validationFailures == null) {
             validationFailures = new ValidationFailures();
 
-            if(IntrospectionMode.isFullIntrospect()) {
+            if(isFullIntrospect()) {
                 metaModelValidator.validate(validationFailures);
             } else {
                 log.info("Meta model validation skipped (full introspection of metamodel not configured)");
@@ -241,6 +242,20 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
         return validationFailures;
     }
+
+    /**
+     * @return whether current introspection mode is 'full', dependent on current
+     * deployment mode and configuration
+     */
+    private static boolean isFullIntrospect() {
+
+        val config = MetaModelContext.current().getConfigurationLegacy();
+        val introspectionMode = CONFIG_PROPERTY_MODE.from(config);
+        val deploymentMode = _Context.getEnvironment().getDeploymentType();
+
+        return introspectionMode.isFullIntrospect(deploymentMode);
+    }
+
 
     // -- SPEC LOADING
 
