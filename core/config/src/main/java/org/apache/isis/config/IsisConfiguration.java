@@ -441,30 +441,40 @@ public class IsisConfiguration {
             return toPatternMap(source);
         }
 
-        private final static Pattern CSS_CLASS_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
+        /**
+         * The pattern matches definitions like:
+         * <ul>
+         * <li>methodNameRegex:value</li>
+         * </ul>
+         *
+         * <p>
+         *     Used for associating cssClass and cssClassFa (font awesome icon) values to method pattern names.
+         * </p>
+         */
+        private final static Pattern PATTERN_FOR_COLON_SEPARATED_PAIR = Pattern.compile("(?<methodRegex>[^:]+):(?<value>.+)");
 
         private static Map<Pattern, String> toPatternMap(String cssClassPatterns) {
-            final Map<Pattern,String> cssClassByPattern = _Maps.newLinkedHashMap();
+            final Map<Pattern,String> valueByPattern = _Maps.newLinkedHashMap();
             if(cssClassPatterns != null) {
                 final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ConfigurationConstants.LIST_SEPARATOR);
-                final Map<String,String> cssClassByRegex = _Maps.newLinkedHashMap();
+                final Map<String,String> valueByRegex = _Maps.newLinkedHashMap();
                 while (regexToCssClasses.hasMoreTokens()) {
                     String regexToCssClass = regexToCssClasses.nextToken().trim();
                     if (_Strings.isNullOrEmpty(regexToCssClass)) {
                         continue;
                     }
-                    final Matcher matcher = CSS_CLASS_REGEX_PATTERN.matcher(regexToCssClass);
+                    final Matcher matcher = PATTERN_FOR_COLON_SEPARATED_PAIR.matcher(regexToCssClass);
                     if(matcher.matches()) {
-                        cssClassByRegex.put(matcher.group(1), matcher.group(2));
+                        valueByRegex.put(matcher.group("methodRegex"), matcher.group("value"));
                     }
                 }
-                for (Map.Entry<String, String> entry : cssClassByRegex.entrySet()) {
+                for (Map.Entry<String, String> entry : valueByRegex.entrySet()) {
                     final String regex = entry.getKey();
                     final String cssClass = entry.getValue();
-                    cssClassByPattern.put(Pattern.compile(regex), cssClass);
+                    valueByPattern.put(Pattern.compile(regex), cssClass);
                 }
             }
-            return cssClassByPattern;
+            return valueByPattern;
         }
 
     }
