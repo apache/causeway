@@ -34,6 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
+import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
@@ -54,6 +55,12 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(ConfigurationConstants.ROOT_PREFIX)
 @Data
 public class IsisConfiguration {
+
+    private final Objects objects = new Objects();
+    @Data
+    public static class Objects {
+        private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
+    }
 
     private final Reflector reflector = new Reflector();
     @Data

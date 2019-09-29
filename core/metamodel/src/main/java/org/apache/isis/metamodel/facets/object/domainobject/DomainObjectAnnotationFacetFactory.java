@@ -247,7 +247,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
         // check from @DomainObject(editing=...)
         ImmutableFacet facet = ImmutableFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfigurationLegacy(), facetHolder);
+                .create(domainObjects, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(facet);

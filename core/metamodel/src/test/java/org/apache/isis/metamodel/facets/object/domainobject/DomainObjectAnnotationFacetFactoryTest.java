@@ -583,7 +583,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_true() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "true");
+                allowingConfigurationToReturn("isis.objects.editing", "true");
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -595,7 +595,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_false() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "false");
+                allowingConfigurationToReturn("isis.objects.editing", "false");
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -608,7 +608,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "foobar");
+                allowingConfigurationToReturn("isis.objects.editing", "foobar");
 
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
@@ -624,7 +624,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_true() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "true");
+                allowingConfigurationToReturn("isis.objects.editing", "true");
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -636,7 +636,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_false() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "false");
+                allowingConfigurationToReturn("isis.objects.editing", "false");
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -649,7 +649,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void configured_value_set_to_not_recognized() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "foobar");
+                allowingConfigurationToReturn("isis.objects.editing", "foobar");
 
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
@@ -664,7 +664,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "false");
+                allowingConfigurationToReturn("isis.objects.editing", "false");
 
                 facetFactory.process(new ProcessClassContext(
                         CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
@@ -681,7 +681,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingConfigurationToReturn(EditingObjectsConfiguration.EDIT_OBJECTS_KEY, "true");
+                allowingConfigurationToReturn("isis.objects.editing", "true");
 
                 facetFactory.process(new ProcessClassContext(
                         CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));
