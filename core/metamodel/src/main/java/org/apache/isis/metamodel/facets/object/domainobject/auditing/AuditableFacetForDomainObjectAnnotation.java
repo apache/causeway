@@ -21,6 +21,8 @@ package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -29,32 +31,55 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.metamodel.facets.object.audit.AuditableFacetAbstract;
 
+import lombok.val;
+
 
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
 
     public static AuditableFacet create(
-            final List<DomainObject> domainObjects,
+            final List<DomainObject> domainObjectAnnotations,
             final IsisConfigurationLegacy configuration,
             final FacetHolder holder) {
 
-        return domainObjects
-                .stream()
-                .filter(domainObject -> domainObject.auditing() != Auditing.NOT_SPECIFIED)
+        val domainObjectAnnotation = domainObjectAnnotations.stream()
+                .filter(doAnnot -> doAnnot.auditing() != Auditing.NOT_SPECIFIED)
                 .findFirst()
-                .map(domainObject -> {
-                    switch (domainObject.auditing()) {
-                    case DISABLED:
-                        return (AuditableFacet)new AuditableFacetForDomainObjectAnnotation(Enablement.DISABLED, holder);
-                    case ENABLED:
-                        return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
-                    case AS_CONFIGURED:
-                    case NOT_SPECIFIED:
-                        return new AuditableFacetForDomainObjectAnnotationAsConfigured(holder);
-                    default:
-                        throw _Exceptions.unmatchedCase(domainObject.auditing());
-                    }
-                })
-                .orElse(new AuditableFacetFromConfiguration(holder));
+                .orElse(null);
+
+        return create(domainObjectAnnotation, configuration, holder);
+    }
+
+    @NotNull
+    private static AuditableFacet create(
+            final DomainObject domainObjectAnnotation,
+            final IsisConfigurationLegacy configuration,
+            final FacetHolder holder) {
+
+        final Auditing auditing = domainObjectAnnotation != null 
+                ? domainObjectAnnotation.auditing() 
+                        : Auditing.AS_CONFIGURED;
+        switch (auditing) {
+        case AS_CONFIGURED:
+
+            val setting = AuditObjectsConfiguration.parse(configuration);
+            switch (setting) {
+            case NONE:
+                return null;
+            default:
+                return domainObjectAnnotation != null
+                ? new AuditableFacetForDomainObjectAnnotationAsConfigured(holder)
+                        : new AuditableFacetFromConfiguration(holder);
+            }
+        case DISABLED:
+            // explicitly disable
+            return new AuditableFacetForDomainObjectAnnotation(Enablement.DISABLED, holder);
+        case ENABLED:
+            return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
+        case NOT_SPECIFIED:
+            // unreachable code
+        default:
+            throw _Exceptions.unmatchedCase(auditing);
+        }
     }
 
     protected AuditableFacetForDomainObjectAnnotation(
@@ -63,3 +88,4 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
         super(holder, enablement);
     }
 }
+
