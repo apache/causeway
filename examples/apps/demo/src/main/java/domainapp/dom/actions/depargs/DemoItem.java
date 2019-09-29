@@ -18,6 +18,8 @@
  */
 package domainapp.dom.actions.depargs;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
@@ -29,7 +31,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@DomainObject(nature=Nature.INMEMORY_ENTITY) 
+@DomainObject(nature=Nature.INMEMORY_ENTITY)
+@Named("depargs.DemoItem")
 @NoArgsConstructor 
 @AllArgsConstructor(staticName="of")
 public class DemoItem {

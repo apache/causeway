@@ -22,16 +22,13 @@ import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
@@ -78,10 +75,8 @@ import domainapp.utils.LibraryPreloadingService;
 @ComponentScan(
         basePackageClasses= {
                 DemoModule.class
-        },
-        includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
-        })
+        }
+)
 public class DemoAppManifest {
 
     @Bean @Singleton
