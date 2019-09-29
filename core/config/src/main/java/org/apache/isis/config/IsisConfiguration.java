@@ -259,6 +259,9 @@ public class IsisConfiguration {
             private boolean jaxbViewModelReferenceTypeAdapter = true;
             private boolean jaxbViewModelDateTimeTypeAdapter = true;
 
+            private boolean jdoqlFromClause = true;
+            private boolean jdoqlVariablesClause = true;
+
         }
     }
 

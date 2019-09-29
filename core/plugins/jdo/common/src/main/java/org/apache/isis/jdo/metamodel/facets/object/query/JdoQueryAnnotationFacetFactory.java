@@ -39,12 +39,6 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting
 
 public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
-    public static final String ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_KEY = "isis.reflector.validator.jdoqlFromClause";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_DEFAULT = true;
-
-    public static final String ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_KEY = "isis.reflector.validator.jdoqlVariablesClause";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_DEFAULT = true;
-
     public JdoQueryAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
@@ -78,18 +72,13 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
     public void refineMetaModelValidator(
             final MetaModelValidatorComposite metaModelValidator) {
 
-        final IsisConfigurationLegacy configuration = _Config.getConfiguration();
-        final boolean validateFromClause = configuration.getBoolean(
-                ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_KEY,
-                ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_DEFAULT);
+        final boolean validateFromClause = getConfiguration().getReflector().getValidator().isJdoqlFromClause();
         if (validateFromClause) {
             final MetaModelValidator queryFromValidator = new MetaModelValidatorVisiting(new VisitorForFromClause(this));
             metaModelValidator.add(queryFromValidator);
         }
 
-        final boolean validateVariablesClause = configuration.getBoolean(
-                ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_KEY,
-                ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_DEFAULT);
+        final boolean validateVariablesClause = getConfiguration().getReflector().getValidator().isJdoqlVariablesClause();
         if (validateVariablesClause) {
             final MetaModelValidator queryFromValidator = new MetaModelValidatorVisiting(new VisitorForVariablesClause(this));
             metaModelValidator.add(queryFromValidator);
