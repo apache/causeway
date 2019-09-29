@@ -54,15 +54,19 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     private T domainObject;
     
     /*getter is API*/
-    @Getter @With(AccessLevel.PACKAGE) @NonNull
+    @Getter(onMethod = @__(@Override)) @With(AccessLevel.PACKAGE) @NonNull 
     private EnumSet<ExecutionMode> executionMode;
     
-    /*getter, wither are API*/
-    @Getter @With(AccessLevel.PUBLIC) @NonNull
+    /*getter and wither are API*/
+    @NonNull
+    @Getter(onMethod = @__({@Override})) 
+    @With(value = AccessLevel.PUBLIC, onMethod = @__(@Override)) 
     private ExecutorService executor;  
     
-    /*getter, wither are API*/
-    @Getter @With(AccessLevel.PUBLIC) @NonNull
+    /*getter and wither are API*/
+    @NonNull
+    @Getter(onMethod = @__({@Override})) 
+    @With(value = AccessLevel.PUBLIC, onMethod = @__(@Override)) 
     private Consumer<Exception> exceptionHandler;  
     
 
@@ -76,7 +80,10 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
         }
         
         if(shouldExecute()) {
-            return submit(()->action.invoke(domainObject));  // no proxy required
+            // to also trigger domain events, we need a proxy, but validation (if required)
+            // was already done above
+            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            return submit(()->action.invoke(proxy_executeOnly));
         }
         
         return CompletableFuture.completedFuture(null);
