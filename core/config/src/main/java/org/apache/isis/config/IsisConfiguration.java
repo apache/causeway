@@ -61,12 +61,23 @@ import org.springframework.stereotype.Component;
 @Data
 public class IsisConfiguration {
 
+
     private final Objects objects = new Objects();
     @Data
     public static class Objects {
         private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
     }
 
+    // // isis.persistor.datanucleus
+    private final Persistor persistor = new Persistor();
+    @Data
+    public static class Persistor {
+        private final Datanucleus datanucleus = new Datanucleus();
+        @Data
+        public static class Datanucleus {
+            private String classMetadataLoadedListener = "org.apache.isis.jdo.datanucleus.CreateSchemaObjectFromClassMetadata";
+        }
+    }
     private final Reflector reflector = new Reflector();
     @Data
     public static class Reflector {

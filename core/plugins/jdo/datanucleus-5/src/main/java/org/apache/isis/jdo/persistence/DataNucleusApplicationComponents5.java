@@ -27,6 +27,7 @@ import javax.enterprise.inject.Vetoed;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.datanucleus.PersistenceNucleusContext;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -52,9 +53,6 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 @Vetoed
 public class DataNucleusApplicationComponents5 implements ApplicationScopedComponent {
-
-    public static final String CLASS_METADATA_LOADED_LISTENER_KEY = "classMetadataLoadedListener";
-    static final String CLASS_METADATA_LOADED_LISTENER_DEFAULT = CreateSchemaObjectFromClassMetadata.class.getName();
 
     ///////////////////////////////////////////////////////////////////////////
     // JRebel support
@@ -86,19 +84,19 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     ///////////////////////////////////////////////////////////////////////////
 
     private final Set<String> persistableClassNameSet;
-    private final IsisConfigurationLegacy jdoObjectstoreConfig;
+    private final IsisConfiguration configuration;
     private final Map<String, String> datanucleusProps;
 
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents5(
-            final IsisConfigurationLegacy configuration,
+            final IsisConfiguration configuration,
             final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
+        this.configuration = configuration;
 
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
-        this.jdoObjectstoreConfig = configuration;
 
         persistenceManagerFactory = createPmfAndSchemaIfRequired(
                 this.persistableClassNameSet, this.datanucleusProps);
@@ -234,9 +232,7 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     }
 
     private MetaDataListener createMetaDataListener() {
-        final String classMetadataListenerClassName = jdoObjectstoreConfig.getString(
-                CLASS_METADATA_LOADED_LISTENER_KEY,
-                CLASS_METADATA_LOADED_LISTENER_DEFAULT);
+        final String classMetadataListenerClassName = configuration.getPersistor().getDatanucleus().getClassMetadataLoadedListener();
         return classMetadataListenerClassName != null
                 ? InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
                         : null;

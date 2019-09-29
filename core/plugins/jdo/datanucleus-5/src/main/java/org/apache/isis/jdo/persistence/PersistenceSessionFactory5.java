@@ -26,6 +26,7 @@ import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.listener.StoreLifecycleListener;
 
+import org.apache.isis.metamodel.MetaModelContext;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 
@@ -58,7 +59,6 @@ import lombok.extern.log4j.Log4j2;
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledStateHolder {
 
-    public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
 
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
@@ -70,7 +70,6 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     @Getter(onMethod=@__({@Override})) 
     @Setter(onMethod=@__({@Override})) 
     FixturesInstalledState fixturesInstalledState;
-
 
     @Override
     public void init() {
@@ -91,7 +90,6 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
-        val jdoObjectstoreConfig = configuration.subsetWithNamesStripped(JDO_OBJECTSTORE_CONFIG_PREFIX);
         val dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
         val datanucleusProps = dataNucleusConfig.copyToMap();
 
@@ -100,9 +98,8 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
 
         return new DataNucleusApplicationComponents5(
-                jdoObjectstoreConfig,
-                datanucleusProps, 
-                classesToBePersisted);
+                MetaModelContext.current().getConfiguration(),
+                datanucleusProps, classesToBePersisted);
     }
 
     @Override
