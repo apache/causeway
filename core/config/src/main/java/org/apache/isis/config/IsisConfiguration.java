@@ -98,45 +98,7 @@ public class IsisConfiguration {
             private final CssClass cssClass = new CssClass();
             @Data
             public static class CssClass {
-
                 private Map<Pattern, String> patterns = new HashMap<>();
-
-                @Component
-                @ConfigurationPropertiesBinding
-                public static class PatternsConverter implements Converter<String, Map<Pattern, String>> {
-                    @Override
-                    public Map<Pattern, String> convert(String source) {
-                        return buildCssClassByPattern(source);
-                    }
-                }
-
-                private final static Pattern CSS_CLASS_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
-
-                private static Map<Pattern, String> buildCssClassByPattern(String cssClassPatterns) {
-                    final Map<Pattern,String> cssClassByPattern = _Maps.newLinkedHashMap();
-                    if(cssClassPatterns != null) {
-                        final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ConfigurationConstants.LIST_SEPARATOR);
-                        final Map<String,String> cssClassByRegex = _Maps.newLinkedHashMap();
-                        while (regexToCssClasses.hasMoreTokens()) {
-                            String regexToCssClass = regexToCssClasses.nextToken().trim();
-                            if (_Strings.isNullOrEmpty(regexToCssClass)) {
-                                continue;
-                            }
-                            final Matcher matcher = CSS_CLASS_REGEX_PATTERN.matcher(regexToCssClass);
-                            if(matcher.matches()) {
-                                cssClassByRegex.put(matcher.group(1), matcher.group(2));
-                            }
-                        }
-                        for (Map.Entry<String, String> entry : cssClassByRegex.entrySet()) {
-                            final String regex = entry.getKey();
-                            final String cssClass = entry.getValue();
-                            cssClassByPattern.put(Pattern.compile(regex), cssClass);
-                        }
-                    }
-                    return cssClassByPattern;
-                }
-
-
             }
 
             private final DomainObjectAnnotation domainObjectAnnotation = new DomainObjectAnnotation();
@@ -470,5 +432,42 @@ public class IsisConfiguration {
         }
 
     }
-    
+
+    @Component
+    @ConfigurationPropertiesBinding
+    public static class PatternsConverter implements Converter<String, Map<Pattern, String>> {
+        @Override
+        public Map<Pattern, String> convert(String source) {
+            return toPatternMap(source);
+        }
+
+        private final static Pattern CSS_CLASS_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
+
+        private static Map<Pattern, String> toPatternMap(String cssClassPatterns) {
+            final Map<Pattern,String> cssClassByPattern = _Maps.newLinkedHashMap();
+            if(cssClassPatterns != null) {
+                final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ConfigurationConstants.LIST_SEPARATOR);
+                final Map<String,String> cssClassByRegex = _Maps.newLinkedHashMap();
+                while (regexToCssClasses.hasMoreTokens()) {
+                    String regexToCssClass = regexToCssClasses.nextToken().trim();
+                    if (_Strings.isNullOrEmpty(regexToCssClass)) {
+                        continue;
+                    }
+                    final Matcher matcher = CSS_CLASS_REGEX_PATTERN.matcher(regexToCssClass);
+                    if(matcher.matches()) {
+                        cssClassByRegex.put(matcher.group(1), matcher.group(2));
+                    }
+                }
+                for (Map.Entry<String, String> entry : cssClassByRegex.entrySet()) {
+                    final String regex = entry.getKey();
+                    final String cssClass = entry.getValue();
+                    cssClassByPattern.put(Pattern.compile(regex), cssClass);
+                }
+            }
+            return cssClassByPattern;
+        }
+
+    }
+
+
 }
