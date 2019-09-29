@@ -236,6 +236,8 @@ public class IsisConfiguration {
             private boolean actionCollectionParameterChoices = true;
             @Deprecated
             private boolean serviceActionsOnly = true;
+            @Deprecated
+            private boolean mixinsOnly = true;
 
             private boolean jaxbViewModelNotAbstract = true;
             private boolean jaxbViewModelNotInnerClass = true;
