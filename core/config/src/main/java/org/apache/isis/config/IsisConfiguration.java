@@ -265,17 +265,20 @@ public class IsisConfiguration {
     private final Services services = new Services();
     @Data
     public static class Services {
+
         private final ApplicationFeatures applicationFeatures = new ApplicationFeatures();
         @Data
         public static class ApplicationFeatures {
             ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
         }
+
         private final Command command = new Command();
         @Data
         public static class Command {
             private CommandActionsConfiguration actions = CommandActionsConfiguration.NONE;
             private CommandPropertiesConfiguration properties = CommandPropertiesConfiguration.NONE;
         }
+
         private final Container container = new Container();
         @Data
         public static class Container {
@@ -300,12 +303,19 @@ public class IsisConfiguration {
 
         }
 
+        private final ExceptionRecognizerCompositeForJdoObjectStore exceptionRecognizerCompositeForJdoObjectStore = new ExceptionRecognizerCompositeForJdoObjectStore();
+        @Data
+        public static class ExceptionRecognizerCompositeForJdoObjectStore {
+            private boolean disable = false;
+        }
+
         private final Injector injector = new Injector();
         @Data
         public static class Injector {
             private boolean setPrefix = false;
             private boolean injectPrefix = true;
         }
+
         private final Publish publish = new Publish();
         @Data
         public static class Publish {
@@ -313,6 +323,7 @@ public class IsisConfiguration {
             private PublishObjectsConfiguration objects = PublishObjectsConfiguration.NONE;
             private PublishPropertiesConfiguration properties = PublishPropertiesConfiguration.NONE;
         }
+
         private final Translation translation = new Translation();
         @Data
         public static class Translation {

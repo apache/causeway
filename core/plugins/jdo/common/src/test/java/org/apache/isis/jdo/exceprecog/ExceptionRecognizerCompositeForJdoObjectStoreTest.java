@@ -57,7 +57,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
     public void whenDisabledFlagSetToTrue() throws Exception {
 
         // when
-        _Config.put(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, true);
+        _Config.put("isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable", true);
         recog.init();
 
         // then
@@ -67,7 +67,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
     @Test
     public void whenDisabledFlagSetToFalse() throws Exception {
         // when
-        _Config.put(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, false);
+        _Config.put("isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable", false);
         recog.init();
 
         // then
