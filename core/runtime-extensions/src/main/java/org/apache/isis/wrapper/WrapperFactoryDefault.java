@@ -26,6 +26,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
@@ -33,6 +34,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
@@ -63,13 +65,14 @@ import org.apache.isis.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.wrapper.proxy.ProxyCreator;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This service provides the ability to 'wrap' a domain object such that it can
  * be interacted with, while enforcing the hide/disable/validate rules as implied by
  * the Isis programming model.
  */
-@Service
+@Service @Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
@@ -167,6 +170,17 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     // /////////////////////////////////////////////////////////////
+    // ASYNC WRAPPING
+    // /////////////////////////////////////////////////////////////
+
+    
+    @Override
+    public <T> AsyncWrap<T> async(T domainObject, EnumSet<ExecutionMode> mode) {
+        val executor = ForkJoinPool.commonPool(); // default, but can be overwritten through withers on the returned AsyncWrap
+        return new AsyncWrapDefault<T>(this, domainObject, mode, executor, log::error);
+    }
+
+    // /////////////////////////////////////////////////////////////
     // Listeners
     // /////////////////////////////////////////////////////////////
 
@@ -218,5 +232,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject AuthenticationSessionProvider authenticationSessionProvider;
     @Inject PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Inject FactoryService factoryService;
+
+
 
 }

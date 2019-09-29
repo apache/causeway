@@ -25,7 +25,8 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.EventObjectBase;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a domain object or a particular feature
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> 
+ * represents an interaction with a domain object or a particular feature
  * (property, collection, action) of a domain object.
  *
  * <p>

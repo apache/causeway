@@ -20,6 +20,8 @@ package org.apache.isis.testdomain.commandexecution;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -35,7 +37,6 @@ import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -44,6 +45,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.Product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
@@ -67,7 +69,7 @@ class WrapperTest {
     @Inject RepositoryService repository;
     @Inject BackgroundService backgroundService;
     @Inject FactoryService facoryService;
-    @Inject WrapperFactory wrapperFactory;
+    @Inject WrapperFactory wrapper;
     @Inject ActionDomainEventListener actionDomainEventListener;
 
     @BeforeEach
@@ -89,7 +91,7 @@ class WrapperTest {
 
         actionDomainEventListener.prepareLatch();
 
-        wrapperFactory.wrap(inventoryManager).updateProductPrice(product, 123);
+        wrapper.wrap(inventoryManager).updateProductPrice(product, 123);
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()
@@ -108,14 +110,26 @@ class WrapperTest {
 
         actionDomainEventListener.prepareLatch();
 
-        wrapperFactory.wrap(inventoryManager, ExecutionMode.ASYNC)
-            .updateProductPrice(product, 123);
+        Future<Product> invocationResult = wrapper.async(inventoryManager)
+                .withExecutor(Executors.newCachedThreadPool()) // use of custom executor (optional)
+                .invoke(InventoryManager::updateProductPrice, product, 123d);
+
+//XXX type-safety should prevent this snippet from being compiled!        
+//        Future<String> invocationResult2 = wrapper.async(inventoryManager)
+//                .invoke(Product::toString);
+        
+        assertNotNull(invocationResult);
+        
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()
                 .await(5, TimeUnit.SECONDS));
-
+        
         assertEquals(123d, product.getPrice(), 1E-6);
+        
+        val product_asReturnedByTheAsyncTask = invocationResult.get();
+        assertNotNull(product_asReturnedByTheAsyncTask);
+        assertEquals(123d, product_asReturnedByTheAsyncTask.getPrice(), 1E-6);
     }
     
 

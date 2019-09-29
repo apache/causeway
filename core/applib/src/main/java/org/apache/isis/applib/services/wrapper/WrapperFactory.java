@@ -93,24 +93,6 @@ public interface WrapperFactory {
          */
         SWALLOW_EXCEPTIONS,
         
-        /**
-         * 
-         * Validates synchronously but executes in background. Any wrapped object method that is supposed to 
-         * return something, will always return {@code null} when invoked to run in background.
-         * <p> 
-         * Execution gets skipped if {@link #SKIP_EXECUTION} is selected.
-         * <p>
-         * During background execution, presence or absence of {@link #SWALLOW_EXCEPTIONS} has no effect, 
-         * since background executions will not fail fast. Instead any exceptions that occur during
-         * background execution will be logged.
-         * 
-         * @since 2.0
-         * 
-         * @apiNote EXPERIMENTAL, what to do in case of exceptions possibly needs refinement, also there 
-         * should be some way to customize the background executor service.
-         */
-        ASYNC_EXECUTION,
-        
         ;
         
         // -- PRESET ENUM SETS
@@ -120,14 +102,6 @@ public interface WrapperFactory {
          */
         public static EnumSet<ExecutionMode> EXECUTE = EnumSet.noneOf(ExecutionMode.class); 
 
-        /**
-         * Validate all business rules and then execute in background. Does throw an exception if 
-         * validation fails, any exceptions that occur during background execution will be logged.
-         * @since 2.0
-         * @apiNote EXPERIMENTAL see {@link #ASYNC_EXECUTION}
-         */
-        public static EnumSet<ExecutionMode> ASYNC = EnumSet.of(ASYNC_EXECUTION);
-        
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
@@ -144,6 +118,12 @@ public interface WrapperFactory {
          * or execution fails.
          */
         public static EnumSet<ExecutionMode> TRY = EnumSet.of(SWALLOW_EXCEPTIONS); 
+        
+        /**
+         * Skips all steps.
+         * @since 2.0
+         */
+        public static EnumSet<ExecutionMode> NOOP = EnumSet.of(SKIP_RULE_VALIDATION, SKIP_EXECUTION);
         
     }
 
@@ -210,6 +190,34 @@ public interface WrapperFactory {
      */
     <T> boolean isWrapper(T possibleWrappedDomainObject);
 
+    // -- ASYNC WRAPPING
+    
+    /**
+     * Returns a {@link AsyncWrap} bound to the provided {@code domainObject}, 
+     * to prepare for type-safe asynchronous action execution. 
+     * 
+     * @param <T>
+     * @param domainObject
+     * @param mode
+     * 
+     * @since 2.0
+     */
+    <T> AsyncWrap<T> async(T domainObject, EnumSet<ExecutionMode> mode);
+    
+    /**
+     * Shortcut for {@link #async(Object, EnumSet)} using execution mode 
+     * {@link ExecutionMode#EXECUTE}.
+     * @param <T>
+     * @param domainObject
+     * 
+     * @since 2.0
+     */
+    default <T> AsyncWrap<T> async(T domainObject) {
+        return async(domainObject, ExecutionMode.EXECUTE);
+    }
+    
+    // -- ITERACTION EVENT HANDLING
+    
     /**
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
