@@ -18,15 +18,25 @@
  */
 package org.apache.isis.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.Data;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
-
-import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -61,6 +71,7 @@ public class IsisConfiguration {
         private final Facet facet = new Facet();
         @Data
         public static class Facet {
+
             private boolean filterVisibility = true;
 
             private final ActionAnnotation actionAnnotation = new ActionAnnotation();
@@ -82,6 +93,18 @@ public class IsisConfiguration {
                     private boolean postForDefault = true;
                 }
             }
+
+            private final CssClass cssClass = new CssClass();
+            @Data
+            public static class CssClass {
+                private Map<Pattern, String> patterns = new HashMap<>();
+            }
+            private final CssClassFa cssClassFa = new CssClassFa();
+            @Data
+            public static class CssClassFa {
+                private Map<Pattern, String> patterns = new HashMap<>();
+            }
+
 
             private final DomainObjectAnnotation domainObjectAnnotation = new DomainObjectAnnotation();
             @Data
@@ -414,5 +437,52 @@ public class IsisConfiguration {
         }
 
     }
-    
+
+    @Component
+    @ConfigurationPropertiesBinding
+    public static class PatternsConverter implements Converter<String, Map<Pattern, String>> {
+        @Override
+        public Map<Pattern, String> convert(String source) {
+            return toPatternMap(source);
+        }
+
+        /**
+         * The pattern matches definitions like:
+         * <ul>
+         * <li>methodNameRegex:value</li>
+         * </ul>
+         *
+         * <p>
+         *     Used for associating cssClass and cssClassFa (font awesome icon) values to method pattern names.
+         * </p>
+         */
+        private final static Pattern PATTERN_FOR_COLON_SEPARATED_PAIR = Pattern.compile("(?<methodRegex>[^:]+):(?<value>.+)");
+
+        private static Map<Pattern, String> toPatternMap(String cssClassPatterns) {
+            final Map<Pattern,String> valueByPattern = _Maps.newLinkedHashMap();
+            if(cssClassPatterns != null) {
+                final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ConfigurationConstants.LIST_SEPARATOR);
+                final Map<String,String> valueByRegex = _Maps.newLinkedHashMap();
+                while (regexToCssClasses.hasMoreTokens()) {
+                    String regexToCssClass = regexToCssClasses.nextToken().trim();
+                    if (_Strings.isNullOrEmpty(regexToCssClass)) {
+                        continue;
+                    }
+                    final Matcher matcher = PATTERN_FOR_COLON_SEPARATED_PAIR.matcher(regexToCssClass);
+                    if(matcher.matches()) {
+                        valueByRegex.put(matcher.group("methodRegex"), matcher.group("value"));
+                    }
+                }
+                for (Map.Entry<String, String> entry : valueByRegex.entrySet()) {
+                    final String regex = entry.getKey();
+                    final String cssClass = entry.getValue();
+                    valueByPattern.put(Pattern.compile(regex), cssClass);
+                }
+            }
+            return valueByPattern;
+        }
+
+    }
+
+
 }

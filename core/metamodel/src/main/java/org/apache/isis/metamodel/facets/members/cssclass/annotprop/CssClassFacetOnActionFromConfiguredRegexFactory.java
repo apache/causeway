@@ -92,8 +92,6 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
 
     // -- cssClassFromPattern
 
-    private final static Pattern CSS_CLASS_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
-
     private CssClassFacet createFromConfiguredRegexIfPossible(String name, FacetHolder facetHolder) {
         String value = cssIfAnyFor(name);
         return value != null
@@ -119,38 +117,10 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
     private Map<Pattern, String> getCssClassByPattern() {
         if (cssClassByPattern == null) {
             // build lazily
-            final String cssClassPatterns = getConfigurationLegacy().getString("isis.reflector.facet.cssClass.patterns");
-            this.cssClassByPattern = buildCssClassByPattern(cssClassPatterns);
+            this.cssClassByPattern = getConfiguration().getReflector().getFacet().getCssClass().getPatterns();
         }
         return cssClassByPattern;
     }
-
-    private static Map<Pattern, String> buildCssClassByPattern(String cssClassPatterns) {
-        final Map<Pattern,String> cssClassByPattern = _Maps.newLinkedHashMap();
-        if(cssClassPatterns != null) {
-            final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ConfigurationConstants.LIST_SEPARATOR);
-            final Map<String,String> cssClassByRegex = _Maps.newLinkedHashMap();
-            while (regexToCssClasses.hasMoreTokens()) {
-                String regexToCssClass = regexToCssClasses.nextToken().trim();
-                if (_Strings.isNullOrEmpty(regexToCssClass)) {
-                    continue;
-                }
-                final Matcher matcher = CSS_CLASS_REGEX_PATTERN.matcher(regexToCssClass);
-                if(matcher.matches()) {
-                    cssClassByRegex.put(matcher.group(1), matcher.group(2));
-                }
-            }
-            for (Map.Entry<String, String> entry : cssClassByRegex.entrySet()) {
-                final String regex = entry.getKey();
-                final String cssClass = entry.getValue();
-                cssClassByPattern.put(Pattern.compile(regex), cssClass);
-            }
-        }
-        return cssClassByPattern;
-    }
-
-
-
 
 }
 

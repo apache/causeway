@@ -97,36 +97,10 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     }
 
     private Map<Pattern, String> faIconByPattern;
-
     private Map<Pattern, String> getFaIconByPattern() {
         if (faIconByPattern == null) {
             // build lazily
-            final String cssClassFaPatterns = getConfigurationLegacy().getString("isis.reflector.facet.cssClassFa.patterns");
-            this.faIconByPattern = buildFaIconByPattern(cssClassFaPatterns);
-        }
-        return faIconByPattern;
-    }
-
-    private static Map<Pattern, String> buildFaIconByPattern(String cssClassFaPatterns) {
-        final Map<Pattern, String> faIconByPattern = _Maps.newLinkedHashMap();
-        if (cssClassFaPatterns != null) {
-            final StringTokenizer regexToFaIcons = new StringTokenizer(cssClassFaPatterns, ConfigurationConstants.LIST_SEPARATOR);
-            final Map<String, String> faIconByRegex = _Maps.newLinkedHashMap();
-            while (regexToFaIcons.hasMoreTokens()) {
-                String regexToFaIcon = regexToFaIcons.nextToken().trim();
-                if (_Strings.isNullOrEmpty(regexToFaIcon)) {
-                    continue;
-                }
-                final Matcher matcher = FA_ICON_REGEX_PATTERN.matcher(regexToFaIcon);
-                if (matcher.matches()) {
-                    faIconByRegex.put(matcher.group(1), matcher.group(2));
-                }
-            }
-            for (Map.Entry<String, String> entry : faIconByRegex.entrySet()) {
-                final String regex = entry.getKey();
-                final String faIcon = entry.getValue();
-                faIconByPattern.put(Pattern.compile(regex), faIcon);
-            }
+            this.faIconByPattern = getConfiguration().getReflector().getFacet().getCssClassFa().getPatterns();
         }
         return faIconByPattern;
     }
