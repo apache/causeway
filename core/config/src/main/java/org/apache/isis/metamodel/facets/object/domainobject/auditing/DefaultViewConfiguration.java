@@ -18,33 +18,19 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.IsisConfiguration;
 
 public enum DefaultViewConfiguration {
-    HIDDEN("hidden"),
-    TABLE("table");
+    HIDDEN(),
+    TABLE();
 
-    private static final String DEFAULT_VIEW_KEY = "isis.viewers.collectionLayout.defaultView";
-
-    private final String defaultView;
-
-    DefaultViewConfiguration(
-            final String defaultView) {
-
-        this.defaultView = defaultView;
+    public String toNameLower() {
+        return name().toLowerCase();
     }
 
-    public String getDefaultView() {
-        return defaultView;
+    public static DefaultViewConfiguration parse(IsisConfiguration configuration) {
+        return configuration.getViewers().getCollectionLayout().getDefaultView();
     }
 
-    public static DefaultViewConfiguration parse(IsisConfigurationLegacy configuration) {
-        final String configuredValue = configuration.getString(DEFAULT_VIEW_KEY);
-        return DefaultViewConfiguration.parseValue(configuredValue);
-    }
-
-    static DefaultViewConfiguration parseValue(final String value) {
-        return value != null && value.trim().toLowerCase().equals("table") ? TABLE : HIDDEN;
-    }
 
 }

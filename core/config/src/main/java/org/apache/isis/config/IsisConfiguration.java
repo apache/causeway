@@ -34,6 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
+import org.apache.isis.metamodel.facets.object.domainobject.auditing.DefaultViewConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.editing.EditingObjectsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -425,6 +426,13 @@ public class IsisConfiguration {
     private final Viewers viewers = new Viewers();
     @Data
     public static class Viewers {
+
+        private final CollectionLayout collectionLayout = new CollectionLayout();
+        @Data
+        public static class CollectionLayout {
+            private DefaultViewConfiguration defaultView = DefaultViewConfiguration.HIDDEN;
+        }
+
         private final Paged paged = new Paged();
         @Data
         public static class Paged {
