@@ -63,6 +63,7 @@ public class IsisConfiguration {
         private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
     }
 
+
     private final Reflector reflector = new Reflector();
     @Data
     public static class Reflector {
@@ -233,6 +234,8 @@ public class IsisConfiguration {
             private boolean checkModuleExtent = true;
             private boolean noParamsOnly = false;
             private boolean actionCollectionParameterChoices = true;
+            @Deprecated
+            private boolean serviceActionsOnly = true;
 
             private boolean jaxbViewModelNotAbstract = true;
             private boolean jaxbViewModelNotInnerClass = true;

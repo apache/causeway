@@ -45,11 +45,6 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner {
 
     @Deprecated
-    public static final String ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY =
-            "isis.reflector.validator.serviceActionsOnly";
-    public static final boolean ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_DEFAULT = true;
-
-    @Deprecated
     public static final String ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY =
             "isis.reflector.validator.mixinsOnly";
     public static final boolean ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_DEFAULT = true;
@@ -106,9 +101,7 @@ implements MetaModelValidatorRefiner {
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final boolean serviceActionsOnly = _Config.getConfiguration().getBoolean(
-                ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY,
-                ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_DEFAULT);
+        final boolean serviceActionsOnly = getConfiguration().getReflector().getValidator().isServiceActionsOnly();
         if (serviceActionsOnly) {
             metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
 
@@ -142,7 +135,7 @@ implements MetaModelValidatorRefiner {
                             thisSpec.getIdentifier(),
                             "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                             thisSpec.getFullIdentifier(),
-                            ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY,
+                            "isis.reflector.validator.serviceActionsOnly",
                             associationNames);
                 }
             }));
