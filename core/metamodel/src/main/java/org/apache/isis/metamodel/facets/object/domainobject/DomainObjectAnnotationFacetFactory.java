@@ -160,7 +160,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
         // check from @DomainObject(publishing=...)
         PublishedObjectFacet publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfigurationLegacy(), facetHolder);
+                .create(domainObjects, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(publishedObjectFacet);

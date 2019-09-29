@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobject.publishing;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.object.domainobject.Util;
 
@@ -25,17 +26,7 @@ public enum PublishObjectsConfiguration {
     ALL,
     NONE;
 
-    private static final String PUBLISH_OBJECTS_KEY = "isis.services.publish.objects";
-
-    public static PublishObjectsConfiguration parse(IsisConfigurationLegacy configuration) {
-        final String configuredValue = configuration.getString(PUBLISH_OBJECTS_KEY);
-        return PublishObjectsConfiguration.parse(configuredValue);
+    public static PublishObjectsConfiguration parse(IsisConfiguration configuration) {
+        return configuration.getServices().getPublish().getObjects();
     }
-
-    private static PublishObjectsConfiguration parse(final String value) {
-        // must be explicitly enabled
-        // behavior must conform to the doc https://isis.apache.org/guides/rgant/rgant.html#_rgant-DomainObject_publishing
-        return Util.parseYes(value)? ALL: NONE;
-    }
-
 }

@@ -29,10 +29,12 @@ import java.util.regex.Pattern;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
+import org.apache.isis.metamodel.facets.object.domainobject.publishing.PublishObjectsConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -265,11 +267,11 @@ public class IsisConfiguration {
 
         }
 
-        // isis.services.publish.actions
         private final Publish publish = new Publish();
         @Data
         public static class Publish {
            private PublishActionsConfiguration actions = PublishActionsConfiguration.NONE;
+            private PublishObjectsConfiguration objects = PublishObjectsConfiguration.NONE;
         }
         private final Translation translation = new Translation();
         @Data

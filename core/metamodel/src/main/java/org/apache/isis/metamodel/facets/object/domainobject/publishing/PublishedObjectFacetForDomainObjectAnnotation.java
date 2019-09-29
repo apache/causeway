@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacetAbstract;
@@ -33,11 +33,10 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
 
     public static PublishedObjectFacet create(
             final List<DomainObject> domainObjects,
-            final IsisConfigurationLegacy configuration,
+            final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PublishObjectsConfiguration setting = PublishObjectsConfiguration.parse(configuration);
-
+        final PublishObjectsConfiguration setting = configuration.getServices().getPublish().getObjects();
         return domainObjects.stream()
                 .map(DomainObject::publishing)
                 .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
