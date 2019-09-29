@@ -82,6 +82,7 @@ public class IsisConfiguration {
             public static class Impl {
 
             }
+            private boolean installFixtures = false;
         }
         /**
          * Default is <code>false</code> only for backward compatibility (to avoid lots of breakages in existing code);

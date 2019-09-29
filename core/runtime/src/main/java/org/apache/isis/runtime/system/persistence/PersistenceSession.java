@@ -162,7 +162,7 @@ SessionScopedComponent {
     /**
      * @see #isFixturesInstalled()
      */
-    static final String INSTALL_FIXTURES_KEY = "isis.persistor.datanucleus.install-fixtures";
+        static final String INSTALL_FIXTURES_KEY = "isis.persistor.datanucleus.install-fixtures";
     static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
     /**
