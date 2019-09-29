@@ -26,14 +26,10 @@ import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
@@ -207,8 +203,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         logAfter(cachedSpecifications);
 
-        final IntrospectionMode mode = configuration.getReflector().getIntrospector().getMode();
-        if(mode.isFullIntrospect(_Context.getEnvironment().getDeploymentType())) {
+        if(isFullIntrospect()) {
             log.info("Introspecting all cached specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
             introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         }
@@ -248,11 +243,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * deployment mode and configuration
      */
     private boolean isFullIntrospect() {
-
-        val introspectionMode = configuration.getReflector().getIntrospector().getMode();
-        val deploymentMode = _Context.getEnvironment().getDeploymentType();
-
-        return introspectionMode.isFullIntrospect(deploymentMode);
+        return IntrospectionMode.isFullIntrospect(configuration);
     }
 
 
@@ -356,12 +347,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
 
-
     // -- HELPER
-
-    private IsisConfigurationLegacy getConfiguration() {
-        return _Config.getConfiguration();
-    }	
 
     private Collection<ObjectSpecification> allCachedSpecifications() {
         return cache.allSpecifications();

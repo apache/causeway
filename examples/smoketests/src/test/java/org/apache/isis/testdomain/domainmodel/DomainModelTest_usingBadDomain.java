@@ -18,10 +18,13 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.spec.DomainModelException;
@@ -57,9 +60,11 @@ import lombok.val;
 @Incubating("does not work, when executed in sequence with other smoketests")
 class DomainModelTest_usingBadDomain {
     
+    @Inject private IsisConfiguration configuration;
+    
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
-        assertTrue(IntrospectionMode.isFullIntrospect());
+        assertTrue(IntrospectionMode.isFullIntrospect(configuration));
     }
     
     @Test
