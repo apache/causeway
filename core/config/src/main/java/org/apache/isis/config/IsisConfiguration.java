@@ -94,12 +94,17 @@ public class IsisConfiguration {
                 }
             }
 
-             // isis.reflector.facet.cssClass.patterns
             private final CssClass cssClass = new CssClass();
             @Data
             public static class CssClass {
                 private Map<Pattern, String> patterns = new HashMap<>();
             }
+            private final CssClassFa cssClassFa = new CssClassFa();
+            @Data
+            public static class CssClassFa {
+                private Map<Pattern, String> patterns = new HashMap<>();
+            }
+
 
             private final DomainObjectAnnotation domainObjectAnnotation = new DomainObjectAnnotation();
             @Data

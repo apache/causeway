@@ -20,12 +20,13 @@ package org.apache.isis.config;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
-//@Import({
-//    IsisConfiguration.class // not required
-//XXX if this module would contribute any managed beans, these would go here
-//})
+@Import({
+    //IsisConfiguration.class // not required
+    IsisConfiguration.PatternsConverter.class
+})
 @EnableConfigurationProperties(IsisConfiguration.class)
 public class IsisConfigModule {
 
