@@ -1,5 +1,6 @@
 package org.ro.to
 
 enum class ResultType(val type: String) {
-    LIST("list")
+    LIST("list"),
+    SCALARVALUE("scalarvalue")
 }

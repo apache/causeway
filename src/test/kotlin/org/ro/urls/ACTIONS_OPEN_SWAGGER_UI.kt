@@ -1,4 +1,8 @@
-{
+package org.ro.urls
+
+object ACTIONS_OPEN_SWAGGER_UI : Response(){
+    override val url = "http://localhost:8080/restful/services/isisApplib.SwaggerServiceMenu/actions/openSwaggerUi/invoke"
+    override val str = """{
     "links": [
         {
             "rel": "self",
@@ -21,4 +25,5 @@
         ],
         "extensions": {}
     }
+}"""
 }

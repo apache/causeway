@@ -135,7 +135,7 @@ class ActionTest {
         assertEquals("metamodel.csv", defaultChoice)
     }
 
-    @Test    //TODO-> empty key in arguments
+    @Test
     fun testParseActionDownloadSwaggerSchemaDefinition() {
         val jsonStr = ACTIONS_DOWNLOAD_SWAGGER_SCHEMA_DEFINITION.str
         val action = ActionHandler().parse(jsonStr) as Action
@@ -162,4 +162,5 @@ class ActionTest {
         val defaultChoice = p1.defaultChoice!!.content as String
         assertEquals("Private", defaultChoice)
     }
+
 }

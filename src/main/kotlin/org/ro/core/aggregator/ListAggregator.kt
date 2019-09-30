@@ -29,7 +29,7 @@ class ListAggregator(private val actionTitle: String) : BaseAggregator() {
         val obj = logEntry.getObj()
 
         when (obj) {
-            is ResultList -> handleList(obj)
+            is InvocationResult -> handleList(obj)
             is TObject -> handleObject(obj)
             is Layout -> handleLayout(obj)
             is Property -> handleProperty(obj)
@@ -41,8 +41,8 @@ class ListAggregator(private val actionTitle: String) : BaseAggregator() {
         }
     }
 
-    private fun handleList(resultList: ResultList) {
-        val result = resultList.result!!
+    private fun handleList(invocationResult: InvocationResult) {
+        val result = invocationResult.result!!
         val links = result.value
         for (l: Link in links) {
             invoke(l)

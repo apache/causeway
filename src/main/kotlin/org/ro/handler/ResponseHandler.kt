@@ -1,9 +1,6 @@
 package org.ro.handler
 
 import org.ro.core.event.LogEntry
-import org.ro.handler.DomainTypesHandler
-import org.ro.handler.UserHandler
-import org.ro.handler.VersionHandler
 
 /**
  * Delegates responses to handlers, acts as Facade.
@@ -16,7 +13,7 @@ object ResponseHandler {
     private var _1 = ResultHandler()
     private var _2 = ActionHandler()
     private var _3 = ServiceHandler()
-    private var _4 = ResultListHandler()
+    private var _4 = InvocationResultHandler()
     private var _5 = TObjectHandler()
     private var _6 = LayoutHandler()
     private var _7 = PropertyHandler()
