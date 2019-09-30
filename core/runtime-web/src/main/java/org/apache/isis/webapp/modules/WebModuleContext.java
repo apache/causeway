@@ -57,16 +57,16 @@ public class WebModuleContext {
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
-    private final IsisConfigurationLegacy isisConfiguration;
+    private final IsisConfigurationLegacy isisConfigurationLegacy;
     private List<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
 
     public WebModuleContext() {
-        this.isisConfiguration = _Config.getConfiguration();
+        this.isisConfigurationLegacy = _Config.getConfiguration();
     }
 
-    public IsisConfigurationLegacy getConfiguration() {
-        return isisConfiguration;
+    public IsisConfigurationLegacy getConfigurationLegacy() {
+        return isisConfigurationLegacy;
     }
 
     public ServletContext getServletContext() {

@@ -67,14 +67,14 @@ public final class WebModuleWicket implements WebModule  {
         }
 
         pathConfigValue = 
-                ctx.getConfiguration().getString("isis.viewer.wicket.basePath", "/wicket");
+                ctx.getConfigurationLegacy().getString("isis.viewer.wicket.basePath", "/wicket");
 
         deploymentMode = _Context.isPrototyping()
                 ? "development" 
                         : "deployment";
 
         appConfigValue = 
-                ctx.getConfiguration().getString("isis.viewer.wicket.app",
+                ctx.getConfigurationLegacy().getString("isis.viewer.wicket.app",
                         "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication");
 
         ctx.setHasBootstrapper();
