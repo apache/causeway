@@ -61,14 +61,21 @@ import org.springframework.stereotype.Component;
 @Data
 public class IsisConfiguration {
 
-
+    private final Authentication authentication = new Authentication();
+    @Data
+    public static class Authentication {
+        private final Shiro shiro = new Shiro();
+        @Data
+        public static class Shiro {
+            private boolean autoLogoutIfAlreadyAuthenticated = false;
+        }
+    }
     private final Objects objects = new Objects();
     @Data
     public static class Objects {
         private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
     }
 
-    // // isis.persistor.datanucleus
     private final Persistor persistor = new Persistor();
     @Data
     public static class Persistor {
@@ -298,18 +305,6 @@ public class IsisConfiguration {
     private final Service service = new Service();
     @Data
     public static class Service {
-        // isis.service.email.sender.username
-        // isis.service.email.sender.address
-        // isis.service.email.sender.password
-        // isis.service.email.sender.hostname
-        // isis.service.email.port
-        // isis.service.email.socketTimeout
-        // isis.service.email.socketConnectionTimeout
-        // isis.service.email.tls.enabled
-        // isis.service.email.throwExceptionOnFail
-        // isis.service.email.override.to
-        // isis.service.email.override.cc
-        // isis.service.email.override.bcc
         private final Email email = new Email();
         @Data
         public static class Email {
@@ -429,7 +424,15 @@ public class IsisConfiguration {
         @Data
         public static class Restfulobjects {
             private String basePath = "/restful";
+            private boolean honorUiHints = false;
+            private boolean objectPropertyValuesOnly = false;
             private boolean strictAcceptChecking = false;
+            private boolean suppressDescribedByLinks = false;
+            private boolean suppressMemberDisabledReason = false;
+            private boolean suppressMemberExtensions = false;
+            private boolean suppressMemberId = false;
+            private boolean suppressMemberLinks = false;
+            private boolean suppressUpdateLink = false;
             private final Gsoc2013 gsoc2013 = new Gsoc2013();
             @Data
             public static class Gsoc2013 {

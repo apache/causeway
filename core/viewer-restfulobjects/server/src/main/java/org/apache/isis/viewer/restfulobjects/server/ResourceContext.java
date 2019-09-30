@@ -218,55 +218,44 @@ public class ResourceContext extends RuntimeContextBase implements RendererConte
 
     // -- configuration settings
 
-    private static final boolean HONOR_UI_HINTS_DEFAULT = false;
-
-    private static final boolean OBJECT_PROPERTY_VALUES_ONLY_DEFAULT = false;
-
-    private static final boolean SUPPRESS_DESCRIBED_BY_LINKS_DEFAULT = false;
-    private static final boolean SUPPRESS_UPDATE_LINK_DEFAULT = false;
-    private static final boolean SUPPRESS_MEMBER_ID_DEFAULT = false;
-    private static final boolean SUPPRESS_MEMBER_LINKS_DEFAULT = false;
-    private static final boolean SUPPRESS_MEMBER_EXTENSIONS_DEFAULT = false;
-    private static final boolean SUPPRESS_MEMBER_DISABLED_REASON_DEFAULT = false;
-
     @Override
     public boolean honorUiHints() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.honorUiHints", HONOR_UI_HINTS_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isHonorUiHints();
     }
 
     @Override
     public boolean objectPropertyValuesOnly() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.objectPropertyValuesOnly", OBJECT_PROPERTY_VALUES_ONLY_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isObjectPropertyValuesOnly();
     }
 
     @Override
     public boolean suppressDescribedByLinks() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.suppressDescribedByLinks", SUPPRESS_DESCRIBED_BY_LINKS_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isSuppressDescribedByLinks();
     }
 
     @Override
     public boolean suppressUpdateLink() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.suppressUpdateLink", SUPPRESS_UPDATE_LINK_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isSuppressUpdateLink();
     }
 
     @Override
     public boolean suppressMemberId() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.suppressMemberId", SUPPRESS_MEMBER_ID_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberId();
     }
 
     @Override
     public boolean suppressMemberLinks() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.suppressMemberLinks", SUPPRESS_MEMBER_LINKS_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberLinks();
     }
 
     @Override
     public boolean suppressMemberExtensions() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.suppressMemberExtensions", SUPPRESS_MEMBER_EXTENSIONS_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberExtensions();
     }
 
     @Override
     public boolean suppressMemberDisabledReason() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.suppressMemberDisabledReason", SUPPRESS_MEMBER_DISABLED_REASON_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isSuppressMemberDisabledReason();
     }
 
     @Override

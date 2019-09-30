@@ -432,7 +432,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     private FixturesInstalledState initialStateFromConfig() {
         val installFixtures = configuration.getPersistor().getDatanucleus().isInstallFixtures();
-        log.info("isFixturesInstalled: {} = {}", "isis.persistor.datanucleus.install-fixtures", installFixtures);
+        log.info("isFixturesInstalled: {} = {}", "'isis.persistor.datanucleus.install-fixtures'", installFixtures);
 
         val objectStoreIsFixturesInstalled = !installFixtures;
         val initialStateFromConfig = objectStoreIsFixturesInstalled
