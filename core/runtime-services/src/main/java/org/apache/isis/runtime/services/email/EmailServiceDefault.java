@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 
 import lombok.extern.log4j.Log4j2;
@@ -55,34 +56,6 @@ public class EmailServiceDefault implements EmailService {
             super(cause);
         }
     }
-
-    // -- CONSTANTS
-
-    private static final String ISIS_SERVICE_EMAIL_SENDER_USERNAME = "isis.service.email.sender.username";
-    private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
-    private static final String ISIS_SERVICE_EMAIL_SENDER_PASSWORD = "isis.service.email.sender.password";
-
-    private static final String ISIS_SERVICE_EMAIL_SENDER_HOSTNAME = "isis.service.email.sender.hostname";
-    private static final String ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT = "smtp.gmail.com";
-
-    private static final String ISIS_SERVICE_EMAIL_PORT = "isis.service.email.port";
-    private static final int ISIS_SERVICE_EMAIL_PORT_DEFAULT = 587;
-
-    private static final String ISIS_SERVICE_EMAIL_TLS_ENABLED = "isis.service.email.tls.enabled";
-    private static final boolean ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT = true;
-
-    private static final String ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL = "isis.service.email.throwExceptionOnFail";
-    private static final boolean ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT = true;
-
-    private static final String ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT = "isis.service.email.socketTimeout";
-    private static final int ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT_DEFAULT = 2000;
-
-    private static final String ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT = "isis.service.email.socketConnectionTimeout";
-    private static final int ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT = 2000;
-
-    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_TO = "isis.service.email.override.to";
-    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_CC = "isis.service.email.override.cc";
-    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_BCC = "isis.service.email.override.bcc";
 
     // -- INIT
 
@@ -109,51 +82,51 @@ public class EmailServiceDefault implements EmailService {
     }
 
     protected String getSenderEmailUsername() {
-        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_USERNAME);
+        return configuration.getService().getEmail().getSender().getUsername();
     }
 
     protected String getSenderEmailAddress() {
-        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_ADDRESS);
+        return configuration.getService().getEmail().getSender().getAddress();
     }
 
     protected String getSenderEmailPassword() {
-        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_PASSWORD);
+        return configuration.getService().getEmail().getSender().getPassword();
     }
 
     protected String getSenderEmailHostName() {
-        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_HOSTNAME, ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT);
+        return configuration.getService().getEmail().getSender().getHostname();
     }
 
     protected Integer getSenderEmailPort() {
-        return configuration.getInteger(ISIS_SERVICE_EMAIL_PORT, ISIS_SERVICE_EMAIL_PORT_DEFAULT);
+        return configuration.getService().getEmail().getPort();
     }
 
     protected Boolean getSenderEmailTlsEnabled() {
-        return configuration.getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT);
+        return configuration.getService().getEmail().getTls().isEnabled();
     }
 
     protected Boolean isThrowExceptionOnFail() {
-        return configuration.getBoolean(ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL, ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT);
+        return configuration.getService().getEmail().isThrowExceptionOnFail();
     }
 
     protected int getSocketTimeout() {
-        return configuration.getInteger(ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT, ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT_DEFAULT);
+        return configuration.getService().getEmail().getSocketTimeout();
     }
 
     protected int getSocketConnectionTimeout() {
-        return configuration.getInteger(ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT, ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT);
+        return configuration.getService().getEmail().getSocketConnectionTimeout();
     }
 
     protected String getEmailOverrideTo() {
-        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_TO);
+        return configuration.getService().getEmail().getOverride().getTo();
     }
 
     protected String getEmailOverrideCc() {
-        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_CC);
+        return configuration.getService().getEmail().getOverride().getCc();
     }
 
     protected String getEmailOverrideBcc() {
-        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_BCC);
+        return configuration.getService().getEmail().getOverride().getBcc();
     }
 
     @Override
@@ -260,6 +233,7 @@ public class EmailServiceDefault implements EmailService {
         return addresses != null && addresses.length > 0;
     }
 
-    @Inject IsisConfigurationLegacy configuration;
+    @Inject IsisConfigurationLegacy configurationLegacy;
+    @Inject IsisConfiguration configuration;
 
 }

@@ -138,7 +138,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     // ///////////////////////////////////////////////////
 
     private ObjectActionReprRenderer addParameterDetails() {
-        boolean gsoc2013 = getRendererContext().getConfiguration().getBoolean("isis.viewer.restfulobjects.gsoc2013.legacyParamDetails", false);
+        boolean gsoc2013 = getRendererContext().getConfiguration().getViewer().getRestfulobjects().getGsoc2013().isLegacyParamDetails();
         if(gsoc2013) {
             final List<Object> parameters = _Lists.newArrayList();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {

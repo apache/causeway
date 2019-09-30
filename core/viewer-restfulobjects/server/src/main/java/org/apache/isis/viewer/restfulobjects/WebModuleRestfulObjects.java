@@ -68,7 +68,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
         }
 
         // try to fetch restfulPath from config else fallback to default
-        final String restfulPath = ctx.getConfiguration()
+        final String restfulPath = ctx.getConfigurationLegacy()
                 .getString(KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
 
         putRestfulPath(restfulPath);

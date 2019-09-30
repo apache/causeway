@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -54,7 +55,8 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     // -- FINAL FIELDS
 
-    @Getter protected final IsisConfigurationLegacy configuration;
+    @Getter protected final IsisConfiguration configuration;
+    @Getter protected final IsisConfigurationLegacy configurationLegacy;
     @Getter protected final ServiceInjector serviceInjector;
     @Getter protected final ServiceRegistry serviceRegistry;
     @Getter protected final SpecificationLoader specificationLoader;
@@ -67,7 +69,8 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     protected RuntimeContextBase() {
         val mmc = MetaModelContext.current();
-        configuration = mmc.getConfigurationLegacy();
+        configuration = mmc.getConfiguration();
+        configurationLegacy = mmc.getConfigurationLegacy();
         serviceInjector = mmc.getServiceInjector();
         serviceRegistry = mmc.getServiceRegistry();
         specificationLoader = mmc.getSpecificationLoader();

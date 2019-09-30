@@ -63,7 +63,8 @@ public class IsisSession extends RuntimeContextBase {
             final RuntimeEventService runtimeEventService,
             final AuthenticationSession authenticationSession) {
 
-        super(IsisContext.getConfigurationLegacy(),
+        super(  IsisContext.getConfiguration(),
+                IsisContext.getConfigurationLegacy(),
                 IsisContext.getServiceInjector(),
                 IsisContext.getServiceRegistry(),
                 IsisContext.getSpecificationLoader(),
