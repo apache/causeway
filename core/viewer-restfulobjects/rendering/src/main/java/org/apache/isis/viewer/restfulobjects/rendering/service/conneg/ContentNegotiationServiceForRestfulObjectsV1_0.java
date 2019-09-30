@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -33,6 +34,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -72,8 +74,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     @Override
     @PostConstruct
     public void init() {
-        this.strictAcceptChecking = getConfiguration()
-                .getBoolean("isis.viewer.restfulobjects.strictAcceptChecking", false);
+        this.strictAcceptChecking = configuration.getViewer().getRestfulobjects().isStrictAcceptChecking();
     }
 
     @Override
@@ -417,6 +418,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     private SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
+    @Inject
+    IsisConfiguration configuration;
 
 
 }

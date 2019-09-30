@@ -428,6 +428,7 @@ public class IsisConfiguration {
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
+            private boolean strictAcceptChecking = false;
             private final Gsoc2013 gsoc2013 = new Gsoc2013();
             @Data
             public static class Gsoc2013 {
