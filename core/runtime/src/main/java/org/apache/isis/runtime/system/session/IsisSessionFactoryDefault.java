@@ -115,7 +115,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         taskList.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
         taskList.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
 
-        taskList.submit(_ConcurrentContext.sequential());
+        taskList.submit(_ConcurrentContext.forkJoin());
         taskList.await();
 
         runtimeEventService.fireAppPostMetamodel();

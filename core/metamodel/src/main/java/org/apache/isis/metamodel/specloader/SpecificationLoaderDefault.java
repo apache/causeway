@@ -363,8 +363,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return objectSpec;
     }
 
-    //private final static _Probe probe = _Probe.unlimited().label("SpecificationLoader");
-
     private void logBefore(
             final List<? extends ObjectSpecification> specificationsFromRegistry,
             final Collection<? extends ObjectSpecification> cachedSpecifications) {
