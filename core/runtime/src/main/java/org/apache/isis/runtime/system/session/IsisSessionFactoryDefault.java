@@ -26,10 +26,11 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -83,8 +84,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
 
-    @PostConstruct
-    public void init() {
+    //@PostConstruct .. too early, needs services to be provisioned first
+    @EventListener
+    public void init(ContextRefreshedEvent event) {
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
 

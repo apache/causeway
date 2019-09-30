@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -45,7 +46,7 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
         final List<DomainObjectLayout> domainObjectLayouts = Annotations.getAnnotations(cls, DomainObjectLayout.class);
         final List<ViewModelLayout> viewModelLayouts = Annotations.getAnnotations(cls, ViewModelLayout.class);
 
-        val metamodelEventService = getServiceRegistry().lookupServiceElseFail(MetamodelEventService.class);
+        val metamodelEventService = this.metamodelEventService.get();
 
         FacetUtil.addFacet(
                 TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent.create(
@@ -113,7 +114,8 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
         return;
     }
 
-
+    private final _Lazy<MetamodelEventService> metamodelEventService = _Lazy.threadSafe(()->
+        getServiceRegistry().lookupServiceElseFail(MetamodelEventService.class));
 
 
 }

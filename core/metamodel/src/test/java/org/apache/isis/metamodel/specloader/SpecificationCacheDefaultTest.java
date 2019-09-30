@@ -18,7 +18,6 @@
  */
 package org.apache.isis.metamodel.specloader;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.jmock.Expectations;
@@ -39,6 +38,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class SpecificationCacheDefaultTest {
 
     @Rule
@@ -49,11 +50,11 @@ public class SpecificationCacheDefaultTest {
     @Mock
     private ObjectSpecification orderSpec;
 
-    private SpecificationCacheDefault specificationCache;
+    private SpecificationCacheDefault<ObjectSpecification> specificationCache;
 
     @Before
     public void setUp() throws Exception {
-        specificationCache = new SpecificationCacheDefault();
+        specificationCache = new SpecificationCacheDefault<>();
 
         context.checking(new Expectations() {{
             allowing(customerSpec).getCorrespondingClass();
@@ -80,7 +81,7 @@ public class SpecificationCacheDefaultTest {
     @Test
     public void get_whenCached() {
         final String customerClassName = Customer.class.getName();
-        specificationCache.cache(customerClassName, customerSpec);
+        specificationCache.put(customerClassName, customerSpec);
 
         final ObjectSpecification objectSpecification = specificationCache.get(customerClassName);
 
@@ -90,10 +91,10 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void allSpecs_whenCached() {
-        specificationCache.cache(Customer.class.getName(), customerSpec);
-        specificationCache.cache(Order.class.getName(), orderSpec);
+        specificationCache.put(Customer.class.getName(), customerSpec);
+        specificationCache.put(Order.class.getName(), orderSpec);
 
-        final Collection<ObjectSpecification> allSpecs = specificationCache.allSpecifications();
+        val allSpecs = specificationCache.snapshotSpecs();
 
         assertThat(allSpecs.size(), is(2));
     }

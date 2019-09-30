@@ -19,10 +19,10 @@
 
 package org.apache.isis.metamodel.specloader;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -30,11 +30,13 @@ import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 
 /**
  * This is populated in two parts.
  *
- * Initially the <tt>specByClassName</tt> map is populated using {@link #cache(String, ObjectSpecification)}.
+ * Initially the <tt>specByClassName</tt> map is populated using {@link #put(String, ObjectSpecification)}.
  * This allows {@link #allSpecifications()} to return a list of specs.
  * Later on, {@link #init()} called which populates #classNameBySpecId.
  *
@@ -43,16 +45,22 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
  * {@link IllegalStateException}.
  *
  */
-class SpecificationCacheDefault {
+class SpecificationCacheDefault<T extends ObjectSpecification> {
 
-    private final Map<String, ObjectSpecification> specByClassName = _Maps.newHashMap();
+    private final Map<String, T> specByClassName = _Maps.newHashMap();
     private Map<ObjectSpecId, String> classNameBySpecId;
 
-    public ObjectSpecification get(final String className) {
+    public T get(final String className) {
         return specByClassName.get(className);
     }
+    
+    public T computeIfAbsent(
+            final String className, 
+            final Function<? super String, T> mappingFunction) {
+        return specByClassName.computeIfAbsent(className, mappingFunction);
+    }
 
-    public void cache(final String className, final ObjectSpecification spec) {
+    public void put(final String className, final T spec) {
         specByClassName.put(className, spec);
         recache(spec);
     }
@@ -62,11 +70,14 @@ class SpecificationCacheDefault {
         specByClassName.clear();
     }
 
-    public Collection<ObjectSpecification> allSpecifications() {
-        return Collections.unmodifiableCollection(specByClassName.values());
+    /** @returns thread-safe defensive copy */
+    public Collection<T> snapshotSpecs() {
+        synchronized(this) {
+            return new ArrayList<T>(specByClassName.values());
+        }
     }
 
-    public ObjectSpecification getByObjectType(final ObjectSpecId objectSpecID) {
+    public T getByObjectType(final ObjectSpecId objectSpecID) {
         if (!isInitialized()) {
             throw new IllegalStateException("SpecificationCache by object type has not yet been initialized");
         }
@@ -75,17 +86,16 @@ class SpecificationCacheDefault {
     }
 
     synchronized void init() {
-        final Map<ObjectSpecId, ObjectSpecification> specById = _Maps.newHashMap();
-
-        final List<ObjectSpecification> cachedSpecifications = _Lists.newArrayList();
-        while(true) {
-            final Collection<ObjectSpecification> newSpecifications = _Lists.newArrayList(allSpecifications());
+        val specById = _Maps.<ObjectSpecId, T>newHashMap();
+        val cachedSpecifications = _Lists.<T>newArrayList();
+        for(;;) {
+            val newSpecifications = snapshotSpecs();
             newSpecifications.removeAll(cachedSpecifications);
             if(newSpecifications.isEmpty()) {
                 break;
             }
-            for (final ObjectSpecification objSpec : newSpecifications) {
-                final ObjectSpecId objectSpecId = objSpec.getSpecId();
+            for (val objSpec : newSpecifications) {
+                val objectSpecId = objSpec.getSpecId();
                 if (objectSpecId == null) {
                     continue;
                 }
@@ -97,13 +107,13 @@ class SpecificationCacheDefault {
         internalInit(specById);
     }
 
-    void internalInit(final Map<ObjectSpecId, ObjectSpecification> specById) {
-        final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
-        final Map<String, ObjectSpecification> specByClassName = _Maps.newHashMap();
+    void internalInit(final Map<ObjectSpecId, T> specById) {
+        val classNameBySpecId = _Maps.<ObjectSpecId, String>newHashMap();
+        val specByClassName = _Maps.<String, T>newHashMap();
 
-        for (ObjectSpecId objectSpecId : specById.keySet()) {
-            final ObjectSpecification objectSpec = specById.get(objectSpecId);
-            final String className = objectSpec.getCorrespondingClass().getName();
+        for (val objectSpecId : specById.keySet()) {
+            val objectSpec = specById.get(objectSpecId);
+            val className = objectSpec.getCorrespondingClass().getName();
             classNameBySpecId.put(objectSpecId, className);
             specByClassName.put(className, objectSpec);
         }
@@ -112,8 +122,8 @@ class SpecificationCacheDefault {
         this.specByClassName.putAll(specByClassName);
     }
 
-    public ObjectSpecification remove(String typeName) {
-        ObjectSpecification removed = specByClassName.remove(typeName);
+    public T remove(String typeName) {
+        T removed = specByClassName.remove(typeName);
         if(removed != null) {
             if(removed.containsDoOpFacet(ObjectSpecIdFacet.class)) {
                 // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
@@ -128,7 +138,7 @@ class SpecificationCacheDefault {
     /**
      * @param spec
      */
-    public void recache(ObjectSpecification spec) {
+    public void recache(T spec) {
         if(!isInitialized()) {
             // JRebel plugin might call this before we are actually up and running;
             // just ignore.

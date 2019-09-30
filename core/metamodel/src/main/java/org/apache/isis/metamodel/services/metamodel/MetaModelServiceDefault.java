@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 

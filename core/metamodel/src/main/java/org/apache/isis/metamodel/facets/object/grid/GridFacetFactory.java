@@ -17,25 +17,29 @@
 package org.apache.isis.metamodel.facets.object.grid;
 
 import org.apache.isis.applib.services.grid.GridService;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 
-public class GridFacetFactory extends FacetFactoryAbstract {
+import lombok.val;
 
+public class GridFacetFactory extends FacetFactoryAbstract {
+    
     public GridFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final GridService gridService = getServiceRegistry().lookupServiceElseFail(GridService.class);
-
-        FacetUtil.addFacet(GridFacetDefault.create(facetHolder, gridService));
+        FacetUtil.addFacet(GridFacetDefault.create(facetHolder, gridService.get()));
     }
+    
+    private final _Lazy<GridService> gridService = _Lazy.threadSafe(()->
+        getServiceRegistry().lookupServiceElseFail(GridService.class));
+    
 
 
 }

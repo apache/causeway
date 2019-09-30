@@ -28,6 +28,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -75,7 +76,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Log4j2
 public class SpecificationLoaderDefault implements SpecificationLoader {
-
+    
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private ProgrammingModel programmingModel;
@@ -83,7 +84,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 
     private MetaModelValidator metaModelValidator;
-    private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
+    private final SpecificationCacheDefault<ObjectSpecificationAbstract> cache = 
+            new SpecificationCacheDefault<>();
     private PostProcessor postProcessor;
 
     @PostConstruct
@@ -144,9 +146,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val typeRegistry = IsisBeanTypeRegistry.current();
 
-        val specificationsFromRegistry = _Lists.<ObjectSpecification>newArrayList();
-        val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
-        val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
+        val specificationsFromRegistry = _Lists.<ObjectSpecificationAbstract>newArrayList();
+        val domainServiceSpecs = _Lists.<ObjectSpecificationAbstract>newArrayList();
+        val mixinSpecs = _Lists.<ObjectSpecificationAbstract>newArrayList();
 
         CommonDtoUtils.VALUE_TYPES.forEach(type->{
             val spec = internalLoadSpecificationOrNull(type, IntrospectionState.NOT_INTROSPECTED);
@@ -187,7 +189,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         cache.init();
 
-        final Collection<ObjectSpecification> cachedSpecifications = allCachedSpecifications();
+        val cachedSpecifications = cache.snapshotSpecs();
 
         logBefore(specificationsFromRegistry, cachedSpecifications);
 
@@ -284,51 +286,34 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return spec;
     }
 
-    private ObjectSpecification internalLoadSpecificationOrNull(
+    private ObjectSpecificationAbstract internalLoadSpecificationOrNull(
             final Class<?> type,
             final IntrospectionState upTo) {
 
-        final Class<?> substitutedType = classSubstitutor.getClass(type);
+        val substitutedType = classSubstitutor.getClass(type);
         if (substitutedType == null) {
             return null;
         }
 
         val typeName = substitutedType.getName();
 
-        //TODO[2033] don't block on long running code ... 'specSpi.introspectUpTo(upTo);'
+        final ObjectSpecificationAbstract cachedSpec;
+        
+        //XXX don't block on long running code ... 'spec.introspectUpTo(upTo);'
         synchronized (cache) {
-
-            val spec = cache.get(typeName);
-            if (spec != null) {
-                if(spec instanceof ObjectSpecificationAbstract) {
-                    ((ObjectSpecificationAbstract)spec).introspectUpTo(upTo);
-                }
-                return spec;
-            }
-
-            val specification = createSpecification(substitutedType);
-
-            // put into the cache prior to introspecting, to prevent
-            // infinite loops
-            cache.cache(typeName, specification);
-            specification.introspectUpTo(upTo);
-
-            return specification;
+            cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType));
         }
+        
+        cachedSpec.introspectUpTo(upTo);
+        return cachedSpec; 
+            
     }
 
     // -- LOOKUP
 
     @Override
     public List<ObjectSpecification> currentSpecifications() {
-
-        final List<ObjectSpecification> defensiveCopy;
-
-        synchronized (cache) {
-            defensiveCopy = _Lists.newArrayList(allCachedSpecifications());
-        }
-
-        return defensiveCopy;
+        return _Casts.uncheckedCast(cache.snapshotSpecs());
     }
 
     @Override
@@ -347,10 +332,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 
     // -- HELPER
-
-    private Collection<ObjectSpecification> allCachedSpecifications() {
-        return cache.allSpecifications();
-    }
 
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
@@ -385,8 +366,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     //private final static _Probe probe = _Probe.unlimited().label("SpecificationLoader");
 
     private void logBefore(
-            final List<ObjectSpecification> specificationsFromRegistry,
-            final Collection<ObjectSpecification> cachedSpecifications) {
+            final List<? extends ObjectSpecification> specificationsFromRegistry,
+            final Collection<? extends ObjectSpecification> cachedSpecifications) {
         if(!log.isDebugEnabled()) {
             return;
         }
@@ -406,12 +387,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 registryNotCached.size(), cachedNotRegistry.size()));
     }
 
-    private void logAfter(final Collection<ObjectSpecification> cachedSpecifications) {
+    private void logAfter(final Collection<? extends ObjectSpecification> cachedSpecifications) {
         if(!log.isDebugEnabled()) {
             return;
         }
 
-        final Collection<ObjectSpecification> cachedSpecificationsAfter = cache.allSpecifications();
+        val cachedSpecificationsAfter = cache.snapshotSpecs();
         List<ObjectSpecification> cachedAfterNotBefore = cachedSpecificationsAfter.stream()
                 .filter(spec -> !cachedSpecifications.contains(spec))
                 .collect(Collectors.toList());
@@ -419,25 +400,26 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 cachedSpecificationsAfter.size(), cachedAfterNotBefore.size()));
     }
 
-    private void introspect(final Collection<ObjectSpecification> specs, final IntrospectionState upTo) {
+    private void introspect(
+            final Collection<ObjectSpecificationAbstract> specs, 
+            final IntrospectionState upTo) {
 
         val isConcurrentFromConfig = configuration.getReflector().getIntrospector().isParallelize();
 
-        val runSequential = !isConcurrentFromConfig || true; //FIXME concurrent specloading disabled, it deadlocks
+        val runSequential = !isConcurrentFromConfig;
         
         if(runSequential) { 
             
-            for (final ObjectSpecification specification : specs) {
-                val specSpi = (ObjectSpecificationAbstract) specification;
-                specSpi.introspectUpTo(upTo);
+            for (val spec : specs) {
+                spec.introspectUpTo(upTo);
             }
             
-            return;
+            return; // sequential run done
         }
         
         specs.parallelStream()
-        .map(spec -> (ObjectSpecificationAbstract) spec)
         .forEach(spec -> spec.introspectUpTo(upTo));
+        
     }
 
 
@@ -469,7 +451,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 
     private void recache(final ObjectSpecification newSpec) {
-        cache.recache(newSpec);
+        cache.recache((ObjectSpecificationAbstract)newSpec);
     }
 
     // -- DEPS

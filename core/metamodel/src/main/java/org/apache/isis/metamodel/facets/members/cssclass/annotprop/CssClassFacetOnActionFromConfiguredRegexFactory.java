@@ -21,13 +21,8 @@ package org.apache.isis.metamodel.facets.members.cssclass.annotprop;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
