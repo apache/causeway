@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.webapp.modules.WebModule;
 import org.apache.isis.webapp.modules.WebModuleContext;
 
@@ -52,7 +53,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 //@Singleton
 public class IsisWebAppContextListener implements ServletContextListener {
     
-    private @Inject ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned 
+    private @Inject ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
+    private @Inject IsisConfiguration isisConfiguration;
 
     // -- INTERFACE IMPLEMENTATION
 
@@ -84,7 +86,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
 
         _Resources.putContextPathIfPresent(contextPath);
 
-        final WebModuleContext webModuleContext = new WebModuleContext();
+        final WebModuleContext webModuleContext = new WebModuleContext(isisConfiguration);
         webModuleContext.prepare();
 
         _Context.putSingleton(WebModuleContext.class, webModuleContext);

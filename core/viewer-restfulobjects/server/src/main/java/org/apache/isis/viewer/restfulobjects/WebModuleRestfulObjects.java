@@ -37,6 +37,8 @@ import static org.apache.isis.commons.internal.context._Context.getDefaultClassL
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
 
+import lombok.val;
+
 /**
  * WebModule that provides the RestfulObjects Viewer.
  * 
@@ -44,9 +46,6 @@ import static org.apache.isis.commons.internal.resources._Resources.putRestfulPa
  */
 @Service @Order(-80)
 public final class WebModuleRestfulObjects implements WebModule  {
-
-    public static final String KEY_RESTFUL_BASE_PATH = "isis.viewer.restfulobjects.basePath";
-    public static final String KEY_RESTFUL_BASE_PATH_DEFAULT = "/restful";
 
     private final static String RESTEASY_BOOTSTRAPPER = 
             "org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap";
@@ -67,9 +66,7 @@ public final class WebModuleRestfulObjects implements WebModule  {
             return;
         }
 
-        // try to fetch restfulPath from config else fallback to default
-        final String restfulPath = ctx.getConfigurationLegacy()
-                .getString(KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+        val restfulPath = ctx.getConfiguration().getViewer().getRestfulobjects().getBasePath();
 
         putRestfulPath(restfulPath);
 

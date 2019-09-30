@@ -428,6 +428,7 @@ public class IsisConfiguration {
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
+            private String basePath = "/restful";
             private boolean strictAcceptChecking = false;
             private final Gsoc2013 gsoc2013 = new Gsoc2013();
             @Data
@@ -439,6 +440,9 @@ public class IsisConfiguration {
         @Data
         public static class Wicket {
 
+            private String basePath = "/wicket";
+            private String app = "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication";
+            
             private final RememberMe rememberMe = new RememberMe();
             @Data
             public static class RememberMe {

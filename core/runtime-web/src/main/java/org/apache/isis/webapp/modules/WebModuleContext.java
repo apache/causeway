@@ -30,11 +30,13 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -43,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@Log4j2
+@Log4j2 @RequiredArgsConstructor
 public class WebModuleContext {
 
     //    /**
@@ -57,17 +59,11 @@ public class WebModuleContext {
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
 
-    private final IsisConfigurationLegacy isisConfigurationLegacy;
+    @NonNull @Getter 
+    private final IsisConfiguration configuration;
+    
     private List<WebModule> webModules;
     private final List<ServletContextListener> activeListeners = new ArrayList<>();
-
-    public WebModuleContext() {
-        this.isisConfigurationLegacy = _Config.getConfiguration();
-    }
-
-    public IsisConfigurationLegacy getConfigurationLegacy() {
-        return isisConfigurationLegacy;
-    }
 
     public ServletContext getServletContext() {
         return _Context.getElseFail(ServletContext.class);

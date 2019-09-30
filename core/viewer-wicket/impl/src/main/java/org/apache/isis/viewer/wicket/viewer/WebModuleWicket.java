@@ -38,6 +38,8 @@ import static org.apache.isis.commons.internal.base._Strings.suffix;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
+import lombok.val;
+
 /**
  * WebModule that provides the Wicket Viewer.
  * @since 2.0
@@ -66,16 +68,15 @@ public final class WebModuleWicket implements WebModule  {
             return;
         }
 
-        pathConfigValue = 
-                ctx.getConfigurationLegacy().getString("isis.viewer.wicket.basePath", "/wicket");
+        val wicketConf = ctx.getConfiguration().getViewer().getWicket();
+        
+        pathConfigValue = wicketConf.getBasePath();
 
         deploymentMode = _Context.isPrototyping()
                 ? "development" 
                         : "deployment";
 
-        appConfigValue = 
-                ctx.getConfigurationLegacy().getString("isis.viewer.wicket.app",
-                        "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication");
+        appConfigValue = wicketConf.getApp();
 
         ctx.setHasBootstrapper();
         ctx.addViewer("wicket");
