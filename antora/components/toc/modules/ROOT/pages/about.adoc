@@ -55,6 +55,7 @@ _Extensions:_
 * xref:ext-viewer-wicket-excel:ROOT:about.adoc[Excel Download]
 * xref:ext-asciidoc:ROOT:about.adoc[Asciidoc value type ]
 * xref:ext-markdown:ROOT:about.adoc[Markdown value type]
+* xref:ext-incubator:ROOT:about.adoc[Experimental framework extensions]
 
 | *xref:toc:ROOT:components.adoc#restful-objects-viewer[Restful Objects Viewer]*
 

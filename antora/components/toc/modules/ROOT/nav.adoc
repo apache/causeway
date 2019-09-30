@@ -43,6 +43,9 @@
 ** link:https://github/TODO/TODO[Seb's viewer (3rd party)]
 ** link:https://github/TODO/TODO[Joerg's viewer (3rd party)]
 
+* Incubator
+
+** xref:ext-incubator:ROOT:about.adoc[Experimental framework extensions]
 
 * DataNucleus Object Store
 
