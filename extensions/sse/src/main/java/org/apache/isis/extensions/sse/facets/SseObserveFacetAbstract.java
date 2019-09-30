@@ -19,37 +19,42 @@
 
 package org.apache.isis.extensions.sse.facets;
 
-import java.util.List;
-
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.sse.api.SseSource;
-import org.apache.isis.extensions.sse.api.ServerSentEvents;
+import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-/**
- * 
- * @since 2.0
- *
- */
-public class ObserveFacetForSseAnnotation extends ObserveFacetAbstract {
+public abstract class SseObserveFacetAbstract extends SingleClassValueFacetAbstract implements SseObserveFacet {
 
-    public static ObserveFacet create(
-            final List<ServerSentEvents> properties,
-            final FacetHolder holder) {
+    private Class<? extends SseSource> eventStreamType;
 
-        return properties.stream()
-                .map(ServerSentEvents::observe)
-                .filter(SseSource::isObservable)
-                .findFirst()
-                .map(eventStreamType -> new ObserveFacetForSseAnnotation(
-                        eventStreamType, holder))
-                .orElse(null);
+    public static Class<? extends Facet> type() {
+        return SseObserveFacet.class;
     }
 
-    private ObserveFacetForSseAnnotation(
-            Class<? extends SseSource> eventStreamType, 
-            FacetHolder holder) {
+    public SseObserveFacetAbstract(
+            final Class<? extends SseSource> eventStreamType,
+            final FacetHolder holder) {
 
-        super(eventStreamType, holder);
+        super(type(), holder, eventStreamType);
+        this.eventStreamType = eventStreamType;
+    }
+
+    @Override
+    public Class<?> value() {
+        return eventStreamType;
+    }
+
+    @Override
+    public Class<? extends SseSource> getEventStreamType() {
+        return eventStreamType;
+    }
+
+    @Override
+    public ObjectSpecification valueSpec() {
+        throw _Exceptions.notImplemented();
     }
 
 

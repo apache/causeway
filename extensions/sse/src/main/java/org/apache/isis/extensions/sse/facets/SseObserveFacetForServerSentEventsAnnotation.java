@@ -19,42 +19,37 @@
 
 package org.apache.isis.extensions.sse.facets;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import java.util.List;
+
 import org.apache.isis.extensions.sse.api.SseSource;
-import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.extensions.sse.api.ServerSentEvents;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-public abstract class ObserveFacetAbstract extends SingleClassValueFacetAbstract implements ObserveFacet {
+/**
+ * 
+ * @since 2.0
+ *
+ */
+public class SseObserveFacetForServerSentEventsAnnotation extends SseObserveFacetAbstract {
 
-    private Class<? extends SseSource> eventStreamType;
-
-    public static Class<? extends Facet> type() {
-        return ObserveFacet.class;
-    }
-
-    public ObserveFacetAbstract(
-            final Class<? extends SseSource> eventStreamType,
+    public static SseObserveFacet create(
+            final List<ServerSentEvents> properties,
             final FacetHolder holder) {
 
-        super(type(), holder, eventStreamType);
-        this.eventStreamType = eventStreamType;
+        return properties.stream()
+                .map(ServerSentEvents::observe)
+                .filter(SseSource::isObservable)
+                .findFirst()
+                .map(eventStreamType -> new SseObserveFacetForServerSentEventsAnnotation(
+                        eventStreamType, holder))
+                .orElse(null);
     }
 
-    @Override
-    public Class<?> value() {
-        return eventStreamType;
-    }
+    private SseObserveFacetForServerSentEventsAnnotation(
+            Class<? extends SseSource> eventStreamType, 
+            FacetHolder holder) {
 
-    @Override
-    public Class<? extends SseSource> getEventStreamType() {
-        return eventStreamType;
-    }
-
-    @Override
-    public ObjectSpecification valueSpec() {
-        throw _Exceptions.notImplemented();
+        super(eventStreamType, holder);
     }
 
 

@@ -21,12 +21,12 @@ package org.apache.isis.extensions.sse;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.sse.services.EventStreamServiceDefault;
+import org.apache.isis.extensions.sse.services.SseServiceDefault;
 import org.apache.isis.extensions.sse.webapp.WebModuleServerSentEvents;
 
 @Configuration
 @Import({
-    EventStreamServiceDefault.class,
+    SseServiceDefault.class,
     WebModuleServerSentEvents.class
 })
 public class IsisBootSse {

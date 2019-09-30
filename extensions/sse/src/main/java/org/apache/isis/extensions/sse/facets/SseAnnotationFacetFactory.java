@@ -50,7 +50,7 @@ implements MetaModelValidatorRefiner {
 
         // else search for @???(observe=...)
         final List<ServerSentEvents> annots = Annotations.getAnnotations(method, ServerSentEvents.class);
-        ObserveFacet facet = ObserveFacetForSseAnnotation.create(annots, holder);
+        SseObserveFacet facet = SseObserveFacetForServerSentEventsAnnotation.create(annots, holder);
 
         FacetUtil.addFacet(facet);
     }

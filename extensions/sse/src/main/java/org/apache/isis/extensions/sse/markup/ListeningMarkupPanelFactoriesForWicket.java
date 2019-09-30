@@ -20,7 +20,7 @@
 package org.apache.isis.extensions.sse.markup;
 
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.extensions.sse.facets.ObserveFacet;
+import org.apache.isis.extensions.sse.facets.SseObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
@@ -58,7 +58,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
         // -- HELPER
 
         private LocalResourcePath getEventStreamResource(ScalarModel scalarModel) {
-            val observeFacet  = scalarModel.getFacet(ObserveFacet.class);
+            val observeFacet  = scalarModel.getFacet(SseObserveFacet.class);
             return observeFacet!=null
                     ? observeFacet.getEventStreamResource()
                             : null;

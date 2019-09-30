@@ -26,7 +26,7 @@ import org.apache.isis.metamodel.facets.SingleClassValueFacet;
 /**
  * Corresponds to <tt>@???(observe=...)</tt> annotation in the Isis programming model.
  */
-public interface ObserveFacet extends SingleClassValueFacet {
+public interface SseObserveFacet extends SingleClassValueFacet {
 
     Class<? extends SseSource> getEventStreamType();
     

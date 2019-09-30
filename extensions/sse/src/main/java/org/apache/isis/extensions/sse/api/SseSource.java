@@ -42,7 +42,7 @@ public interface SseSource {
     public static final class Noop implements SseSource {
 
         @Override
-        public void run(SseChannel eventStream) {
+        public void run(SseChannel channel) {
             // just do nothing
         }
 
