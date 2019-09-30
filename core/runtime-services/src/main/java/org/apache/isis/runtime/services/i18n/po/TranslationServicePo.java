@@ -56,7 +56,7 @@ public class TranslationServicePo implements TranslationService {
 
         final Mode translationMode = configuration.getServices().getTranslation().getPo().getMode();
 
-        final boolean translationDisabled = (Mode.DISABLED == translationMode);
+        final boolean translationDisabled = (Mode.DISABLED == translationMode || Mode.DISABLE == translationMode);
         if(translationDisabled) {
             // switch to disabled mode
             po = new PoDisabled(this);
