@@ -1,19 +1,20 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.Json
+import org.ro.handler.PropertyHandler
 import org.ro.urls.FR_OBJECT_PROPERTY_
 import org.ro.urls.SO_PROPERTY
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @UnstableDefault
 class PropertyTest {
 
     @Test
     fun testFixtureResultObjectPropety() {
-        val p = Json.parse(Property.serializer(), FR_OBJECT_PROPERTY_.str)
+        val jsonStr = FR_OBJECT_PROPERTY_.str
+        val p = PropertyHandler().parse(jsonStr) as Property
         val actual = p.disabledReason!!
         val expected = "Non-cloneable view models are read-only; Immutable"
         assertEquals(expected, actual)
@@ -21,7 +22,8 @@ class PropertyTest {
 
     @Test
     fun testSimpleObjectPropety() {
-        val p = Json.parse(Property.serializer(), SO_PROPERTY.str)
+        val jsonStr = SO_PROPERTY.str
+        val p = PropertyHandler().parse(jsonStr) as Property
         assertEquals("notes", p.id)
         assertEquals("string", p.extensions!!.xIsisFormat)
         assertEquals(5, p.links.size)
@@ -29,12 +31,12 @@ class PropertyTest {
         val modifyLink = p.links[2]
         assertEquals("PUT", modifyLink.method)
 
-        //FIXME expected is an entry for "arguments": {
-        //                "value": null
-        //            }
-        val arguments = modifyLink.arguments!!.asMap()
-  //      assertEquals(1, arguments.size)
-        assertNotNull(arguments)
+        val arguments = modifyLink.arguments
+        console.log("[PT.testSimpleObject]")
+        console.log(arguments)
+        assertEquals(1, arguments.size)
+        console.log(arguments.values)
+        assertTrue(arguments.containsKey("value"))
     }
 
 }

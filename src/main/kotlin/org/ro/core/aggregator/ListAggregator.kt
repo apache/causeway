@@ -5,9 +5,9 @@ import org.ro.core.UiManager
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
+import org.ro.to.InvocationResult
 import org.ro.to.Link
 import org.ro.to.Property
-import org.ro.to.ResultList
 import org.ro.to.TObject
 
 /** sequence of operations:
@@ -18,7 +18,7 @@ import org.ro.to.TObject
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
 @Serializable
-class ListAggregator(private val actionTitle: String) : BaseAggregator() {
+class ListAggregator(val actionTitle: String) : BaseAggregator() {
     var list: DisplayList
 
     init {

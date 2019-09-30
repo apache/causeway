@@ -30,7 +30,7 @@ class ActionTest {
         assertEquals(4, links.size)   //1
 
         val invokeLink = action.getInvokeLink()!!
-        val argList = invokeLink.arguments!!.asMap()
+        val argList = invokeLink.arguments
         assertEquals(2, argList.size)  //2
 
         val paramList = action.parameters
@@ -71,7 +71,7 @@ class ActionTest {
         assertEquals(4, links.size)
 
         val invokeLink = action.getInvokeLink()
-        val argList = invokeLink!!.arguments!!.asMap()
+        val argList = invokeLink!!.arguments
         assertEquals(1, argList.size)  //2
 
         val paramList = action.parameters
@@ -95,7 +95,7 @@ class ActionTest {
         assertEquals(4, links.size)
 
         val invokeLink = action.getInvokeLink()
-        val argList = invokeLink!!.arguments!!.asMap()
+        val argList = invokeLink!!.arguments
         assertEquals(2, argList.size)  //2
 
         val paramList = action.parameters
@@ -119,7 +119,7 @@ class ActionTest {
         assertEquals(4, links.size)
 
         val invokeLink = action.getInvokeLink()
-        val argList = invokeLink!!.arguments!!.asMap()
+        val argList = invokeLink!!.arguments
         assertEquals(2, argList.size)  //2
 
         val paramList = action.parameters
@@ -143,7 +143,7 @@ class ActionTest {
         assertEquals(4, links.size)
 
         val invokeLink = action.getInvokeLink()
-        val argList = invokeLink!!.arguments!!.asMap()
+        val argList = invokeLink!!.arguments
         assertEquals(3, argList.size)  //2
 
         val paramList = action.parameters

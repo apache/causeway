@@ -1,25 +1,29 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.to.Arguments
 
 @Serializable
 data class Link(val rel: String = "",
                 val method: String = Method.GET.operation,
                 val href: String = "",
                 val type: String = "",
-//                val args: Map<String, Argument> = emptyMap(),
-//                val arguments: Map<String, Argument> = emptyMap(),
-                val args: Arguments? = null,         //TODO authors@ro.org "args" should be changed to "arguments"
-                val arguments: Arguments? = null,
+                val args: Map<String, Argument> = emptyMap(),
+                val arguments: Map<String, Argument?> = emptyMap(),
+/*                can either be:
+                empty Map {}					==>
+Map with "value": null		==> SO_PROPERTY
+Map with empty key "": 		==> ACTIONS_DOWNLOAD_META_MODEL
+(regular) Map with key,<VALUE> ==> ACTIONS_RUN_FIXTURE_SCRIPT, ACTIONS_FIND_BY_NAME, ACTIONS_CREATE  */
+//                val args: Arguments? = null,         //TODO authors@ro.org "args" should be changed to "arguments"
+//                val arguments: Arguments? = null,
                 val title: String = "") : TransferObject {
 
-    private fun argMap(): Map<String, Argument>? {
-        if (args != null && args.isNotEmpty()) {
-            return args.asMap()
+    private fun argMap(): Map<String, Argument?>? {
+        if (args.isNotEmpty()) {
+            return args
         }
-        if (arguments != null && arguments.isNotEmpty()) {
-            return arguments.asMap()
+        if (arguments.isNotEmpty()) {
+            return arguments
         }
         return null
     }
@@ -46,7 +50,7 @@ data class Link(val rel: String = "",
         if (rel.contains("invoke;action")) answer = true
         return answer;
     }
-
+/*
     fun resultKey(): String {
         val parts = title.split(":")
         return parts[0]
@@ -56,5 +60,5 @@ data class Link(val rel: String = "",
         val start = title.indexOf(":")
         return title.substring(start + 1, title.length)
     }
-
+     */
 }
