@@ -41,7 +41,7 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 public interface RuntimeContext {
 
     AuthenticationSession getAuthenticationSession();
-    IsisConfigurationLegacy getConfiguration();
+    IsisConfigurationLegacy getConfigurationLegacy();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();
     ServiceRegistry getServiceRegistry();

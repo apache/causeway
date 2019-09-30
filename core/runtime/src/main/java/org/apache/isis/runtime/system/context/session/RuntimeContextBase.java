@@ -54,7 +54,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     // -- FINAL FIELDS
 
-    @Getter protected final IsisConfigurationLegacy configuration;
+    @Getter protected final IsisConfigurationLegacy configurationLegacy;
     @Getter protected final ServiceInjector serviceInjector;
     @Getter protected final ServiceRegistry serviceRegistry;
     @Getter protected final SpecificationLoader specificationLoader;
@@ -67,7 +67,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
 
     protected RuntimeContextBase() {
         val mmc = MetaModelContext.current();
-        configuration = mmc.getConfigurationLegacy();
+        configurationLegacy = mmc.getConfigurationLegacy();
         serviceInjector = mmc.getServiceInjector();
         serviceRegistry = mmc.getServiceRegistry();
         specificationLoader = mmc.getSpecificationLoader();

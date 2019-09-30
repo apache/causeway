@@ -87,8 +87,8 @@ class DomainResourceHelper {
         }
 
         @Override
-        public IsisConfigurationLegacy getConfiguration() {
-            return rendererContext.getConfiguration();
+        public IsisConfigurationLegacy getConfigurationLegacy() {
+            return rendererContext.getConfigurationLegacy();
         }
 
         @Override
