@@ -23,7 +23,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.config.IsisConfiguration;
+import javax.inject.Inject;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -42,6 +43,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -50,11 +52,8 @@ import org.apache.isis.security.authentication.standard.SimpleSession;
 import org.apache.isis.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.ShiroSecurityContext;
 
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Inject;
 
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
@@ -66,23 +65,21 @@ import javax.inject.Inject;
  * {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  */
-@Log4j2
+@Log4j2 @NoArgsConstructor
 public class ShiroAuthenticator implements Authenticator {
 
     // -- constructor and fields
-    private final boolean autoLogout;
+    private boolean autoLogout;
 
-    @Inject
-    IsisConfiguration configuration;
-
-    public ShiroAuthenticator() {
-        autoLogout = configuration.getAuthentication().getShiro().isAutoLogoutIfAlreadyAuthenticated();
-    }
+    @Inject private IsisConfiguration configuration;
+    
+    
 
     // -- init, shutdown
 
     @Override
     public void init() {
+        autoLogout = configuration.getAuthentication().getShiro().isAutoLogoutIfAlreadyAuthenticated();
     }
 
 
@@ -227,6 +224,12 @@ public class ShiroAuthenticator implements Authenticator {
      */
     protected RealmSecurityManager getSecurityManager() {
         return ShiroSecurityContext.getSecurityManager();
+    }
+
+    /** Junit support */
+    public ShiroAuthenticator(IsisConfiguration configuration) {
+        super();
+        this.configuration = configuration;
     }
 
 

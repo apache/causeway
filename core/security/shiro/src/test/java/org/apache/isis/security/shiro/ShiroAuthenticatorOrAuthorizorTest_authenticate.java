@@ -30,7 +30,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -43,6 +43,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
@@ -57,10 +59,10 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
         // PRODUCTION
 
-        _Config.clear();
-        _Config.put("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
-
-        authenticator = new ShiroAuthenticator();
+        val configuration = new IsisConfiguration();
+        configuration.getAuthentication().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
+        
+        authenticator = new ShiroAuthenticator(configuration);
         authorizor = new ShiroAuthorizor();
 
         authenticator.init();

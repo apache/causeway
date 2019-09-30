@@ -31,8 +31,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
@@ -42,6 +42,8 @@ import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
@@ -59,10 +61,10 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
         // PRODUCTION
 
-        _Config.clear();
-        _Config.put("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
-
-        authenticator = new ShiroAuthenticator();
+        val configuration = new IsisConfiguration();
+        configuration.getAuthentication().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
+        
+        authenticator = new ShiroAuthenticator(configuration);
         authorizor = new ShiroAuthorizor();
 
         authenticator.init();
