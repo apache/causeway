@@ -99,16 +99,13 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);
 
-        val runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
-
         // ... and make IsisSessionFactory available via the IsisContext static for those
         // places where we cannot yet inject.
-
         _Context.putSingleton(IsisSessionFactory.class, this); //TODO[2112] should no longer be required, since Spring manages this instance
 
         runtimeEventService.fireAppPreMetamodel();
 
-        val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Concurrent Tasks");
+        val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init");
         
         taskList.addRunnable("SpecificationLoader.init()", this::initMetamodel);
         taskList.addRunnable("ChangesDtoUtils.init()", ChangesDtoUtils::init);
@@ -153,7 +150,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
     
     private void validateMetamodel() {
-        //TODO[2158] these are all validations, hence should be implemented as validation refiners!
+        //TODO[2158] these are all validations, hence should be implemented as validation refiners?!
 
         //
         // translateServicesAndEnumConstants

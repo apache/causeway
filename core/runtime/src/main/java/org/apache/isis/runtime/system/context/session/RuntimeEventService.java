@@ -28,7 +28,7 @@ import org.apache.isis.runtime.system.session.IsisSession;
 /**
  * 
  * @since 2.0
- * @implNote Listeners to runtime events can only reliably receive this after the 
+ * @implNote Listeners to runtime events can only reliably receive these after the 
  * post-construct phase has finished!
  */
 @Service
