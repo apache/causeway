@@ -18,29 +18,57 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.fixtures.fixturescripts.FixtureScripts;
+import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service @Log4j2
 public class SeedSecurityModuleService {
 
-    @Inject FixtureScripts fixtureScripts;
+    @Inject private FixtureScripts fixtureScripts;
 
-    @PostConstruct
+    //@PostConstruct ... to early, need to wait for the IsisSessionFactory, 
+    //which can only init after the post-construct phase
     public void init() {
-
+        
         log.info("SEED");
 
         fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
 
     }
 
+    @EventListener(AppLifecycleEvent.class)
+    public void onAppLifecycleEvent(AppLifecycleEvent event) {
+
+        val eventType = event.getEventType(); 
+
+        log.debug("received app lifecycle event {}", eventType);
+
+        switch (eventType) {
+        case appPreMetamodel:
+            //create();
+            break;
+        case appPostMetamodel:
+            init();
+            break;
+        case appPreDestroy:
+            //shutdown();
+            break;
+
+        default:
+            throw _Exceptions.unmatchedCase(eventType);
+        }
+
+    }
+
+    
 
 }

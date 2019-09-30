@@ -18,55 +18,46 @@
  */
 package org.apache.isis.runtime.system.context.session;
 
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.runtime.system.persistence.JdoPersistenceLifecycleService;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.runtime.system.session.IsisSession;
 
 /**
  * 
  * @since 2.0
- * @implNote listeners to runtime events are hard-wired, because these events are already fired 
- * during bootstrapping, when event handling might not work properly yet.   
+ * @implNote Listeners to runtime events can only reliably receive this after the 
+ * post-construct phase has finished!
  */
 @Service
 public class RuntimeEventService {
+    
+    @Inject private EventBusService eventBusService;  
 
-    @Inject JdoPersistenceLifecycleService listener; // dependsOn
-
-    @Inject Event<AppLifecycleEvent> appLifecycleEvents;
-    @Inject Event<SessionLifecycleEvent> sessionLifecycleEvents;
-
-    // -- APP
+   // -- APP
 
     public void fireAppPreMetamodel() {
-        //appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
-        listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
+        eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreMetamodel));
     }
 
     public void fireAppPostMetamodel() {
-        //appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
-        listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
+        eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
     }
 
     public void fireAppPreDestroy() {
-        //appLifecycleEvents.fire(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
-        listener.onAppLifecycleEvent(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
+        eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPreDestroy));
     }
 
     // -- SESSION
 
     public void fireSessionOpened(IsisSession session) {
-        //sessionLifecycleEvents.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
-        listener.onSessionLifecycleEvent(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
+        eventBusService.post(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
     }
 
     public void fireSessionClosing(IsisSession session) {
-        //sessionLifecycleEvents.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
-        listener.onSessionLifecycleEvent(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
+        eventBusService.post(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
     }
 
     //	public void fireSessionFlushing(IsisSession session) {
