@@ -44,7 +44,7 @@ public interface ProgrammingModelPlugin {
         /**
          * registers the provided factory after all built-in factories
          */
-        VALIDATION,
+        AFTER_BUILT_IN,
         ;
     }
 

@@ -17,38 +17,36 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.facets.properties.property.observe;
+package org.apache.isis.extensions.sse.facets;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.events.sse.EventStreamSource;
+import org.apache.isis.extensions.sse.api.SseSource;
+import org.apache.isis.extensions.sse.api.ServerSentEvents;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facets.objectvalue.observe.ObserveFacet;
-import org.apache.isis.metamodel.facets.objectvalue.observe.ObserveFacetAbstract;
 
 /**
  * 
  * @since 2.0
  *
  */
-public class ObserveFacetForPropertyAnnotation extends ObserveFacetAbstract {
+public class ObserveFacetForSseAnnotation extends ObserveFacetAbstract {
 
     public static ObserveFacet create(
-            final List<Property> properties,
+            final List<ServerSentEvents> properties,
             final FacetHolder holder) {
 
         return properties.stream()
-                .map(Property::observe)
-                .filter(EventStreamSource::isObservable)
+                .map(ServerSentEvents::observe)
+                .filter(SseSource::isObservable)
                 .findFirst()
-                .map(eventStreamType -> new ObserveFacetForPropertyAnnotation(
+                .map(eventStreamType -> new ObserveFacetForSseAnnotation(
                         eventStreamType, holder))
                 .orElse(null);
     }
 
-    private ObserveFacetForPropertyAnnotation(
-            Class<? extends EventStreamSource> eventStreamType, 
+    private ObserveFacetForSseAnnotation(
+            Class<? extends SseSource> eventStreamType, 
             FacetHolder holder) {
 
         super(eventStreamType, holder);

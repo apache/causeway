@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
+package org.apache.isis.extensions.sse.markup;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -27,9 +27,9 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 import static org.apache.isis.commons.internal.base._Strings.isNullOrEmpty;
 
-final class MarkupComponent_observing  {
+final class ListeningMarkupComponent_observing  {
 
-    private static final String jScriptTemplateResource = "ObservingComponent.js";
+    private static final String jScriptTemplateResource = "js/ObservingComponent.js";
 
     static CharSequence decorate(CharSequence htmlContent, LocalResourcePath observing) {
         if(observing==null) {
@@ -38,7 +38,7 @@ final class MarkupComponent_observing  {
         final String jScriptTemplate;
         try {
             jScriptTemplate = _Resources.loadAsStringUtf8(
-                    MarkupComponent_observing.class, jScriptTemplateResource);
+                    ListeningMarkupComponent_observing.class, jScriptTemplateResource);
 
         } catch (IOException e) {
             e.printStackTrace();

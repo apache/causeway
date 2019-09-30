@@ -32,10 +32,11 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.events.sse.EventStreamService;
-import org.apache.isis.applib.events.sse.EventStreamService.ExecutionBehavior;
 import org.apache.isis.applib.util.JaxbAdapters;
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.extensions.sse.api.SseService;
+import org.apache.isis.extensions.sse.api.SseService.ExecutionBehavior;
+import org.apache.isis.extensions.sse.api.ServerSentEvents;
+import org.apache.isis.extensions.sse.markup.ListeningMarkup;
 
 import domainapp.utils.DemoStub;
 import lombok.Getter;
@@ -49,11 +50,12 @@ import lombok.val;
 public class AsyncActionDemo extends DemoStub {
 
     @XmlTransient
-    @Inject EventStreamService eventStreamService;
+    @Inject SseService eventStreamService;
 
     @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class)
-    @Property(observe=DemoTask.class)
-    @Getter @Setter Markup progressView;
+    @Property
+    @ServerSentEvents(observe=DemoTask.class) // bind to a SSE channel
+    @Getter @Setter ListeningMarkup progressView;
 
     @Action
     public AsyncActionDemo startSimpleTask() {
@@ -75,7 +77,7 @@ public class AsyncActionDemo extends DemoStub {
 
     @Override
     public void initDefaults() {
-        progressView = new Markup("Please start a task!");
+        progressView = ListeningMarkup.valueOfHtml("Please start a task!");
     }
 
 }

@@ -16,16 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.incubator;
+package org.apache.isis.extensions.sse;
 
-import org.apache.isis.metamodel.facets.actions.support.SupportingMethodValidatorRefinerFactory;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public class SupportingMethodPlugin implements ProgrammingModelPlugin {
+import org.apache.isis.extensions.sse.services.EventStreamServiceDefault;
+import org.apache.isis.extensions.sse.webapp.WebModuleServerSentEvents;
 
-    @Override
-    public void plugin(FactoryCollector collector) {
-        collector.addFactory(new SupportingMethodValidatorRefinerFactory(), FacetFactoryCategory.VALIDATION);
-    }
+@Configuration
+@Import({
+    EventStreamServiceDefault.class,
+    WebModuleServerSentEvents.class
+})
+public class IsisBootSse {
 
 }

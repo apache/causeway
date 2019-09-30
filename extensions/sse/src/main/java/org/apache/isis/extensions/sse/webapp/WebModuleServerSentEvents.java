@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp.modules.sse;
+package org.apache.isis.extensions.sse.webapp;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;

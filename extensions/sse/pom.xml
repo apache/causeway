@@ -21,33 +21,33 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-extensions-incubator</artifactId>
-	<name>Apache Isis Extensions - Incubator</name>
+	<artifactId>isis-extensions-sse</artifactId>
+	<name>Apache Isis Extensions - Server Sent Events</name>
 	<description></description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.incubator</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/incubator</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.sse</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/sse</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-metamodel</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-runtime-web</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-viewer-wicket-ui</artifactId>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-viewer-wicket-ui</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 

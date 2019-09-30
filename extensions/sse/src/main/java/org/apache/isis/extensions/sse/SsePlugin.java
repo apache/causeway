@@ -16,27 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.events.sse;
+package org.apache.isis.extensions.sse;
 
-import java.util.Optional;
+import org.apache.isis.extensions.sse.facets.SseAnnotationFacetFactory;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin;
 
-/**
- * Server-sent events.
- *  
- * @see https://www.w3schools.com/html/html5_serversentevents.asp
- * 
- * @since 2.0
- *
- */
-public interface EventStreamService {
+public class SsePlugin implements ProgrammingModelPlugin {
 
-    public static enum ExecutionBehavior {
-        SIMPLE,
-        REQUIRES_NEW_SESSION
+    @Override
+    public void plugin(FactoryCollector collector) {
+        
+        collector.addFactory(
+                new SseAnnotationFacetFactory(), FacetFactoryCategory.AFTER_BUILT_IN);
+        
     }
-
-    Optional<EventStream> lookupByType(Class<?> sourceType);
-
-    void submit(EventStreamSource task, ExecutionBehavior executionBehavior);
 
 }

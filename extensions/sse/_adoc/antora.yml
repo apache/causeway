@@ -1,0 +1,6 @@
+name: ext-sse
+title: "Extensions - Server Sent Events"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

@@ -30,7 +30,6 @@ import javax.jdo.annotations.NotPersistent;
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.events.sse.EventStreamSource;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.command.spi.CommandService;
@@ -255,14 +254,5 @@ public @interface Property {
      */
     String fileAccept() default "";
 
-
-
-
-
-    /**
-     * TODO
-     *
-     */
-    Class<? extends EventStreamSource> observe() default EventStreamSource.Noop.class;
 
 }

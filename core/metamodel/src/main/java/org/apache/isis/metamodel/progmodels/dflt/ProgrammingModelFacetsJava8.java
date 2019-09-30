@@ -411,8 +411,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(new ViewModelSemanticCheckingFacetFactory());
         
-        // plugin value factories
-        factoriesFromPlugins.getFactories(FacetFactoryCategory.VALIDATION).forEach(this::addFactory);
+        // plugin factories
+        factoriesFromPlugins.getFactories(FacetFactoryCategory.AFTER_BUILT_IN).forEach(this::addFactory);
 
     }
 

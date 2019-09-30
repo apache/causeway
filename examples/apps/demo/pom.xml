@@ -73,6 +73,18 @@
 		</dependency>
 
 		<!-- ISIS EXTENSIONS -->
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-incubator</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sse</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>

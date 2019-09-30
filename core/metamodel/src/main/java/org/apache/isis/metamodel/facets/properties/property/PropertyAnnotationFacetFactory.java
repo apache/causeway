@@ -43,7 +43,6 @@ import org.apache.isis.metamodel.facets.object.domainobject.domainevents.Propert
 import org.apache.isis.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.metamodel.facets.objectvalue.observe.ObserveFacet;
 import org.apache.isis.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
@@ -65,7 +64,6 @@ import org.apache.isis.metamodel.facets.properties.property.modify.PropertySette
 import org.apache.isis.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
-import org.apache.isis.metamodel.facets.properties.property.observe.ObserveFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
@@ -102,7 +100,6 @@ implements MetaModelValidatorRefiner {
         processOptional(processMethodContext);
         processRegEx(processMethodContext);
         processFileAccept(processMethodContext);
-        processObserve(processMethodContext);
     }
 
 
@@ -251,7 +248,7 @@ implements MetaModelValidatorRefiner {
 
     void processProjecting(final ProcessMethodContext processMethodContext) {
 
-        final Class<?> cls = processMethodContext.getCls();
+        //final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
@@ -375,18 +372,6 @@ implements MetaModelValidatorRefiner {
 
         FacetUtil.addFacet(facet);
     }
-
-    void processObserve(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        // else search for @Property(observe=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        ObserveFacet facet = ObserveFacetForPropertyAnnotation.create(properties, holder);
-
-        FacetUtil.addFacet(facet);
-    }
-
 
     // //////////////////////////////////////
 

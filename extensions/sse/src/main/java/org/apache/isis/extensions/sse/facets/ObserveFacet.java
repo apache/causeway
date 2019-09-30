@@ -16,30 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.sse.facets;
 
-import org.apache.isis.webapp.modules.h2console.H2ManagerMenu;
-import org.apache.isis.webapp.modules.h2console.WebModuleH2Console;
-import org.apache.isis.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
-import org.apache.isis.webapp.modules.resources.WebModuleStaticResources;
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.extensions.sse.api.SseSource;
+import org.apache.isis.metamodel.facets.SingleClassValueFacet;
 
-@Configuration
-@Import({
-    IsisWebAppContextListener.class,
-    IsisWebAppContextInitializer.class,
+/**
+ * Corresponds to <tt>@???(observe=...)</tt> annotation in the Isis programming model.
+ */
+public interface ObserveFacet extends SingleClassValueFacet {
 
-    // default modules
-    WebModuleLogOnExceptionLogger.class,
-    WebModuleStaticResources.class,
-
-    // h2 console
-    WebModuleH2Console.class,
-    H2ManagerMenu.class,
-
-})
-public class IsisBootWebApp {
+    Class<? extends SseSource> getEventStreamType();
+    
+    default LocalResourcePath getEventStreamResource() {
+        final String eventStreamId = getEventStreamType().getName();
+        final LocalResourcePath ssePath = new LocalResourcePath("/sse?eventStream=" + eventStreamId);
+        return ssePath;
+    }
 
 }

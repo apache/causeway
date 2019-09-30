@@ -23,15 +23,14 @@ import java.util.concurrent.atomic.LongAdder;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.events.sse.EventStream;
-import org.apache.isis.applib.events.sse.EventStreamSource;
-import org.apache.isis.applib.value.Markup;
+import org.apache.isis.extensions.sse.api.SseChannel;
+import org.apache.isis.extensions.sse.api.SseSource;
 
 import lombok.RequiredArgsConstructor;
 
 @DomainObject(nature=Nature.INMEMORY_ENTITY, editing=Editing.DISABLED) 
 @RequiredArgsConstructor(staticName="of")
-public class DemoTask implements EventStreamSource {
+public class DemoTask implements SseSource {
 
     public String title() {
         return String.format("DemoTask '%s'", Integer.toHexString(hashCode()));
@@ -42,7 +41,7 @@ public class DemoTask implements EventStreamSource {
 
 
     @Override
-    public void run(EventStream eventStream) {
+    public void run(SseChannel eventStream) {
 
         taskProgress = TaskProgress.of(new LongAdder(), totalSteps);
 
@@ -63,8 +62,8 @@ public class DemoTask implements EventStreamSource {
     }
 
     @Override
-    public Markup getPayload() {
-        return new Markup("" + taskProgress + "<br/>" + taskProgress.toHtmlProgressBar());
+    public String getPayload() {
+        return "" + taskProgress + "<br/>" + taskProgress.toHtmlProgressBar();
     }
 
 

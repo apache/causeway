@@ -16,32 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.extensions.incubator;
 
-package org.apache.isis.applib.events.sse;
+import org.apache.isis.metamodel.facets.actions.support.SupportingMethodValidatorRefinerFactory;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin;
 
-import java.util.UUID;
-import java.util.function.Predicate;
+public class IncubatorPlugin implements ProgrammingModelPlugin {
 
-/**
- * Server-sent events.
- *  
- * @see https://www.w3schools.com/html/html5_serversentevents.asp
- * 
- * @since 2.0
- *
- */
-public interface EventStream {
-
-    UUID getId();
-    Class<?> getSourceType();
-
-    void listenWhile(Predicate<EventStreamSource> listener);
-
-    void fire(EventStreamSource source);
-
-    void close();
-
-    void awaitClose() throws InterruptedException;
-
+    @Override
+    public void plugin(FactoryCollector collector) {
+        
+        collector.addFactory(
+                new SupportingMethodValidatorRefinerFactory(), FacetFactoryCategory.AFTER_BUILT_IN);
+        
+    }
 
 }

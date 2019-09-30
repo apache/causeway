@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.services.sse;
+package org.apache.isis.extensions.sse.services;
 
 import java.util.List;
 import java.util.Map;
@@ -35,11 +35,11 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.events.sse.EventStream;
-import org.apache.isis.applib.events.sse.EventStreamService;
-import org.apache.isis.applib.events.sse.EventStreamSource;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.extensions.sse.api.SseChannel;
+import org.apache.isis.extensions.sse.api.SseService;
+import org.apache.isis.extensions.sse.api.SseSource;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.transaction.IsisTransactionAspectSupport;
 
@@ -58,19 +58,19 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Service @Log4j2
-public class EventStreamServiceDefault implements EventStreamService {
+public class EventStreamServiceDefault implements SseService {
 
     @Inject TransactionService transactionService;
 
     private final EventStreamPool eventStreamPool = new EventStreamPool();
 
     @Override
-    public Optional<EventStream> lookupByType(Class<?> sourceType) {
+    public Optional<SseChannel> lookupByType(Class<?> sourceType) {
         return eventStreamPool.lookupByType(sourceType);
     }
 
     @Override
-    public void submit(EventStreamSource task, ExecutionBehavior executionBehavior) {
+    public void submit(SseSource task, ExecutionBehavior executionBehavior) {
 
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
@@ -101,7 +101,7 @@ public class EventStreamServiceDefault implements EventStreamService {
 
     // -- HELPER
 
-    private void run(EventStreamSource task) {
+    private void run(SseSource task) {
 
         val sourceType = task.getClass();
 
@@ -131,7 +131,7 @@ public class EventStreamServiceDefault implements EventStreamService {
 
         private final Map<Class<?>,  EventStreamLifecycle> eventStreamsByType = new ConcurrentHashMap<>();
 
-        public Optional<EventStream> lookupByType(Class<?> sourceType) {
+        public Optional<SseChannel> lookupByType(Class<?> sourceType) {
             return Optional.ofNullable(eventStreamsByType.get(sourceType))
                     .map(EventStreamLifecycle::getEventStream);
         }
@@ -154,7 +154,7 @@ public class EventStreamServiceDefault implements EventStreamService {
 
         private static final Object $LOCK = new Object[0]; //see https://projectlombok.org/features/Synchronized
 
-        @Getter private final EventStream eventStream;
+        @Getter private final SseChannel eventStream;
         private final EventStreamPool eventStreamPool;
 
         private int runningTasksCounter;
@@ -189,7 +189,7 @@ public class EventStreamServiceDefault implements EventStreamService {
     // -- EVENT STREAM DEFAULT IMPLEMENTATION
 
     @Value @Log4j2
-    private static class EventStreamDefault implements EventStream {
+    private static class EventStreamDefault implements SseChannel {
 
         private static final Object $LOCK = new Object[0]; //see https://projectlombok.org/features/Synchronized
 
@@ -197,12 +197,12 @@ public class EventStreamServiceDefault implements EventStreamService {
         @Getter final Class<?> sourceType;
 
         private final CountDownLatch latch = new CountDownLatch(1);
-        private final Queue<Predicate<EventStreamSource>> listeners = new ConcurrentLinkedQueue<>();
+        private final Queue<Predicate<SseSource>> listeners = new ConcurrentLinkedQueue<>();
 
         @Override
-        public void fire(EventStreamSource source) {
+        public void fire(SseSource source) {
 
-            final List<Predicate<EventStreamSource>> defensiveCopyOfListeners;
+            final List<Predicate<SseSource>> defensiveCopyOfListeners;
 
             synchronized ($LOCK) {
                 if(!isActive()) {
@@ -214,7 +214,7 @@ public class EventStreamServiceDefault implements EventStreamService {
 
             log.debug("about to fire events to {} listeners", ()->defensiveCopyOfListeners.size());
 
-            final List<Predicate<EventStreamSource>> markedForRemoval = _Lists.newArrayList();
+            final List<Predicate<SseSource>> markedForRemoval = _Lists.newArrayList();
 
             defensiveCopyOfListeners.forEach(listener->{
                 val retain = listener.test(source);
@@ -234,7 +234,7 @@ public class EventStreamServiceDefault implements EventStreamService {
         }
 
         @Override
-        public void listenWhile(Predicate<EventStreamSource> listener) {
+        public void listenWhile(Predicate<SseSource> listener) {
             synchronized ($LOCK) {
                 if(isActive()) {
                     listeners.add(listener);   

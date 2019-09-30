@@ -38,6 +38,7 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisBootSecmanEncryp
 import org.apache.isis.extensions.secman.jdo.IsisBootSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisBootSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisBootSecmanRealmShiro;
+import org.apache.isis.extensions.sse.IsisBootSse;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
@@ -60,6 +61,7 @@ import domainapp.utils.LibraryPreloadingService;
     IsisBootSecurityShiro.class,
     IsisBootDataNucleus.class,
     IsisBootWebWicket.class,
+    IsisBootSse.class, // server sent events
 
     // Security Manager Extension (secman)
     IsisBootSecmanModel.class,

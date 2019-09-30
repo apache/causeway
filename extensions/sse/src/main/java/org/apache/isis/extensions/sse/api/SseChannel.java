@@ -17,16 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.facets.objectvalue.observe;
+package org.apache.isis.extensions.sse.api;
 
-import org.apache.isis.applib.events.sse.EventStreamSource;
-import org.apache.isis.metamodel.facets.SingleClassValueFacet;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
- * Corresponds to <tt>@Property(observe=...)</tt> annotation in the Isis programming model.
+ * Server-sent events.
+ *  
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ * 
+ * @since 2.0
+ *
  */
-public interface ObserveFacet extends SingleClassValueFacet {
+public interface SseChannel {
 
-    Class<? extends EventStreamSource> getEventStreamType();
+    UUID getId();
+    Class<?> getSourceType();
+
+    void listenWhile(Predicate<SseSource> listener);
+
+    void fire(SseSource source);
+
+    void close();
+
+    void awaitClose() throws InterruptedException;
+
 
 }

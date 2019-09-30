@@ -22,9 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.metamodel.facets.objectvalue.observe.ObserveFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -129,23 +127,10 @@ public class MarkupPanelFactories {
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new MarkupComponent(
-                        id, model, getEventStreamResource((ScalarModel)model));
+                val markupComponent = new MarkupComponent(id, model);
                 markupComponent.setEnabled(false);
                 return markupComponent;    
             };
-        }
-
-        // -- HELPER
-
-        private LocalResourcePath getEventStreamResource(ScalarModel scalarModel) {
-            final ObserveFacet observeFacet  = scalarModel.getFacet(ObserveFacet.class);
-            if(observeFacet==null) {
-                return null;
-            }
-            final String eventStreamId = observeFacet.getEventStreamType().getName();
-            final LocalResourcePath ssePath = new LocalResourcePath("/sse?eventStream=" + eventStreamId);
-            return ssePath;
         }
 
     }
@@ -162,8 +147,7 @@ public class MarkupPanelFactories {
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new MarkupComponent(
-                        id, model, /*observing not supported*/ null);
+                val markupComponent = new MarkupComponent(id, model);
                 return markupComponent;    
             };
         }

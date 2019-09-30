@@ -17,10 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.metamodel.facets.objectvalue.observe;
+package org.apache.isis.extensions.sse.facets;
 
-import org.apache.isis.applib.events.sse.EventStreamSource;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.extensions.sse.api.SseSource;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleClassValueFacetAbstract;
@@ -28,14 +28,14 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public abstract class ObserveFacetAbstract extends SingleClassValueFacetAbstract implements ObserveFacet {
 
-    private Class<? extends EventStreamSource> eventStreamType;
+    private Class<? extends SseSource> eventStreamType;
 
     public static Class<? extends Facet> type() {
         return ObserveFacet.class;
     }
 
     public ObserveFacetAbstract(
-            final Class<? extends EventStreamSource> eventStreamType,
+            final Class<? extends SseSource> eventStreamType,
             final FacetHolder holder) {
 
         super(type(), holder, eventStreamType);
@@ -48,7 +48,7 @@ public abstract class ObserveFacetAbstract extends SingleClassValueFacetAbstract
     }
 
     @Override
-    public Class<? extends EventStreamSource> getEventStreamType() {
+    public Class<? extends SseSource> getEventStreamType() {
         return eventStreamType;
     }
 

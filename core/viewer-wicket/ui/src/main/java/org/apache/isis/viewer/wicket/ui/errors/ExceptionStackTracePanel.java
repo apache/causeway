@@ -101,7 +101,7 @@ public class ExceptionStackTracePanel extends Panel {
                 if(ticketMarkup == null) {
                     Components.permanentlyHide(this, ID_TICKET_MARKUP);
                 } else {
-                    add(new MarkupComponent(ID_TICKET_MARKUP, Model.of(ticket.getMarkup()), null /*observing*/));
+                    add(new MarkupComponent(ID_TICKET_MARKUP, Model.of(ticket.getMarkup())));
                 }
 
                 final boolean suppressExceptionDetail =

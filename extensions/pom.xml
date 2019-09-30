@@ -216,14 +216,16 @@
 
 	<modules>
 		<module>asciidoc</module>
-		<module>markdown</module>
 		<module>fixtures</module>
+		<module>markdown</module>
+		<module>restclient</module>
+		<module>secman</module>
 		<module>specsupport</module>
+		<module>sse</module>
+		<module>viewer-wicket-excel</module>
+
 		<module>incubator</module>
 		<module>legacy</module>
-		<module>viewer-wicket-excel</module>
-		<module>secman</module>
-		<module>restclient</module>
 	</modules>
 
 </project>

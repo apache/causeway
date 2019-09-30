@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp.modules.sse;
+package org.apache.isis.extensions.sse.webapp;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -29,12 +29,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.applib.events.sse.EventStream;
-import org.apache.isis.applib.events.sse.EventStreamService;
 import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.extensions.sse.api.SseChannel;
+import org.apache.isis.extensions.sse.api.SseService;
+import org.apache.isis.extensions.sse.markup.ListeningMarkup;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
@@ -52,7 +53,7 @@ public class ServerSentEventsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ExecutorService threadPool;
 
-    private final _Lazy<EventStreamService> eventStreamService_Lazy =
+    private final _Lazy<SseService> eventStreamService_Lazy =
             _Lazy.threadSafe(this::lookupEventStreamService);
 
     @Override
@@ -98,7 +99,7 @@ public class ServerSentEventsServlet extends HttpServlet {
 
     // -- HELPER
 
-    private void fork(final AsyncContext asyncContext, final EventStream eventStream) {
+    private void fork(final AsyncContext asyncContext, final SseChannel eventStream) {
 
         val response = asyncContext.getResponse();
         val marshaller = new JaxbAdapters.MarkupAdapter();
@@ -116,7 +117,7 @@ public class ServerSentEventsServlet extends HttpServlet {
                     return false; // stop listening
                 }
 
-                val payload = marshaller.marshal(source.getPayload());
+                val payload = marshaller.marshal(ListeningMarkup.valueOfHtml(source.getPayload()));
 
                 writer
                 .append("data: ")
@@ -158,8 +159,8 @@ public class ServerSentEventsServlet extends HttpServlet {
         }
     }
 
-    private EventStreamService lookupEventStreamService() {
-        return IsisContext.getServiceRegistry().lookupServiceElseFail(EventStreamService.class);
+    private SseService lookupEventStreamService() {
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(SseService.class);
     }
 
 }

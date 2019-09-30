@@ -38,7 +38,7 @@ public class AsciiDocComponent extends MarkupComponent {
     private static final long serialVersionUID = 1L;
 
     public AsciiDocComponent(String id, IModel<?> model) {
-        super(id, model, /*observing*/ null);
+        super(id, model);
     }
 
     @Override

@@ -16,30 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.webapp;
+package org.apache.isis.extensions.sse.api;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.webapp.modules.h2console.H2ManagerMenu;
-import org.apache.isis.webapp.modules.h2console.WebModuleH2Console;
-import org.apache.isis.webapp.modules.logonlog.WebModuleLogOnExceptionLogger;
-import org.apache.isis.webapp.modules.resources.WebModuleStaticResources;
-
-@Configuration
-@Import({
-    IsisWebAppContextListener.class,
-    IsisWebAppContextInitializer.class,
-
-    // default modules
-    WebModuleLogOnExceptionLogger.class,
-    WebModuleStaticResources.class,
-
-    // h2 console
-    WebModuleH2Console.class,
-    H2ManagerMenu.class,
-
-})
-public class IsisBootWebApp {
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ServerSentEvents {
+    
+    /**
+     * TODO
+     *
+     */
+    Class<? extends SseSource> observe() default SseSource.Noop.class;
 
 }

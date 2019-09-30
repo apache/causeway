@@ -16,66 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
+package org.apache.isis.extensions.sse.markup;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.WebComponent;
-import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.value.Markup;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 import lombok.val;
 
-public class MarkupComponent extends WebComponent {
+public class ListeningMarkupComponent extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
-
-    public MarkupComponent(final String id, IModel<?> model){
+    
+    private final LocalResourcePath observing;
+    
+    public ListeningMarkupComponent(final String id, IModel<?> model, LocalResourcePath observing){
         super(id, model);
+        this.observing = observing;
     }
-
+    
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
-        replaceComponentTagBody(markupStream, openTag, htmlContent);
+        replaceComponentTagBody(
+                markupStream, 
+                openTag, 
+
+                observing!=null 
+                ? ListeningMarkupComponent_observing.decorate(htmlContent, observing)
+                        : htmlContent
+
+                );
     }
 
-    @Override
-    protected void onComponentTag(ComponentTag tag)	{
-        super.onComponentTag(tag);
-        tag.setType(TagType.OPEN);
-    }
-
-    // -- HELPER
-
-    protected static CharSequence extractHtmlOrElse(Object modelObject, final String fallback) {
-
-        if(modelObject==null) {
-            return fallback;
-        }
-
-        if(modelObject instanceof ObjectAdapter) {
-
-            final ObjectAdapter objAdapter = (ObjectAdapter) modelObject;
-
-            if(objAdapter.getPojo()==null)
-                return fallback;
-
-            final Object value = objAdapter.getPojo();
-
-            if(!(value instanceof Markup))
-                return fallback;
-
-            return ((Markup)value).asString();
-        }
-
-        return modelObject.toString();
-
-    }
-
-
+    
 }
