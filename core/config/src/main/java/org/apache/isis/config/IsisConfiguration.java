@@ -424,6 +424,7 @@ public class IsisConfiguration {
         @Data
         public static class Restfulobjects {
             private String basePath = "/restful";
+            private boolean honorUiHints = false;
             private boolean strictAcceptChecking = false;
             private final Gsoc2013 gsoc2013 = new Gsoc2013();
             @Data

@@ -218,8 +218,6 @@ public class ResourceContext extends RuntimeContextBase implements RendererConte
 
     // -- configuration settings
 
-    private static final boolean HONOR_UI_HINTS_DEFAULT = false;
-
     private static final boolean OBJECT_PROPERTY_VALUES_ONLY_DEFAULT = false;
 
     private static final boolean SUPPRESS_DESCRIBED_BY_LINKS_DEFAULT = false;
@@ -231,7 +229,7 @@ public class ResourceContext extends RuntimeContextBase implements RendererConte
 
     @Override
     public boolean honorUiHints() {
-        return getConfigurationLegacy().getBoolean("isis.viewer.restfulobjects.honorUiHints", HONOR_UI_HINTS_DEFAULT);
+        return getConfiguration().getViewer().getRestfulobjects().isHonorUiHints();
     }
 
     @Override
