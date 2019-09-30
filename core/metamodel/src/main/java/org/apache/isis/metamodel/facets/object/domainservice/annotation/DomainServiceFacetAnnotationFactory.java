@@ -82,7 +82,7 @@ implements MetaModelValidatorRefiner {
                     + " convert into a mixin (@Mixin annotation) instead",
                     cls.getName(),
                     natureOfService,
-                    "isis.reflector.validator.mixinsOnly");
+                    "'isis.reflector.validator.mixinsOnly'");
             
             mixinOnlyValidator.addFailure(Identifier.classIdentifier(cls), msg);
             break;
@@ -129,7 +129,7 @@ implements MetaModelValidatorRefiner {
                             thisSpec.getIdentifier(),
                             "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                             thisSpec.getFullIdentifier(),
-                            "isis.reflector.validator.serviceActionsOnly",
+                            "'isis.reflector.validator.serviceActionsOnly'",
                             associationNames);
                 }
             }));

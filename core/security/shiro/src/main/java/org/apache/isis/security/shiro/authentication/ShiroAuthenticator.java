@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -53,6 +54,8 @@ import static org.apache.isis.config.internal._Config.getConfiguration;
 
 import lombok.extern.log4j.Log4j2;
 
+import javax.inject.Inject;
+
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
  * {@link AuthorizationManagerInstaller authorization} (as recommended), then this class is
@@ -66,16 +69,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ShiroAuthenticator implements Authenticator {
 
-    private static final String ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY = "isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated";
-    private static final boolean ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT = false;
-
     // -- constructor and fields
     private final boolean autoLogout;
 
+    @Inject
+    IsisConfiguration configuration;
+
     public ShiroAuthenticator() {
-        autoLogout = getConfiguration().getBoolean(
-                ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY,
-                ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT);
+        autoLogout = configuration.getAuthentication().getShiro().isAutoLogoutIfAlreadyAuthenticated();
     }
 
     // -- init, shutdown
