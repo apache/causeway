@@ -66,55 +66,13 @@
 			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId>
 		</dependency>
 
-		<!-- SPRING -->
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.boot</groupId> -->
-<!-- 			<artifactId>spring-boot-starter-tomcat</artifactId> -->
-<!-- 			<version>${spring-boot.version}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
-
-		<!-- ISIS API -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.isis.core</groupId> -->
-<!-- 			<artifactId>isis-applib</artifactId> -->
-<!-- 		</dependency> -->
-
-		<!-- ISIS CORE PLUGINS -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.isis.core</groupId> -->
-<!-- 			<artifactId>isis-plugins-codegen-bytebuddy</artifactId> -->
-<!-- 		</dependency> -->
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.isis.core</groupId> -->
-<!-- 			<artifactId>isis-plugins-jdo-datanucleus-5</artifactId> -->
-<!-- 			<exclusions> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>org.slf4j</groupId> -->
-<!-- 					<artifactId>slf4j-api</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 			</exclusions> -->
-<!-- 		</dependency> -->
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.isis.core</groupId> -->
-<!-- 			<artifactId>isis-plugins-jaxrs-resteasy-4</artifactId> -->
-<!-- 		</dependency> -->
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.isis.core</groupId> -->
-<!-- 			<artifactId>isis-plugins-security-shiro</artifactId> -->
-<!-- 			<exclusions> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>org.slf4j</groupId> -->
-<!-- 					<artifactId>slf4j-api</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 			</exclusions> -->
-<!-- 		</dependency> -->
-		
 		<!-- ISIS EXTENSIONS -->
+		
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-incubator</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>

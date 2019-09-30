@@ -18,7 +18,6 @@
 package org.apache.isis.metamodel.progmodels.dflt;
 
 import java.util.List;
-import java.util.Set;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Plugin;
@@ -30,7 +29,6 @@ import org.apache.isis.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
-import org.apache.isis.metamodel.facets.actions.support.SupportingMethodValidatorRefinerFactory;
 import org.apache.isis.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
@@ -161,6 +159,8 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin.FacetFactoryCategory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin.FactoryCollector;
+
+import lombok.val;
 
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
 
@@ -384,7 +384,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(new Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory());
 
-        // plugin value factories
+        // plugin factories that contribute values
         factoriesFromPlugins.getFactories(FacetFactoryCategory.VALUE).forEach(this::addFactory);
 
         // written to not trample over TypeOf if already installed
@@ -411,8 +411,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(new ViewModelSemanticCheckingFacetFactory());
         
-        // possibly required at the very end
-        addFactory(new SupportingMethodValidatorRefinerFactory());
+        // plugin value factories
+        factoriesFromPlugins.getFactories(FacetFactoryCategory.VALIDATION).forEach(this::addFactory);
 
     }
 
@@ -426,8 +426,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
     // -- HELPER
 
     private static FactoryCollector discoverFactories() {
-        final Set<ProgrammingModelPlugin> plugins = _Plugin.loadAll(ProgrammingModelPlugin.class);
-        final FactoryCollector collector = ProgrammingModelPlugin.collector();
+        val plugins = _Plugin.loadAll(ProgrammingModelPlugin.class);
+        val collector = ProgrammingModelPlugin.newCollector();
         plugins.forEach(plugin->{
             plugin.plugin(collector);
         });

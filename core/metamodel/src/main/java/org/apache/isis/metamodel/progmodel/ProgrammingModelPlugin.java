@@ -33,10 +33,18 @@ public interface ProgrammingModelPlugin {
     /**
      * Guides the priority at which facet factories are registered.
      * There is no other use.
+     * @apiNote extend as needed
      */
     public static enum FacetFactoryCategory {
-        // extend as needed ...
-        VALUE
+        /**
+         * registers the provided factory after built-in value factory providers
+         */
+        VALUE,
+        
+        /**
+         * registers the provided factory after all built-in factories
+         */
+        VALIDATION,
         ;
     }
 
@@ -58,7 +66,7 @@ public interface ProgrammingModelPlugin {
 
     }
 
-    public static FactoryCollector collector() {
+    public static FactoryCollector newCollector() {
         return new FactoryCollector() {
 
             final SetMultimap<FacetFactoryCategory, FacetFactory> factoriesByCategory =
