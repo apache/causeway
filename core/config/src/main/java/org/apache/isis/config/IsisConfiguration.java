@@ -425,7 +425,15 @@ public class IsisConfiguration {
     private final Viewer viewer = new Viewer();
     @Data
     public static class Viewer {
-
+        private final Restfulobjects restfulobjects = new Restfulobjects();
+        @Data
+        public static class Restfulobjects {
+            private final Gsoc2013 gsoc2013 = new Gsoc2013();
+            @Data
+            public static class Gsoc2013 {
+                private boolean legacyParamDetails = false;
+            }
+        }
         private final Wicket wicket = new Wicket();
         @Data
         public static class Wicket {
