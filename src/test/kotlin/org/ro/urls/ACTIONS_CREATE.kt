@@ -3,9 +3,9 @@ package org.ro.urls
 object ACTIONS_CREATE : Response() {
     override val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/create"
     override val str = """{
-        "id": "create",
-        "memberType": "action",
-        "links": [
+    "id": "create",
+    "memberType": "action",
+    "links": [
         {
             "rel": "self",
             "href": "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/create",
@@ -25,10 +25,10 @@ object ACTIONS_CREATE : Response() {
             "method": "POST",
             "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\"",
             "arguments": {
-            "name": {
-            "value": null
-        }
-        }
+                "name": {
+                    "value": null
+                }
+            }
         },
         {
             "rel": "describedby",
@@ -36,18 +36,18 @@ object ACTIONS_CREATE : Response() {
             "method": "GET",
             "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/action-description\""
         }
-        ],
-        "extensions": {
+    ],
+    "extensions": {
         "actionType": "user",
         "actionSemantics": "nonIdempotent"
     },
-        "parameters": {
+    "parameters": {
         "name": {
-        "num": 0,
-        "id": "name",
-        "name": "Name",
-        "description": ""
+            "num": 0,
+            "id": "name",
+            "name": "Name",
+            "description": ""
+        }
     }
-    }
-    }"""
+}"""
 }

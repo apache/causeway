@@ -64,7 +64,7 @@ class ActionTest {
     }
 
     @Test
-    fun testParseActionDownloadLayouts() {
+    fun testParseActionDownloadLayout() {
         val jsonStr = ACTIONS_DOWNLOAD_LAYOUTS.str
         val action = ActionHandler().parse(jsonStr) as Action
         val links = action.links
@@ -87,4 +87,79 @@ class ActionTest {
         assertEquals(choiceList[2].content, defaultChoice)
     }
 
+    @Test
+    fun testParseActionDownloadMenubarsLayout() {
+        val jsonStr = ACTIONS_DOWNLOAD_MENUBARS_LAYOUT.str
+        val action = ActionHandler().parse(jsonStr) as Action
+        val links = action.links
+        assertEquals(4, links.size)
+
+        val invokeLink = action.getInvokeLink()
+        val argList = invokeLink!!.arguments!!.asMap()
+        assertEquals(2, argList.size)  //2
+
+        val paramList = action.parameters
+        assertEquals(2, paramList.size)
+
+        val p = action.findParameterByName("type")
+        assertEquals("type", p!!.id)
+
+        val choiceList = p.choices
+        assertEquals(2, choiceList.size)
+
+        val defaultChoice = p.defaultChoice!!.content as String
+        assertEquals(choiceList[0].content, defaultChoice)
+    }
+
+//    @Test    //TODO-> empty key in arguments
+    fun testParseActionDownloadMetaModel() {
+        val jsonStr = ACTIONS_DOWNLOAD_META_MODEL.str
+        val action = ActionHandler().parse(jsonStr) as Action
+        val links = action.links
+        assertEquals(4, links.size)
+
+        val invokeLink = action.getInvokeLink()
+        val argList = invokeLink!!.arguments!!.asMap()
+        assertEquals(2, argList.size)  //2
+
+        val paramList = action.parameters
+        assertEquals(2, paramList.size)
+
+        val p = action.findParameterByName(".csvFileName")
+        assertEquals(".csvFileName", p!!.id)
+
+//        val choiceList = p.choices
+//        assertEquals(2, choiceList.size)
+
+        val defaultChoice = p.defaultChoice!!.content as String
+        assertEquals("metamodel.csv", defaultChoice)
+    }
+
+    @Test    //TODO-> empty key in arguments
+    fun testParseActionDownloadSwaggerSchemaDefinition() {
+        val jsonStr = ACTIONS_DOWNLOAD_SWAGGER_SCHEMA_DEFINITION.str
+        val action = ActionHandler().parse(jsonStr) as Action
+        val links = action.links
+        assertEquals(4, links.size)
+
+        val invokeLink = action.getInvokeLink()
+        val argList = invokeLink!!.arguments!!.asMap()
+        assertEquals(3, argList.size)  //2
+
+        val paramList = action.parameters
+        assertEquals(3, paramList.size)
+
+        val p0 = action.findParameterByName("filename")
+        assertEquals("filename", p0!!.id)
+        val p1 = action.findParameterByName("visibility")
+        assertEquals("visibility", p1!!.id)
+        val p2 = action.findParameterByName("format")
+        assertEquals("format", p2!!.id)
+
+        val choiceList = p1.choices
+        assertEquals(3, choiceList.size)
+
+        val defaultChoice = p1.defaultChoice!!.content as String
+        assertEquals("Private", defaultChoice)
+    }
 }

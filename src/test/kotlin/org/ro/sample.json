@@ -1,34 +1,40 @@
 {
-    "id": "downloadLayouts",
+    "id": "downloadSwaggerSchemaDefinition",
     "memberType": "action",
     "links": [
         {
             "rel": "self",
-            "href": "http://localhost:8080/restful/services/isisApplib.LayoutServiceMenu/actions/downloadLayouts",
+            "href": "http://localhost:8080/restful/services/isisApplib.SwaggerServiceMenu/actions/downloadSwaggerSchemaDefinition",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
         },
         {
             "rel": "up",
-            "href": "http://localhost:8080/restful/services/isisApplib.LayoutServiceMenu",
+            "href": "http://localhost:8080/restful/services/isisApplib.SwaggerServiceMenu",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
             "title": "Prototyping"
         },
         {
-            "rel": "urn:org.restfulobjects:rels/invoke;action=\"downloadLayouts\"",
-            "href": "http://localhost:8080/restful/services/isisApplib.LayoutServiceMenu/actions/downloadLayouts/invoke",
+            "rel": "urn:org.restfulobjects:rels/invoke;action=\"downloadSwaggerSchemaDefinition\"",
+            "href": "http://localhost:8080/restful/services/isisApplib.SwaggerServiceMenu/actions/downloadSwaggerSchemaDefinition/invoke",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\"",
             "arguments": {
-                "style": {
+                "filename": {
+                    "value": null
+                },
+                "visibility": {
+                    "value": null
+                },
+                "format": {
                     "value": null
                 }
             }
         },
         {
             "rel": "describedby",
-            "href": "http://localhost:8080/restful/domain-types/isisApplib.LayoutServiceMenu/actions/downloadLayouts",
+            "href": "http://localhost:8080/restful/domain-types/isisApplib.SwaggerServiceMenu/actions/downloadSwaggerSchemaDefinition",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/action-description\""
         }
@@ -38,18 +44,35 @@
         "actionSemantics": "safe"
     },
     "parameters": {
-        "style": {
+        "filename": {
             "num": 0,
-            "id": "style",
-            "name": "Style",
+            "id": "filename",
+            "name": "Filename",
+            "description": "",
+            "default": "swagger"
+        },
+        "visibility": {
+            "num": 1,
+            "id": "visibility",
+            "name": "Visibility",
             "description": "",
             "choices": [
-                "Current",
-                "Complete",
-                "Normalized",
-                "Minimal"
+                "Public",
+                "Private",
+                "Private With Prototyping"
             ],
-            "default": "Normalized"
+            "default": "Private"
+        },
+        "format": {
+            "num": 2,
+            "id": "format",
+            "name": "Format",
+            "description": "",
+            "choices": [
+                "Json",
+                "Yaml"
+            ],
+            "default": "Yaml"
         }
     }
 }

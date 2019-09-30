@@ -3,9 +3,9 @@ package org.ro.urls
 object ACTIONS_RUN_FIXTURE_SCRIPT : Response() {
     override val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript"
     override val str = """{
-        "id": "runFixtureScript",
-        "memberType": "action",
-        "links": [
+    "id": "runFixtureScript",
+    "memberType": "action",
+    "links": [
         {
             "rel": "self",
             "href": "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript",
@@ -25,13 +25,13 @@ object ACTIONS_RUN_FIXTURE_SCRIPT : Response() {
             "method": "POST",
             "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\"",
             "arguments": {
-            "script": {
-            "value": null
-        },
-            "parameters": {
-            "value": null
-        }
-        }
+                "script": {
+                    "value": null
+                },
+                "parameters": {
+                    "value": null
+                }
+            }
         },
         {
             "rel": "describedby",
@@ -39,40 +39,40 @@ object ACTIONS_RUN_FIXTURE_SCRIPT : Response() {
             "method": "GET",
             "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/action-description\""
         }
-        ],
-        "extensions": {
+    ],
+    "extensions": {
         "actionType": "prototype",
         "actionSemantics": "nonIdempotent"
     },
-        "parameters": {
+    "parameters": {
         "script": {
-        "num": 0,
-        "id": "script",
-        "name": "Script",
-        "description": "",
-        "choices": [
-        {
-            "rel": "urn:org.restfulobjects:rels/value",
-            "href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PHBhdGg-PC9wYXRoPjwvbWVtZW50bz4=",
-            "method": "GET",
-            "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
-            "title": "Domain App Demo"
-        }
-        ],
-        "default": {
-        "rel": "urn:org.restfulobjects:rels/value",
-        "href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PHBhdGg-PC9wYXRoPjwvbWVtZW50bz4=",
-        "method": "GET",
-        "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
-        "title": "Domain App Demo"
-    }
-    },
+            "num": 0,
+            "id": "script",
+            "name": "Script",
+            "description": "",
+            "choices": [
+                {
+                    "rel": "urn:org.restfulobjects:rels/value",
+                    "href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PHBhdGg-PC9wYXRoPjwvbWVtZW50bz4=",
+                    "method": "GET",
+                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
+                    "title": "Domain App Demo"
+                }
+            ],
+            "default": {
+                "rel": "urn:org.restfulobjects:rels/value",
+                "href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PHBhdGg-PC9wYXRoPjwvbWVtZW50bz4=",
+                "method": "GET",
+                "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
+                "title": "Domain App Demo"
+            }
+        },
         "parameters": {
-        "num": 1,
-        "id": "parameters",
-        "name": "Parameters",
-        "description": "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)"
+            "num": 1,
+            "id": "parameters",
+            "name": "Parameters",
+            "description": "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)"
+        }
     }
-    }
-    }"""
+}"""
 }
