@@ -425,7 +425,14 @@ public class IsisConfiguration {
         public static class Restfulobjects {
             private String basePath = "/restful";
             private boolean honorUiHints = false;
+            private boolean objectPropertyValuesOnly = false;
             private boolean strictAcceptChecking = false;
+            private boolean suppressDescribedByLinks = false;
+            private boolean suppressMemberDisabledReason = false;
+            private boolean suppressMemberExtensions = false;
+            private boolean suppressMemberId = false;
+            private boolean suppressMemberLinks = false;
+            private boolean suppressUpdateLink = false;
             private final Gsoc2013 gsoc2013 = new Gsoc2013();
             @Data
             public static class Gsoc2013 {
