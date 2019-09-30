@@ -49,8 +49,8 @@ public interface BackgroundCommandService extends AutoCloseable {
 
     /**
      * @since 2.0
+     * @apiNote refined from AutoCloseable to not throw catched exceptions
      */
-    // refined from AutoCloseable to not throw catched exceptions
     @Override
     default void close() { 
 

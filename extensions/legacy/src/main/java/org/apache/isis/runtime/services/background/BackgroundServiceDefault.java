@@ -24,8 +24,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.command.CommandContext;
