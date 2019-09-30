@@ -295,6 +295,50 @@ public class IsisConfiguration {
         }
     }
 
+    private final Service service = new Service();
+    @Data
+    public static class Service {
+        // isis.service.email.sender.username
+        // isis.service.email.sender.address
+        // isis.service.email.sender.password
+        // isis.service.email.sender.hostname
+        // isis.service.email.port
+        // isis.service.email.socketTimeout
+        // isis.service.email.socketConnectionTimeout
+        // isis.service.email.tls.enabled
+        // isis.service.email.throwExceptionOnFail
+        // isis.service.email.override.to
+        // isis.service.email.override.cc
+        // isis.service.email.override.bcc
+        private final Email email = new Email();
+        @Data
+        public static class Email {
+            private int port = 587;
+            private int socketConnectionTimeout = 2000;
+            private int socketTimeout = 2000;
+            private boolean throwExceptionOnFail = true;
+            private final Override override = new Override();
+            @Data
+            public static class Override {
+                private String to;
+                private String cc;
+                private String bcc;
+            }
+            private final Sender sender = new Sender();
+            @Data
+            public static class Sender {
+                private String username;
+                private String address;
+                private String password;
+                private String hostname;
+            }
+            private final Tls tls = new Tls();
+            @Data
+            public static class Tls {
+                private boolean enabled = true;
+            }
+        }
+    }
     private final Services services = new Services();
     @Data
     public static class Services {
