@@ -66,6 +66,7 @@ public class _Probe {
     private boolean silenced = false;
 
     private final LongAdder counter = new LongAdder();
+    private final LongAdder nanoCounter = new LongAdder();
 
     private _Probe(long maxCalls, MaxCallsReachedAction maxAction) {
         this.maxCalls = maxCalls;
@@ -176,6 +177,14 @@ public class _Probe {
         errOut("-------------------------------------");
         out=restore_out;
     }
+    
+    public void run(Runnable runnable) {
+        val t0 = System.nanoTime();
+        runnable.run();
+        val nanos = System.nanoTime() - t0;
+        nanoCounter.add(nanos);
+        println("total runtime %d ms", nanoCounter.longValue()/1000_000);
+    }
 
     // -- CONVENIENT DEBUG TOOLS (STATIC)
 
@@ -220,6 +229,8 @@ public class _Probe {
         final String message = "["+label+" "+counterValue+"] "+chars; 
         out.println(String.format(emphasisFormat, message));
     }
+
+    
 
 
 }

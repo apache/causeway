@@ -31,7 +31,6 @@ import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
@@ -341,60 +340,43 @@ public class FacetedMethodsBuilder {
         return actionFacetedMethods;
     }
 
-    private enum RecognisedHelpersStrategy {
-        SKIP, DONT_SKIP;
-        public boolean skip() {
-            return this == SKIP;
-        }
-    }
-
-    /**
-     * REVIEW: I'm not sure why we do two passes here.
-     *
-     * <p>
-     * Perhaps it's important to skip helpers first. I doubt it, though.
-     */
     private List<FacetedMethod> findActionFacetedMethods(
             final MethodScope methodScope) {
         if (log.isDebugEnabled()) {
             log.debug("introspecting {}: actions", getClassName());
         }
-        final List<FacetedMethod> actionFacetedMethods1 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.SKIP);
-        final List<FacetedMethod> actionFacetedMethods2 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.DONT_SKIP);
-        return ListExtensions.combineWith(actionFacetedMethods1, actionFacetedMethods2);
+        val actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
+        collectActionFacetedMethods(actionFacetedMethods, methodScope);
+        return actionFacetedMethods;
     }
 
-    private List<FacetedMethod> findActionFacetedMethods(
-            final MethodScope methodScope,
-            final RecognisedHelpersStrategy recognisedHelpersStrategy) {
+    private void collectActionFacetedMethods(
+            final List<FacetedMethod> actionFacetedMethods,
+            final MethodScope methodScope) {
 
         if (log.isDebugEnabled()) {
             log.debug("  looking for action methods");
         }
-
-        final List<FacetedMethod> actionFacetedMethods = _Lists.newArrayList();
 
         for (int i = 0; i < methods.size(); i++) {
             final Method method = methods.get(i);
             if (method == null) {
                 continue;
             }
-            final FacetedMethod actionPeer = findActionFacetedMethod(methodScope, recognisedHelpersStrategy, method);
+            final FacetedMethod actionPeer = findActionFacetedMethod(methodScope, method);
             if (actionPeer != null) {
                 methods.set(i, null);
                 actionFacetedMethods.add(actionPeer);
             }
         }
-
-        return actionFacetedMethods;
+        
     }
 
     private FacetedMethod findActionFacetedMethod(
             final MethodScope methodScope,
-            final RecognisedHelpersStrategy recognisedHelpersStrategy,
             final Method actionMethod) {
 
-        if (!representsAction(actionMethod, methodScope, recognisedHelpersStrategy)) {
+        if (!representsAction(actionMethod, methodScope)) {
             return null;
         }
 
@@ -434,8 +416,7 @@ public class FacetedMethodsBuilder {
 
     private boolean representsAction(
             final Method actionMethod,
-            final MethodScope methodScope,
-            final RecognisedHelpersStrategy recognisedHelpersStrategy) {
+            final MethodScope methodScope) {
 
         if (!MethodUtil.inScope(actionMethod, methodScope)) {
             return false;
@@ -455,26 +436,27 @@ public class FacetedMethodsBuilder {
             return false;
         }
 
+        // ensure we can load specs for all the params
         if (!loadParamSpecs(actionMethod)) {
             return false;
-        }
-
-        if (getFacetProcessor().recognizes(actionMethod)) {
-            // a bit of a hack
-            if (actionMethod.getName().startsWith("set")) {
-                return false;
-            }
-            if (recognisedHelpersStrategy.skip()) {
-                log.debug("  skipping possible helper method {0}", actionMethod);
-                return false;
-            }
         }
 
         if(explicitActionAnnotationConfigured()) {
             if(!Annotations.isAnnotationPresent(actionMethod, Action.class)) {
                 return false;
             }
+            // we have @Action, so fall through
+            
+        } else {
+
+            // exclude those that have eg. reserved prefixes
+            if (getFacetProcessor().recognizes(actionMethod)) {
+                return false;
+            }
+            // we have a valid action candidate, so fall through
+            
         }
+        
         log.debug("  identified action {0}", actionMethod);
         return true;
     }

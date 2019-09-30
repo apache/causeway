@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.spec;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Hierarchical {
 
@@ -30,10 +30,10 @@ public interface Hierarchical {
     boolean hasSubclasses();
 
     /**
-     * Get the list of specifications for all the interfaces that the class
+     * Get the set of specifications for all the interfaces that the class
      * represented by this specification implements.
      */
-    List<ObjectSpecification> interfaces();
+    Collection<ObjectSpecification> interfaces();
 
     /**
      * Determines if this specification represents the same specification, or a
@@ -52,18 +52,10 @@ public interface Hierarchical {
     }
 
     /**
-     * Direct subclasses only (same as {@link #subclasses(Depth)} with depth = {@link Depth#DIRECT}).
-     *
-     * @deprecated - use {@link #subclasses(Depth)}.
-     */
-    @Deprecated
-    List<ObjectSpecification> subclasses();
-
-    /**
-     * Get the list of specifications for the subclasses of the class
+     * Get the set of specifications for the subclasses of the class
      * represented by this specification
      */
-    List<ObjectSpecification> subclasses(Depth depth);
+    Collection<ObjectSpecification> subclasses(Depth depth);
 
     /**
      * Get the specification for this specification's class's superclass.

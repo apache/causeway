@@ -69,9 +69,10 @@ import org.apache.isis.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+@Log4j2 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
 
     private static final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
@@ -122,9 +123,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             return;
         }
 
-        final DomainServiceFacet facet = getFacet(DomainServiceFacet.class);
-        final boolean serviceWithNatureOfDomain = facet != null && facet.getNatureOfService() == NatureOfService.DOMAIN;
-        if (serviceWithNatureOfDomain) {
+        val domainServiceFacet = getFacet(DomainServiceFacet.class);
+        val isServiceWithNatureOfDomain = domainServiceFacet != null && domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
+        if (isServiceWithNatureOfDomain) {
             if (log.isDebugEnabled()) {
                 log.debug("skipping type hierarchy introspection for domain service with natureOfService = DOMAIN {}", getFullIdentifier());
             }
@@ -148,10 +149,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         //
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
         final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
-        for (final Class<?> interfaceType : interfaceTypes) {
-            final Class<?> substitutedInterfaceType = classSubstitutor.getClass(interfaceType);
+        for (val interfaceType : interfaceTypes) {
+            val substitutedInterfaceType = classSubstitutor.getClass(interfaceType);
             if (substitutedInterfaceType != null) {
-                final ObjectSpecification interfaceSpec = getSpecificationLoader().loadSpecification(substitutedInterfaceType);
+                val interfaceSpec = getSpecificationLoader().loadSpecification(substitutedInterfaceType);
                 interfaceSpecList.add(interfaceSpec);
             }
         }
@@ -159,9 +160,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         updateAsSubclassTo(interfaceSpecList);
         updateInterfaces(interfaceSpecList);
     }
-
+    
     @Override
-    protected synchronized void introspectMembers() {
+    protected void introspectMembers() {
 
         if(this.containsFacet(ValueFacet.class)) {
             if (log.isDebugEnabled()) {
@@ -171,10 +172,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
 
         // associations and actions
-        final List<ObjectAssociation> associations = createAssociations();
+        val associations = createAssociations();
         sortAndUpdateAssociations(associations);
 
-        final List<ObjectAction> actions = createActions();
+        val actions = createActions();
         sortCacheAndUpdateActions(actions);
 
         postProcess();

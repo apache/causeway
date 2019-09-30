@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.testspec;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
@@ -51,7 +52,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     private ObjectAction action;
     public List<ObjectAssociation> fields = _Lists.newArrayList();
     private final String name;
-    private List<ObjectSpecification> subclasses = Collections.emptyList();
+    private Set<ObjectSpecification> subclasses = Collections.emptySet();
     private String title;
     /**
      * lazily derived, see {@link #getSpecId()} 
@@ -237,13 +238,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectSpecification> subclasses() {
+    public Set<ObjectSpecification> subclasses(final Depth depth) {
         return subclasses;
-    }
-
-    @Override
-    public List<ObjectSpecification> subclasses(final Depth depth) {
-        return subclasses();
     }
 
     @Override

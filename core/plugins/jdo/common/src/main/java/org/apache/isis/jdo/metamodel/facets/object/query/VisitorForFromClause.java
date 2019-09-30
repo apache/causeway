@@ -18,13 +18,14 @@
  */
 package org.apache.isis.jdo.metamodel.facets.object.query;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.Hierarchical;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+
+import lombok.val;
 
 class VisitorForFromClause extends VisitorForClauseAbstract {
 
@@ -45,12 +46,12 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
             final String query,
             final ValidationFailures validationFailures) {
 
-        final String className = objectSpec.getCorrespondingClass().getName();
+        val className = objectSpec.getCorrespondingClass().getName();
         if (Objects.equals(classNameFromClause, className)) {
             return;
         }
-        final ObjectSpecification fromSpec = getSpecificationLoader().loadSpecification(classNameFromClause);
-        List<ObjectSpecification> subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
+        val fromSpec = getSpecificationLoader().loadSpecification(classNameFromClause);
+        val subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
         if(subclasses.contains(objectSpec)) {
             return;
         }

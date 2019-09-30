@@ -32,10 +32,7 @@ public class SpecificationTraverser {
      * and the parameterized type.
      */
     public void traverseTypes(final Method method, final Collection<Class<?>> discoveredTypes) {
-        final TypeExtractorMethodReturn returnTypes = new TypeExtractorMethodReturn(method);
-        for (final Class<?> returnType : returnTypes) {
-            discoveredTypes.add(returnType);
-        }
+        new TypeExtractorMethodReturn(method).forEach(discoveredTypes::add);
     }
 
 }

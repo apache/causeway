@@ -19,9 +19,12 @@
 
 package org.apache.isis.metamodel.specloader.specimpl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -100,11 +103,30 @@ import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+@Log4j2 //@EqualsAndHashCode(of = "correspondingClass", callSuper = false)
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
-    private static class SubclassList {
-        private final List<ObjectSpecification> classes = _Lists.newArrayList();
+//    private static class Subclasses {
+//        private final Set<ObjectSpecification> classes = new HashSet<>();
+//
+//        public void addSubclass(final ObjectSpecification subclass) {
+//            if(classes.contains(subclass)) {
+//                return;
+//            }
+//            classes.add(subclass);
+//        }
+//
+//        public boolean hasSubclasses() {
+//            return !classes.isEmpty();
+//        }
+//
+//        public Collection<ObjectSpecification> toCollection() {
+//            return Collections.unmodifiableSet(classes);
+//        }
+//    }
+
+    private static class Subclasses {
+        private final List<ObjectSpecification> classes = new ArrayList<>();
 
         public void addSubclass(final ObjectSpecification subclass) {
             if(classes.contains(subclass)) {
@@ -117,11 +139,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return !classes.isEmpty();
         }
 
-        public List<ObjectSpecification> toList() {
+        public List<ObjectSpecification> toCollection() {
             return Collections.unmodifiableList(classes);
         }
     }
-
+    
+    
     // -- fields
 
     //protected final ServiceInjector servicesInjector;
@@ -146,9 +169,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
-    private final SubclassList directSubclasses = new SubclassList();
+    private final Subclasses directSubclasses = new Subclasses();
     // built lazily
-    private SubclassList transitiveSubclasses;
+    private Subclasses transitiveSubclasses;
 
     private final Class<?> correspondingClass;
     private final String fullName;
@@ -169,6 +192,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
 
+    private final static Set<String> exclusions = _Sets.of( //TODO[2133] make this configurable, or find an alternative, perhaps a specific type annotation?
+            "org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult",
+            "org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript"
+            );
+    
 
     // -- Constructor
     public ObjectSpecificationAbstract(
@@ -180,13 +208,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
-
-        val exclusions = _Sets.of( //TODO[2133] make this configurable, or find an alternative, perhaps a specific type annotation?
-                "org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureResult",
-                "org.apache.isis.extensions.fixtures.legacy.fixturescripts.FixtureScript",
-                "org.apache.isis.applib.fixturescripts.FixtureResult",
-                "org.apache.isis.applib.fixturescripts.FixtureScript"
-                );
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
         this.excludedFromMetamodel = _Reflect
@@ -246,24 +267,29 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return fullName;
     }
 
-
     /**
      * Keeps introspecting up to the level required.
      */
     public void introspectUpTo(final IntrospectionState upTo) {
+        
+        if(!isLessThan(upTo)) {
+            return; // optimization
+        }
 
-        log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
-
+        if(log.isDebugEnabled()) {
+            log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
+        }
+        
         switch (introspectionState) {
         case NOT_INTROSPECTED:
-            if(this.introspectionState.compareTo(upTo) < 0) {
+            if(isLessThan(upTo)) {
                 // set to avoid infinite loops
                 this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
                 introspectTypeHierarchy();
                 updateFromFacetValues();
                 this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
             }
-            if(this.introspectionState.compareTo(upTo) < 0) {
+            if(isLessThan(upTo)) {
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
                 this.introspectionState = IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
@@ -274,7 +300,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             // nothing to do
             break;
         case TYPE_INTROSPECTED:
-            if(this.introspectionState.compareTo(upTo) < 0) {
+            if(isLessThan(upTo)) {
                 // set to avoid infinite loops
                 this.introspectionState = IntrospectionState.MEMBERS_BEING_INTROSPECTED;
                 introspectMembers();
@@ -289,6 +315,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
+    private boolean isLessThan(IntrospectionState upTo) {
+        return this.introspectionState.compareTo(upTo) < 0;
+    }
+    
+    
     protected abstract void introspectTypeHierarchy();
     protected abstract void introspectMembers();
 
@@ -584,19 +615,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public List<ObjectSpecification> interfaces() {
+    public Collection<ObjectSpecification> interfaces() {
         return Collections.unmodifiableList(interfaces);
     }
 
     @Override
-    public List<ObjectSpecification> subclasses() {
-        return subclasses(Depth.DIRECT);
-    }
-
-    @Override
-    public List<ObjectSpecification> subclasses(final Depth depth) {
+    public Collection<ObjectSpecification> subclasses(final Depth depth) {
         if (depth == Depth.DIRECT) {
-            return directSubclasses.toList();
+            return directSubclasses.toCollection();
         }
 
         // depth == Depth.TRANSITIVE)
@@ -604,11 +630,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             transitiveSubclasses = transitiveSubclasses();
         }
 
-        return transitiveSubclasses.toList();
+        return transitiveSubclasses.toCollection();
     }
 
-    private synchronized SubclassList transitiveSubclasses() {
-        final SubclassList appendTo = new SubclassList();
+    private synchronized Subclasses transitiveSubclasses() {
+        final Subclasses appendTo = new Subclasses();
         appendSubclasses(this, appendTo);
         transitiveSubclasses = appendTo;
         return transitiveSubclasses;
@@ -616,9 +642,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private void appendSubclasses(
             final ObjectSpecification objectSpecification,
-            final SubclassList appendTo) {
+            final Subclasses appendTo) {
 
-        final List<ObjectSpecification> directSubclasses = objectSpecification.subclasses(Depth.DIRECT);
+        val directSubclasses = objectSpecification.subclasses(Depth.DIRECT);
         for (ObjectSpecification subclass : directSubclasses) {
             appendTo.addSubclass(subclass);
             appendSubclasses(subclass, appendTo);
@@ -1195,7 +1221,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         str.append("class", getFullIdentifier());
         return str.toString();
     }
-
+    
     // -- GUARDS
 
     private boolean contributeeAndMixedInAssociationsAdded;
