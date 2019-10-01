@@ -183,8 +183,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
 
     private void addBreadcrumbs() {
 
-        boolean showBreadcrumbs = getConfigurationLegacy().getBoolean(
-                BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
+        boolean showBreadcrumbs = getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
         final Component breadcrumbPanel =
                 showBreadcrumbs
                 ? new BreadcrumbPanel(ID_BREADCRUMBS)

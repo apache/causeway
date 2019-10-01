@@ -432,8 +432,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     protected boolean isShowBreadcrumbs() {
-        return getConfigurationLegacy() .getBoolean(
-                BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
+        return getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel<?> model) {

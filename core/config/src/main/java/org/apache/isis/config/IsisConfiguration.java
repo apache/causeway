@@ -610,6 +610,14 @@ public class IsisConfiguration {
                 private int maxSize = 15;
             }
 
+            private final Breadcrumbs breadcrumbs = new Breadcrumbs();
+            @Data
+            public static class Breadcrumbs {
+                /**
+                 * Determines whether the breadcrumbs should be available in the footer.
+                 */
+                private boolean showChooser = true;
+            }
             private final DatePicker datePicker = new DatePicker();
             @Data
             public static class DatePicker {
