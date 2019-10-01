@@ -19,18 +19,17 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import lombok.val;
 
 public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -42,20 +41,16 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val facets = new ArrayList<Facet>();
 
-        final List<Facet> facets = new ArrayList<Facet>();
-        final List<Method> methods = new ArrayList<Method>();
-
-        Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        val method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
-            facets.add(new CreatedCallbackFacetViaMethod(method, holder));
+            facets.add(new CreatedCallbackFacetViaMethod(method, facetHolder));
+            processClassContext.removeMethod(method);
         }
-
-        processClassContext.removeMethods(methods);
+        
         FacetUtil.addFacets(facets);
     }
 

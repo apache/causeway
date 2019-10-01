@@ -102,11 +102,6 @@ public interface FacetFactory {
             methodRemover.removeMethod(method);
         }
 
-        @Override
-        public void removeMethods(final List<Method> methods) {
-            methodRemover.removeMethods(methods);
-        }
-
     }
 
     public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
@@ -154,11 +149,6 @@ public interface FacetFactory {
         @Override
         public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
             methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
-        }
-
-        @Override
-        public void removeMethods(final List<Method> methods) {
-            methodRemover.removeMethods(methods);
         }
 
     }

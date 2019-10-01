@@ -21,19 +21,18 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.DELETED_PREFIX;
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.DELETING_PREFIX;
+
+import lombok.val;
 
 public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -45,19 +44,17 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
-
-        final List<Facet> facets = new ArrayList<Facet>();
-        final List<Method> methods = new ArrayList<Method>();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val facets = new ArrayList<Facet>();
 
         Method method = null;
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DELETING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
-            final RemovingCallbackFacet facet = holder.getFacet(RemovingCallbackFacet.class);
+            processClassContext.removeMethod(method);
+            final RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
             if (facet == null) {
-                facets.add(new RemovingCallbackFacetViaMethod(method, holder));
+                facets.add(new RemovingCallbackFacetViaMethod(method, facetHolder));
             } else {
                 facet.addMethod(method);
             }
@@ -65,16 +62,15 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
 
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DELETED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
-            final RemovedCallbackFacet facet = holder.getFacet(RemovedCallbackFacet.class);
+            processClassContext.removeMethod(method);
+            val facet = facetHolder.getFacet(RemovedCallbackFacet.class);
             if (facet == null) {
-                facets.add(new RemovedCallbackFacetViaMethod(method, holder));
+                facets.add(new RemovedCallbackFacetViaMethod(method, facetHolder));
             } else {
                 facet.addMethod(method);
             }
         }
-
-        processClassContext.removeMethods(methods);
+        
         FacetUtil.addFacets(facets);
     }
 

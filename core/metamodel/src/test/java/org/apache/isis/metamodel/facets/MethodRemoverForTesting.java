@@ -88,15 +88,5 @@ public class MethodRemoverForTesting implements MethodRemover {
         return removeMethodsReturn;
     }
 
-    // ////////////////////////////////////////////////////////////
-    // removeMethods(List):void
-    // ////////////////////////////////////////////////////////////
-
-    @Override
-    public void removeMethods(final List<Method> methods) {
-        for (final Method method : methods) {
-            removeMethod(method);
-        }
-    }
 
 }

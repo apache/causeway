@@ -21,10 +21,8 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
@@ -33,6 +31,8 @@ import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.REMOVED_PREFIX;
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.REMOVING_PREFIX;
+
+import lombok.val;
 
 public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -44,18 +44,16 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
-        final List<Facet> facets = new ArrayList<Facet>();
-        final List<Method> methods = new ArrayList<Method>();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val facets = new ArrayList<Facet>();
 
         Method method = MethodFinderUtils
                 .findMethod(cls, MethodScope.OBJECT, REMOVING_PREFIX, void.class,
                         NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
-            final RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
+            processClassContext.removeMethod(method);
+            val facet = facetHolder.getFacet(RemovingCallbackFacet.class);
             if (facet == null) {
                 facets.add(new RemovingCallbackFacetViaMethod(method, facetHolder));
             } else {
@@ -65,8 +63,8 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
 
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
-            final RemovedCallbackFacet facet = facetHolder.getFacet(RemovedCallbackFacet.class);
+            processClassContext.removeMethod(method);
+            val facet = facetHolder.getFacet(RemovedCallbackFacet.class);
             if (facet == null) {
                 facets.add(new RemovedCallbackFacetViaMethod(method, facetHolder));
             } else {
@@ -74,7 +72,6 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
             }
         }
 
-        processClassContext.removeMethods(methods);
         FacetUtil.addFacets(facets);
     }
 

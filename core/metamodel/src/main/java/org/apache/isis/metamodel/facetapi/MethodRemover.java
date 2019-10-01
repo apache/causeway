@@ -54,6 +54,4 @@ public interface MethodRemover {
 
     void removeMethod(Method method);
 
-    void removeMethods(List<Method> methods);
-
 }

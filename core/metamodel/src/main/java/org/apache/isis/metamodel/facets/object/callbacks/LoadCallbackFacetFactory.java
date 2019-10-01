@@ -21,10 +21,8 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
@@ -33,6 +31,8 @@ import org.apache.isis.metamodel.methodutils.MethodScope;
 
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.LOADED_PREFIX;
 import static org.apache.isis.metamodel.facets.MethodLiteralConstants.LOADING_PREFIX;
+
+import lombok.val;
 
 public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -44,26 +44,23 @@ public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
-        final List<Facet> facets = new ArrayList<Facet>();
-        final List<Method> methods = new ArrayList<Method>();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val facets = new ArrayList<Facet>();
 
         Method method = null;
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LOADING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
+            processClassContext.removeMethod(method);
             facets.add(new LoadingCallbackFacetViaMethod(method, facetHolder));
         }
 
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LOADED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
+            processClassContext.removeMethod(method);
             facets.add(new LoadedCallbackFacetViaMethod(method, facetHolder));
         }
 
-        processClassContext.removeMethods(methods);
         FacetUtil.addFacets(facets);
     }
 

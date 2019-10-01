@@ -21,16 +21,16 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import lombok.val;
 
 public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -42,17 +42,15 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
-        final List<Facet> facets = new ArrayList<Facet>();
-        final List<Method> methods = new ArrayList<Method>();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val facets = new ArrayList<Facet>();
 
         Method method = null;
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
-            final PersistingCallbackFacet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
+            processClassContext.removeMethod(method);
+            val facet = facetHolder.getFacet(PersistingCallbackFacet.class);
             if (facet == null) {
                 facets.add(new PersistingCallbackFacetViaMethod(method, facetHolder));
             } else {
@@ -62,16 +60,15 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
 
         method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodLiteralConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methods.add(method);
-            final PersistedCallbackFacet facet = facetHolder.getFacet(PersistedCallbackFacet.class);
+            processClassContext.removeMethod(method);
+            val facet = facetHolder.getFacet(PersistedCallbackFacet.class);
             if (facet == null) {
                 facets.add(new PersistedCallbackFacetViaMethod(method, facetHolder));
             } else {
                 facet.addMethod(method);
             }
         }
-
-        processClassContext.removeMethods(methods);
+        
         FacetUtil.addFacets(facets);
     }
 

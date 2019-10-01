@@ -101,20 +101,6 @@ public class FacetedMethodsBuilder {
             }
         }
 
-        @Override
-        public void removeMethods(final List<Method> methodsToRemove) {
-            for (int i = 0; i < methods.size(); i++) {
-                if (methods.get(i) == null) {
-                    continue;
-                }
-                for (final Method method : methodsToRemove) {
-                    if (methods.get(i).equals(method)) {
-                        methods.set(i, null);
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     private final ObjectSpecificationAbstract spec;

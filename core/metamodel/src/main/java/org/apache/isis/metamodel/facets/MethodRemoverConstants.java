@@ -42,8 +42,5 @@ public class MethodRemoverConstants {
         public void removeMethod(final Method method) {
         }
 
-        @Override
-        public void removeMethods(final List<Method> methods) {
-        }
     };
 }
