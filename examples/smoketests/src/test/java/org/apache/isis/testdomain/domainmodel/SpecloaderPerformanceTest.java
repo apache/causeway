@@ -63,9 +63,9 @@ class SpecloaderPerformanceTest {
     @Test //under constr.
     void repeatedSpecloading() {
         
-        config.getReflector().getIntrospector().setParallelize(true);
+        config.getReflector().getIntrospector().setParallelize(false);
         
-        for(int i=0; i<100; ++i) {
+        for(int i=0; i<40; ++i) {
             specificationLoader.shutdown();
             specificationLoader.init();
         }

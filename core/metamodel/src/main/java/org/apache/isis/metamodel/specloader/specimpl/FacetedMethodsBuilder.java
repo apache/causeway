@@ -20,12 +20,14 @@
 package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.exceptions.IsisException;
@@ -60,12 +62,17 @@ public class FacetedMethodsBuilder {
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
 
+    /* thread-safety ... make sure every methodsRemaining access is synchronized! */
     private static final class FacetedMethodsMethodRemover implements MethodRemover {
 
-        private final List<Method> methods;
+        //private final Object $lock = new Object();
+        
+        private final Set<Method> methodsRemaining;
 
-        private FacetedMethodsMethodRemover(final Class<?> introspectedClass, final List<Method> methods) {
-            this.methods = methods;
+        private FacetedMethodsMethodRemover(final Class<?> introspectedClass, Method[] methods) {
+            this.methodsRemaining = Stream.of(methods)
+                    .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
+                    //.collect(Collectors.toCollection(_Sets::newHashSet));
         }
 
         @Override
@@ -75,7 +82,9 @@ public class FacetedMethodsBuilder {
                 Class<?> returnType,
                 Class<?>[] parameterTypes) {
             
-            MethodUtil.removeMethod(methods, methodScope, methodName, returnType, parameterTypes);
+            //synchronized($lock) {
+                MethodUtil.removeMethod(methodsRemaining, methodScope, methodName, returnType, parameterTypes);
+            //}
         }
 
         @Override
@@ -87,30 +96,39 @@ public class FacetedMethodsBuilder {
                 int paramCount,
                 Consumer<Method> onRemoval) {
             
-            MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
+            //synchronized($lock) {
+                MethodUtil.removeMethods(methodsRemaining, methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
+            //}
         }
 
         @Override
-        public void removeMethod(final Method method) {
-            if (method == null) {
+        public void removeMethod(Method method) {
+            if(method==null) {
                 return;
             }
-            for (int i = 0; i < methods.size(); i++) {
-                if (methods.get(i) == null) {
-                    continue;
-                }
-                if (methods.get(i).equals(method)) {
-                    methods.set(i, null);
-                }
-            }
+            //synchronized($lock) {
+                methodsRemaining.remove(method);    
+            //}
         }
 
+        void removeIf(Predicate<Method> matcher) {
+            //synchronized($lock) {
+                methodsRemaining.removeIf(matcher);
+            //}
+        }
+
+        void acceptRemaining(Consumer<Set<Method>> consumer) {
+            //synchronized($lock) {
+                consumer.accept(methodsRemaining);
+            //}
+        }
+        
     }
 
     private final ObjectSpecificationAbstract spec;
 
     private final Class<?> introspectedClass;
-    private final List<Method> methods;
+   // private final Set<Method> methodsRemaining;
 
     private List<FacetedMethod> associationFacetMethods;
     private List<FacetedMethod> actionFacetedMethods;
@@ -134,15 +152,16 @@ public class FacetedMethodsBuilder {
     public FacetedMethodsBuilder(
             final ObjectSpecificationAbstract spec,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
+        
         if (log.isDebugEnabled()) {
             log.debug("creating JavaIntrospector for {}", spec.getFullIdentifier());
         }
 
         this.spec = spec;
         this.introspectedClass = spec.getCorrespondingClass();
-        this.methods = Arrays.asList(introspectedClass.getMethods());
-
-        this.methodRemover = new FacetedMethodsMethodRemover(introspectedClass, methods);
+        
+        val methodsRemaining = introspectedClass.getMethods();
+        this.methodRemover = new FacetedMethodsMethodRemover(introspectedClass, methodsRemaining);
 
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
@@ -220,7 +239,13 @@ public class FacetedMethodsBuilder {
         if (log.isDebugEnabled()) {
             log.debug("introspecting {}: properties and collections", getClassName());
         }
-        final Set<Method> associationCandidateMethods = getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
+        
+        final Set<Method> associationCandidateMethods = new HashSet<Method>();
+        
+        methodRemover.acceptRemaining(methodsRemaining->{
+            getFacetProcessor()
+            .findAssociationCandidateAccessors(methodsRemaining, associationCandidateMethods);
+        });
 
         // Ensure all return types are known
         final Set<Class<?>> typesToLoad = _Sets.newHashSet();
@@ -348,17 +373,14 @@ public class FacetedMethodsBuilder {
             log.debug("  looking for action methods");
         }
 
-        for (int i = 0; i < methods.size(); i++) {
-            final Method method = methods.get(i);
-            if (method == null) {
-                continue;
-            }
-            final FacetedMethod actionPeer = findActionFacetedMethod(methodScope, method);
+        methodRemover.removeIf(method->{
+            val actionPeer = findActionFacetedMethod(methodScope, method);
             if (actionPeer != null) {
-                methods.set(i, null);
                 actionFacetedMethods.add(actionPeer);
+                return true;
             }
-        }
+            return false;
+        });
         
     }
 
@@ -492,7 +514,7 @@ public class FacetedMethodsBuilder {
 
     /**
      * Searches for all methods matching the prefix and returns them, also
-     * removing it from the {@link #methods array of methods} if found.
+     * removing it from the {@link #methodsRemaining array of methods} if found.
      * @param onMatch 
      */
     private void findAndRemovePrefixedMethods(
@@ -503,7 +525,10 @@ public class FacetedMethodsBuilder {
             final int paramCount, 
             Consumer<Method> onMatch) {
         
-        MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount, onMatch);
+        methodRemover.acceptRemaining(methodsRemaining->{
+            MethodUtil.removeMethods(methodsRemaining, methodScope, prefix, returnType, canBeVoid, paramCount, onMatch);    
+        });
+        
     }
 
     // ////////////////////////////////////////////////////////////////////////////

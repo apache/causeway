@@ -48,6 +48,7 @@ public interface MethodRemover {
             Consumer<Method> onRemoval
             );
 
+    /*variant with noop consumer*/
     default void removeMethods(
             MethodScope methodScope, 
             String prefix, 
@@ -55,7 +56,7 @@ public interface MethodRemover {
             boolean canBeVoid, 
             int paramCount) {
         
-        removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount, whatever -> {});
+        removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount, removedMethod -> {});
     }
     
     
@@ -68,7 +69,11 @@ public interface MethodRemover {
      *            - whether looking for <tt>static</tt> (class) or
      *            instance-level methods.
      */
-    void removeMethod(MethodScope methodScope, String methodName, Class<?> returnType, Class<?>[] parameterTypes);
+    void removeMethod(
+            MethodScope methodScope, 
+            String methodName, 
+            Class<?> returnType,
+            Class<?>[] parameterTypes);
 
     void removeMethod(Method method);
 

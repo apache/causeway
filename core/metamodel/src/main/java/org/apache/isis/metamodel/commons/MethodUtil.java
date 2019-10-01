@@ -23,9 +23,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import org.apache.isis.metamodel.methodutils.MethodScope;
+
+import lombok.val;
 
 public class MethodUtil {
 
@@ -48,13 +51,22 @@ public class MethodUtil {
      * The search algorithm is as specified in
      * {@link MethodUtil#findMethodIndex(List, MethodScope, String, Class, Class[])}.
      */
-    public static Method removeMethod(final List<Method> methods, final MethodScope methodScope, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
-        final int idx = MethodUtil.findMethodIndex(methods, methodScope, name, returnType, paramTypes);
-        if (idx != -1) {
-            final Method method = methods.get(idx);
-            methods.set(idx, null);
-            return method;
+    public static Method removeMethod(
+            final Set<Method> methods, 
+            final MethodScope methodScope, 
+            final String name, 
+            final Class<?> returnType, 
+            final Class<?>[] paramTypes) {
+        
+        val methodIterator = methods.iterator();
+        while(methodIterator.hasNext()) {
+            val method = methodIterator.next();
+            if(matches(method, methodScope, name, returnType, paramTypes)){
+                methodIterator.remove();
+                return method;
+            }
         }
+        
         return null;
     }
 
@@ -72,53 +84,50 @@ public class MethodUtil {
      * </ul>
      * If the returnType is specified as null then the return type is ignored.
      */
-    private static int findMethodIndex(final List<Method> methods, final MethodScope methodScope, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
-        int idx = -1;
-        method: for (int i = 0; i < methods.size(); i++) {
-            if (methods.get(i) == null) {
-                continue;
-            }
+    private static boolean matches(
+            final Method method, 
+            final MethodScope methodScope, 
+            final String name, 
+            final Class<?> returnType, 
+            final Class<?>[] paramTypes) {
+        
+        final int modifiers = method.getModifiers();
 
-            final Method method = methods.get(i);
-            final int modifiers = method.getModifiers();
-
-            // check for public modifier
-            if (!Modifier.isPublic(modifiers)) {
-                continue;
-            }
-
-            // check for static modifier
-            if (!inScope(method, methodScope)) {
-                continue;
-            }
-
-            // check for name
-            if (!method.getName().equals(name)) {
-                continue;
-            }
-
-            // check for return type
-            if (returnType != null && returnType != method.getReturnType()) {
-                continue;
-            }
-
-            // check params (if required)
-            if (paramTypes != null) {
-                final Class<?>[] parameterTypes = method.getParameterTypes();
-                if (paramTypes.length != parameterTypes.length) {
-                    continue;
-                }
-
-                for (int c = 0; c < paramTypes.length; c++) {
-                    if ((paramTypes[c] != null) && (paramTypes[c] != parameterTypes[c])) {
-                        continue method;
-                    }
-                }
-            }
-            idx = i;
-            break;
+        // check for public modifier
+        if (!Modifier.isPublic(modifiers)) {
+            return false;
         }
-        return idx;
+
+        // check for static modifier
+        if (!inScope(method, methodScope)) {
+            return false;
+        }
+
+        // check for name
+        if (!method.getName().equals(name)) {
+            return false;
+        }
+
+        // check for return type
+        if (returnType != null && returnType != method.getReturnType()) {
+            return false;
+        }
+
+        // check params (if required)
+        if (paramTypes != null) {
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            if (paramTypes.length != parameterTypes.length) {
+                return false;
+            }
+
+            for (int c = 0; c < paramTypes.length; c++) {
+                if ((paramTypes[c] != null) && (paramTypes[c] != parameterTypes[c])) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
     public static boolean inScope(final Method extendee, final MethodScope methodScope) {
@@ -154,35 +163,43 @@ public class MethodUtil {
      * @return Method
      */
     public static void removeMethods(
-            final List<Method> methods,
-            final MethodScope forClass,
-            final String prefix,
-            final Class<?> returnType,
-            final boolean canBeVoid,
-            final int paramCount, 
+            Set<Method> methods,
+            MethodScope forClass,
+            String prefix,
+            Class<?> returnType,
+            boolean canBeVoid,
+            int paramCount, 
             Consumer<Method> onMatch) {
 
-        for (int i = 0; i < methods.size(); i++) {
-            final Method method = methods.get(i);
-            if (method == null) {
-                continue;
-            }
-
-            if (!inScope(method, forClass)) {
-                continue;
-            }
-
-            final boolean goodPrefix = method.getName().startsWith(prefix);
-
-            final boolean goodCount = method.getParameterTypes().length == paramCount;
-            final Class<?> type = method.getReturnType();
-            final boolean goodReturn = ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, type);
-
-            if (goodPrefix && goodCount && goodReturn) {
-                onMatch.accept(method);
-                methods.set(i, null);
-            }
+        methods.removeIf(method -> 
+            matches(method, forClass, prefix, returnType, canBeVoid, paramCount, onMatch));
+        
+    }
+    
+    private static boolean matches(
+            Method method,
+            MethodScope forClass,
+            String prefix,
+            Class<?> returnType,
+            boolean canBeVoid,
+            int paramCount,
+            Consumer<Method> onMatch) {
+        
+        if (!inScope(method, forClass)) {
+            return false;
         }
+
+        val goodPrefix = method.getName().startsWith(prefix);
+        val goodCount = method.getParameterTypes().length == paramCount;
+        val type = method.getReturnType();
+        val goodReturn = ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, type);
+
+        if (goodPrefix && goodCount && goodReturn) {
+            onMatch.accept(method);
+            return true;
+        }
+        
+        return false;
         
     }
 

@@ -120,7 +120,7 @@ class PublisherServiceTest {
         future.get(1000, TimeUnit.SECONDS);
 
         // then - after the commit
-        assertEquals("publishedObjects=created=0,deleted=1,loaded=0,updated=2,modified=1,",
+        assertEquals("publishedObjects=created=0,deleted=1,loaded=1,updated=2,modified=1,",
                 publisherService.getHistory());
 
     }

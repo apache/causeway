@@ -20,6 +20,7 @@
 package org.apache.isis.metamodel.specloader.facetprocessor;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -161,13 +162,16 @@ public class FacetProcessor {
      * Delegates to all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
-    public Set<Method> findAssociationCandidateAccessors(final List<Method> methods, final Set<Method> candidates) {
+    public Set<Method> findAssociationCandidateAccessors(
+            final Collection<Method> methods, 
+            final Set<Method> candidates) {
+        
         cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
-        for (final Method method : methods) {
+        for (val method : methods) {
             if (method == null) {
                 continue;
             }
-            for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
+            for (val facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
                 if (facetFactory.isPropertyOrCollectionAccessorCandidate(method)) {
                     candidates.add(method);
                 }
