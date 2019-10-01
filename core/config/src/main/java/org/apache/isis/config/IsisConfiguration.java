@@ -20,9 +20,7 @@ package org.apache.isis.config;
 
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -655,6 +653,25 @@ public class IsisConfiguration {
                 private String encryptionKey;
             }
 
+            private final Themes themes = new Themes();
+            @Data
+            public static class Themes {
+                /**
+                 * A comma separated list of enabled theme names, as defined by https://bootswatch.com.
+                 */
+                private List<String> enabled = new ArrayList<>();
+
+                /**
+                 * The initial theme to use.
+                 *
+                 * <p>
+                 *     Expected to be in the list of {@link #getEnabled()} themes.
+                 * </p>
+                 */
+                private String initial = "Flatly";
+
+                private String provider = "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault";
+            }
             private final WhereAmI whereAmI = new WhereAmI();
             @Data
             public static class WhereAmI {

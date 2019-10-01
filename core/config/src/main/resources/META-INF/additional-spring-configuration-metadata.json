@@ -47,6 +47,15 @@
     }
   ],
   "hints": [
+    {
+      "name": "isis.viewer.wicket.themes.provider",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport"
+        }
+      }]
+    }
   ]
 }
 
