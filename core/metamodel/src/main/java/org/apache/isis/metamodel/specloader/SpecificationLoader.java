@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.specloader;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -52,9 +53,9 @@ public interface SpecificationLoader {
      *     ObjectSpec's being discovered, eg performing metamodel validation.
      * </p>
      * 
-     * @return snapshot of all the (currently) loaded specifications
+     * @return (defensive-copy) snapshot of all the (currently) loaded specifications
      */
-    List<ObjectSpecification> currentSpecifications();
+    Collection<ObjectSpecification> snapshotSpecifications();
 
     /**
      * Lookup a specification that has bean loaded before.

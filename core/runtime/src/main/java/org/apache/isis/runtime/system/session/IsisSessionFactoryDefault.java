@@ -173,7 +173,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        for (final ObjectSpecification objSpec : IsisContext.getSpecificationLoader().currentSpecifications()) {
+        for (final ObjectSpecification objSpec : IsisContext.getSpecificationLoader().snapshotSpecifications()) {
             final Class<?> correspondingClass = objSpec.getCorrespondingClass();
             if(correspondingClass.isEnum()) {
                 final Object[] enumConstants = correspondingClass.getEnumConstants();

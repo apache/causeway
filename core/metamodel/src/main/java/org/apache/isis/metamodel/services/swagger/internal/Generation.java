@@ -128,7 +128,7 @@ class Generation {
     void appendServicePathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        for (val spec : specificationLoader.currentSpecifications()) {
+        for (val spec : specificationLoader.snapshotSpecifications()) {
 
             val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet == null) {
@@ -180,7 +180,7 @@ class Generation {
     void appendObjectPathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        for (final ObjectSpecification objectSpec : specificationLoader.currentSpecifications()) {
+        for (final ObjectSpecification objectSpec : specificationLoader.snapshotSpecifications()) {
 
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet != null) {

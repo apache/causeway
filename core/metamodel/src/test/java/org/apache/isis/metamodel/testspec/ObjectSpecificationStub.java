@@ -45,6 +45,7 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
 public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSpecification {
@@ -330,12 +331,17 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public BeanSort getBeanSort() {
-        return BeanSort.UNKNOWN; // [2033] not implemented yet
+        return BeanSort.UNKNOWN; // [2158] not implemented yet
     }
 
     @Override
     public boolean isExcludedFromMetamodel() {
-        return false; // [2133] not implemented yet
+        return false; // [2158] not implemented yet
+    }
+
+    @Override
+    public void introspectUpTo(IntrospectionState upTo) {
+        // [2158] not implemented yet
     }
 
 }

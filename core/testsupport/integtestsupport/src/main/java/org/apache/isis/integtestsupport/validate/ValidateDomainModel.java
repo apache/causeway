@@ -54,7 +54,7 @@ public class ValidateDomainModel implements Runnable {
         val specificationLoader = IsisContext.getSpecificationLoader();
         this.validationFailures = specificationLoader.validate();
 
-        val objectSpecifications = specificationLoader.currentSpecifications();
+        val objectSpecifications = specificationLoader.snapshotSpecifications();
         
         if(log.isDebugEnabled()) {
             for (ObjectSpecification objectSpecification : objectSpecifications) {

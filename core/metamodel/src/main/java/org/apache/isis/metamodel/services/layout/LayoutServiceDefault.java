@@ -85,7 +85,7 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public byte[] toZip(final Style style) {
-        final Collection<ObjectSpecification> allSpecs = specificationLoader.currentSpecifications();
+        final Collection<ObjectSpecification> allSpecs = specificationLoader.snapshotSpecifications();
         final List<ObjectSpecification> domainObjectSpecs = _Lists
                 .filter(allSpecs, spec ->
                 !spec.isAbstract() &&

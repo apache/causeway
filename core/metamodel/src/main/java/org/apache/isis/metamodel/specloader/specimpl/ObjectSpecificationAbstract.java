@@ -267,9 +267,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return fullName;
     }
 
-    /**
-     * Keeps introspecting up to the level required.
-     */
+    @Override
     public void introspectUpTo(final IntrospectionState upTo) {
         
         if(!isLessThan(upTo)) {

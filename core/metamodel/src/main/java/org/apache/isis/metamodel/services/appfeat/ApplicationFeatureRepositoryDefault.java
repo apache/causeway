@@ -110,7 +110,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private Collection<ObjectSpecification> primeMetaModel() {
         serviceRegistry.streamRegisteredBeans()
         .forEach(bean->specificationLoader.loadSpecification(bean.getBeanClass()));
-        return specificationLoader.currentSpecifications();
+        return specificationLoader.snapshotSpecifications();
     }
 
     private void createApplicationFeaturesFor(final Collection<ObjectSpecification> specifications) {

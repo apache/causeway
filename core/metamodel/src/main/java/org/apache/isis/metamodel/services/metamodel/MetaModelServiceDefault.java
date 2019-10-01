@@ -97,7 +97,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public DomainModel getDomainModel() {
 
-        final Collection<ObjectSpecification> specifications = specificationLoader.currentSpecifications();
+        final Collection<ObjectSpecification> specifications = specificationLoader.snapshotSpecifications();
 
         final List<DomainMember> rows = _Lists.newArrayList();
         for (final ObjectSpecification spec : specifications) {

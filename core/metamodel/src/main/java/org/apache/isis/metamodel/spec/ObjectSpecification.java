@@ -58,6 +58,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
@@ -426,6 +427,12 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
         return _Streams.concat(self, actions, properties, collections);
         
     }
+
+    /**
+     * Introspecting up to the level required.
+     * @since 2.0
+     */
+    void introspectUpTo(IntrospectionState upTo);
 
 
 }

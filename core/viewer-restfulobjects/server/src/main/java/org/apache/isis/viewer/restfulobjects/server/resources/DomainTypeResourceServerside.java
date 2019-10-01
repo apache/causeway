@@ -82,7 +82,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.TYPE_LIST;
         init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().currentSpecifications();
+        final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().snapshotSpecifications();
 
         final TypeListReprRenderer renderer = new TypeListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();

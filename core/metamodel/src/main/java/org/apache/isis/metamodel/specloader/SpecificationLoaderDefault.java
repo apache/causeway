@@ -46,7 +46,6 @@ import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
@@ -85,7 +84,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 
     private MetaModelValidator metaModelValidator;
-    private final SpecificationCacheDefault<ObjectSpecificationAbstract> cache = 
+    private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
     private PostProcessor postProcessor;
 
@@ -140,18 +139,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         postProcessor.init();
         metaModelValidator.init();
 
-
         // need to completely load services and mixins (synchronously)
         log.info("Loading all specs (up to state of {})", IntrospectionState.NOT_INTROSPECTED);
 
         val typeRegistry = IsisBeanTypeRegistry.current();
 
-        val specificationsFromRegistry = _Lists.<ObjectSpecificationAbstract>newArrayList();
-        val domainServiceSpecs = _Lists.<ObjectSpecificationAbstract>newArrayList();
-        val mixinSpecs = _Lists.<ObjectSpecificationAbstract>newArrayList();
+        val specificationsFromRegistry = _Lists.<ObjectSpecification>newArrayList();
+        val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
+        val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         CommonDtoUtils.VALUE_TYPES.forEach(type->{
-            val spec = internalLoadSpecificationOrNull(type, IntrospectionState.NOT_INTROSPECTED);
+            val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
             if(spec!=null) specificationsFromRegistry.add(spec);
         });
 
@@ -160,7 +158,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             val type = entry.getKey();
             val sort = entry.getValue(); 
 
-            val spec = internalLoadSpecificationOrNull(type, IntrospectionState.NOT_INTROSPECTED);
+            val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
             if(spec!=null) specificationsFromRegistry.add(spec);
 
             switch (sort) {
@@ -174,7 +172,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 return;
             case ENTITY:
                 typeRegistry.getEntityTypes().add(type);
-                mixinSpecs.add(spec);
+                mixinSpecs.add(spec); //XXX why?
                 return;
             case VIEW_MODEL:
                 typeRegistry.getViewModelTypes().add(type);
@@ -257,7 +255,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         loadSpecification(domainType);
     }
 
-    @Override
+    @Override @Nullable
     public ObjectSpecification loadSpecification(@Nullable final Class<?> type, final IntrospectionState upTo) {
 
         if(type==null) {
@@ -266,31 +264,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         requires(upTo, "upTo");
 
-        val spec = internalLoadSpecificationOrNull(type, upTo);
-        if(spec == null) {
-            return null;
-        }
-
-        // TODO: review, is this now needed?
-        //  We now create the ObjectSpecIdFacet immediately after creating the ObjectSpecification,
-        //  so the cache shouldn't need updating here also.
-        if(cache.isInitialized()) {
-            // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
-            // don't have an ObjectSpecId; hence the guard.
-            if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
-                val specId = spec.getSpecId();
-                if (cache.getByObjectType(specId) == null) {
-                    cache.recache(spec);
-                }
-            }
-        }
-        return spec;
-    }
-
-    private ObjectSpecificationAbstract internalLoadSpecificationOrNull(
-            final Class<?> type,
-            final IntrospectionState upTo) {
-
         val substitutedType = classSubstitutor.getClass(type);
         if (substitutedType == null) {
             return null;
@@ -298,7 +271,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val typeName = substitutedType.getName();
 
-        final ObjectSpecificationAbstract cachedSpec;
+        final ObjectSpecification cachedSpec;
         
         //XXX don't block on long running code ... 'spec.introspectUpTo(upTo);'
         synchronized (cache) {
@@ -307,14 +280,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         cachedSpec.introspectUpTo(upTo);
         return cachedSpec; 
-            
     }
 
     // -- LOOKUP
 
     @Override
-    public List<ObjectSpecification> currentSpecifications() {
-        return _Casts.uncheckedCast(cache.snapshotSpecs());
+    public Collection<ObjectSpecification> snapshotSpecifications() {
+        return cache.snapshotSpecs();
     }
 
     @Override
@@ -337,10 +309,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecificationAbstract createSpecification(final Class<?> cls) {
+    private ObjectSpecification createSpecification(final Class<?> cls) {
 
         // ... and create the specs
-        final ObjectSpecificationAbstract objectSpec;
+        final ObjectSpecification objectSpec;
         if (FreeStandingList.class.isAssignableFrom(cls)) {
 
             objectSpec = new ObjectSpecificationOnStandaloneList(facetProcessor, postProcessor);
@@ -400,7 +372,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     private void introspect(
-            final Collection<ObjectSpecificationAbstract> specs, 
+            final Collection<ObjectSpecification> specs, 
             final IntrospectionState upTo) {
 
         val isConcurrentFromConfig = configuration.getReflector().getIntrospector().isParallelize();
@@ -450,7 +422,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 
     private void recache(final ObjectSpecification newSpec) {
-        cache.recache((ObjectSpecificationAbstract)newSpec);
+        cache.recache(newSpec);
     }
 
     // -- DEPS

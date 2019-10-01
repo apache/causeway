@@ -24,14 +24,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
-
-import lombok.val;
 
 @Smoketest
 @SpringBootTest(
@@ -50,11 +48,12 @@ import lombok.val;
 })
 class SpecloaderPerformanceTest {
     
+    @Inject private IsisConfiguration config;
     @Inject private SpecificationLoader specificationLoader;
     
-    //@Test under constr.
+    @Test //under constr.
     void repeatedSpecloading() {
-           
+        
         specificationLoader.shutdown();
         specificationLoader.init();
     }
