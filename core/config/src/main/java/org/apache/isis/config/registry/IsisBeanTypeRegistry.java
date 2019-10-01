@@ -131,6 +131,8 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         }
     }
 
+    public static boolean repeatedTesting = false;
+    
     /**
      * Implemented as a one-shot, that clears the inbox afterwards.
      * @return
@@ -141,7 +143,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
         synchronized (inbox) {
             defensiveCopy = new HashMap<>(inbox);
-            inbox.clear();
+            if(!repeatedTesting) inbox.clear();
         }
 
         if(log.isDebugEnabled()) {

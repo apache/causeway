@@ -103,14 +103,14 @@ public class SpecificationCacheDefaultTest {
         assertThat(allSpecs.size(), is(2));
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test
     public void getByObjectType_whenNotSet() {
-        specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
+        assertNull(specificationCache.getByObjectType(ObjectSpecId.of("CUS")));
     }
 
     @Test
     public void getByObjectType_whenSet() {
-        specificationCache.init();
+        
         specificationCache.computeIfAbsent(Customer.class.getName(), __->customerSpec);
         val objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
 

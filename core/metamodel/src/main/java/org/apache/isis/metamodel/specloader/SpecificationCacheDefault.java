@@ -24,36 +24,19 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.val;
 
 
-/**
- * This is populated in two parts.
- *
- * Initially the <tt>specByClassName</tt> map is populated using {@link #put(String, ObjectSpecification)}.
- * This allows {@link #allSpecifications()} to return a list of specs.
- * Later on, {@link #init()} called which populates #classNameBySpecId.
- *
- * Attempting to call {@link #getByObjectType(ObjectSpecId)} before 
- * {@link #init() initialisation} will result in an
- * {@link IllegalStateException}.
- *
- */
 class SpecificationCacheDefault<T extends ObjectSpecification> {
 
     private final Map<String, T> specByClassName = _Maps.newHashMap();
     private final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
     
-    @Getter(AccessLevel.PACKAGE) private boolean initialized = false; //package scoped JUnit support
-
     public T get(final String className) {
         return specByClassName.get(className);
     }
@@ -71,7 +54,6 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
     }
 
     public void clear() {
-        initialized = false;
         specByClassName.clear();
         classNameBySpecId.clear();
     }
@@ -84,27 +66,8 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
     }
 
     public T getByObjectType(final ObjectSpecId objectSpecID) {
-        if (!isInitialized()) {
-            throw new IllegalStateException("SpecificationCache by object type has not yet been initialized");
-        }
         final String className = classNameBySpecId.get(objectSpecID);
         return className != null ? specByClassName.get(className) : null;
-    }
-
-    void init() {
-        val cachedSpecifications = _Lists.<T>newArrayList();
-        for(;;) {
-            val newSpecifications = snapshotSpecs();
-            newSpecifications.removeAll(cachedSpecifications);
-            if(newSpecifications.isEmpty()) {
-                break;
-            }
-            for (val spec : newSpecifications) {
-                internalPut(spec);
-            }
-            cachedSpecifications.addAll(newSpecifications);
-        }
-        initialized = true;
     }
 
     private void internalPut(T spec) {

@@ -28,13 +28,11 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
@@ -130,8 +128,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             log.debug("initialising {}", this);
         }
         
-        val stopWatch = _Timing.now();
-        
         // initialize subcomponents
         programmingModel.init();
         facetProcessor.init();
@@ -184,8 +180,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         });
 
-
-        cache.init();
+        val stopWatch = _Timing.now();
 
         val cachedSpecifications = cache.snapshotSpecs();
 
@@ -291,14 +286,10 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Override
     public ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId) {
-        if(!cache.isInitialized()) {
-            throw new IllegalStateException("Internal cache not yet initialized");
-        }
         val spec = cache.getByObjectType(objectSpecId);
         if(spec!=null) {
             return spec;
         }
-
         // fallback
         return loadSpecification(objectSpecId.asString(), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
@@ -396,33 +387,16 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private void invalidateCache(final Class<?> cls) {
 
-        if(!cache.isInitialized()) {
-            // could be called by JRebel plugin, before we are up-and-running
-            // just ignore.
-            return;
-        }
-        final Class<?> substitutedType = classSubstitutor.getClass(cls);
+        val substitutedType = classSubstitutor.getClass(cls);
 
-        if(substitutedType.isAnonymousClass()) {
-            // JRebel plugin might call us... just ignore 'em.
-            return;
-        }
-
-        ObjectSpecification spec = loadSpecification(substitutedType, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        ObjectSpecification spec = 
+                loadSpecification(substitutedType, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
         while(spec != null) {
-            final Class<?> type = spec.getCorrespondingClass();
+            val type = spec.getCorrespondingClass();
             cache.remove(type.getName());
-            if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
-                // umm.  Some specs do not have an ObjectSpecIdFacet...
-                recache(spec);
-            }
             spec = spec.superclass();
         }
-    }
-
-
-    private void recache(final ObjectSpecification newSpec) {
-        cache.recache(newSpec);
     }
 
     // -- DEPS
