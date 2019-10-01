@@ -29,6 +29,7 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
@@ -48,6 +49,7 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
     IsisPresets.DebugProgrammingModel,
     
 })
+@Incubating("not a real test, just for performance tuning")
 class SpecloaderPerformanceTest {
     
     @Inject private IsisConfiguration config;
@@ -61,13 +63,13 @@ class SpecloaderPerformanceTest {
     @Test //under constr.
     void repeatedSpecloading() {
         
-        config.getReflector().getIntrospector().setParallelize(false);
+        config.getReflector().getIntrospector().setParallelize(true);
         
-        for(int i=0; i<1; ++i) {
+        for(int i=0; i<100; ++i) {
             specificationLoader.shutdown();
             specificationLoader.init();
         }
     }
-    
+
 
 }

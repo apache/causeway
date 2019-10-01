@@ -36,6 +36,8 @@ import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.springframework.core.annotation.AnnotationUtils;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -129,9 +131,9 @@ public final class Annotations  {
         if (cls == null) {
             return Collections.emptyList();
         }
-
+        
         final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
-        for (final Annotation annotation : cls.getAnnotations()) {
+        for (final Annotation annotation : AnnotationUtils.getAnnotations(cls)) {
             append(annotation, annotationClass, annotationAndDepths);
         }
         if(!annotationAndDepths.isEmpty()) {
@@ -166,6 +168,7 @@ public final class Annotations  {
             final Annotation annotation,
             final Class<T> annotationClass,
             final List<AnnotationAndDepth<T>> annotationAndDepths) {
+        
         appendWithDepth(annotation, annotationClass, annotationAndDepths, 0, _Lists.newArrayList());
     }
 
@@ -274,7 +277,7 @@ public final class Annotations  {
         }
 
         final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
-        for (final Annotation annotation : method.getAnnotations()) {
+        for (final Annotation annotation : AnnotationUtils.getAnnotations(method)) {
             append(annotation, annotationClass, annotationAndDepths);
         }
         if(!annotationAndDepths.isEmpty()) {
@@ -578,9 +581,11 @@ public final class Annotations  {
     public static boolean isAnnotationPresent(
             final Method method, 
             final Class<? extends Annotation> annotationClass) {
+
         if (method == null) {
             return false;
         }
+        
         return _Reflect.getAnnotation(method, annotationClass, true, true)!=null;
     }
 

@@ -68,7 +68,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
     protected SpecificationLoader mockSpecificationLoader;
-    protected ProgrammableMethodRemover methodRemover;
+    protected MethodRemoverForTesting methodRemover;
 
     protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
@@ -101,7 +101,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
                 );
 
-        methodRemover = new ProgrammableMethodRemover();
+        methodRemover = new MethodRemoverForTesting();
 
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
 

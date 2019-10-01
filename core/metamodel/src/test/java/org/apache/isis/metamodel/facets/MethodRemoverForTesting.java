@@ -26,71 +26,53 @@ import java.util.List;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
-public class ProgrammableMethodRemover implements MethodRemover {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Value;
+
+public class MethodRemoverForTesting implements MethodRemover {
 
     // ////////////////////////////////////////////////////////////
     // removeMethod(...): void
     // ////////////////////////////////////////////////////////////
-
+    @Value
     static class RemoveMethodArgs {
-        public RemoveMethodArgs(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            this.methodScope = methodScope;
-            this.methodName = methodName;
-            this.returnType = returnType;
-            this.parameterTypes = parameterTypes;
-        }
-
         public MethodScope methodScope;
         public String methodName;
         public Class<?> returnType;
         public Class<?>[] parameterTypes;
     }
 
-    private final List<RemoveMethodArgs> removeMethodArgsCalls = new ArrayList<RemoveMethodArgs>();
+    @Getter
+    private final List<RemoveMethodArgs> removeMethodArgsCalls = new ArrayList<>();
 
     @Override
     public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
         removeMethodArgsCalls.add(new RemoveMethodArgs(methodScope, methodName, returnType, parameterTypes));
     }
 
-    public List<RemoveMethodArgs> getRemoveMethodArgsCalls() {
-        return removeMethodArgsCalls;
-    }
-
     // ////////////////////////////////////////////////////////////
     // removeMethod(Method): void
     // ////////////////////////////////////////////////////////////
 
-    private final List<Method> removeMethodMethodCalls = new ArrayList<Method>();
+    @Getter
+    private final List<Method> removedMethodMethodCalls = new ArrayList<Method>();
 
     @Override
     public void removeMethod(final Method method) {
-        removeMethodMethodCalls.add(method);
-    }
-
-    public List<Method> getRemovedMethodMethodCalls() {
-        return removeMethodMethodCalls;
+        removedMethodMethodCalls.add(method);
     }
 
     // ////////////////////////////////////////////////////////////
     // removeMethods(...):List
     // ////////////////////////////////////////////////////////////
 
+    @Setter
     private List<Method> removeMethodsReturn;
 
-    public void setRemoveMethodsReturn(final List<Method> removeMethodsReturn) {
-        this.removeMethodsReturn = removeMethodsReturn;
-    }
 
+    @Value
     static class RemoveMethodsArgs {
-        public RemoveMethodsArgs(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
-            this.methodScope = methodScope;
-            this.prefix = prefix;
-            this.returnType = returnType;
-            this.canBeVoid = canBeVoid;
-            this.paramCount = paramCount;
-        }
-
         public MethodScope methodScope;
         public String prefix;
         public Class<?> returnType;

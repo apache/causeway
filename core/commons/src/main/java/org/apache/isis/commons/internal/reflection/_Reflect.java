@@ -39,7 +39,8 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.springframework.core.annotation.AnnotationUtils;
+
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 
@@ -314,21 +315,29 @@ public final class _Reflect {
         if (!ignoreAccess && !isAccessible(method)) {
             return null;
         }
-
-        final Stream<Method> methods;
-
+        
         if(searchSupers) {
-            methods = streamAllMethods(method.getDeclaringClass(), ignoreAccess);    
+            return AnnotationUtils.findAnnotation(method, annotationCls);    
         } else {
-            methods = streamMethods(method.getDeclaringClass(), ignoreAccess);
+            return AnnotationUtils.getAnnotation(method, annotationCls);
         }
-
-        return methods
-                .filter(m->same(method, m))
-                .map(m->m.getAnnotation(annotationCls))
-                .filter(_NullSafe::isPresent)
-                .findFirst()
-                .orElse(null);
+        
+//        
+//
+//        final Stream<Method> methods;
+//
+//        if(searchSupers) {
+//            methods = streamAllMethods(method.getDeclaringClass(), ignoreAccess);    
+//        } else {
+//            methods = streamMethods(method.getDeclaringClass(), ignoreAccess);
+//        }
+//
+//        return methods
+//                .filter(m->same(method, m))
+//                .map(m->m.getAnnotation(annotationCls))
+//                .filter(_NullSafe::isPresent)
+//                .findFirst()
+//                .orElse(null);
 
     }
 

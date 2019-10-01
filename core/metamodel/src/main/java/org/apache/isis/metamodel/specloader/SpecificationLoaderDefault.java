@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -183,6 +184,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val stopWatch = _Timing.now();
 
         val cachedSpecifications = cache.snapshotSpecs();
+        probe.println("cachedSpecifications " + cachedSpecifications.size());
 
         logBefore(specificationsFromRegistry, cachedSpecifications);
 
@@ -279,6 +281,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     // -- LOOKUP
 
+    private final static _Probe probe = _Probe.unlimited().label("init");
+    
     @Override
     public Collection<ObjectSpecification> snapshotSpecifications() {
         return cache.snapshotSpecs();

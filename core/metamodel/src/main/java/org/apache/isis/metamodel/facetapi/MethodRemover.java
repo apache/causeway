@@ -39,7 +39,7 @@ public interface MethodRemover {
      *            instance-level methods.
      * @return any methods that were removed.
      */
-    List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount);
+    List<Method> removeMethods(MethodScope methodScope, String prefix, Class<?> returnType, boolean canBeVoid, int paramCount);
 
     /**
      * Locate all methods (that the implementation should somehow know about)
