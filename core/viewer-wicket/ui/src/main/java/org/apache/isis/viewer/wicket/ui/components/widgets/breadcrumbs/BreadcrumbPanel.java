@@ -49,11 +49,6 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_BREADCRUMBS = "breadcrumbs";
-    /**
-     * A configuration setting which value determines whether the breadcrumbs should be available in the footer
-     */
-    public static final String SHOW_BREADCRUMBS_KEY = "isis.viewer.wicket.breadcrumbs.showChooser";
-    public static final boolean SHOW_BREADCRUMBS_DEFAULT = true;
 
     public BreadcrumbPanel(String id) {
         super(id);
@@ -151,7 +146,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getConfigurationLegacy().getBoolean(SHOW_BREADCRUMBS_KEY, SHOW_BREADCRUMBS_DEFAULT);
+        boolean shouldShow = getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
         setVisible(shouldShow);
     }
 

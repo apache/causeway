@@ -30,6 +30,7 @@ import com.google.common.collect.Iterables;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.runtime.system.context.IsisContext;
 
@@ -46,10 +47,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
-    private static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
-
-    private final _Lazy<ThemeProvider> themeProvider = _Lazy.of(this::createThemeProvider); 
-
+    private final _Lazy<ThemeProvider> themeProvider = _Lazy.of(this::createThemeProvider);
 
     @Override
     public ThemeProvider getThemeProvider() {
@@ -83,13 +81,12 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     private ThemeProvider createThemeProvider() {
 
-        final String themeName = getConfiguration().getString(
-                DEFAULT_THEME_KEY, BOOTSWATCH_THEME_DEFAULT.name());
+        final String themeName = getConfiguration().getViewer().getWicket().getThemes().getInitial();
         BootswatchTheme bootswatchTheme;
         try {
             bootswatchTheme = BootswatchTheme.valueOf(themeName);
         } catch(Exception ex) {
-            bootswatchTheme = BOOTSWATCH_THEME_DEFAULT;
+            bootswatchTheme = BootswatchTheme.Flatly;
             log.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", 
                     themeName, 
                     bootswatchTheme);
@@ -126,7 +123,7 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     /**
      * Filters which themes to show in the drop up by using the provided values
-     * in {@value #ENABLED_THEMES_KEY}
+     * in {@link IsisConfiguration.Viewer.Wicket.Themes#getEnabled()}
      *
      * @param allThemes All available themes
      * @return A list of all enabled themes
@@ -134,17 +131,12 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
     private List<String> filterThemes(List<String> allThemes) {
         List<String> enabledThemes;
 
-        final String[] enabledThemesArray = getConfiguration().getList(ENABLED_THEMES_KEY);
+        final String[] enabledThemesArray = getConfiguration().getViewer().getWicket().getThemes().getEnabled().toArray(new String[]{});
         if (enabledThemesArray.length > 0) {
             final Set<String> enabledThemesSet = _NullSafe.stream(enabledThemesArray)
                     .collect(Collectors.toSet());
 
-            Iterable<String> enabled = Iterables.filter(allThemes, new Predicate<String>() {
-                @Override
-                public boolean apply(String themeName) {
-                    return enabledThemesSet.contains(themeName);
-                }
-            });
+            Iterable<String> enabled = allThemes.stream().filter(enabledThemesSet::contains).collect(Collectors.toList());
 
             enabledThemes = _Lists.newArrayList(enabled);
         } else {
@@ -154,8 +146,8 @@ public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
         return enabledThemes;
     }
 
-    private IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfigurationLegacy();
+    private IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
 }

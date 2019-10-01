@@ -117,11 +117,11 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
             return "credit" + num + component;
         }
 
-        public static Credit create(final IsisConfigurationLegacy configuration, final int num) {
+        public static Credit create(final IsisConfigurationLegacy configurationLegacy, final int num) {
             String base = "isis.viewer.wicket.credit." + num + ".";
-            String url = configuration.getString(base + "url");
-            String name = configuration.getString(base + "name");
-            String image = configuration.getString(base + "image");
+            String url = configurationLegacy.getString(base + "url");
+            String name = configurationLegacy.getString(base + "name");
+            String image = configurationLegacy.getString(base + "image");
             return new Credit(num, url, name, image);
         }
     }
@@ -183,8 +183,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
 
     private void addBreadcrumbs() {
 
-        boolean showBreadcrumbs = getConfigurationLegacy().getBoolean(
-                BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
+        boolean showBreadcrumbs = getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
         final Component breadcrumbPanel =
                 showBreadcrumbs
                 ? new BreadcrumbPanel(ID_BREADCRUMBS)

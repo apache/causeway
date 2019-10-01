@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.model.models.whereami;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.util.pchain.ParentChain;
@@ -40,14 +41,15 @@ class WhereAmIModelDefault implements WhereAmIModel {
     private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
     private final EntityModel startOfChain;
 
-    private static boolean isWhereAmIEnabled = IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT;
-    private static int maxChainLength = MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT;
+    private boolean isWhereAmIEnabled;
+    private int maxChainLength;
+
     private static int configHash = 0;
 
     public WhereAmIModelDefault(EntityModel startOfChain) {
         this.startOfChain = startOfChain;
 
-        overrideFromConfigIfNew(IsisContext.getConfigurationLegacy());
+        overrideFromConfigIfNew(IsisContext.getConfigurationLegacy(), IsisContext.getConfiguration());
 
         final ObjectAdapter adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
@@ -87,7 +89,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
         return new EntityModel(objectAdapter);
     }
 
-    private void overrideFromConfigIfNew(IsisConfigurationLegacy configuration) {
+    private void overrideFromConfigIfNew(IsisConfigurationLegacy configurationLegacy, IsisConfiguration configuration) {
 
         //[ahuber] without evidence that this significantly improves performance,
         // (skipping 2 hash-table lookups) we use the smart update idiom here ...
@@ -98,20 +100,14 @@ class WhereAmIModelDefault implements WhereAmIModel {
 
         // that's the hash of the object (we don't care about the actual config values)
         // assuming that, we get a new (immutable) config instance each app's life-cycle:
-        final int newConfigHash = System.identityHashCode(configuration);
+        final int newConfigHash = System.identityHashCode(configurationLegacy);
         if(newConfigHash == configHash)
             return;
 
         configHash = newConfigHash;
 
-        isWhereAmIEnabled = configuration.getBoolean(
-                CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED,
-                IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT);
-        maxChainLength = configuration.getInteger(
-                CONFIG_KEY_MAX_NAVIGABLE_PARENT_CHAIN_LENGTH,
-                MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT);
-
+        isWhereAmIEnabled = configuration.getViewer().getWicket().getWhereAmI().isEnabled();
+        maxChainLength = configuration.getViewer().getWicket().getWhereAmI().getMaxParentChainLength();
     }
-
 
 }

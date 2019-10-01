@@ -37,16 +37,6 @@ public interface IsisWicketThemeSupport {
     ThemeProvider getThemeProvider();
     List<String> getEnabledThemeNames();
 
-    // -- CONSTANTS
-
-    /**
-     * A configuration setting which value could be a comma separated list of enabled theme names
-     */
-    static final String ENABLED_THEMES_KEY  = "isis.viewer.wicket.themes.enabled";
-    static final String DEFAULT_THEME_KEY  = "isis.viewer.wicket.themes.initial";
-    static final String THEME_SUPPORT_PROVIDER_KEY  = "isis.viewer.wicket.themes.provider";
-    static final Class<? extends IsisWicketThemeSupport> THEME_SUPPORT_DEFAULT_CLASS = 
-            IsisWicketThemeSupportDefault.class;
 
     // -- LOOKUP
 
@@ -59,10 +49,9 @@ public interface IsisWicketThemeSupport {
     /*private*/ static IsisWicketThemeSupport createInstance() {
 
 
-        val configuration = IsisContext.getConfigurationLegacy();
+        val configuration = IsisContext.getConfiguration();
 
-        val themeSupportClassName = configuration.getString(
-                THEME_SUPPORT_PROVIDER_KEY, THEME_SUPPORT_DEFAULT_CLASS.getName());
+        val themeSupportClassName = configuration.getViewer().getWicket().getThemes().getProvider();
 
         try {
 
@@ -74,10 +63,10 @@ public interface IsisWicketThemeSupport {
             val log = org.apache.logging.log4j.LogManager.getLogger(IsisWicketThemeSupport.class);
             log.warn("Could not instantiate configured theme support class '{}', defaulting to '{}'",
                     themeSupportClassName,
-                    THEME_SUPPORT_DEFAULT_CLASS.getName());
+                    IsisWicketThemeSupportDefault.class.getName());
         }
 
-        return (IsisWicketThemeSupport) InstanceUtil.createInstance(THEME_SUPPORT_DEFAULT_CLASS);
+        return (IsisWicketThemeSupport) InstanceUtil.createInstance(IsisWicketThemeSupportDefault.class);
     }
 
 

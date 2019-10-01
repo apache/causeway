@@ -20,9 +20,7 @@ package org.apache.isis.config;
 
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +39,7 @@ import org.apache.isis.metamodel.facets.properties.property.command.CommandPrope
 import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPropertiesConfiguration;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.viewer.wicket.ui.DialogMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -70,6 +69,7 @@ public class IsisConfiguration {
             private boolean autoLogoutIfAlreadyAuthenticated = false;
         }
     }
+
     private final Objects objects = new Objects();
     @Data
     public static class Objects {
@@ -84,12 +84,18 @@ public class IsisConfiguration {
         public static class Datanucleus {
             private String classMetadataLoadedListener = "org.apache.isis.jdo.datanucleus.CreateSchemaObjectFromClassMetadata";
 
+            private boolean installFixtures = false;
+
             private final Impl impl = new Impl();
             @Data
             public static class Impl {
-
             }
-            private boolean installFixtures = false;
+
+            private final StandaloneCollection standaloneCollection = new StandaloneCollection();
+            @Data
+            public static class StandaloneCollection {
+                private boolean bulkLoad = false;
+            }
         }
         /**
          * Default is <code>false</code> only for backward compatibility (to avoid lots of breakages in existing code);
@@ -104,6 +110,7 @@ public class IsisConfiguration {
         @Deprecated
         private boolean enforceSafeSemantics = false;
     }
+
     private final Reflector reflector = new Reflector();
     @Data
     public static class Reflector {
@@ -334,6 +341,7 @@ public class IsisConfiguration {
             }
         }
     }
+
     private final Services services = new Services();
     @Data
     public static class Services {
@@ -439,34 +447,51 @@ public class IsisConfiguration {
                 private boolean legacyParamDetails = false;
             }
         }
+
         private final Wicket wicket = new Wicket();
         @Data
         public static class Wicket {
 
-            private String basePath = "/wicket";
             private String app = "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication";
-            
-            private final RememberMe rememberMe = new RememberMe();
-            @Data
-            public static class RememberMe {
-                private boolean suppress = false;
-            }
 
-            private boolean suppressSignUp = false;
-            private boolean suppressPasswordReset = false;
+            /**
+             * Whether the Ajax debug should be shown.
+             */
+            private boolean ajaxDebugMode = false;
+
+            private String basePath = "/wicket";
+
             private boolean clearOriginalDestination = false;
 
             /**
-             * Whether to use a modal dialog for property edits and for actions associated with properties.
-             * This can be overridden on a case-by-case basis using <code>@PropertyLayout#promptStyle</code> and
-             * <code>@ActionLayout#promptStyle</code>.
+             * The pattern used for rendering and parsing dates.
              *
-             * This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother
-             * user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
+             * <p>
+             * Each Date scalar panel will use {@ #getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its
+             * date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be
+             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
+             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
+             * than those of regular Java code).
              */
-            private PromptStyle promptStyle = PromptStyle.INLINE;
+            private String datePattern = "dd-MM-yyyy";
 
-            private boolean showFooter = true;
+            /**
+             * The pattern used for rendering and parsing date/times.
+             *
+             * <p>
+             * Each Date scalar panel will use {@link Wicket#getDatePattern()} or {@link Wicket#getDateTimePattern()} depending on its
+             * date type.  In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be
+             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
+             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
+             * than those of regular Java code).
+             */
+            private String dateTimePattern = "dd-MM-yyyy HH:mm";
+
+            private DialogMode dialogMode = DialogMode.SIDEBAR;
+
+            private DialogMode dialogModeForMenu = DialogMode.MODAL;
+
+            private String liveReloadUrl;
 
             private int maxTitleLengthInTables = 12;
 
@@ -495,37 +520,31 @@ public class IsisConfiguration {
             }
 
             /**
-             * The pattern used for rendering and parsing dates.
+             * Whether to use a modal dialog for property edits and for actions associated with properties.
+             * This can be overridden on a case-by-case basis using <code>@PropertyLayout#promptStyle</code> and
+             * <code>@ActionLayout#promptStyle</code>.
              *
-             * <p>
-             * Each Date scalar panel will use {@ #getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its
-             * date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be
-             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
-             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
-             * than those of regular Java code).
+             * This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother
+             * user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
              */
-            private String datePattern = "dd-MM-yyyy";
+            private PromptStyle promptStyle = PromptStyle.INLINE;
+
             /**
-             * The pattern used for rendering and parsing date/times.
+             * Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit)
+             * is the same as the previous page.
              *
-             * <p>
-             * Each Date scalar panel will use {@link Wicket#getDatePattern()} or {@link Wicket#getDateTimePattern()} depending on its
-             * date type.  In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be
-             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
-             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
-             * than those of regular Java code).
+             * This behaviour is disabled by default; the viewer will update the existing page if it can, making for a
+             * smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of redirecting in all cases.
              */
-            private String dateTimePattern = "dd-MM-yyyy HH:mm";
-            /**
-             * The pattern used for rendering and parsing timestamps.
-             */
-            private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
+            private boolean redirectEvenIfSameObject = false;
+
             /**
              * in Firefox and more recent versions of Chrome 54+, cannot copy out of disabled fields; instead we use the
              * readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute)
              * This behaviour is enabled by default but can be disabled using this flag
              */
             private boolean replaceDisabledTagWithReadonlyTag = true;
+
             /**
              * Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they
              * do a double click.
@@ -533,6 +552,7 @@ public class IsisConfiguration {
              * This behaviour is enabled by default, but can be disabled using this flag.
              */
             private boolean preventDoubleClickForFormSubmit = true;
+
             /**
              * Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they
              * do a double click.
@@ -540,6 +560,27 @@ public class IsisConfiguration {
              * This behaviour is enabled by default, but can be disabled using this flag.
              */
             private boolean preventDoubleClickForNoArgAction = true;
+
+            private boolean showFooter = true;
+
+            /**
+             * Whether Wicket tags should be stripped from the markup.
+             *
+             * <p>
+             * Be aware that if Wicket tags are <i>not</i> stripped, then this may break CSS rules on some browsers.
+             * </p>
+             */
+            private boolean stripWicketTags = true;
+
+            private boolean suppressSignUp = false;
+
+            private boolean suppressPasswordReset = false;
+
+            /**
+             * The pattern used for rendering and parsing timestamps.
+             */
+            private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
+
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.
              *
@@ -554,16 +595,105 @@ public class IsisConfiguration {
             private boolean useIndicatorForNoArgAction = true;
 
             /**
-             * Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit)
-             * is the same as the previous page.
+             * Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
              *
-             * This behaviour is disabled by default; the viewer will update the existing page if it can, making for a
-             * smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of redirecting in all cases.
+             * <p>
+             *     Be aware that this can substantially impact performance.
+             * </p>
              */
-            private boolean redirectEvenIfSameObject = false;
+            private boolean wicketSourcePlugin = false;
+
+            private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
+            @Data
+            public static class BookmarkedPages {
+
+                /**
+                 * Determines whether the bookmarks should be available in the header.
+                 */
+                private boolean showChooser = true;
+
+                private int maxSize = 15;
+            }
+
+            private final Breadcrumbs breadcrumbs = new Breadcrumbs();
+            @Data
+            public static class Breadcrumbs {
+                /**
+                 * Determines whether the breadcrumbs should be available in the footer.
+                 */
+                private boolean showChooser = true;
+            }
+            private final DatePicker datePicker = new DatePicker();
+            @Data
+            public static class DatePicker {
+
+                /**
+                 * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+                 */
+                private String minDate = "1900-01-01T00:00:00.000Z";
+
+                /**
+                 * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+                 */
+                private String maxDate = "2100-01-01T00:00:00.000Z";
+            }
+
+            private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();
+            @Data
+            public static class DevelopmentUtilities {
+
+                /**
+                 * Determines whether debug bar and other stuff influenced by <tt>org.apache.wicket.settings.DebugSettings#isDevelopmentUtilitiesEnabled()</tt> is enabled or not.
+                 *
+                 * <p>
+                 *     By default, depends on the mode (prototyping = enabled, server = disabled).  This property acts as an override.
+                 * </p>
+                 */
+                private boolean enable = false;
+            }
+
+            private final RememberMe rememberMe = new RememberMe();
+            @Data
+            public static class RememberMe {
+                private boolean suppress = false;
+                private String cookieKey = "isisWicketRememberMe";
+                private String encryptionKey;
+            }
+
+            private final Themes themes = new Themes();
+            @Data
+            public static class Themes {
+
+// isis.viewer.wicket.themes.showChooser
+                /**
+                 * A comma separated list of enabled theme names, as defined by https://bootswatch.com.
+                 */
+                private List<String> enabled = new ArrayList<>();
+
+                /**
+                 * The initial theme to use.
+                 *
+                 * <p>
+                 *     Expected to be in the list of {@link #getEnabled()} themes.
+                 * </p>
+                 */
+                private String initial = "Flatly";
+
+                private String provider = "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault";
+
+                /**
+                 * Whether the theme chooser should be available in the footer.
+                 */
+                private boolean showChooser = false;
+            }
+            private final WhereAmI whereAmI = new WhereAmI();
+            @Data
+            public static class WhereAmI {
+                private boolean enabled = true;
+                private int maxParentChainLength = 64;
+            }
         }
     }
-
 
     private final Viewers viewers = new Viewers();
     @Data
