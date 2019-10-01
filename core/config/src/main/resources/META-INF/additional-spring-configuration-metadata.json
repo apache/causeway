@@ -5,6 +5,45 @@
       "type": "java.lang.String",
       "description": "URL used by DataNucleus Object store to connect.",
       "defaultValue": ""
+    },
+    {
+      "name": "isis.viewer.wicket.credit.1.url",
+      "type": "java.net.URL"
+    },
+    {
+      "name": "isis.viewer.wicket.credit.1.name",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.viewer.wicket.credit.1.image",
+      "type": "java.lang.String",
+      "description": "Path of image, relative to webapp root."
+    },
+    {
+      "name": "isis.viewer.wicket.credit.2.url",
+      "type": "java.net.URL"
+    },
+    {
+      "name": "isis.viewer.wicket.credit.2.name",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.viewer.wicket.credit.2.image",
+      "type": "java.lang.String",
+      "description": "Path of image, relative to webapp root."
+    },
+    {
+      "name": "isis.viewer.wicket.credit.3.url",
+      "type": "java.net.URL"
+    },
+    {
+      "name": "isis.viewer.wicket.credit.3.name",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "isis.viewer.wicket.credit.3.image",
+      "type": "java.lang.String",
+      "description": "Path of image, relative to webapp root."
     }
   ],
   "hints": [
