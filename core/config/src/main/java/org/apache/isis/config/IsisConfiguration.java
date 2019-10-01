@@ -18,17 +18,27 @@
  */
 package org.apache.isis.config;
 
-import lombok.Data;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandActionsConfiguration;
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishActionsConfiguration;
 import org.apache.isis.metamodel.facets.object.domainobject.auditing.AuditObjectsConfiguration;
@@ -40,11 +50,9 @@ import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPr
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.viewer.wicket.ui.DialogMode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+
+import lombok.Data;
+import lombok.Getter;
 
 
 /**
@@ -61,18 +69,15 @@ import org.springframework.stereotype.Component;
 @Data
 public class IsisConfiguration {
 
+    @Autowired
+    private ConfigurableEnvironment environment;
+    
     /**
      * Not populated by Spring!
      * @deprecated maybe using {@link #environment} is the better choice!?
      */
-    @Deprecated 
-    private final Map<String, String> rawKeyValueMap = new HashMap<String, String>();
-    
-    /**
-     * Not populated by Spring, but as an alternative can also be injected into managed beans!
-     */
-    private Environment environment;
-    
+    @Getter(lazy = true) @Deprecated
+    private final Map<String, String> rawKeyValueMap = _Spring.copySpringEnvironmentToMap(environment);
     
     private final Authentication authentication = new Authentication();
     @Data

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.beans.BeansException;
@@ -45,7 +44,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -59,8 +57,6 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
 
-    @Inject private IsisConfiguration isisConfiguration;
-    
     @Override
     public void setApplicationContext(ApplicationContext springContext) throws BeansException {
 
@@ -77,9 +73,6 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
         
         val rawKeyValueMap = _Spring.copySpringEnvironmentToMap(configurableEnvironment);
         _Config.putAll(rawKeyValueMap);
-        
-        isisConfiguration.getRawKeyValueMap().putAll(rawKeyValueMap);
-        isisConfiguration.setEnvironment(configurableEnvironment);
 
         log.info("Spring's context was passed over to Isis");
 
