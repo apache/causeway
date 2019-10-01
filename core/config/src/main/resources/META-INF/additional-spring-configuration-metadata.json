@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL",
+      "type": "java.lang.String",
+      "description": "URL used by DataNucleus Object store to connect.",
+      "defaultValue": ""
+    }
+  ],
+  "hints": [
+  ]
+}
+
