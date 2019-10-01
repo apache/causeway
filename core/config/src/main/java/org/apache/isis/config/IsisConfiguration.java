@@ -39,6 +39,7 @@ import org.apache.isis.metamodel.facets.properties.property.command.CommandPrope
 import org.apache.isis.metamodel.facets.properties.property.publishing.PublishPropertiesConfiguration;
 import org.apache.isis.metamodel.services.appfeat.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.viewer.wicket.ui.DialogMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
@@ -486,15 +487,9 @@ public class IsisConfiguration {
              */
             private String dateTimePattern = "dd-MM-yyyy HH:mm";
 
-            /**
-             * Whether to use a modal dialog for property edits and for actions associated with properties.
-             * This can be overridden on a case-by-case basis using <code>@PropertyLayout#promptStyle</code> and
-             * <code>@ActionLayout#promptStyle</code>.
-             *
-             * This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother
-             * user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
-             */
-            private PromptStyle promptStyle = PromptStyle.INLINE;
+            private DialogMode dialogMode = DialogMode.SIDEBAR;
+
+            private DialogMode dialogModeForMenu = DialogMode.MODAL;
 
             private int maxTitleLengthInTables = 12;
 
@@ -521,6 +516,16 @@ public class IsisConfiguration {
             public void setMaxTitleLengthInStandaloneTables(final int val) {
                 maxTitleLengthInStandaloneTables = val;
             }
+
+            /**
+             * Whether to use a modal dialog for property edits and for actions associated with properties.
+             * This can be overridden on a case-by-case basis using <code>@PropertyLayout#promptStyle</code> and
+             * <code>@ActionLayout#promptStyle</code>.
+             *
+             * This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother
+             * user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
+             */
+            private PromptStyle promptStyle = PromptStyle.INLINE;
 
             /**
              * Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit)
@@ -656,6 +661,8 @@ public class IsisConfiguration {
             private final Themes themes = new Themes();
             @Data
             public static class Themes {
+
+// isis.viewer.wicket.themes.showChooser
                 /**
                  * A comma separated list of enabled theme names, as defined by https://bootswatch.com.
                  */
@@ -671,6 +678,11 @@ public class IsisConfiguration {
                 private String initial = "Flatly";
 
                 private String provider = "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault";
+
+                /**
+                 * Whether the theme chooser should be available in the footer.
+                 */
+                private boolean showChooser = false;
             }
             private final WhereAmI whereAmI = new WhereAmI();
             @Data

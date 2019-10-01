@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -52,12 +53,6 @@ import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
 public class ThemeChooser extends Panel {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * A configuration setting which value determines whether the theme chooser should be available in the footer
-     */
-    private static final String SHOW_THEME_PICKER_KEY = "isis.viewer.wicket.themes.showChooser";
-    private static final boolean SHOW_THEME_PICKER_DEFAULT = false;
 
     /**
      * The name of the cookie that stores the last user selection
@@ -148,7 +143,7 @@ public class ThemeChooser extends Panel {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getConfiguration().getBoolean(SHOW_THEME_PICKER_KEY, SHOW_THEME_PICKER_DEFAULT);
+        boolean shouldShow = getConfiguration().getViewer().getWicket().getThemes().isShowChooser();
         setVisible(shouldShow);
     }
 
@@ -156,8 +151,8 @@ public class ThemeChooser extends Panel {
         return IsisWicketThemeSupport.getInstance();
     }
 
-    private IsisConfigurationLegacy getConfiguration() {
-        return IsisContext.getConfigurationLegacy();
+    private IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
     IsisSessionFactory getIsisSessionFactory() {

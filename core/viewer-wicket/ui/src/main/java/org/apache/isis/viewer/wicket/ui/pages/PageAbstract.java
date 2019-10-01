@@ -112,11 +112,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private static final long serialVersionUID = 1L;
 
-    public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE =
-            new ConfigPropertyEnum<>("isis.viewer.wicket.dialogMode", DialogMode.SIDEBAR);
-    public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE_FOR_MENUS =
-            new ConfigPropertyEnum<>("isis.viewer.wicket.dialogModeForMenu", DialogMode.MODAL);
-
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
      */
@@ -472,11 +467,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         case INLINE:
         case INLINE_AS_IF_EDIT:
         default:
-            final ConfigPropertyEnum<DialogMode> configProp =
-            sort == BeanSort.MANAGED_BEAN
-            ? CONFIG_DIALOG_MODE_FOR_MENUS
-                    : CONFIG_DIALOG_MODE;
-            final DialogMode dialogMode = configProp.from(getConfigurationLegacy());
+            final DialogMode dialogMode =
+                    sort == BeanSort.MANAGED_BEAN
+                            ? getConfiguration().getViewer().getWicket().getDialogModeForMenu()
+                            : getConfiguration().getViewer().getWicket().getDialogMode();
             switch (dialogMode) {
             case SIDEBAR:
                 return actionPromptSidebar;
