@@ -70,6 +70,7 @@ public class IsisConfiguration {
             private boolean autoLogoutIfAlreadyAuthenticated = false;
         }
     }
+
     private final Objects objects = new Objects();
     @Data
     public static class Objects {
@@ -84,11 +85,18 @@ public class IsisConfiguration {
         public static class Datanucleus {
             private String classMetadataLoadedListener = "org.apache.isis.jdo.datanucleus.CreateSchemaObjectFromClassMetadata";
 
+            private boolean installFixtures = false;
+
             private final Impl impl = new Impl();
             @Data
             public static class Impl {
             }
-            private boolean installFixtures = false;
+
+            private final StandaloneCollection standaloneCollection = new StandaloneCollection();
+            @Data
+            public static class StandaloneCollection {
+                private boolean bulkLoad = false;
+            }
         }
         /**
          * Default is <code>false</code> only for backward compatibility (to avoid lots of breakages in existing code);
@@ -103,6 +111,7 @@ public class IsisConfiguration {
         @Deprecated
         private boolean enforceSafeSemantics = false;
     }
+
     private final Reflector reflector = new Reflector();
     @Data
     public static class Reflector {
@@ -333,6 +342,7 @@ public class IsisConfiguration {
             }
         }
     }
+
     private final Services services = new Services();
     @Data
     public static class Services {
@@ -617,7 +627,6 @@ public class IsisConfiguration {
 
         }
     }
-
 
     private final Viewers viewers = new Viewers();
     @Data

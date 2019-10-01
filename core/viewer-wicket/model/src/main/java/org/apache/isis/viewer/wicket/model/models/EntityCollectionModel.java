@@ -76,8 +76,6 @@ implements LinksProvider, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String KEY_BULK_LOAD = "isis.persistor.datanucleus.standaloneCollection.bulkLoad";
-
     private static final int PAGE_SIZE_DEFAULT_FOR_PARENTED = 12;
     private static final int PAGE_SIZE_DEFAULT_FOR_STANDALONE = 25;
 
@@ -92,8 +90,7 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
 
-                //XXX lombok issue, cannot use val here 
-                boolean isBulkLoad = IsisContext.getConfigurationLegacy().getBoolean(KEY_BULK_LOAD, false);
+                val isBulkLoad = IsisContext.getConfiguration().getPersistor().getDatanucleus().getStandaloneCollection().isBulkLoad();
                 final Stream<ObjectAdapter> resolveResults = isBulkLoad
                         ? loadInBulk(entityCollectionModel)
                                 : loadOneByOne(entityCollectionModel);
