@@ -100,6 +100,11 @@ public final class _Timing {
         public long getNanos() {
             return stopped ? t1 - t0 : System.nanoTime() - t0 ;
         }
+        
+        @Override
+        public String toString() {
+            return String.format(Locale.US, "%.2f ms", getMillis());
+        }
 
     }
 

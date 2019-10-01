@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -125,14 +126,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      */
     @Override
     public void init() {
-
+        
         if (log.isDebugEnabled()) {
             log.debug("initialising {}", this);
         }
-
-        // wire subcomponents into each other
-        //facetProcessor.setServicesInjector(servicesInjector);
-
+        
+        val stopWatch = _Timing.now();
+        
         // initialize subcomponents
         programmingModel.init();
         facetProcessor.init();
@@ -209,7 +209,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         }
 
-        log.info("init() - done");
+        stopWatch.stop();
+        log.info("init() - took " + stopWatch);
 
     }
 
@@ -277,7 +278,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
             // don't have an ObjectSpecId; hence the guard.
             if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
-                ObjectSpecId specId = spec.getSpecId();
+                val specId = spec.getSpecId();
                 if (cache.getByObjectType(specId) == null) {
                     cache.recache(spec);
                 }

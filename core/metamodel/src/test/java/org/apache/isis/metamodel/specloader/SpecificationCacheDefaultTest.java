@@ -18,8 +18,6 @@
  */
 package org.apache.isis.metamodel.specloader;
 
-import java.util.Map;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -27,7 +25,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -60,8 +57,15 @@ public class SpecificationCacheDefaultTest {
             allowing(customerSpec).getCorrespondingClass();
             will(returnValue(Customer.class));
 
+            allowing(customerSpec).getSpecId();
+            will(returnValue(ObjectSpecId.of("CUS")));
+            
             allowing(orderSpec).getCorrespondingClass();
             will(returnValue(Order.class));
+            
+            allowing(orderSpec).getSpecId();
+            will(returnValue(ObjectSpecId.of("ORD")));
+            
         }});
     }
 
@@ -81,7 +85,7 @@ public class SpecificationCacheDefaultTest {
     @Test
     public void get_whenCached() {
         final String customerClassName = Customer.class.getName();
-        specificationCache.put(customerClassName, customerSpec);
+        specificationCache.computeIfAbsent(customerClassName, __->customerSpec);
 
         final ObjectSpecification objectSpecification = specificationCache.get(customerClassName);
 
@@ -91,8 +95,8 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void allSpecs_whenCached() {
-        specificationCache.put(Customer.class.getName(), customerSpec);
-        specificationCache.put(Order.class.getName(), orderSpec);
+        specificationCache.computeIfAbsent(Customer.class.getName(), __->customerSpec);
+        specificationCache.computeIfAbsent(Order.class.getName(), __->orderSpec);
 
         val allSpecs = specificationCache.snapshotSpecs();
 
@@ -106,11 +110,9 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenSet() {
-        Map<ObjectSpecId, ObjectSpecification> specByObjectType = _Maps.newHashMap();
-        specByObjectType.put(ObjectSpecId.of("CUS"), customerSpec);
-
-        specificationCache.internalInit(specByObjectType);
-        final ObjectSpecification objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
+        specificationCache.init();
+        specificationCache.computeIfAbsent(Customer.class.getName(), __->customerSpec);
+        val objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
 
         assertSame(objectSpec, customerSpec);
     }

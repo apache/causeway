@@ -22,15 +22,12 @@ import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.extensions.fixtures.IsisBootFixtures;
 import org.apache.isis.jdo.IsisBootDataNucleus;
@@ -48,10 +45,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 @ComponentScan(
         basePackageClasses= {               
                 JdoTestDomainModule.class
-        },
-        includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})}
-        )
+        })
 @PropertySources({
     @PropertySource("classpath:/org/apache/isis/testdomain/conf/isis-non-changing.properties"),
     @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-persistence.properties"),

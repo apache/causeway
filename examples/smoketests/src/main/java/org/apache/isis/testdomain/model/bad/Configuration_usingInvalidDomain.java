@@ -19,20 +19,13 @@
 package org.apache.isis.testdomain.model.bad;
 
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 
 @Configuration
 @ComponentScan(
         basePackageClasses= {               
                 Configuration_usingInvalidDomain.class
-        },
-        includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})}
-        )
+        })
 public class Configuration_usingInvalidDomain {
 
 }

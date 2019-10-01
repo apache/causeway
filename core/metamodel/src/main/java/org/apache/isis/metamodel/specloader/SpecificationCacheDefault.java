@@ -30,6 +30,8 @@ import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.val;
 
 
@@ -48,7 +50,9 @@ import lombok.val;
 class SpecificationCacheDefault<T extends ObjectSpecification> {
 
     private final Map<String, T> specByClassName = _Maps.newHashMap();
-    private Map<ObjectSpecId, String> classNameBySpecId;
+    private final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
+    
+    @Getter(AccessLevel.PACKAGE) private boolean initialized = false; //package scoped JUnit support
 
     public T get(final String className) {
         return specByClassName.get(className);
@@ -57,17 +61,19 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
     public T computeIfAbsent(
             final String className, 
             final Function<? super String, T> mappingFunction) {
-        return specByClassName.computeIfAbsent(className, mappingFunction);
+        
+        T spec = specByClassName.get(className);
+        if(spec==null) {
+            spec = mappingFunction.apply(className);
+            internalPut(spec);
+        }
+        return spec;
     }
-
-    public void put(final String className, final T spec) {
-        specByClassName.put(className, spec);
-        recache(spec);
-    }
-
 
     public void clear() {
+        initialized = false;
         specByClassName.clear();
+        classNameBySpecId.clear();
     }
 
     /** @returns thread-safe defensive copy */
@@ -85,8 +91,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
         return className != null ? specByClassName.get(className) : null;
     }
 
-    synchronized void init() {
-        val specById = _Maps.<ObjectSpecId, T>newHashMap();
+    void init() {
         val cachedSpecifications = _Lists.<T>newArrayList();
         for(;;) {
             val newSpecifications = snapshotSpecs();
@@ -94,64 +99,46 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
             if(newSpecifications.isEmpty()) {
                 break;
             }
-            for (val objSpec : newSpecifications) {
-                val objectSpecId = objSpec.getSpecId();
-                if (objectSpecId == null) {
-                    continue;
-                }
-                specById.put(objectSpecId, objSpec);
+            for (val spec : newSpecifications) {
+                internalPut(spec);
             }
             cachedSpecifications.addAll(newSpecifications);
         }
-
-        internalInit(specById);
+        initialized = true;
     }
 
-    void internalInit(final Map<ObjectSpecId, T> specById) {
-        val classNameBySpecId = _Maps.<ObjectSpecId, String>newHashMap();
-        val specByClassName = _Maps.<String, T>newHashMap();
-
-        for (val objectSpecId : specById.keySet()) {
-            val objectSpec = specById.get(objectSpecId);
-            val className = objectSpec.getCorrespondingClass().getName();
-            classNameBySpecId.put(objectSpecId, className);
-            specByClassName.put(className, objectSpec);
+    private void internalPut(T spec) {
+        if(spec==null) {
+            return;
         }
-        this.classNameBySpecId = classNameBySpecId;
-        this.specByClassName.clear();
-        this.specByClassName.putAll(specByClassName);
+        val className = spec.getCorrespondingClass().getName();
+        val specId = spec.getSpecId();
+        specByClassName.put(className, spec);
+        if (specId == null) {
+            return;
+        }
+        classNameBySpecId.put(specId, className);
     }
 
     public T remove(String typeName) {
-        T removed = specByClassName.remove(typeName);
-        if(removed != null) {
-            if(removed.containsDoOpFacet(ObjectSpecIdFacet.class)) {
-                // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
-                // don't have an ObjectSpecId; hence the guard.
-                ObjectSpecId specId = removed.getSpecId();
-                classNameBySpecId.remove(specId);
-            }
+        final T removed = specByClassName.remove(typeName);
+        if(hasUsableSpecId(removed)) {
+            val specId = removed.getSpecId();
+            classNameBySpecId.remove(specId);
         }
         return removed;
     }
 
-    /**
-     * @param spec
-     */
     public void recache(T spec) {
-        if(!isInitialized()) {
-            // JRebel plugin might call this before we are actually up and running;
-            // just ignore.
-            return;
+        if(hasUsableSpecId(spec)) {
+            classNameBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass().getName());
         }
-        if(!spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
-            return;
-        }
-        classNameBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass().getName());
     }
-
-    boolean isInitialized() {
-        return classNameBySpecId != null;
+    
+    private boolean hasUsableSpecId(T spec) {
+        // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
+        // don't have an ObjectSpecId; hence the guard.
+        return spec!=null && spec.containsDoOpFacet(ObjectSpecIdFacet.class);
     }
 
 }
