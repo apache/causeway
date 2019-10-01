@@ -87,7 +87,6 @@ public class IsisConfiguration {
             private final Impl impl = new Impl();
             @Data
             public static class Impl {
-
             }
             private boolean installFixtures = false;
         }
@@ -450,8 +449,43 @@ public class IsisConfiguration {
             @Data
             public static class RememberMe {
                 private boolean suppress = false;
+                private String cookieKey = "isisWicketRememberMe";
+                private String encryptionKey;
             }
 
+            private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();
+            @Data
+            public static class DevelopmentUtilities {
+                /**
+                 * A configuration setting which value determines whether debug bar and other stuff influenced by <tt>org.apache.wicket.settings.DebugSettings#isDevelopmentUtilitiesEnabled()</tt> is enabled or not.
+                 *
+                 * <p>
+                 *     By default, depends on the mode (prototyping = enabled, server = disabled).  This property acts as an override.
+                 * </p>
+                 */
+                private boolean enable = false;
+            }
+
+            /**
+             * Whether Wicket tags should be stripped from the markup.
+             *
+             * <p>
+             * Be aware that if Wicket tags are <i>not</i> stripped, then this may break CSS rules on some browsers.
+             * </p>
+             */
+            private boolean stripWicketTags = true;
+            /**
+             * Whether the Ajax debug should be shown.
+             */
+            private boolean ajaxDebugMode = false;
+            /**
+             * Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
+             *
+             * <p>
+             *     Be aware that this can substantially impact performance.
+             * </p>
+             */
+            private boolean wicketSourcePlugin = false;
             private boolean suppressSignUp = false;
             private boolean suppressPasswordReset = false;
             private boolean clearOriginalDestination = false;

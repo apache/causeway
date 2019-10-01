@@ -28,6 +28,7 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -55,7 +56,6 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.DebugSettings;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
@@ -137,27 +137,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     private static final long serialVersionUID = 1L;
 
-    private static final String STRIP_WICKET_TAGS_KEY = "isis.viewer.wicket.stripWicketTags";
-    private static final boolean STRIP_WICKET_TAGS_DEFAULT = true;
-    private static final String AJAX_DEBUG_MODE_KEY = "isis.viewer.wicket.ajaxDebugMode";
-    private static final boolean AJAX_DEBUG_MODE_DEFAULT = false;
-    private static final String WICKET_SOURCE_PLUGIN_KEY = "isis.viewer.wicket.wicketSourcePlugin";
-    private static final boolean WICKET_SOURCE_PLUGIN_DEFAULT = false;
-
-    private static final String WICKET_REMEMBER_ME_COOKIE_KEY = "isis.viewer.wicket.rememberMe.cookieKey";
-    private static final String WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT = "isisWicketRememberMe";
-    private static final String WICKET_REMEMBER_ME_ENCRYPTION_KEY = "isis.viewer.wicket.rememberMe.encryptionKey";
-
-    /**
-     * A configuration setting which value determines whether debug bar and other stuff influenced by {@link DebugSettings#isDevelopmentUtilitiesEnabled()} is enabled or not.
-     *
-     * <p>
-     *     By default, depends on the mode (prototyping = enabled, server = disabled).  This property acts as an override.
-     * </p>
-     */
-    public static final String ENABLE_DEVELOPMENT_UTILITIES_KEY = "isis.viewer.wicket.developmentUtilities.enable";
-    public static final boolean ENABLE_DEVELOPMENT_UTILITIES_DEFAULT = false;
-
     /**
      * Convenience locator, down-casts inherited functionality.
      */
@@ -224,7 +203,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @Override
     protected void init() {
 
-        val configuration = IsisContext.getConfigurationLegacy();
+        val configurationLegacy = IsisContext.getConfigurationLegacy();
+        val configuration = IsisContext.getConfiguration();
         val serviceRegistry = IsisContext.getServiceRegistry();
         //val serviceInjector = IsisContext.getServiceInjector();
 
@@ -262,11 +242,11 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
 
-            this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
+            this.getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
 
             configureSecurity(configuration);
 
-            getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
+            getDebugSettings().setAjaxDebugModeEnabled(((IsisConfiguration) null).getViewer().getWicket().isAjaxDebugMode());
 
             // must be done after injected componentFactoryRegistry into the app itself
             buildCssBundle();
@@ -296,8 +276,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 log.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
 
                 if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-                    boolean enableDevUtils = configuration
-                            .getBoolean(ENABLE_DEVELOPMENT_UTILITIES_KEY, ENABLE_DEVELOPMENT_UTILITIES_DEFAULT);
+                    boolean enableDevUtils = configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable();
                     if(enableDevUtils) {
                         getDebugSettings().setDevelopmentUtilitiesEnabled(true);
 
@@ -345,26 +324,28 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    protected void configureSecurity(final IsisConfigurationLegacy configuration) {
+    void configureSecurity(IsisConfiguration configuration) {
         getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
     }
 
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
-    protected IAuthenticationStrategy newAuthenticationStrategy(final IsisConfigurationLegacy configuration) {
-        final String cookieKey = configuration.getString(WICKET_REMEMBER_ME_COOKIE_KEY,
-                WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT);
-        final String encryptionKey = configuration.getString(WICKET_REMEMBER_ME_ENCRYPTION_KEY, defaultEncryptionKeyIfNotConfigured());
+    IAuthenticationStrategy newAuthenticationStrategy(IsisConfiguration configuration) {
+        final String cookieKey = configuration.getViewer().getWicket().getRememberMe().getCookieKey();
+        String encryptionKey = configuration.getViewer().getWicket().getRememberMe().getEncryptionKey();
+        if (encryptionKey == null) {
+            encryptionKey = defaultEncryptionKey();
+        }
         return new DefaultAuthenticationStrategy(cookieKey, encryptionKey);
     }
 
     /**
-     * As called by {@link #newAuthenticationStrategy(IsisConfigurationLegacy)}; if an encryption key for the 'rememberMe'
+     * As called by {@link #newAuthenticationStrategy(IsisConfiguration)}; if an encryption key for the 'rememberMe'
      * cookie hasn't been configured, then use a different encryption key for the 'rememberMe' cookie each time the
      * app is restarted.
      */
-    protected String defaultEncryptionKeyIfNotConfigured() {
+    String defaultEncryptionKey() {
         return _Context.isPrototyping()
                 ? "PrototypingEncryptionKey"
                         : UUID.randomUUID().toString();
@@ -394,7 +375,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         final IsisConfigurationLegacy configuration = _Config.getConfiguration();
         requireNonNull(configuration, "Configuration must be prepared prior to init().");
 
-        if(isWicketSourcePluginEnabled(configuration)) {
+        if(((IsisConfiguration) configuration).getViewer().getWicket().isWicketSourcePlugin()) {
             configureWicketSourcePlugin();
         }
     }
@@ -580,45 +561,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 log.error(msg);
             }
 
-            // //////////////////////////////////////
-
-            /**
-             * Whether Wicket tags should be stripped from the markup, as specified by configuration settings..
-             *
-             * <p>
-             * If the <tt>isis.viewer.wicket.stripWicketTags</tt> is set, then this is used, otherwise the default is to strip
-             * the tags because they may break some CSS rules.
-             */
-            private boolean determineStripWicketTags(IsisConfigurationLegacy configuration) {
-                final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, STRIP_WICKET_TAGS_DEFAULT);
-                return strip;
-            }
-
-            // //////////////////////////////////////
-
-            /**
-             * Whether the Ajax debug should be shown, as specified by configuration settings.
-             *
-             * <p>
-             * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
-             */
-            private boolean determineAjaxDebugModeEnabled(IsisConfigurationLegacy configuration) {
-                final boolean debugModeEnabled = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
-                return debugModeEnabled;
-            }
-
-            /**
-             * Whether the Wicket source plugin should be enabled, as specified by configuration settings.
-             *
-             * <p>
-             * If the <tt>isis.viewer.wicket.wicketSourcePlugin</tt> is set, then this is used, otherwise the default is to disable.
-             */
-            private boolean isWicketSourcePluginEnabled(IsisConfigurationLegacy configuration) {
-                final boolean pluginEnabled = configuration.getBoolean(WICKET_SOURCE_PLUGIN_KEY, WICKET_SOURCE_PLUGIN_DEFAULT);
-                return pluginEnabled;
-            }
-
-            // //////////////////////////////////////
 
             @Override
             protected void onDestroy() {
