@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -301,7 +302,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
-        String liveReloadUrl = getConfiguration().getString(LIVE_RELOAD_URL_KEY);
+        String liveReloadUrl = getConfigurationLegacy().getString(LIVE_RELOAD_URL_KEY);
         if(liveReloadUrl != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         }
@@ -427,12 +428,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private boolean isShowBookmarks() {
-        return getConfiguration() .getBoolean(
-                BookmarkedPagesPanel.SHOW_BOOKMARKS_KEY, BookmarkedPagesPanel.SHOW_BOOKMARKS_DEFAULT);
+        return getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowChooser();
     }
 
     protected boolean isShowBreadcrumbs() {
-        return getConfiguration() .getBoolean(
+        return getConfigurationLegacy() .getBoolean(
                 BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
     }
 
@@ -477,7 +477,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             sort == BeanSort.MANAGED_BEAN
             ? CONFIG_DIALOG_MODE_FOR_MENUS
                     : CONFIG_DIALOG_MODE;
-            final DialogMode dialogMode = configProp.from(getConfiguration());
+            final DialogMode dialogMode = configProp.from(getConfigurationLegacy());
             switch (dialogMode) {
             case SIDEBAR:
                 return actionPromptSidebar;
@@ -539,8 +539,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     // -- DEPS
 
-    protected IsisConfigurationLegacy getConfiguration() {
+    protected IsisConfigurationLegacy getConfigurationLegacy() {
         return IsisContext.getConfigurationLegacy();
+    }
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
     protected ServiceRegistry getServiceRegistry() {

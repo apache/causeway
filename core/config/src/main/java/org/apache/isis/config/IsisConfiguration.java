@@ -601,6 +601,12 @@ public class IsisConfiguration {
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
             @Data
             public static class BookmarkedPages {
+
+                /**
+                 * Determines whether the bookmarks should be available in the header.
+                 */
+                private boolean showChooser = true;
+
                 private int maxSize = 15;
             }
 

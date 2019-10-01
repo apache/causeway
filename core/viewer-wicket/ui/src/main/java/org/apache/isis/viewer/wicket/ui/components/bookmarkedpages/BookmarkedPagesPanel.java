@@ -72,12 +72,6 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     private static final String CLEAR_BOOKMARKS = "clearBookmarks";
 
 
-    /**
-     * A configuration setting which value determines whether the bookmarks should be available in the header
-     */
-    public static final String SHOW_BOOKMARKS_KEY = "isis.viewer.wicket.bookmarkedPages.showChooser";
-    public static final boolean SHOW_BOOKMARKS_DEFAULT = true;
-
     private static final JavaScriptResourceReference SLIDE_PANEL_JS = new JavaScriptResourceReference(BookmarkedPagesPanel.class, "slide-panel.js");
 
     @Inject
