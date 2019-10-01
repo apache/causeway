@@ -94,7 +94,9 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         // These could include everything under @Property(...) because the
         // PropertyAnnotationFacetFactory is also run against actions.
         //
+        
         FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
+        
 
         // adjust name if necessary
         final String name = getName();

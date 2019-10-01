@@ -98,7 +98,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
     }
 
     private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix, final Class<?> returnType, final List<Method> methodListToAppendTo) {
-        methodListToAppendTo.addAll(methodRemover.removeMethods(MethodScope.OBJECT, prefix, returnType, false, 0));
+        methodRemover.removeMethods(MethodScope.OBJECT, prefix, returnType, false, 0, methodListToAppendTo::add);
     }
 
     @Override

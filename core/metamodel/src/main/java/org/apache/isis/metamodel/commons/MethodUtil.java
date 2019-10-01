@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.commons;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
@@ -147,20 +147,20 @@ public class MethodUtil {
      * @param forClass
      * @param name
      * @param returnType
+     * @param onRemoval 
      * @param paramTypes
      *            the set of parameters the method should have, if null then is
      *            ignored
      * @return Method
      */
-    public static List<Method> removeMethods(
+    public static void removeMethods(
             final List<Method> methods,
             final MethodScope forClass,
             final String prefix,
             final Class<?> returnType,
             final boolean canBeVoid,
-            final int paramCount) {
-
-        final List<Method> validMethods = new ArrayList<Method>();
+            final int paramCount, 
+            Consumer<Method> onMatch) {
 
         for (int i = 0; i < methods.size(); i++) {
             final Method method = methods.get(i);
@@ -179,11 +179,11 @@ public class MethodUtil {
             final boolean goodReturn = ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, type);
 
             if (goodPrefix && goodCount && goodReturn) {
-                validMethods.add(method);
+                onMatch.accept(method);
                 methods.set(i, null);
             }
         }
-        return validMethods;
+        
     }
 
 

@@ -95,10 +95,14 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
             final MethodRemover methodRemover,
             final List<Method> methodListToAppendTo) {
 
-        final List<Method> list =
-                methodRemover.removeMethods(MethodScope.OBJECT, MethodLiteralConstants.GET_PREFIX,
-                        Collection.class, false, 0);
-        methodListToAppendTo.addAll(list);
+        methodRemover.removeMethods(
+                MethodScope.OBJECT, 
+                MethodLiteralConstants.GET_PREFIX,
+                Collection.class, 
+                false, 
+                0,
+                methodListToAppendTo::add
+                );
     }
 
     @Override

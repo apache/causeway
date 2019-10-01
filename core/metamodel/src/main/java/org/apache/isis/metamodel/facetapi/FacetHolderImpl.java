@@ -19,10 +19,10 @@
 
 package org.apache.isis.metamodel.facetapi;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
@@ -35,7 +35,7 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
  */
 public class FacetHolderImpl implements FacetHolder {
 
-    private final Map<Class<? extends Facet>, Facet> facetsByClass = new HashMap<>();
+    private final Map<Class<? extends Facet>, Facet> facetsByClass = new ConcurrentHashMap<>();
     private final Set<Class<? extends Facet>> implementedFacetInterfaces = new HashSet<>();
 
     @Override
@@ -45,7 +45,9 @@ public class FacetHolderImpl implements FacetHolder {
 
     @Override
     public boolean containsFacetWithInterface(final Class<? extends Facet> facetType) {
-        return implementedFacetInterfaces.contains(facetType);
+        synchronized(implementedFacetInterfaces) {
+            return implementedFacetInterfaces.contains(facetType);
+        }
     }
 
     @Override
@@ -119,10 +121,12 @@ public class FacetHolderImpl implements FacetHolder {
     private void put(final Class<? extends Facet> facetType, final Facet facet) {
         facetsByClass.put(facetType, facet);
 
-        _NullSafe.stream(facetType.getInterfaces())
-        .filter(intfc->Facet.class.isAssignableFrom(intfc))
-        .map(intfc-> _Casts.<Class<? extends Facet>>uncheckedCast(intfc))
-        .forEach(implementedFacetInterfaces::add);
+        synchronized(implementedFacetInterfaces) {
+            _NullSafe.stream(facetType.getInterfaces())
+            .filter(intfc->Facet.class.isAssignableFrom(intfc))
+            .map(intfc-> _Casts.<Class<? extends Facet>>uncheckedCast(intfc))
+            .forEach(implementedFacetInterfaces::add);
+        }
 
     }
 

@@ -99,11 +99,12 @@ import org.apache.isis.security.authentication.AuthenticationSession;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2 //@EqualsAndHashCode(of = "correspondingClass", callSuper = false)
+@Log4j2 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
 //    private static class Subclasses {

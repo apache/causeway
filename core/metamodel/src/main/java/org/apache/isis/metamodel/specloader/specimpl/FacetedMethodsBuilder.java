@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.exceptions.IsisException;
@@ -69,21 +70,24 @@ public class FacetedMethodsBuilder {
 
         @Override
         public void removeMethod(
-                final MethodScope methodScope,
-                final String methodName,
-                final Class<?> returnType,
-                final Class<?>[] parameterTypes) {
+                MethodScope methodScope,
+                String methodName,
+                Class<?> returnType,
+                Class<?>[] parameterTypes) {
+            
             MethodUtil.removeMethod(methods, methodScope, methodName, returnType, parameterTypes);
         }
 
         @Override
-        public List<Method> removeMethods(
-                final MethodScope methodScope,
-                final String prefix,
-                final Class<?> returnType,
-                final boolean canBeVoid,
-                final int paramCount) {
-            return MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
+        public void removeMethods(
+                MethodScope methodScope,
+                String prefix,
+                Class<?> returnType,
+                boolean canBeVoid,
+                int paramCount,
+                Consumer<Method> onRemoval) {
+            
+            MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount, onRemoval);
         }
 
         @Override
@@ -482,21 +486,24 @@ public class FacetedMethodsBuilder {
             final Class<?> returnType,
             final int paramCount,
             final List<Method> methodListToAppendTo) {
-        final List<Method> matchingMethods = findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount);
-        methodListToAppendTo.addAll(matchingMethods);
+        
+        findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount, methodListToAppendTo::add);
     }
 
     /**
      * Searches for all methods matching the prefix and returns them, also
      * removing it from the {@link #methods array of methods} if found.
+     * @param onMatch 
      */
-    private List<Method> findAndRemovePrefixedMethods(
+    private void findAndRemovePrefixedMethods(
             final MethodScope methodScope,
             final String prefix,
             final Class<?> returnType,
             final boolean canBeVoid,
-            final int paramCount) {
-        return MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
+            final int paramCount, 
+            Consumer<Method> onMatch) {
+        
+        MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount, onMatch);
     }
 
     // ////////////////////////////////////////////////////////////////////////////
