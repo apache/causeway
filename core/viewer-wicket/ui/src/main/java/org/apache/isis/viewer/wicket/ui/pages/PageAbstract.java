@@ -19,16 +19,46 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.core.settings.ITheme;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
+import lombok.extern.log4j.Log4j2;
+
+import java.util.*;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.security.authentication.AuthenticationSession;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.*;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.DialogMode;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
+import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -39,13 +69,7 @@ import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
 import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -61,49 +85,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.config.property.ConfigPropertyEnum;
-import org.apache.isis.runtime.system.context.IsisContext;
-import org.apache.isis.security.authentication.AuthenticationSession;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
-import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.DialogMode;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
-import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-
-import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
-import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.core.settings.ITheme;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
-import lombok.extern.log4j.Log4j2;
-
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
@@ -117,8 +98,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      */
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
-
-    private static final String LIVE_RELOAD_URL_KEY = "isis.viewer.wicket.liveReloadUrl";
 
     // not to be confused with the bootstrap theme...
     // is simply a CSS class derived from the application's name
@@ -297,7 +276,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
-        String liveReloadUrl = getConfigurationLegacy().getString(LIVE_RELOAD_URL_KEY);
+        String liveReloadUrl = getConfiguration().getViewer().getWicket().getLiveReloadUrl();
         if(liveReloadUrl != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         }

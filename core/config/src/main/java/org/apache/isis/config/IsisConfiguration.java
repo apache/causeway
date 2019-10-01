@@ -491,6 +491,8 @@ public class IsisConfiguration {
 
             private DialogMode dialogModeForMenu = DialogMode.MODAL;
 
+            private String liveReloadUrl;
+
             private int maxTitleLengthInTables = 12;
 
             private Integer maxTitleLengthInParentedTables;
