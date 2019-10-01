@@ -610,6 +610,21 @@ public class IsisConfiguration {
                 private int maxSize = 15;
             }
 
+            private final DatePicker datePicker = new DatePicker();
+            @Data
+            public static class DatePicker {
+
+                /**
+                 * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+                 */
+                private String minDate = "1900-01-01T00:00:00.000Z";
+
+                /**
+                 * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+                 */
+                private String maxDate = "2100-01-01T00:00:00.000Z";
+            }
+
             private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();
             @Data
             public static class DevelopmentUtilities {
