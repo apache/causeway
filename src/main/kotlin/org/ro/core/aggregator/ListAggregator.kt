@@ -43,7 +43,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
 
     private fun handleList(invocationResult: InvocationResult) {
         val result = invocationResult.result!!
-        val links = result.value
+        val links = result.getValueLinks()
         for (l: Link in links) {
             invoke(l)
         }

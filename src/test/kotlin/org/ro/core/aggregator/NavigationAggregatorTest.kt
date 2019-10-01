@@ -11,13 +11,13 @@ import kotlin.test.assertEquals
 class NavigationAggregatorTest : IntegrationTest() {
 
     @Test
-    fun testService() {
+    fun testRestfulServices() {
         // given
         val aggregator = NavigationAggregator()
         // when
         val logEntry = mockResponse(RESTFUL_SERVICES, aggregator)
         val result = logEntry.obj as Result
-        val actual = result.value.size
+        val actual = result.getValueLinks().size
         // then
         assertEquals(8, actual)
     }

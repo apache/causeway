@@ -24,11 +24,9 @@ class NavigationAggregator : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (serviceCount >= serviceTotal) {
-            if (!isRendered) {
-                UiManager.amendMenu()
-                isRendered = true
-            }
+        if (serviceCount >= serviceTotal && !isRendered) {
+            UiManager.amendMenu()
+            isRendered = true
         }
     }
 
@@ -39,7 +37,7 @@ class NavigationAggregator : BaseAggregator() {
 
     private fun handleResult(obj: TransferObject) {
         val result = obj as Result
-        val values = result.value
+        val values = result.getValueLinks()
         serviceTotal = values.size
         for (l in values) {
             invoke(l)
