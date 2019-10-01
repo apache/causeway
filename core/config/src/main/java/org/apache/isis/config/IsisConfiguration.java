@@ -587,6 +587,12 @@ public class IsisConfiguration {
              */
             private boolean wicketSourcePlugin = false;
 
+            private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
+            @Data
+            public static class BookmarkedPages {
+                private int maxSize = 15;
+            }
+
             private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();
             @Data
             public static class DevelopmentUtilities {

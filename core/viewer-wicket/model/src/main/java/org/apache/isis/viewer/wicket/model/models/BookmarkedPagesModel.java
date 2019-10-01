@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -36,9 +37,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
 
     private static final long serialVersionUID = 1L;
-
-    private static final String MAX_SIZE_KEY = "isis.viewer.wicket.bookmarkedPages.maxSize";
-    private static final int MAX_SIZE_DEFAULT_VALUE = 15;
 
     private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
 
@@ -79,7 +77,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     private int getMaxSize() {
-        return getConfiguration().getInteger(MAX_SIZE_KEY, MAX_SIZE_DEFAULT_VALUE);
+        return getConfiguration().getViewer().getWicket().getBookmarkedPages().getMaxSize();
     }
 
     private static void trim(List<?> list, int requiredSize) {
@@ -143,8 +141,11 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     // //////////////////////////////////////
 
 
-    protected IsisConfigurationLegacy getConfiguration() {
+    protected IsisConfigurationLegacy getConfigurationLegacy() {
         return IsisContext.getConfigurationLegacy();
+    }
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
 
