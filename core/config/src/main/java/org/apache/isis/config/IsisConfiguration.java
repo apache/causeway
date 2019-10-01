@@ -43,6 +43,7 @@ import org.apache.isis.viewer.wicket.ui.DialogMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 
@@ -60,6 +61,19 @@ import org.springframework.stereotype.Component;
 @Data
 public class IsisConfiguration {
 
+    /**
+     * Not populated by Spring!
+     * @deprecated maybe using {@link #environment} is the better choice!?
+     */
+    @Deprecated 
+    private final Map<String, String> rawKeyValueMap = new HashMap<String, String>();
+    
+    /**
+     * Not populated by Spring, but as an alternative can also be injected into managed beans!
+     */
+    private Environment environment;
+    
+    
     private final Authentication authentication = new Authentication();
     @Data
     public static class Authentication {

@@ -62,6 +62,8 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
+//import lombok.val;
+
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
  * standalone} (eg result of invoking an action) or {@link Type#PARENTED
@@ -90,7 +92,8 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
 
-                val isBulkLoad = IsisContext.getConfiguration().getPersistor().getDatanucleus().getStandaloneCollection().isBulkLoad();
+                //XXX lombok issue, cannot use val here 
+                boolean isBulkLoad = IsisContext.getConfiguration().getPersistor().getDatanucleus().getStandaloneCollection().isBulkLoad();
                 final Stream<ObjectAdapter> resolveResults = isBulkLoad
                         ? loadInBulk(entityCollectionModel)
                                 : loadOneByOne(entityCollectionModel);

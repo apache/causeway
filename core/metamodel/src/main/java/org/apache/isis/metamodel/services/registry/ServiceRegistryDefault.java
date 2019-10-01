@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.beans.BeansException;
@@ -44,6 +45,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -57,6 +59,8 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
 
+    @Inject private IsisConfiguration isisConfiguration;
+    
     @Override
     public void setApplicationContext(ApplicationContext springContext) throws BeansException {
 
@@ -70,22 +74,27 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
         }
 
         _Context.putSingleton(ApplicationContext.class, springContext);
-        _Config.putAll(_Spring.copySpringEnvironmentToMap(configurableEnvironment));
+        
+        val rawKeyValueMap = _Spring.copySpringEnvironmentToMap(configurableEnvironment);
+        _Config.putAll(rawKeyValueMap);
+        
+        isisConfiguration.getRawKeyValueMap().putAll(rawKeyValueMap);
+        isisConfiguration.setEnvironment(configurableEnvironment);
 
         log.info("Spring's context was passed over to Isis");
 
-        isisConfiguration = _Config.getConfiguration(); // finalize config
+        isisConfigurationLegacy = _Config.getConfiguration(); // finalize config
 
         // dump config to log
-        if(log.isInfoEnabled() && !isisConfiguration.getEnvironment().isUnitTesting()) {
+        if(log.isInfoEnabled() && !isisConfigurationLegacy.getEnvironment().isUnitTesting()) {
             log.info("\n" + _Config.getConfiguration().toStringFormatted());
         }    
 
     }
 
     @Bean @Singleton
-    public IsisConfigurationLegacy getConfiguration() {
-        return isisConfiguration;
+    public IsisConfigurationLegacy getConfigurationLegacy() {
+        return isisConfigurationLegacy;
     }
 
     @Override
@@ -101,7 +110,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
     // -- DEPS
 
     @Autowired private ConfigurableEnvironment configurableEnvironment;
-    private IsisConfigurationLegacy isisConfiguration;
+    private IsisConfigurationLegacy isisConfigurationLegacy;
 
     // -- HELPER
 

@@ -28,7 +28,6 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -65,8 +64,7 @@ import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
@@ -104,6 +102,7 @@ import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import lombok.val;
+//import lombok.val;
 import lombok.extern.log4j.Log4j2;
 import net.ftlines.wicketsource.WicketSource;
 
@@ -147,6 +146,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @Inject private ComponentFactoryRegistry componentFactoryRegistry;
     @Inject private PageClassRegistry pageClassRegistry;
     @Inject private WicketViewerSettings settings;
+    private IsisConfiguration configuration;
 
     //    @Inject private ImageResourceCache imageCache;
     //    @Inject private WicketViewerSettings wicketViewerSettings;
@@ -203,11 +203,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @Override
     protected void init() {
 
-        val configurationLegacy = IsisContext.getConfigurationLegacy();
-        val configuration = IsisContext.getConfiguration();
+        configuration = IsisContext.getConfiguration();
+        
         val serviceRegistry = IsisContext.getServiceRegistry();
-        //val serviceInjector = IsisContext.getServiceInjector();
-
         val backgroundInitializationTasks = createBackgroundInitializationTasks();
         
         try {
@@ -246,7 +244,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             configureSecurity(configuration);
 
-            getDebugSettings().setAjaxDebugModeEnabled(((IsisConfiguration) null).getViewer().getWicket().isAjaxDebugMode());
+            getDebugSettings().setAjaxDebugModeEnabled(configuration.getViewer().getWicket().isAjaxDebugMode());
 
             // must be done after injected componentFactoryRegistry into the app itself
             buildCssBundle();
@@ -372,10 +370,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     protected void configureWicketSourcePluginIfNecessary() {
-        final IsisConfigurationLegacy configuration = _Config.getConfiguration();
+        
         requireNonNull(configuration, "Configuration must be prepared prior to init().");
 
-        if(((IsisConfiguration) configuration).getViewer().getWicket().isWicketSourcePlugin()) {
+        if(configuration.getViewer().getWicket().isWicketSourcePlugin()) {
             configureWicketSourcePlugin();
         }
     }
