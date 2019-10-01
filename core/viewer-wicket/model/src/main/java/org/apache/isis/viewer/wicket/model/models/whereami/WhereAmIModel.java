@@ -31,13 +31,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
  */
 public interface WhereAmIModel {
 
-    public final static String CONFIG_KEY_IS_WHERE_AM_I_FEATURE_ENABLED = "isis.viewer.wicket.whereAmI.enabled";
-    public final static String CONFIG_KEY_MAX_NAVIGABLE_PARENT_CHAIN_LENGTH = "isis.viewer.wicket.whereAmI.maxParentChainLength";
-
-    public final static boolean IS_WHERE_AM_I_FEATURE_ENABLED_DEFAULT = true;
-    public final static int MAX_NAVIGABLE_PARENT_CHAIN_LENGTH_DEFAULT = 64;
-
-
     public static WhereAmIModel of(EntityModel startOfChain) {
         return new WhereAmIModelDefault(startOfChain);
     }

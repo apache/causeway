@@ -448,6 +448,7 @@ public class IsisConfiguration {
                 private boolean legacyParamDetails = false;
             }
         }
+
         private final Wicket wicket = new Wicket();
         @Data
         public static class Wicket {
@@ -625,6 +626,12 @@ public class IsisConfiguration {
                 private String encryptionKey;
             }
 
+            private final WhereAmI whereAmI = new WhereAmI();
+            @Data
+            public static class WhereAmI {
+                private boolean enabled = true;
+                private int maxParentChainLength = 64;
+            }
         }
     }
 
