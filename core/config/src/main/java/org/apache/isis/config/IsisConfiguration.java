@@ -442,53 +442,40 @@ public class IsisConfiguration {
         @Data
         public static class Wicket {
 
-            private String basePath = "/wicket";
             private String app = "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication";
-            
-            private final RememberMe rememberMe = new RememberMe();
-            @Data
-            public static class RememberMe {
-                private boolean suppress = false;
-                private String cookieKey = "isisWicketRememberMe";
-                private String encryptionKey;
-            }
 
-            private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();
-            @Data
-            public static class DevelopmentUtilities {
-                /**
-                 * A configuration setting which value determines whether debug bar and other stuff influenced by <tt>org.apache.wicket.settings.DebugSettings#isDevelopmentUtilitiesEnabled()</tt> is enabled or not.
-                 *
-                 * <p>
-                 *     By default, depends on the mode (prototyping = enabled, server = disabled).  This property acts as an override.
-                 * </p>
-                 */
-                private boolean enable = false;
-            }
-
-            /**
-             * Whether Wicket tags should be stripped from the markup.
-             *
-             * <p>
-             * Be aware that if Wicket tags are <i>not</i> stripped, then this may break CSS rules on some browsers.
-             * </p>
-             */
-            private boolean stripWicketTags = true;
             /**
              * Whether the Ajax debug should be shown.
              */
             private boolean ajaxDebugMode = false;
+
+            private String basePath = "/wicket";
+
+            private boolean clearOriginalDestination = false;
+
             /**
-             * Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
+             * The pattern used for rendering and parsing dates.
              *
              * <p>
-             *     Be aware that this can substantially impact performance.
-             * </p>
+             * Each Date scalar panel will use {@ #getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its
+             * date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be
+             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
+             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
+             * than those of regular Java code).
              */
-            private boolean wicketSourcePlugin = false;
-            private boolean suppressSignUp = false;
-            private boolean suppressPasswordReset = false;
-            private boolean clearOriginalDestination = false;
+            private String datePattern = "dd-MM-yyyy";
+
+            /**
+             * The pattern used for rendering and parsing date/times.
+             *
+             * <p>
+             * Each Date scalar panel will use {@link Wicket#getDatePattern()} or {@link Wicket#getDateTimePattern()} depending on its
+             * date type.  In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be
+             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
+             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
+             * than those of regular Java code).
+             */
+            private String dateTimePattern = "dd-MM-yyyy HH:mm";
 
             /**
              * Whether to use a modal dialog for property edits and for actions associated with properties.
@@ -499,8 +486,6 @@ public class IsisConfiguration {
              * user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
              */
             private PromptStyle promptStyle = PromptStyle.INLINE;
-
-            private boolean showFooter = true;
 
             private int maxTitleLengthInTables = 12;
 
@@ -529,37 +514,21 @@ public class IsisConfiguration {
             }
 
             /**
-             * The pattern used for rendering and parsing dates.
+             * Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit)
+             * is the same as the previous page.
              *
-             * <p>
-             * Each Date scalar panel will use {@ #getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its
-             * date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be
-             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
-             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
-             * than those of regular Java code).
+             * This behaviour is disabled by default; the viewer will update the existing page if it can, making for a
+             * smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of redirecting in all cases.
              */
-            private String datePattern = "dd-MM-yyyy";
-            /**
-             * The pattern used for rendering and parsing date/times.
-             *
-             * <p>
-             * Each Date scalar panel will use {@link Wicket#getDatePattern()} or {@link Wicket#getDateTimePattern()} depending on its
-             * date type.  In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be
-             * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
-             * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
-             * than those of regular Java code).
-             */
-            private String dateTimePattern = "dd-MM-yyyy HH:mm";
-            /**
-             * The pattern used for rendering and parsing timestamps.
-             */
-            private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
+            private boolean redirectEvenIfSameObject = false;
+
             /**
              * in Firefox and more recent versions of Chrome 54+, cannot copy out of disabled fields; instead we use the
              * readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute)
              * This behaviour is enabled by default but can be disabled using this flag
              */
             private boolean replaceDisabledTagWithReadonlyTag = true;
+
             /**
              * Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they
              * do a double click.
@@ -567,6 +536,7 @@ public class IsisConfiguration {
              * This behaviour is enabled by default, but can be disabled using this flag.
              */
             private boolean preventDoubleClickForFormSubmit = true;
+
             /**
              * Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they
              * do a double click.
@@ -574,6 +544,27 @@ public class IsisConfiguration {
              * This behaviour is enabled by default, but can be disabled using this flag.
              */
             private boolean preventDoubleClickForNoArgAction = true;
+
+            private boolean showFooter = true;
+
+            /**
+             * Whether Wicket tags should be stripped from the markup.
+             *
+             * <p>
+             * Be aware that if Wicket tags are <i>not</i> stripped, then this may break CSS rules on some browsers.
+             * </p>
+             */
+            private boolean stripWicketTags = true;
+
+            private boolean suppressSignUp = false;
+
+            private boolean suppressPasswordReset = false;
+
+            /**
+             * The pattern used for rendering and parsing timestamps.
+             */
+            private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
+
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.
              *
@@ -588,13 +579,36 @@ public class IsisConfiguration {
             private boolean useIndicatorForNoArgAction = true;
 
             /**
-             * Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit)
-             * is the same as the previous page.
+             * Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
              *
-             * This behaviour is disabled by default; the viewer will update the existing page if it can, making for a
-             * smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of redirecting in all cases.
+             * <p>
+             *     Be aware that this can substantially impact performance.
+             * </p>
              */
-            private boolean redirectEvenIfSameObject = false;
+            private boolean wicketSourcePlugin = false;
+
+            private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();
+            @Data
+            public static class DevelopmentUtilities {
+
+                /**
+                 * Determines whether debug bar and other stuff influenced by <tt>org.apache.wicket.settings.DebugSettings#isDevelopmentUtilitiesEnabled()</tt> is enabled or not.
+                 *
+                 * <p>
+                 *     By default, depends on the mode (prototyping = enabled, server = disabled).  This property acts as an override.
+                 * </p>
+                 */
+                private boolean enable = false;
+            }
+
+            private final RememberMe rememberMe = new RememberMe();
+            @Data
+            public static class RememberMe {
+                private boolean suppress = false;
+                private String cookieKey = "isisWicketRememberMe";
+                private String encryptionKey;
+            }
+
         }
     }
 
