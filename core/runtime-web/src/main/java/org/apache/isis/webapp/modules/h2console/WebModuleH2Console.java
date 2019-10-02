@@ -23,6 +23,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,9 @@ import lombok.val;
 @Service @Order(0)
 public class WebModuleH2Console implements WebModule  {
 
-    @Inject private IsisConfigurationLegacy isisConfiguration;
+    @Inject private IsisConfigurationLegacy isisConfigurationLegacy;
+    @Inject IsisConfiguration isisConfiguration;
+
 
     private final static String SERVLET_NAME = "H2Console";
     private final static String SERVLET_CLASS_NAME = "org.h2.server.web.WebServlet";
@@ -82,12 +85,11 @@ public class WebModuleH2Console implements WebModule  {
 
     private boolean canEnable(WebModuleContext ctx) {
 
-        if(!isisConfiguration.getEnvironment().getDeploymentType().isPrototyping()) {
+        if(!isisConfigurationLegacy.getEnvironment().getDeploymentType().isPrototyping()) {
             return false;
         }
 
-        val connectionUrl = isisConfiguration
-                .getString("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL");
+        val connectionUrl = isisConfiguration.getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
 
         val usesH2Connection = !_Strings.isNullOrEmpty(connectionUrl) && connectionUrl.contains(":h2:mem:");
 
