@@ -36,16 +36,25 @@ data class Link(val rel: String = "",
 
     fun argumentsAsBody(): String {
         val args = argMap()!!
-        val arg1 = args.get("script")!!
-        val arg2 = args.get("parameters")!!
-        return "{" + arg1.asBody() + "," + arg2.asBody() + "}"
+        var body = "{"
+        for (kv in args) {
+            val arg = kv.value!!
+            body = body + arg.asBody() + ","
+        }
+        val len = body.length
+        body = body.replaceRange(len -1, len,"}")
+        console.log("[Link.argumentsAsBody] \n $body")
+        return body
     }
 
     fun isInvokeAction(): Boolean {
-        var answer = false
-        if (rel.contains("invokeaction")) answer = true
-        if (rel.contains("invoke;action")) answer = true
-        return answer;
+        if (rel.contains("invokeaction")) {
+            return true
+        }
+        if (rel.contains("invoke;action")) {
+            return true
+        }
+        return false
     }
 
 }

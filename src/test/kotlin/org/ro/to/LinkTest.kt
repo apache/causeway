@@ -56,10 +56,9 @@ class LinkTest : IntegrationTest() {
             //now pass on body in order to prepare everything to invoke
             val arguments = link.arguments
             val arg = Argument(href)
-            arguments!!._set("script", arg)
+            arguments._set("script", arg)
             ActionAggregator().invoke(link)
-            val le = EventStore.find(url)
-            assertNotNull(le)
+            val le = EventStore.find(url)!!
             assertTrue(!le.isError())
         }
     }

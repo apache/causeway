@@ -1,5 +1,5 @@
 package org.ro.urls
-// Result.kt
+// ResultListList.kt
 object RESTFUL_SERVICES : Response() {
     override val url = "http://localhost:8080/restful/services"
     override val str = """

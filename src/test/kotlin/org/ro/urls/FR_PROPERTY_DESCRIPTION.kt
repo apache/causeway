@@ -27,7 +27,7 @@ object FR_PROPERTY_DESCRIPTION : Response() {
         ],
         "optional": false,
         "extensions": {
-            "friendlyName": "Result class"
+            "friendlyName": "ResultListResult class"
         }
     }"""
 }

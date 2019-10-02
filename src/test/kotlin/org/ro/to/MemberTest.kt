@@ -56,7 +56,7 @@ class MemberTest() {
         val m = MemberHandler().parse(FR_PROPERTY_DESCRIPTION.str) as Member
         val extensions: Extensions? = m.extensions
         assertNotNull(extensions)
-        assertEquals("Result class", extensions.friendlyName)
+        assertEquals("ResultListResult class", extensions.friendlyName)
     }
 
     private fun parse(jsonStr: String): Member {

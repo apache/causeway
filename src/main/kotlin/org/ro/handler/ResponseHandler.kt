@@ -1,6 +1,8 @@
 package org.ro.handler
 
 import org.ro.core.event.LogEntry
+import org.ro.org.ro.handler.ResultObjectHandler
+import org.ro.org.ro.handler.ResultValueHandler
 
 /**
  * Delegates responses to handlers, acts as Facade.
@@ -13,7 +15,9 @@ object ResponseHandler {
     private var _1 = ResultHandler()
     private var _2 = ActionHandler()
     private var _3 = ServiceHandler()
-    private var _4 = InvocationResultHandler()
+    private var _4 = ResultListHandler()
+    private var _4a = ResultObjectHandler()
+    private var _4b = ResultValueHandler()
     private var _5 = TObjectHandler()
     private var _6 = LayoutHandler()
     private var _7 = PropertyHandler()
@@ -28,7 +32,9 @@ object ResponseHandler {
         _1.successor = _2
         _2.successor = _3
         _3.successor = _4
-        _4.successor = _5
+        _4.successor = _4a
+        _4a.successor = _4b
+        _4b.successor = _5
         _5.successor = _6
         _6.successor = _7
         _7.successor = _8

@@ -5,9 +5,9 @@ import org.ro.core.UiManager
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
-import org.ro.to.InvocationResult
 import org.ro.to.Link
 import org.ro.to.Property
+import org.ro.to.ResultList
 import org.ro.to.TObject
 
 /** sequence of operations:
@@ -29,7 +29,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
         val obj = logEntry.getObj()
 
         when (obj) {
-            is InvocationResult -> handleList(obj)
+            is ResultList -> handleList(obj)
             is TObject -> handleObject(obj)
             is Layout -> handleLayout(obj)
             is Property -> handleProperty(obj)
@@ -41,9 +41,9 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
         }
     }
 
-    private fun handleList(invocationResult: InvocationResult) {
+    private fun handleList(invocationResult: ResultList) {
         val result = invocationResult.result!!
-        val links = result.getValueLinks()
+        val links = result.value
         for (l: Link in links) {
             invoke(l)
         }

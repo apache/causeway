@@ -82,7 +82,7 @@ class ColumnFactory {
 
     private fun buildLink(): ColumnDefinition<Exposer> {
         return ColumnDefinition<dynamic>(
-                title = "Result",
+                title = "ResultListResult",
                 field = "result",
                 headerFilter = Editor.INPUT,
                 formatterComponentFunction = { _, _, data ->

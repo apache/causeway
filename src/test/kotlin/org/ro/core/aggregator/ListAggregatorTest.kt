@@ -46,7 +46,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertEquals(pdLe.aggregator, layoutLe.aggregator) // 5
             assertNotNull(dl.layout) // 6
             assertTrue(propertyLabels.size > 0)   // 7
-            assertEquals("Result class", lbl)
+            assertEquals("ResultListResult class", lbl)
         }
     }
 
