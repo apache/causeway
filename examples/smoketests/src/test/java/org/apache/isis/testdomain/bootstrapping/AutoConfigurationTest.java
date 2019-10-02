@@ -27,12 +27,9 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
 
@@ -95,9 +92,7 @@ class AutoConfigurationTest {
     @BeforeEach
     void beforeEach() {
         assertNotNull(applicationContext);
-        if(!_Spring.isContextAvailable()) {
-            _Spring.init(applicationContext);
-        }
+        _Spring.reinit(applicationContext);
     }
     
     @Test

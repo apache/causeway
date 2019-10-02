@@ -79,6 +79,12 @@ public class _Spring {
     public static void init(ApplicationContext context) {
         _Context.putSingleton(ApplicationContext.class, context);
     }
+    
+    /** JUnit support */
+    public static void reinit(ApplicationContext applicationContext) {
+        _Context.remove(ApplicationContext.class);
+        _Spring.init(applicationContext);
+    }
 
     public static ApplicationContext context() {
         return _Context.getElseFail(ApplicationContext.class);
@@ -254,5 +260,7 @@ public class _Spring {
         }
 
     }
+
+    
 
 }

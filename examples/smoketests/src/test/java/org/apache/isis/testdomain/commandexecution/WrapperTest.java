@@ -58,9 +58,6 @@ import lombok.val;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                //        		"logging.level.org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo=DEBUG",
-                //        		"logging.level.org.apache.isis.jdo.persistence.PersistenceSession5=DEBUG",
-                //        		"logging.level.org.apache.isis.jdo.persistence.IsisTransactionJdo=DEBUG",
         })
 class WrapperTest {
 
