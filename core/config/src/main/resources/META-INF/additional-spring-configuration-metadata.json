@@ -3,22 +3,22 @@
     {
       "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName",
       "type": "java.lang.String",
-      "description": "JDBC driver used by DataNucleus Object store to connect.",
+      "description": "JDBC driver used by DataNucleus Object store to connect."
     },
     {
       "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL",
       "type": "java.lang.String",
-      "description": "URL used by DataNucleus Object store to connect.",
+      "description": "URL used by DataNucleus Object store to connect."
     },
     {
       "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName",
       "type": "java.lang.String",
-      "description": "User account used by DataNucleus Object store to connect.",
+      "description": "User account used by DataNucleus Object store to connect."
     },
     {
       "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword",
       "type": "java.lang.String",
-      "description": "Password for the user account used by DataNucleus Object store to connect.",
+      "description": "Password for the user account used by DataNucleus Object store to connect."
     },
     {
       "name": "isis.viewer.wicket.credit.1.url",
