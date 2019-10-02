@@ -98,13 +98,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance (
-            final IsisConfiguration configuration,
-            final ProgrammingModel programmingModel,
-            final MetaModelValidator metaModelValidator) {
+            IsisConfiguration configuration,
+            IsisSystemEnvironment isisSystemEnvironment,
+            ProgrammingModel programmingModel,
+            MetaModelValidator metaModelValidator) {
 
         val instance = new SpecificationLoaderDefault(); 
 
         instance.isisConfiguration = configuration;
+        instance.isisSystemEnvironment = isisSystemEnvironment;
         instance.programmingModel = programmingModel;
         instance.metaModelValidator = metaModelValidator;
 
