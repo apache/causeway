@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.system.persistence;
+package org.apache.isis.jdo.datanucleus.service;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
@@ -31,6 +31,8 @@ import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
 import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
 import org.apache.isis.runtime.system.context.session.SessionLifecycleEvent;
+import org.apache.isis.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.system.session.IsisSession;
 import org.apache.isis.runtime.system.session.IsisSessionFactory;
 
