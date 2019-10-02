@@ -27,6 +27,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.layout.grid.Grid;
@@ -116,7 +117,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public boolean supportsReloading() {
-        return _Context.isPrototyping();
+        return isisSystemEnvironment.isPrototyping();
     }
 
     @Override
@@ -243,5 +244,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Inject MessageService messageService;
     @Inject GridReaderUsingJaxb gridReader;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }

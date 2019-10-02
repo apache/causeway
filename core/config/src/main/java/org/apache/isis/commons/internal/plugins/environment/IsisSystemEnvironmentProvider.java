@@ -16,20 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config;
+package org.apache.isis.commons.internal.plugins.environment;
 
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironmentProvider;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import java.util.Set;
+
+import javax.inject.Singleton;
+
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
+/**
+ * Simply responsible for instantiating the singleton {@link IsisSystemEnvironment} through its factory method.
+ */
 @Configuration
-@Import({
-    //IsisConfiguration.class // not required
-    IsisConfiguration.PatternsConverter.class,
-    IsisSystemEnvironmentProvider.class
-})
-@EnableConfigurationProperties(IsisConfiguration.class)
-public class IsisConfigModule {
+public class IsisSystemEnvironmentProvider {
 
+    @Bean @Singleton
+    public IsisSystemEnvironment isisSystemEnvironment() {
+        return IsisSystemEnvironment.get();
+    }
 }
+
+

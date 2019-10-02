@@ -712,7 +712,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return oa;
         }
         //TODO [2033] remove or replace        
-        //        if(_Context.isPrototyping()) {
+        //        if(IsisSystemEnvironment.get().isPrototyping()) {
         //            // automatically refresh if not in production
         //            // (better support for jrebel)
         //

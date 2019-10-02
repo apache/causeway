@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -174,7 +175,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         menuBars.setMetadataError(
                 "Exactly one menu must have 'unreferencedActions' flag set; found " + size + " such menus");
-        if(_Context.isPrototyping()) {
+        if(isisSystemEnvironment.isPrototyping()) {
             messageService.warnUser("Menubars metadata errors; check the error log");
         }
         log.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
@@ -393,6 +394,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     @Inject MenuBarsLoaderService menuBarsLoaderService;
     @Inject MessageService messageService;
     @Inject JaxbService jaxbService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }
 

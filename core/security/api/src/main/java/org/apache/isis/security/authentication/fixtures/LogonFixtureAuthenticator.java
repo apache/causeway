@@ -19,10 +19,14 @@
 
 package org.apache.isis.security.authentication.fixtures;
 
-import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.standard.AuthenticatorAbstract;
 
+/**
+ * @deprecated - I suspect that this code is no longer used anywhere...
+ */
+@Deprecated
 public class LogonFixtureAuthenticator extends AuthenticatorAbstract {
 
     public LogonFixtureAuthenticator() {
@@ -39,7 +43,7 @@ public class LogonFixtureAuthenticator extends AuthenticatorAbstract {
 
     @Override
     protected final boolean isValid(final AuthenticationRequest request) {
-        return _Context.isPrototyping();
+        return IsisSystemEnvironment.get().isPrototyping();
     }
 
 

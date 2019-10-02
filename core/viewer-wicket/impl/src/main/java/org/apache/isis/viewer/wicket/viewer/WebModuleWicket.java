@@ -18,12 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.viewer;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,8 @@ public final class WebModuleWicket implements WebModule  {
     private String deploymentMode;
     private String appConfigValue;
 
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
+
     @Override
     public String getName() {
         return "Wicket";
@@ -72,7 +76,7 @@ public final class WebModuleWicket implements WebModule  {
         
         pathConfigValue = wicketConf.getBasePath();
 
-        deploymentMode = _Context.isPrototyping()
+        deploymentMode = isisSystemEnvironment.isPrototyping()
                 ? "development" 
                         : "deployment";
 

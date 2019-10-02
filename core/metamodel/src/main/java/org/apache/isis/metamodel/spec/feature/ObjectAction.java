@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -307,7 +308,7 @@ public interface ObjectAction extends ObjectMember {
             final List<ObjectAction> topLevelActions = _Lists.newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-            if(_Context.isPrototyping()) {
+            if(IsisSystemEnvironment.get().isPrototyping()) {
                 addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
             }
             return topLevelActions;
@@ -342,7 +343,7 @@ public interface ObjectAction extends ObjectMember {
             final List<ObjectAction> associatedActions = _Lists.newArrayList();
 
             addActions(adapter, ActionType.USER, association, associatedActions);
-            if(_Context.isPrototyping()) {
+            if(IsisSystemEnvironment.get().isPrototyping()) {
                 addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
             }
 

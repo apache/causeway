@@ -23,8 +23,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -79,7 +81,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
         isisConfigurationLegacy = _Config.getConfiguration(); // finalize config
 
         // dump config to log
-        if(log.isInfoEnabled() && !isisConfigurationLegacy.getEnvironment().isUnitTesting()) {
+        if(log.isInfoEnabled() && !isisSystemEnvironment.isUnitTesting()) {
             log.info("\n" + _Config.getConfiguration().toStringFormatted());
         }    
 
@@ -152,5 +154,6 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
 
     }
 
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }

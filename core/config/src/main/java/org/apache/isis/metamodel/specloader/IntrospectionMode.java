@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.specloader;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.val;
@@ -59,9 +60,9 @@ public enum IntrospectionMode {
 
     protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
 
-    public static boolean isFullIntrospect(IsisConfiguration configuration) {
+    public static boolean isFullIntrospect(IsisConfiguration configuration, IsisSystemEnvironment isisSystemEnvironment) {
         val introspectionMode = configuration.getReflector().getIntrospector().getMode();
-        return introspectionMode.isFullIntrospect(_Context.getEnvironment().getDeploymentType());
+        return introspectionMode.isFullIntrospect(isisSystemEnvironment.getDeploymentType());
     }
     
 }

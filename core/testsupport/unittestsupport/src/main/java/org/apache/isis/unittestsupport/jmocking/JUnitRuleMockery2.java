@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -36,7 +37,6 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -69,7 +69,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Factory method.
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
-        IsisSystemEnvironment.setUnitTesting(true);
+        IsisSystemEnvironment.get().setUnitTesting(true);
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {
             jUnitRuleMockery2.setImposteriser(Imposterisers.getDefault());

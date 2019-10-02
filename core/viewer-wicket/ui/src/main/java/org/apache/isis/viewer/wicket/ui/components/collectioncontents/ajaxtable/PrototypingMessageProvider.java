@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.Locale;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -56,7 +57,7 @@ class PrototypingMessageProvider {
 
     private static String getTookTimingMessage() {
 
-        if(!_Context.isPrototyping()) {
+        if(!IsisSystemEnvironment.get().isPrototyping()) {
             return "";
         }
 

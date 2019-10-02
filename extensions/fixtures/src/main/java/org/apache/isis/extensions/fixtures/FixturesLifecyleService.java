@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.clock.Clock;
@@ -33,6 +34,7 @@ import org.apache.isis.runtime.system.session.IsisSessionFactory;
 public class FixturesLifecyleService {
 
     @Inject IsisSessionFactory isisSessionFactory; // depends on  
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
     @PostConstruct
     public void postConstruct() {
@@ -41,7 +43,7 @@ public class FixturesLifecyleService {
         // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
         // we do this after loading the services to allow a service to prime a different clock
         // implementation (eg to use an NTP time service).
-        if (_Context.isPrototyping() && !Clock.isInitialized()) {
+        if (isisSystemEnvironment.isPrototyping() && !Clock.isInitialized()) {
             FixtureClock.initialize();
         }
 

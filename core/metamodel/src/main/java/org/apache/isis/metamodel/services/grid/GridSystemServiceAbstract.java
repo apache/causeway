@@ -55,6 +55,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -170,7 +171,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
             }
         } else {
 
-            if(_Context.isPrototyping()) {
+            if(isisSystemEnvironment.isPrototyping()) {
                 messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
             }
             log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
@@ -693,5 +694,6 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
     @Inject protected TranslationService translationService;
     @Inject protected JaxbService jaxbService;
     @Inject protected MessageService messageService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }

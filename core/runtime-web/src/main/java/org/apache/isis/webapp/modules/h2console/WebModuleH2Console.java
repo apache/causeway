@@ -23,6 +23,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ import lombok.val;
 @Service @Order(0)
 public class WebModuleH2Console implements WebModule  {
 
-    @Inject private IsisConfigurationLegacy isisConfigurationLegacy;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
     @Inject IsisConfiguration isisConfiguration;
 
 
@@ -85,7 +86,7 @@ public class WebModuleH2Console implements WebModule  {
 
     private boolean canEnable(WebModuleContext ctx) {
 
-        if(!isisConfigurationLegacy.getEnvironment().getDeploymentType().isPrototyping()) {
+        if(!isisSystemEnvironment.getDeploymentType().isPrototyping()) {
             return false;
         }
 

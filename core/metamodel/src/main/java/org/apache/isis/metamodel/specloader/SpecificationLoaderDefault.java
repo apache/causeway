@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.base._Timing;
@@ -103,7 +104,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val instance = new SpecificationLoaderDefault(); 
 
-        instance.configuration = configuration;
+        instance.isisConfiguration = configuration;
         instance.programmingModel = programmingModel;
         instance.metaModelValidator = metaModelValidator;
 
@@ -237,7 +238,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * deployment mode and configuration
      */
     private boolean isFullIntrospect() {
-        return IntrospectionMode.isFullIntrospect(configuration);
+        return IntrospectionMode.isFullIntrospect(isisConfiguration, isisSystemEnvironment);
     }
 
 
@@ -365,7 +366,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final Collection<ObjectSpecification> specs, 
             final IntrospectionState upTo) {
 
-        val isConcurrentFromConfig = configuration.getReflector().getIntrospector().isParallelize();
+        val isConcurrentFromConfig = isisConfiguration.getReflector().getIntrospector().isParallelize();
 
         val runSequential = !isConcurrentFromConfig;
         
@@ -402,7 +403,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Inject private ProgrammingModelService programmingModelService;
     @Inject private MetaModelValidatorService metaModelValidatorService; 
-    @Inject private IsisConfiguration configuration;
+    @Inject private IsisConfiguration isisConfiguration;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
     // -- DEPRECATED
 

@@ -31,6 +31,7 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -605,7 +606,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
     private List<ActionType> inferActionTypes() {
         final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
-        if (_Context.isPrototyping()) {
+        if (IsisSystemEnvironment.get().isPrototyping()) {
             actionTypes.add(ActionType.PROTOTYPE);
         }
         return actionTypes;

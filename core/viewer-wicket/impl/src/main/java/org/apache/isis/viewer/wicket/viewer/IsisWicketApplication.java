@@ -28,6 +28,8 @@ import java.util.function.Function;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -143,10 +145,15 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         return (IsisWicketApplication) AuthenticatedWebApplication.get();
     }
 
-    @Inject private ComponentFactoryRegistry componentFactoryRegistry;
-    @Inject private PageClassRegistry pageClassRegistry;
-    @Inject private WicketViewerSettings settings;
+    private ServiceRegistry serviceRegistry;
+
+    // injected manually
+    private ComponentFactoryRegistry componentFactoryRegistry;
+    private PageClassRegistry pageClassRegistry;
+    private WicketViewerSettings settings;
+
     private IsisConfiguration configuration;
+    private IsisSystemEnvironment isisSystemEnvironment;
 
     //    @Inject private ImageResourceCache imageCache;
     //    @Inject private WicketViewerSettings wicketViewerSettings;
@@ -203,9 +210,21 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @Override
     protected void init() {
 
-        configuration = IsisContext.getConfiguration();
-        
-        val serviceRegistry = IsisContext.getServiceRegistry();
+        // resolve injection points 'manually', after first looking up the serviceRegistry from our IsisContext.
+
+        // XXX it would be nice to have Spring inject into this class instead.
+        this.serviceRegistry = IsisContext.getServiceRegistry();
+
+        //XXX don't rely on ServiceInjector, since it can run in different configurable modes. (Hmm... not sure what this means?)
+        //serviceInjector.injectServicesInto(this);
+        {
+            configuration = serviceRegistry.lookupServiceElseFail(IsisConfiguration.class);
+            componentFactoryRegistry = serviceRegistry.lookupServiceElseFail(ComponentFactoryRegistry.class);
+            pageClassRegistry = serviceRegistry.lookupServiceElseFail(PageClassRegistry.class);
+            settings = serviceRegistry.lookupServiceElseFail(WicketViewerSettings.class);
+            isisSystemEnvironment = serviceRegistry.lookupServiceElseFail(IsisSystemEnvironment.class);
+        }
+
         val backgroundInitializationTasks = createBackgroundInitializationTasks();
         
         try {
@@ -222,17 +241,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
 
-            // Initialize Spring Dependency Injection
+            // Initialize Spring Dependency Injection (into Wicket components)
             getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
-            //XXX don't rely on ServiceInjector, since it can run in different configurable modes
-            //serviceInjector.injectServicesInto(this);
-
-            { // resolve injection points 'manually' 
-                componentFactoryRegistry = serviceRegistry.lookupServiceElseFail(ComponentFactoryRegistry.class);
-                pageClassRegistry = serviceRegistry.lookupServiceElseFail(PageClassRegistry.class);
-                settings = serviceRegistry.lookupServiceElseFail(WicketViewerSettings.class);
-            }
 
 
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
@@ -268,7 +279,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 log(metaModelDeficiencies.getValidationErrors());
             }
 
-            if(_Context.isPrototyping()) {
+            if(isisSystemEnvironment.isPrototyping()) {
                 DebugDiskDataStore.register(this);
                 log.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
                 log.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
@@ -344,7 +355,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      * app is restarted.
      */
     String defaultEncryptionKey() {
-        return _Context.isPrototyping()
+        return isisSystemEnvironment.isPrototyping()
                 ? "PrototypingEncryptionKey"
                         : UUID.randomUUID().toString();
     }
@@ -379,7 +390,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     protected void configureWicketSourcePlugin() {
-        if(_Context.isPrototyping()) {
+        if(isisSystemEnvironment.isPrototyping()) {
             WicketSource.configure(this);
         }
     }
@@ -579,7 +590,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             @Override //[ahuber] final on purpose! to switch DeploymentType, do this consistent with IsisContext.
             public final RuntimeConfigurationType getConfigurationType() {
-                return _Context.isPrototyping()
+                return IsisSystemEnvironment.get().isPrototyping()
                         ? RuntimeConfigurationType.DEVELOPMENT
                                 : RuntimeConfigurationType.DEPLOYMENT;
             }

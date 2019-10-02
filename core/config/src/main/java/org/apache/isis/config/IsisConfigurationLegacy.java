@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 
 import lombok.val;
@@ -58,7 +57,7 @@ public interface IsisConfigurationLegacy {
 
     // -- VERSION
 
-    public static String getVersion() {
+    public default String getVersion() {
         return "2.0.0-M3";
     }
 
@@ -207,13 +206,6 @@ public interface IsisConfigurationLegacy {
      */
     Map<String, String> copyToMap();
 
-    /**
-     * pre-bootstrapping configuration
-     */
-    default public IsisSystemEnvironment getEnvironment() {
-        return _Context.getEnvironment();
-    }
-
     // -- TO STRING
 
     default public String toStringFormatted() {
@@ -225,7 +217,7 @@ public interface IsisConfigurationLegacy {
                 ConfigurationConstants.maskIfProtected(configuration.copyToMap(), TreeMap::new);
 
         String head = String.format("APACHE ISIS %s (%s) ", 
-                IsisConfigurationLegacy.getVersion(), getEnvironment().getDeploymentType().name());
+                getVersion(), IsisSystemEnvironment.get().getDeploymentType().name());
         final int fillCount = 46-head.length();
         final int fillLeft = fillCount/2;
         final int fillRight = fillCount-fillLeft;

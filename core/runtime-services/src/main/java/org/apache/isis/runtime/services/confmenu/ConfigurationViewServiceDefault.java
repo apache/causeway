@@ -23,12 +23,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
@@ -54,12 +57,12 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
         final Map<String, ConfigurationProperty> map = new HashMap<>();
 
-        _Config.getConfiguration().copyToMap().forEach((k, v)->add(k, v, map));
+        isisConfigurationLegacy.copyToMap().forEach((k, v)->add(k, v, map));
 
         // for convenience add some additional info to the top ...
-        add("[ Isis Version ]", IsisConfigurationLegacy.getVersion(), map);
-        add("[ Deployment Type ]", _Context.getEnvironment().getDeploymentType().name(), map);
-        add("[ Unit Testing ]", ""+_Context.getEnvironment().isUnitTesting(), map);
+        add("[ Isis Version ]", isisConfigurationLegacy.getVersion(), map);
+        add("[ Deployment Type ]", isisSystemEnvironment.getDeploymentType().name(), map);
+        add("[ Unit Testing ]", ""+isisSystemEnvironment.isUnitTesting(), map);
 
         return map;
     }
@@ -71,4 +74,6 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
         map.put(key, new ConfigurationProperty(key, value));
     }
 
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    @Inject IsisConfigurationLegacy isisConfigurationLegacy;
 }

@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
@@ -84,7 +85,7 @@ public class TranslationServicePo implements TranslationService {
     }
 
     protected boolean isPrototypeOrTest() {
-        return _Context.isPrototyping();
+        return isisSystemEnvironment.isPrototyping();
     }
 
     @PreDestroy
@@ -173,5 +174,6 @@ public class TranslationServicePo implements TranslationService {
         return localeProviders.get();
     }
 
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }

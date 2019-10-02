@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.AbstractResource;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     @Override
     public boolean supportsReloading() {
-        return _Context.isPrototyping();
+        return isisSystemEnvironment.isPrototyping();
     }
 
     @Override
@@ -111,5 +112,6 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     @Inject JaxbService jaxbService;
     @Autowired(required = false) WebAppConfigBean webAppConfigBean;
 
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 }
 

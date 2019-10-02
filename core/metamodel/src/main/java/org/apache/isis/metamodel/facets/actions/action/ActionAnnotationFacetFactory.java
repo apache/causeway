@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -174,7 +175,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // search for @Action(restrictTo=...)
         final List<Action> actions = Annotations.getAnnotations(method, Action.class);
         PrototypeFacet facet = PrototypeFacetForActionAnnotation.create(actions, holder,
-                _Context.getEnvironment().getDeploymentType());
+                IsisSystemEnvironment.get().getDeploymentType());
 
         FacetUtil.addFacet(facet);
     }

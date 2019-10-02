@@ -29,12 +29,9 @@ import java.util.function.Supplier;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
-import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
-import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.*;
 
 /**
  * <h1>- internal use only -</h1>
@@ -351,23 +348,6 @@ public final class _Context {
      */
     public static Class<?> loadClassAndInitialize(String className) throws ClassNotFoundException{
         return Class.forName(className, true, getDefaultClassLoader());
-    }
-
-    // -- ENVIRONMENT
-
-    /** framework internal, exposed by IsisContext */
-    public static IsisSystemEnvironment getEnvironment() {
-        return getOrElse(IsisSystemEnvironment.class, ()->IsisSystemEnvironment.DEFAULT); 
-    }
-
-    /** framework internal, shortcut for convenience */
-    public static boolean isPrototyping() {
-        return getEnvironment().getDeploymentType().isPrototyping();
-    }
-
-    /** framework internal, shortcut for convenience */
-    public static boolean isUnitTesting() {
-        return getEnvironment().isUnitTesting();
     }
 
     // -- HELPER
