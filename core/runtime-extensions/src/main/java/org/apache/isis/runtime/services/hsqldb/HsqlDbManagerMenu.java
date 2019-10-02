@@ -19,7 +19,9 @@
 package org.apache.isis.runtime.services.hsqldb;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.hsqldb.util.DatabaseManagerSwing;
 
 import org.apache.isis.applib.IsisApplibModule;
@@ -33,7 +35,6 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.runtime.system.context.IsisContext;
 
 @DomainService(
         nature = NatureOfService.VIEW,
@@ -46,12 +47,13 @@ import org.apache.isis.runtime.system.context.IsisContext;
 public class HsqlDbManagerMenu {
 
 
+    @Inject IsisConfiguration isisConfiguration;
+
     private String url;
 
     @PostConstruct
     public void init() {
-        this.url = IsisContext.getConfigurationLegacy()
-                .getString("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL");
+        this.url = isisConfiguration.getPersistor().getDatanucleus().getImpl().getJavax().getJdo().getOption().getConnectionUrl();
     }
 
 

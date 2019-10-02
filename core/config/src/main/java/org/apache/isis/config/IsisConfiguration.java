@@ -18,6 +18,7 @@
  */
 package org.apache.isis.config;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,6 +109,26 @@ public class IsisConfiguration {
             private final Impl impl = new Impl();
             @Data
             public static class Impl {
+                private final Javax javax = new Javax();
+                @Data
+                public static class Javax {
+                    private final Jdo jdo = new Jdo();
+                    @Data
+                    public static class Jdo {
+                        private final Option option = new Option();
+                        @Data
+                        public static class Option {
+                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionDriverName'
+                            private String connectionDriverName;
+                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionURL'
+                            private String connectionUrl;
+                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionUserName'
+                            private String connectionUserName;
+                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionPassword'
+                            private String connectionPassword;
+                        }
+                    }
+                }
             }
 
             private final StandaloneCollection standaloneCollection = new StandaloneCollection();
