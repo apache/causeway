@@ -19,15 +19,12 @@
 package domainapp.conf;
 
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.IsisBootSecurityBypass;
@@ -54,9 +51,6 @@ import domainapp.modules.simple.SimpleModule;
         basePackageClasses= {
                 DomainAppApplicationModule.class,
                 SimpleModule.class
-        },
-        includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class SimpleAppConfigurationForTesting {
 

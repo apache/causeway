@@ -20,12 +20,9 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.webapp.IsisBootWebApp;
 
 /**
@@ -39,9 +36,6 @@ import org.apache.isis.webapp.IsisBootWebApp;
 @ComponentScan(
         basePackageClasses= {
                 IsisBootWebWicket.class,
-        },
-        includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class IsisBootWebWicket {
 

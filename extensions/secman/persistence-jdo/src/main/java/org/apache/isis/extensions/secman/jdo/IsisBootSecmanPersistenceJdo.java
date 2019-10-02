@@ -19,19 +19,12 @@
 package org.apache.isis.extensions.secman.jdo;
 
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 
 @Configuration
 @ComponentScan(
         basePackageClasses= {
                 IsisBootSecmanPersistenceJdo.class
-        },
-        includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class IsisBootSecmanPersistenceJdo {
 
