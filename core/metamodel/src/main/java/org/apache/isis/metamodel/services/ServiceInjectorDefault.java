@@ -18,6 +18,7 @@
  */
 package org.apache.isis.metamodel.services;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,12 +31,14 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
@@ -43,6 +46,7 @@ import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -75,15 +79,19 @@ public class ServiceInjectorDefault implements ServiceInjector {
 
     private void injectServices(final Object targetPojo, Consumer<InjectionPoint> onNotResolvable) {
 
-        final Class<?> cls = targetPojo.getClass();
+        val type = targetPojo.getClass();
+        if(serviceRegistry.isResolvableBean(type)) {
+            log.warn("Skipping call injectServices() on an already managed bean {}.", type);
+            return; // already managed
+        }
 
-        injectToFields(targetPojo, cls, onNotResolvable);
+        injectToFields(targetPojo, type, onNotResolvable);
 
         if(autowireSetters) {
-            injectViaPrefixedMethods(targetPojo, cls, "set", onNotResolvable);
+            injectViaPrefixedMethods(targetPojo, type, "set", onNotResolvable);
         }
         if(autowireInject) {
-            injectViaPrefixedMethods(targetPojo, cls, "inject", onNotResolvable);
+            injectViaPrefixedMethods(targetPojo, type, "inject", onNotResolvable);
         }
     }
 
@@ -100,6 +108,17 @@ public class ServiceInjectorDefault implements ServiceInjector {
         }
     }
 
+    @Primary
+    private static class PrimaryProvider {
+        final static PrimaryProvider INSTANCE = new PrimaryProvider();
+        
+        @Getter(lazy = true)
+        private final Primary primaryAnnotation = 
+            PrimaryProvider.class.getAnnotation(Primary.class);
+    }
+    
+    
+    
     private void injectToField(final Object targetPojo, final Field field, Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> typeToBeInjected = field.getType();
@@ -115,16 +134,34 @@ public class ServiceInjectorDefault implements ServiceInjector {
             injectToField_nonScalar(targetPojo, field, elementType, onNotResolvable);
             return;
         }
-
+        
         val beans = serviceRegistry.select(typeToBeInjected, field.getAnnotations());
 
         if(beans.isEmpty()) {
             onNotResolvable.accept(new InjectionPoint(field));
-            return;
+        } else if(beans.isCardinalityOne()) {
+            val bean = beans.getSingleton().get();
+            invokeInjectorField(field, targetPojo, bean);
+        } else {
+            
+            val primaryAnnotation = PrimaryProvider.INSTANCE.getPrimaryAnnotation();
+            val requiredAnnotations = _Arrays.combine(
+                    Annotation.class, 
+                    primaryAnnotation, 
+                    field.getAnnotations());
+            
+            // look for primary
+            val primaryBean = serviceRegistry.select(typeToBeInjected, requiredAnnotations);
+            if(!primaryBean.isEmpty()) {
+                val bean = primaryBean.getFirst().get();
+                invokeInjectorField(field, targetPojo, bean);
+                return;
+            }
+            
+            // fallback: pick first in list
+            val bean = beans.getFirst().get();
+            invokeInjectorField(field, targetPojo, bean);    
         }
-
-        val bean = beans.getFirst().get();
-        invokeInjectorField(field, targetPojo, bean);
 
     }
 

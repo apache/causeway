@@ -26,7 +26,7 @@ import org.apache.isis.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin //FIXME mixins seem broken!
+@Mixin
 @RequiredArgsConstructor
 public class BlobDemo_downloadLogo  {
 

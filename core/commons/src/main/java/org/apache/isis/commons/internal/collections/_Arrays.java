@@ -168,6 +168,26 @@ public final class _Arrays {
         }
         return all;
     }
+    
+    /**
+     * Returns a new array containing all components {first, *rest}
+     * @param type (non-null) explicit array element type
+     * @param first (non-null)
+     * @param rest (nullable)
+     * @return (non-null)
+     */
+    @SafeVarargs
+    public static <T, X extends T, Y extends T> T[] combine(Class<T> type, X first, @Nullable  Y... rest) {
+        requires(type, "type");
+        requires(first, "first");
+        final int restLength = _NullSafe.size(rest);
+        final T[] all = _Casts.uncheckedCast(Array.newInstance(type, restLength+1));
+        all[0] = first;
+        if(restLength>0) {
+            System.arraycopy(rest, 0, all, 1, restLength);
+        }
+        return all;
+    }
 
     /**
      * Returns a new array containing all components {*first, *rest}

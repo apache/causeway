@@ -36,6 +36,7 @@ import javax.inject.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
@@ -51,7 +52,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
-import org.apache.isis.commons.internal.ioc.cdi._CDI;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -187,19 +187,25 @@ public class _Spring {
             return Collections.emptySet();
         }
         return stream(annotations)
-                .filter(_CDI::isQualifier)
+                .filter(_Spring::isGenericQualifier)
                 .collect(Collectors.toSet());
     }
 
     /**
      * @param annotation
-     * @return whether or not the annotation is a valid qualifier for CDI
+     * @return whether or not the annotation is a valid qualifier for Spring
      */
-    public static boolean isQualifier(Annotation annotation) {
+    public static boolean isGenericQualifier(Annotation annotation) {
         if(annotation==null) {
             return false;
         }
-        return annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0;
+        if(annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0) {
+            return true;
+        }
+        if(annotation.annotationType().equals(Primary.class)) {
+            return true;
+        }
+        return false;
     }
 
     /**

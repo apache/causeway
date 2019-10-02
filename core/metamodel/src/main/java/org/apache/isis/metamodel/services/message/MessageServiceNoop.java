@@ -23,12 +23,12 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 
-@Vetoed //@Singleton @Order(Ordered.LOWEST_PRECEDENCE) //FIXME[2112] tell Spring to use correct order 
+@Vetoed // can be used via producer (optional) 
 public class MessageServiceNoop implements MessageService {
 
     @Override
     public void informUser(final String message) {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+        throw new UnsupportedOperationException("Not supported by this implementation of MessageService");
     }
 
     @Override

@@ -49,6 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.Getter;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Smoketest
 @SpringBootTest(
@@ -90,7 +91,7 @@ class WrapperTest {
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()
-                .await(5, TimeUnit.SECONDS));
+                .await(2, TimeUnit.SECONDS)); //XXX just a reasonable long time period
 
         assertEquals(123d, product.getPrice(), 1E-6);
     }
@@ -118,7 +119,7 @@ class WrapperTest {
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()
-                .await(5, TimeUnit.SECONDS));
+                .await(2, TimeUnit.SECONDS)); //XXX just a reasonable long time period
         
         assertEquals(123d, product.getPrice(), 1E-6);
         
@@ -128,7 +129,7 @@ class WrapperTest {
     }
     
 
-    @Service
+    @Service @Log4j2
     public static class ActionDomainEventListener {
 
         @Getter private CountDownLatch countDownLatch;
@@ -136,6 +137,7 @@ class WrapperTest {
         @EventListener(InventoryManager.UpdateProductPriceEvent.class)
         public void onDomainEvent(InventoryManager.UpdateProductPriceEvent event) {
             if(event.getEventPhase()==Phase.EXECUTED) {
+                log.info("UpdateProductPriceEvent received.");
                 countDownLatch.countDown();
             }
         }

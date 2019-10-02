@@ -18,21 +18,25 @@
  */
 package org.apache.isis.runtime.spring;
 
-import org.apache.isis.config.IsisConfigModule;
+import javax.inject.Singleton;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.OrderComparator;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.config.IsisConfigModule;
 import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.metamodel.IsisMetamodelModule;
-import org.apache.isis.metamodel.services.repository.RepositoryServiceJdo;
 import org.apache.isis.runtime.IsisRuntimeModule;
 import org.apache.isis.runtime.services.IsisRuntimeServicesModule;
 import org.apache.isis.wrapper.IsisWrapperModule;
@@ -60,5 +64,9 @@ public class IsisBoot implements ApplicationContextAware {
         // (its passed over to ServiceRegistryDefault)
     }
 
+    @Bean @Singleton //XXX as used by _Spring utility
+    public OrderComparator orderComparator() {
+        return new AnnotationAwareOrderComparator();
+    }
 
 }

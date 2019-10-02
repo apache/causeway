@@ -37,8 +37,9 @@ public final class ServiceUtil {
     private ServiceUtil() {
     }
 
-    //FIXME [2033] I found no standardized way yet to do this, maybe create a list during bean-scan?
-    public static String idOfBean(final Bean<?> serviceBean) {
+    //[2033] I found no standardized way yet to do this, maybe create a list during bean-scan?
+    //TODO no longer referenced, remove?
+    private static String idOfBean(final Bean<?> serviceBean) {
 
         // serviceBean might also be a producer method
         // eg. org.jboss.weld.bean.ProducerMethod

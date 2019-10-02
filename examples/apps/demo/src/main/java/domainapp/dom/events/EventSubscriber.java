@@ -42,7 +42,6 @@ public class EventSubscriber {
     @Inject private WrapperFactory wrapper;
     @Inject private EventBusService eventBusService;
     @Inject private EventLogRepository eventLogRepository;
-//    @Inject private TransactionService transactionService;
 
     public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {}
 
@@ -64,10 +63,6 @@ public class EventSubscriber {
         // store in event log
         wrapper.async(this)
         .run(EventSubscriber::storeEvent, ev);
-        
-//        transactionService.executeWithinTransaction(()->{
-//            storeEvent(ev);
-//        });
 
     }
 

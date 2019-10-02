@@ -20,13 +20,11 @@ package org.apache.isis.testdomain.domainmodel;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
@@ -42,7 +40,6 @@ import org.apache.isis.testdomain.model.bad.OrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.OrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.OrphanedPropertySupport;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

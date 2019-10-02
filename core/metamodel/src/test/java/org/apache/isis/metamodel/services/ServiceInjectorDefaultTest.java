@@ -44,8 +44,7 @@ import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.val;
 
 @ActiveProfiles("test")
@@ -112,7 +111,7 @@ class ServiceInjectorDefaultTest {
     public static interface RepositoryServiceExtended extends RepositoryService, MixinService {
     }
 
-    @Getter @Setter
+    @Data
     public static class SomeDomainObject {
         private RepositoryService a;
         private MixinService b;
@@ -129,9 +128,7 @@ class ServiceInjectorDefaultTest {
 
     @BeforeEach
     void setup() {
-        if(!_Spring.isContextAvailable()) {
-            _Spring.init(applicationContext);    
-        }
+        _Spring.reinit(applicationContext);    
     }
     
     @Test

@@ -78,7 +78,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
 
             @Override
             public void summarize(final ValidationFailures validationFailures) {
-                //FIXME[2112]
+                //FIXME[2112] module (legacy) specific, remove?
                 //                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
                 //
                 //                final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
@@ -95,7 +95,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                 //                    }
                 //                }
             }
-            //FIXME[2112]
+            //FIXME[2112] module (legacy) specific, remove?
             //            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
             //                final List<Class<?>> modules = appManifest.getModules();
             //                return modules.stream()
