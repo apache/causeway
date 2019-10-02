@@ -1,7 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.org.ro.handler.ResultValueHandler
+import org.ro.handler.ResultValueHandler
 import org.ro.urls.ACTIONS_OPEN_SWAGGER_UI
 import kotlin.test.Test
 import kotlin.test.assertEquals

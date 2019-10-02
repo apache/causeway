@@ -1,10 +1,6 @@
-package org.ro.org.ro.to
+package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.to.Extensions
-import org.ro.to.IResult
-import org.ro.to.Link
-import org.ro.to.Value
 
 @Serializable
 data class ResultValueResult(
