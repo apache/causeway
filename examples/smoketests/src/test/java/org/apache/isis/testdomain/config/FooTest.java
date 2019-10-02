@@ -18,15 +18,22 @@
  */
 package org.apache.isis.testdomain.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.testdomain.Smoketest;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,9 +56,19 @@ class FooTest {
     @Configuration
     static class Setup {
         
+        @ConfigurationProperties(prefix = "foo")
+        @Bean @Named("foo-as-map")
+        public Map<String, String> getAsMap() {
+            return new HashMap<>();
+        }
+        
     }
 
-    @Inject private FooProperties foo;
+    @Inject 
+    private FooProperties foo;
+    
+    @Inject @Named("foo-as-map") 
+    private Map<String, String> fooAsMap;
 
     @Test
     void foo() {
@@ -63,6 +80,10 @@ class FooTest {
         assertNotNull(foo.getConnectionURL());
         
         System.out.println(foo);
+        
+        assertNotNull(fooAsMap);
+        assertFalse(fooAsMap.isEmpty());
+        System.out.println(fooAsMap);
         
     }
 

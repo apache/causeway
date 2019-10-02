@@ -27,7 +27,6 @@ import javax.enterprise.inject.Vetoed;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.datanucleus.PersistenceNucleusContext;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -39,8 +38,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.jdo.datanucleus.CreateSchemaObjectFromClassMetadata;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.datanucleus.DataNucleusLifeCycleHelper;
 import org.apache.isis.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.jdo.metamodel.facets.object.query.JdoNamedQuery;
@@ -93,8 +91,8 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
             final IsisConfiguration configuration,
             final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
+        
         this.configuration = configuration;
-
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
 

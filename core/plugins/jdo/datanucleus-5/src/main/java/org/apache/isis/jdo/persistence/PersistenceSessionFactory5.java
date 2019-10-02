@@ -26,21 +26,21 @@ import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.listener.StoreLifecycleListener;
 
-import org.apache.isis.metamodel.MetaModelContext;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.jdo.datanucleus.DataNucleusSettings;
 import org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.jdo.entities.JdoEntityTypeRegistry;
 import org.apache.isis.jdo.lifecycles.JdoStoreLifecycleListenerForIsis;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.security.authentication.AuthenticationSession;
@@ -59,13 +59,11 @@ import lombok.extern.log4j.Log4j2;
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledStateHolder {
 
-    public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
-
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
     
     private StoreLifecycleListener storeLifecycleListener;
-    private IsisConfigurationLegacy configuration;
+    private IsisConfiguration configuration;
 
     @Getter(onMethod=@__({@Override})) 
     @Setter(onMethod=@__({@Override})) 
@@ -73,7 +71,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     @Override
     public void init() {
-        this.configuration = _Config.getConfiguration();
+        this.configuration = IsisContext.getConfiguration();
         // need to eagerly build, ... must be completed before catalogNamedQueries().
         // Why? because that method causes entity classes to be loaded which register with DN's EnhancementHelper,
         // which are then cached in DN.  It results in our CreateSchema listener not firing.
@@ -90,16 +88,24 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
-        val dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
-        val datanucleusProps = dataNucleusConfig.copyToMap();
+        this.configuration = IsisContext.getConfiguration();
+        
+        val dnSettings = IsisContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
+        
+        //val dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
+        val datanucleusProps = dnSettings.getAsMap(); 
+                //dataNucleusConfig.copyToMap();
+        
+        System.out.println("############## " + datanucleusProps);
 
         addDataNucleusPropertiesIfRequired(datanucleusProps);
 
         val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
 
         return new DataNucleusApplicationComponents5(
-                MetaModelContext.current().getConfiguration(),
-                datanucleusProps, classesToBePersisted);
+                configuration,
+                datanucleusProps, 
+                classesToBePersisted);
     }
 
     @Override
@@ -108,8 +114,15 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, specificationLoader);
     }
 
-    private static void addDataNucleusPropertiesIfRequired(
-            final Map<String, String> props) {
+//    private static HashMap<String, String> toMap(Properties props) {
+//        val map = _Maps.<String, String>newHashMap();
+//        for (val name: props.stringPropertyNames()) {
+//            map.put(name, props.getProperty(name));
+//        }
+//        return map;
+//    }
+    
+    private static void addDataNucleusPropertiesIfRequired(Map<String, String> props) {
 
         // new feature in DN 3.2.3; enables dependency injection into entities
         putIfNotPresent(props, PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, JDOStateManagerForIsis.class.getName());

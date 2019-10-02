@@ -18,12 +18,18 @@
  */
 package org.apache.isis.jdo;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Named;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.jdo.datanucleus.DataNucleusSettings;
 import org.apache.isis.jdo.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.jdo.jdosupport.mixins.Persistable_datanucleusIdLong;
 import org.apache.isis.jdo.metrics.MetricsServiceDefault;
@@ -31,7 +37,7 @@ import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
 
 @Configuration
 @Import({
-    //TimestampService.class, //FIXME initializes too early 
+    DataNucleusSettings.class, // config bean
     MetricsServiceDefault.class,
     IsisJdoSupportDN5.class,
     IsisPlatformTransactionManagerForJdo.class,
@@ -40,10 +46,16 @@ import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
         basePackageClasses= {
                 // bring in the mixins
                 Persistable_datanucleusIdLong.class,
-        },
-        includeFilters= {
-                @ComponentScan.Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class IsisBootDataNucleus {
-
+    
+    // reserved for datanucleus' own config props
+    public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; 
+    
+    @ConfigurationProperties(prefix = DATANUCLEUS_CONFIG_PREFIX)
+    @Bean @Named("dn-settings")
+    public Map<String, String> getAsMap() {
+        return new HashMap<>();
+    }
+    
 }
