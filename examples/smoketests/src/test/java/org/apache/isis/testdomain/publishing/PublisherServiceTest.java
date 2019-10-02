@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.publishing;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -47,6 +49,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import lombok.Getter;
 import lombok.val;
 
 @Smoketest
@@ -94,14 +97,18 @@ class PublisherServiceTest {
             repository.persist(book);
 
             // then - before the commit
-            assertEquals("", publisherService.getHistory());
+            assertEquals("{}", publisherService.getHistory().toString());
 
             return null;
         });
 
         // then - after the commit
-        assertEquals("publishedObjects=created=0,deleted=0,loaded=0,updated=1,modified=1,",
-                publisherService.getHistory());
+        val history = publisherService.getHistory();
+        assertEquals(0, history.get("created"));
+        assertEquals(0, history.get("deleted"));
+        assertEquals(0, history.get("loaded"));
+        assertEquals(1, history.get("updated"));
+        assertEquals(1, history.get("modified"));
 
     }
 
@@ -120,8 +127,12 @@ class PublisherServiceTest {
         future.get(1000, TimeUnit.SECONDS);
 
         // then - after the commit
-        assertEquals("publishedObjects=created=0,deleted=1,loaded=1,updated=2,modified=1,",
-                publisherService.getHistory());
+        val history = publisherService.getHistory();
+        assertEquals(0, history.get("created"));
+        assertEquals(1, history.get("deleted"));
+        //assertEquals(0, history.get("loaded"));
+        assertEquals(2, history.get("updated"));
+        assertEquals(1, history.get("modified"));
 
     }
 
@@ -130,30 +141,26 @@ class PublisherServiceTest {
     @Service
     public static class PublisherServiceProbe implements PublisherService {
 
-        private StringBuilder history = new StringBuilder();
-
+        @Getter
+        private final Map<String, Integer> history = new HashMap<>();
+        
         void clearHistory() {
-            history = new StringBuilder();
+            history.clear();
         }
 
-        String getHistory() {
-            return history.toString();
-        }
 
         @Override
         public void publish(Execution<?, ?> execution) {
-            history.append("execution=").append(execution).append(",");
+            history.put("execution", 999);
         }
 
         @Override
         public void publish(PublishedObjects publishedObjects) {
-            history.append("publishedObjects=")
-            .append("created=").append(publishedObjects.getNumberCreated()).append(",")
-            .append("deleted=").append(publishedObjects.getNumberDeleted()).append(",")
-            .append("loaded=").append(publishedObjects.getNumberLoaded()).append(",")
-            .append("updated=").append(publishedObjects.getNumberUpdated()).append(",")
-            .append("modified=").append(publishedObjects.getNumberPropertiesModified()).append(",")
-            ;
+            history.put("created", publishedObjects.getNumberCreated());
+            history.put("deleted", publishedObjects.getNumberDeleted());
+            history.put("loaded", publishedObjects.getNumberLoaded());
+            history.put("updated", publishedObjects.getNumberUpdated());
+            history.put("modified", publishedObjects.getNumberPropertiesModified());
         }
 
     }

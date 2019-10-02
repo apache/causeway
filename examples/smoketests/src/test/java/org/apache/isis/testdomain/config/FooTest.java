@@ -37,10 +37,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
-                "foo.flag=true"
+                
+                "foo.flag=true",
+                "foo.uuid=${random.uuid}",
+                "foo.random-schema=test_${random.uuid}",
+                "foo.ConnectionURL=jdbc:h2:mem:test"
         })
 @EnableConfigurationProperties(FooProperties.class)
-public class FooTest {
+class FooTest {
     
     @Configuration
     static class Setup {
@@ -53,6 +57,13 @@ public class FooTest {
     void foo() {
         assertNotNull(foo);
         assertTrue(foo.isFlag());
+        
+        assertNotNull(foo.getUuid());
+        assertNotNull(foo.getRandomSchema());
+        assertNotNull(foo.getConnectionURL());
+        
+        System.out.println(foo);
+        
     }
 
 }

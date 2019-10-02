@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.config;
 
+import java.util.UUID;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
@@ -27,5 +29,8 @@ import lombok.Data;
 class FooProperties {
 
     private boolean flag = false;
+    private UUID uuid;
+    private String randomSchema;
+    private String connectionURL;
     
 }

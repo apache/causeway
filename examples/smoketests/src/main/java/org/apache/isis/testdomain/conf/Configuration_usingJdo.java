@@ -49,7 +49,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 @PropertySources({
     @PropertySource("classpath:/org/apache/isis/testdomain/conf/isis-non-changing.properties"),
     @PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-persistence.properties"),
-    @PropertySource(IsisPresets.H2InMemory),
+    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
     @PropertySource(IsisPresets.NoTranslations),
 })
 public class Configuration_usingJdo {
