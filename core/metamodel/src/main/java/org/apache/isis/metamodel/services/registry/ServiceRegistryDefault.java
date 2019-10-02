@@ -24,73 +24,32 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0
  */
-@Service @Log4j2
-public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
-
-    @Override
-    public void setApplicationContext(ApplicationContext springContext) throws BeansException {
-
-        // ensures a well defined precondition
-        {
-            val beanTypeRegistry = _Context.getIfAny(IsisBeanTypeRegistry.class);
-            _Context.clear(); // special code in IsisBeanTypeRegistry.close() prevents auto-closing
-            if(beanTypeRegistry!=null) {
-                _Context.putSingleton(IsisBeanTypeRegistry.class, beanTypeRegistry);
-            } 
-        }
-
-        _Context.putSingleton(ApplicationContext.class, springContext);
-        
-        val rawKeyValueMap = _Spring.copySpringEnvironmentToMap(configurableEnvironment);
-        _Config.putAll(rawKeyValueMap);
-
-        log.info("Spring's context was passed over to Isis");
-
-        isisConfigurationLegacy = _Config.getConfiguration(); // finalize config
-
-        // dump config to log
-        if(log.isInfoEnabled() && !isisSystemEnvironment.isUnitTesting()) {
-            log.info("\n" + _Config.getConfiguration().toStringFormatted());
-        }    
-
-    }
-
-    @Bean @Singleton
-    public IsisConfigurationLegacy getConfigurationLegacy() {
-        return isisConfigurationLegacy;
-    }
+@DomainService(nature = NatureOfService.DOMAIN)
+public final class ServiceRegistryDefault implements ServiceRegistry {
+    
+    //XXX to enforce provisioning order, a depends-on relationship; 
+    // keep as long as IsisConfigurationLegacy is used 
+    @Inject private IsisConfigurationLegacy isisConfigurationLegacy; 
 
     @Override
     public Optional<BeanAdapter> lookupRegisteredBeanById(String id) {
@@ -102,11 +61,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
         return registeredBeansById.get().values().stream();
     }
 
-    // -- DEPS
-
-    @Autowired private ConfigurableEnvironment configurableEnvironment;
-    private IsisConfigurationLegacy isisConfigurationLegacy;
-
+    
     // -- HELPER
 
     private final _Lazy<Map<String, BeanAdapter>> registeredBeansById = 
@@ -154,6 +109,5 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
 
     }
 
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }

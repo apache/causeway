@@ -25,6 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Singleton;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,7 +44,7 @@ import org.springframework.stereotype.Service;
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Service
+@Service @Singleton
 public @interface DomainService {
 
     /**

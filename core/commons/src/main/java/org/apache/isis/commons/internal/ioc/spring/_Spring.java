@@ -200,6 +200,7 @@ public class _Spring {
      * Returns a key/value pair copy of Spring's environment
      * @see {@linkplain <a href="https://jira.spring.io/browse/SPR-10241">https://jira.spring.io/browse/SPR-10241</a>}
      * @param configurableEnvironment
+     * @deprecated alternative solution {@linkplain <a href="https://stackoverflow.com/a/53950574/56880">stack-overflow</a>}
      */
     public static Map<String, String> copySpringEnvironmentToMap(
             ConfigurableEnvironment configurableEnvironment) {
