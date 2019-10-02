@@ -22,7 +22,7 @@ include::release-process-for-snapshots.adoc[leveloffset=+1]
 
 include::release-process-for-interim-releases.adoc[leveloffset=+1]
 
-include::asciidoc-publish-procedure.adoc[leveloffset=+1]
+include::antora-publish-procedure.adoc[leveloffset=+1]
 
 include::key-generation.adoc[leveloffset=+1]
 

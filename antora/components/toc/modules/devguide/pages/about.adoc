@@ -15,6 +15,7 @@ include::hints-and-tips/enhance-only.adoc[leveloffset=+2]
 include::hints-and-tips/how-run-fixtures-on-app-startup.adoc[leveloffset=+2]
 
 include::building-apache-isis.adoc[leveloffset=+1]
+include::building-docs-and-website.adoc[leveloffset=+1]
 
 include::contributing.adoc[leveloffset=+1]
 

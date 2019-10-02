@@ -322,7 +322,7 @@ mvn -Drevision=$ISISREL \
 
 In the main `isis` repo (ie containing the asciidoc source):
 
-* Paste in the JIRA-generated release notes generated above, adding to top of `antora/downloads/modules/rn/pages/about.adoc`.
+* Paste in the JIRA-generated release notes generated above, adding to top of `antora/components/relnotes/modules/ROOT/pages/about.adoc`.
 +
 Also add a summary line for the release.
 
@@ -332,7 +332,7 @@ Also add a summary line for the release.
 +
 A search for `archetypeGroupId=org.apache.isis.archetype` should find these pages.
 
-* update the link:../../doap_isis.rdf[DOAP RDF] file (which provides a machine-parseable description of the project) should also be updated with details of the new release.
+* update the `doap_isis.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
 Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 For more information on DOAP files, see these http://projects.apache.org/doap.html[Apache policy docs].
