@@ -18,8 +18,13 @@
  */
 package org.apache.isis.commons.internal.plugins.environment;
 
-import org.apache.isis.commons.internal.base._Lazy;
+import javax.inject.Singleton;
+
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.commons.internal.base._Lazy;
 
 /**
  * Represents configuration, that is available in an early phase of bootstrapping. 
@@ -27,7 +32,7 @@ import org.springframework.stereotype.Service;
  * 
  * @since 2.0
  */
-@Service
+@Service @Singleton @Order(value = Ordered.LOWEST_PRECEDENCE)
 public class IsisSystemEnvironment {
 
     private static _Lazy<IsisSystemEnvironment> singleton = _Lazy.threadSafe(IsisSystemEnvironment::new);

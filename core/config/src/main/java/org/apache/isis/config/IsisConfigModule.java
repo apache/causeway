@@ -18,16 +18,17 @@
  */
 package org.apache.isis.config;
 
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironmentProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 
 @Configuration
 @Import({
     //IsisConfiguration.class // not required
     IsisConfiguration.PatternsConverter.class,
-    IsisSystemEnvironmentProvider.class
+    IsisSystemEnvironment.class
 })
 @EnableConfigurationProperties(IsisConfiguration.class)
 public class IsisConfigModule {

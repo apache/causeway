@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironmentProvider;
+import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
@@ -62,11 +62,11 @@ import lombok.val;
 class DomainModelTest_usingBadDomain {
     
     @Inject private IsisConfiguration configuration;
-    @Inject private IsisSystemEnvironmentProvider isisSystemEnvironmentProvider;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
     
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
-        assertTrue(IntrospectionMode.isFullIntrospect(configuration, isisSystemEnvironmentProvider.isisSystemEnvironment()));
+        assertTrue(IntrospectionMode.isFullIntrospect(configuration, isisSystemEnvironment));
     }
     
     @Test
