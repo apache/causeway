@@ -30,7 +30,6 @@ import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironmentPlugin;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
@@ -358,8 +357,7 @@ public final class _Context {
 
     /** framework internal, exposed by IsisContext */
     public static IsisSystemEnvironment getEnvironment() {
-        return getOrElse(IsisSystemEnvironment.class, 
-                IsisSystemEnvironmentPlugin.get()::getIsisSystemEnvironment);
+        return getOrElse(IsisSystemEnvironment.class, ()->IsisSystemEnvironment.DEFAULT); 
     }
 
     /** framework internal, shortcut for convenience */
