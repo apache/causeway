@@ -109,27 +109,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
-//    private static class Subclasses {
-//        private final Set<ObjectSpecification> classes = new HashSet<>();
-//
-//        public void addSubclass(final ObjectSpecification subclass) {
-//            if(classes.contains(subclass)) {
-//                return;
-//            }
-//            classes.add(subclass);
-//        }
-//
-//        public boolean hasSubclasses() {
-//            return !classes.isEmpty();
-//        }
-//
-//        public Collection<ObjectSpecification> toCollection() {
-//            return Collections.unmodifiableSet(classes);
-//        }
-//    }
-
     private static class Subclasses {
-        private final List<ObjectSpecification> classes = new ArrayList<>();
+        private final Set<ObjectSpecification> classes = _Sets.newConcurrentHashSet();
 
         public void addSubclass(final ObjectSpecification subclass) {
             if(classes.contains(subclass)) {
@@ -142,10 +123,29 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return !classes.isEmpty();
         }
 
-        public List<ObjectSpecification> toCollection() {
-            return Collections.unmodifiableList(classes);
+        public Collection<ObjectSpecification> toCollection() {
+            return Collections.unmodifiableSet(classes);
         }
     }
+
+//    private static class Subclasses {
+//        private final List<ObjectSpecification> classes = new ArrayList<>();
+//
+//        public void addSubclass(final ObjectSpecification subclass) {
+//            if(classes.contains(subclass)) {
+//                return;
+//            }
+//            classes.add(subclass);
+//        }
+//
+//        public boolean hasSubclasses() {
+//            return !classes.isEmpty();
+//        }
+//
+//        public List<ObjectSpecification> toCollection() {
+//            return Collections.unmodifiableList(classes);
+//        }
+//    }
     
     
     // -- fields
@@ -157,12 +157,27 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
+    // -- ASSOCIATIONS
+    
     private final List<ObjectAssociation> associations = _Lists.newArrayList();
+    
+    // defensive immutable lazy copy of associations
+    private final _Lazy<List<ObjectAssociation>> unmodifiableAssociations = 
+            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(associations)));
+    
+    // -- ACTIONS
+    
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
+
+    // defensive immutable lazy copy of objectActions
+    private final _Lazy<List<ObjectAction>> unmodifiableActions = 
+            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(objectActions)));
 
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
     private final ListMultimap<ActionType, ObjectAction> objectActionsByType = 
             _Multimaps.newConcurrentListMultimap();
+    
+    // -- INTERFACES
 
     private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
     
@@ -367,24 +382,26 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
-        final List<ObjectAssociation> orderedAssociations = sortAssociations(associations);
-        synchronized (this.associations) {
+        val orderedAssociations = sortAssociations(associations);
+        synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
+            unmodifiableAssociations.clear(); // invalidate
         }
     }
 
     protected void sortCacheAndUpdateActions(final List<ObjectAction> objectActions) {
         final List<ObjectAction> orderedActions = sortActions(objectActions);
-        synchronized (this.objectActions){
+        synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
+            unmodifiableActions.clear();
 
-            for (final ActionType type : ActionType.values()) {
-                val objectActionForType = objectActionsByType.getOrElseNew(type);
+            for (val actionType : ActionType.values()) {
+                val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
                 objectActions.stream()
-                .filter(ObjectAction.Predicates.ofType(type))
+                .filter(ObjectAction.Predicates.ofType(actionType))
                 .forEach(objectActionForType::add);
             }
         }
@@ -677,9 +694,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         guardAgainstTooEarly_assoz(contributed);
-
-        return stream(this.associations)
-                .filter(ContributeeMember.Predicates.regularElse(contributed));
+        
+        synchronized(unmodifiableAssociations) {
+            return stream(unmodifiableAssociations.get())
+                    .filter(ContributeeMember.Predicates.regularElse(contributed));    
+        }
+        
     }
 
     @Override
@@ -1244,8 +1264,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
         if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
-            synchronized (this.objectActions) {
-                final List<ObjectAction> actions = _Lists.newArrayList(this.objectActions);
+            synchronized (unmodifiableActions) {
+                val actions = _Lists.newArrayList(this.objectActions);
                 if (isEntityOrViewModel()) {
                     actions.addAll(createContributeeActions());
                     actions.addAll(createMixedInActions());
@@ -1260,8 +1280,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
         if(contributed.isIncluded() && !contributeeAndMixedInAssociationsAdded) {
-            synchronized (this.associations) {
-                List<ObjectAssociation> associations = _Lists.newArrayList(this.associations);
+            synchronized (unmodifiableAssociations) {
+                val associations = _Lists.newArrayList(this.associations);
                 if(isEntityOrViewModel()) {
                     associations.addAll(createContributeeAssociations());
                     associations.addAll(createMixedInAssociations());
