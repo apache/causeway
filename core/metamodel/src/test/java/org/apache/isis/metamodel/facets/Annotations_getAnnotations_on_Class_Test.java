@@ -23,12 +23,15 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import org.apache.isis.commons.internal.reflection._Annotations;
+
 import static org.hamcrest.CoreMatchers.is;
+
+import lombok.val;
 
 public class Annotations_getAnnotations_on_Class_Test {
 
@@ -76,12 +79,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.YES)
         class SomeDomainObject {}
 
-        final List<DomainObj> annotations = Annotations
-                .getAnnotations(SomeDomainObject.class, DomainObj.class);
-
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
+        
+        Assert.assertThat(synthesized.isPresent(), is(true));
+        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -90,12 +92,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @Published
         class SomeDomainObject {}
 
-        final List<DomainObj> annotations = Annotations
-                .getAnnotations(SomeDomainObject.class, DomainObj.class);
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(synthesized.isPresent(), is(true));
+        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -104,12 +105,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @MetaPublished
         class SomeDomainObject {}
 
-        final List<DomainObj> annotations = Annotations
-                .getAnnotations(SomeDomainObject.class, DomainObj.class);
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(synthesized.isPresent(), is(true));
+        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -119,29 +119,25 @@ public class Annotations_getAnnotations_on_Class_Test {
         @Published
         class SomeDomainObject {}
 
-        final List<DomainObj> annotations = Annotations
-                .getAnnotations(SomeDomainObject.class, DomainObj.class);
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(2));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(synthesized.isPresent(), is(true));
+        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
     public void meta_overrides_metaMeta() throws Exception {
 
         @MetaPublished
-        @NotPublished
+        @NotPublished // <-- should win over the other
         class SomeDomainObject {}
 
-        final List<DomainObj> annotations = Annotations
-                .getAnnotations(SomeDomainObject.class, DomainObj.class);
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(2));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(synthesized.isPresent(), is(true));
+        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
     @Test
@@ -149,17 +145,14 @@ public class Annotations_getAnnotations_on_Class_Test {
 
         @MetaPublished
         @Published
-        @DomainObj(publishng = DomainObj.Publishng.NO)
+        @DomainObj(publishng = DomainObj.Publishng.NO) // <-- should win over the others
         class SomeDomainObject {}
 
-        final List<DomainObj> annotations = Annotations
-                .getAnnotations(SomeDomainObject.class, DomainObj.class);
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(3));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(2).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(synthesized.isPresent(), is(true));
+        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
 
@@ -168,17 +161,14 @@ public class Annotations_getAnnotations_on_Class_Test {
 
         @MetaPublished
         @NotPublished
-        @DomainObj(publishng = DomainObj.Publishng.YES)
+        @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should win over the others
         class SomeDomainObject {}
 
-        final List<DomainObj> annotations = Annotations
-                .getAnnotations(SomeDomainObject.class, DomainObj.class);
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(3));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(2).publishng(), is(DomainObj.Publishng.YES));
+        Assert.assertThat(synthesized.isPresent(), is(true));
+        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
 }
