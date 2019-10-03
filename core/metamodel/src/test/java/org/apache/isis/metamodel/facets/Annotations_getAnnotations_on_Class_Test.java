@@ -24,12 +24,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.reflection._Annotations;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import lombok.val;
 
@@ -46,6 +47,7 @@ public class Annotations_getAnnotations_on_Class_Test {
             NOT_SPECIFIED
         }
         Publishng publishng() default Publishng.NOT_SPECIFIED;
+        String name() default "";
     }
 
 
@@ -63,6 +65,13 @@ public class Annotations_getAnnotations_on_Class_Test {
     @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface NotPublished {
+    }
+    
+    @DomainObj(name = "foo")
+    @Inherited
+    @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface NamedFoo {
     }
 
     //@Meta
@@ -82,8 +91,8 @@ public class Annotations_getAnnotations_on_Class_Test {
         val synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
         
-        Assert.assertThat(synthesized.isPresent(), is(true));
-        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -95,8 +104,8 @@ public class Annotations_getAnnotations_on_Class_Test {
         val synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(synthesized.isPresent(), is(true));
-        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -108,8 +117,8 @@ public class Annotations_getAnnotations_on_Class_Test {
         val synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(synthesized.isPresent(), is(true));
-        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -122,8 +131,8 @@ public class Annotations_getAnnotations_on_Class_Test {
         val synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(synthesized.isPresent(), is(true));
-        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -136,8 +145,8 @@ public class Annotations_getAnnotations_on_Class_Test {
         val synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(synthesized.isPresent(), is(true));
-        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
     @Test
@@ -151,8 +160,8 @@ public class Annotations_getAnnotations_on_Class_Test {
         val synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(synthesized.isPresent(), is(true));
-        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
 
@@ -167,8 +176,45 @@ public class Annotations_getAnnotations_on_Class_Test {
         val synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
-        Assert.assertThat(synthesized.isPresent(), is(true));
-        Assert.assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
     }
+    
+    @Test
+    public void merge_only_valid_attributes() throws Exception {
+
+        @NamedFoo // <-- should provide name=foo even if the below matches first on publishng=YES
+        @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should provide YES
+        class SomeDomainObject {}
+
+        val publishng = _Annotations
+                .getEnum("publishng", SomeDomainObject.class, DomainObj.class, DomainObj.Publishng.class);
+        
+        val name = _Annotations
+                .getString("name", SomeDomainObject.class, DomainObj.class);
+
+        assertThat(publishng.isPresent(), is(true));
+        assertThat(name.isPresent(), is(true));
+        
+        assertThat(publishng.get(), is(DomainObj.Publishng.YES));
+        assertThat(name.get(), is("foo"));
+    }
+    
+    @Test @Disabled("unfortunately there is no easy way to plug into synthesizing, "
+            + "to get the desired behavior")
+    public void ignore_not_specified() throws Exception {
+
+        @MetaPublished
+        @NotPublished // <-- should win over the above
+        @DomainObj(publishng = DomainObj.Publishng.NOT_SPECIFIED) // <-- should be ignored
+        class SomeDomainObject {}
+
+        val synthesized = _Annotations
+                .synthesize(SomeDomainObject.class, DomainObj.class);
+        
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
+    }
+    
 
 }
