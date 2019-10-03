@@ -1,0 +1,7 @@
+= Application Library
+include::_attributes.adoc[]
+
+Documentation comprises:
+
+* xref:applib:ant:about.adoc[Annotations] - part of the reference guide.
+

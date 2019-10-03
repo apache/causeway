@@ -36,7 +36,7 @@ public class OrderMenu {
 
 The rules of precedence are:
 
-1. xref:rg:ant:DomainService.adoc#objectType[`@DomainService#objectType()`]
+1. xref:applib:ant:DomainService.adoc#objectType[`@DomainService#objectType()`]
 2. xref:rg:cms:methods.adoc#getId[`getId()`]
 3. The fully qualified class name.
 

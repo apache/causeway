@@ -201,7 +201,7 @@ The xref:rg:svc:integration-api/MementoService.adoc[`MementoService`] also provi
 
 The xref:rg:svc:integration-api/JaxbService.adoc[`JaxbService`] is a simple wrapper around
 standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that there is built-in support for JAXB classes (ie annotated with
-xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]) to be used as view models.
+xref:applib:ant:XmlRootElement.adoc[`@XmlRootElement`]) to be used as view models.
 
 
 

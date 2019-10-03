@@ -22,7 +22,7 @@ public interface FactoryService {
 ----
 <1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
 The class must have a no-arg constructor.
-<2> programmatically instantiate a mixin, for example as annotated with xref:rg:ant:Mixin.adoc[`@Mixin`].
+<2> programmatically instantiate a mixin, for example as annotated with xref:applib:ant:Mixin.adoc[`@Mixin`].
 The class must have a 1-arg constructor of the appropriate type.
 
 

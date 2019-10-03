@@ -2,26 +2,5 @@
 
 ** xref:security:ROOT:api-for-applications.adoc[API for Applications]
 
-** Bypass Implementation
-*** xref:security-bypass:ROOT:configuring-isis-to-use-bypass.adoc[Configuring to use Bypass]
 
-** Shiro Implementation (extension)
-
-*** xref:security-shiro:ROOT:configuring-isis-to-use-shiro.adoc[Configuring to use Shiro]
-*** Realms
-**** xref:security-shiro:ROOT:ini-realm.adoc[INI Realm]
-**** xref:security-shiro:realm-jdbc:about.adoc[JDBC Realm]
-**** xref:security-shiro:realm-ldap:about.adoc[LDAP Realm]
-*** xref:security-shiro:ROOT:enhanced-wildcard-permission.adoc[Enhanced Wildcard Permissions]
-*** xref:security-shiro:ROOT:run-as.adoc[Run As]
-*** xref:security-shiro:ROOT:shiro-caching.adoc[Shiro Caching]
-
-** xref:ext-secman:ROOT:about.adoc[SecMan (extension)]
-*** xref:ext-secman:api:about.adoc[API]
-*** xref:ext-secman:model:about.adoc[Model]
-*** xref:ext-secman:realm-shiro:about.adoc[Realm (for Shiro)]
-*** xref:ext-secman:persistence-jdo:about.adoc[JDO Persistence]
-*** xref:ext-secman:encryption-jbcrypt:about.adoc[JBCrypt Encryption]
-
-** xref:security:ROOT:usage-by-isis-viewers.adoc[Usage by Isis Viewers]
 

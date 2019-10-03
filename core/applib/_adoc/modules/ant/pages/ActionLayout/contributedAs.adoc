@@ -1,0 +1,54 @@
+[[contributedAs]]
+= `contributedAs()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+For a domain service action that _can_ be contributed, the `contributedAs()` attribute determines how it is contributed: as an action or as an association (ie a property or collection).
+
+The distinction between property or collection is automatic: if the action returns a `java.util.Collection` (or subtype) then the action is contributed as a collection; otherwise it is contributed as a property.
+
+For a domain service action to be contributed, the domain services must have a xref:applib:ant:DomainService.adoc#nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:applib:ant:Action.adoc#semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
+
+For example:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
+public class CustomerContributions {
+    @Action(semantics=SemanticsOf.SAFE)
+    @ActionLayout(contributedAs=Contributed.AS_ASSOCIATION)
+    public List<Order> mostRecentOrders(Customer customer) { /* ... */ }
+    ...
+}
+----
+
+[TIP]
+====
+The `@ActionLayout` is not required if the action does not have safe semantics, or if the action takes more than one argument; in these cases the action can only be contributed _as_ an action.
+====
+
+
+It's also possible to use the attribute to suppress the action completely:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.VIEW)
+public class OrderContributions {
+    @ActionLayout(contributedAs=Contributed.AS_NEITHER)
+    public void cancel(Order order);
+    ...
+}
+----
+
+In such cases, though, it would probably make more sense to annotate the action as either xref:applib:ant:Action.adoc#hidden[hidden] or indeed xref:applib:ant:Programmatic.adoc[`@Programmatic`].
+
+
+
+[NOTE]
+====
+Unlike other `@ActionLayout` attributes, this attribute _cannot_ be specified using a file-based layout because it relates to the contributor domain service, not the contributee domain object.
+====
+

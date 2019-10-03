@@ -57,7 +57,7 @@ public class ShoppingCartItem {
 }
 ----
 <1> `product` is the 0th argument of the action.
-<2> the xref:rg:ant:MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<2> the xref:applib:ant:MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 
 
@@ -90,6 +90,6 @@ public class ShoppingCartItem {
     ...
 }
 ----
-<1> the xref:rg:ant:MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<1> the xref:applib:ant:MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 

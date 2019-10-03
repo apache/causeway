@@ -3,7 +3,7 @@ include::_attributes.adoc[]
 
 The reference guides are:
 
-* xref:rg:ant:about.adoc[Annotations]
+* xref:applib:ant:about.adoc[Annotations]
 * xref:rg:svc:about.adoc[Domain Services]
 * xref:rg:cfg:about.adoc[Configuration Properties]
 * xref:rg:cms:about.adoc[Classes, Methods and Schema]

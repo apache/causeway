@@ -47,12 +47,12 @@ If none exists, will return null (and the calling xref:rg:svc:presentation-layer
 <5> returns a default grid, eg two columns in ratio 4:8.
 Used when no existing grid layout exists for a domain class.
 <6> validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
-This is done using existing metadata, most notably that of the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotation.
+This is done using existing metadata, most notably that of the xref:applib:ant:MemberOrder.adoc[`@MemberOrder`] annotation.
 Such a grid, if persisted as the layout XML file for the domain class, allows the `@MemberOrder` annotation to be removed from the source code of the domain class (but other annotations must be retained).
 <7> Takes a normalized grid and enriches it with additional metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
-Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations (xref:rg:ant:ActionLayout.adoc[`@ActionLayout`], xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] and xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`]) to be removed from the source code of the domain class.
+Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations (xref:applib:ant:ActionLayout.adoc[`@ActionLayout`], xref:applib:ant:PropertyLayout.adoc[`@PropertyLayout`] and xref:applib:ant:CollectionLayout.adoc[`@CollectionLayout`]) to be removed from the source code of the domain class.
 <8> Takes a normalized grid and strips out removes all members, leaving only the grid structure.
-Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
+Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:applib:ant:MemberOrder.adoc[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
 
 The first four methods just delegate to the corresponding methods in xref:rg:svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`], while the last four delegate to the  corresponding method in xref:rg:svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`].
 The service inspects the ``Grid``'s concrete class to determine which actual `GridSystemService` instance to delegate to.

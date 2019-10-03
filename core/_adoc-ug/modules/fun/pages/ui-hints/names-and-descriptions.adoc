@@ -26,25 +26,25 @@ The table below summarizes the annotations available:
 
 
 | Class
-| xref:rg:ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named()`]
-| xref:rg:ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs()`]
+| xref:applib:ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named()`]
+| xref:applib:ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs()`]
 
 
 | Property
-| xref:rg:ant:PropertyLayout.adoc#named[`@PropertyLayout#named()`]
-| xref:rg:ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs()`]
+| xref:applib:ant:PropertyLayout.adoc#named[`@PropertyLayout#named()`]
+| xref:applib:ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs()`]
 
 | Collection
-| xref:rg:ant:CollectionLayout.adoc#named[`@CollectionLayout#named()`]
-| xref:rg:ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs()`]
+| xref:applib:ant:CollectionLayout.adoc#named[`@CollectionLayout#named()`]
+| xref:applib:ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs()`]
 
 | Action
-| xref:rg:ant:ActionLayout.adoc#named[`@ActionLayout#named()`]
-| xref:rg:ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs()`]
+| xref:applib:ant:ActionLayout.adoc#named[`@ActionLayout#named()`]
+| xref:applib:ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs()`]
 
 | Action Parameters
-| xref:rg:ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
-| xref:rg:ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs()`]
+| xref:applib:ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
+| xref:applib:ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs()`]
 
 |===
 

@@ -42,7 +42,7 @@ per the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`], so 
 
 The core framework provides a default implementation of this service (`org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession`).
 
-To use an alternative implementation, implement the `HintStore` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `HintStore` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 == View models

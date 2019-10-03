@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 Subclass of xref:rg:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is first instantiated using the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryServuce`]'s `#instantiate(...)` method.
 
-`ObjectCreatedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:rg:ant:DomainObject.adoc#createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`].
+`ObjectCreatedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:applib:ant:DomainObject.adoc#createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`].
 
 
 

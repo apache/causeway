@@ -17,7 +17,7 @@ image::reference-services/categories.png[width="600px",link="{imagesdir}/referen
 
 A small number of domain services can be considered both API and SPI; a good example is the xref:rg:svc:integration-api/EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features/user-registration.adoc[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 The same is true of the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
-xref:rg:ant:Action.adoc#domainEvent[`@Action#domainEvent()`] etc.
+xref:applib:ant:Action.adoc#domainEvent[`@Action#domainEvent()`] etc.
 
 For these hybrid services we have categorized the service as an "API" service.
 This chapter therefore contains only the strictly SPI services.
@@ -80,7 +80,7 @@ Alternatively the object can be instantiated simply using `new`, then services i
 The framework provides default implementations for many of the domain services.
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
-The trick is to use the xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]
+The trick is to use the xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]
 attribute, specifying a low number (typically `"1"`).
 
 [NOTE]
@@ -161,14 +161,14 @@ invoke an action or edit a property; this is held by the `Command` object.
 
 * if a xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured, then this will be used to create the `Command` object implementation, generally so that it can then also be persisted.
 +
-If the action or property is annotated to be invoked in the background (using xref:rg:ant:Action.adoc#command[`@Action#command...()`] or xref:rg:ant:Property.adoc#command[`@Property#command...()`]) then no further work is done.
+If the action or property is annotated to be invoked in the background (using xref:applib:ant:Action.adoc#command[`@Action#command...()`] or xref:applib:ant:Property.adoc#command[`@Property#command...()`]) then no further work is done.
 But, if the action/property is to be executed in the foreground, then the interaction continues.
 
 * the (request-scoped) xref:rg:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
 In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] extensively each successive call results in a new child execution.
 
 * before and after each action invocation/property edit, a xref:rg:cms:classes/domainevent.adoc[domain event] is may be broadcast to all subscribers.
-Whether this occurs depends on whether the action/property has been annotated (using xref:rg:ant:Action.adoc#domainEvent[`@Action#domainEvent()`] or xref:rg:ant:Property.adoc#domainEvent[`@Property#domainEvent()`]).
+Whether this occurs depends on whether the action/property has been annotated (using xref:applib:ant:Action.adoc#domainEvent[`@Action#domainEvent()`] or xref:applib:ant:Property.adoc#domainEvent[`@Property#domainEvent()`]).
 +
 (Note that susbcribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
@@ -176,12 +176,12 @@ Whether this occurs depends on whether the action/property has been annotated (u
 Metrics as to which objects are merely loaded into memory are also captured using the xref:rg:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
-xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:rg:ant:Action.adoc#publishing[`@Action#publishing()`] or xref:rg:ant:Property.adoc#publishing[`@Property#publishing()`]).
+xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:applib:ant:Action.adoc#publishing[`@Action#publishing()`] or xref:applib:ant:Property.adoc#publishing[`@Property#publishing()`]).
 +
 The internal service delegates in turn to any registered xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`]s (there may be more than one).
 
 * At the end of each transaction, details of all changed objects are published, again through the (internal) xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
-Only domain objects specified to be published with xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] are published. +
+Only domain objects specified to be published with xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] are published. +
 +
 [NOTE]
 ====

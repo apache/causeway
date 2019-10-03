@@ -33,7 +33,7 @@ private String name;
 Under the covers it is implemented as an annotation processor; it basically hooks into the Java compiler
 so that it can emit additional bytecode (eg for the getter and setter).  See xref:toc:devguide:about.adoc#other-settings-compiler[here] for details of setting up in IntelliJ (Eclipse has very similar support).
 
-Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:rg:ant:Property.adoc[`Property`], xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`], xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:rg:ant:MemberOrder.adoc[`@MemberOrder`]) can be placed on the field instead.
+Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:applib:ant:Property.adoc[`Property`], xref:applib:ant:PropertyLayout.adoc[`@PropertyLayout`], xref:applib:ant:Collection.adoc[`@Collection`], xref:applib:ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:applib:ant:MemberOrder.adoc[`@MemberOrder`]) can be placed on the field instead.
 
 
 There are plugins for Lombok for maven; it's just a matter of adding the required dependency.  To compile the code
@@ -44,7 +44,7 @@ Lombok plugin appropriate to that IDE.  See the link:https://projectlombok.org/d
 
 == Future thoughts
 
-In the future we might extend/fork Lombok so that it understands Isis' own annotations (ie xref:rg:ant:Property.adoc[`@Property`] and xref:rg:ant:Collection.adoc[`@Collection`])
+In the future we might extend/fork Lombok so that it understands Isis' own annotations (ie xref:applib:ant:Property.adoc[`@Property`] and xref:applib:ant:Collection.adoc[`@Collection`])
 rather than Lombok's own `@Getter` and `@Setter.
 
 It might also be possible to use Lombok to generate the domain event classes for each member.

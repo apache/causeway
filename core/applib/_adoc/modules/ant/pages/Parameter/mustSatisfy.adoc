@@ -1,0 +1,65 @@
+[[mustSatisfy]]
+= `mustSatisfy()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+The `mustSatisfy()` attribute allows arbitrary validation to be applied to parameters using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.  The attribute is also supported on xref:applib:ant:Property.adoc#mustSatisfy[properties].
+
+[TIP]
+====
+The specification implementations can (of course) be reused between parameters and xref:applib:ant:Property.adoc#mustSatisfy[properties].
+====
+
+The `Specification` is consulted during validation, being passed the proposed value.  If the proposed value fails, then the value returned is the used as the invalidity reason.
+
+For example:
+
+[source,java]
+----
+public class StartWithCapitalLetterSpecification
+        extends AbstractSpecification<String> {            // <1>
+    public String satisfiesSafely(String proposed) {
+        return "".equals(proposed)
+            ? "Empty string"
+            : !Character.isUpperCase(proposed.charAt(0))
+                ? "Does not start with a capital letter"
+                : null;
+    }
+}
+public class CustomerRepository {
+    public Customer newCustomer(
+            @Parameter(
+                mustSatisfy=StartWithCapitalLetterSpecification.class
+            )
+            @ParameterLayout(named="First Name")
+            final String firstName,
+            @Parameter(
+                mustSatisfy=StartWithCapitalLetterSpecification.class
+            )
+            @ParameterLayout(named="Last Name")
+            final String lastName) {
+        ...
+    }
+    ...
+}
+----
+<1> the `AbstractSpecification` class conveniently handles type-safety and dealing with null values.  The applib also provides `SpecificationAnd` and `SpecificationOr` to allow specifications to be combined "algebraically".
+
+
+It is also possible to provide translatable reasons.  Rather than implement `Specification`, instead implement `Specification2` which defines the API:
+
+[source,java]
+----
+public interface Specification2 extends Specification {
+    public TranslatableString satisfiesTranslatable(Object obj); // <1>
+}
+----
+<1> Return `null` if specification satisfied, otherwise the reason as a translatable string
+
+With `Specification2` there is no need to implement the inherited `satifies(Object)`; that method will never be called.
+
+
+

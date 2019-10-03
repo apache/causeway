@@ -380,9 +380,9 @@ The table below summarises the choices:
 |===
 
 | Style
-|xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`]
-| xref:rg:ant:MemberOrder.adoc[`@MemberOrder`]
-| xref:rg:ant:ActionLayout.adoc[`@ActionLayout`], xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`]
+|xref:applib:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`]
+| xref:applib:ant:MemberOrder.adoc[`@MemberOrder`]
+| xref:applib:ant:ActionLayout.adoc[`@ActionLayout`], xref:applib:ant:PropertyLayout.adoc[`@PropertyLayout`], xref:applib:ant:CollectionLayout.adoc[`@CollectionLayout`]
 
 
 |`COMPLETE`

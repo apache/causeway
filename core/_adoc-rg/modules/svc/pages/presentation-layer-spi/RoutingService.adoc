@@ -18,7 +18,7 @@ of the implementation to figure out what the "owning" object might be.
 
 * if an action returns `null` or is `void`, then return some other "useful" object. +
 +
-For example, return the home page (eg as defined by the xref:rg:ant:HomePage.adoc[`@HomePage`] annotation).
+For example, return the home page (eg as defined by the xref:applib:ant:HomePage.adoc[`@HomePage`] annotation).
 
 Currently the routing service is used only by the xref:vw:ROOT:about.adoc[Wicket viewer]; it is ignored by the xref:vro:ROOT:about.adoc[Restful Objects] viewer.
 
@@ -28,7 +28,7 @@ Currently the routing service is used only by the xref:vw:ROOT:about.adoc[Wicket
 Unlike most other domain services, the framework will check _all_ available implementations of
 `RoutingService` to return a route, rather than the first implementation found; in other words it uses the
 chain-of-responsibility pattern.  Services are called in the order defined by
-xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]).  The route used will be the
+xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`]).  The route used will be the
 result of the first implementation checked that declares that it can provide a route.
 ====
 
@@ -58,7 +58,7 @@ The framework provides a default implementation - `RoutingServiceDefault` - whic
 It uses the xref:rg:svc:application-layer-spi/HomePageProviderService.adoc[`HomePageProviderService`].
 
 There can be multiple implementations of `RoutingService` registered.
-These are checked in turn (chain of responsibility pattern), ordered according to xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+These are checked in turn (chain of responsibility pattern), ordered according to xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 The route from the first service that returns `true` from its `canRoute(...)` method will be used.
 
 

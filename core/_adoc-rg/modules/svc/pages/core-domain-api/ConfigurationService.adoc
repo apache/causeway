@@ -61,7 +61,7 @@ public class TweetService {
 
 [TIP]
 ====
-If you _do_ have a domain service that needs to access Isis properties, then an alternative is to define a xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] method and pass in a `Map<String,String>` of properties.
+If you _do_ have a domain service that needs to access Isis properties, then an alternative is to define a xref:applib:ant:PostConstruct.adoc[`@PostConstruct`] method and pass in a `Map<String,String>` of properties.
 This is provided all properties, not just those with the 'application' prefix.
 ====
 

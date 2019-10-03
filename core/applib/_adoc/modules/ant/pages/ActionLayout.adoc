@@ -1,0 +1,121 @@
+= `@ActionLayout`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `@ActionLayout` annotation applies to actions, collecting together all UI hints within a single annotation.
+
+The table below summarizes the annotation's attributes.
+
+.`@ActionLayout` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:applib:ant:ActionLayout.adoc#bookmarking[`bookmarking()`]
+|`AS_ROOT`, `NEVER` +
+(`NEVER`)
+|indicates if an action (with safe xref:applib:ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
+
+
+|xref:applib:ant:ActionLayout.adoc#contributedAs[`contributedAs()`]
+|`AS_BOTH`, `AS_ACTION`, `AS_ASSOCIATION`, `AS_NEITHER` +
+(`AS_BOTH`)
+|for a domain service action that can be contributed, whether to contribute as an action or as an association (ie a property or collection). +
+
+For a domain service action to be contributed, the domain services must have a xref:applib:ant:DomainService.adoc#nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:applib:ant:Action.adoc#semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
+
+
+|xref:applib:ant:ActionLayout.adoc#cssClass[`cssClass()`]
+|Any string valid as a CSS class
+|an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]. +
+
+Supported by the xref:vw:ROOT:about.adoc[Wicket viewer] but currently ignored by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
+
+
+|xref:applib:ant:ActionLayout.adoc#cssClassFa[`cssClassFa()`]
+|Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
+|specify a font awesome icon for the action's menu link or icon. +
+
+
+|`cssClassFaPosition()`
+|`LEFT`, `RIGHT` +
+(`LEFT`)
+|Positioning of the icon on the button/menu item.
+
+
+|xref:applib:ant:ActionLayout.adoc#describedAs[`describedAs()`]
+|String.
+|provides a short description of the action, eg for rendering as a 'tool tip'.
+
+
+|xref:applib:ant:ActionLayout.adoc#hidden[`hidden()`]
+|`EVERYWHERE`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the action should be hidden from the user.
+
+
+|xref:applib:ant:ActionLayout.adoc#named[`named()`]
+|String.
+|to override the name inferred from the action's name in code. +
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+
+|xref:applib:ant:ActionLayout.adoc#position[`position()`]
+|`BELOW`, `RIGHT`, `PANEL`, `PANEL_DROPDOWN` (`BELOW`)
+|for actions associated (using xref:applib:ant:MemberOrder.adoc[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
+
+
+|===
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItems {
+    @Action(semantics=SemanticsOf.SAFE)             // <1>
+    @ActionLayout(
+        bookmarking=BookmarkPolicy.AS_ROOT,
+        cssClass="x-key",
+        cssClassFa="fa-checkbox",
+        describedAs="Mark the todo item as not complete after all",
+        hidden=Where.NOWHERE                        // <2>
+    )
+    @MemberOrder(sequence = "1")
+    public List<ToDoItem> notYetComplete() {
+        ...
+    }
+}
+----
+<1> required for bookmarkable actions
+<2> default value, so could be omitted
+
+
+[TIP]
+====
+As an alternative to using the `@ActionLayout` annotation, a xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+====
+
+
+
+
+
+
+
+
+
+
+
+include::ActionLayout/bookmarking.adoc[leveloffset=+1]
+include::ActionLayout/contributedAs.adoc[leveloffset=+1]
+include::ActionLayout/cssClass.adoc[leveloffset=+1]
+include::ActionLayout/cssClassFa.adoc[leveloffset=+1]
+include::ActionLayout/describedAs.adoc[leveloffset=+1]
+include::ActionLayout/hidden.adoc[leveloffset=+1]
+include::ActionLayout/named.adoc[leveloffset=+1]
+include::ActionLayout/position.adoc[leveloffset=+1]

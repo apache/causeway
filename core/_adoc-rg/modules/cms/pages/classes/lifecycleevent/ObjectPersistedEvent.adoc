@@ -8,4 +8,4 @@ include::_attributes.adoc[]
 Subclass of xref:rg:cms:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is first saved (inserted) into the database using the xref:rg:svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#persist(...)` method.
 
 
-`ObjectPersistedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:rg:ant:DomainObject.adoc#persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`].
+`ObjectPersistedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:applib:ant:DomainObject.adoc#persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`].

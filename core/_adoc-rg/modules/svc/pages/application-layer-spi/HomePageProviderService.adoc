@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-This service simply provides access to the home page object (if any) that is returned from the domain service action annotated with xref:rg:ant:HomePage.adoc[`@HomePage`].
+This service simply provides access to the home page object (if any) that is returned from the domain service action annotated with xref:applib:ant:HomePage.adoc[`@HomePage`].
 
 It was originally introduced to support the default implementation of xref:rg:svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`], but was factored out to support alternative implementations of that service (and may be useful for other use cases).
 

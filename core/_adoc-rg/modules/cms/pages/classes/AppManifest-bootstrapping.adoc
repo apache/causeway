@@ -46,7 +46,7 @@ The following sections describe each of these methods in a little more detail.
 === `getModules()`
 
 The most significant method (the only one which must return a non-`null` value) is the `getModules()` method.
-Each module is identified by a class; the framework simply uses that class' package as the root to search for domain services (annotated with xref:rg:ant:DomainService.adoc[`@DomainService`]) and entities (annotated with xref:rg:ant:PersistenceCapable.adoc[`@PersistenceCapable`]).
+Each module is identified by a class; the framework simply uses that class' package as the root to search for domain services (annotated with xref:applib:ant:DomainService.adoc[`@DomainService`]) and entities (annotated with xref:applib:ant:PersistenceCapable.adoc[`@PersistenceCapable`]).
 Generally there is one such module class per Maven module.
 
 A module class for a domain module might for example be defined as:
@@ -92,7 +92,7 @@ As can be seen, the various (non-ASF) link:https://platform.incode.org[Incode Pl
 === `getAdditionalServices()`
 
 We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
-However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:rg:ant:DomainService.adoc[`@DomainService`] annotation.
+However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:applib:ant:DomainService.adoc[`@DomainService`] annotation.
 
 For example, the xref:ext-secman:ROOT:about.adoc[SecMan extension] allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
 

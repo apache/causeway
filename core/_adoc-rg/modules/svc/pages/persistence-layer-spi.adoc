@@ -76,7 +76,7 @@ Key:
 * `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 
 
-Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:rg:ant:DomainService.adoc[`@DomainService`].
+Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:applib:ant:DomainService.adoc[`@DomainService`].
 
 
 

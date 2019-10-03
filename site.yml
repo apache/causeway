@@ -40,6 +40,10 @@ content:
       start_path: core/_adoc-rg
 
     - url: .
+      start_path: core/applib/_adoc
+      branches: HEAD
+
+    - url: .
       start_path: core/testsupport/_adoc
       branches: HEAD
     - url: .

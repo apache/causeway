@@ -12,7 +12,7 @@ Each `Module` can express its immediate dependencies (using `Module#getDependenc
 
 Each `Module` can also optionally define additional dependencies on "legacy" modules (that is, those that do not implement `Module`) using `Module#getAdditionalModules()` method.
 These legacy modules simply define a package to search for entities and domain services.
-Legacy domain services can also be explicitly identified using `Module#getAdditionalServices()` method; such services do _not_ need to be annotated with xref:rg:ant:DomainService.adoc[`@DomainService`].
+Legacy domain services can also be explicitly identified using `Module#getAdditionalServices()` method; such services do _not_ need to be annotated with xref:applib:ant:DomainService.adoc[`@DomainService`].
 
 A `Module` can also declare additional configuration properties (using either `Module#getIndividualConfigProps()` or `Module#getPropertyResources()`) that should be      contributed to the overall set of configuration properties used to bootstrap the application.
 
@@ -118,7 +118,7 @@ public interface Module {
 The framework calculates a full set of transitive dependencies from this.
 <2> Support for "legacy" modules that do not implement `Module`.
 These are added to the set of packages to scan for entities and domain services.
-<3> Each `Module` can define additional "legacy" domain services that have not been defined within modules,or that have not been annotated with xref:rg:ant:DomainService.adoc[`@DomainService`].
+<3> Each `Module` can define additional "legacy" domain services that have not been defined within modules,or that have not been annotated with xref:applib:ant:DomainService.adoc[`@DomainService`].
 <4> Optionally each `Module` can define a xref:rg:cms:classes.adoc#FixtureScript[`FixtureScript`] which holds immutable "reference data".
 These are automatically executed whenever running integration tests (but are ignored when bootstrapping the runtime as a webapp.
 <5> Similarly, optionally each `Module` can define a tear-down xref:rg:cms:classes.adoc#FixtureScript[`FixtureScript`], used to remove the contents of _all_ entities (both reference data and operational/transactional data).

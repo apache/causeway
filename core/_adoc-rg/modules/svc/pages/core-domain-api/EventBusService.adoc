@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 The `EventBusService` allows domain objects to emit events to subscribing domain services using an in-memory event bus.
 
-The primary user of the service is the framework itself, which automatically emit events for xref:rg:ant:Action.adoc#domainEvent[actions], xref:rg:ant:Property.adoc#domainEvent[properties] and xref:rg:ant:Collection.adoc#domainEvent[collections].
+The primary user of the service is the framework itself, which automatically emit events for xref:applib:ant:Action.adoc#domainEvent[actions], xref:applib:ant:Property.adoc#domainEvent[properties] and xref:applib:ant:Collection.adoc#domainEvent[collections].
 Multiple events are generated:
 
 * when an object member is to be viewed, an event is fired; subscribers can veto (meaning that the member is hidden)
@@ -19,7 +19,7 @@ Multiple events are generated:
 
 If a subscriber throws an exception in the first three steps, then the interaction is vetoed.
 If a subscriber throws an exception in the last two steps, then the transaction is aborted.
-For more on this topic, see xref:rg:ant:Action.adoc#domainEvent[`@Action#domainEvent()`], xref:rg:ant:Property.adoc#domainEvent[`@Property#domainEvent()`] and xref:rg:ant:Collection.adoc#domainEvent[`@Collection#domainEvent()`].
+For more on this topic, see xref:applib:ant:Action.adoc#domainEvent[`@Action#domainEvent()`], xref:applib:ant:Property.adoc#domainEvent[`@Property#domainEvent()`] and xref:applib:ant:Collection.adoc#domainEvent[`@Collection#domainEvent()`].
 
 It is also possible for domain objects to programmatically generate domain events.
 However the events are published, the primary use case is to decoupling interactions from one module/package/namespace and another.
@@ -42,21 +42,21 @@ public abstract class EventBusService {
 ----
 <1> posts the event onto event bus
 <2> allows domain services to register themselves.
-This should be done in their xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] initialization method (for both singleton and xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] domain services.
+This should be done in their xref:applib:ant:PostConstruct.adoc[`@PostConstruct`] initialization method (for both singleton and xref:applib:ant:RequestScoped.adoc[`@RequestScoped`] domain services.
 <3> exists for symmetry, but need never be called (it is in fact deliberately a no-op).
 
 
 
 
-To use an alternative implementation, implement the `EventBusService` domain service and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `EventBusService` domain service and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 
 
 == Registering Subscribers
 
-The `register()` method should be called in the xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] lifecycle method.
-It is valid and probably the least confusing to readers to also "unregister" in the xref:rg:ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:rg:svc:core-domain-api/EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
+The `register()` method should be called in the xref:applib:ant:PostConstruct.adoc[`@PostConstruct`] lifecycle method.
+It is valid and probably the least confusing to readers to also "unregister" in the xref:applib:ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:rg:svc:core-domain-api/EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
 
 For example:
 
@@ -85,18 +85,18 @@ public class MySubscribingDomainService {
 <1> subscribers are typically not visible in the UI, so specify a `DOMAIN` nature
 <2> It's important that subscribers register before any domain services that might emit events on the event bus service.
 For example, the xref:ext-secman:ROOT:about.adoc[SecMan extension] provides a domain service that automatically seeds certain domain entities; these will generate xref:rg:cms:classes/lifecycleevent.adoc[lifecycle events] and so any subscribers must be registered before such seed services.
-The easiest way to do this is to use the xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
-<3> register with the event bus service during xref:rg:ant:PostConstruct.adoc[`@PostConstruct`]
+The easiest way to do this is to use the xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
+<3> register with the event bus service during xref:applib:ant:PostConstruct.adoc[`@PostConstruct`]
     initialization
 <4> corresponding deregister when shutting down
 
-This works for both singleton (application-scoped) and also xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] domain services.
+This works for both singleton (application-scoped) and also xref:applib:ant:RequestScoped.adoc[`@RequestScoped`] domain services.
 
 
 [TIP]
 ====
 The xref:rg:cms:classes/super.adoc#AbstractSubscriber[`AbstractSubscriber`] class automatically performs this registration.
-As a convenience, it is also annotated with the xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
+As a convenience, it is also annotated with the xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
 ====
 
 
@@ -292,7 +292,7 @@ public class LibraryMember {
 ----
 <1> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.i.applib.event.ActionDomainEvent`.
 
-In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:rg:ant:Action.adoc#domainEvent[`@Action#domainEvent()`] et al.
+In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:applib:ant:Action.adoc#domainEvent[`@Action#domainEvent()`] et al.
 
 
 
@@ -415,4 +415,4 @@ isis.services.eventbus.implementation=com.mycompany.isis.MyEventBusServiceImplem
 
 The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
-The xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] meanwhile is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:rg:ant:Action.adoc#publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:rg:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]).
+The xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] meanwhile is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:applib:ant:Action.adoc#publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]).

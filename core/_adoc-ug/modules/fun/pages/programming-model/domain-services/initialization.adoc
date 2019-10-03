@@ -10,10 +10,10 @@ Services can optionally declare lifecycle callbacks to initialize them (when the
 
 An Apache Isis session _is_ available when initialization occurs (so services can interact with the object store, for example).
 
-The framework will call any `public` method annotated with xref:rg:ant:PostConstruct.adoc[`@PostConstruct`] with either no arguments of an argument of type `Map<String,String>`.
+The framework will call any `public` method annotated with xref:applib:ant:PostConstruct.adoc[`@PostConstruct`] with either no arguments of an argument of type `Map<String,String>`.
 In the latter case, the framework passes in the configuration.
 
-Shutdown is similar; the framework will call any method annotated with xref:rg:ant:PreDestroy.adoc[`@PreDestroy`].
+Shutdown is similar; the framework will call any method annotated with xref:applib:ant:PreDestroy.adoc[`@PreDestroy`].
 
 
 

@@ -56,7 +56,7 @@ See also xref:rg:cms:methods.adoc#removeFrom[`removeFrom...()`]`
 |Y
 |Return a list of matching elements for a property or an action parameter. +
 
-Alternatively, can specify for a class using xref:rg:ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject` +
+Alternatively, can specify for a class using xref:applib:ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject` +
 `#autoCompleteRepository`] +
 
 See also xref:rg:cms:methods.adoc#choices[`choices...()`]

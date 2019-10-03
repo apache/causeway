@@ -1,0 +1,76 @@
+= `@DomainServiceLayout`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `@DomainServiceLayout` annotation applies to domain services, collecting together all view layout semantics within a single annotation.
+
+[TIP]
+====
+You will also find some additional material in the xref:vw:ROOT:layout/application-menu.adoc[object layout] chapter.
+====
+
+
+The table below summarizes the annotation's attributes.
+
+.`@DomainServiceLayout` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:applib:ant:DomainServiceLayout.adoc#menuBar[`menuBar()`]
+|`PRIMARY`, `SECONDARY`, `TERTIARY` (`PRIMARY`).
+|the menubar in which the menu that holds this service's actions should reside.
+
+
+|xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`menuOrder()`]
+|
+|the order of the service's menu with respect to other service's.
+
+
+|xref:applib:ant:DomainServiceLayout.adoc#named[`named()`]
+|string, eg "Customers"
+|name of this class (overriding the name derived from its name in code)
+
+
+
+|===
+
+
+
+For example:
+
+[source,java]
+----
+@DomainService
+@DomainServiceLayout(
+    menuBar=MenuBar.PRIMARY,
+    menuOrder="100",
+    named="ToDos"
+)
+public class ToDoItems {
+    ...
+}
+----
+
+
+
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:vw:ROOT:layout/file-based.adoc[`.layout.xml`] file (only for properties, collections and actions are supported).
+====
+
+
+
+
+
+
+
+include::DomainServiceLayout/menuBar.adoc[leveloffset=+1]
+include::DomainServiceLayout/menuOrder.adoc[leveloffset=+1]
+include::DomainServiceLayout/named.adoc[leveloffset=+1]

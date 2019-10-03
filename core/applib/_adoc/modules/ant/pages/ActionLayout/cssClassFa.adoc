@@ -1,0 +1,43 @@
+[[cssClassFa]]
+= `cssClassFa()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered on the action's representation as a button or menu item.    The related `cssClassFaPosition()` attribute specifies the positioning of the icon, to the left or the right of the text.
+
+These attributes can also be applied to xref:applib:ant:DomainObjectLayout.adoc#cssClassFa[domain objects] and to xref:applib:ant:ViewModelLayout.adoc#cssClassFa[view models] to specify the object's icon.
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    @ActionLayout(
+        cssClassFa="fa-step-backward"
+    )
+    public ToDoItem previous() { /* ... */ }
+
+    @ActionLayout(
+        cssClassFa="fa-step-forward",
+        cssClassFaPosition=ActionLayout.CssClassFaPosition.RIGHT
+    )
+    public ToDoItem next() { /* ... */ }
+}
+----
+
+There can be multiple "fa-" classes, eg to mirror or rotate the icon. There is no need to include the mandatory `fa` "marker" CSS class; it will be automatically added to the list.  The `fa-` prefix can also be omitted from the class names; it will be prepended to each if required.
+
+
+== Alternatives
+
+As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout/file-based.adoc[file-based layout] can be used instead.
+
+
+[NOTE]
+====
+The similar xref:applib:ant:ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+====
+

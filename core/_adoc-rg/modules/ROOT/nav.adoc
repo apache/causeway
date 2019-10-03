@@ -1,2 +1,2 @@
-* xref:about.adoc[About]
+include::rg:ROOT:partial$nav.adoc[]
 

@@ -43,14 +43,14 @@ a persistent entity).  The enum indicates whether these schemas should be includ
 
 Apache Isis provides a default implementation of the service, `o.a.i.applib.services.jaxb.JaxbServiceDefault`.
 
-To use an alternative implementation, implement `JaxbService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement `JaxbService` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 
 
 
 == Usage within the framework
 
 This service is provided as a convenience for applications, but is also used internally by the framework to
-xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated
+xref:applib:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated
 xref:ug:fun:building-blocks.adoc#view-models[view models].  The functionality to download XML and XSD schemas is also
 exposed in the UI through mixins to xref:rg:cms:classes/mixins.adoc#Dto[`Dto`] interface.
 

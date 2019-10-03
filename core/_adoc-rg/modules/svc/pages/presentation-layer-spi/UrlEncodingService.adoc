@@ -13,7 +13,7 @@ When the framework needs to recreate the view model (for example to invoke an ac
 Defining this functionality as an SPI has two use cases:
 
 * first, (though some browsers support longer strings), there is a limit of 2083 characters for URLs.
-For view model mementos that correspond to large strings (as might occur when serializing a JAXB xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated view model), the service provides a hook.
+For view model mementos that correspond to large strings (as might occur when serializing a JAXB xref:applib:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated view model), the service provides a hook.
 +
 For example, each memento string could be mapped to a GUID held in some cluster-aware cache.
 
@@ -46,5 +46,5 @@ The framework provides a default implementation -- `UrlEncodingServiceWithCompre
 As already noted, be aware that the maximum length of a URL should not exceed 2083 characters.
 For large view models, there's the possibility that this limit could be exceeded; in such cases register an alternative implementation of this service.
 
-To use an alternative implementation, implement the `UrlEncodingService` interface and use xref:rg:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, implement the `UrlEncodingService` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:intro/overriding-the-services.adoc[introduction] to this guide).
 

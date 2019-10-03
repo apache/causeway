@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 Every object has a xref:vw:ROOT:layout.adoc[layout] .
-This may be specified using annotations such as xref:rg:ant:MemberOrder.adoc[`@MemberOrder`], xref:rg:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and the like,  but it much more commonly specified using an xref:vw:ROOT:layout/file-based .adoc[XML layout file].
+This may be specified using annotations such as xref:applib:ant:MemberOrder.adoc[`@MemberOrder`], xref:applib:ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and the like,  but it much more commonly specified using an xref:vw:ROOT:layout/file-based .adoc[XML layout file].
 
 The `layout` method allows the domain object to specify an alternate layout to its usual layout.
 

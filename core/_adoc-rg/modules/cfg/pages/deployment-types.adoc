@@ -9,7 +9,7 @@ Apache Isis distinguishes between the application being run in development mode 
 
 (For mostly historical reasons) development mode is actually called `SERVER_PROTOTYPE`, while production mode is called just `SERVER`.
 
-When running in development/prototyping mode, certain capabilities are enabled; most notably any actions restricted to prototyping mode (using xref:rg:ant:Action.adoc#restrictTo[`@Action#restrictTo()`]) will be available.
+When running in development/prototyping mode, certain capabilities are enabled; most notably any actions restricted to prototyping mode (using xref:applib:ant:Action.adoc#restrictTo[`@Action#restrictTo()`]) will be available.
 
 
 
