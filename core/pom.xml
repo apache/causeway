@@ -139,8 +139,8 @@
 		<h2.version>1.4.199</h2.version>
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
-		<spring-framework.version>5.1.7.RELEASE</spring-framework.version>
-		<spring-boot.version>2.1.5.RELEASE</spring-boot.version>
+		<spring-framework.version>5.2.0.RELEASE</spring-framework.version>
+		<spring-boot.version>2.2.0.RC1</spring-boot.version>
 		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
 
 		<wicket.version>8.6.1</wicket.version>
@@ -361,16 +361,23 @@
 
 	<repositories>
 		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
 			<id>central</id>
 			<name>Central Repository</name>
 			<url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>Apache Repository</id>
 			<url>https://repository.apache.org/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>Spring Milestones</id>
+			<url>https://repo.spring.io/milestone/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -1126,6 +1133,18 @@
 				  <artifactId>jaxws-ri</artifactId>
 				  <version>2.3.2</version>
 				  <type>pom</type>
+				  <exclusions>
+					  	<exclusion>
+					  		<!-- version clash with spring, we pull in the newer 1.3.5 below -->
+					  		<groupId>jakarta.annotation</groupId>
+			    			<artifactId>jakarta.annotation-api</artifactId>
+					  	</exclusion>
+				  </exclusions>
+			</dependency>
+			<dependency>
+			    <groupId>jakarta.annotation</groupId>
+			    <artifactId>jakarta.annotation-api</artifactId>
+			    <version>1.3.5</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
