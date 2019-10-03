@@ -19,7 +19,7 @@
 
 package org.apache.isis.security.authentication.fixtures;
 
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.security.authentication.AuthenticationRequest;
 import org.apache.isis.security.authentication.standard.AuthenticatorAbstract;
 

@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -47,6 +46,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins.environment;
+package org.apache.isis.commons.internal.environment;
 
 /**
  * 

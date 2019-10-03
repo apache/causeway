@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import java.time.Duration;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -33,6 +35,10 @@ import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+
+import lombok.val;
 
 @Smoketest
 @SpringBootTest(
@@ -60,15 +66,26 @@ class SpecloaderPerformanceTest {
         IsisBeanTypeRegistry.repeatedTesting = true;
     }
     
-    @Test //under constr.
-    void repeatedSpecloading() {
+    static long ITERATIONS = 40; /* should typically run in ~10s */
+    static long EXPECTED_MILLIS_PER_ITERATION = 500;
+    
+    @Test 
+    void repeatedConcurrentSpecloading_shouldNotDeadlock() {
         
-        config.getReflector().getIntrospector().setParallelize(false);
+        config.getReflector().getIntrospector().setParallelize(true);
         
-        for(int i=0; i<40; ++i) {
-            specificationLoader.shutdown();
-            specificationLoader.init();
-        }
+        val timeOutMillis = ITERATIONS * EXPECTED_MILLIS_PER_ITERATION;
+        
+        assertTimeout(Duration.ofMillis(timeOutMillis), ()->{
+        
+            for(int i=0; i<ITERATIONS; ++i) {
+                specificationLoader.shutdown();
+                specificationLoader.init();
+            }
+            
+        });
+        
+        
     }
 
 

@@ -16,15 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.plugins.environment;
+package org.apache.isis.commons.internal.environment;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.context._Context;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents configuration, that is available in an early phase of bootstrapping. 
@@ -32,10 +36,8 @@ import org.apache.isis.commons.internal.base._Lazy;
  * 
  * @since 2.0
  */
-@Service @Singleton @Order(value = Ordered.LOWEST_PRECEDENCE)
+@Service @Singleton @Log4j2
 public class IsisSystemEnvironment {
-
-    private static _Lazy<IsisSystemEnvironment> singleton = _Lazy.threadSafe(IsisSystemEnvironment::new);
 
     /**
      * @deprecated - this is provided only as a stepping stone for code that currently uses static method calls
@@ -43,11 +45,38 @@ public class IsisSystemEnvironment {
      */
     @Deprecated
     public static IsisSystemEnvironment get() {
-        return singleton.get();
+        return _Context.computeIfAbsent(IsisSystemEnvironment.class, IsisSystemEnvironment::new);
     }
 
-    // -- INIT
-
+    // -- LIFE-CYCLE
+    
+    @PostConstruct
+    public void postConstruct() {
+        // when NOT bootstrapped with Spring, postConstruct() never gets called
+        
+        // when bootstrapped with Spring, postConstruct() must happen before any call to get() above,
+        // otherwise we copy over settings from the primed instance already created with get() above,
+        // then on the _Context replace the primed with this one
+        val primed = _Context.getIfAny(IsisSystemEnvironment.class);
+        if(primed!=null) {
+            _Context.remove(IsisSystemEnvironment.class);
+            this.setPrototyping(primed.isPrototyping());
+            this.setUnitTesting(primed.isUnitTesting());
+        }
+        _Context.putSingleton(IsisSystemEnvironment.class, this);
+    }
+    
+    @EventListener(ContextClosedEvent.class)
+    public void onContextAboutToClose(ContextClosedEvent event) {
+        // happens before any @PostConstruct
+        // as a consequence, no managed bean should touch the _Context during its post-construct phase
+        // as it has already been cleared here
+        log.info("Context about to close.");
+        _Context.clear();
+    }
+    
+    // -- SETUP
+    
     /**
      * For framework internal unit tests.<p>
      * Let the framework know what context we are running on.

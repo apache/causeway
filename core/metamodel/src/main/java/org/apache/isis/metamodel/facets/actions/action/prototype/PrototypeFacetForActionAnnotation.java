@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
+import org.apache.isis.commons.internal.environment.DeploymentType;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacetAbstract;

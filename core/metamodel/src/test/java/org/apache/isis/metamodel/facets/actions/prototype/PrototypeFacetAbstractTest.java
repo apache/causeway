@@ -22,7 +22,7 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
+import org.apache.isis.commons.internal.environment.DeploymentType;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;

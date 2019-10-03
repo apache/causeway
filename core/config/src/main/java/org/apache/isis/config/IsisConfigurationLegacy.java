@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 
 import lombok.val;
 

@@ -19,8 +19,8 @@
 package org.apache.isis.metamodel.specloader;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.plugins.environment.DeploymentType;
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.environment.DeploymentType;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 
 import lombok.val;

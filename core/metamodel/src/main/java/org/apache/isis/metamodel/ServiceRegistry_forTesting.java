@@ -87,14 +87,16 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     // -- HELPER
 
     private Set<BeanAdapter> registeredBeans() {
-        if(registeredBeans.isEmpty()) {
+        synchronized(registeredBeans) {
+            if(registeredBeans.isEmpty()) {
 
-            val beanSortClassifier = IsisBeanTypeRegistry.current();
+                val beanSortClassifier = IsisBeanTypeRegistry.current();
 
-            streamSingletons()
-            .map(s->toBeanAdapter(s, beanSortClassifier))
-            .filter(_NullSafe::isPresent)
-            .forEach(registeredBeans::add);
+                streamSingletons()
+                .map(s->toBeanAdapter(s, beanSortClassifier))
+                .filter(_NullSafe::isPresent)
+                .forEach(registeredBeans::add);
+            }    
         }
         return registeredBeans;
     }

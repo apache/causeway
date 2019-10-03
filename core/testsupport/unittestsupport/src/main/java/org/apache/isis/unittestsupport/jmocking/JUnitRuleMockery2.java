@@ -24,7 +24,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -37,6 +36,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

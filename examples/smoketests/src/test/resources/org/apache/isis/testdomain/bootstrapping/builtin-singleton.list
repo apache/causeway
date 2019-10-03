@@ -16,7 +16,7 @@ org.apache.isis.applib.services.scratchpad.Scratchpad
 org.apache.isis.applib.services.swagger.SwaggerServiceMenu
 org.apache.isis.applib.services.tablecol.TableColumnOrderService$Default
 org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression
-org.apache.isis.commons.internal.plugins.environment.IsisSystemEnvironment
+org.apache.isis.commons.internal.environment.IsisSystemEnvironment
 org.apache.isis.config.IsisConfiguration$PatternsConverter
 org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring
 org.apache.isis.config.beans.WebAppConfigBean
@@ -87,6 +87,6 @@ org.apache.isis.runtime.system.transaction.PersistenceSessionServiceInternalDefa
 org.apache.isis.security.authentication.bypass.AuthenticatorBypass
 org.apache.isis.security.authentication.manager.AuthorizationManagerStandard
 org.apache.isis.security.authentication.standard.AuthenticationManagerStandard
-org.apache.isis.security.authorization.bypass.AuthorizorBypass
+#org.apache.isis.security.authorization.bypass.AuthorizorBypass
 org.apache.isis.testdomain.jdo.InventoryResource
 org.apache.isis.wrapper.WrapperFactoryDefault
