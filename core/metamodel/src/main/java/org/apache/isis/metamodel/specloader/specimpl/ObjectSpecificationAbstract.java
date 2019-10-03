@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -38,7 +37,8 @@ import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
@@ -159,15 +159,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
 
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
-    private final Map<ActionType, List<ObjectAction>> objectActionsByType = createObjectActionsByType();
-
-    private static Map<ActionType, List<ObjectAction>> createObjectActionsByType() {
-        final Map<ActionType, List<ObjectAction>> map = _Maps.newHashMap();
-        for (final ActionType type : ActionType.values()) {
-            map.put(type, _Lists.<ObjectAction>newArrayList());
-        }
-        return map;
-    }
+    private final ListMultimap<ActionType, ObjectAction> objectActionsByType = 
+            _Multimaps.newConcurrentListMultimap();
 
     private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
     private final Subclasses directSubclasses = new Subclasses();
@@ -376,7 +369,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             this.objectActions.addAll(orderedActions);
 
             for (final ActionType type : ActionType.values()) {
-                final List<ObjectAction> objectActionForType = objectActionsByType.get(type);
+                val objectActionForType = objectActionsByType.getOrElseNew(type);
                 objectActionForType.clear();
                 objectActions.stream()
                 .filter(ObjectAction.Predicates.ofType(type))

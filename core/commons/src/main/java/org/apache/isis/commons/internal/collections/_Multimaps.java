@@ -32,6 +32,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -39,6 +40,8 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.base._Casts;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -67,6 +70,8 @@ public class _Multimaps {
          * @param value
          */
         public void putElement(K key, V value);
+        
+        public List<V> getOrElseNew(K key);
     }
 
     /**
@@ -82,6 +87,8 @@ public class _Multimaps {
          * @param value
          */
         public void putElement(K key, V value);
+        
+        public Set<V> getOrElseNew(K key);
     }
 
     /**
@@ -108,6 +115,8 @@ public class _Multimaps {
          * @return null if no such element exists
          */
         public V getElement(K1 key, K2 subkey);
+        
+        public Map<K2, V> getOrElseNew(K1 key);
     }
 
     public static <K, V> ListMultimap<K, V> newListMultimap(
@@ -135,8 +144,13 @@ public class _Multimaps {
 
             @Override
             public void putElement(K key, V value) {
-                final Collection<V> collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
-                collection.add(value);
+                getOrElseNew(key).add(value);
+            }
+            
+            @Override
+            public List<V> getOrElseNew(K key) {
+                val collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
+                return collection;
             }
 
         };
@@ -167,8 +181,13 @@ public class _Multimaps {
 
             @Override
             public void putElement(K key, V value) {
-                final Collection<V> collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
-                collection.add(value);
+                getOrElseNew(key).add(value);
+            }
+            
+            @Override
+            public Set<V> getOrElseNew(K key) {
+                val collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
+                return collection;
             }
 
         };
@@ -199,14 +218,19 @@ public class _Multimaps {
 
             @Override
             public void putElement(K1 key, K2 subkey, V value) {
-                final Map<K2, V> elementMap = delegate.computeIfAbsent(key, __->elementMapFactory.get());
-                elementMap.put(subkey, value);
+                getOrElseNew(key).put(subkey, value);
             }
 
             @Override
             public V getElement(K1 key, K2 subkey) {
                 final Map<K2, V> elementMap = delegate.get(key);
                 return elementMap!=null ? elementMap.get(subkey) : null;
+            }
+            
+            @Override
+            public Map<K2, V> getOrElseNew(K1 key) {
+                val elementMap = delegate.computeIfAbsent(key, __->elementMapFactory.get());
+                return elementMap;
             }
 
         };
@@ -220,6 +244,13 @@ public class _Multimaps {
     public static <K, V> ListMultimap<K, V> newListMultimap(){
         return newListMultimap(HashMap<K, List<V>>::new, ArrayList::new);
     }
+    
+    /**
+     * @return ConcurrentHashMap of CopyOnWriteArrayList (fully concurrent)
+     */
+    public static <K, V> ListMultimap<K, V> newConcurrentListMultimap(){
+        return newListMultimap(ConcurrentHashMap<K, List<V>>::new, CopyOnWriteArrayList::new);
+    }
 
     /**
      * @return HashMap of HashSets
@@ -227,6 +258,14 @@ public class _Multimaps {
     public static <K, V> SetMultimap<K, V> newSetMultimap(){
         return newSetMultimap(HashMap<K, Set<V>>::new, HashSet::new);
     }
+    
+    /**
+     * @return ConcurrentHashMap of ConcurrentHashMap-key-sets (fully concurrent)
+     */
+    public static <K, V> SetMultimap<K, V> newConcurrentSetMultimap(){
+        return newSetMultimap(ConcurrentHashMap<K, Set<V>>::new, _Sets::newConcurrentHashSet);
+    }
+
 
     /**
      * @param keyComparator - if {@code null} uses natural ordering
@@ -250,7 +289,7 @@ public class _Multimaps {
     }
 
     /**
-     * @return ConcurrentHashMap of HashMaps
+     * @return ConcurrentHashMap of HashMaps (not fully concurrent)
      */
     public static <K1, K2, V> MapMultimap<K1, K2, V> newConcurrentMapMultimap(){
         return newMapMultimap(ConcurrentHashMap<K1, Map<K2, V>>::new, HashMap::new);

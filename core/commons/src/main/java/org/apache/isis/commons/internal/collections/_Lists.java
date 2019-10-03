@@ -150,19 +150,19 @@ public final class _Lists {
 
     // -- COPY ON WRITE LIST
 
-    public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList() {
+    public static <T> CopyOnWriteArrayList<T> newConcurrentList() {
         return new CopyOnWriteArrayList<T>();
     }
 
-    public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(@Nullable Collection<T> collection) {
+    public static <T> CopyOnWriteArrayList<T> newConcurrentList(@Nullable Collection<T> collection) {
         if(collection==null) {
-            return newCopyOnWriteArrayList();
+            return newConcurrentList();
         }
         return new CopyOnWriteArrayList<T>(collection);
     }
 
-    public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(@Nullable Iterable<T> iterable) {
-        return _Collections.collectFromIterable(iterable, _Lists::newCopyOnWriteArrayList,
+    public static <T> CopyOnWriteArrayList<T> newConcurrentList(@Nullable Iterable<T> iterable) {
+        return _Collections.collectFromIterable(iterable, _Lists::newConcurrentList,
                 ()->Collectors.<T, CopyOnWriteArrayList<T>>toCollection(CopyOnWriteArrayList::new) );
     }
 
