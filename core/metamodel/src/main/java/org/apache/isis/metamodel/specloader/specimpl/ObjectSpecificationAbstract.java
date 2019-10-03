@@ -34,12 +34,14 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -163,6 +165,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             _Multimaps.newConcurrentListMultimap();
 
     private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
+    
+    // defensive immutable lazy copy of interfaces
+    private final _Lazy<List<ObjectSpecification>> unmodifiableInterfaces = 
+            _Lazy.threadSafe(()->Collections.unmodifiableList(new ArrayList<>(interfaces)));
+    
+    
+    
     private final Subclasses directSubclasses = new Subclasses();
     // built lazily
     private Subclasses transitiveSubclasses;
@@ -330,8 +339,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected void updateInterfaces(final List<ObjectSpecification> interfaces) {
-        this.interfaces.clear();
-        this.interfaces.addAll(interfaces);
+        synchronized(unmodifiableInterfaces) {
+            this.interfaces.clear();
+            this.interfaces.addAll(interfaces);
+            unmodifiableInterfaces.clear();
+        }
     }
 
     private void updateAsSubclassTo(final ObjectSpecification supertypeSpec) {
@@ -525,26 +537,30 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
 
-        // lookup facet holder's facet
-        final Stream<Q> facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
-
-        // lookup all interfaces
-        final Stream<Q> facets2 = _NullSafe.stream(interfaces)
-                .filter(_NullSafe::isPresent) // just in case
-                .map(interfaceSpec->interfaceSpec.getFacet(facetType));
-
-        // search up the inheritance hierarchy
-        final Stream<Q> facets3 = _NullSafe.streamNullable(superclass()) 
-                .map(superSpec->superSpec.getFacet(facetType));
-
-        final Stream<Q> facetsCombined = Stream.concat(Stream.concat(facets1, facets2), facets3);
-
-        final NotANoopFacetFilter<Q> notANoopFacetFilter = new NotANoopFacetFilter<>();
-
-        return facetsCombined
-                .filter(notANoopFacetFilter)
-                .findFirst()
-                .orElse(notANoopFacetFilter.noopFacet);
+        synchronized(unmodifiableInterfaces) {
+        
+            // lookup facet holder's facet
+            val facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
+    
+            // lookup all interfaces
+            val facets2 = _NullSafe.stream(interfaces())
+                    .filter(_NullSafe::isPresent) // just in case
+                    .map(interfaceSpec->interfaceSpec.getFacet(facetType));
+    
+            // search up the inheritance hierarchy
+            val facets3 = _NullSafe.streamNullable(superclass()) 
+                    .map(superSpec->superSpec.getFacet(facetType));
+    
+            val facetsCombined = _Streams.concat(facets1, facets2, facets3);
+    
+            val notANoopFacetFilter = new NotANoopFacetFilter<Q>();
+    
+            return facetsCombined
+                    .filter(notANoopFacetFilter)
+                    .findFirst()
+                    .orElse(notANoopFacetFilter.noopFacet);
+        
+        }
     }
 
     @Vetoed
@@ -608,7 +624,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public Collection<ObjectSpecification> interfaces() {
-        return Collections.unmodifiableList(interfaces);
+        return unmodifiableInterfaces.get();
     }
 
     @Override
@@ -1019,7 +1035,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             final Object servicePojo,
             final List<ObjectAction> contributeeActionsToAppendTo) {
 
-        log.debug("{} : addContributeeActionsIfAny(...); servicePojo class is: {}", this.getFullIdentifier(), servicePojo.getClass().getName());
+        if(log.isDebugEnabled()) {
+            log.debug("{} : addContributeeActionsIfAny(...); servicePojo class is: {}", 
+                    this.getFullIdentifier(), servicePojo.getClass().getName());
+        }
 
         final Class<?> serviceType = servicePojo.getClass();
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(serviceType,

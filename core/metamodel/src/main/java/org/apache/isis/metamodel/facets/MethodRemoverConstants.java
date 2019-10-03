@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.methodutils.MethodScope;
 
 public class MethodRemoverConstants {
 
-    public static MethodRemover NULL = new MethodRemover() {
+    public static MethodRemover NOOP = new MethodRemover() {
         @Override
         public void removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
         }

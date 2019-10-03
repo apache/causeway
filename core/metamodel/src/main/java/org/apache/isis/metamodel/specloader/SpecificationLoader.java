@@ -19,7 +19,6 @@
 package org.apache.isis.metamodel.specloader;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.annotation.Nullable;
 

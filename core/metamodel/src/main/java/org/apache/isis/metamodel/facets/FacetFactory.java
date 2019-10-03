@@ -117,6 +117,7 @@ public interface FacetFactory {
      * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the
      * number of {@link FacetFactory factory}s that are queried when building up
      * the meta-model.
+     * 
      */
     List<FeatureType> getFeatureTypes();
 

@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,7 +72,26 @@ public class _Multimaps {
          */
         public void putElement(K key, V value);
         
+        /**
+         * Returns the List to which the specified key is mapped,
+         * or a new List if this map contains no mapping for the key.
+         * <p> In the latter case the List is also put onto this map.  
+         * @param key
+         * @return
+         */
         public List<V> getOrElseNew(K key);
+        
+        /**
+         * Returns the List to which the specified key is mapped,
+         * or an immutable empty List if this map contains no mapping for the key.
+         * <p> In the latter case the List is not put onto this map.  
+         * @param key
+         * @return
+         */
+        default public List<V> getOrElseEmpty(K key) {
+            return getOrDefault(key, Collections.emptyList());
+        }
+        
     }
 
     /**
@@ -88,7 +108,25 @@ public class _Multimaps {
          */
         public void putElement(K key, V value);
         
+        /**
+         * Returns the Set to which the specified key is mapped,
+         * or a new Set if this map contains no mapping for the key.
+         * <p> In the latter case the Set is also put onto this map.  
+         * @param key
+         * @return
+         */
         public Set<V> getOrElseNew(K key);
+        
+        /**
+         * Returns the Set to which the specified key is mapped,
+         * or an immutable empty Set if this map contains no mapping for the key.
+         * <p> In the latter case the Set is not put onto this map.  
+         * @param key
+         * @return
+         */
+        default public Set<V> getOrElseEmpty(K key) {
+            return getOrDefault(key, Collections.emptySet());
+        }
     }
 
     /**
@@ -116,7 +154,25 @@ public class _Multimaps {
          */
         public V getElement(K1 key, K2 subkey);
         
+        /**
+         * Returns the Map to which the specified key is mapped,
+         * or a new Map if this map contains no mapping for the key.
+         * <p> In the latter case the Map is also put onto this map.  
+         * @param key
+         * @return
+         */
         public Map<K2, V> getOrElseNew(K1 key);
+        
+        /**
+         * Returns the Map to which the specified key is mapped,
+         * or an immutable empty Map if this map contains no mapping for the key.
+         * <p> In the latter case the Map not is put onto this map.  
+         * @param key
+         * @return
+         */
+        default public Map<K2, V> getOrElseEmpty(K1 key) {
+            return getOrDefault(key, Collections.emptyMap());
+        }
     }
 
     public static <K, V> ListMultimap<K, V> newListMultimap(

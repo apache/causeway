@@ -27,8 +27,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -78,10 +81,9 @@ public class FacetProcessor {
      * Derived from factories that implement
      * {@link MethodPrefixBasedFacetFactory}.
      *
-     * <p>
-     * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<String> cachedMethodPrefixes;
+    private final _Lazy<List<String>> methodPrefixes = 
+            _Lazy.threadSafe(this::init_methodPrefixes);
 
     /**
      * All registered {@link FacetFactory factories} that implement
@@ -90,19 +92,16 @@ public class FacetProcessor {
      * <p>
      * Used within {@link #recognizes(Method)}.
      *
-     * <p>
-     * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<MethodFilteringFacetFactory> cachedMethodFilteringFactories;
+    private final _Lazy<List<MethodFilteringFacetFactory>> methodFilteringFactories =
+            _Lazy.threadSafe(this::init_methodFilteringFactories);
 
     /**
      * All registered {@link FacetFactory factories} that implement
      * {@link ContributeeMemberFacetFactory}.
-     *
-     * <p>
-     * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<ContributeeMemberFacetFactory> cachedContributeeMemberFacetFactories;
+    private final _Lazy<List<ContributeeMemberFacetFactory>> contributeeMemberFacetFactories =
+            _Lazy.threadSafe(this::init_contributeeMemberFacetFactories);
 
     /**
      * All registered {@link FacetFactory factories} that implement
@@ -110,11 +109,9 @@ public class FacetProcessor {
      *
      * <p>
      * Used within {@link #recognizes(Method)}.
-     *
-     * <p>
-     * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<PropertyOrCollectionIdentifyingFacetFactory> cachedPropertyOrCollectionIdentifyingFactories;
+    private final _Lazy<List<PropertyOrCollectionIdentifyingFacetFactory>> propertyOrCollectionIdentifyingFactories =
+            _Lazy.threadSafe(this::init_propertyOrCollectionIdentifyingFactories);
 
     /**
      * ObjectFeatureType => List<FacetFactory>
@@ -123,26 +120,33 @@ public class FacetProcessor {
      * Lazily initialized, then cached. The lists remain in the same order that
      * the factories were {@link #registerFactory(FacetFactory) registered}.
      */
-    private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
-
-    // //////////////////////////////////////////////////
-    // init, shutdown (application scoped)
-    // //////////////////////////////////////////////////
-
+    private final _Lazy<ListMultimap<FeatureType, FacetFactory>> factoryListByFeatureType = 
+            _Lazy.threadSafe(this::init_factoriesByFeatureType);
+    
+    // -- LIFECYCLE
+    
     public void init() {
+        cleanUp(); 
+        
         serviceInjector = MetaModelContext.current().getServiceInjector();
         val facetFactoryList = programmingModel.getList();
         facetFactoryList.forEach(this::registerFactory);
     }
 
     public void shutdown() {
+        cleanUp();
     }
 
-    public void registerFactory(final FacetFactory factory) {
+    private void cleanUp() {
         clearCaches();
+        factories.clear();
+        serviceInjector = null;
+        factoryByFactoryType.clear();
+    }
+    
+    private void registerFactory(FacetFactory factory) {
         factoryByFactoryType.put(factory.getClass(), factory);
         factories.add(factory);
-
         injectDependenciesInto(factory);
     }
 
@@ -150,7 +154,7 @@ public class FacetProcessor {
      * This is <tt>public</tt> so that can be used for <tt>@Facets</tt>
      * processing.
      */
-    public void injectDependenciesInto(final FacetFactory factory) {
+    public void injectDependenciesInto(FacetFactory factory) {
         serviceInjector.injectServicesInto(factory);
     }
 
@@ -163,15 +167,16 @@ public class FacetProcessor {
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
     public Set<Method> findAssociationCandidateAccessors(
-            final Collection<Method> methods, 
-            final Set<Method> candidates) {
+            Collection<Method> methods, 
+            Set<Method> candidates) {
         
-        cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
+        val factories = propertyOrCollectionIdentifyingFactories.get();
+        
         for (val method : methods) {
             if (method == null) {
                 continue;
             }
-            for (val facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
+            for (val facetFactory : factories) {
                 if (facetFactory.isPropertyOrCollectionAccessorCandidate(method)) {
                     candidates.add(method);
                 }
@@ -188,9 +193,11 @@ public class FacetProcessor {
      * <p>
      * Intended to be called after {@link #findAndRemovePropertyAccessors(org.apache.isis.metamodel.facetapi.MethodRemover, java.util.List)} once only reference properties remain.
      */
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-        cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
-        for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
+    public void findAndRemovePropertyAccessors(
+            MethodRemover methodRemover, 
+            List<Method> methodListToAppendTo) {
+        
+        for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
         }
     }
@@ -203,9 +210,11 @@ public class FacetProcessor {
      * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveCollectionAccessors(MethodRemover,
      *      List)
      */
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-        cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
-        for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
+    public void findAndRemoveCollectionAccessors(
+            MethodRemover methodRemover, 
+            List<Method> methodListToAppendTo) {
+        
+        for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
         }
     }
@@ -228,17 +237,15 @@ public class FacetProcessor {
      * factory set does the work) is a slight performance optimization for when
      * there are multiple facet factories that search for the same prefix.
      */
-    public boolean recognizes(final Method method) {
-        cacheMethodPrefixesIfRequired();
-        final String methodName = method.getName();
-        for (final String prefix : cachedMethodPrefixes) {
+    public boolean recognizes(Method method) {
+        val methodName = method.getName();
+        for (val prefix : methodPrefixes.get()) {
             if (methodName.startsWith(prefix)) {
                 return true;
             }
         }
 
-        cacheMethodFilteringFacetFactoriesIfRequired();
-        for (final MethodFilteringFacetFactory factory : cachedMethodFilteringFactories) {
+        for (val factory : methodFilteringFactories.get()) {
             if (factory.recognizes(method)) {
                 return true;
             }
@@ -247,9 +254,9 @@ public class FacetProcessor {
         return false;
     }
 
-    public void processObjectSpecId(final Class<?> cls, final FacetHolder facetHolder) {
-        final List<ObjectSpecIdFacetFactory> factoryList = getObjectSpecIfFacetFactoryList();
-        for (final ObjectSpecIdFacetFactory facetFactory : factoryList) {
+    public void processObjectSpecId(Class<?> cls, FacetHolder facetHolder) {
+        val factoryList = getObjectSpecIfFacetFactoryList();
+        for (val facetFactory : factoryList) {
             facetFactory.process(new ProcessObjectSpecIdContext(cls, facetHolder));
         }
     }
@@ -259,14 +266,16 @@ public class FacetProcessor {
     
     private List<ObjectSpecIdFacetFactory> getObjectSpecIfFacetFactoryList() {
         if(objectSpecIfFacetFactoryList == null) {
-            List<ObjectSpecIdFacetFactory> facetFactories = _Lists.newArrayList();
-            final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
-            for (final FacetFactory facetFactory : factoryList) {
+            val facetFactories = _Lists.<ObjectSpecIdFacetFactory>newArrayList();
+            
+            factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
+            .forEach(facetFactory->{
                 if (facetFactory instanceof ObjectSpecIdFacetFactory) {
-                    final ObjectSpecIdFacetFactory objectSpecIdFacetFactory = (ObjectSpecIdFacetFactory) facetFactory;
+                    val objectSpecIdFacetFactory = (ObjectSpecIdFacetFactory) facetFactory;
                     facetFactories.add(objectSpecIdFacetFactory);
                 }
-            }
+            });
+            
             objectSpecIfFacetFactoryList = Collections.unmodifiableList(facetFactories);
         }
         return objectSpecIfFacetFactoryList;
@@ -288,13 +297,17 @@ public class FacetProcessor {
      *            - holder to attach facets to.
      */
     public void process(
-            final Class<?> cls,
-            final MethodRemover methodRemover,
-            final FacetHolder facetHolder) {
-        final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
-        for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
-        }
+            Class<?> cls,
+            MethodRemover methodRemover,
+            FacetHolder facetHolder) {
+        
+        val ctx = new ProcessClassContext(
+                cls, 
+                removerElseNoopRemover(methodRemover), 
+                facetHolder);
+        
+        factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
+        .forEach(facetFactory->facetFactory.process(ctx));
     }
 
 
@@ -319,28 +332,28 @@ public class FacetProcessor {
      *            action, collection etc)
      */
     public void process(
-            final Class<?> cls,
-            final Method method,
-            final MethodRemover methodRemover,
-            final FacetedMethod facetedMethod,
-            final FeatureType featureType) {
-        final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
-        final ProcessMethodContext processMethodContext =
-                new ProcessMethodContext(cls, featureType, method, removerElseNullRemover(methodRemover), facetedMethod);
-        for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(processMethodContext);
-        }
+            Class<?> cls,
+            Method method,
+            MethodRemover methodRemover,
+            FacetedMethod facetedMethod,
+            FeatureType featureType) {
+        
+        
+        val processMethodContext =
+                new ProcessMethodContext(cls, featureType, method, removerElseNoopRemover(methodRemover), facetedMethod);
+        
+        factoryListByFeatureType.get().getOrElseEmpty(featureType)
+        .forEach(facetFactory->facetFactory.process(processMethodContext));
     }
 
 
-    public void processMemberOrder(
-            final ObjectMember facetHolder) {
-        cacheContributeeMemberFacetFactoriesIfRequired();
-        final ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext =
+    public void processMemberOrder(ObjectMember facetHolder) {
+        
+        val processMemberContext =
                 new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(facetHolder);
-        for (final ContributeeMemberFacetFactory facetFactory : cachedContributeeMemberFacetFactories) {
-            facetFactory.process(processMemberContext);
-        }
+        contributeeMemberFacetFactories.get().forEach(facetFactory->
+            facetFactory.process(processMemberContext));
+        
     }
 
     /**
@@ -362,121 +375,100 @@ public class FacetProcessor {
      * @param facetedMethodParameter
      */
     public void processParams(
-            final Class<?> introspectedClass,
-            final Method method,
-            final int paramNum,
-            final MethodRemover methodRemover,
-            final FacetedMethodParameter facetedMethodParameter) {
-        for (FeatureType featureType : FeatureType.PARAMETERS_ONLY) {
+            Class<?> introspectedClass,
+            Method method,
+            int paramNum,
+            MethodRemover methodRemover,
+            FacetedMethodParameter facetedMethodParameter) {
+        
+        for (val featureType : FeatureType.PARAMETERS_ONLY) {
             processParams(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter, featureType);
         }
     }
 
     public void processParams(
-            final Class<?> introspectedClass,
-            final Method method,
-            final int paramNum,
-            final MethodRemover methodRemover,
-            final FacetedMethodParameter facetedMethodParameter,
-            final FeatureType featureType) {
-        final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
-        final ProcessParameterContext processParameterContext =
+            Class<?> introspectedClass,
+            Method method,
+            int paramNum,
+            MethodRemover methodRemover,
+            FacetedMethodParameter facetedMethodParameter,
+            FeatureType featureType) {
+        
+        val processParameterContext =
                 new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);
-        for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.processParams(processParameterContext);
-        }
+        
+        factoryListByFeatureType.get().getOrElseEmpty(featureType)
+        .forEach(facetFactory->facetFactory.processParams(processParameterContext));
     }
 
-    private List<FacetFactory> getFactoryListByFeatureType(final FeatureType featureType) {
-        cacheByFeatureTypeIfRequired();
-        List<FacetFactory> list = factoryListByFeatureType.get(featureType);
-        return list != null? list: Collections.<FacetFactory>emptyList();
-    }
 
     private void clearCaches() {
-        factoryListByFeatureType = null;
-        cachedMethodPrefixes = null;
-        cachedMethodFilteringFactories = null;
-        cachedPropertyOrCollectionIdentifyingFactories = null;
+        factoryListByFeatureType.clear();
+        methodPrefixes.clear();
+        methodFilteringFactories.clear();
+        contributeeMemberFacetFactories.clear();
+        propertyOrCollectionIdentifyingFactories.clear();
+    }
+    
+    // -- INITIALIZERS
+
+    private ListMultimap<FeatureType, FacetFactory> init_factoriesByFeatureType() {
+        val factoryListByFeatureType = _Multimaps.<FeatureType, FacetFactory>newListMultimap();
+        for (val factory : factories) {
+            factory.getFeatureTypes().forEach(featureType->
+                factoryListByFeatureType.putElement(featureType, factory));
+        }
+        return factoryListByFeatureType;
     }
 
-    private synchronized void cacheByFeatureTypeIfRequired() {
-        if (factoryListByFeatureType != null) {
-            return;
-        }
-        factoryListByFeatureType = _Maps.newHashMap();
-        for (final FacetFactory factory : factories) {
-            final List<FeatureType> featureTypes = factory.getFeatureTypes();
-            for (final FeatureType featureType : featureTypes) {
-                final List<FacetFactory> factoryList = getList(factoryListByFeatureType, featureType);
-                factoryList.add(factory);
-            }
-        }
-    }
-
-    private synchronized void cacheMethodPrefixesIfRequired() {
-        if (cachedMethodPrefixes != null) {
-            return;
-        }
-        cachedMethodPrefixes = _Lists.newArrayList();
-        for (final FacetFactory facetFactory : factories) {
+    private List<String> init_methodPrefixes() {
+        val cachedMethodPrefixes = _Lists.<String>newArrayList();
+        for (val facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
-                final MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
+                val methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
                 ListExtensions.mergeWith(cachedMethodPrefixes, methodPrefixBasedFacetFactory.getPrefixes());
             }
         }
+        return cachedMethodPrefixes;
     }
 
-    private synchronized void cacheMethodFilteringFacetFactoriesIfRequired() {
-        if (cachedMethodFilteringFactories != null) {
-            return;
-        }
-        cachedMethodFilteringFactories = _Lists.newArrayList();
-        for (final FacetFactory factory : factories) {
+    private List<MethodFilteringFacetFactory> init_methodFilteringFactories() {
+        val methodFilteringFactories = _Lists.<MethodFilteringFacetFactory>newArrayList();
+        for (val factory : factories) {
             if (factory instanceof MethodFilteringFacetFactory) {
-                final MethodFilteringFacetFactory methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
-                cachedMethodFilteringFactories.add(methodFilteringFacetFactory);
+                val methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
+                methodFilteringFactories.add(methodFilteringFacetFactory);
             }
         }
+        return methodFilteringFactories;
     }
 
-    private synchronized void cacheContributeeMemberFacetFactoriesIfRequired() {
-        if (cachedContributeeMemberFacetFactories != null) {
-            return;
-        }
-        cachedContributeeMemberFacetFactories = _Lists.newArrayList();
-        for (final FacetFactory factory : factories) {
+    private List<ContributeeMemberFacetFactory> init_contributeeMemberFacetFactories() {
+        val contributeeMemberFacetFactories = _Lists.<ContributeeMemberFacetFactory>newArrayList();
+        for (val factory : factories) {
             if (factory instanceof ContributeeMemberFacetFactory) {
                 final ContributeeMemberFacetFactory memberOrderingFacetFactory = (ContributeeMemberFacetFactory) factory;
-                cachedContributeeMemberFacetFactories.add(memberOrderingFacetFactory);
+                contributeeMemberFacetFactories.add(memberOrderingFacetFactory);
             }
         }
+        return contributeeMemberFacetFactories;
     }
 
-    private synchronized void cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired() {
-        if (cachedPropertyOrCollectionIdentifyingFactories != null) {
-            return;
-        }
-        cachedPropertyOrCollectionIdentifyingFactories = _Lists.newArrayList();
-        for (FacetFactory factory : factories) {
+    private List<PropertyOrCollectionIdentifyingFacetFactory> init_propertyOrCollectionIdentifyingFactories() {
+        val propertyOrCollectionIdentifyingFactories = _Lists.<PropertyOrCollectionIdentifyingFacetFactory>newArrayList();
+        for (val factory : factories) {
             if (factory instanceof PropertyOrCollectionIdentifyingFacetFactory) {
-                final PropertyOrCollectionIdentifyingFacetFactory identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
-                cachedPropertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);
+                val identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
+                propertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);
             }
         }
+        return propertyOrCollectionIdentifyingFactories;
     }
+    
+    // -- HELPER
 
-    private static <K, T> List<T> getList(final Map<K, List<T>> map, final K key) {
-        List<T> list = map.get(key);
-        if (list == null) {
-            list = _Lists.newArrayList();
-            map.put(key, list);
-        }
-        return list;
-    }
-
-    private MethodRemover removerElseNullRemover(final MethodRemover methodRemover) {
-        return methodRemover != null ? methodRemover : MethodRemoverConstants.NULL;
+    private static MethodRemover removerElseNoopRemover(MethodRemover methodRemover) {
+        return methodRemover != null ? methodRemover : MethodRemoverConstants.NOOP;
     }
 
 }
