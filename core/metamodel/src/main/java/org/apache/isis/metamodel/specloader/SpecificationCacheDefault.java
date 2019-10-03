@@ -37,13 +37,13 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
     private final Map<String, T> specByClassName = _Maps.newHashMap();
     private final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
     
-    public T get(final String className) {
+    public T get(String className) {
         return specByClassName.get(className);
     }
     
     public T computeIfAbsent(
-            final String className, 
-            final Function<? super String, T> mappingFunction) {
+            String className, 
+            Function<? super String, T> mappingFunction) {
         
         T spec = specByClassName.get(className);
         if(spec==null) {
@@ -66,7 +66,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
     }
 
     public T getByObjectType(final ObjectSpecId objectSpecID) {
-        final String className = classNameBySpecId.get(objectSpecID);
+        val className = classNameBySpecId.get(objectSpecID);
         return className != null ? specByClassName.get(className) : null;
     }
 

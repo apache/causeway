@@ -19,12 +19,9 @@
 package org.apache.isis.metamodel.facets.object.domainobject.auditing;
 
 
-import java.util.List;
-
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -36,26 +33,11 @@ import lombok.val;
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
 
     public static AuditableFacet create(
-            List<DomainObject> domainObjectAnnotations,
+            Optional<Auditing> auditingIfAny,
             IsisConfiguration configuration,
             FacetHolder holder) {
 
-        val domainObjectAnnotation = domainObjectAnnotations.stream()
-                .filter(doAnnot -> doAnnot.auditing() != Auditing.NOT_SPECIFIED)
-                .findFirst()
-                .orElse(null);
-
-        return create(domainObjectAnnotation, configuration, holder);
-    }
-
-    private static AuditableFacet create(
-            @Nullable DomainObject domainObjectAnnotation,
-            IsisConfiguration configuration,
-            FacetHolder holder) {
-
-        val auditing = domainObjectAnnotation != null 
-                ? domainObjectAnnotation.auditing() 
-                        : Auditing.AS_CONFIGURED;
+        val auditing = auditingIfAny.orElse(Auditing.AS_CONFIGURED); 
                 
         switch (auditing) {
         case AS_CONFIGURED:
@@ -65,7 +47,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             case NONE:
                 return null;
             default:
-                return domainObjectAnnotation != null
+                return auditingIfAny.isPresent()
                 ? new AuditableFacetForDomainObjectAnnotationAsConfigured(holder)
                         : new AuditableFacetFromConfiguration(holder);
             }

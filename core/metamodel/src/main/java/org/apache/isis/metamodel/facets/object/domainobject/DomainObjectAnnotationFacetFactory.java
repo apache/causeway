@@ -27,8 +27,10 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -41,6 +43,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
@@ -85,6 +88,8 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.metamodel.util.EventUtil;
 
+import lombok.val;
+
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
@@ -120,10 +125,9 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
 
     void processAuditing(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        final FacetHolder holder = processClassContext.getFacetHolder();
-
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        
         //
         // this rule originally implemented only in AuditableFacetFromConfigurationFactory
         // but think should apply in general
@@ -134,10 +138,10 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
             return;
         }
 
-
         // check for @DomainObject(auditing=....)
-        AuditableFacet auditableFacet = AuditableFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfiguration(), holder);
+        val auditing = _Annotations.getEnum("auditing", cls, DomainObject.class, Auditing.class);
+        val auditableFacet = AuditableFacetForDomainObjectAnnotation
+                .create(auditing, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(auditableFacet);
@@ -145,9 +149,8 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
 
     void processPublishing(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing, see above
@@ -159,8 +162,9 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         }
 
         // check from @DomainObject(publishing=...)
-        PublishedObjectFacet publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfiguration(), facetHolder);
+        val publishing = _Annotations.getEnum("publishing", cls, DomainObject.class, Publishing.class);
+        val publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
+                .create(publishing, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(publishedObjectFacet);
@@ -170,7 +174,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        // check from @DomainObject(auditing=...)
+        // check from @DomainObject(autoCompleteRepository=...)
         final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
         Facet facet = createFor(domainObjects, facetHolder, cls);
 

@@ -19,9 +19,8 @@
 
 package org.apache.isis.metamodel.facets.object.domainobject.publishing;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
@@ -32,34 +31,34 @@ import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFa
 public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObjectFacetAbstract {
 
     public static PublishedObjectFacet create(
-            final List<DomainObject> domainObjects,
+            final Optional<Publishing> publishingIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final PublishObjectsConfiguration setting = configuration.getServices().getPublish().getObjects();
-        return domainObjects.stream()
-                .map(DomainObject::publishing)
-                .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
-                .findFirst()
-                .map(publishing -> {
-                    switch (publishing) {
-                    case AS_CONFIGURED:
-                        return setting == PublishObjectsConfiguration.NONE
-                        ? null
-                                : (PublishedObjectFacet)new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
-                                ;
-                    case DISABLED:
-                        return null;
-                    case ENABLED:
-                        return new PublishedObjectFacetForDomainObjectAnnotation(holder);
-                    case NOT_SPECIFIED:
-                        throw _Exceptions.unexpectedCodeReach(); // case filtered out above
-                    }
-                    throw new IllegalStateException("domainObject.publishing() not recognised, is " + publishing);
+        
+        return
+        publishingIfAny.map(publishing -> {
+            switch (publishing) {
+            case AS_CONFIGURED:
+                return setting == PublishObjectsConfiguration.NONE
+                ? null
+                        : (PublishedObjectFacet)new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(holder)
+                        ;
+            case DISABLED:
+                return null;
+            case ENABLED:
+                return new PublishedObjectFacetForDomainObjectAnnotation(holder);
+            case NOT_SPECIFIED:
+                throw _Exceptions.unexpectedCodeReach(); // case filtered out above
+            }
+            throw new IllegalStateException("domainObject.publishing() not recognised, is " + publishing);
 
-                }).orElseGet(() -> setting == PublishObjectsConfiguration.NONE
-                        ? null
-                                : new PublishedObjectFacetFromConfiguration(holder));
+        })
+        .orElseGet(() -> setting == PublishObjectsConfiguration.NONE
+                ? null
+                        : new PublishedObjectFacetFromConfiguration(holder));
+        
 
     }
 
