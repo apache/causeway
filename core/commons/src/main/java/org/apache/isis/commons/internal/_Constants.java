@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
 
+import org.springframework.context.annotation.Primary;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -72,5 +74,13 @@ public final class _Constants {
         @Override public void flush() throws IOException { }
         @Override public void close() throws IOException { }
     };
+    
+    public static final Primary ANNOTATION_PRIMARY = new Primary() {
+        @Override
+        public Class<? extends Annotation> annotationType(){
+            return Primary.class;
+        }
+    };
+    
 
 }

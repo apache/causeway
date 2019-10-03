@@ -31,12 +31,12 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.InjectionPoint;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
@@ -46,7 +46,6 @@ import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 
-import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -108,17 +107,6 @@ public class ServiceInjectorDefault implements ServiceInjector {
         }
     }
 
-    @Primary
-    private static class PrimaryProvider {
-        final static PrimaryProvider INSTANCE = new PrimaryProvider();
-        
-        @Getter(lazy = true)
-        private final Primary primaryAnnotation = 
-            PrimaryProvider.class.getAnnotation(Primary.class);
-    }
-    
-    
-    
     private void injectToField(final Object targetPojo, final Field field, Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> typeToBeInjected = field.getType();
@@ -144,10 +132,9 @@ public class ServiceInjectorDefault implements ServiceInjector {
             invokeInjectorField(field, targetPojo, bean);
         } else {
             
-            val primaryAnnotation = PrimaryProvider.INSTANCE.getPrimaryAnnotation();
             val requiredAnnotations = _Arrays.combine(
                     Annotation.class, 
-                    primaryAnnotation, 
+                    _Constants.ANNOTATION_PRIMARY, 
                     field.getAnnotations());
             
             // look for primary
