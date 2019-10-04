@@ -8,9 +8,9 @@ class Parameter(val id: String,
                 val num: Int = 0,
                 val description: String,
                 val name: String,
-                // choices either are a list of:
-                // Links -> ACTIONS_RUN_FIXTURE_SCRIPT
-                // Strings -> ACTIONS_DOWNLOAD_LAYOUTS
+        // choices either are a list of:
+        // Links -> ACTIONS_RUN_FIXTURE_SCRIPT
+        // Strings -> ACTIONS_DOWNLOAD_LAYOUTS
                 val choices: List<Value> = emptyList(),
                 @SerialName("default") val defaultChoice: Value? = null
 ) : TransferObject {
@@ -18,8 +18,13 @@ class Parameter(val id: String,
     fun getChoiceListKeys(): MutableList<String> {
         val result: MutableList<String> = mutableListOf()
         for (c in choices) {
-            if (c.content is Link) {
-                result.add((c.content).title)
+            when (c.content) {
+                is Link -> {
+                    result.add((c.content).title)
+                }
+                is String -> {
+                    result.add(c.content)
+                }
             }
         }
         return result
@@ -27,10 +32,15 @@ class Parameter(val id: String,
 
     fun getHrefByTitle(title: String): String? {
         for (c in choices) {
-            if (c.content is Link) {
-                val l = c.content
-                if (l.title == title) {
-                    return l.href
+            val l = c.content
+            when (l) {
+                is Link -> {
+                    if (l.title == title) {
+                        return l.href
+                    }
+                }
+                is String -> {
+                    return l
                 }
             }
         }

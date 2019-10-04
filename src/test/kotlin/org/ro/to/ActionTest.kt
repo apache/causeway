@@ -77,8 +77,8 @@ class ActionTest {
         val paramList = action.parameters
         assertEquals(1, paramList.size)
 
-        val p = action.findParameterByName("style")
-        assertEquals("style", p!!.id)
+        val p = action.findParameterByName("style")!!
+        assertEquals("style", p.id)
 
         val choiceList = p.choices
         assertEquals(4, choiceList.size)

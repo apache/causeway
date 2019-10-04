@@ -1,13 +1,16 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
+import org.ro.IntegrationTest
 import org.ro.handler.ResultValueHandler
+import org.ro.org.ro.core.aggregator.ObjectAggregator
+import org.ro.urls.ACTIONS_DOWNLOAD_VALUE
 import org.ro.urls.ACTIONS_OPEN_SWAGGER_UI
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @UnstableDefault
-class ResultValueTest{
+class ResultValueTest : IntegrationTest() {
 
     @Test
     fun testParseActionOpenSwaggerUI() {
@@ -19,6 +22,19 @@ class ResultValueTest{
         val result = ir.result!!
         val value = result.value!!.content as String
         assertEquals("http:/swagger-ui/index.html", value)
+    }
+
+    @Test
+    fun testDownload() {
+        // given
+        val aggregator = ObjectAggregator("object test")
+        // when
+        val logEntry = mockResponse(ACTIONS_DOWNLOAD_VALUE, aggregator)
+        val ro = logEntry.obj as ResultValue
+        val type = ro.resulttype
+        // then
+        assertEquals(ResultType.SCALARVALUE.type, type)
+
     }
 
 }
