@@ -19,10 +19,8 @@
 package org.apache.isis.metamodel.facets.object.domainobject;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -41,13 +39,10 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
@@ -73,7 +68,6 @@ import org.apache.isis.metamodel.facets.object.domainobject.publishing.Published
 import org.apache.isis.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
-import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -165,43 +159,47 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         // then add
         FacetUtil.addFacet(publishedObjectFacet);
     }
+    
+    // -- AUTO COMPLETE
 
     void processAutoComplete(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(autoCompleteRepository=...)
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        Facet facet = createFor(domainObjects, facetHolder, cls);
+        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val facet = createFor(domainObjectIfAny, facetHolder, cls);
 
         // then add
         FacetUtil.addFacet(facet);
     }
+    
+    private final static class AnnotHelper {
+        AnnotHelper(DomainObject domainObject) {
+            this.autoCompleteRepository = domainObject.autoCompleteRepository();
+            this.autoCompleteAction = domainObject.autoCompleteAction();
+        }
+        final Class<?> autoCompleteRepository;
+        final String autoCompleteAction;
+        Method repositoryMethod;
+    }
 
     private AutoCompleteFacet createFor(
-            final List<DomainObject> domainObjects,
+            final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder facetHolder,
             final Class<?> cls) {
-        if(domainObjects.isEmpty()) {
+        
+        if(!domainObjectIfAny.isPresent()) {
             return null;
         }
 
-        class Annot {
-            Annot(final DomainObject domainObject) {
-                this.autoCompleteRepository = domainObject.autoCompleteRepository();
-                this.autoCompleteAction = domainObject.autoCompleteAction();
-            }
-            Class<?> autoCompleteRepository;
-            String autoCompleteAction;
-            Method repositoryMethod;
-        }
-
-        return domainObjects.stream()
-                .map(domainObject -> new Annot(domainObject))
+        return domainObjectIfAny
+                .map(domainObject -> new AnnotHelper(domainObject))
                 .filter(a -> a.autoCompleteRepository != Object.class)
-                .peek(a -> a.repositoryMethod = findRepositoryMethod(cls, "@DomainObject", a.autoCompleteRepository, a.autoCompleteAction))
-                .filter(a -> a.repositoryMethod != null)
-                .findFirst()
+                .filter(a -> {
+                    a.repositoryMethod = findRepositoryMethod(cls, "@DomainObject", a.autoCompleteRepository, a.autoCompleteAction);
+                    return a.repositoryMethod != null;
+                })
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
                         facetHolder, a.autoCompleteRepository, a.repositoryMethod))
                 .orElse(null);
@@ -227,39 +225,39 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;
     }
+    
+    // -- BOUNDED
 
     void processBounded(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(bounded=...)
-        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjects, facetHolder);
+        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
 
         // then add
         FacetUtil.addFacet(facet);
     }
 
     void processEditing(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(editing=...)
+        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
         ImmutableFacet facet = ImmutableFacetForDomainObjectAnnotation
-                .create(domainObjects, getConfiguration(), facetHolder);
+                .create(domainObjectIfAny, getConfiguration(), facetHolder);
 
         // then add
         FacetUtil.addFacet(facet);
     }
 
     void processObjectType(final ProcessObjectSpecIdContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        
+        val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
-        Facet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjects, facetHolder);
+        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
 
         //FIXME [2033] removed here (module 'metamodel'), should be re-implemented in 'jdo-common'         
         // else check for @PersistenceCapable(schema=...)
@@ -276,32 +274,32 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
 
     void processNature(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
 
-        if(domainObjects == null) {
+        if(!domainObjectIfAny.isPresent()) {
             return;
         }
 
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
-        final PostConstructMethodCache postConstructMethodCache = this;
-        final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
-                domainObjects, 
-                facetHolder, 
-                postConstructMethodCache);
+        val postConstructMethodCache = this;
+        final ViewModelFacet recreatableObjectFacet = 
+                RecreatableObjectFacetForDomainObjectAnnotation.create(
+                    domainObjectIfAny, 
+                    facetHolder, 
+                    postConstructMethodCache);
 
         if(recreatableObjectFacet != null) {
             FacetUtil.addFacet(recreatableObjectFacet);
         } else {
 
-            final List<DomainObject> mixinDomainObjects =
-                    domainObjects.stream()
+            val mixinDomainObjectIfAny =
+                    domainObjectIfAny
                     .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
-                    .filter(domainObject -> mixinTypeValidator.ensureMixinType(cls))
-                    .collect(Collectors.toList());
+                    .filter(domainObject -> mixinTypeValidator.ensureMixinType(cls));
 
-            final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(mixinDomainObjects, cls, facetHolder, getServiceInjector());
+            val mixinFacet = 
+                    MixinFacetForDomainObjectAnnotation.create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector());
             FacetUtil.addFacet(mixinFacet);
         }
 
@@ -309,41 +307,38 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
 
     private void processLifecycleEvents(final ProcessClassContext processClassContext) {
-
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        if(domainObjects == null) {
+        
+        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        if(!domainObjectIfAny.isPresent()) {
             return;
         }
-        final FacetHolder holder = processClassContext.getFacetHolder();
-
-        processLifecycleEventCreated(domainObjects, holder);
-        processLifecycleEventLoaded(domainObjects, holder);
-        processLifecycleEventPersisted(domainObjects, holder);
-        processLifecycleEventPersisting(domainObjects, holder);
-        processLifecycleEventRemoving(domainObjects, holder);
-        processLifecycleEventUpdated(domainObjects, holder);
-        processLifecycleEventUpdating(domainObjects, holder);
+        val facetHolder = processClassContext.getFacetHolder();
+        
+        processLifecycleEventCreated(domainObjectIfAny, facetHolder);
+        processLifecycleEventLoaded(domainObjectIfAny, facetHolder);
+        processLifecycleEventPersisted(domainObjectIfAny, facetHolder);
+        processLifecycleEventPersisting(domainObjectIfAny, facetHolder);
+        processLifecycleEventRemoving(domainObjectIfAny, facetHolder);
+        processLifecycleEventUpdated(domainObjectIfAny, facetHolder);
+        processLifecycleEventUpdating(domainObjectIfAny, facetHolder);
     }
 
 
     private void processDomainEvents(final ProcessClassContext processClassContext) {
-
-        final Class<?> cls = processClassContext.getCls();
-        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
-        if(domainObjects == null) {
+        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        if(!domainObjectIfAny.isPresent()) {
             return;
         }
-        final FacetHolder holder = processClassContext.getFacetHolder();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        processDomainEventAction(domainObjects, holder);
-        processDomainEventProperty(domainObjects, holder);
-        processDomainEventCollection(domainObjects, holder);
+        processDomainEventAction(domainObjectIfAny, facetHolder);
+        processDomainEventProperty(domainObjectIfAny, facetHolder);
+        processDomainEventCollection(domainObjectIfAny, facetHolder);
     }
 
-    private void processLifecycleEventCreated(final List<DomainObject> domainObjects, final FacetHolder holder) {
+    private void processLifecycleEventCreated(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
 
-        domainObjects.stream()
+        domainObjectIfAny
         .map(DomainObject::createdLifecycleEvent)
         .filter(lifecycleEvent ->
         EventUtil.eventTypeIsPostable(
@@ -352,15 +347,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectCreatedEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getCreatedLifecycleEvent().isPostForDefault())
                 )
-        .findFirst()
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventLoaded(final List<DomainObject> domainObjects, final FacetHolder holder) {
+    private void processLifecycleEventLoaded(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
 
-        domainObjects.stream()
+        domainObjectIfAny
         .map(DomainObject::loadedLifecycleEvent)
         .filter(lifecycleEvent ->
         EventUtil.eventTypeIsPostable(
@@ -369,15 +363,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectLoadedEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getLoadedLifecycleEvent().isPostForDefault())
                 )
-        .findFirst()
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventPersisting(final List<DomainObject> domainObjects, final FacetHolder holder) {
+    private void processLifecycleEventPersisting(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
 
-        domainObjects.stream()
+        domainObjectIfAny
         .map(DomainObject::persistingLifecycleEvent)
         .filter(lifecycleEvent ->
         EventUtil.eventTypeIsPostable(
@@ -386,15 +379,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectPersistingEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getPersistingLifecycleEvent().isPostForDefault())
                 )
-        .findFirst()
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventPersisted(final List<DomainObject> domainObjects, final FacetHolder holder) {
+    private void processLifecycleEventPersisted(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
 
-        domainObjects.stream()
+        domainObjectIfAny
         .map(DomainObject::persistedLifecycleEvent)
         .filter(lifecycleEvent ->
         EventUtil.eventTypeIsPostable(
@@ -403,15 +395,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectPersistedEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getPersistedLifecycleEvent().isPostForDefault())
                 )
-        .findFirst()
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventRemoving(final List<DomainObject> domainObjects, final FacetHolder holder) {
+    private void processLifecycleEventRemoving(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
 
-        domainObjects.stream()
+        domainObjectIfAny
         .map(DomainObject::removingLifecycleEvent)
         .filter(lifecycleEvent ->
         EventUtil.eventTypeIsPostable(
@@ -420,15 +411,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectRemovingEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getRemovingLifecycleEvent().isPostForDefault())
                 )
-        .findFirst()
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventUpdated(final List<DomainObject> domainObjects, final FacetHolder holder) {
+    private void processLifecycleEventUpdated(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
 
-        domainObjects.stream()
+        domainObjectIfAny
         .map(DomainObject::updatedLifecycleEvent)
         .filter(lifecycleEvent ->
         EventUtil.eventTypeIsPostable(
@@ -437,15 +427,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectUpdatedEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getUpdatedLifecycleEvent().isPostForDefault())
                 )
-        .findFirst()
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processLifecycleEventUpdating(final List<DomainObject> domainObjects, final FacetHolder holder) {
+    private void processLifecycleEventUpdating(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
 
-        domainObjects.stream()
+        domainObjectIfAny
         .map(DomainObject::updatingLifecycleEvent)
         .filter(lifecycleEvent ->
         EventUtil.eventTypeIsPostable(
@@ -454,38 +443,37 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 ObjectUpdatingEvent.Default.class,
                 getConfiguration().getReflector().getFacet().getDomainObjectAnnotation().getUpdatingLifecycleEvent().isPostForDefault())
                 )
-        .findFirst()
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processDomainEventAction(final List<DomainObject> domainObjects, final FacetHolder holder) {
-        domainObjects.stream()
+    private void processDomainEventAction(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+        
+        domainObjectIfAny
         .map(DomainObject::actionDomainEvent)
         .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
-        .findFirst()
         .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
 
     }
 
-    private void processDomainEventProperty(final List<DomainObject> domainObjects, final FacetHolder holder) {
-        domainObjects.stream()
+    private void processDomainEventProperty(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+        
+        domainObjectIfAny
         .map(DomainObject::propertyDomainEvent)
         .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
-        .findFirst()
         .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
-    private void processDomainEventCollection(final List<DomainObject> domainObjects, final FacetHolder holder) {
-        domainObjects.stream()
+    private void processDomainEventCollection(final Optional<DomainObject> domainObjectIfAny, final FacetHolder holder) {
+        
+        domainObjectIfAny
         .map(DomainObject::collectionDomainEvent)
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
-        .findFirst()
         .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
                 holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);

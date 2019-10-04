@@ -19,12 +19,12 @@
 
 package org.apache.isis.metamodel.facets.object.domainobject.editing;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -38,18 +38,17 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
     private final String reason;
 
     public static ImmutableFacet create(
-            final List<DomainObject> domainObjects,
+            final Optional<DomainObject> domainObjectIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final EditingObjectsConfiguration setting = configuration.getObjects().getEditing();
 
-        return domainObjects.stream()
-                .filter(domainObject -> domainObject.editing() != Editing.NOT_SPECIFIED)
-                .findFirst()
+        return domainObjectIfAny
                 .map(domainObject -> {
                     final String disabledReason = domainObject.editingDisabledReason();
                     switch (domainObject.editing()) {
+                    case NOT_SPECIFIED:
                     case AS_CONFIGURED:
 
                         if(holder.containsDoOpFacet(ImmutableFacet.class)) {
@@ -66,7 +65,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
                         return null;
                     default:
                     }
-                    throw new IllegalStateException("domainObject.editing() not recognised, is " + domainObject.editing());
+                    throw _Exceptions.unmatchedCase(domainObject.editing());
                 })
                 .orElseGet(() -> setting == EditingObjectsConfiguration.FALSE
                 ? new ImmutableFacetFromConfiguration("Disabled", holder)

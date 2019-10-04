@@ -36,8 +36,6 @@ import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.springframework.core.annotation.AnnotationUtils;
-
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -47,6 +45,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
@@ -123,6 +122,7 @@ public final class Annotations  {
     /**
      * Searches for annotation on provided class, and if not found for the
      * superclass.
+     * @deprecated use {@link _Annotations} instead
      */
     public static <T extends Annotation> List<T> getAnnotations(
             final Class<?> cls,
@@ -133,7 +133,7 @@ public final class Annotations  {
         }
         
         final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
-        for (final Annotation annotation : AnnotationUtils.getAnnotations(cls)) {
+        for (final Annotation annotation : cls.getAnnotations()) {
             append(annotation, annotationClass, annotationAndDepths);
         }
         if(!annotationAndDepths.isEmpty()) {
@@ -268,6 +268,7 @@ public final class Annotations  {
     /**
      * Searches for annotation on provided method, and if not found for any
      * inherited methods up from the superclass.
+     * @deprecated use {@link _Annotations} instead
      */
     public static <T extends Annotation> List<T> getAnnotations(
             final Method method,
@@ -277,7 +278,7 @@ public final class Annotations  {
         }
 
         final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
-        for (final Annotation annotation : AnnotationUtils.getAnnotations(method)) {
+        for (final Annotation annotation : method.getAnnotations()) {
             append(annotation, annotationClass, annotationAndDepths);
         }
         if(!annotationAndDepths.isEmpty()) {

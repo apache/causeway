@@ -18,18 +18,17 @@
  */
 package org.apache.isis.metamodel.facets.object.domainservicelayout;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
+
+import lombok.val;
 
 public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
@@ -39,37 +38,33 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
-        final DomainService domainService = Annotations.getAnnotation(cls, DomainService.class);
-        final List<DomainServiceLayout> domainServiceLayouts = Annotations.getAnnotations(cls, DomainServiceLayout.class);
+        val domainServiceIfAny = processClassContext.synthesize(DomainService.class);
+        val domainServiceLayoutIfAny = processClassContext.synthesize(DomainServiceLayout.class);
 
         // either one is enough to treat this as a domain service
-        if(domainService == null && domainServiceLayouts.isEmpty()) {
+        val isAnyPresent = 
+                domainServiceIfAny.isPresent() || 
+                domainServiceLayoutIfAny.isPresent();
+        
+        if(!isAnyPresent) {
             return;
         }
 
-        final DomainServiceLayout.MenuBar menuBar =
-                domainServiceLayouts.stream()
+        val menuBar = domainServiceLayoutIfAny
                 .map(DomainServiceLayout::menuBar)
-                .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED)
-                .findFirst()
+                .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);
+        
+        FacetUtil.addFacet(new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
 
-        FacetUtil.addFacet(
-                new DomainServiceLayoutFacetAnnotation(
-                        facetHolder,
-                        menuBar));
-
-        final String named =
-                domainServiceLayouts.stream()
+        val named = domainServiceLayoutIfAny
                 .map(DomainServiceLayout::named)
                 .map(_Strings::emptyToNull)
                 .filter(Objects::nonNull)
-                .findFirst()
                 .orElse(null);
+        
         FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(named, facetHolder));
     }
 

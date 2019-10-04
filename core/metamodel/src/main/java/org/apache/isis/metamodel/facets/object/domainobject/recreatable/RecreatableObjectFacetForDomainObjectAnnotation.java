@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.object.domainobject.recreatable;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -32,11 +32,11 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends
 RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public static ViewModelFacet create(
-            final List<DomainObject> domainObjects,
+            final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder,
             final PostConstructMethodCache postConstructMethodCache) {
 
-        return domainObjects.stream()
+        return domainObjectIfAny
                 .map(DomainObject::nature)
                 .map(nature -> {
                     switch (nature) {
@@ -60,7 +60,6 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
                 })
                 .filter(Objects::nonNull)
-                .findFirst()
                 .orElse(null);
     }
 

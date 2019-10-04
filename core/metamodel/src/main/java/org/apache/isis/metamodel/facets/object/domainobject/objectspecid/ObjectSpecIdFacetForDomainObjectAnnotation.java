@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.domainobject.objectspecid;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbs
 public class ObjectSpecIdFacetForDomainObjectAnnotation extends ObjectSpecIdFacetAbstract {
 
     public static ObjectSpecIdFacet create(
-            final List<DomainObject> domainObjects,
+            final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder) {
 
-        return domainObjects.stream()
+        return domainObjectIfAny
                 .map(DomainObject::objectType)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(objectType -> new ObjectSpecIdFacetForDomainObjectAnnotation(objectType, holder))
                 .orElse(null);
     }

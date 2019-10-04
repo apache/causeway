@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.domainobject.choices;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.object.choices.ChoicesFacetFromBoundedAb
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
     public static Facet create(
-            final List<DomainObject> domainObjects,
+            final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder facetHolder) {
 
-        return domainObjects.stream()
+        return domainObjectIfAny
                 .map(DomainObject::bounding)
                 .filter(bounding -> bounding != Bounding.NOT_SPECIFIED)
-                .findFirst()
                 .map(bounding -> bounding == Bounding.BOUNDED
                 ? new ChoicesFacetForDomainObjectAnnotation(facetHolder)
                         : null).orElse(null);
