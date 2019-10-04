@@ -56,10 +56,10 @@ The derived properties could also have been implemented using xref:ug:fun:buildi
 
 [IMPORTANT]
 ====
-Be aware that all the state will become the DTO's memento, ultimately converted into a URL-safe form, by way of the xref:rg:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`].
+Be aware that all the state will become the DTO's memento, ultimately converted into a URL-safe form, by way of the xref:applib:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`].
 
 There are limits to the lengths of URLs, however.
-If the URL does exceed limits or contains invalid characters, then provide a custom implementation of xref:rg:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
+If the URL does exceed limits or contains invalid characters, then provide a custom implementation of xref:applib:svc:presentation-layer-spi/UrlEncodingService.adoc[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
 a URL.
 ====
 

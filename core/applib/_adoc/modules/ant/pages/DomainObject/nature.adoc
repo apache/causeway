@@ -57,7 +57,7 @@ For further discussion on using mixins, see xref:ug:fun:building-blocks.adoc#mix
 indicates that the domain object is conceptually part of the application layer, and exists to surfaces behaviour and/or state that is aggregate of one or more domain entities.
 
 Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.
-As such the domain object's class cannot be annotated with xref:applib:ant:ViewModel.adoc[`@ViewModel`] or implement the xref:rg:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.
+As such the domain object's class cannot be annotated with xref:applib:ant:ViewModel.adoc[`@ViewModel`] or implement the xref:applib:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.
 
 
 [NOTE]

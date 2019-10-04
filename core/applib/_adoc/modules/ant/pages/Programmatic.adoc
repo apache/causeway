@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `@Programmatic` annotation causes the method to be excluded completely from the Apache Isis metamodel. This means it won't appear in any UI, and it won't appear in any xref:rg:svc:integration-api/MementoService.adoc[memento]s or xref:rg:svc:integration-api/XmlSnapshotService.adoc[snapshot]s.
+The `@Programmatic` annotation causes the method to be excluded completely from the Apache Isis metamodel. This means it won't appear in any UI, and it won't appear in any xref:applib:svc:integration-api/MementoService.adoc[memento]s or xref:applib:svc:integration-api/XmlSnapshotService.adoc[snapshot]s.
 
 A common use-case is to ignore implementation-level artifacts. For example:
 

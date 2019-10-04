@@ -1,0 +1,6 @@
+name: rg
+title: "Guides - Reference Guides"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

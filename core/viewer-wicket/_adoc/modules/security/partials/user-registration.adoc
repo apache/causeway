@@ -14,7 +14,7 @@ These pages all "reach inside" Apache Isis framework using a mechanism similar t
 The sign-in verification page to render is pluggable; see xref:vw:ROOT:extending/custom-pages.adoc[extensions chapter] for details.
 ====
 
-User registration is only available if the xref:rg:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
+User registration is only available if the xref:applib:svc:persistence-layer-spi/UserRegistrationService.adoc[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
 
 Because Shiro realms are pluggable, the Apache Isis framework does not provide default implementations of this service.
 However, if you are using the xref:ext-secman:ROOT:about.adoc[SecMan extension], then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).

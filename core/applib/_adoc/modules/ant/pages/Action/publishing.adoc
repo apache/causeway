@@ -7,10 +7,10 @@ include::_attributes.adoc[]
 
 
 
-The `publishing()` attribute determines whether and how an action invocation is published via the registered implementation of xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The `publishing()` attribute determines whether and how an action invocation is published via the registered implementation of xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
-The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.services.publish.actions` is used to determine the whether the action is published:
+The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.services.publish.actions` is used to determine the whether the action is published:
 
 * `all` +
 +

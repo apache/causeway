@@ -20,7 +20,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:applib:ant:ViewModelLayout.adoc#cssclass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a domain class (type) should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
+|the css class that a domain class (type) should have, to allow more targetted styling in xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`]
 
 
 |xref:applib:ant:ViewModelLayout.adoc#cssClassFa[`cssClassFa()`]
@@ -37,7 +37,7 @@ The table below summarizes the annotation's attributes.
 |xref:applib:ant:ViewModelLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`]
 |subtype of `CssClassUiEvent` +
 (`CssClassUiEvent.Default`)
-|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
+|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
 
 
 |xref:applib:ant:ViewModelLayout.adoc#describedAs[`describedAs()`]
@@ -47,12 +47,12 @@ The table below summarizes the annotation's attributes.
 |xref:applib:ant:ViewModelLayout.adoc#iconUiEvent[`iconUiEvent()`]
 |subtype of `IconUiEvent` +
 (`IconUiEvent.Default`)
-|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
+|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
 
 |xref:applib:ant:ViewModelLayout.adoc#layoutUiEvent[`layoutUiEvent()`]
 |subtype of `LayoutUiEvent` +
 (`LayoutUiEvent.Default`)
-|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
+|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
 
 |xref:applib:ant:ViewModelLayout.adoc#named[`named()`]
 |String.
@@ -74,7 +74,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |xref:applib:ant:ViewModelLayout.adoc#titleUiEvent[`titleUiEvent()`]
 |subtype of `TitleUiEvent` +
 (`TitleUiEvent.Default`)
-|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
+|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
 
 |===
 

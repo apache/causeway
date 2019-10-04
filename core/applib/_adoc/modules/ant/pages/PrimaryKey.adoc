@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 The `@javax.jdo.annotation.PrimaryKey` annotation is used by JDO/DataNucleus to indicate that a property is used as the primary key for an entity with application-managed identity.
 
-Apache Isis also uses this annotation in a very minimal way: to ensure that the framework's own logic to initialize newly instantiated objects (eg using xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(...)`] does not touch the primary key, and also to ensure that the primary key property is always disabled (read-only).
+Apache Isis also uses this annotation in a very minimal way: to ensure that the framework's own logic to initialize newly instantiated objects (eg using xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(...)`] does not touch the primary key, and also to ensure that the primary key property is always disabled (read-only).
 
 [NOTE]
 ====

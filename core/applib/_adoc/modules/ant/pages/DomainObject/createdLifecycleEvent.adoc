@@ -6,15 +6,15 @@ include::_attributes.adoc[]
 
 
 Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.
-This is typically when the xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s `instantiate()` method is called.
+This is typically when the xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s `instantiate()` method is called.
 
-Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
+Subscribers subscribe through the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
 The subscriber could then, for example, update the object, eg looking up state from some external datastore.
 
 [TIP]
 ====
 It's possible to instantiate objects without firing this lifecycle; just instantiate using its regular constructor, and then use the ``ServiceRegistry``'s
-xref:rg:svc:metadata-api/ServiceRegistry.adoc[`injectServicesInto(...)`] to manually inject any required domain services.
+xref:applib:svc:metadata-api/ServiceRegistry.adoc[`injectServicesInto(...)`] to manually inject any required domain services.
 ====
 
 
@@ -53,7 +53,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):

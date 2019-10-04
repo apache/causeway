@@ -194,7 +194,7 @@ msgstr "Ich heisse {firstName} {lastName}."
 then the translation would be: "Ich heisse James Bond".
 
 
-The same class is used in xref:rg:svc:core-domain-api/MessageService.adoc[`MessageService`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
+The same class is used in xref:applib:svc:core-domain-api/MessageService.adoc[`MessageService`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
 
 For example:
 
@@ -214,7 +214,7 @@ public interface MessageService {
 
 === `TranslatableException`
 
-Another mechanism by which messages can be rendered to the user are as the result of exception messages thrown and recognized by an xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`].
+Another mechanism by which messages can be rendered to the user are as the result of exception messages thrown and recognized by an xref:applib:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`].
 
 In this case, if the exception implements `TranslatableException`, then the message will automatically be translated before being rendered.
 The `TranslatableException` itself takes the form:
@@ -535,7 +535,7 @@ To ensure your app is fully internationalized app, you must therefore:
 We make no apologies for this requirement: one of the reasons that we decided to implement Apache Isis' i18n support in this way is because it encourages/requires the app to be properly tested.
 
 Behind the scenes Apache Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.
-These are simply passed through to the registered xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
+These are simply passed through to the registered xref:applib:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
 ====
 
 

@@ -9,12 +9,12 @@ and any repository query automatically does a flush before hand.
 
 What that means is that there's no need to explicitly start or commit transactions in Apache Isis; this will be done
 for you. Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the
-xref:rg:svc:persistence-layer-api/IsisJdoSupport.adoc[IsisJdoSupport] domain service, then you are likely to confuse the
+xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[IsisJdoSupport] domain service, then you are likely to confuse the
 framework and get a stack trace for your trouble.
 
 However, you can complete a given transaction and start a new one.  This is sometimes useful if writing a fixture
 script which is going to perform some sort of bulk migration of data from an old system.  For this use case, use the
-xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`].
+xref:applib:svc:application-layer-api/TransactionService.adoc[`TransactionService`].
 
 For example:
 
@@ -40,7 +40,7 @@ You get the idea.
 
 == Raise message in the UI
 
-The framework provides the xref:rg:svc:application-layer-api/MessageService.adoc[`MessageService`] as a means to return an out-of-band
+The framework provides the xref:applib:svc:application-layer-api/MessageService.adoc[`MessageService`] as a means to return an out-of-band
 message to the end-user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] these are shown as "toast" pop-ups; the
 xref:vro:ROOT:about.adoc[Restful Objects viewer] returns an HTTP header.
 
@@ -70,7 +70,7 @@ Another way in which exceptions might be considered "expected" could be as the r
 object which then violates some type of database constraint.  Even if the domain application checks beforehand, it
 could be that another user operating on the object at the same moment of time might result in the conflict.
 
-To handle this the xref:rg:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`] SPI can be used.  The
+To handle this the xref:applib:svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`] SPI can be used.  The
 framework provides a number of implementations out-of-the-box; whenever an exception is thrown it is passed to each
 known recognizer implementation to see if it recognizes the exception and can return a user-meaningful error message.
 For example, `ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException` checks if the

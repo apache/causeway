@@ -72,7 +72,7 @@ public ExceptionRecognizerTranslate exceptionRecognizerTranslations =    // <4>
 All of these rules could be inlined in your own base class; as we say, they are a convenience.
 
 The class also provides a number of injected domain services,  notably
-xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`], xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry2`], xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] (to wrap objects simulating interaction through the user interface), xref:rg:svc:application-layer-api/TransactionService.adoc[`TransactionService`] (most commonly used to commit changes after the fixture setup) and xref:rg:svc:application-layer-api/SessionManagementService.adoc[`SessionManagementService`] (for tests that check interactions over multiple separate sessions).
+xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`], xref:applib:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry2`], xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] (to wrap objects simulating interaction through the user interface), xref:applib:svc:application-layer-api/TransactionService.adoc[`TransactionService`] (most commonly used to commit changes after the fixture setup) and xref:applib:svc:application-layer-api/SessionManagementService.adoc[`SessionManagementService`] (for tests that check interactions over multiple separate sessions).
 
 
 

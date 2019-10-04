@@ -13,11 +13,11 @@ Whether a property is enabled or disabled depends upon these factors:
 
 * whether the domain object has been configured as immutable through the xref:rg:DomainObject/editing.adoc[`@DomainObject#editing()`] attribute
 
-* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.objects.editing`.  If set to `false`, then the object's properties (and collections) are __not__ editable
+* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.objects.editing`.  If set to `false`, then the object's properties (and collections) are __not__ editable
 
 * else, then the value of the `@Property(editing=...)` attribute itself
 
-* else, the result of invoking any supporting xref:rg:cms:rgcms.adoc#\_rgcms_methods_prefixes_disable[`disable...()`] supporting methods
+* else, the result of invoking any supporting xref:applib:cms:rgcms.adoc#\_rgcms_methods_prefixes_disable[`disable...()`] supporting methods
 
 
 Thus, to make a property read-only even if the object would otherwise be editable, use:

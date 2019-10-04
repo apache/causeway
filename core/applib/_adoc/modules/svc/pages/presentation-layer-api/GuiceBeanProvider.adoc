@@ -1,0 +1,88 @@
+[[GuiceBeanProvider]]
+= `GuiceBeanProvider`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+TODO: v2: this service has been deleted - remove this doc and update the migration guide.
+
+The `GuiceBeanProvider` domain service acts as a bridge between Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer] internal bootstrapping using link:https://github.com/google/guice[Google Guice].
+
+This service operates at a very low-level, and you are unlikely to have a need for it.
+It is used internally by the framework, in the default implementation of the xref:applib:svc:presentation-api/DeepLinkService.adoc[`DeepLinkService`].
+
+[NOTE]
+====
+Currently Apache Isis uses a combination of Guice (within the Wicket viewer only) and a home-grown dependency injection framework.
+In future versions we intended to refactor the framework to use CDI throughout.
+At that time this service is likely to become redundant because we will allow any of the internal components of Apache Isis to be injected into your domain object code.
+====
+
+
+== API & Implementation
+
+The API defined by this service is:
+
+[source,java]
+----
+public interface GuiceBeanProvider {
+    @Programmatic
+    <T> T lookup(Class<T> beanType);
+    @Programmatic
+    <T> T lookup(Class<T> beanType, final Annotation qualifier);
+}
+----
+
+The xref:vw:ROOT:about.adoc[Wicket viewer] this provides a default implementation of this service.
+
+To use an alternative implementation, implement the `GuideBeanProvider` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+
+
+
+
+== Usage
+
+Using the xref:vw:ROOT:about.adoc[Wicket viewer] requires subclassing of `IsisWicketApplication`.
+In the subclass it is commonplace to override `newIsisWicketModule()`, for example:
+
+[source,java]
+----
+@Override
+protected Module newIsisWicketModule() {
+    final Module isisDefaults = super.newIsisWicketModule();
+    final Module overrides = new AbstractModule() {
+        @Override
+        protected void configure() {
+            bind(String.class).annotatedWith(Names.named("applicationName"))
+                              .toInstance("ToDo App");
+            bind(String.class).annotatedWith(Names.named("applicationCss"))
+                              .toInstance("css/application.css");
+            bind(String.class).annotatedWith(Names.named("applicationJs"))
+                              .toInstance("scripts/application.js");
+            ...
+        }
+    };
+    return Modules.override(isisDefaults).with(overrides);
+}
+----
+
+This "module" is in fact a Guice module, and so the `GuiceBeanProvider` service can be used to lookup any of the components bound into it.
+
+For example:
+
+[source,java]
+----
+public class SomeDomainObject {
+    private String lookupApplicationName() {
+        return guiceBeanProvider.lookup(String.class, Names.named("applicationName"));
+    }
+    @Inject
+    GuiceBeanProvider guiceBeanProvider;
+}
+----
+
+should return "ToDo App".
+
+
+

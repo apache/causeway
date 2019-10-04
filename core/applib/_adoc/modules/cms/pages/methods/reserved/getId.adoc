@@ -1,0 +1,56 @@
+[[getId]]
+= `getId()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `getId()` method applies only to domain services, and is used to provide a unique alias for the domain service's class name.
+
+This value is used internally to generate a string representation of an service identity (the `Oid`).
+This can appear in several contexts, including:
+
+* as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
+ (see xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`])
+* in the serialization of `OidDto` in the xref:xref:schema:ROOT:cmd[command] and xref:schema:ROOT:about.adoc#ixn.adoc[interaction] schemas
+* in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
+* in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (specifically, for bookmarked actions)
+
+
+
+== Example
+
+For example:
+
+[source,java]
+----
+@DomainService
+public class OrderMenu {
+    ...
+    public String getId() { return "orders.OrderMenu"; }
+}
+----
+
+
+
+== Precedence
+
+The rules of precedence are:
+
+1. xref:applib:ant:DomainService.adoc#objectType[`@DomainService#objectType()`]
+2. xref:applib:cms:methods.adoc#getId[`getId()`]
+3. The fully qualified class name.
+
+
+[TIP]
+====
+This might be obvious, but to make explicit: we recommend that you always specify an object type for your domain services.
+
+Otherwise, if you refactor your code (change class name or move package), then any externally held references to the OID of the service will break.
+At best this will require a data migration in the database; at worst it could cause external clients accessing data through the xref:vro:ROOT:about.adoc[Restful Objects] viewer to break.
+====
+
+[NOTE]
+====
+If the object type is not unique across all domain classes then the framework will fail-fast and fail to boot.
+An error message will be printed in the log to help you determine which classes have duplicate object tyoes.
+====

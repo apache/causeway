@@ -13,7 +13,7 @@ This page lists the user and reference guides available for developers to create
 == Reference Guides
 
 * xref:applib:ant:about.adoc[Annotations]
-* xref:rg:svc:about.adoc[Domain Services]
+* xref:applib:svc:about.adoc[Domain Services]
 * xref:rg:cfg:about.adoc[Core Configuration Properties]
 * xref:rg:cms:about.adoc[Classes, Methods & Schemas]
 

@@ -145,7 +145,7 @@ Implementing business logic using a (no-arg) action, and associating with a prop
 
 
 |link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
-Invoking (no-arg) action on multiple objects at once (using xref:applib:ant:Action.adoc#invokeOn[`@Action#invokeOn()`], and using the xref:rg:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
+Invoking (no-arg) action on multiple objects at once (using xref:applib:ant:Action.adoc#invokeOn[`@Action#invokeOn()`], and using the xref:applib:svc:application-layer-api/ActionInvocationContext.adoc[`ActionInvocationContext`] domain service for a smoother end-user experience.
 |||x||||||x||
 
 
@@ -341,7 +341,7 @@ How to validate action parameters using the xref:applib:ant:Parameter.adoc#mustS
 
 
 |link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
-How to instantiate/initialize objects using xref:rg:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:rg:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
+How to instantiate/initialize objects using xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:applib:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`].
 |x||||||||x||
 
 

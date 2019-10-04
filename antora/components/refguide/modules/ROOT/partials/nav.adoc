@@ -1,0 +1,6 @@
+* xref:rg:ROOT:about.adoc[Reference Guide]
+include::applib:ant:partial$nav.adoc[]
+include::applib:rg:partial$nav.adoc[]
+include::applib:cms:partial$nav.adoc[]
+include::cfg:ROOT:partial$nav.adoc[]
+include::schema:ROOT:partial$nav.adoc[]

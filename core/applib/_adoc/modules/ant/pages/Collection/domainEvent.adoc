@@ -14,7 +14,7 @@ In the cases of the domain object's collections, the events that are fired are:
 * pre-execute phase: before the modification of the collection
 * post-execute: after the modification of the collection
 
-Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
+Subscribers subscribe through the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
 
 
 [WARNING]
@@ -72,7 +72,7 @@ This substantially reduces the boilerplate in the subclasses because no explicit
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
@@ -163,7 +163,7 @@ And, conversely, the framework also provides `CollectionDomainEvent.Noop`; if `d
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:rg:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service.
+However, events can be raised programmatically either by calling the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:applib:svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service.
 
 
 == See also

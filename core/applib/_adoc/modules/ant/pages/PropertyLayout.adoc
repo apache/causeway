@@ -19,7 +19,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:applib:ant:PropertyLayout.adoc#cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a property should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
+|the css class that a property should have, to allow more targetted styling in xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`]
 
 
 |xref:applib:ant:PropertyLayout.adoc#describedAs[`describedAs()`]
@@ -40,7 +40,7 @@ The table below summarizes the annotation's attributes.
 
 Defaults is `LEFT`, unless xref:applib:ant:PropertyLayout.adoc#multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
 
-It is also possible to change the default through a xref:rg:cfg:configuring-core.adoc#isis-viewers-propertyLayout-labelPosition[configuration property]
+It is also possible to change the default through a xref:cfg:ROOT:configuring-core.adoc#isis-viewers-propertyLayout-labelPosition[configuration property]
 
 
 |xref:applib:ant:PropertyLayout.adoc#multiLine[`multiLine()`]

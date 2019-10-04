@@ -75,7 +75,7 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |xref:applib:ant:XmlJavaTypeAdapter.adoc[`javax.xml.bind` +
 `.annotation` +
 `XmlJavaTypeAdapter`]
-|JAXB annotation defining how to serialize an entity.  Used in conjunction with the (framework provided) `PersistentEntityAdapter` class to serialize persistent entities into a canonical OID (equivalent to the `Bookmark` provided by the xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`]).
+|JAXB annotation defining how to serialize an entity.  Used in conjunction with the (framework provided) `PersistentEntityAdapter` class to serialize persistent entities into a canonical OID (equivalent to the `Bookmark` provided by the xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`]).
 |Domain
 |
 

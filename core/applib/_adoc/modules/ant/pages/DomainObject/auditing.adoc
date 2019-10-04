@@ -5,9 +5,9 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the registered xref:rg:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s).
+The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the registered xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s).
 
-The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.services.audit.objects` is used to determine the whether the action is audited:
+The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.services.audit.objects` is used to determine the whether the action is audited:
 
 * `all` +
 +

@@ -1,0 +1,217 @@
+= Supporting Method Prefixes
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+Supporting methods are those that are associated with properties, collections and actions, providing additional imperative business rule checking and behaviour to be performed when the user interacts with those object members.
+
+This association is performed by name matching.  Thus, a property called "firstName", derived from a method `getFirstName()` may have supporting methods `hideFirstName()`, `disableFirstName()` and `validateFirstName()`.  Supporting methods are, therefore, each characterized by their own particular prefix.
+
+
+[NOTE]
+====
+Using name matching to associate supporting methods generally works very well, but of course if an object member's method is renamed, there's always the risk that the developer forgets to rename the supporting method; the supporting methods become "orphaned".
+
+Apache Isis checks for this automatically, and will fail-fast (fail to boot) if any orphaned methods are located.  A suitable error message is logged so that the issue can be easily diagnosed.
+====
+
+
+The table below lists the method prefixes that are recognized as part of Apache Isis' default programming model.
+
+.Recognized Method Prefixes
+[cols="2,1,1,1,1,1,4a", options="header"]
+|===
+
+|Prefix
+|Object
+|Property
+|Collection
+|Action
+|Action +
+Param
+|Description
+
+|xref:applib:cms:methods.adoc#addTo[`addTo...()`]
+|
+|
+|Y
+|
+|
+|add object to a collection  +
+
+[NOTE]
+====
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+====
+
+See also xref:applib:cms:methods.adoc#removeFrom[`removeFrom...()`]`
+
+
+|xref:applib:cms:methods.adoc#autoComplete[`autoComplete...()`]
+|
+|Y
+|
+|
+|Y
+|Return a list of matching elements for a property or an action parameter. +
+
+Alternatively, can specify for a class using xref:applib:ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject` +
+`#autoCompleteRepository`] +
+
+See also xref:applib:cms:methods.adoc#choices[`choices...()`]
+
+|xref:applib:cms:methods.adoc#choices[`choices...()`]
+|
+|Y
+|
+|
+|Y
+|Provide list of choices for a property or action parameter. +
+
+See also xref:applib:cms:methods.adoc#autoComplete[`autoComplete...()`].
+
+|xref:applib:cms:methods.adoc#clear[`clear...()`]
+|
+|Y
+|
+|
+|
+|Clear a property (set it to null). +
+
+Allows business logic to be placed apart from the setter. +
+
+See also xref:applib:cms:methods.adoc#modify[`modify...()`]
+
+
+|xref:applib:cms:methods.adoc#default[`default...()`]
+|
+|Y
+|
+|
+|Y
+|Default value for a property or an action parameter.
+
+|xref:applib:cms:methods.adoc#disable[`disable...()`]
+|Y
+|Y
+|Y
+|Y
+|
+|Disables (makes read-only) a property, a collection or an action.
+
+|xref:applib:cms:methods.adoc#get[`get...()`]
+|
+|Y
+|Y
+|
+|
+|Access the value of a property or collection. +
+
+See also xref:applib:cms:methods.adoc#set[`set...()`].
+
+|xref:applib:cms:methods.adoc#hide[`hide...()`]
+|
+|Y
+|Y
+|Y
+|
+|Hides a property, a collection or an action.
+
+|xref:applib:cms:methods.adoc#modify[`modify...()`]
+|
+|Y
+|
+|
+|
+|Modify a property (set it to a non-null) value. +
+
+Allows business logic to be placed apart from the setter. +
+
+See also xref:applib:cms:methods.adoc#clear[`clear...()`]`.
+
+|xref:applib:cms:methods.adoc#removeFrom[`removeFrom...()`]
+|
+|
+|Y
+|
+|
+|remove object from a collection. +
+
+[NOTE]
+====
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+====
+
+See also xref:applib:cms:methods.adoc#addTo[`addTo...()`]`
+
+
+|xref:applib:cms:methods.adoc#set[`set...()`]
+|
+|Y
+|Y
+|
+|
+|Sets the value of a property or a collection.
+
+|xref:applib:cms:methods.adoc#validate[`validate...()`]
+|Y
+|
+|
+|Y
+|Y
+|Check that a proposed value of a property or a set of action parameters or a single action parameter is valid. +
+
+See also xref:applib:cms:methods.adoc#validateAddTo[`validateAddTo...()`] and xref:applib:cms:methods.adoc#validateRemoveFrom[`validateRemoveFrom...()`] to validate modifications to collections.
+
+|xref:applib:cms:methods.adoc#validateAddTo[`validate +
+AddTo...()`]
+|
+|Y
+|
+|
+|
+|Check that a proposed object to add to a collection is valid. +
+
+[NOTE]
+====
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+====
+
+See also xref:applib:cms:methods.adoc#validateRemoveFrom[`validateRemoveFrom...()`], and xref:applib:cms:methods.adoc#validate[`validate...()`] for properties and actions.
+
+|xref:applib:cms:methods.adoc#validateRemoveFrom[`validate +
+RemoveFrom...()`]
+|
+|Y
+|
+|
+|
+|Check that a proposed object to remove from a collection is valid. +
+
+[NOTE]
+====
+Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+====
+
+See also xref:applib:cms:methods.adoc#validateAddTo[`validateAddTo...()`], and xref:applib:cms:methods.adoc#validate[`validate...()`] for properties and actions.
+
+|===
+
+
+
+
+include::prefixes/addTo.adoc[leveloffset=+1]
+include::prefixes/autoComplete.adoc[leveloffset=+1]
+include::prefixes/choices.adoc[leveloffset=+1]
+include::prefixes/clear.adoc[leveloffset=+1]
+include::prefixes/default.adoc[leveloffset=+1]
+include::prefixes/disable.adoc[leveloffset=+1]
+include::prefixes/get.adoc[leveloffset=+1]
+include::prefixes/hide.adoc[leveloffset=+1]
+include::prefixes/modify.adoc[leveloffset=+1]
+include::prefixes/removeFrom.adoc[leveloffset=+1]
+include::prefixes/set.adoc[leveloffset=+1]
+include::prefixes/validate.adoc[leveloffset=+1]
+include::prefixes/validateAddTo.adoc[leveloffset=+1]
+include::prefixes/validateRemoveFrom.adoc[leveloffset=+1]

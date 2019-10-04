@@ -1,0 +1,118 @@
+[[TransactionService]]
+= `TransactionService3`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `TransactionService3` (and its various supertypes) allows domain objects to influence user transactions.
+
+
+
+== API
+
+The API of `TransactionService3` is:
+
+[source,java]
+----
+public interface TransactionService3 {
+    Transaction2 currentTransaction();      // <1>
+    void nextTransaction();                 // <2>
+    void nextTransaction(Policy policy);    // <3>
+    void flushTransaction();                // <4>
+    TransactionState getTransactionState(); // <5>
+}
+----
+<1> to obtain a handle on the current `Transaction`, discussed further below
+<2> The framework automatically start a transaction before each user interaction (action invocation or property edit), and will commit that transaction after the interaction has completed.
+Under certain circumstances (eg actions used to perform data migration, say, or for large fixture scripts), it can be helpful to programmatically complete one transaction and start another one.
+<3> overload of nextTransaction() that provides more control on the action to be performed if the current transaction has been marked for abort only
+<4> If the user interaction creates/persists an object or deletes an object (eg using the
+xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]'s `persist()` or `delete()` methods), then the framework actually queues up the work and only performs the persistence command either at the end of the transaction or immediately prior to the next query.
+Performing a flush will cause any pending calls to be performed immediately.
+<5> the state of the current or most recently completed transaction.
+
+
+Here `TransactionState` is an enum defined as:
+
+[source,java]
+----
+public enum TransactionState {
+    NONE,           // <1>
+    IN_PROGRESS,    // <2>
+    MUST_ABORT,     // <3>
+    COMMITTED,      // <4>
+    ABORTED;        // <5>
+}
+----
+<1> No transaction exists.
+<2> Started, still in progress.
+May flush, commit or abort.
+<3> Started, but has hit an exception.
+May not flush or commit, can only abort.
+<4> Completed, having successfully committed.
+May not flush or abort or commit.
+<5> Completed, having aborted.
+Again, may not flush or abort or commit.
+
+
+As noted above, `nextTransaction()` can be useful for actions used to perform data migration, say, or for large fixture scripts.
+It is also used by the xref:vw:ROOT:about.adoc[Wicket viewer]'s support for bulk actions; each action is invoked in its own transaction.
+An overload of this method takes a `Policy` enum, defined as:
+
+[source,java]
+----
+public enum Policy {
+    UNLESS_MARKED_FOR_ABORT,
+    ALWAYS
+}
+----
+
+If the current transaction has been marked for abort, then the `Policy.UNLESS_MARKED_FOR_ABORT` will escalate to a runtime exception, that is, will fail fast.
+Specifying `Policy.ALWAYS` is provided for use by integration tests so that they can continue on with the test teardown even if the test caused an issue.
+
+The `Transaction2` object - as obtained by `currentTransaction()` method, above - is a minimal wrapper around the underlying database transaction.  Its API is:
+
+[source,java]
+----
+public interface Transaction2 {
+    UUID getTransactionId();                    // <1>
+    int getSequence();                          // <2>
+    void flush();                               // <3>
+    TransactionState getTransactionState();     // <4>
+    void clearAbortCause();                     // <5>
+}
+----
+<1> is a unique identifier for the interaction/request, as defined by the
+xref:applib:cms:classes/mixins.adoc#HasTransactionId[`HasTransactionId`] mixin.
+<2> there can actually be multiple transactions within such a request/interaction; the sequence is a (0-based) is used to distinguish such.
+<3> as per `TransactionService#flushTransaction()` described above.
+<4> The state of this transaction (same as `TransactionService#getTransactionState()`).
+<5> (For framework use only) If the cause has been rendered higher up in the stack, then clear the cause so that it won't be picked up and rendered elsewhere.
+
+[TIP]
+====
+One place where `clearAboutCause()` may be useful is for application-level handling of SQL integrity exceptions, eg as described in link:https://issues.apache.org/jira/browse/ISIS-1476[ISIS-1476]:
+
+[source,java]
+----
+try {
+    // do something...
+} catch (final JDODataStoreException e) {
+    if (Iterables.filter(Throwables.getCausalChain(e),
+        SQLIntegrityConstraintViolationException.class) != null) {
+        // ignore
+        this.transactionService.currentTransaction().clearAbortCause();
+    } else {
+        throw e;
+    }
+}
+----
+====
+
+
+== Implementation
+
+The core framework provides a default implementation of this service, `o.a.i.core.metamodel.services.xactn.TransactionServiceDefault`.
+
+

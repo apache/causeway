@@ -1,0 +1,63 @@
+[[FactoryService]]
+= `FactoryService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `FactoryService` collects together methods for instantiating domain objects.
+
+
+
+== API
+
+The API of `FactoryService` is:
+
+[source,java]
+----
+public interface FactoryService {
+    <T> T instantiate(Class<T> domainClass);           // <1>
+    <T> T mixin(Class<T> mixinClass, Object mixedIn);  // <2>
+}
+----
+<1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
+The class must have a no-arg constructor.
+<2> programmatically instantiate a mixin, for example as annotated with xref:applib:ant:Mixin.adoc[`@Mixin`].
+The class must have a 1-arg constructor of the appropriate type.
+
+
+The object is created in memory, but is not persisted.  The benefits of using this method (instead of simply using the Java `new` keyword) are:
+
+* any services will be injected into the object immediately (otherwise they will not be injected until the frameworkbecomes aware of the object, typically when it is persisted through the xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
+
+* the default value for any properties (usually as specified by `defaultXxx()` supporting methods) will not be set and the `created()` callback will be called.
+
+The corollary is: if your code never uses `defaultXxx()` or the `created()` callback, then you can just `new` up the object.  The xref:applib:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service can be used to inject services into the domain object.
+
+
+
+== Usage
+
+For example:
+
+[source,java]
+----
+Customer cust = factoryService.instantiate(Customer.class);
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+repositoryService.persist(cust);
+----
+
+
+== Implementation
+
+The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.factory.FactoryServiceDefault`).
+
+
+
+
+== Related Services
+
+The xref:applib:svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] is often used in conjunction with the `FactoryService`, to persist domain objects after they have been instantiated and populated.
+
+An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the xref:applib:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service to inject other domain services into the instantiated object.

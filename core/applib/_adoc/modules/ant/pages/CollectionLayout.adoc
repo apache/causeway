@@ -19,7 +19,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:applib:ant:CollectionLayout.adoc#cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a collection should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
+|the css class that a collection should have, to allow more targetted styling in xref:cfg:ROOT:application-specific/application-css.adoc[`application.css`]
 
 
 |xref:applib:ant:CollectionLayout.adoc#defaultView[`defaultView()`]

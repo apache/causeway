@@ -1,0 +1,57 @@
+[[JaxbService]]
+= `JaxbService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+
+The `JaxbService` allows instances of JAXB-annotated classes to be marshalled to XML and
+unmarshalled from XML back into domain objects.
+
+
+
+
+
+== API & Implementation
+
+The API defined by `JaxbService` is:
+
+[source,java]
+----
+public interface JaxbService {
+    @Programmatic
+    <T> T fromXml(Class<T> domainClass, String xml);                                            // <1>
+    @Programmatic
+    public String toXml(final Object domainObject);                                             // <2>
+    public enum IsisSchemas {                                                                   // <3>
+        INCLUDE, IGNORE
+    }
+    @Programmatic
+    public Map<String, String> toXsd(final Object domainObject, final IsisSchemas isSchemas);} // <4>
+}
+----
+<1> unmarshalls the XML into an instance of the class.
+<2> marshalls the domain object into XML
+<3> whether to include or exclude the Isis schemas in the generated map of XSDs.  Discussed further below.
+<4> generates a map of each of the schemas referenced; the key is the schema namespace, the value is the XML of the schema itself.
+
+With respect to the `IsisSchemas` enum: a JAXB-annotated domain object will live in its own XSD namespace and may
+reference multiple other XSD schemas.  In particular, many JAXB domain objects will reference the
+xref:schema:ROOT:about.adoc[common Isis schemas] (for example the `OidDto` class that represents a reference to
+a persistent entity).  The enum indicates whether these schemas should be included or excluded from the map.
+
+Apache Isis provides a default implementation of the service, `o.a.i.applib.services.jaxb.JaxbServiceDefault`.
+
+To use an alternative implementation, implement `JaxbService` interface and use xref:applib:ant:DomainServiceLayout.adoc#menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:applib:svc:intro/overriding-the-services.adoc[introduction] to this guide).
+
+
+
+== Usage within the framework
+
+This service is provided as a convenience for applications, but is also used internally by the framework to
+xref:applib:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated
+xref:ug:fun:building-blocks.adoc#view-models[view models].  The functionality to download XML and XSD schemas is also
+exposed in the UI through mixins to xref:applib:cms:classes/mixins.adoc#Dto[`Dto`] interface.
+
+

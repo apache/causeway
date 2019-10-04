@@ -1,0 +1,166 @@
+[[cmd]]
+= Command
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+The command ("cmd") schema defines the serialized form of the __intention__ to invoke an action or to edit a property.
+It can be supplemented with optional timings capturing the actual invocation of a command (introduced to support the replication of commands in a master/slave arrangement).
+
+
+[NOTE]
+====
+Mixin actions are represented as regular actions on the mixed-in object.
+In other words, the fact that the actual implementation of the action is defined by a mixin is an implementation detail only.
+====
+
+== `commandDto`
+
+The `commandDto` root element is defined as:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/cmd"              <!--1-->
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://isis.apache.org/schema/cmd"
+           xmlns:com="http://isis.apache.org/schema/common">
+
+    <xs:import namespace="http://isis.apache.org/schema/common"             <!--2-->
+               schemaLocation="../common/common-1.0.xsd"/>
+
+    <xs:element name="commandDto">                                          <!--3-->
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string"            <!--4-->
+                        minOccurs="1" maxOccurs="1" default="1"/>
+                <xs:element name="minorVersion" type="xs:string"
+                        minOccurs="1" maxOccurs="1" default="1"/>
+
+                <xs:element name="transactionId" type="xs:string"/>         <!--5-->
+                <xs:element name="user" type="xs:string"/>                  <!--6-->
+                <xs:element name="targets" type="com:oidsDto"/>             <!--7-->
+                <xs:element name="member" type="memberDto"/>                <!--8-->
+                <xs:element name="timings" type="memberDto" minOccurs="0"/> <!--9-->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="commandsDto">                                         <!--10-->
+        <xs:annotation>
+            <xs:documentation>Collection of commandDto's</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="commandDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    ...
+</xs:schema>
+----
+<1> the command schema has a namespace URI of "http://isis.apache.org/schema/cmd".
+Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
+<2> uses complex types defined in the xref:xref:schema:ROOT:common.adoc["common" schema].
+<3> definition of the `commandDto` root element.
+The corresponding XML will use this as its top-level element.
+<4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
+<5> unique identifier for the transaction in which this command is created.
+The transaction Id is used to correlate to the xref:xref:schema:ROOT:interaction[interaction] that executes the command, and to any xref:schema:ROOT:about.adoc#changes.adoc[changes] to domain objects occurring as a side-effect of that interaction.
+<6> the name of the user who created the command (whose intention it is to invoke the action/edit the property).
+<7> the target object (or objects) to be invoked.
+A bulk action will create multiple commands, each with only a single target.
+(A future version of the framework may also support a single bulk command against this multiple targets, ie all-or-nothing).
+<8> the `memberDto`, defined below, the captures the action/property and arguments/new value.
+<9> optional timings for the invocation of a command.
+<10> groups multiple commands together.
+
+The `CommandDto` DTO corresponding to the `commandDto` root element can be marshalled to/from XML using the `CommandDtoUtils` class.
+The `CommandsDto` DTO allows multiple commands to be marshalled together.
+This was introduced to support replication of commands in a master/slave arrangement (eg for regression testing).
+
+
+== `memberDto` and subtypes
+
+The `memberDto` complex type is an abstract type representing the intention to either invoke an action or to edit a property.
+The `actionDto` and `propertyDto` are the concrete subtypes:
+
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/cmd" ...>
+    ...
+    <xs:complexType name="memberDto" abstract="true">                       <!--1-->
+        </xs:element>
+        <xs:sequence>
+            <xs:element name="memberIdentifier" type="xs:string"/>          <!--2-->
+            <xs:element name="logicalMemberIdentifier" type="xs:string">    <!--3-->
+        </xs:sequence>
+        <xs:attribute  name="interactionType" type="com:interactionType"/>  <!--4-->
+    </xs:complexType>
+
+    <xs:complexType name="actionDto">                                       <!--5-->
+        <xs:complexContent>
+            <xs:extension base="memberDto">
+                <xs:sequence>
+                    <xs:element name="parameters" type="paramsDto"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="propertyDto">                                     <!--6-->
+        <xs:complexContent>
+            <xs:extension base="memberDto">
+                <xs:sequence>
+                    <xs:element name="newValue" type="com:valueWithTypeDto"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
+----
+<1> the `memberDto` is an abstract type.
+Its primary responsibility is simply to identify the member (action or property).
+<2> the formal identifier (fully qualified class name + member name) of the member being interacted with (action or property).
+<3> the "logical" formal identifier (object type, as per `@DomainObject(objectType=)`, + member name) of the member being interacted with (action or property).
+<4> the `interactionType` attribute indicates whether the member is an action or a property.
+<5> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to invoke the action.
+The `paramsDto` type is defined xref:xref:schema:ROOT:cmd/ancillary.adoc[below].
+<6> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
+
+In general the `logicalMemberIdentifier` should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
+
+Note also that there is a corresponding xref:xref:schema:ROOT:ixn/memberExecutionDto.adoc[`memberExecutionDto`]
+complex type in the "ixn" schema that is for the actual execution (capturing metrics about its execution and also the return value if an action invocation).
+
+
+
+== Ancillary types
+
+The schema also defines a small number of supporting types:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/cmd" ...>
+    ...
+    <xs:complexType name="paramsDto">                                       <!--1-->
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="parameter" type="paramDto"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="paramDto">                                        <!--2-->
+        <xs:complexContent>
+            <xs:extension base="com:valueWithTypeDto">
+                <xs:attribute name="name" use="required" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
+----
+<1> the `paramsDto` is simply the list of parameter/arguments.
+<2> the `paramDto` complex type essentially combines a parameter with its corresponding argument: a named value that has a type.
+It extends the `valueWithTypeDto` complex type taken from the
+xref:xref:schema:ROOT:common.adoc["common"] schema.

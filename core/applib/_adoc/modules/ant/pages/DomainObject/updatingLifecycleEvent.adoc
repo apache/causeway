@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 Whenever a (persistent) domain object has been modified and is about to be updated to the database, an "updating" lifecycle event is fired.
 
-Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the domain object.
+Subscribers subscribe through the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the domain object.
 The subscriber could then, for example, update the object, or it could use it maintain an external datastore.
 One possible application is to maintain a full-text search database using link:https://lucene.apache.org/[Apache Lucene] or similar.
 
@@ -15,7 +15,7 @@ One possible application is to maintain a full-text search database using link:h
 ====
 Another use case is to maintain "last updated by"/"last updated at" properties.
 While you can roll your own, note that the framework provides built-in support for this use case through the
-xref:rg:cms:classes/roles.adoc#Timestampable[`Timestampable`] role interface.
+xref:applib:cms:classes/roles.adoc#Timestampable[`Timestampable`] role interface.
 ====
 
 By default the event raised is `ObjectUpdatingEvent.Default`.
@@ -53,7 +53,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):

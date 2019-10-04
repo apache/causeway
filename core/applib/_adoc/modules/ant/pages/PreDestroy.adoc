@@ -19,7 +19,7 @@ public void deinit() { /* ... */ }    <2>
 <1> It is not necessary to annotate the method with xref:applib:ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility, and accept no arguments.
 
-A common use case is for domain services that interact with the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  For example:
+A common use case is for domain services that interact with the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`].  For example:
 
 [source,java]
 ----
@@ -41,7 +41,7 @@ public class MySubscribingService {
 
 [TIP]
 ====
-In this particular use case, it is generally simpler to just subclass from xref:rg:cms:classes/super.adoc#AbstractSubscriber[`AbstractSubscriber`].
+In this particular use case, it is generally simpler to just subclass from xref:applib:cms:classes/super.adoc#AbstractSubscriber[`AbstractSubscriber`].
 ====
 
 Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.

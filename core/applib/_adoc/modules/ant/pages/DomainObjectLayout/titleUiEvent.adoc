@@ -6,10 +6,10 @@ include::_attributes.adoc[]
 
 
 Whenever a domain object is to be rendered, the framework fires off a title UI event to obtain a title for the object.
-This is as an alternative to implementing xref:rg:cms:methods.adoc#title[`title()`] reserved method, or using the xref:applib:ant:Title.adoc[`@Title`] annotation, within the class itself.
+This is as an alternative to implementing xref:applib:cms:methods.adoc#title[`title()`] reserved method, or using the xref:applib:ant:Title.adoc[`@Title`] annotation, within the class itself.
 (If either `title()` or `@Title` are present, then they will take precedence).
 
-Subscribers subscribe through the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can
+Subscribers subscribe through the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can
 use obtain a reference to the domain object from the event.
 From this they can, if they wish, specify a title for the domain object using the event's API.
 
@@ -54,7 +54,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
@@ -109,7 +109,7 @@ And, conversely, the framework also provides `TitleUiEvent.Noop`; if `titleUiEve
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] API directly, or as a result of calling the xref:rg:svc:application-layer-api/TitleService.adoc[`TitleService`]'s `titleOf(...)` method.
+However, events can be raised programmatically either by calling the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] API directly, or as a result of calling the xref:applib:svc:application-layer-api/TitleService.adoc[`TitleService`]'s `titleOf(...)` method.
 
 
 == See also

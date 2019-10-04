@@ -25,7 +25,7 @@ public class CustomerViewModel {
 ----
 
 Although there are several ways to instantiate a view model, we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
-The xref:rg:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] can then be used to inject dependencies into the view model.
+The xref:applib:svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] can then be used to inject dependencies into the view model.
 For example:
 
 [source,java]
@@ -46,7 +46,7 @@ The view model's memento will be derived from the value of the view model object
 Any xref:applib:ant:Property.adoc#notPersisted[`@Property#notPersisted()`] properties will be excluded from the memento, as will any xref:applib:ant:Programmatic.adoc[`@Programmatic`] properties.
 Properties that are merely xref:applib:ant:Property.adoc#hidden[hidden] _are_ included in the memento.
 
-Only properties supported by the configured xref:rg:svc:integration-api/MementoService.adoc[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
+Only properties supported by the configured xref:applib:svc:integration-api/MementoService.adoc[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
 
 View models, as defined by `@ViewModel` (or `@DomainObject(nature=VIEW_MODEL)` for that matter) have some limitations:
 
@@ -60,7 +60,7 @@ If you are using view models heavily, you may wish to restrict yourself to just 
 
 [NOTE]
 ====
-The `@ViewModel` does not allow the objectType to be specified, meaning that it is incompatible with the metamodel validation check ennabled by the xref:rg:cfg:configuring-core.adoc#metamodel-validation[`explicitObjectType`] configuration property.
+The `@ViewModel` does not allow the objectType to be specified, meaning that it is incompatible with the metamodel validation check ennabled by the xref:cfg:ROOT:configuring-core.adoc#metamodel-validation[`explicitObjectType`] configuration property.
 
 Instead, use xref:applib:ant:DomainObject.adoc#nature[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:applib:ant:DomainObject.adoc#objectType[`@DomainObject#objectType()`].
 ====

@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
 
-If necessary the icon specified can be overridden by a particular object instance using the xref:rg:cms:methods.adoc#iconName[`iconName()`] method.
+If necessary the icon specified can be overridden by a particular object instance using the xref:applib:cms:methods.adoc#iconName[`iconName()`] method.
 
 
 

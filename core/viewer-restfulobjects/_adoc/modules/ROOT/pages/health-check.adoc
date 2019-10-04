@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The xref:rg:svc:application-layer-spi/HealthCheckService.adoc[`HealthCheckService`] SPI allows applications to provide an implementation of that service which can indicate the overall health of the application.
+The xref:applib:svc:application-layer-spi/HealthCheckService.adoc[`HealthCheckService`] SPI allows applications to provide an implementation of that service which can indicate the overall health of the application.
 The "health" is defined by the very simple `Health` class, where a non-null message indicates a problem, otherwise everything is ok:
 
 [source,java]

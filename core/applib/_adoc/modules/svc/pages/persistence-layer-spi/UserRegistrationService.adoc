@@ -1,0 +1,94 @@
+[[UserRegistrationService]]
+= `UserRegistrationService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `UserRegistrationService` provides the ability for users to sign-up to access an application by providing a valid email address, and also provides the capability for users to reset their password if forgotten.
+
+For user sign-up, the xref:vw:ROOT:about.adoc[Wicket viewer] will check whether an implementation of this service (and also the xref:applib:svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`]) is available, and if so will render a sign-up page where the user enters their email address.
+A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on).
+When the user has provided the additional details, the Wicket viewer calls _this_ service in order to create an account for them, and then logs the user on.
+
+For the password reset feature, the Wicket viewer will render a password reset page, and use the `EmailNotificationService` to send a "password forgotten" email.
+This service provides the ability to reset a password based on the user's email address.
+
+It is of course possible for domain objects to use this service; it will be injected into domain object or other domain services in the usual way.
+That said, we expect that such use cases will be comparatively rare; the primary use case is for the Wicket viewer's sign-up page.
+
+[NOTE]
+====
+For further details on the user registration feature (as supported by the Wicket viewer), see xref:vw:ROOT:features/user-registration.adoc[here].
+====
+
+
+
+== SPI
+
+The SPI defined by the service is:
+
+[source,java]
+----
+public interface UserRegistrationService {
+    @Programmatic
+    boolean usernameExists(String username);                                    // <1>
+    @Programmatic
+    boolean emailExists(String emailAddress);                                   // <2>
+    @Programmatic
+    void registerUser(String username, String password, String emailAddress);   // <3>
+    @Programmatic
+    boolean updatePasswordByEmail(String emailAddress, String password);        // <4>
+}
+----
+<1> checks if there is already a user with the specified username
+<2> checks if there is already a user with the specified email address
+<3> creates the user, with specified password and email address.
+The username and email address must both be unique (not being used by an existing user)
+<4> allows the user to reset their password
+
+
+
+
+== Implementation
+
+The core Apache Isis framework itself defines only an API; there is no default implementation.
+Rather, the implementation will depend on the security mechanism being used.
+
+That said, if you have configured your app to use the xref:ext-secman:ROOT:about.adoc[SecMan extension] then note that it _does_ provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the `UserRegistrationService`.
+You will need to extend that service and provide implementation for the two abstract methods: `getInitialRole()` and `getAdditionalInitialRoles()`.
+
+For example:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class AppUserRegistrationService extends SecurityModuleAppUserRegistrationServiceAbstract {
+    protected ApplicationRole getInitialRole() {
+    return findRole("regular-user");
+    }
+    protected Set<ApplicationRole> getAdditionalInitialRoles() {
+        return Collections.singleton(findRole("self-registered-user"));
+    }
+    private ApplicationRole findRole(final String roleName) {
+        return applicationRoles.findRoleByName(roleName);
+    }
+    @Inject
+    private ApplicationRoles applicationRoles;
+}
+----
+
+This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application.
+Without any role such user will be able only to see/use the logout link of the application.
+
+
+== Related Services
+
+The most common use case is to allow users to sign-up through Apache Isis' Wicket viewer.
+Because the process requires email to be sent, the following services must be configured:
+
+* xref:applib:svc:integration-api/EmailService.adoc[`EmailService`]
+* xref:applib:svc:presentation-layer-spi/EmailNotificationService.adoc[`EmailNotificationService`]
+* `UserRegistrationService` (this service)
+
+The `EmailService` in particular requires additional xref:cfg:ROOT:configuring-core.adoc[configuration properties] to specify the external SMTP service.

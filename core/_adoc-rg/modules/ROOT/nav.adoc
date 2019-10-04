@@ -1,2 +1,0 @@
-include::rg:ROOT:partial$nav.adoc[]
-

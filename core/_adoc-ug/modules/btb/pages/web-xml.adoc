@@ -435,7 +435,7 @@ Discussed in more detail below.
 Originally introduced to allow the `SwaggerSpec` resource (which does not require a session) to be invoked.
 <4> A comma separated list of paths that are allowed through even if not authenticated.
 The servlets mapped to these paths are expected to be able to deal with there being no session.
-Typically they will be logon pages, or for health checks (as per xref:rg:svc:application-layer-spi/HealthCheckService.adoc[`HealthCheckService`] SPI.
+Typically they will be logon pages, or for health checks (as per xref:applib:svc:application-layer-spi/HealthCheckService.adoc[`HealthCheckService`] SPI.
 See below for further details.
 <5> where to redirect to if an exception occurs.
 

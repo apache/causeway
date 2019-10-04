@@ -1,0 +1,6 @@
+name: schema
+title: "Schema"
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc

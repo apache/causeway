@@ -1,0 +1,271 @@
+[[RepositoryService]]
+= `RepositoryService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:page-partial:
+
+
+The `RepositoryService` collects together methods for creating, persisting and searching for entities from the underlying persistence store.
+It acts as an abstraction over the JDO/DataNucleus objectstore.
+
+You can use it during prototyping to write naive queries (find all rows, then filter using the Guava `Predicate` API, or you can use it to call JDO link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/query.html#named[named queries] using JDOQL.
+
+As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] service.
+
+
+
+== API
+
+The API of `RepositoryService` is:
+
+[source,java]
+----
+public interface RepositoryService {
+    <T> T instantiate(final Class<T> ofType);                                               // <1>
+
+    boolean isPersistent(Object domainObject);                                              // <2>
+    void persist(Object domainObject);                                                      // <3>
+    void persistAndFlush(Object domainObject);                                              // <4>
+
+    void remove(Object persistentDomainObject);                                             // <5>
+    void removeAndFlush(Object persistentDomainObject);                                     // <6>
+
+    <T> List<T> allInstances(Class<T> ofType, long... range);                               // <7>
+
+    <T> List<T> allMatches(Query<T> query);                                                 // <8>
+    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <9>
+
+    <T> T uniqueMatch(Query<T> query);                                                      // <10>
+    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);                 // <11>
+
+    @Deprecated
+    <T> T firstMatch(Query<T> query);                                                       // <12>
+    @Deprecated
+    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);                  // <13>
+}
+----
+<1> create a new non-persisted domain entity.
+This is identical to
+xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`]'s `instantiate(...)` method, but is provided in the
+``RepositoryService``'s API too because instantiating and persisting objects are often done together.
+<2> test whether a particular domain object is persistent or not
+<3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
+<4> persist (ie save) and flush; same as `persist()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
+<5> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
+<6> remove (delete) and flush;  same as `remove()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
+<7> return all persisted instances of specified type.
+Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.
+The optional varargs parameters are for paging control; more on this below.
+<8> all persistence instances matching the specified `Query`.
+`Query` itself is an Isis abstraction on top of JDO/DataNucleus' Query API.
+*This is the primary API used for querying*
+<9> As the previous, but with client-side filtering using a `Predicate`.
+Only really intended for prototyping.
+<10> Returns the first instance that matches the supplied query.
+If no instance is found then `null `will be returned, while if there is more that one instances a run-time exception will be thrown.
+Generally this method is preferred for looking up an object by its (primary or alternate) key.
+<11> As the previous, but with client-side filtering using a `Predicate`.
+Only really intended for prototyping.
+<12> (Deprecated) returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.
+No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
+<13> (Deprecated) As the previous, but with client-side filtering using a `Predicate`.
+Only really intended for prototyping.
+
+
+The `uniqueMatch(...)` methods are the recommended way of querying for (precisely) one instance.
+The `firstMatch(...)` methods are for less strict querying.
+
+
+== Usage
+
+This section briefly discusses how application code can use (some of) these APIs.
+
+
+=== Persist
+
+[source,java]
+----
+Customer cust = repositoryService.instantiate(Customer.class);
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+repositoryService.persist(cust);
+----
+
+You should be aware that by default Apache Isis queues up calls to `#persist()` and `#remove()`.
+These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.
+This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
+
+By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`.
+However, this behaviour can be disabled using the  xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.services.container.disableAutoFlush`.
+
+
+
+=== `persistAndFlush(...)`, `removeAndFlush(...)`
+
+In some cases, such as when using managed properties and collections for implementing 1-1, 1-n, or m-n relationships, the developer needs to invoke `flush()` to send the changes to the DataNucleus persistence mechanism.
+These managed properties and collections and then updated.
+
+The `persistAndFlush(...)` and `removeAndFlush(...)` methods save the developer from having to additionally call the `flush(...)` method after calling `persist()` or `remove()`.
+
+For example, the following code requires a flush to occur, so uses these methods:
+
+[source,java]
+----
+public abstract class Warehouse extends SalesVIPEntity<Marketplace> {
+
+    @Persistent(mappedBy = "marketplace", dependentElement = "true")
+    @Getter @Setter                                                             // <1>
+    private SortedSet<MarketplaceExcludedProduct> excludedProducts =
+                            new TreeSet<MarketplaceExcludedProduct>();
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public MarketplaceExcludedProduct addExcludedProduct(final Product product) {
+        MarketplaceExcludedProduct marketplaceExcludedProduct = this.findExcludedProduct(product);
+        if (marketplaceExcludedProduct == null) {
+            marketplaceExcludedProduct =
+                this.factoryService.instantiate(MarketplaceExcludedProduct.class);
+        }
+
+        this.wrap(marketplaceExcludedProduct).setMarketplace(this);
+        this.wrap(marketplaceExcludedProduct).setProduct(product);
+
+        this.repositoryService.persistAndFlush(marketplaceExcludedProduct);     // <2>
+        return marketplaceExcludedProduct;
+    }
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public void deleteFromExcludedProducts(final Product product) {
+        final MarketplaceExcludedProduct marketplaceExcludedProduct = findExcludedProduct(product);
+        if (marketplaceExcludedProduct != null) {
+            this.repositoryService.removeAndFlush(marketplaceExcludedProduct);
+        }
+    }
+    ...                                                                         // <3>
+}
+----
+<1> using lombok for brevity
+<2> Needed for updating the managed properties and collections.
+<3> injected services and other methods ommited
+
+On the “addExcludedProduct()” action, if the user didn't flush, the following test would fail because the managed collection would not containing the given product:
+
+[source,java]
+----
+@Test
+public void addExcludedProduct() {
+
+    // given
+    final AmazonMarketplace amazonMarketplace = this.wrapSkipRules(
+        this.marketplaceRepository).findOrCreateAmazonMarketplace(
+            AmazonMarketplaceLocation.FRANCE);
+
+    final Product product = this.wrap(this.productRepository)
+        .createProduct(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+    // when
+    this.wrap(amazonMarketplace).addExcludedProduct(product);
+
+    // then
+    Assertions.assertThat(
+            this.wrapSkipRules(amazonMarketplace).findAllProductsExcluded()
+        ).contains(product);                                                    // <1>
+}
+----
+<1> this would fail.
+
+
+
+=== Query and `xxxMatches(...)`
+
+There are various implementations of the `Query` API, but these either duplicate functionality of the other overloads of `allMatches(...)` or they are not supported by the JDO/DataNucleus object store.
+The only significant implementation of `Query` to be aware of is `QueryDefault`, which identifies a named query and a set of parameter/argument tuples.
+
+For example, in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] the `ToDoItem` is annotated:
+
+[source,java]
+----
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+            name = "findByAtPathAndComplete", language = "JDOQL",               // <1>
+            value = "SELECT "
+                    + "FROM todoapp.dom.module.todoitem.ToDoItem "
+                    + "WHERE atPath.indexOf(:atPath) == 0 "                     // <2>
+                    + "   && complete == :complete"),                           // <3>
+    ...
+})
+public class ToDoItem ... {
+    ...
+}
+----
+<1> name of the query
+<2> defines the `atPath` parameter
+<3> defines the `complete` parameter
+
+This JDO query definitions are used in the `ToDoItemRepositoryImplUsingJdoql` service:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ToDoItemRepositoryImplUsingJdoql implements ToDoItemRepositoryImpl {
+    @Programmatic
+    public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Category category) {
+        return repositoryService.allMatches(
+                new QueryDefault<>(ToDoItem.class,
+                        "findByAtPathAndCategory",                              // <1>
+                        "atPath", atPath,                                       // <2>
+                        "category", category));                                 // <3>
+    }
+    ...
+    @javax.inject.Inject
+    RepositoryService repositoryService;
+}
+----
+<1> corresponds to the "findByAtPathAndCategory" JDO named query
+<2> provide argument for the `atPath` parameter.
+The pattern is parameter, argument, parameter, argument, ... and so on.
+<3> provide argument for the `category` parameter.
+The pattern is parameter, argument, parameter, argument, ... and so on.
+
+Other JDOQL named queries (not shown) follow the exact same pattern.
+
+With respect to the other query APIs, the varargs parameters are optional, but allow for (client-side and managed) paging.
+The first parameter is the `start` (0-based, the second is the `count`.
+
+[TIP]
+====
+It is also possible to query using DataNucleus' type-safe query API.
+For more details, see xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`].
+====
+
+
+
+== Implementation
+
+The default implementation of this domain service is `o.a.i.core.metamodel.services.repository.RepositoryServiceDefault`.
+
+
+=== Configuration Properties
+
+The default implementation of this domain service supports the following configuration properties:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.services.` +
+`container.` +
+`disableAutoFlush`
+|`true`,`false` +
+(`false`)
+|Whether the `RepositoryService` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+
+|===
+
+
+== Usage Notes
+
+The xref:applib:svc:core-domain-api/FactoryService.adoc[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
+

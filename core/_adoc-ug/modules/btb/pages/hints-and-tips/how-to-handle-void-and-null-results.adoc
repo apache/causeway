@@ -21,7 +21,7 @@ When clicking the back button in the browser the user sees "Object not found" (s
 And refresh the current page when receiving a null response or invoking a void action.
 But how to implement this?_
 
-One way to implement this idea is to provide a custom implementation of the xref:rg:svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`] SPI domain service.
+One way to implement this idea is to provide a custom implementation of the xref:applib:svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`] SPI domain service.
 The default implementation will either return the current object (if not null), else the home page (as defined by xref:applib:ant:HomePage.adoc[`@HomePage`]) if one exists.
 
 The following custom implementation refines this to use the breadcrumbs (available in the Wicket viewer) to return the first non-deleted domain object found in the list of breadcrumbs:

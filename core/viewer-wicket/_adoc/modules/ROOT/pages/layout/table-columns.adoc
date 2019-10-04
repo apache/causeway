@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The optional xref:rg:svc:presentation-layer-spi/TableColumnOrderService.adoc[`TableColumnOrderService`] SPI service can be used to reorder columns in a table, either for a parented collection (owned by parent domain object) or a standalone collection (returned from an action invocation).
+The optional xref:applib:svc:presentation-layer-spi/TableColumnOrderService.adoc[`TableColumnOrderService`] SPI service can be used to reorder columns in a table, either for a parented collection (owned by parent domain object) or a standalone collection (returned from an action invocation).
 
 For example, suppose there is a `Customer` and an `Order`:
 

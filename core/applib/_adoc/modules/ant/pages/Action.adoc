@@ -30,19 +30,19 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the action invocation should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:rg:svc:application-layer-api/CommandContext.adoc[`CommandContext`] service.
+`services.command.Command` object through the xref:applib:svc:application-layer-api/CommandContext.adoc[`CommandContext`] service.
 
 
 |`commandExecuteIn()`
 |`FOREGROUND`,`BACKGROUND` +
 (`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:applib:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
 
 
 |`commandPersistence()`
 |`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
 (`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:rg:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured).
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:applib:svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured).
 
 
 |`commandDtoProcessor()`
@@ -54,7 +54,7 @@ The table below summarizes the annotation's attributes.
 |xref:applib:ant:Action.adoc#domainEvent[`domainEvent()`]
 |subtype of `ActionDomainEvent` +
 (`ActionDomainEvent.Default`)
-|the event type to be posted to the xref:rg:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to
+|the event type to be posted to the xref:applib:svc:core-domain-api/EventBusService.adoc[`EventBusService`] to
 broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and
 post-execute).
 
@@ -78,7 +78,7 @@ Currently this is only supported for no-arg actions.
 |xref:applib:ant:Action.adoc#publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether the action invocation should be published to the registered xref:rg:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+|whether the action invocation should be published to the registered xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 
 |xref:applib:ant:Action.adoc#restrictTo[`restrictTo()`]
 |`NO_RESTRICTIONS`,`PROTOTYPING` +

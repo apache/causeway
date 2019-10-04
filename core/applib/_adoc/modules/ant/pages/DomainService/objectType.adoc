@@ -11,8 +11,8 @@ This value is used internally to generate a string representation of an service 
 This can appear in several contexts, including:
 
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
- (see xref:rg:svc:integration-api/BookmarkService.adoc[`BookmarkService`])
-* in the serialization of `OidDto` in the xref:rg:cms:schema.adoc#cmd[command] and xref:rg:cms:schema.adoc#ixn[interaction] schemas
+ (see xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`])
+* in the serialization of `OidDto` in the xref:xref:schema:ROOT:cmd[command] and xref:schema:ROOT:about.adoc#ixn.adoc[interaction] schemas
 * in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
 * in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (specifically, for bookmarked actions)
 
@@ -39,7 +39,7 @@ public class OrderMenu {
 The rules of precedence are:
 
 1. `@DomainService#objectType`
-2. xref:rg:cms:methods.adoc#getId[`getId()`]
+2. xref:applib:cms:methods.adoc#getId[`getId()`]
 3. The fully qualified class name.
 
 
