@@ -19,10 +19,10 @@
 
 package org.apache.isis.extensions.sse.facets;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.apache.isis.extensions.sse.api.SseSource;
 import org.apache.isis.extensions.sse.api.ServerSentEvents;
+import org.apache.isis.extensions.sse.api.SseSource;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 /**
@@ -33,13 +33,12 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 public class SseObserveFacetForServerSentEventsAnnotation extends SseObserveFacetAbstract {
 
     public static SseObserveFacet create(
-            final List<ServerSentEvents> properties,
+            final Optional<ServerSentEvents> serverSentEventsIfAny,
             final FacetHolder holder) {
 
-        return properties.stream()
+        return serverSentEventsIfAny
                 .map(ServerSentEvents::observe)
                 .filter(SseSource::isObservable)
-                .findFirst()
                 .map(eventStreamType -> new SseObserveFacetForServerSentEventsAnnotation(
                         eventStreamType, holder))
                 .orElse(null);

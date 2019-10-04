@@ -19,17 +19,14 @@
 
 package org.apache.isis.extensions.sse.facets;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import org.apache.isis.extensions.sse.api.ServerSentEvents;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+
+import lombok.val;
 
 public class SseAnnotationFacetFactory extends FacetFactoryAbstract 
 implements MetaModelValidatorRefiner {
@@ -45,12 +42,10 @@ implements MetaModelValidatorRefiner {
 
 
     void processObserve(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        // else search for @???(observe=...)
-        final List<ServerSentEvents> annots = Annotations.getAnnotations(method, ServerSentEvents.class);
-        SseObserveFacet facet = SseObserveFacetForServerSentEventsAnnotation.create(annots, holder);
+        val serverSentEventsIfAny = processMethodContext.synthesizeOnMethod(ServerSentEvents.class);
+        val facet = SseObserveFacetForServerSentEventsAnnotation.create(serverSentEventsIfAny, facetHolder);
 
         FacetUtil.addFacet(facet);
     }

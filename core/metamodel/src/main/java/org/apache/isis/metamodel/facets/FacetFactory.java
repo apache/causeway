@@ -62,6 +62,7 @@ public interface FacetFactory {
             return cls;
         }
         
+        /** @since 2.0*/
         public <A extends Annotation> Optional<A> synthesize(Class<A> annotationType) {
             return _Annotations.synthesizeInherited(cls, annotationType);
         }
@@ -109,6 +110,11 @@ public interface FacetFactory {
         @Override
         public void removeMethod(final Method method) {
             methodRemover.removeMethod(method);
+        }
+        
+        /** @since 2.0*/
+        public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {
+            return _Annotations.synthesizeInherited(method, annotationType);
         }
 
     }

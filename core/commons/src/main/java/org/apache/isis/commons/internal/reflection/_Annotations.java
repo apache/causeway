@@ -19,11 +19,17 @@
 package org.apache.isis.commons.internal.reflection;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
+import org.springframework.util.ReflectionUtils;
+
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -68,13 +74,22 @@ public final class _Annotations {
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> synthesizeInherited(
-            Class<?> annotatedElement, 
+            AnnotatedElement annotatedElement, 
             Class<A> annotationType) {
         
         val collected = _Annotations
                 .collect(annotatedElement);
         
         if(!collected.isPresent(annotationType)) {
+            
+            // also handle fields, getter methods might be associated with
+            if(annotatedElement instanceof Method) {
+                val fieldForGetter = fieldForGetter((Method) annotatedElement);
+                if(fieldForGetter!=null) {
+                    return synthesizeInherited(fieldForGetter, annotationType);
+                }
+            }
+            
             return Optional.empty();
         }
         
@@ -113,12 +128,47 @@ public final class _Annotations {
     /**
      * @apiNote don't expose Spring's MergedAnnotation
      */
-    private static MergedAnnotations collect(Class<?> annotatedElement) {
+    private static MergedAnnotations collect(AnnotatedElement annotatedElement) {
         
         //TODO use cache if not already
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
         return collected;
     }
     
+    private static Field fieldForGetter(Method getter) {
+        if(ReflectionUtils.isObjectMethod(getter)) {
+            return null;
+        }
+        val fieldNameCandidate = fieldNameForGetter(getter);
+        if(fieldNameCandidate==null) {
+            return null;
+        }
+        val declaringClass = getter.getDeclaringClass();
+        for(val field : declaringClass.getDeclaredFields()) {
+            if(field.getName().equals(fieldNameCandidate)) {
+                return field;
+            }
+        }
+        return null;
+    }
+    
+    private static String fieldNameForGetter(Method getter) {
+        if(getter.getParameterCount()>0) {
+            return null;
+        }
+        if(getter.getReturnType()==void.class) {
+            return null;
+        }
+        val methodName = getter.getName();
+        String fieldName = null;
+        if(methodName.startsWith("is") &&  methodName.length() > 2) {
+            fieldName = methodName.substring(2);
+        } else if(methodName.startsWith("get") &&  methodName.length() > 3) {
+            fieldName = methodName.substring(3);
+        } else {
+            return null;
+        }
+        return _Strings.decapitalize(fieldName);
+    }
     
 }

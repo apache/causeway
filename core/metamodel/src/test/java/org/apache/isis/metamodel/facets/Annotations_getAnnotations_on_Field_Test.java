@@ -31,8 +31,13 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.metamodel.facets.Annotations_getAnnotations_on_Parameter_Test.DomainObj;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 @SuppressWarnings("unused")
 public class Annotations_getAnnotations_on_Field_Test {
@@ -70,13 +75,18 @@ public class Annotations_getAnnotations_on_Field_Test {
                 return name;
             }
         }
+        
+        val field = SomeDomainObject.class.getDeclaredField("name");
+        val nearestF = _Annotations.synthesizeInherited(field, Property.class);
+        
+        assertThat(nearestF.isPresent(), is(true));
+        assertThat(nearestF.get().publishing(), is(Publishing.ENABLED));
+        
+        val method = SomeDomainObject.class.getMethod("getName");
+        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
-        Method method = SomeDomainObject.class.getMethod("getName");
-        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
-
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
+        assertThat(nearestM.isPresent(), is(true));
+        assertThat(nearestM.get().publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -90,12 +100,11 @@ public class Annotations_getAnnotations_on_Field_Test {
             }
         }
 
-        Method method = SomeDomainObject.class.getMethod("getName");
-        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
+        val method = SomeDomainObject.class.getMethod("getName");
+        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
+        assertThat(nearestM.isPresent(), is(true));
+        assertThat(nearestM.get().publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -109,12 +118,11 @@ public class Annotations_getAnnotations_on_Field_Test {
             }
         }
 
-        Method method = SomeDomainObject.class.getMethod("getName");
-        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
+        val method = SomeDomainObject.class.getMethod("getName");
+        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
+        assertThat(nearestM.isPresent(), is(true));
+        assertThat(nearestM.get().publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -129,13 +137,11 @@ public class Annotations_getAnnotations_on_Field_Test {
             }
         }
 
-        Method method = SomeDomainObject.class.getMethod("getName");
-        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
+        val method = SomeDomainObject.class.getMethod("getName");
+        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
-        Assert.assertThat(annotations.size(), is(2));
-
-        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
-        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.ENABLED));
+        assertThat(nearestM.isPresent(), is(true));
+        assertThat(nearestM.get().publishing(), is(Publishing.ENABLED));
     }
 
     @Test
@@ -150,13 +156,11 @@ public class Annotations_getAnnotations_on_Field_Test {
             }
         }
 
-        Method method = SomeDomainObject.class.getMethod("getName");
-        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
+        val method = SomeDomainObject.class.getMethod("getName");
+        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
-        Assert.assertThat(annotations.size(), is(2));
-
-        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.DISABLED));
-        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.ENABLED));
+        assertThat(nearestM.isPresent(), is(true));
+        assertThat(nearestM.get().publishing(), is(Publishing.DISABLED));
     }
 
     @Test
@@ -172,14 +176,11 @@ public class Annotations_getAnnotations_on_Field_Test {
             }
         }
 
-        Method method = SomeDomainObject.class.getMethod("getName");
-        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
+        val method = SomeDomainObject.class.getMethod("getName");
+        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
-        Assert.assertThat(annotations.size(), is(3));
-
-        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.DISABLED));
-        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.ENABLED));
-        Assert.assertThat(annotations.get(2).publishing(), is(Publishing.ENABLED));
+        assertThat(nearestM.isPresent(), is(true));
+        assertThat(nearestM.get().publishing(), is(Publishing.DISABLED));
     }
 
 
@@ -196,14 +197,11 @@ public class Annotations_getAnnotations_on_Field_Test {
             }
         }
 
-        Method method = SomeDomainObject.class.getMethod("getName");
-        final List<Property> annotations = Annotations.getAnnotations(method, Property.class);
+        val method = SomeDomainObject.class.getMethod("getName");
+        val nearestM = _Annotations.synthesizeInherited(method, Property.class);
 
-        Assert.assertThat(annotations.size(), is(3));
-
-        Assert.assertThat(annotations.get(0).publishing(), is(Publishing.ENABLED));
-        Assert.assertThat(annotations.get(1).publishing(), is(Publishing.DISABLED));
-        Assert.assertThat(annotations.get(2).publishing(), is(Publishing.ENABLED));
+        assertThat(nearestM.isPresent(), is(true));
+        assertThat(nearestM.get().publishing(), is(Publishing.ENABLED));
     }
 
 }

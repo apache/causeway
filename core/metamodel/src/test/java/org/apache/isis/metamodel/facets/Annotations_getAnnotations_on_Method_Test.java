@@ -23,13 +23,15 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.Method;
-import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
+import org.apache.isis.commons.internal.reflection._Annotations;
+
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class Annotations_getAnnotations_on_Method_Test {
 
@@ -75,12 +77,11 @@ public class Annotations_getAnnotations_on_Method_Test {
             public void updateName(String name) {}
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        val method = SomeDomainObject.class.getMethod("updateName", String.class);
+        val nearest = _Annotations.synthesizeInherited(method, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -91,12 +92,11 @@ public class Annotations_getAnnotations_on_Method_Test {
             public void updateName(String name) {}
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        val method = SomeDomainObject.class.getMethod("updateName", String.class);
+        val nearest = _Annotations.synthesizeInherited(method, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -107,12 +107,11 @@ public class Annotations_getAnnotations_on_Method_Test {
             public void updateName(String name) {}
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        val method = SomeDomainObject.class.getMethod("updateName", String.class);
+        val nearest = _Annotations.synthesizeInherited(method, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(1));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -124,13 +123,11 @@ public class Annotations_getAnnotations_on_Method_Test {
             public void updateName(String name) {}
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        val method = SomeDomainObject.class.getMethod("updateName", String.class);
+        val nearest = _Annotations.synthesizeInherited(method, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(2));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -142,13 +139,11 @@ public class Annotations_getAnnotations_on_Method_Test {
             public void updateName(String name) {}
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        val method = SomeDomainObject.class.getMethod("updateName", String.class);
+        val nearest = _Annotations.synthesizeInherited(method, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(2));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
     @Test
@@ -161,14 +156,11 @@ public class Annotations_getAnnotations_on_Method_Test {
             public void updateName(String name) {}
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        val method = SomeDomainObject.class.getMethod("updateName", String.class);
+        val nearest = _Annotations.synthesizeInherited(method, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(3));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(2).publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
 
@@ -182,14 +174,11 @@ public class Annotations_getAnnotations_on_Method_Test {
             public void updateName(String name) {}
         }
 
-        Method method = SomeDomainObject.class.getMethod("updateName", String.class);
-        final List<DomainObj> annotations = Annotations.getAnnotations(method, DomainObj.class);
+        val method = SomeDomainObject.class.getMethod("updateName", String.class);
+        val nearest = _Annotations.synthesizeInherited(method, DomainObj.class);
 
-        Assert.assertThat(annotations.size(), is(3));
-
-        Assert.assertThat(annotations.get(0).publishng(), is(DomainObj.Publishng.YES));
-        Assert.assertThat(annotations.get(1).publishng(), is(DomainObj.Publishng.NO));
-        Assert.assertThat(annotations.get(2).publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
 }

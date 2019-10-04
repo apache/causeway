@@ -199,6 +199,24 @@ public final class _Strings {
         }
         return Character.toUpperCase(input.charAt(0)) + input.substring(1);
     }
+    
+    /**
+     * Converts the first character in {@code input} to lower case using the rules of the default locale.
+     * @param input
+     * @return null if {@code input} is null
+     */
+    public static String decapitalize(@Nullable final String input) {
+        if(input==null) {
+            return null;
+        }
+        if (input.length() == 0) {
+            return input;
+        }
+        if (input.length() == 1) {
+            return input.toLowerCase();
+        }
+        return Character.toLowerCase(input.charAt(0)) + input.substring(1);
+    }
 
     // -- SPECIAL UNARY OPERATORS
 
