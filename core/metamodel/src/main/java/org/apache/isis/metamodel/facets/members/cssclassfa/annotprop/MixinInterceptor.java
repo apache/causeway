@@ -20,12 +20,12 @@
 package org.apache.isis.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.metamodel.facets.Annotations;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract;
+
+import lombok.val;
 
 /**
  * To solve <a href="https://issues.apache.org/jira/browse/ISIS-1743">ISIS-1743</a>.<br/>
@@ -43,15 +43,15 @@ class MixinInterceptor {
      */
     static String intendedNameOf(Method method) {
 
-        final Class<?> declaringClass = method.getDeclaringClass();
-        final List<Mixin> mixins = Annotations.getAnnotations(declaringClass, Mixin.class);
-        final Optional<Mixin> mixinIfAny = mixins.stream().findFirst();
+        val declaringClass = method.getDeclaringClass();
+        val mixinIfAny = _Annotations.findNearestAnnotation(declaringClass, Mixin.class);
 
         if(mixinIfAny.isPresent()) {
-            final String methodName = method.getName();
-            final String mixinAnnotMethodName = mixinIfAny.get().method();
+            val methodName = method.getName();
+            val mixinAnnotMethodName = mixinIfAny.get().method();
             if(mixinAnnotMethodName.equals(methodName)) {
-                final String mixinMethodName = ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
+                val mixinMethodName = 
+                        ObjectMemberAbstract.deriveMemberNameFrom(method.getDeclaringClass().getName());
                 if(mixinMethodName!=null) {
                     return mixinMethodName;
                 }

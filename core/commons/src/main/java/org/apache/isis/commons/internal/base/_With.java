@@ -214,7 +214,7 @@ public final class _With<T> {
      */
     public static <T> T requires(@Nullable T obj, String paramName) {
         if (obj == null) {
-            throw new NullPointerException(String.format("Parameter '%s' is required to be present (not null).", paramName));
+            throw new NullPointerException(String.format("Parameter/Field '%s' is required to be present (not null).", paramName));
         }
         return obj;
     }
@@ -231,10 +231,10 @@ public final class _With<T> {
      */
     public static String requiresNotEmpty(@Nullable String obj, String paramName) {
         if (obj == null) {
-            throw new NullPointerException(String.format("Parameter '%s' is required to be present (not null).", paramName));
+            throw new NullPointerException(String.format("Parameter/Field '%s' is required to be present (not null).", paramName));
         }
         if (obj.length()==0) {
-            throw new IllegalArgumentException(String.format("Parameter '%s' is required to be present and not empty.", paramName));
+            throw new IllegalArgumentException(String.format("Parameter/Field '%s' is required to be present and not empty.", paramName));
         }
         return obj;
     }

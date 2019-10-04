@@ -42,6 +42,22 @@ import lombok.val;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _Annotations {
     
+    
+    /**
+     * Optionally returns the 'nearest' annotation of given type based on presence.
+     * 
+     * @param <A>
+     * @param annotatedElement
+     * @param annotationType
+     * @return non-null
+     */
+    public static <A extends Annotation> Optional<A> findNearestAnnotation(
+            Class<?> annotatedElement, 
+            Class<A> annotationType) {
+        //XXX if synthesize has got runtime performance, than we simply us it here
+        return synthesize(annotatedElement, annotationType);
+    }
+    
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
@@ -135,7 +151,7 @@ public final class _Annotations {
             Class<E> enumType) {
         return getEnum(attributeName, annotatedElement, annotationType, enumType, DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY);
     }   
-
+    
     // -- BEHAVIOR
     
     public final static AttributeAcceptStrategy DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY = 
@@ -164,6 +180,8 @@ public final class _Annotations {
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
         return collected;
     }
+
+
     
     
     
