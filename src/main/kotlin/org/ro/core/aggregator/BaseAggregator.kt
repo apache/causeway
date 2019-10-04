@@ -19,11 +19,8 @@ abstract class BaseAggregator : Aggregator {
         var href: String?
         for (l in links) {
             href = l.href
-            if (href.isNotEmpty()) {
-                //can be "object-layout" >= 1.16
-                if (href.endsWith("layout")) {
-                    return l
-                }
+            if (href.isNotEmpty() && href.endsWith("layout")) {
+                return l
             }
         }
         return null

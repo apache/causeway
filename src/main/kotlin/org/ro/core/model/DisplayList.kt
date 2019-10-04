@@ -1,13 +1,12 @@
 package org.ro.core.model
 
-import kotlinx.serialization.Serializable
 import org.ro.layout.Layout
+import org.ro.org.ro.core.model.BaseDisplayable
 import org.ro.to.Extensions
 import org.ro.to.Property
 import org.ro.to.TObject
 
-@Serializable
-class DisplayList(val title: String) {
+class DisplayList(override val title: String) : BaseDisplayable() {
     val data = mutableListOf<Exposer>()
     var layout: Layout? = null
     val propertyLabels = mutableMapOf<String, String>()
@@ -41,21 +40,6 @@ class DisplayList(val title: String) {
     // Property
     fun addProperty(property: Property) {
         properties.add(property)
-    }
-
-    fun getMembers(): Map<String, String> {
-        val members = mutableMapOf<String, String>()
-        console.log(this)
-        if (layout != null) {
-            for (p in properties) {
-                val key = p.id
-                val columnTitle = propertyLabels.get(key)
-                if (columnTitle != null) {
-                    members.put(columnTitle, key)
-                }
-            }
-        }
-        return members
     }
 
 }

@@ -3,6 +3,9 @@ package org.ro.core
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
+import org.ro.core.model.DisplayObject
+import org.ro.org.ro.core.model.BaseDisplayable
+import org.ro.org.ro.ui.kv.RoDisplay
 import org.ro.ui.RoMenuBar
 import org.ro.ui.RoStatusBar
 import org.ro.ui.RoView
@@ -57,15 +60,22 @@ object UiManager {
        // }
     }
 
-    fun handleView(displayList: DisplayList) {
+    fun createListView(displayList: DisplayList) {
         val title: String = extractTitle(displayList)
         val panel = RoTable(displayList)
         add(title, panel)
         displayList.isRendered = true
     }
 
-    private fun extractTitle(displayList: DisplayList): String {
-        val strList = displayList.title.split("/")
+    fun createObjectView(displayObject: DisplayObject) {
+        val title: String = extractTitle(displayObject)
+        val panel = RoDisplay(displayObject)
+        add(title, panel)
+        displayObject.isRendered = true
+    }
+
+    private fun extractTitle(displayable: BaseDisplayable): String {
+        val strList = displayable.title.split("/")
         val len = strList.size
         return strList.get(len - 2)
     }

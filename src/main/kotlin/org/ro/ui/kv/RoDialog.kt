@@ -50,7 +50,10 @@ class RoDialog(
                     "Select" -> {
                         @Suppress("UNCHECKED_CAST")
                         val list = fi.content as List<StringPair>
-                        val preSelectedValue = list.first().first
+                        var preSelectedValue: String? = null
+                        if (list.isNotEmpty()) {
+                            preSelectedValue = list.first().first
+                        }
                         add(Select(label = fi.label, options = list, value = preSelectedValue))
                     }
                 }

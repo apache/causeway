@@ -34,7 +34,7 @@ class ListAggregatorTest : IntegrationTest() {
                 it.rel == RelType.DESCRIBEDBY.type
             }
             val actObs = pLe.aggregator as ListAggregator
-            val dl = obs.list
+            val dl = obs.dsp
             val property = pdLe.getObj() as Property
             val propertyLabels = dl.propertyLabels
             val lbl = propertyLabels.get(property.id)!!
@@ -42,7 +42,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertEquals("className", p.id) //1
             assertNotNull(descLink)                  //2
             assertEquals(obs, actObs)              //3
-            assertNotNull(actObs.list.layout)         // 4
+            assertNotNull(actObs.dsp.layout)         // 4
             assertEquals(pdLe.aggregator, layoutLe.aggregator) // 5
             assertNotNull(dl.layout) // 6
             assertTrue(propertyLabels.size > 0)   // 7
@@ -60,7 +60,7 @@ class ListAggregatorTest : IntegrationTest() {
             mockResponse(SO_LIST_ALL, obs)
             mockResponse(SO_0, obs)
             // then
-            val ol = obs.list
+            val ol = obs.dsp
             assertNotNull(ol)
             assertEquals(1, ol.data.size)
         }

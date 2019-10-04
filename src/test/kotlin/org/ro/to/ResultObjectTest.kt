@@ -12,16 +12,16 @@ class ResultObjectTest {
     @Test
     fun testActionSimpleObjectsCreate() {
         val jsonStr = ACTION_SO_CREATE.str
-        val ir = ResultObjectHandler().parse(jsonStr) as ResultObject
-        val links = ir.links
+        val ro = ResultObjectHandler().parse(jsonStr) as ResultObject
+        val links = ro.links
         assertEquals(0, links.size)
 
-        val result = ir.result!!
+        val ror = ro.result!!
 
-        val resLinks = result.links
+        val resLinks = ror.links
         assertEquals(4, resLinks.size)
 
-        val title = result.title
+        val title = ror.title
         assertEquals("Object: Beutlin", title)
     }
 

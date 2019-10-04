@@ -1,6 +1,5 @@
 package org.ro.core.aggregator
 
-import kotlinx.serialization.Serializable
 import org.ro.core.UiManager
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
@@ -17,12 +16,12 @@ import org.ro.to.TObject
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
-@Serializable
+//@Serializable
 class ListAggregator(val actionTitle: String) : BaseAggregator() {
-    var list: DisplayList
+    var dsp: DisplayList
 
     init {
-        list = DisplayList(actionTitle)
+        dsp = DisplayList(actionTitle)
     }
 
     override fun update(logEntry: LogEntry) {
@@ -36,8 +35,8 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (list.canBeDisplayed()) {
-            UiManager.handleView(list)
+        if (dsp.canBeDisplayed()) {
+            UiManager.createListView(dsp)
         }
     }
 
@@ -50,7 +49,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleObject(obj: TObject) {
-        list.addData(obj)
+        dsp.addData(obj)
         val l = obj.getLayoutLink()
         if (l != null) {
             invoke(l)
@@ -58,7 +57,7 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
-        list.layout = layout
+        dsp.layout = layout
         val pls = layout.properties
         for (pl in pls) {
             val l = pl.link!!
@@ -68,9 +67,9 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
 
     private fun handleProperty(p: Property) {
         if (p.isPropertyDescription()) {
-            list.addPropertyLabel(p)
+            dsp.addPropertyLabel(p)
         } else {
-            list.addProperty(p)
+            dsp.addProperty(p)
             val l = p.descriptionLink()!!
             invoke(l)
         }
