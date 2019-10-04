@@ -1,6 +1,6 @@
-* xref:about.adoc[Classes, Methods & Schema]
+* xref:applib:cms:about.adoc[Classes & Methods]
 
-** xref:methods.adoc[Methods]
-** xref:classes.adoc[Classes]
+** xref:applib:cms:methods.adoc[Methods]
+** xref:applib:cms:classes.adoc[Classes]
 
 

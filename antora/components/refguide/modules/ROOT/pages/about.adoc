@@ -5,6 +5,8 @@ The reference guides are:
 
 * xref:applib:ant:about.adoc[Annotations]
 * xref:applib:svc:about.adoc[Domain Services]
-* xref:cfg:ROOT:about.adoc[Configuration Properties]
-* xref:cms:ROOT:about.adoc[Classes, Methods and Schema]
+* xref:applib:cms:about.adoc[Classes & Methods]
+* xref:schema:ROOT:about.adoc[Schemas]
+* xref:cfg:ROOT:about.adoc[Configuration]
+
 

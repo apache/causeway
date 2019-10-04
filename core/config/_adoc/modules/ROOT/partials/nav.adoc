@@ -1,4 +1,4 @@
-* xref:cfg:ROOT:about.adoc[Core Config Properties]
+* xref:cfg:ROOT:about.adoc[Configuration]
 
 ** xref:cfg:ROOT:deployment-types.adoc[Deployment Types]
 ** xref:cfg:ROOT:configuration-files.adoc[Configuration Files]
