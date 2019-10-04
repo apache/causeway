@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.param.parameter.maxlen;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -29,13 +29,12 @@ import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstrac
 public class MaxLengthFacetForParameterAnnotation extends MaxLengthFacetAbstract {
 
     public static MaxLengthFacet create(
-            final List<Parameter> parameters,
+            final Optional<Parameter> parameterIfAny,
             final FacetHolder holder) {
 
-        return parameters.stream()
+        return parameterIfAny
                 .map(Parameter::maxLength)
                 .filter(maxLength -> maxLength != -1)
-                .findFirst()
                 .map(maxLength -> new MaxLengthFacetForParameterAnnotation(maxLength, holder))
                 .orElse(null);
     }

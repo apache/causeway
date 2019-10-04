@@ -596,6 +596,7 @@ public final class Annotations  {
      *
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
+     * @deprecated use {@link _Annotations} instead
      */
     public static <T extends Annotation> List<T> getAnnotations(
             final Method method,

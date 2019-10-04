@@ -26,6 +26,8 @@ import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 
+import lombok.val;
+
 public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends FacetFactoryAbstract {
 
     public ActionParameterChoicesFacetDerivedFromChoicesFacetFactory() {
@@ -34,7 +36,8 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final Class<?> paramType = processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
+        
+        val paramType = processParameterContext.getParameterType();
 
         if(!getSpecificationLoader().loadSpecification(paramType).containsDoOpFacet(ChoicesFacet.class)) {
             return;

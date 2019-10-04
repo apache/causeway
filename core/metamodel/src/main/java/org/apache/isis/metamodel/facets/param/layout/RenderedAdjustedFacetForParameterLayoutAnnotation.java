@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.param.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RenderDay;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.objectvalue.renderedadjusted.RenderedAdj
 public class RenderedAdjustedFacetForParameterLayoutAnnotation extends RenderedAdjustedFacetAbstract {
 
     public static RenderedAdjustedFacet create(
-            final List<ParameterLayout> parameterLayouts,
+            final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
-        return parameterLayouts.stream()
+        return parameterLayoutIfAny
                 .map(ParameterLayout::renderDay)
                 .filter(renderDay -> renderDay != RenderDay.NOT_SPECIFIED)
-                .findFirst()
                 .map(renderDay -> {
                     switch (renderDay) {
                     case AS_DAY:

@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.param.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -29,13 +29,12 @@ import org.apache.isis.metamodel.facets.objectvalue.multiline.MultiLineFacetAbst
 public class MultiLineFacetForParameterLayoutAnnotation extends MultiLineFacetAbstract {
 
     public static MultiLineFacet create(
-            final List<ParameterLayout> parameterLayouts,
+            final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
-        return parameterLayouts.stream()
+        return parameterLayoutIfAny
                 .map(ParameterLayout::multiLine)
                 .filter(multiLine -> multiLine != -1)
-                .findFirst()
                 .map(multiLine -> new MultiLineFacetForParameterLayoutAnnotation(multiLine, false, holder))
                 .orElse(null);
     }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.param.parameter.regex;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Strings;
@@ -33,7 +33,7 @@ public class RegExFacetForPatternAnnotationOnParameter extends RegExFacetAbstrac
     private final Pattern pattern;
 
     public static RegExFacet create(
-            final List<javax.validation.constraints.Pattern> patterns,
+            final Optional<javax.validation.constraints.Pattern> patternIfAny,
             final Class<?> parameterType,
             final FacetHolder holder) {
 
@@ -41,9 +41,8 @@ public class RegExFacetForPatternAnnotationOnParameter extends RegExFacetAbstrac
             return null;
         }
 
-        return patterns.stream()
+        return patternIfAny
                 .filter(pattern -> _Strings.emptyToNull(pattern.regexp()) != null)
-                .findFirst()
                 .map(pattern ->
                 new RegExFacetForPatternAnnotationOnParameter(
                         pattern.regexp(), pattern.flags(), pattern.message(), holder))

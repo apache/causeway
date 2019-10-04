@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.param.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,12 +30,11 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
 
     public static NamedFacet create(
-            final List<ParameterLayout> parameterLayouts,
+            final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
-        return parameterLayouts.stream()
+        return parameterLayoutIfAny
                 .filter(parameterLayout -> _Strings.emptyToNull(parameterLayout.named()) != null)
-                .findFirst()
                 .map(parameterLayout -> new NamedFacetForParameterLayoutAnnotation(
                         parameterLayout.named(), parameterLayout.namedEscaped(), holder))
                 .orElse(null);

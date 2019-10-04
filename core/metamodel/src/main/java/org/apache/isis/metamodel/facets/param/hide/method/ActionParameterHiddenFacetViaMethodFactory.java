@@ -54,14 +54,14 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
 
         final Class<?> cls = processParameterContext.getCls();
         final Method actionMethod = processParameterContext.getMethod();
-        final int param = processParameterContext.getParamNum();
+        final int paramNum = processParameterContext.getParamNum();
         final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
 
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final List<Class<?>> paramTypes = ListExtensions.mutableCopy(actionMethod.getParameterTypes());
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
-        final String hideName = MethodLiteralConstants.HIDE_PREFIX + param + capitalizedName;
+        final String hideName = MethodLiteralConstants.HIDE_PREFIX + paramNum + capitalizedName;
 
         final int numParamTypes = paramTypes.size();
 

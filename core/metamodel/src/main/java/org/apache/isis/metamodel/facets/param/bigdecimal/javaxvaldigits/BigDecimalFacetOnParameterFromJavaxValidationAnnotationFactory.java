@@ -18,16 +18,13 @@
  */
 package org.apache.isis.metamodel.facets.param.bigdecimal.javaxvaldigits;
 
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
@@ -40,17 +37,15 @@ public class BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory exte
     @Override
     public void processParams(ProcessParameterContext processParameterContext) {
 
-        final Method method = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-
-        if(BigDecimal.class != method.getParameterTypes()[paramNum]) {
+        if(BigDecimal.class != processParameterContext.getParameterType()) {
             return;
         }
 
-        final List<Digits> digitsAnnots = Annotations.getAnnotations(method, paramNum, Digits.class);
-        if(digitsAnnots.size() > 0) {
-            FacetUtil.addFacet(create(digitsAnnots.get(0), processParameterContext.getFacetHolder()));
-        }
+        processParameterContext.synthesizeOnParameter(Digits.class)
+        .ifPresent(digits->{
+            FacetUtil.addFacet(create(digits, processParameterContext.getFacetHolder()));
+        });
+        
     }
 
     private BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {

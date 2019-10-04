@@ -23,9 +23,10 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory extends FacetFactoryAbstract {
 
@@ -35,8 +36,8 @@ public class TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory extends Fa
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final Class<?> type = processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
-        final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
+        val type = processParameterContext.getParameterType();
+        val facetHolder = processParameterContext.getFacetHolder();
         addFacetDerivedFromTypeIfPresent(facetHolder, type);
     }
 

@@ -21,10 +21,12 @@ package org.apache.isis.metamodel.facets;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -224,7 +226,11 @@ public interface FacetFactory {
                 final int paramNum,
                 final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
+            
             super(cls, method, methodRemover, facetedMethodParameter);
+            if(paramNum>=method.getParameterCount()) {
+                throw _Exceptions.unrecoverable("invalid ProcessParameterContext");
+            }
             this.paramNum = paramNum;
         }
 
@@ -237,7 +243,21 @@ public interface FacetFactory {
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnParameter(Class<A> annotationType) {
-            return _Annotations.synthesizeInherited(super.method.getParameters()[paramNum], annotationType);
+            return _Annotations.synthesizeInherited(getParameter(), annotationType);
+        }
+
+        /**
+         * @since 2.0
+         */
+        public Class<?> getParameterType() {
+            return super.method.getParameterTypes()[paramNum];
+        }
+        
+        /**
+         * @since 2.0
+         */
+        public Parameter getParameter() {
+            return super.method.getParameters()[paramNum];
         }
     }
 

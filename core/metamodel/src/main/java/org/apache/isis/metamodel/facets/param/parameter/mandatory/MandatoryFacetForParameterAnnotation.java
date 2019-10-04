@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.param.parameter.mandatory;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -34,7 +32,7 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
     }
 
     public static MandatoryFacet create(
-            final List<Parameter> parameters,
+            final java.util.Optional<Parameter> parameterIfAny,
             final Class<?> parameterType,
             final FacetHolder holder) {
 
@@ -43,10 +41,9 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
         }
 
 
-        return parameters.stream()
+        return parameterIfAny
                 .map(Parameter::optionality)
                 .filter(optionality -> optionality != Optionality.NOT_SPECIFIED)
-                .findFirst()
                 .map(optionality -> {
                     switch (optionality) {
                     case DEFAULT:

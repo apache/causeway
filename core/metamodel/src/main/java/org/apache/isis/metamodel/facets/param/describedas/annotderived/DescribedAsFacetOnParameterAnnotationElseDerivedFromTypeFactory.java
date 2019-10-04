@@ -25,6 +25,8 @@ import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public class DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory extends FacetFactoryAbstract {
 
     public DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory() {
@@ -34,8 +36,7 @@ public class DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory ext
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
 
-        final int paramNum = processParameterContext.getParamNum();
-        final Class<?> parameterType = processParameterContext.getMethod().getParameterTypes()[paramNum];
+        val parameterType = processParameterContext.getParameterType();
 
         // fall back to a description on the parameter's type, if
         // available

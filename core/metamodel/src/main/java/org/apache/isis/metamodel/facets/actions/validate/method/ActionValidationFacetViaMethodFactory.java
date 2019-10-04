@@ -33,6 +33,8 @@ import org.apache.isis.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 
+import lombok.val;
+
 /**
  * Sets up {@link ActionValidationFacet}.
  */
@@ -88,18 +90,19 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
 
         final Class<?> cls = processParameterContext.getCls();
         final Method actionMethod = processParameterContext.getMethod();
-        final int param = processParameterContext.getParamNum();
+        final int paramNum = processParameterContext.getParamNum();
+        val paramType = processParameterContext.getParameterType();
         final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
 
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final Class<?>[] paramTypes = actionMethod.getParameterTypes();
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
-        final String validateName = MethodLiteralConstants.VALIDATE_PREFIX + param + capitalizedName;
+        final String validateName = MethodLiteralConstants.VALIDATE_PREFIX + paramNum + capitalizedName;
         final Method validateMethod = MethodFinderUtils.findMethod_returningText(
                 cls, onClass,
                 validateName,
-                new Class<?>[]{paramTypes[param]});
+                new Class<?>[]{paramType});
         if (validateMethod == null) {
             return;
         }

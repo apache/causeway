@@ -19,9 +19,6 @@
 
 package org.apache.isis.metamodel.facets.param.parameter;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
@@ -29,9 +26,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.isis.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
@@ -43,6 +38,8 @@ import org.apache.isis.metamodel.facets.param.parameter.regex.RegExFacetForPatte
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 
+import lombok.val;
+
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
@@ -53,15 +50,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-
-        final Method method = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-
-        final Class<?>[] parameterTypes = method.getParameterTypes();
-        if (paramNum >= parameterTypes.length) {
-            return; // ignore
-        }
-
         processParamsMaxLength(processParameterContext);
         processParamsMustSatisfy(processParameterContext);
         processParamsRegEx(processParameterContext);
@@ -71,61 +59,50 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
     void processParamsMaxLength(final ProcessParameterContext processParameterContext) {
 
-        final Method method = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
+        val holder = processParameterContext.getFacetHolder();
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        FacetUtil.addFacet(MaxLengthFacetForParameterAnnotation.create(parameters, holder));
+        FacetUtil.addFacet(MaxLengthFacetForParameterAnnotation.create(parameterIfAny, holder));
     }
 
     void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
 
-        final Method method = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
+        val holder = processParameterContext.getFacetHolder();
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         FacetUtil.addFacet(
-                MustSatisfySpecificationFacetForParameterAnnotation.create(parameters, holder, getServiceInjector()));
+                MustSatisfySpecificationFacetForParameterAnnotation.create(parameterIfAny, holder, getServiceInjector()));
     }
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {
 
-        final Method method = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final Class<?>[] parameterTypes = method.getParameterTypes();
-        final Class<?> parameterType = parameterTypes[paramNum];
+        val holder = processParameterContext.getFacetHolder();
+        val parameterType = processParameterContext.getParameterType();
 
-
-        final List<Pattern> patterns = Annotations.getAnnotations(method, paramNum, Pattern.class);
+        val patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
         FacetUtil.addFacet(
-                RegExFacetForPatternAnnotationOnParameter.create(patterns, parameterType, holder));
+                RegExFacetForPatternAnnotationOnParameter.create(patternIfAny, parameterType, holder));
 
-        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
         FacetUtil.addFacet(
-                RegExFacetForParameterAnnotation.create(parameters, parameterType, holder));
+                RegExFacetForParameterAnnotation.create(parameterIfAny, parameterType, holder));
     }
 
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
 
-        final Method method = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final Class<?>[] parameterTypes = method.getParameterTypes();
-        final Class<?> parameterType = parameterTypes[paramNum];
+        val holder = processParameterContext.getFacetHolder();
+        val parameterType = processParameterContext.getParameterType();
 
-        final List<Nullable> nullabilities = Annotations.getAnnotations(method, paramNum, Nullable.class);
+        val nullableIfAny = processParameterContext.synthesizeOnParameter(Nullable.class);
         final MandatoryFacet facet =
-                MandatoryFacetInvertedByNullableAnnotationOnParameter.create(nullabilities, parameterType, holder);
+                MandatoryFacetInvertedByNullableAnnotationOnParameter.create(nullableIfAny, parameterType, holder);
         FacetUtil.addFacet(facet);
         conflictingOptionalityValidator.flagIfConflict(
                 facet, "Conflicting @Nullable with other optionality annotation");
 
-        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
         final MandatoryFacet mandatoryFacet =
-                MandatoryFacetForParameterAnnotation.create(parameters, parameterType, holder);
+                MandatoryFacetForParameterAnnotation.create(parameterIfAny, parameterType, holder);
         FacetUtil.addFacet(mandatoryFacet);
         conflictingOptionalityValidator.flagIfConflict(
                 mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation");
@@ -134,12 +111,10 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {
 
-        final Method method = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
+        val holder = processParameterContext.getFacetHolder();
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        FacetUtil.addFacet(FileAcceptFacetForParameterAnnotation.create(parameters, holder));
+        FacetUtil.addFacet(FileAcceptFacetForParameterAnnotation.create(parameterIfAny, holder));
     }
 
 

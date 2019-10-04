@@ -51,11 +51,8 @@ public class ParameterNameFacetFactoryUsingReflection extends FacetFactoryAbstra
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        val method = processParameterContext.getMethod();
-        val paramNum = processParameterContext.getParamNum();
 
-        val parameters = method.getParameters();
-        val parameter = parameters[paramNum];
+        val parameter = processParameterContext.getParameter();
         val parameterName = parameter.getName();
 
         // if not compiled with -parameters flag, then ignore
