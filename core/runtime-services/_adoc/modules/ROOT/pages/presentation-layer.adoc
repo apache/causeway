@@ -24,7 +24,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:fis:ROOT:presentation-layer/ContentNegotiationService.adoc[`o.a.i.v.ro.` +
+|xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`o.a.i.v.ro.` +
 `rendering.service.conneg.` +
 `ContentNegotiationService`]
 |Encodes the algorithm that delegates to any registered xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`]s.
@@ -35,10 +35,10 @@ Impl'n (g: a:)
 |
 
 
-|xref:fis:ROOT:presentation-layer/RepresentationService.adoc[`o.a.i.v.ro.` +
+|xref:runtime-services:ROOT:presentation-layer/RepresentationService.adoc[`o.a.i.v.ro.` +
 `rendering.service.` +
 `RepresentationService`]
-|Generates the representations, delegating to any registered xref:fis:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`]s.
+|Generates the representations, delegating to any registered xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`]s.
 |`RepresentationService-` +
 `ForRestfulObjects` +
 ``o.a.i.core`` +

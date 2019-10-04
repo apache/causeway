@@ -122,9 +122,9 @@ To support these use cases several other services are involved:
 
 * the xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
 
-* the (internal) xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
+* the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
+* the (internal) xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 
 * the xref:applib:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 

@@ -10,7 +10,7 @@ Its intended use is to support multiple versions of a REST API, where the respon
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:fis:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
 == API & Implementation

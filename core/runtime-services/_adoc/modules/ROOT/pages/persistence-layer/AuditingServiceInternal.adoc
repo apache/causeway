@@ -21,7 +21,7 @@ public class AuditingServiceInternal {
 }
 ----
 <1> minor performance optimization as to whether any auditing services are actually enabled; checks to see if any xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`] are enabled.
-<2> uses the xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s).
+<2> uses the xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s).
 
 The service implementation is `o.a.i.c.r.s.auditing.AuditingServiceInternal`.
 
@@ -34,7 +34,7 @@ Apache Isis' default implementation of `AuditingServiceInternal` class is automa
 
 == Related Classes
 
-The service delegates between the (internal) xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service  to the configured xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s).
+The service delegates between the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service  to the configured xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s).
 If no such service(s) are configured, then _this_ service is in effect a no-op.
 
-The (internal) xref:fis:ROOT:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] performs a similar function for the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.
+The (internal) xref:runtime-services:ROOT:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] performs a similar function for the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.

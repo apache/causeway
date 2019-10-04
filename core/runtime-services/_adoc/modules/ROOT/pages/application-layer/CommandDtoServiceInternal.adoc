@@ -51,5 +51,5 @@ The SPI is implemented by `o.a.i.c.r.s.command.CommandDtoServiceInternalServiceD
 == Related Services
 
 The design of this service is similar to that of
-xref:fis:ROOT:application-layer/InteractionDtoServiceInternal.adoc[`InteractionDtoServiceInternal`], used to create the
+xref:runtime-services:ROOT:application-layer/InteractionDtoServiceInternal.adoc[`InteractionDtoServiceInternal`], used to create the
 `MemberExecutionDto` (from the xref:schema:ROOT:ixn.adoc["ixn" schema]).

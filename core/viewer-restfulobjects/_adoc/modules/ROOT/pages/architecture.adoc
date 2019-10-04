@@ -15,7 +15,7 @@ the `Content-Type` header which the client can use to know how to process the re
 
 * `RepresentationService` +
 +
-The xref:fis:ROOT:presentation-layer/RepresentationService.adoc[`RepresentationService`] is an SPI domain service (plugin-point)
+The xref:runtime-services:ROOT:presentation-layer/RepresentationService.adoc[`RepresentationService`] is an SPI domain service (plugin-point)
 that allows an arbitrary representation to be generated for any of the resources defined in the RO spec. +
 +
 Normally this SPI service need not be replaced, because the default implementation
@@ -27,7 +27,7 @@ is able to handle the request (per the chain of responsibliity pattern).
 * `ContentNegotiationService` +
 +
 As noted above, there can be multiple implementations of the
-xref:fis:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`], each one handling a particular
+xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`], each one handling a particular
 HTTP `Accept` header.  If the implementation does not recognize the value of the header, if can simply return `null`. +
 +
 The framework provides a number of implementations; an implementation that handles the

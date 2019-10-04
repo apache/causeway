@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 The `MetricsService` is a request-scoped domain service that hooks into the JDO/DataNucleus ObjectStore to provide a number of counters relating to numbers of object loaded, dirtied etc.
 
-The service is used by the xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] domain service (to populate the DTO held by the `Interaction.Execution`) and also by the (internal) xref:fis:ROOT:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] domain service (to populate the `PublishedObjects` class.
+The service is used by the xref:applib:svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] domain service (to populate the DTO held by the `Interaction.Execution`) and also by the (internal) xref:runtime-services:ROOT:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] domain service (to populate the `PublishedObjects` class.
 
 
 == API & Implementation

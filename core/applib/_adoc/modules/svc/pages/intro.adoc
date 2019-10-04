@@ -35,7 +35,7 @@ Importantly, this also minimizes the coupling between your code and Apache Isis,
 The framework also defines a number of "internal" services.
 These are not part of the framework's formal API, in that they use classes that are outside of the applib.
 These internal framework services should be thought of as part of the internal design of the framework, and are liable to change from release to release.
-The internal framework services are documented in the xref:fis:ROOT:about.adoc[Framework Internal Services] guide.
+The internal framework services are documented in the xref:runtime-services:ROOT:about.adoc[Framework Internal Services] guide.
 
 
 
@@ -172,15 +172,15 @@ Whether this occurs depends on whether the action/property has been annotated (u
 +
 (Note that susbcribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
-* As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service.
+* As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service.
 Metrics as to which objects are merely loaded into memory are also captured using the xref:applib:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
-xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:applib:ant:Action.adoc#publishing[`@Action#publishing()`] or xref:applib:ant:Property.adoc#publishing[`@Property#publishing()`]).
+xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:applib:ant:Action.adoc#publishing[`@Action#publishing()`] or xref:applib:ant:Property.adoc#publishing[`@Property#publishing()`]).
 +
 The internal service delegates in turn to any registered xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`]s (there may be more than one).
 
-* At the end of each transaction, details of all changed objects are published, again through the (internal) xref:fis:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
+* At the end of each transaction, details of all changed objects are published, again through the (internal) xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
 Only domain objects specified to be published with xref:applib:ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] are published. +
 +
 [NOTE]
@@ -188,7 +188,7 @@ Only domain objects specified to be published with xref:applib:ant:DomainObject.
 Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:applib:svc:application-layer-api/TransactionService.adoc[`TransactionService`].
 ====
 
-* Also at the end of each transaction, details of all changed properties are passed to any registered xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:fis:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] domain service.
+* Also at the end of each transaction, details of all changed properties are passed to any registered xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:runtime-services:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] domain service.
 
 Implementations of xref:applib:svc:application-layer-spi/CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:schema:ROOT:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).

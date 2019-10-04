@@ -24,23 +24,23 @@ Impl'n (g: a:)
 
 
 
-|xref:fis:ROOT:persistence-layer/AuditingServiceInternal.adoc[`o.a.i.c.r.s.auditing.` +
+|xref:runtime-services:ROOT:persistence-layer/AuditingServiceInternal.adoc[`o.a.i.c.r.s.auditing.` +
 `AuditingServiceInternal`]
 |Co-ordinates between
-xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] and
-xref:fis:ROOT:spi/AuditerService.adoc[`AuditerService`].
+xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] and
+xref:runtime-services:ROOT:spi/AuditerService.adoc[`AuditerService`].
 |concrete class.
 |
 
 
-|xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`o.a.i.c.r.s.changes.` +
+|xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`o.a.i.c.r.s.changes.` +
 `ChangedObjectsServiceInternal`]
 |Request-scoped service holding objects enlisted into current transaction.
 |concrete class.
 |
 
 
-|xref:fis:ROOT:persistence-layer/PersistenceSessionServiceInternal.adoc[`o.a.i.c.m.s.` +
+|xref:runtime-services:ROOT:persistence-layer/PersistenceSessionServiceInternal.adoc[`o.a.i.c.m.s.` +
 `persistsession.` +
 `PersistenceSessionServiceInternal`]
 |Acts as a facade to the underlying JDO persistence session / database connection.  As such it provides methods for
@@ -51,10 +51,10 @@ querying and for persisting objects.
 |
 
 
-|xref:fis:ROOT:persistence-layer/PublishingServiceInternal.adoc[`o.a.i.c.m.s.publishing.` +
+|xref:runtime-services:ROOT:persistence-layer/PublishingServiceInternal.adoc[`o.a.i.c.m.s.publishing.` +
 `PublishingServiceInternal`]
 |Co-ordinates between
-xref:fis:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] and
+xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] and
 xref:applib:svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] and the SPI services, and the
 xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 |`PublishingService-` +

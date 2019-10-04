@@ -32,7 +32,7 @@ which will run the provided block of code (a `Runnable` or a `Callable`) in a wa
 `UserService#getUser()` will return the specified user (and roles, if specified).
 (If roles are not specified, then the roles of the current user are preserved).
 
-The current user/role reported by the internal xref:fis:ROOT:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`] will also return the specified user/roles.
+The current user/role reported by the internal xref:runtime-services:ROOT:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`] will also return the specified user/roles.
 
 [IMPORTANT]
 ====
@@ -69,7 +69,7 @@ protected void execute(final ExecutionContext ec) {
 
 === ACCESS_ALL_ROLE
 
-When `sudo(...)` is called the "effective user" is reported by both xref:applib:svc:core-domain-api/UserService.adoc[`UserService`] and by xref:fis:ROOT:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`], but does not propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism].
+When `sudo(...)` is called the "effective user" is reported by both xref:applib:svc:core-domain-api/UserService.adoc[`UserService`] and by xref:runtime-services:ROOT:application-layer/AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`], but does not propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism].
 These continue to be evaluated according to the permissions of the current user.
 
 This can be a problem in certain use cases.

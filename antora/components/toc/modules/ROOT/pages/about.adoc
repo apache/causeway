@@ -116,7 +116,7 @@ _for bug reports & feature requests_
 |*xref:toc:ROOT:internal.adoc#implementation[Implementation]*
 
 *  xref:archdesign:ROOT:about.adoc[Architecture & Design]
-*  xref:fis:ROOT:about.adoc[Framework Internal Services]
+*  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
 *  xref:smoketests:ROOT:about.adoc[SmokeTest App]
 
 

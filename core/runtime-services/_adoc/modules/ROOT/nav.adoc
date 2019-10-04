@@ -1,0 +1,20 @@
+* xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
+
+** xref:runtime-services:ROOT:presentation-layer.adoc[Presentation Layer]
+*** xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[ContentNegotiationService]
+*** xref:runtime-services:ROOT:presentation-layer/RepresentationService.adoc[RepresentationService]
+
+** xref:runtime-services:ROOT:application-layer.adoc[Application Layer]
+*** xref:runtime-services:ROOT:application-layer/AuthenticationSessionProvider.adoc[AuthenticationSessionProvider]
+*** xref:runtime-services:ROOT:application-layer/CommandDtoServiceInternal.adoc[CommandDtoServiceInternal]
+*** xref:runtime-services:ROOT:application-layer/InteractionDtoServiceInternal.adoc[InteractionDtoServiceInternal]
+
+** xref:runtime-services:ROOT:persistence-layer.adoc[Persistence Layer]
+*** xref:runtime-services:ROOT:persistence-layer/AuditingServiceInternal.adoc[AuditingServiceInternal]
+*** xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[ChangedObjectsServiceInternal]
+*** xref:runtime-services:ROOT:persistence-layer/PersistenceSessionServiceInternal.adoc[PersistenceSessionServiceInternal]
+*** xref:runtime-services:ROOT:persistence-layer/PublishingServiceInternal.adoc[PublishingServiceInternal]
+
+
+
+

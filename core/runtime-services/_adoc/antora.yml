@@ -1,5 +1,5 @@
-name: fis
-title: "Framework Internal Services"
+name: runtime-services
+title: "Runtime Services"
 version: master
 start_page: ROOT:about.adoc
 nav:

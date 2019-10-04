@@ -201,4 +201,4 @@ To use an alternative implementation, use xref:applib:ant:DomainServiceLayout.ad
 
 The default implementation of `ContentNegotiationService` delegates to xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
 
-The `ContentNegotiationService` is itself called by the (default implementation of) xref:fis:ROOT:presentation-layer/RepresentationService.adoc[`RepresentationService`].
+The `ContentNegotiationService` is itself called by the (default implementation of) xref:runtime-services:ROOT:presentation-layer/RepresentationService.adoc[`RepresentationService`].

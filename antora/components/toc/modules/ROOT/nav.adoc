@@ -97,7 +97,7 @@ _for bug reports & feature requests_
 [external]
 **  xref:archdesign:ROOT:about.adoc[Architecture & Design]
 [external]
-**  xref:fis:ROOT:about.adoc[Framework Internal Services]
+**  xref:runtime-services:ROOT:about.adoc[Framework Internal Services]
 [external]
 **  xref:smoketests:ROOT:about.adoc[SmokeTest App]
 

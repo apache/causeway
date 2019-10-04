@@ -29,7 +29,7 @@ content:
       start_path: antora/components/archdesign
 
     - url: .
-      start_path: core/_adoc-ug
+      start_path: antora/components/userguide
       branches: HEAD
     - url: .
       branches: HEAD
@@ -47,6 +47,10 @@ content:
       branches: HEAD
     - url: .
       start_path: core/schema/_adoc
+      branches: HEAD
+
+    - url: .
+      start_path: core/runtime-services/_adoc
       branches: HEAD
 
     - url: .

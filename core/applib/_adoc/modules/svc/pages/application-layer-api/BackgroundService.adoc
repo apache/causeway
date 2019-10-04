@@ -11,7 +11,7 @@ The `BackgroundService2` is responsible for capturing a memento representing the
 
 The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can capture the action to invoke and its arguments.
 
-This is done using xref:fis:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`].
+This is done using xref:runtime-services:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`].
 
 The persistence delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService2`.
 One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
@@ -115,7 +115,7 @@ The latter is analogous to the way in which the `BackgroundCommandService` persi
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way.
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:applib:svc:application-layer-spi/CommandService.adoc[`CommandService`] and xref:applib:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]).
 
-The xref:fis:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
+The xref:runtime-services:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
 (In earlier versions, xref:applib:svc:integration-api/MementoService.adoc[`MementoService`] was used for this purpose).
 
 
