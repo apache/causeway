@@ -54,14 +54,44 @@ public final class _Annotations {
     public static <A extends Annotation> Optional<A> findNearestAnnotation(
             Class<?> annotatedElement, 
             Class<A> annotationType) {
-        //XXX if synthesize has got runtime performance, than we simply us it here
+        //XXX if synthesize has good runtime performance, than we simply us it here
         return synthesize(annotatedElement, annotationType);
     }
     
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
-     * Does not support attribute inheritance.
+     * Does support attribute inheritance.
+     * 
+     * @param <A>
+     * @param annotatedElement
+     * @param annotationType
+     * @param attributeAcceptStrategy
+     * @return non-null
+     */
+    public static <A extends Annotation> Optional<A> synthesizeInherited(
+            Class<?> annotatedElement, 
+            Class<A> annotationType,
+            AttributeAcceptStrategy attributeAcceptStrategy) {
+        
+        val collected = _Annotations
+                .collect(annotatedElement);
+        
+        if(!collected.isPresent(annotationType)) {
+            return Optional.empty();
+        }
+        
+        val proxy = _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                .createProxy(collected, annotationType, attributeAcceptStrategy);
+        
+        return Optional.of(proxy);
+    }
+    
+    
+    /**
+     * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * <p>
+     * Does NOT support attribute inheritance.
      * 
      * @param <A>
      * @param annotatedElement
@@ -152,6 +182,12 @@ public final class _Annotations {
         return getEnum(attributeName, annotatedElement, annotationType, enumType, DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY);
     }   
     
+    public static <A extends Annotation> Optional<A> synthesizeInherited(
+            Class<?> annotatedElement, 
+            Class<A> annotationType) {
+        return synthesizeInherited(annotatedElement, annotationType, DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY);
+    }
+    
     // -- BEHAVIOR
     
     public final static AttributeAcceptStrategy DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY = 
@@ -159,12 +195,32 @@ public final class _Annotations {
     
     static interface AttributeAcceptStrategy {
         
+        default boolean acceptInt(int value) {
+            return value!=-1;
+        }
+        
         default boolean acceptString(String value) {
             return !_Strings.isNullOrEmpty(value);
         }
         
         default boolean acceptEnum(Enum<?> value) {
             return value != null && !value.name().equals("NOT_SPECIFIED"); 
+        }
+
+        default boolean accept(Object value) {
+            if(value==null) {
+                return false;
+            }
+            if(value instanceof Enum) {
+                return acceptEnum((Enum<?>) value);
+            }
+            if(value instanceof String) {
+                return acceptString((String) value);
+            }
+            if(value instanceof Integer) {
+                return acceptInt((int) value);
+            }
+            return true;
         }
         
     }
@@ -180,9 +236,6 @@ public final class _Annotations {
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
         return collected;
     }
-
-
-    
     
     
 }

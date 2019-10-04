@@ -24,7 +24,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -88,11 +87,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.YES)
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+        val nearest = _Annotations
+                .findNearestAnnotation(SomeDomainObject.class, DomainObj.class);
         
-        assertThat(synthesized.isPresent(), is(true));
-        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -101,11 +100,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @Published
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+        val nearest = _Annotations
+                .findNearestAnnotation(SomeDomainObject.class, DomainObj.class);
 
-        assertThat(synthesized.isPresent(), is(true));
-        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -114,11 +113,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @MetaPublished
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+        val nearest = _Annotations
+                .findNearestAnnotation(SomeDomainObject.class, DomainObj.class);
 
-        assertThat(synthesized.isPresent(), is(true));
-        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -128,11 +127,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @Published
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+        val nearest = _Annotations
+                .findNearestAnnotation(SomeDomainObject.class, DomainObj.class);
 
-        assertThat(synthesized.isPresent(), is(true));
-        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
 
     @Test
@@ -142,11 +141,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @NotPublished // <-- should win over the other
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+        val nearest = _Annotations
+                .findNearestAnnotation(SomeDomainObject.class, DomainObj.class);
 
-        assertThat(synthesized.isPresent(), is(true));
-        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
     @Test
@@ -157,11 +156,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.NO) // <-- should win over the others
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+        val nearest = _Annotations
+                .findNearestAnnotation(SomeDomainObject.class, DomainObj.class);
 
-        assertThat(synthesized.isPresent(), is(true));
-        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
 
@@ -173,11 +172,11 @@ public class Annotations_getAnnotations_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should win over the others
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+        val nearest = _Annotations
+                .findNearestAnnotation(SomeDomainObject.class, DomainObj.class);
 
-        assertThat(synthesized.isPresent(), is(true));
-        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(nearest.isPresent(), is(true));
+        assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
     }
     
     @Test
@@ -200,8 +199,7 @@ public class Annotations_getAnnotations_on_Class_Test {
         assertThat(name.get(), is("foo"));
     }
     
-    @Test @Disabled("unfortunately there is no easy way to plug into synthesizing, "
-            + "to get the desired behavior")
+    @Test
     public void ignore_not_specified() throws Exception {
 
         @MetaPublished
@@ -210,7 +208,7 @@ public class Annotations_getAnnotations_on_Class_Test {
         class SomeDomainObject {}
 
         val synthesized = _Annotations
-                .synthesize(SomeDomainObject.class, DomainObj.class);
+                .synthesizeInherited(SomeDomainObject.class, DomainObj.class);
         
         assertThat(synthesized.isPresent(), is(true));
         assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
