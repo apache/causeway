@@ -22,7 +22,7 @@ In our case we focus on the validation (to determine the nature of the inbound m
 ====
 
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module provides an out-of-the-box solution of this design.
-It provides an implementation of the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], but which simply publishes instances of xref:xref:schema:ROOT:ixn.adoc[`InteractionDto`] to an ActiveMQ queue.
+It provides an implementation of the xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], but which simply publishes instances of xref:schema:ROOT:ixn.adoc[`InteractionDto`] to an ActiveMQ queue.
 Camel (or similar) can then be hooked up to consume these events from this queue, and use a processor to parse the action memento to determine what has changed on the source system.
 Thereafter, a subsequent Camel processor can then call back to the source - via the xref:vro:ROOT:about.adoc[Restful Objects viewer] - to enrich the message with additional details using a DTO.
 

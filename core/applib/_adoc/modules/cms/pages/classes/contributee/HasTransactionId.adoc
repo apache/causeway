@@ -43,7 +43,7 @@ public interface RepresentsInteractionMemberExecution extends HasTransactionId {
 }
 ----
 
-Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:xref:schema:ROOT:ixn[`InteractionDto`]) that has at least one member execution (cf xref:schema:ROOT:about.adoc#ixn/memberExecutionDto.adoc[`memberExecutionDto`]).
+Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:schema:ROOT:ixn[`InteractionDto`]) that has at least one member execution (cf xref:schema:ROOT:about.adoc#ixn/memberExecutionDto.adoc[`memberExecutionDto`]).
 
 If the interaction (almost certainly an action) calls other actions by way of xref:applib:svc:WrapperFactory.adoc[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
 

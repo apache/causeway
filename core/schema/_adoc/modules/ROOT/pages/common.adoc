@@ -59,7 +59,7 @@ If none is specified, then the fully qualified class name will be used.
 <5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.
 In previous versions of the schema the attribute was defaulted to "persistent"; the "persistent" state is assumed if the attribute is omitted.
 <6> Models a list of OIDs.
-This is used by the xref:xref:schema:ROOT:cmd.adoc["cmd" schema] to represent the
+This is used by the xref:schema:ROOT:cmd.adoc["cmd" schema] to represent the
 intention to perform a bulk actions (against a number of selected objects).
 
 In previous versions of the schema the object type and object identifers of `oidDto` were modelled as an element rather than an attribute.
@@ -72,11 +72,11 @@ xref:applib:ant:XmlRootElement.adoc[`@XmlRootElement`]), that reference domain e
 +
 These references are serialized instead into OIDs
 
-* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:xref:schema:ROOT:cmd.adoc["cmd" (command)] schema.
+* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:schema:ROOT:cmd.adoc["cmd" (command)] schema.
 +
 They are also used to represent references to any action arguments/properties that take domain object entities/view models.
 
-* third, as references to the target of an interaction capturing the actual execution of an action invocation or property edit, as described by the xref:xref:schema:ROOT:ixn.adoc["ixn" (interaction)] schema.
+* third, as references to the target of an interaction capturing the actual execution of an action invocation or property edit, as described by the xref:schema:ROOT:ixn.adoc["ixn" (interaction)] schema.
 
 
 == `collectionDto` etc
@@ -170,7 +170,7 @@ This is primarily to save storage space if the resultant XML is persisted as a m
 
 == Ancillary types
 
-The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:xref:schema:ROOT:cmd["cmd"] and xref:schema:ROOT:about.adoc#ixn.adoc["ixn"] schemas.
+The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:schema:ROOT:cmd["cmd"] and xref:schema:ROOT:about.adoc#ixn.adoc["ixn"] schemas.
 
 [source,xml]
 ----
@@ -239,6 +239,6 @@ The common schema also defines a number of ancillary types, used either by the c
 <5> Captures a pair of numbers representing a difference.
 Used for example to capture metrics (number objects modified before and after).
 <6> Whether this command/interaction with a member is invoking an action, or editing a property.
-Used by both the xref:xref:schema:ROOT:cmd["cmd"] and xref:schema:ROOT:about.adoc#ixn.adoc["ixn"] schemas.
+Used by both the xref:schema:ROOT:cmd["cmd"] and xref:schema:ROOT:about.adoc#ixn.adoc["ixn"] schemas.
 <7> Contains a list of OIDs, eg for use in "bulk" actions that apply to multiple targets.
 

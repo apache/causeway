@@ -9,7 +9,7 @@ include::_attributes.adoc[]
 The `CommandExecutorService` domain service is provides the ability to execute a specified `Command`, optionally running the command with the identity of the user captured in that `Command`.
 
 In fact, the service requires that the implementation of the `Command` being executed implements the `CommandWithDto` sub-interface.
-This allows the xref:xref:schema:ROOT:cmd.adoc[`CommandDto`] memento to be extracted, from which the action can be invoked/property edited.
+This allows the xref:schema:ROOT:cmd.adoc[`CommandDto`] memento to be extracted, from which the action can be invoked/property edited.
 
 The primary use case for this service is to allow the replay of commands, eg for regression testing.
 This is implemented by the (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay module].

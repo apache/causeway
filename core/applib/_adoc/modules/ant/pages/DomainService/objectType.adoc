@@ -12,7 +12,7 @@ This can appear in several contexts, including:
 
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
  (see xref:applib:svc:integration-api/BookmarkService.adoc[`BookmarkService`])
-* in the serialization of `OidDto` in the xref:xref:schema:ROOT:cmd[command] and xref:schema:ROOT:about.adoc#ixn.adoc[interaction] schemas
+* in the serialization of `OidDto` in the xref:schema:ROOT:cmd[command] and xref:schema:ROOT:about.adoc#ixn.adoc[interaction] schemas
 * in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
 * in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (specifically, for bookmarked actions)
 

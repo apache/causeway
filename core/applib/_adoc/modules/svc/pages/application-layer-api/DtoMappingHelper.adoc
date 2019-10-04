@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 :page-partial:
 
 
-The `DtoMappingHelper` converts the domain object's internal identifier into a serializable `OidDto` for use in the xref:xref:schema:ROOT:cmd[command] and xref:schema:ROOT:about.adoc#ixn.adoc[interaction] schemas.
+The `DtoMappingHelper` converts the domain object's internal identifier into a serializable `OidDto` for use in the xref:schema:ROOT:cmd[command] and xref:schema:ROOT:about.adoc#ixn.adoc[interaction] schemas.
 
 
 == API and Usage

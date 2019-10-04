@@ -190,7 +190,7 @@ Note that it's possible for there to be more than one transaction per top-level 
 
 * Also at the end of each transaction, details of all changed properties are passed to any registered xref:applib:svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:fis:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] domain service.
 
-Implementations of xref:applib:svc:application-layer-spi/CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:xref:schema:ROOT:cmd.adoc[`cmd.xsd`] schema.
+Implementations of xref:applib:svc:application-layer-spi/CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:schema:ROOT:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
 Similarly, implementations of xref:applib:svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.

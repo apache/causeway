@@ -14,8 +14,8 @@ This page lists the user and reference guides available for developers to create
 
 * xref:applib:ant:about.adoc[Annotations]
 * xref:applib:svc:about.adoc[Domain Services]
-* xref:rg:cfg:about.adoc[Core Configuration Properties]
-* xref:rg:cms:about.adoc[Classes, Methods & Schemas]
+* xref:cfg:ROOT:about.adoc[Core Configuration Properties]
+* xref:cms:ROOT:about.adoc[Classes, Methods & Schemas]
 
 == Testing & Prototyping
 

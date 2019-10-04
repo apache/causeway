@@ -23,7 +23,7 @@ In contrast, if the `@ViewModel` annotation is used then only the state of the p
 If using `ViewModel` interface then arbitrary state (including that of collections), however the programmer must write all the code by hand
 
 The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated with the xref:applib:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], using the framework-provided `PersistentEntityAdapter`.
-This adapter converts any references to such domain entities using the `oidDto` complex type (as defined by the Apache Isis xref:xref:schema:ROOT:common.adoc[common schema]): the object's type and its identifier.
+This adapter converts any references to such domain entities using the `oidDto` complex type (as defined by the Apache Isis xref:schema:ROOT:common.adoc[common schema]): the object's type and its identifier.
 
 [TIP]
 ====

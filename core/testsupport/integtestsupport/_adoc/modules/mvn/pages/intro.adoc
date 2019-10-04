@@ -18,7 +18,7 @@ Uses the xref:applib:svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to g
 +
 Uses the xref:applib:svc:integration-api/JaxbService.adoc[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
 +
-This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:applib:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:xref:schema:ROOT:common.adoc[common schema]).
+This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:applib:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:schema:ROOT:common.adoc[common schema]).
 
 The `validate` goal is by default bound to the `test` phase, and the `swagger` goal is by default bound to the `package` phase; both are typically of your application's `dom` sub-module.
 The `xsd` goal meanwhile defaults to the `generate-resources` phase, and this is generally used in a completely separate sub-module.

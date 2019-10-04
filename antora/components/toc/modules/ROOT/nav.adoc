@@ -23,8 +23,8 @@
 
 ** *xref:applib:ant:about.adoc[Annotations]*
 ** *xref:applib:svc:about.adoc[Domain Services]*
-**  xref:rg:cfg:about.adoc[Core Config'n Properties]
-**  xref:rg:cms:about.adoc[Classes, Methods & Schema]
+**  xref:cfg:ROOT:about.adoc[Core Config'n Properties]
+**  xref:cms:ROOT:about.adoc[Classes, Methods & Schema]
 
 * Testing & Prototyping
 
