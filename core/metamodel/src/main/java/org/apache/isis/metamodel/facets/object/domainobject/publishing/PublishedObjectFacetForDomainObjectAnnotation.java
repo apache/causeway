@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.object.domainobject.publishing;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
@@ -37,9 +36,9 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
 
         final PublishObjectsConfiguration setting = configuration.getServices().getPublish().getObjects();
         
-        return
-        publishingIfAny.map(publishing -> {
+        return publishingIfAny.map(publishing -> {
             switch (publishing) {
+            case NOT_SPECIFIED:
             case AS_CONFIGURED:
                 return setting == PublishObjectsConfiguration.NONE
                 ? null
@@ -49,8 +48,6 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
                 return null;
             case ENABLED:
                 return new PublishedObjectFacetForDomainObjectAnnotation(holder);
-            case NOT_SPECIFIED:
-                throw _Exceptions.unexpectedCodeReach(); // case filtered out above
             }
             throw new IllegalStateException("domainObject.publishing() not recognised, is " + publishing);
 

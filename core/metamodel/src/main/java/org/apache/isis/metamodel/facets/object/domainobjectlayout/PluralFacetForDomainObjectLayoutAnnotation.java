@@ -19,8 +19,8 @@
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -30,15 +30,14 @@ import org.apache.isis.metamodel.facets.object.plural.PluralFacetAbstract;
 
 public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstract {
 
-    public static PluralFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
-        if(domainObjectLayouts.isEmpty()) {
-            return null;
-        }
-        return domainObjectLayouts.stream()
+    public static PluralFacet create(
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final FacetHolder holder) {
+        
+        return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::plural)
                 .filter(Objects::nonNull)
                 .map(plural -> new PluralFacetForDomainObjectLayoutAnnotation(plural, holder))
-                .findFirst()
                 .orElse(null);
     }
 

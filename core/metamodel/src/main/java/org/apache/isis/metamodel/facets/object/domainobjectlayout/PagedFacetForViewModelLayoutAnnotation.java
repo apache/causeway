@@ -19,7 +19,7 @@
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -29,15 +29,14 @@ import org.apache.isis.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetForViewModelLayoutAnnotation extends PagedFacetAbstract {
 
-    public static PagedFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
-        if(viewModelLayouts.isEmpty()) {
-            return null;
-        }
-        return viewModelLayouts.stream()
+    public static PagedFacet create(
+            final Optional<ViewModelLayout> viewModelLayoutIfAny, 
+            final FacetHolder holder) {
+        
+        return viewModelLayoutIfAny
                 .map(ViewModelLayout::paged)
                 .filter(paged -> paged > 1)
                 .map(paged -> new PagedFacetForViewModelLayoutAnnotation(paged, holder))
-                .findFirst()
                 .orElse(null);
     }
 

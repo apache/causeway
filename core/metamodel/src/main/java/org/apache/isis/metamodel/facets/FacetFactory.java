@@ -19,10 +19,13 @@
 
 package org.apache.isis.metamodel.facets;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -58,6 +61,11 @@ public interface FacetFactory {
         public Class<?> getCls() {
             return cls;
         }
+        
+        public <A extends Annotation> Optional<A> synthesize(Class<A> annotationType) {
+            return _Annotations.synthesizeInherited(cls, annotationType);
+        }
+        
     }
 
     static class AbstractProcessWithMethodContext<T extends FacetHolder> extends AbstractProcessWithClsContext<T> implements MethodRemover{

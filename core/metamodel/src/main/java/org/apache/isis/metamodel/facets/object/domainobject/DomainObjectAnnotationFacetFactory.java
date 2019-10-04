@@ -27,10 +27,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -54,7 +52,6 @@ import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.PostConstructMethodCache;
-import org.apache.isis.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
@@ -78,7 +75,6 @@ import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
-import org.apache.isis.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -111,7 +107,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-
+        
         processAuditing(processClassContext);
         processPublishing(processClassContext);
         processAutoComplete(processClassContext);
@@ -139,7 +135,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         }
 
         // check for @DomainObject(auditing=....)
-        val auditing = _Annotations.getEnum("auditing", cls, DomainObject.class, Auditing.class);
+        val auditing = processClassContext.synthesize(DomainObject.class).map(DomainObject::auditing);
         val auditableFacet = AuditableFacetForDomainObjectAnnotation
                 .create(auditing, getConfiguration(), facetHolder);
 
@@ -162,7 +158,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         }
 
         // check from @DomainObject(publishing=...)
-        val publishing = _Annotations.getEnum("publishing", cls, DomainObject.class, Publishing.class);
+        val publishing = processClassContext.synthesize(DomainObject.class).map(DomainObject::publishing);
         val publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
                 .create(publishing, getConfiguration(), facetHolder);
 

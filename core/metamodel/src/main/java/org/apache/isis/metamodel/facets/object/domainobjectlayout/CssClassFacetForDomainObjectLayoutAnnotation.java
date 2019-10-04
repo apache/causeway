@@ -16,7 +16,7 @@
  * under the License. */
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -27,7 +27,10 @@ import org.apache.isis.metamodel.facets.object.cssclass.method.CssClassFacetMeth
 
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+    public static CssClassFacet create(
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final FacetHolder holder) {
+        
         CssClassFacet facet = holder.getFacet(CssClassFacet.class);
         // this is a bit hacky, explicitly checking whether a different implementation is already added.
         // normally we would just re-order the list of facet factories in ProgrammingModelsFacetJava5, however in
@@ -39,11 +42,10 @@ public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetA
             // don't overwrite
             return null;
         }
-        return domainObjectLayouts.stream()
+        return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::cssClass)
                 .filter(_Strings::isNotEmpty)
                 .map(cssClass -> new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder))
-                .findFirst()
                 .orElse(null);
     }
 

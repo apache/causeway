@@ -19,7 +19,7 @@
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -31,13 +31,12 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetForDomainObjectLayoutAnnotation extends NamedFacetAbstract {
 
     public static NamedFacet create(
-            final List<DomainObjectLayout> domainObjectLayouts,
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
-        return domainObjectLayouts.stream()
+        return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::named)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(named -> new NamedFacetForDomainObjectLayoutAnnotation(named, holder))
                 .orElse(null);
     }

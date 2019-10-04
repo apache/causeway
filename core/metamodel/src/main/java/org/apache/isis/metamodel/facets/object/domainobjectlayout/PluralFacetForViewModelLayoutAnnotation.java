@@ -19,7 +19,7 @@
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,11 +30,13 @@ import org.apache.isis.metamodel.facets.object.plural.PluralFacetAbstract;
 
 public class PluralFacetForViewModelLayoutAnnotation extends PluralFacetAbstract {
 
-    public static PluralFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
-        return viewModelLayouts.stream()
+    public static PluralFacet create(
+            final Optional<ViewModelLayout> viewModelLayoutIfAny, 
+            final FacetHolder holder) {
+        
+        return viewModelLayoutIfAny
                 .map(ViewModelLayout::plural)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(plural -> new PluralFacetForViewModelLayoutAnnotation(plural, holder))
                 .orElse(null);
     }

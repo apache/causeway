@@ -22,7 +22,8 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 
 /**
- * Generalizes {@link org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition}, 
+ * Generalizes 
+ * {@link org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition}, 
  * {@link org.apache.isis.applib.annotation.DomainObjectLayout.CssClassFaPosition} and 
  * {@link org.apache.isis.applib.annotation.ViewModelLayout.CssClassFaPosition}.
  *

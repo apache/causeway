@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -29,12 +29,13 @@ import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacetAbstract
 
 public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+    public static DescribedAsFacet create(
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final FacetHolder holder) {
 
-        return domainObjectLayouts.stream()
+        return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(describedAs -> new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder))
                 .orElse(null);
     }

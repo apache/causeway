@@ -26,10 +26,12 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.applib.events.ui.TitleUiEvent;
 import org.apache.isis.commons.internal.reflection._Annotations;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -40,13 +42,18 @@ public class Annotations_getAnnotations_on_Class_Test {
     @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface DomainObj { // cf @DomainObject
+        
         enum Publishng { // cf Publishing enum
             YES,
             NO,
             NOT_SPECIFIED
         }
+        
         Publishng publishng() default Publishng.NOT_SPECIFIED;
+        
         String name() default "";
+        
+        Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Default.class;
     }
 
 
@@ -71,6 +78,13 @@ public class Annotations_getAnnotations_on_Class_Test {
     @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface NamedFoo {
+    }
+    
+    @DomainObj(titleUiEvent = TitleUiEvent.Noop.class)
+    @Inherited
+    @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface TitleUiEventNoop {
     }
 
     //@Meta
@@ -180,26 +194,6 @@ public class Annotations_getAnnotations_on_Class_Test {
     }
     
     @Test
-    public void merge_only_valid_attributes() throws Exception {
-
-        @NamedFoo // <-- should provide name=foo even if the below matches first on publishng=YES
-        @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should provide YES
-        class SomeDomainObject {}
-
-        val publishng = _Annotations
-                .getEnum("publishng", SomeDomainObject.class, DomainObj.class, DomainObj.Publishng.class);
-        
-        val name = _Annotations
-                .getString("name", SomeDomainObject.class, DomainObj.class);
-
-        assertThat(publishng.isPresent(), is(true));
-        assertThat(name.isPresent(), is(true));
-        
-        assertThat(publishng.get(), is(DomainObj.Publishng.YES));
-        assertThat(name.get(), is("foo"));
-    }
-    
-    @Test
     public void ignore_not_specified() throws Exception {
 
         @MetaPublished
@@ -213,6 +207,42 @@ public class Annotations_getAnnotations_on_Class_Test {
         assertThat(synthesized.isPresent(), is(true));
         assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.NO));
     }
+    
+    @Test
+    public void inherit_nonStandardAttributes_string() throws Exception {
+
+        @NamedFoo // <-- should provide name=foo even if direct below matches first
+        @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should provide YES
+        class SomeDomainObject {}
+        
+        val synthesized = _Annotations
+                .synthesizeInherited(SomeDomainObject.class, DomainObj.class);
+        
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(synthesized.get().name(), is("foo"));
+        
+    }
+    
+    @Test
+    public void inherit_nonStandardAttributes_class() throws Exception {
+
+        @TitleUiEventNoop // <-- should provide uiEvent=Noop even if direct below matches first
+        @NamedFoo // <-- should provide name=foo even if direct below matches first
+        @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should provide YES
+        class SomeDomainObject {}
+        
+        val synthesized = _Annotations
+                .synthesizeInherited(SomeDomainObject.class, DomainObj.class);
+        
+        assertThat(synthesized.isPresent(), is(true));
+        assertThat(synthesized.get().publishng(), is(DomainObj.Publishng.YES));
+        assertThat(synthesized.get().name(), is("foo"));
+        assertEquals(TitleUiEvent.Noop.class, synthesized.get().titleUiEvent());
+        
+    }
+    
+
     
 
 }

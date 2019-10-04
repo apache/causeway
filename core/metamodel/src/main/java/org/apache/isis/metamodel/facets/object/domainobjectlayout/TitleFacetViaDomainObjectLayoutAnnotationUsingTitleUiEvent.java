@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -42,20 +42,19 @@ import org.apache.isis.metamodel.util.EventUtil;
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends TitleFacetAbstract {
 
     public static Facet create(
-            final List<DomainObjectLayout> domainObjectLayouts,
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfigurationLegacy configurationLegacy,
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
-        return domainObjectLayouts.stream()
+        return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::titleUiEvent)
                 .filter(titleUiEvent -> EventUtil.eventTypeIsPostable(
                         titleUiEvent,
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
                         configuration.getReflector().getFacet().getDomainObjectLayoutAnnotation().getTitleUiEvent().isPostForDefault()))
-                .findFirst()
                 .map(titleUiEventClass -> {
                     final String translationContext;
                     if(facetHolder instanceof ObjectSpecification) {

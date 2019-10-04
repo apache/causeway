@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -29,13 +29,12 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetForViewModelLayoutAnnotation extends NamedFacetAbstract {
 
     public static NamedFacet create(
-            final List<ViewModelLayout> viewModelLayouts,
+            final Optional<ViewModelLayout> viewModelLayoutIfAny,
             final FacetHolder holder) {
 
-        return viewModelLayouts.stream()
+        return viewModelLayoutIfAny
                 .map(ViewModelLayout::named)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(named -> new NamedFacetForViewModelLayoutAnnotation(named, holder))
                 .orElse(null);
     }

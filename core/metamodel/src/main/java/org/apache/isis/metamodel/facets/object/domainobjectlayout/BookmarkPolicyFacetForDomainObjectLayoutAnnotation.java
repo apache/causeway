@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -29,18 +29,18 @@ import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFace
 
 public class BookmarkPolicyFacetForDomainObjectLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+    public static BookmarkPolicyFacet create(
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final FacetHolder holder) {
 
-
-        return domainObjectLayouts.stream()
+        return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::bookmarking)
                 .filter(bookmarkPolicy -> bookmarkPolicy != BookmarkPolicy.NEVER)
-                .findFirst()
                 .map(bookmarkPolicy -> new BookmarkPolicyFacetForDomainObjectLayoutAnnotation(bookmarkPolicy, holder))
                 .orElse(null);
     }
 
     private BookmarkPolicyFacetForDomainObjectLayoutAnnotation(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {
-        super(holder, bookmarkPolicy);
+        super(bookmarkPolicy, holder);
     }
 }

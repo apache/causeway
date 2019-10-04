@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.ViewModelLayout;
@@ -40,19 +40,18 @@ extends LayoutFacetAbstract
 implements LayoutFacet {
 
     public static Facet create(
-            final List<ViewModelLayout> viewModelLayouts,
+            final Optional<ViewModelLayout> viewModelLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final IsisConfigurationLegacy configurationLegacy,
             IsisConfiguration configuration, final FacetHolder facetHolder) {
 
-        return viewModelLayouts.stream()
+        return viewModelLayoutIfAny
                 .map(ViewModelLayout::layoutUiEvent)
                 .filter(layoutUiEvent -> EventUtil.eventTypeIsPostable(
                         layoutUiEvent,
                         LayoutUiEvent.Noop.class,
                         LayoutUiEvent.Default.class,
                         configuration.getReflector().getFacet().getViewModelLayoutAnnotation().getLayoutUiEvent().isPostForDefault()))
-                .findFirst()
                 .map(layoutUiEvent -> {
 
                     return new LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(

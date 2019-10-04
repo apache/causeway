@@ -16,7 +16,7 @@
  * under the License. */
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -26,12 +26,13 @@ import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
 public class CssClassFacetForViewModelLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
+    public static CssClassFacet create(
+            final Optional<ViewModelLayout> viewModelLayoutIfAny, 
+            final FacetHolder holder) {
 
-        return viewModelLayouts.stream()
+        return viewModelLayoutIfAny
                 .map(ViewModelLayout::cssClass)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(cssClass -> new CssClassFacetForViewModelLayoutAnnotation(cssClass, holder))
                 .orElse(null);
     }

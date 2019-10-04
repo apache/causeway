@@ -25,8 +25,6 @@ import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
-import org.apache.isis.commons.internal.base._Strings;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -71,8 +69,7 @@ public final class _Annotations {
      */
     public static <A extends Annotation> Optional<A> synthesizeInherited(
             Class<?> annotatedElement, 
-            Class<A> annotationType,
-            AttributeAcceptStrategy attributeAcceptStrategy) {
+            Class<A> annotationType) {
         
         val collected = _Annotations
                 .collect(annotatedElement);
@@ -82,7 +79,7 @@ public final class _Annotations {
         }
         
         val proxy = _Annotations_SynthesizedMergedAnnotationInvocationHandler
-                .createProxy(collected, annotationType, attributeAcceptStrategy);
+                .createProxy(collected, annotationType);
         
         return Optional.of(proxy);
     }
@@ -109,121 +106,7 @@ public final class _Annotations {
         
         return synthesized;
     }
-    
-    // -- ATTRIBUTE FETCHERS
-    
-    /**
-     * Optionally create a String from attribute values based on presence.
-     * @param <A>
-     * @param attributeName
-     * @param annotatedElement
-     * @param annotationType
-     * @param attributeAcceptStrategy
-     * @return non-null
-     */
-    public static <A extends Annotation> Optional<String> getString(
-            String attributeName,
-            Class<?> annotatedElement, 
-            Class<A> annotationType,
-            AttributeAcceptStrategy attributeAcceptStrategy) {
-        
-        val value = _Annotations
-                .collect(annotatedElement)
-                .stream(annotationType)
-                .map(ma->ma.getString(attributeName))
-                .filter(attributeAcceptStrategy::acceptString)
-                .findFirst();
-        
-        return value;
-    }
 
-    /**
-     * Optionally create an Enum from attribute values based on presence.
-     * @param <A>
-     * @param <E>
-     * @param attributeName
-     * @param annotatedElement
-     * @param annotationType
-     * @param enumType
-     * @param attributeAcceptStrategy
-     * @return non-null
-     */
-    public static <A extends Annotation, E extends Enum<E>> Optional<E> getEnum(
-            String attributeName,
-            Class<?> annotatedElement, 
-            Class<A> annotationType,
-            Class<E> enumType, 
-            AttributeAcceptStrategy attributeAcceptStrategy) {
-        
-        val value = _Annotations
-                .collect(annotatedElement)
-                .stream(annotationType)
-                .map(ma->ma.getEnum(attributeName, enumType))
-                .filter(attributeAcceptStrategy::acceptEnum)
-                .findFirst();
-        
-        return value;
-    }
-    
-    // -- SHORTCUTS
-    
-    public static <A extends Annotation> Optional<String> getString(
-            String attributeName,
-            Class<?> annotatedElement, 
-            Class<A> annotationType) {
-        return getString(attributeName, annotatedElement, annotationType, DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY);
-    }
-    
-    public static <A extends Annotation, E extends Enum<E>> Optional<E> getEnum(
-            String attributeName,
-            Class<?> annotatedElement, 
-            Class<A> annotationType,
-            Class<E> enumType) {
-        return getEnum(attributeName, annotatedElement, annotationType, enumType, DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY);
-    }   
-    
-    public static <A extends Annotation> Optional<A> synthesizeInherited(
-            Class<?> annotatedElement, 
-            Class<A> annotationType) {
-        return synthesizeInherited(annotatedElement, annotationType, DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY);
-    }
-    
-    // -- BEHAVIOR
-    
-    public final static AttributeAcceptStrategy DEFAULT_ATTRIBUTE_ACCEPT_STRATEGY = 
-            new AttributeAcceptStrategy() {};
-    
-    static interface AttributeAcceptStrategy {
-        
-        default boolean acceptInt(int value) {
-            return value!=-1;
-        }
-        
-        default boolean acceptString(String value) {
-            return !_Strings.isNullOrEmpty(value);
-        }
-        
-        default boolean acceptEnum(Enum<?> value) {
-            return value != null && !value.name().equals("NOT_SPECIFIED"); 
-        }
-
-        default boolean accept(Object value) {
-            if(value==null) {
-                return false;
-            }
-            if(value instanceof Enum) {
-                return acceptEnum((Enum<?>) value);
-            }
-            if(value instanceof String) {
-                return acceptString((String) value);
-            }
-            if(value instanceof Integer) {
-                return acceptInt((int) value);
-            }
-            return true;
-        }
-        
-    }
     
     // -- HELPER
     
@@ -232,7 +115,7 @@ public final class _Annotations {
      */
     private static MergedAnnotations collect(Class<?> annotatedElement) {
         
-        //TODO use cache
+        //TODO use cache if not already
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
         return collected;
     }

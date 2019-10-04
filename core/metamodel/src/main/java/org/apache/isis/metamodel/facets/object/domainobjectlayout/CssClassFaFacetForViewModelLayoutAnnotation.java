@@ -16,7 +16,7 @@
  * under the License. */
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -27,7 +27,9 @@ import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetForViewModelLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final List<ViewModelLayout> viewModelLayouts, final FacetHolder holder) {
+    public static CssClassFaFacet create(
+            final Optional<ViewModelLayout> viewModelLayoutIfAny, 
+            final FacetHolder holder) {
 
         class Annot {
             private Annot(final ViewModelLayout viewModelLayout) {
@@ -38,10 +40,9 @@ public class CssClassFaFacetForViewModelLayoutAnnotation extends CssClassFaFacet
             CssClassFaPosition cssClassFaPosition;
         }
 
-        return viewModelLayouts.stream()
+        return viewModelLayoutIfAny
                 .map(Annot::new)
                 .filter(a -> a.cssClassFa != null )
-                .findFirst()
                 .map(a -> new CssClassFaFacetForViewModelLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
                 .orElse(null);
     }

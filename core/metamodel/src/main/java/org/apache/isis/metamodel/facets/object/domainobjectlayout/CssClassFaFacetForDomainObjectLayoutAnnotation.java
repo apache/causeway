@@ -17,7 +17,7 @@
 
 package org.apache.isis.metamodel.facets.object.domainobjectlayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -28,7 +28,9 @@ import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final List<DomainObjectLayout> domainObjectLayouts, final FacetHolder holder) {
+    public static CssClassFaFacet create(
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny, 
+            final FacetHolder holder) {
 
         class Annot {
             private Annot(final DomainObjectLayout domainObjectLayout) {
@@ -39,10 +41,9 @@ public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFa
             CssClassFaPosition cssClassFaPosition;
         }
 
-        return domainObjectLayouts.stream()
+        return domainObjectLayoutIfAny
                 .map(Annot::new)
                 .filter(a -> a.cssClassFa != null )
-                .findFirst()
                 .map(a -> new CssClassFaFacetForDomainObjectLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
                 .orElse(null);
     }

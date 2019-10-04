@@ -40,6 +40,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
         val auditing = auditingIfAny.orElse(Auditing.AS_CONFIGURED); 
                 
         switch (auditing) {
+        case NOT_SPECIFIED:
         case AS_CONFIGURED:
 
             val auditObjects = AuditObjectsConfiguration.from(configuration);
@@ -56,8 +57,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             return new AuditableFacetForDomainObjectAnnotation(Enablement.DISABLED, holder);
         case ENABLED:
             return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
-        case NOT_SPECIFIED:
-            // unreachable code
+            
         default:
             throw _Exceptions.unmatchedCase(auditing);
         }

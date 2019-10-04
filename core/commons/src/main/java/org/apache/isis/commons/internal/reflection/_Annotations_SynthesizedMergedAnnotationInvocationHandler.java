@@ -38,7 +38,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.reflection._Annotations.AttributeAcceptStrategy;
 
 import lombok.val;
 
@@ -55,11 +54,11 @@ import lombok.val;
  * @see Annotation
  * @see AnnotationUtils#synthesizeAnnotation(Annotation, AnnotatedElement)
  */
-final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends Annotation> implements InvocationHandler {
+final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends Annotation> 
+implements InvocationHandler {
 
     private final MergedAnnotations mergedAnnotations;
     private final Class<A> type;
-    private final AttributeAcceptStrategy attributeAcceptStrategy;
     private final _Annotations_AttributeMethods attributes;
 
     @Nullable
@@ -68,16 +67,13 @@ final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends 
 
     private _Annotations_SynthesizedMergedAnnotationInvocationHandler(
             MergedAnnotations mergedAnnotations, 
-            Class<A> type, 
-            AttributeAcceptStrategy attributeAcceptStrategy) {
+            Class<A> type) {
         
         Assert.notNull(mergedAnnotations, "MergedAnnotations must not be null");
         Assert.notNull(type, "Type must not be null");
         Assert.isTrue(type.isAnnotation(), "Type must be an annotation");
-        Assert.notNull(attributeAcceptStrategy, "AttributeAcceptStrategy must not be null");
         this.mergedAnnotations = mergedAnnotations;
         this.type = type;
-        this.attributeAcceptStrategy = attributeAcceptStrategy;
         this.attributes = _Annotations_AttributeMethods.forAnnotationType(type);
         for (int i = 0; i < this.attributes.size(); i++) {
             getAttributeValue(this.attributes.get(i));
@@ -192,15 +188,14 @@ final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends 
         String name = method.getName();
         Class<?> type = ClassUtils.resolvePrimitiveIfNecessary(method.getReturnType());
         
-        val fallbackValueRef = new Object[] {null};
+        val defaultValue = method.getDefaultValue();
         
         val attributeValue = this.mergedAnnotations.stream()
         .map(annotation->(Object)annotation.getValue(name, type).orElse(null))
         .filter(_NullSafe::isPresent)
-        .peek(value->fallbackValueRef[0]=value) // store as fallback
-        .filter(value->attributeAcceptStrategy.accept(value))
+        .filter(value->!value.equals(defaultValue))
         .findFirst()
-        .orElse(fallbackValueRef[0]);
+        .orElse(defaultValue);
         
         if(attributeValue==null) {
             throw new NoSuchElementException("No value found for attribute named '" + name +
@@ -215,12 +210,11 @@ final class _Annotations_SynthesizedMergedAnnotationInvocationHandler<A extends 
     @SuppressWarnings("unchecked")
     static <A extends Annotation> A createProxy(
             MergedAnnotations mergedAnnotations, 
-            Class<A> type,
-            AttributeAcceptStrategy attributeAcceptStrategy) {
+            Class<A> type) {
         
         ClassLoader classLoader = type.getClassLoader();
         InvocationHandler handler = 
-                new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(mergedAnnotations, type, attributeAcceptStrategy);
+                new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(mergedAnnotations, type);
         Class<?>[] interfaces = isVisible(classLoader, SynthesizedAnnotation.class) ?
                 new Class<?>[] {type, SynthesizedAnnotation.class} : new Class<?>[] {type};
         return (A) Proxy.newProxyInstance(classLoader, interfaces, handler);
