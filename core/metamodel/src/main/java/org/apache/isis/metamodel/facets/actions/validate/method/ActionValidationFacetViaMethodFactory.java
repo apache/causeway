@@ -95,7 +95,6 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
         final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
 
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final Class<?>[] paramTypes = actionMethod.getParameterTypes();
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
         final String validateName = MethodLiteralConstants.VALIDATE_PREFIX + paramNum + capitalizedName;

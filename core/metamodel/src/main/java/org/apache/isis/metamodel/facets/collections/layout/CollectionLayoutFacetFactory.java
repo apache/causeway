@@ -18,12 +18,9 @@
  */
 package org.apache.isis.metamodel.facets.collections.layout;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
