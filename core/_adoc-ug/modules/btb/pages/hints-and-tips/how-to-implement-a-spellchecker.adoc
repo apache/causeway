@@ -13,7 +13,7 @@ From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the A
 
 One way to implement is to use the xref:applib:svc:core-domain-api/EventBusService.adoc[event bus]:
 
-* Set up a xref:rg:cms:classes/domainevent.adoc[domain event] xref:rg:cms:classes/super.adoc#AbstractSubscriber[subscriber] that can veto the changes.
+* Set up a xref:applib:cms:classes/domainevent.adoc[domain event] xref:applib:cms:classes/super.adoc#AbstractSubscriber[subscriber] that can veto the changes.
 
 * if the change is made through an action, you can use xref:applib:ant:Action.adoc#domainEvent[`@Action#domainEvent()`].
 

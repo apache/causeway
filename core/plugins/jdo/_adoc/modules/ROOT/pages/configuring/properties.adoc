@@ -42,7 +42,7 @@ There generally is no need to change this from its default.
 `RegisterEntities.` +
 `packagePrefix`
 |fully qualified package names, CSV
-|This property is derived automatically derived from the set of modules provided in the xref:rg:cms:classes/super.adoc#AppManifest[`AppManifest`], and so does not need to be specified explicitly.
+|This property is derived automatically derived from the set of modules provided in the xref:applib:cms:classes/super.adoc#AppManifest[`AppManifest`], and so does not need to be specified explicitly.
 
 It holds the set of packages to search so that DataNucleus builds its metamodel eagerly rather than lazily.
 

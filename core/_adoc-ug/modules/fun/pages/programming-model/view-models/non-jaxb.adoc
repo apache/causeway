@@ -69,7 +69,7 @@ public class ExcelUploadManager implements ViewModel {
   public void viewModelInit(String memento) { /* ... */ }
 }
 ----
-|Implement xref:rg:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.  The memento is as defined by the
+|Implement xref:applib:cms:classes/super.adoc#ViewModel[`ViewModel`] interface.  The memento is as defined by the
 interface's methods: the programmer has full control (but also full responsibility) for the string memento.
 
 |===

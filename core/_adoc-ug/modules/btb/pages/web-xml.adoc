@@ -388,7 +388,7 @@ This filter reads one context parameter:
     <param-value>deployment</param-value>   <!--1-->
 </context-param>
 ----
-<1> alternatively set to "development"; see xref:rg:cfg:deployment-types.adoc[deployment types] for further discussion.
+<1> alternatively set to "development"; see xref:cfg:ROOT:deployment-types.adoc[deployment types] for further discussion.
 
 
 === `IsisSessionFilter`

@@ -43,7 +43,7 @@ It is also possible to return a localized string by returning a `TranslatableStr
 
 == For more information
 
-For more information, see the xref:rg:cms:methods.adoc#validate[`validate...()`] section in the appropriate reference guide.
+For more information, see the xref:applib:cms:methods.adoc#validate[`validate...()`] section in the appropriate reference guide.
 The reference guide also explains how to define validation declaratively, using the xref:applib:ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`] or xref:applib:ant:Property.adoc#mustSatisfy[`@Property#mustSatisfy()`] attributes.
 
 

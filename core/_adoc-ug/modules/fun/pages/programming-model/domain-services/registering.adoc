@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 // TODO: v2: this is out of date, need to xref Spring Boot mechanism instead.
 
 
-The easiest way to register domain services with the framework is to use an xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`].
+The easiest way to register domain services with the framework is to use an xref:applib:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`].
 This specifies the modules which contain xref:applib:ant:DomainService.adoc[`@DomainService`]-annotated classes.
 
 For example:

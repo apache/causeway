@@ -23,7 +23,7 @@ But if the state change is more complex, then most likely an action should be us
 
 == Defining actions
 
-If the xref:rg:cfg:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is set (recommended), then actions are `public` methods with the xref:applib:ant:Action.adoc[`@Action`] annotation.
+If the xref:cfg:ROOT:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is set (recommended), then actions are `public` methods with the xref:applib:ant:Action.adoc[`@Action`] annotation.
 This annotation can also specify additional domain semantics, for example regarding idempotency.
 
 For example:
@@ -46,7 +46,7 @@ public ShoppingBasket addToBasket(
 For the `product` parameter this is reasonable, but not so for the `quantity` parameter (which would by default show up with a name of "int".
 The `@ParameterLayout` annotation provides a UI hint to the framework.
 
-If the xref:rg:cfg:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is _not_ set, then the rules are a little more involved: an action is a public method that is not getters or setters which represent properties or collections, and does not have one of the various method prefixes (such as `hide` or `validate`) used for represent xref:ug:fun:business-rules.adoc[business rules]), and is not annotated with xref:applib:ant:Programmatic.adoc[`@Programmatic`].
+If the xref:cfg:ROOT:configuring-core.adoc#policy[`isis.reflector.explicitAnnotations.action`] configuration property is _not_ set, then the rules are a little more involved: an action is a public method that is not getters or setters which represent properties or collections, and does not have one of the various method prefixes (such as `hide` or `validate`) used for represent xref:ug:fun:business-rules.adoc[business rules]), and is not annotated with xref:applib:ant:Programmatic.adoc[`@Programmatic`].
 
 
 
@@ -56,7 +56,7 @@ If the xref:rg:cfg:configuring-core.adoc#policy[`isis.reflector.explicitAnnotati
 Parameter types can be value types or reference types.
 In the case of primitive types, the end-user can just enter the value directly through the parameter field.
 In the case of reference types however (such as `Product`), a drop-down must be provided from which the end-user to select.
-This is done using either a supporting xref:rg:cms:methods.adoc#choices[`choices`] or xref:rg:cms:methods.adoc#autoComplete[`autoComplete`] method.
+This is done using either a supporting xref:applib:cms:methods.adoc#choices[`choices`] or xref:applib:cms:methods.adoc#autoComplete[`autoComplete`] method.
 The "choices" is used when there is a limited set of options, while "autoComplete" is used when there are large set of options such that the end-user must provide some characters to use for a search.
 
 For example, the `addToBasket(...)` action shown above might well have an autocomplete supporting method :

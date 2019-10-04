@@ -35,7 +35,7 @@ Alternatively, you can specify these hints dynamically in the xref:vw:ROOT:layou
 Rather than annotating every action with xref:applib:ant:ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa()`] and xref:applib:ant:ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
 Not only does this save a lot of boilerplate/editing, it helps ensure consistency across all actions.
 
-To declare fa classes globally, use the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.reflector.facet.cssClassFa.patterns` (a comma separated list of key:value pairs).
+To declare fa classes globally, use the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.reflector.facet.cssClassFa.patterns` (a comma separated list of key:value pairs).
 
 For example:
 
@@ -78,7 +78,7 @@ Again, this CSS class will be attached to an appropriate containing `<div>` or `
 Possible use cases for this is to highlight the most important properties of a domain object.
 
 
-It is also possible to specify CSS classes globally, using the xref:rg:cfg:configuring-core.adoc[configuration property] `isis.reflector.facet.cssClass.patterns` configuration property.
+It is also possible to specify CSS classes globally, using the xref:cfg:ROOT:configuring-core.adoc[configuration property] `isis.reflector.facet.cssClass.patterns` configuration property.
 
 For example:
 

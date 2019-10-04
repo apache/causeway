@@ -32,7 +32,7 @@ For example, a cascade delete could be implemented here.
 For example, a business audit event could be implemented here.
 
 
-For more details on the actual domain event classes, see the xref:rg:cms:classes/domainevent.adoc[domain event] section of the relevant reference guide.
+For more details on the actual domain event classes, see the xref:applib:cms:classes/domainevent.adoc[domain event] section of the relevant reference guide.
 
 
 

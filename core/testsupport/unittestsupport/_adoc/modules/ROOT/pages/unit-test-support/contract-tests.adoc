@@ -40,7 +40,7 @@ If using DataNucleus against an RDBMS (as you probably are) then we strongly rec
 
 * second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer). +
 +
-The xref:rg:cms:classes/utility.adoc#ObjectContracts[`ObjectContracts`]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
+The xref:applib:cms:classes/utility.adoc#ObjectContracts[`ObjectContracts`]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
 * third, if the relationship is bidirectional then JDO/Objectstore will automatically maintain the relationship.
 

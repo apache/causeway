@@ -18,7 +18,7 @@ There are some disadvantages to using file-based layouts:
 
 * they also suffer from syntactic fragility: an invalid XML document will result in no metadata for the entire class.
 
-The `menubars.layout.xml` file is just the serialized form of a xref:rg:cms:classes/layout.adoc[`MenuBars`] layout class defined within Apache Isis' applib.
+The `menubars.layout.xml` file is just the serialized form of a xref:applib:cms:classes/layout.adoc[`MenuBars`] layout class defined within Apache Isis' applib.
 These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that
 is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making it easy to author such layout files.
 
