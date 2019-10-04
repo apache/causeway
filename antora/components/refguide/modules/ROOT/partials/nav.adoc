@@ -1,4 +1,4 @@
-* xref:rg:ROOT:about.adoc[Reference Guide]
+* xref:rg:ROOT:about.adoc[Table of Contents]
 include::applib:ant:partial$nav.adoc[]
 include::applib:svc:partial$nav.adoc[]
 include::applib:cms:partial$nav.adoc[]
