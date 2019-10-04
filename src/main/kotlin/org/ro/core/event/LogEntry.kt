@@ -5,16 +5,18 @@ import kotlinx.serialization.Serializable
 import org.ro.core.Session
 import org.ro.core.aggregator.Aggregator
 import org.ro.to.TransferObject
+import pl.treksoft.kvision.core.Col
 import kotlin.js.Date
 
-enum class EventState(val id: String, val iconName: String) {
-    INITIAL("INITIAL", "fa-power-off"),
-    RUNNING("RUNNING", "fa-play-circle"),
-    ERROR("ERROR", "fa-exclamation-circle"),
-    SUCCESS("SUCCESS", "fa-check-circle"),
-    VIEW("VIEW", "fa-info-circle"),
-    CACHE_USED ("CACHE_USED", "fa-caret-circle-left"),
-    CLOSED("CLOSED", "fa-times-circle")
+//Eventually color codes from css instead
+enum class EventState(val id: String, val iconName: String, val color: Col ) {
+    INITIAL("INITIAL", "fa-power-off", Col.GRAY),
+    RUNNING("RUNNING", "fa-play-circle", Col.YELLOW),
+    ERROR("ERROR", "fa-exclamation-circle", Col.RED),
+    SUCCESS("SUCCESS", "fa-check-circle", Col.GREEN),
+    VIEW("VIEW", "fa-info-circle", Col.BLUE),
+    CACHE_USED ("CACHE_USED", "fa-caret-circle-left", Col.VIOLET),
+    CLOSED("CLOSED", "fa-times-circle", Col.LIGHTBLUE)
 }
 
 @Serializable

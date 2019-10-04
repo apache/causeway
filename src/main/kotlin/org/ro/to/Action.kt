@@ -11,19 +11,11 @@ data class Action(val id: String,
 ) : TransferObject {
 
     fun getInvokeLink(): Link? {
-        for (l in links) {
-            if (l.rel.indexOf(id) > 0) {
-                return l
-            }
-        }
-        return null
+        return links.firstOrNull { it.rel.indexOf(id) > 0 }
     }
 
     fun findParameterByName(name: String): Parameter? {
-        for (p in parameters) {
-            if (p.value.id == name) return p.value
-        }
-        return null
+        return parameters.values.firstOrNull { it.id == name }
     }
 
 }

@@ -5,10 +5,10 @@
         "links": [
             {
                 "rel": "self",
-                "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20",
+                "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64",
                 "method": "GET",
                 "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
-                "title": "Object: Beutlin"
+                "title": "Object: Gin"
             },
             {
                 "rel": "describedby",
@@ -18,27 +18,27 @@
             },
             {
                 "rel": "urn:org.apache.isis.restfulobjects:rels/object-layout",
-                "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/object-layout",
+                "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/object-layout",
                 "method": "GET",
                 "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
-                "title": "Object: Beutlin"
+                "title": "Object: Gin"
             },
             {
                 "rel": "urn:org.restfulobjects:rels/update",
-                "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20",
+                "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64",
                 "method": "PUT",
                 "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
                 "arguments": {}
             }
         ],
         "extensions": {
-            "oid": "simple.SimpleObject:20",
+            "oid": "simple.SimpleObject:64",
             "isService": false,
             "isPersistent": true
         },
-        "title": "Object: Beutlin",
+        "title": "Object: Gin",
         "domainType": "simple.SimpleObject",
-        "instanceId": "20",
+        "instanceId": "64",
         "members": {
             "name": {
                 "id": "name",
@@ -46,12 +46,12 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;property=\"name\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/properties/name",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/properties/name",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
                     }
                 ],
-                "value": "Beutlin",
+                "value": "Gin",
                 "extensions": {
                     "x-isis-format": "string"
                 },
@@ -63,7 +63,7 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;action=\"rebuildMetamodel\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/actions/rebuildMetamodel",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/actions/rebuildMetamodel",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
                     }
@@ -75,7 +75,7 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;action=\"downloadJdoMetadata\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/actions/downloadJdoMetadata",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/actions/downloadJdoMetadata",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
                     }
@@ -87,7 +87,7 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;action=\"openRestApi\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/actions/openRestApi",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/actions/openRestApi",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
                     }
@@ -99,7 +99,7 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;action=\"downloadLayoutXml\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/actions/downloadLayoutXml",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/actions/downloadLayoutXml",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
                     }
@@ -111,7 +111,7 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;action=\"delete\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/actions/delete",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/actions/delete",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
                     }
@@ -123,7 +123,7 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;action=\"updateName\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/actions/updateName",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/actions/updateName",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
                     }
@@ -135,7 +135,7 @@
                 "links": [
                     {
                         "rel": "urn:org.restfulobjects:rels/details;action=\"clearHints\"",
-                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/20/actions/clearHints",
+                        "href": "http://localhost:8080/restful/objects/simple.SimpleObject/64/actions/clearHints",
                         "method": "GET",
                         "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
                     }

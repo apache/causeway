@@ -3,13 +3,13 @@ package org.ro.handler
 import org.ro.core.event.LogEntry
 
 /**
- * Delegates responses to handlers, acts as Facade.
+ * Delegates responses (logEntry.response) to handlers, acts as Facade.
  * @See: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
 object ResponseHandler {
     private var delegate: IResponseHandler
 
-    //TODO sequence of handlers should follow frequency of invocation in order to minimize the time taken by unneeded calls to 'canHandle()'
+    //IMPROVE sequence of handlers should follow frequency of invocation in order to minimize the time taken by unneeded calls to 'canHandle()'
     private var _1 = ResultHandler()
     private var _2 = ActionHandler()
     private var _3 = ServiceHandler()

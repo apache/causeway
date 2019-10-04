@@ -7,6 +7,10 @@ import org.ro.to.TransferObject
 
 class ResultObjectHandler : BaseHandler(), IResponseHandler {
 
+    override fun doHandle() {
+        update()
+    }
+
     @UnstableDefault
     override fun parse(jsonStr: String): TransferObject? {
         return Json.parse(ResultObject.serializer(), jsonStr)

@@ -2,6 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.Serializable
 
+//IMPROVE initialize value="", move behavior out of TO
 @Serializable
 data class Argument(var key: String = "",
                     var value: String? = null,

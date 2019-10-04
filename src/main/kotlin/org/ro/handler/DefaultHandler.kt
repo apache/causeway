@@ -11,7 +11,6 @@ class DefaultHandler : BaseHandler(), IResponseHandler {
     override fun doHandle() {
         logEntry.aggregator = UndefinedAggregator()
         update()
-//        console.log("[DefaultHandler.doHandle] no handler for $logEntry")
     }
 
 }

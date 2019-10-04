@@ -23,21 +23,11 @@ class ServiceTest : ToTest() {
         assertTrue(service.containsMemberWith("create"))
 
         // jsonObj contains '"members": {}' not '"members": []'
-        // in AS this results in an unordered list (Object{}),
+        // this results in an unordered list (Map),
         // but intended is an ordered list (Array[])
-        // or is it a Map?
         //TODO use object-layout / menu layout instead
     }
 
- /*FIXME   private fun includesId(list: kotlin.collections.List<Member>, id: String): Boolean {
-        for (m in list) {
-            if (m.id == id) {
-                return true
-            }
-        }
-        return false
-    }
-   */
     fun Service.containsMemberWith(id: String): Boolean {
         for (m in getMemberList()) {
             if (m.id == id) {

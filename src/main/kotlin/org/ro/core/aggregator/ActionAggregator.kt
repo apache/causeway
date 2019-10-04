@@ -2,6 +2,7 @@ package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
 import org.ro.to.Action
+import org.ro.to.Link
 import org.ro.to.Method
 import org.ro.ui.ActionPrompt
 
@@ -15,7 +16,11 @@ class ActionAggregator : BaseAggregator() {
                 when (l.method) {
                     Method.GET.name -> {
                         //val obs = logEntry.aggregator!! ? this==obs?
-                        this.invoke(l)
+                        if (l.hasArguments()) {
+                            ActionPrompt(action).open()
+                        } else {
+                            this.invoke(l)
+                        }
                     }
                     Method.POST.name -> {
                         ActionPrompt(action).open()
@@ -28,4 +33,15 @@ class ActionAggregator : BaseAggregator() {
             }
         }
     }
+
+    fun Link.isInvokeAction(): Boolean {
+        if (rel.contains("invokeaction")) {
+            return true
+        }
+        if (rel.contains("invoke;action")) {
+            return true
+        }
+        return false
+    }
+
 }

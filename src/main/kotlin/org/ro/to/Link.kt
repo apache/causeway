@@ -17,7 +17,7 @@ data class Link(val rel: String = "",
                 val arguments: Map<String, Argument?> = emptyMap(),
                 val title: String = "") : TransferObject {
 
-    private fun argMap(): Map<String, Argument?>? {
+    fun argMap(): Map<String, Argument?>? {
         if (args.isNotEmpty()) {
             return args
         }
@@ -34,27 +34,8 @@ data class Link(val rel: String = "",
         arg.value = value
     }
 
-    fun argumentsAsBody(): String {
-        val args = argMap()!!
-        var body = "{"
-        for (kv in args) {
-            val arg = kv.value!!
-            body = body + arg.asBody() + ","
-        }
-        val len = body.length
-        body = body.replaceRange(len -1, len,"}")
-        console.log("[Link.argumentsAsBody] \n $body")
-        return body
-    }
-
-    fun isInvokeAction(): Boolean {
-        if (rel.contains("invokeaction")) {
-            return true
-        }
-        if (rel.contains("invoke;action")) {
-            return true
-        }
-        return false
+    fun hasArguments(): Boolean {
+        return !argMap().isNullOrEmpty()
     }
 
 }
