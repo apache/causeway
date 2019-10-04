@@ -219,6 +219,8 @@ public interface FacetFactory {
 
     public static class ProcessParameterContext extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
         private final int paramNum;
+        private final Class<?> paramType;
+        private final Parameter parameter; 
 
         public ProcessParameterContext(
                 final Class<?> cls,
@@ -232,6 +234,8 @@ public interface FacetFactory {
                 throw _Exceptions.unrecoverable("invalid ProcessParameterContext");
             }
             this.paramNum = paramNum;
+            this.paramType = super.method.getParameterTypes()[paramNum];
+            this.parameter = super.method.getParameters()[paramNum];
         }
 
         public int getParamNum() {
@@ -243,21 +247,21 @@ public interface FacetFactory {
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnParameter(Class<A> annotationType) {
-            return _Annotations.synthesizeInherited(getParameter(), annotationType);
+            return _Annotations.synthesizeInherited(parameter, annotationType);
         }
 
         /**
          * @since 2.0
          */
         public Class<?> getParameterType() {
-            return super.method.getParameterTypes()[paramNum];
+            return this.paramType;
         }
         
         /**
          * @since 2.0
          */
         public Parameter getParameter() {
-            return super.method.getParameters()[paramNum];
+            return parameter;
         }
     }
 

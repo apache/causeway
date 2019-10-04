@@ -33,8 +33,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -366,7 +364,7 @@ implements MetaModelValidatorRefiner {
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             final Constructor<?>[] constructors = correspondingClass.getDeclaredConstructors();
             for (Constructor<?> constructor : constructors) {
-                if(constructor.getParameterTypes().length == 0) {
+                if(constructor.getParameterCount() == 0) {
                     if (!Modifier.isPublic(constructor.getModifiers())) {
                         validationFailures
                         .add(objectSpec.getIdentifier(),

@@ -133,8 +133,7 @@ public class DomainEventHelper {
 
         // no-arg constructor
         for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if(parameterTypes.length == 0) {
+            if(constructor.getParameterCount() == 0) {
                 final Object event = constructor.newInstance();
                 final ActionDomainEvent<S> ade = uncheckedCast(event);
 
@@ -231,8 +230,7 @@ public class DomainEventHelper {
 
         // no-arg constructor
         for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if(parameterTypes.length == 0) {
+            if(constructor.getParameterCount() == 0) {
                 final Object event = constructor.newInstance();
                 final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
                 pde.initSource(source);
@@ -320,8 +318,7 @@ public class DomainEventHelper {
 
         // no-arg constructor
         for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if(parameterTypes.length ==0) {
+            if(constructor.getParameterCount() == 0) {
                 final Object event = constructor.newInstance();
                 final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
 

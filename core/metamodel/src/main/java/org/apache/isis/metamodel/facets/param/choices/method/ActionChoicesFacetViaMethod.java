@@ -34,6 +34,8 @@ import org.apache.isis.metamodel.facets.param.choices.ActionChoicesFacetAbstract
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
@@ -77,10 +79,10 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         final Object[] options = (Object[]) objectOrCollection;
         final Object[][] results = new Object[options.length][];
 
+        val parameterTypes = method.getParameterTypes();
+        
         for (int i = 0; i < results.length; i++) {
-            final Class<?> parameterType = method.getParameterTypes()[i];
-            results[i] = handleResults(options[i], parameterType,
-                    interactionInitiatedBy);
+            results[i] = handleResults(options[i], parameterTypes[i], interactionInitiatedBy);
         }
         return results;
     }

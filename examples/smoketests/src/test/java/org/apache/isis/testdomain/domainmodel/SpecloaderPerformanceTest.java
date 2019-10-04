@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
-import java.time.Duration;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -27,6 +25,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.commons.internal.base._Timing;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -36,7 +36,7 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 
-import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -66,7 +66,7 @@ class SpecloaderPerformanceTest {
         IsisBeanTypeRegistry.repeatedTesting = true;
     }
     
-    static long ITERATIONS = 40; /* should typically run in ~10s */
+    static long ITERATIONS = 400; /* should typically run in ~10s */
     static long EXPECTED_MILLIS_PER_ITERATION = 500;
     
     @Test 
@@ -75,17 +75,23 @@ class SpecloaderPerformanceTest {
         config.getReflector().getIntrospector().setParallelize(true);
         
         val timeOutMillis = ITERATIONS * EXPECTED_MILLIS_PER_ITERATION;
+        val goodUntilMillis = System.currentTimeMillis() + timeOutMillis;
         
-        assertTimeout(Duration.ofMillis(timeOutMillis), ()->{
+        val repeatedRun = (Runnable)()->{
         
             for(int i=0; i<ITERATIONS; ++i) {
+                _Annotations.clearCache();
                 specificationLoader.shutdown();
                 specificationLoader.init();
+           
+                if(System.currentTimeMillis() > goodUntilMillis) {
+                    fail("timed out");
+                }
             }
             
-        });
+        };
         
-        
+        _Timing.runVerbose("Repeated Concurrent Specloading", repeatedRun);
     }
 
 

@@ -63,7 +63,7 @@ public class DisableForSessionFacetViaMethod extends DisableForSessionFacetAbstr
         if (session == null) {
             return null;
         }
-        final int len = method.getParameterTypes().length;
+        final int len = method.getParameterCount();
         final Object[] parameters = new Object[len];
         parameters[0] = session.createUserMemento();
         // TODO: need to change to pick up as non-static rather than static

@@ -62,6 +62,13 @@ public final class _Annotations {
         return synthesize(annotatedElement, annotationType);
     }
     
+    //final static _Probe probe1 = _Probe.unlimited().label("synthesizeInherited");
+    //final static _Probe probe2 = _Probe.unlimited().label("synthesizeInherited");
+    private final static _Annotations_SyntCache syntCache = new _Annotations_SyntCache();
+    public static void clearCache() {
+        syntCache.clear();
+    }
+    
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
@@ -76,6 +83,25 @@ public final class _Annotations {
     public static <A extends Annotation> Optional<A> synthesizeInherited(
             AnnotatedElement annotatedElement, 
             Class<A> annotationType) {
+        
+        //probe1.println("lookup");
+        
+        //return _AnnotationsLegacy.nearest(annotatedElement, annotationType);
+        
+        return calc_synthesizeInherited(annotatedElement, annotationType);
+               
+        
+//        return syntCache.computeIfAbsent(
+//                annotatedElement, 
+//                annotationType, 
+//                _Annotations::calc_synthesizeInherited);
+    }
+    
+    private static <A extends Annotation> Optional<A> calc_synthesizeInherited(
+            AnnotatedElement annotatedElement, 
+            Class<A> annotationType) {
+        
+        //probe2.println("cache-miss");
         
         val collected = _Annotations
                 .collect(annotatedElement);
@@ -111,7 +137,7 @@ public final class _Annotations {
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> synthesize(
-            Class<?> annotatedElement, 
+            AnnotatedElement annotatedElement, 
             Class<A> annotationType) {
         
         val synthesized = _Annotations
@@ -128,10 +154,13 @@ public final class _Annotations {
     /**
      * @apiNote don't expose Spring's MergedAnnotations
      */
-    private static MergedAnnotations collect(AnnotatedElement annotatedElement) {
+    static MergedAnnotations collect(AnnotatedElement annotatedElement) {
         
-        //TODO use cache if not already
         val collected = MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS);
+        
+//        val collected = syntCache.computeIfAbsent(annotatedElement, __->
+//            MergedAnnotations.from(annotatedElement, SearchStrategy.INHERITED_ANNOTATIONS));
+
         return collected;
     }
     
@@ -139,23 +168,12 @@ public final class _Annotations {
         if(ReflectionUtils.isObjectMethod(getter)) {
             return null;
         }
-        val fieldNameCandidate1 = fieldNameForGetter(getter);
-        if(fieldNameCandidate1==null) {
+        val fieldNameCandidate = fieldNameForGetter(getter);
+        if(fieldNameCandidate==null) {
             return null;
         }
-        //val fieldNameCandidate2 = "_" + fieldNameCandidate1; //XXX legacy behavior
-        
         val declaringClass = getter.getDeclaringClass();
-        for(val field : declaringClass.getDeclaredFields()) { //TODO use cache if appropriate ... ReflectionUtils.findField(clazz, name)
-            val fieldName = field.getName(); 
-            if(fieldName.equals(fieldNameCandidate1)) {
-                return field;
-            }
-//            if(fieldName.equals(fieldNameCandidate2)) { //XXX legacy behavior
-//                return field;
-//            }
-        }
-        return null;
+        return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
     }
     
     private static String fieldNameForGetter(Method getter) {

@@ -73,9 +73,9 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         }
 
         final Method actionMethod = processMethodContext.getMethod();
-        final Class<?>[] paramTypes = actionMethod.getParameterTypes();
+        final int paramCount = actionMethod.getParameterCount();
 
-        for (int i = 0; i < paramTypes.length; i++) {
+        for (int i = 0; i < paramCount; i++) {
 
             // attempt to match method...
             Method defaultMethod = findDefaultNumMethod(processMethodContext, i);

@@ -58,9 +58,8 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
     private void attachActionChoicesFacetIfParameterChoicesMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
-        final Class<?>[] actionParamTypes = actionMethod.getParameterTypes();
 
-        if (actionParamTypes.length <= 0) {
+        if (actionMethod.getParameterCount() <= 0) {
             return;
         }
 

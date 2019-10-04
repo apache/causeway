@@ -78,7 +78,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
         // this could be a dependent defaults situation, but has a previous parameter been updated
         // that this parameter is dependent upon?
-        final int numParams = method.getParameterTypes().length;
+        final int numParams = method.getParameterCount();
         if (paramNumUpdated < numParams) {
             // in this case the parameter that was updated is previous
             //
