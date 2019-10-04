@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.action.hidden;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Where;
@@ -31,13 +31,12 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public class HiddenFacetForActionAnnotation extends HiddenFacetAbstract {
 
     public static HiddenFacet create(
-            final List<Action> actions,
+            final Optional<Action> actionsIfAny,
             final FacetHolder holder) {
 
-        return actions.stream()
+        return actionsIfAny
                 .map(Action::hidden)
                 .filter(where -> where != null && where != Where.NOT_SPECIFIED)
-                .findFirst()
                 .map(where -> new HiddenFacetForActionAnnotation(where, holder))
                 .orElse(null);
     }

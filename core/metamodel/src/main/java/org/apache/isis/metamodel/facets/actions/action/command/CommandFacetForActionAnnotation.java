@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.actions.action.command;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
@@ -35,16 +35,15 @@ import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
-            final List<Action> actions,
+            final Optional<Action> actionsIfAny,
             final IsisConfiguration configuration,
             final ServiceInjector servicesInjector,
             final FacetHolder holder) {
 
         final CommandActionsConfiguration setting = CommandActionsConfiguration.from(configuration);
 
-        return actions.stream()
+        return actionsIfAny
                 .filter(action -> action.command() != CommandReification.NOT_SPECIFIED)
-                .findFirst()
                 .map(action -> {
 
                     CommandReification command = action.command();

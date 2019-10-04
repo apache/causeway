@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.action.semantics;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacetAb
 public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFacetAbstract {
 
     public static ActionSemanticsFacet create(
-            final List<Action> actions,
+            final Optional<Action> actionsIfAny,
             final FacetHolder holder) {
 
-        return actions.stream()
+        return actionsIfAny
                 .map(Action::semantics)
                 .filter(semanticsOf -> semanticsOf != SemanticsOf.NOT_SPECIFIED)
-                .findFirst()
                 .map(semanticsOf ->
                 (ActionSemanticsFacet)new ActionSemanticsFacetForActionAnnotation(semanticsOf, holder))
                 .orElse(new ActionSemanticsFacetFallbackToNonIdempotent(holder));

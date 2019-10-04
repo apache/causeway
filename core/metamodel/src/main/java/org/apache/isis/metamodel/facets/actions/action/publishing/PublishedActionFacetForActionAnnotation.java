@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.action.publishing;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
@@ -32,16 +32,15 @@ import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 public class PublishedActionFacetForActionAnnotation extends PublishedActionFacetAbstract {
 
     public static PublishedActionFacet create(
-            final List<Action> actions,
+            final Optional<Action> actionsIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final PublishActionsConfiguration setting = PublishActionsConfiguration.from(configuration);
 
-        return actions.stream()
+        return actionsIfAny
                 .map(Action::publishing)
                 .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
-                .findFirst()
                 .map(publishing -> {
                     switch (publishing) {
                     case AS_CONFIGURED:

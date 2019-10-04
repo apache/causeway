@@ -19,7 +19,8 @@
 
 package org.apache.isis.metamodel.facets.actions.action.prototype;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -31,15 +32,14 @@ import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacetAbstract
 public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
 
     public static PrototypeFacet create(
-            final List<Action> actions,
+            final Optional<Action> actionsIfAny,
             final FacetHolder holder,
-            final DeploymentType deploymentType) {
+            final Supplier<DeploymentType> lazyDeploymentType) {
 
-        return actions.stream()
+        return actionsIfAny
                 .map(Action::restrictTo)
                 .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
-                .findFirst()
-                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, deploymentType))
+                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, lazyDeploymentType.get()))
                 .orElse(null);
 
     }
