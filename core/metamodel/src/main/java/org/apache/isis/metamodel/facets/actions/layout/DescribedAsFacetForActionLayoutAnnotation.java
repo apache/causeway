@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -29,12 +29,13 @@ import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacetAbstract
 
 public class DescribedAsFacetForActionLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(List<ActionLayout> actionLayouts, FacetHolder holder) {
+    public static DescribedAsFacet create(
+            final Optional<ActionLayout> actionLayoutIfAny,
+            final FacetHolder holder) {
 
-        return actionLayouts.stream()
+        return actionLayoutIfAny
                 .map(ActionLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(describedAs -> new DescribedAsFacetForActionLayoutAnnotation(describedAs, holder))
                 .orElse(null);
     }

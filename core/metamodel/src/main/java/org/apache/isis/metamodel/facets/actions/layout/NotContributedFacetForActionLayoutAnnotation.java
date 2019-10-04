@@ -19,7 +19,7 @@
 package org.apache.isis.metamodel.facets.actions.layout;
 
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
@@ -31,13 +31,12 @@ import org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFac
 public class NotContributedFacetForActionLayoutAnnotation extends NotContributedFacetAbstract {
 
     public static NotContributedFacet create(
-            final List<ActionLayout> actionLayouts,
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
-        return actionLayouts.stream()
+        return actionLayoutIfAny
                 .map(ActionLayout::contributed)
                 .filter(contributed -> contributed != Contributed.NOT_SPECIFIED)
-                .findFirst()
                 .map(contributed -> {
                     return new NotContributedFacetForActionLayoutAnnotation(contributed, holder);
                 })

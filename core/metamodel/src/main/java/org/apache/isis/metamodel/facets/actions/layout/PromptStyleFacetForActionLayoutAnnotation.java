@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.actions.layout;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -40,14 +40,13 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
     }
 
     public static PromptStyleFacet create(
-            final List<ActionLayout> actionLayouts,
+            final Optional<ActionLayout> actionLayoutIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        return actionLayouts.stream()
+        return actionLayoutIfAny
                 .map(ActionLayout::promptStyle)
                 .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
-                .findFirst()
                 .map(promptStyle -> {
 
                     switch (promptStyle) {
@@ -67,10 +66,10 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
 
                         promptStyle = configuration.getViewer().getWicket().getPromptStyle();
                         return new PromptStyleFacetAsConfigured(promptStyle, holder);
-
-
+                    default:
+                        throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
                     }
-                    throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
+                    
                 })
                 .orElseGet(() -> {
                     // do not replace

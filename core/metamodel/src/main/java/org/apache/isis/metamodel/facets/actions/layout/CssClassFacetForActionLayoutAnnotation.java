@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 public class CssClassFacetForActionLayoutAnnotation extends CssClassFacetAbstract {
 
     public static CssClassFacet create(
-            final List<ActionLayout> actionLayouts,
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
-        return actionLayouts.stream()
+        return actionLayoutIfAny
                 .map(ActionLayout::cssClass)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(cssClass -> new CssClassFacetForActionLayoutAnnotation(cssClass, holder))
                 .orElse(null);
     }

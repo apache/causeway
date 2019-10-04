@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -31,13 +31,12 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public class HiddenFacetForActionLayoutAnnotation extends HiddenFacetAbstract {
 
     public static HiddenFacet create(
-            final List<ActionLayout> actionLayouts,
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
-        return actionLayouts.stream()
+        return actionLayoutIfAny
                 .map(ActionLayout::hidden)
                 .filter(where -> where != null && where != Where.NOT_SPECIFIED)
-                .findFirst()
                 .map(where -> new HiddenFacetForActionLayoutAnnotation(where, holder))
                 .orElse(null);
     }

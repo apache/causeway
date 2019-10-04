@@ -19,25 +19,19 @@
 
 package org.apache.isis.metamodel.facets.collections.collection;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
-import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
@@ -53,12 +47,12 @@ import org.apache.isis.metamodel.facets.collections.collection.notpersisted.NotP
 import org.apache.isis.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
-import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.util.EventUtil;
+
+import lombok.val;
 
 public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
@@ -77,11 +71,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     void processModify(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
-
-        final Class<?> cls = processMethodContext.getCls();
-        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val cls = processMethodContext.getCls();
+        val typeSpec = getSpecificationLoader().loadSpecification(cls);
+        val holder = processMethodContext.getFacetHolder();
 
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
         if(getterFacet == null) {
@@ -96,13 +88,12 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
 
         // search for @Collection(domainEvent=...)
-        final CollectionDomainEventFacetAbstract collectionDomainEventFacet = collections.stream()
+        val collectionDomainEventFacet = collectionIfAny
                 .map(Collection::domainEvent)
                 .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
-                .findFirst()
                 .map(domainEvent ->
                 (CollectionDomainEventFacetAbstract)
                 new CollectionDomainEventFacetForCollectionAnnotation(
@@ -183,34 +174,31 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
 
     void processHidden(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(hidden=...)
-        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
-        HiddenFacet facet = HiddenFacetForCollectionAnnotation.create(collections, holder);
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        val facet = HiddenFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
 
     void processEditing(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val holder = processMethodContext.getFacetHolder();
 
         // check for @Collection(editing=...)
-        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
-        DisabledFacet facet = DisabledFacetForCollectionAnnotation.create(collections, holder);
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        val facet = DisabledFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
 
     void processNotPersisted(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val holder = processMethodContext.getFacetHolder();
 
         // search for @Collection(notPersisted=...)
-        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
-        NotPersistedFacet facet = NotPersistedFacetForCollectionAnnotation.create(collections, holder);
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        val facet = NotPersistedFacetForCollectionAnnotation.create(collectionIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -218,24 +206,24 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext) {
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        final Method method = processMethodContext.getMethod();
+        val facetHolder = processMethodContext.getFacetHolder();
+        val method = processMethodContext.getMethod();
 
-        final Class<?> methodReturnType = method.getReturnType();
+        val methodReturnType = method.getReturnType();
         if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
             return;
         }
 
         // check for @Collection(typeOf=...)
-        final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         TypeOfFacet facet = TypeOfFacetOnCollectionFromCollectionAnnotation
-                .create(collections, facetHolder);
+                .create(collectionIfAny, facetHolder);
 
         // else infer from return type
         if(facet == null) {
-            final Class<?> returnType = method.getReturnType();
+            val returnType = method.getReturnType();
             if (returnType.isArray()) {
-                final Class<?> componentType = returnType.getComponentType();
+                val componentType = returnType.getComponentType();
                 facet = new TypeOfFacetInferredFromArray(componentType, facetHolder);
             }
         }
@@ -250,8 +238,8 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     private TypeOfFacet inferFromGenericReturnType(final ProcessMethodContext processMethodContext) {
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        final Method method = processMethodContext.getMethod();
+        val facetHolder = processMethodContext.getFacetHolder();
+        val method = processMethodContext.getMethod();
 
         final Type type = method.getGenericReturnType();
         if (!(type instanceof ParameterizedType)) {
@@ -266,7 +254,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         final Object actualTypeArgument = actualTypeArguments[0];
         if (actualTypeArgument instanceof Class) {
-            final Class<?> actualType = (Class<?>) actualTypeArgument;
+            val actualType = (Class<?>) actualTypeArgument;
             return new TypeOfFacetInferredFromGenerics(actualType, facetHolder);
         }
 

@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.collections.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -29,11 +29,12 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(List<CollectionLayout> collectionLayouts, FacetHolder holder) {
+    public static NamedFacet create(
+            final Optional<CollectionLayout> collectionLayoutIfAny, 
+            final FacetHolder holder) {
 
-        return collectionLayouts.stream()
+        return collectionLayoutIfAny
                 .filter(collectionLayout -> _Strings.emptyToNull(collectionLayout.named()) != null)
-                .findFirst()
                 .map(collectionLayout ->
                 new NamedFacetForCollectionLayoutAnnotation(
                         collectionLayout.named(), collectionLayout.namedEscaped(), holder))

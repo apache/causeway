@@ -19,7 +19,6 @@
 package org.apache.isis.jdo.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.jdo.annotations.Column;
@@ -30,7 +29,6 @@ import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentF
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation;
@@ -43,6 +41,8 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposit
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+
+import lombok.val;
 
 
 public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
@@ -65,8 +65,8 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
         BigDecimalValueFacet existingFacet = holder.getFacet(BigDecimalValueFacet.class);
 
-        final List<Column> jdoColumnAnnotations = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
-        final Column jdoColumnAnnotation = jdoColumnAnnotations.isEmpty() ? null : jdoColumnAnnotations.get(0);
+        val jdoColumnAnnotation = processMethodContext.synthesizeOnMethod(Column.class)
+                .orElse(null);
 
         if (jdoColumnAnnotation == null) {
             if(existingFacet != null && !existingFacet.isNoop()) {

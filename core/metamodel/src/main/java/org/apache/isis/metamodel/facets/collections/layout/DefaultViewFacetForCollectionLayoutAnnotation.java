@@ -19,12 +19,11 @@
 
 package org.apache.isis.metamodel.facets.collections.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
@@ -36,14 +35,13 @@ public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFa
     }
 
     public static DefaultViewFacet create(
-            final List<CollectionLayout> collectionLayouts,
+            final Optional<CollectionLayout> collectionLayoutIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final String defaultView = collectionLayouts.stream()
+        final String defaultView = collectionLayoutIfAny
                 .map(CollectionLayout::defaultView)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .orElseGet(() -> configuration.getViewers().getCollectionLayout().getDefaultView().toNameLower());
         return new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder);
     }

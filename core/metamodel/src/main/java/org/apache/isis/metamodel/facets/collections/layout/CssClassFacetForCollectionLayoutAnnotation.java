@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.collections.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -29,12 +29,11 @@ import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
 public class CssClassFacetForCollectionLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(List<CollectionLayout> collectionLayouts, FacetHolder holder) {
+    public static CssClassFacet create(Optional<CollectionLayout> collectionLayoutIfAny, FacetHolder holder) {
 
-        return collectionLayouts.stream()
+        return collectionLayoutIfAny
                 .map(CollectionLayout::cssClass)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(cssClass -> new CssClassFacetForCollectionLayoutAnnotation(cssClass, holder))
                 .orElse(null);
     }

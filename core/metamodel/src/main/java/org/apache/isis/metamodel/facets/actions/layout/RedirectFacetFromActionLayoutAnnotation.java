@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Redirect;
@@ -29,11 +29,13 @@ import org.apache.isis.metamodel.facets.actions.redirect.RedirectFacetAbstract;
 
 public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
 
-    public static RedirectFacet create(final List<ActionLayout> actionLayouts, final FacetHolder holder) {
-        return actionLayouts.stream()
+    public static RedirectFacet create(
+            final Optional<ActionLayout> actionLayoutIfAny, 
+            final FacetHolder holder) {
+        
+        return actionLayoutIfAny
                 .map(ActionLayout::redirectPolicy)
                 .map(redirect ->  new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
-                .findFirst()
                 .orElse(null);
     }
 

@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.collections.layout;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -31,12 +31,14 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class HiddenFacetForCollectionLayoutAnnotation extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final List<CollectionLayout> collectionLayouts, final FacetHolder holder) {
-        return collectionLayouts.stream()
+    public static HiddenFacet create(
+            final Optional<CollectionLayout> collectionLayoutIfAny, 
+            final FacetHolder holder) {
+        
+        return collectionLayoutIfAny
                 .map(CollectionLayout::hidden)
                 .filter(Objects::nonNull)
                 .filter(where -> where != Where.NOT_SPECIFIED)
-                .findFirst()
                 .map(where -> new HiddenFacetForCollectionLayoutAnnotation(where, holder))
                 .orElse(null);
     }

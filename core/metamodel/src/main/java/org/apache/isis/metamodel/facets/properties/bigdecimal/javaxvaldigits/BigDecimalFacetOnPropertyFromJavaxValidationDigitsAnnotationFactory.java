@@ -19,16 +19,16 @@
 package org.apache.isis.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.validation.constraints.Digits;
 
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+
+import lombok.val;
 
 public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory extends FacetFactoryAbstract {
 
@@ -43,12 +43,11 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory
             return;
         }
 
-        final List<Digits> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Digits.class);
-        final Digits annotation = annotations.isEmpty() ? null : annotations.get(0);
-        if (annotation == null) {
+        val digits = processMethodContext.synthesizeOnMethod(Digits.class).orElse(null); 
+        if (digits == null) {
             return;
         }
-        FacetUtil.addFacet(create(processMethodContext, annotation));
+        FacetUtil.addFacet(create(processMethodContext, digits));
     }
 
     private BigDecimalValueFacet create(final ProcessMethodContext processMethodContext, final Digits annotation) {

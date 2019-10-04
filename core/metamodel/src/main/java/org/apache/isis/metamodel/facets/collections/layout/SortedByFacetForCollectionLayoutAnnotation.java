@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.collections.layout;
 
 import java.util.Comparator;
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -32,14 +32,13 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 public class SortedByFacetForCollectionLayoutAnnotation extends SortedByFacetAbstract {
 
     public static SortedByFacet create(
-            final List<CollectionLayout> collectionLayouts,
+            final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
-        return collectionLayouts.stream()
+        return collectionLayoutIfAny
                 .map(CollectionLayout::sortedBy)
                 .filter(sortedBy -> sortedBy != Comparator.class)
                 .filter(Comparator.class::isAssignableFrom)
-                .findFirst()
                 .map(sortedBy -> {
                     Class<? extends Comparator<?>> sortedByForceGenerics = uncheckedCast(sortedBy);
                     return new SortedByFacetForCollectionLayoutAnnotation(sortedByForceGenerics, holder);

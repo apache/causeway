@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFace
 public class BookmarkPolicyFacetForActionLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
     public static BookmarkPolicyFacet create(
-            final List<ActionLayout> actionLayouts,
+            final Optional<ActionLayout> actionLayoutIfAny,
             final FacetHolder holder) {
 
-        return actionLayouts.stream()
+        return actionLayoutIfAny
                 .map(ActionLayout::bookmarking)
                 .filter(bookmarkPolicy -> bookmarkPolicy != BookmarkPolicy.NOT_SPECIFIED)
-                .findFirst()
                 .map(bookmarkPolicy -> {
                     switch (bookmarkPolicy){
                     case AS_ROOT:

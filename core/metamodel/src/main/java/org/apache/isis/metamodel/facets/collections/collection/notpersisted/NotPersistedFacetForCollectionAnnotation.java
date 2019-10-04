@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.collections.collection.notpersisted;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.MementoSerialization;
@@ -34,13 +34,12 @@ public class NotPersistedFacetForCollectionAnnotation extends NotPersistedFacetA
     }
 
     public static NotPersistedFacet create(
-            final List<Collection> collections,
+            final Optional<Collection> collectionIfAny,
             final FacetHolder holder) {
 
-        return collections.stream()
+        return collectionIfAny
                 .map(Collection::mementoSerialization)
                 .filter(mementoSerialization -> mementoSerialization != MementoSerialization.NOT_SPECIFIED)
-                .findFirst()
                 .map(mementoSerialization -> {
                     switch (mementoSerialization) {
                     case INCLUDED:

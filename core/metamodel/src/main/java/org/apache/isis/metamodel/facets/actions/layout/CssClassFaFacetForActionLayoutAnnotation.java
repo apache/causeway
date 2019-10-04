@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.layout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,7 +30,9 @@ import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final List<ActionLayout> actionLayouts, final FacetHolder holder) {
+    public static CssClassFaFacet create(
+            final Optional<ActionLayout> actionLayoutIfAny, 
+            final FacetHolder holder) {
 
         class Annot {
             private Annot(final ActionLayout actionLayout) {
@@ -41,10 +43,9 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
             CssClassFaPosition cssClassFaPosition;
         }
 
-        return actionLayouts.stream()
+        return actionLayoutIfAny
                 .map(Annot::new)
                 .filter(a -> a.cssClassFa != null )
-                .findFirst()
                 .map(a -> new CssClassFaFacetForActionLayoutAnnotation(a.cssClassFa, a.cssClassFaPosition, holder))
                 .orElse(null);
     }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.collections.collection.disabled;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Editing;
@@ -31,12 +31,11 @@ import org.apache.isis.metamodel.facets.members.disabled.DisabledFacetAbstractIm
 public class DisabledFacetForCollectionAnnotation extends DisabledFacetAbstractImpl {
 
     public static DisabledFacet create(
-            final List<Collection> collections,
+            final Optional<Collection> collectionIfAny,
             final FacetHolder holder) {
 
-        return collections.stream()
+        return collectionIfAny
                 .filter(collection -> collection.editing() != Editing.NOT_SPECIFIED)
-                .findFirst()
                 .map(collection -> {
                     final Editing editing = collection.editing();
                     final String disabledReason = collection.editingDisabledReason();

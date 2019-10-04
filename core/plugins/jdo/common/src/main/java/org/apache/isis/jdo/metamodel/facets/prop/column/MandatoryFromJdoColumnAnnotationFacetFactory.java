@@ -44,6 +44,9 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+
+import lombok.val;
+
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 
@@ -79,10 +82,10 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             }
         }
 
-        final List<Column> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
-        final Column annotation = annotations.isEmpty() ? null : annotations.get(0);
-        boolean required = whetherRequired(processMethodContext, annotation);
-        MandatoryFacet facet = annotation != null
+        val jdoColumnAnnotation = processMethodContext.synthesizeOnMethod(Column.class)
+                .orElse(null);
+        boolean required = whetherRequired(processMethodContext, jdoColumnAnnotation);
+        MandatoryFacet facet = jdoColumnAnnotation != null
                 ? new MandatoryFacetDerivedFromJdoColumn(holder, required)
                         : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
 

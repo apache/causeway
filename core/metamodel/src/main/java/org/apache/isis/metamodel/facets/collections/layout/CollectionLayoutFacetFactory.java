@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.facets.collections.layout;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.Annotations;
@@ -35,6 +34,8 @@ import org.apache.isis.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.metamodel.facets.object.paged.PagedFacet;
 
+import lombok.val;
+
 
 public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
@@ -45,45 +46,44 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        final List<CollectionLayout> collectionLayouts = Annotations.getAnnotations(processMethodContext.getMethod(), CollectionLayout.class);
-
+        val collectionLayoutIfAny = processMethodContext.synthesizeOnMethod(CollectionLayout.class);
 
         // cssClass
-        CssClassFacet cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
+        CssClassFacet cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
         FacetUtil.addFacet(cssClassFacet);
 
 
         // describedAs
         DescribedAsFacet describedAsFacet =
-                DescribedAsFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
+                DescribedAsFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
         FacetUtil.addFacet(describedAsFacet);
 
 
         // hidden
-        HiddenFacet hiddenFacet = HiddenFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
+        HiddenFacet hiddenFacet = HiddenFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
         FacetUtil.addFacet(hiddenFacet);
 
 
         // defaultView
         DefaultViewFacet defaultViewFacet =
-                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayouts, getConfiguration(), holder);
+                DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, getConfiguration(), facetHolder);
         FacetUtil.addFacet(defaultViewFacet);
 
 
         // named
-        NamedFacet namedFacet = NamedFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
+        NamedFacet namedFacet = NamedFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
         FacetUtil.addFacet(namedFacet);
 
 
         // paged
-        PagedFacet pagedFacet = PagedFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
+        PagedFacet pagedFacet = PagedFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
         FacetUtil.addFacet(pagedFacet);
 
 
         // sortedBy
-        SortedByFacet sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayouts, holder);
+        SortedByFacet sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
         FacetUtil.addFacet(sortedByFacet);
 
     }

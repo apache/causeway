@@ -42,6 +42,9 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+
+import lombok.val;
+
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 
@@ -60,17 +63,17 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
             return;
         }
 
-        final List<Column> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
-
+       
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }
+        val jdoColumnAnnotation = processMethodContext.synthesizeOnMethod(Column.class)
+                .orElse(null);
 
-        if (annotations.isEmpty()) {
+        if (jdoColumnAnnotation==null) {
             return;
         }
-        final Column annotation = annotations.get(0);
-        if(annotation.length() == -1) {
+        if(jdoColumnAnnotation.length() == -1) {
             return;
         }
 
@@ -78,7 +81,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
 
         MaxLengthFacet existingFacet = holder.getFacet(MaxLengthFacet.class);
 
-        final MaxLengthFacet facet = new MaxLengthFacetDerivedFromJdoColumn(annotation.length(), holder);
+        final MaxLengthFacet facet = new MaxLengthFacetDerivedFromJdoColumn(jdoColumnAnnotation.length(), holder);
 
         if(!existingFacet.isNoop()) {
             // will raise violation later
