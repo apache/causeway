@@ -1,24 +1,43 @@
 {
   "properties": [
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName",
-      "type": "java.lang.String",
-      "description": "JDBC driver used by DataNucleus Object store to connect."
+      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionFactoryName"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL",
-      "type": "java.lang.String",
-      "description": "URL used by DataNucleus Object store to connect."
+      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionFactory2Name"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName",
-      "type": "java.lang.String",
-      "description": "User account used by DataNucleus Object store to connect."
+      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionPasswordDecrypter"
     },
     {
-      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword",
-      "type": "java.lang.String",
-      "description": "Password for the user account used by DataNucleus Object store to connect."
+      "name": "isis.persistor.datanucleus.impl.datanucleus.PersistenceUnitLoadClasses"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.datanucleus.objectProvider.className"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.datanucleus.schema.validateAll"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword"
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass"
     },
     {
       "name": "isis.viewer.wicket.credit.1.url",
@@ -61,6 +80,33 @@
     }
   ],
   "hints": [
+    {
+      "name": "isis.persistor.datanucleus.impl.datanucleus.ConnectionPasswordDecrypter",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.datanucleus.store.connection.DecryptionProvider"
+        }
+      }]
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "javax.jdo.PersistenceManagerFactory"
+        }
+      }]
+    },
+    {
+      "name": "isis.persistor.datanucleus.impl.datanucleus.objectProvider.className",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.datanucleus.state.StateManagerImpl"
+        }
+      }]
+    },
     {
       "name": "isis.viewer.wicket.themes.provider",
       "providers": [{

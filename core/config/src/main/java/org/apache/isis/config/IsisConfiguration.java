@@ -18,7 +18,6 @@
  */
 package org.apache.isis.config;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,22 +108,203 @@ public class IsisConfiguration {
             private final Impl impl = new Impl();
             @Data
             public static class Impl {
+                private final DataNucleus datanucleus = new DataNucleus();
+                /**
+                 * slightly different capitalization is intentional here; cannot have nested class with same name as parent.
+                 * We rely on additional-spring-configuration-metadata.json to specify the desired property names.
+                 */
+                @Data
+                public static class DataNucleus {
+
+                    /**
+                     * 	The JNDI name for a connection factory for transactional connections.
+                     *
+                     * 	<p>
+                     * 	    For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
+                     * 	</p>
+                     *
+                     * <p>
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     * </p>
+                     */
+                    private String connectionFactoryName;
+
+                    /**
+                     * 	The JNDI name for a connection factory for non-transactional connections.
+                     *
+                     * 	<p>
+                     * 	    For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
+                     * 	</p>
+                     *
+                     * <p>
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     * </p>
+                     */
+                    private String connectionFactory2Name;
+
+
+                    /**
+                     * Name of a class that implements <tt>org.datanucleus.store.connection.DecryptionProvider</tt>
+                     * and should only be specified if the password is encrypted in the persistence properties.
+                     *
+                     * <p>
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     * </p>
+                     */
+                    private String connectionPasswordDecrypter;
+
+
+                    /**
+                     * 	Used when we have specified the persistence-unit name for a PMF/EMF and where we want the
+                     * 	datastore "tables" for all classes of that persistence-unit loading up into the StoreManager.
+                     *
+                     * <p>
+                     *     Defaults to true, which is the opposite of DataNucleus' own default.
+                     *     (The reason that DN defaults to false is because some databases are slow so such an
+                     *     operation would slow down the startup process).
+                     * </p>
+                     *
+                     * <p>
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     * </p>
+                     */
+                    private boolean persistenceUnitLoadClasses = true;
+
+                    public enum TransactionTypeEnum {
+                        RESOURCE_LOCAL,
+                        JTA
+                    }
+
+                    /**
+                     * Type of transaction to use.
+                     *
+                     * <p>
+                     * If running under JavaSE the default is RESOURCE_LOCAL, and if running under JavaEE the default is JTA.
+                     * </p>
+                     *
+                     * <p>
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     * </p>
+                     */
+                    private TransactionTypeEnum transactionType;
+
+                    private final Cache cache = new Cache();
+                    @Data
+                    public static class Cache {
+                        private final Level2 level2 = new Level2();
+                        @Data
+                        public static class Level2 {
+                            /**
+                             * Name of the type of Level 2 Cache to use.
+                             *
+                             * <p>
+                             * Can be used to interface with external caching products.
+                             * Use "none" to turn off L2 caching.
+                             * </p>
+                             *
+                             * <p>
+                             * See also Cache docs for JDO, and for JPA
+                             * </p>
+                             */
+                            private String type = "none";
+                        }
+                    }
+                    private final ObjectProvider objectProvider = new ObjectProvider();
+                    @Data
+                    public static class ObjectProvider {
+                        /**
+                         * New feature in DN 3.2.3; enables dependency injection into entities
+                         *
+                         * <p>
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         * </p>
+                         */
+                        private String className = "org.apache.isis.jdo.datanucleus.JDOStateManagerForIsis";
+                    }
+                    private final Schema schema = new Schema();
+                    @Data
+                    public static class Schema {
+                        /**
+                         * Whether DN should automatically create the database schema on bootstrapping.
+                         *
+                         * <p>
+                         *     This should be set to <tt>true</tt> when running against an in-memory database, but
+                         *     set to <tt>false</tt> when running against a persistent database (use something like
+                         *     flyway instead to manage schema evolution).
+                         * </p>
+                         *
+                         * <p>
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         * </p>
+                         */
+                        private boolean autoCreateAll = false;
+
+                        /**
+                         * Previously we defaulted this property to "true", but that could cause the target database
+                         * to be modified
+                         *
+                         * <p>
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         * </p>
+                         */
+                        private boolean autoCreateDatabase = false;
+
+                        /**
+                         * <p>
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         * </p>
+                         */
+                        private boolean validateAll = true;
+                    }
+                }
                 private final Javax javax = new Javax();
                 @Data
                 public static class Javax {
                     private final Jdo jdo = new Jdo();
                     @Data
                     public static class Jdo {
+
+                        /**
+                         * <p>
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         * </p>
+                         */
+                        private String persistenceManagerFactoryClass = "org.datanucleus.api.jdo.JDOPersistenceManagerFactory";
+
                         private final Option option = new Option();
                         @Data
                         public static class Option {
-                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionDriverName'
+                            /**
+                             * JDBC driver used by DataNucleus Object store to connect.
+                             *
+                             * <p>
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             * </p>
+                             */
                             private String connectionDriverName;
-                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionURL'
+                            /**
+                             * URL used by DataNucleus Object store to connect.
+                             *
+                             * <p>
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             * </p>
+                             */
                             private String connectionUrl;
-                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionUserName'
+                            /**
+                             * User account used by DataNucleus Object store to connect.
+                             *
+                             * <p>
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             * </p>
+                             */
                             private String connectionUserName;
-                            // this field also appears in additional-spring-configuration-metadata.json, to fix the casing as 'ConnectionPassword'
+                            /**
+                             * Password for the user account used by DataNucleus Object store to connect.
+                             *
+                             * <p>
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             * </p>
+                             */
                             private String connectionPassword;
                         }
                     }
@@ -704,7 +884,6 @@ public class IsisConfiguration {
             @Data
             public static class Themes {
 
-// isis.viewer.wicket.themes.showChooser
                 /**
                  * A comma separated list of enabled theme names, as defined by https://bootswatch.com.
                  */
