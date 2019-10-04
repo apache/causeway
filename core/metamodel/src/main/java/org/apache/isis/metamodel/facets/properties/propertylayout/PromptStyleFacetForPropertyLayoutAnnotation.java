@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.properties.propertylayout;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -40,14 +40,13 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
     }
 
     public static PromptStyleFacet create(
-            final List<PropertyLayout> propertyLayouts,
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        return propertyLayouts.stream()
+        return propertyLayoutIfAny
                 .map(PropertyLayout::promptStyle)
                 .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
-                .findFirst()
                 .map(promptStyle -> {
 
                     switch (promptStyle) {

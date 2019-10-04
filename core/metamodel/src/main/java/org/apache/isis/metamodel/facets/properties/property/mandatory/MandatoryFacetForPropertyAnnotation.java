@@ -20,13 +20,14 @@
 package org.apache.isis.metamodel.facets.properties.property.mandatory;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+
+import lombok.val;
 
 public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacetAbstract {
 
@@ -35,23 +36,22 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
     }
 
     public static MandatoryFacet create(
-            final List<Property> properties,
+            final java.util.Optional<Property> propertyIfAny,
             final Method method,
             final FacetHolder holder) {
 
-        if(properties.isEmpty()) {
+        if(!propertyIfAny.isPresent()) {
             return null;
         }
 
-        final Class<?> returnType = method.getReturnType();
+        val returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return new MandatoryFacetForPropertyAnnotation.Primitive(holder);
         }
 
-        return properties.stream()
+        return propertyIfAny
                 .map(Property::optionality)
                 .filter(optionality -> optionality != Optionality.NOT_SPECIFIED)
-                .findFirst()
                 .map(optionality -> {
                     switch (optionality) {
                     case DEFAULT:

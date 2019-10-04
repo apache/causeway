@@ -20,12 +20,15 @@
 package org.apache.isis.metamodel.facets.properties.property.mandatory;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+
+import lombok.val;
 
 /**
  * Derived by presence of an {@link Nullable} annotation.
@@ -40,13 +43,16 @@ public class MandatoryFacetInvertedByNullableAnnotationOnProperty extends Mandat
         super(holder, Semantics.OPTIONAL);
     }
 
-    public static MandatoryFacet create(final Nullable annotation, Method method, final FacetHolder holder) {
+    public static MandatoryFacet create(
+            final Optional<Nullable> annotation, 
+            final Method method, 
+            final FacetHolder holder) {
 
-        if(annotation == null) {
+        if(!annotation.isPresent()) {
             return null;
         }
 
-        final Class<?> returnType = method.getReturnType();
+        val returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return null;
         }

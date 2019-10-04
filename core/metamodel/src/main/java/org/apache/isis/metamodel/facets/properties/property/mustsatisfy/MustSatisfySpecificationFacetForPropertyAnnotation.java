@@ -20,8 +20,10 @@
 package org.apache.isis.metamodel.facets.properties.property.mustsatisfy;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Property;
@@ -31,21 +33,20 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
 
+import lombok.val;
+
 public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSatisfySpecificationFacetAbstract {
 
     public static Facet create(
-            final List<Property> properties,
+            final Optional<Property> propertyIfAny,
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
-
-        List<Specification> specifications = properties.stream()
+        
+        val specifications = propertyIfAny
                 .map(Property::mustSatisfy)
-                .flatMap(classes ->
-                Arrays.stream(classes)
-                .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
-                .filter(Objects::nonNull)
-                        )
-                .collect(Collectors.toList());
+                .map(MustSatisfySpecificationFacetForPropertyAnnotation::toSpecifications)
+                .orElse(Collections.emptyList());
+        
         return specifications.size() > 0
                 ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder, servicesInjector)
                         : null;
@@ -55,6 +56,11 @@ public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSati
         super(specifications, holder, servicesInjector);
     }
 
-
+    private static List<Specification> toSpecifications(Class<? extends Specification>[] classes) {
+        return Arrays.stream(classes)
+        .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
+    }
 
 }

@@ -20,12 +20,10 @@
 package org.apache.isis.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -35,6 +33,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
@@ -53,10 +53,10 @@ public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends Abstract
                 new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod);
 
         // when
-        final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final List<PropertyLayout> propertyLayouts = facetFactory.propertyLayoutsFrom(processMethodContext);
+        val facetHolder = facetFactory.facetHolderFrom(processMethodContext);
+        val propertyLayoutIfAny = facetFactory.propertyLayoutsFrom(processMethodContext);
 
-        facetFactory.processLabelAt(holder, propertyLayouts);
+        facetFactory.processLabelAt(facetHolder, propertyLayoutIfAny);
 
         // then
         final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);

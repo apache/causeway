@@ -19,34 +19,18 @@
 
 package org.apache.isis.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetedMethod;
-import org.apache.isis.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
-import org.apache.isis.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.metamodel.facets.properties.projection.ProjectingFacet;
 import org.apache.isis.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -67,13 +51,14 @@ import org.apache.isis.metamodel.facets.properties.property.notpersisted.NotPers
 import org.apache.isis.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
-import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.metamodel.util.EventUtil;
+
+import lombok.val;
 
 public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract 
 implements MetaModelValidatorRefiner {
@@ -105,13 +90,11 @@ implements MetaModelValidatorRefiner {
 
     void processModify(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
+        val cls = processMethodContext.getCls();
+        val typeSpec = getSpecificationLoader().loadSpecification(cls);
+        val holder = processMethodContext.getFacetHolder();
 
-        final Class<?> cls = processMethodContext.getCls();
-        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-
-        final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
+        val getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
         if(getterFacet == null) {
             return;
         }
@@ -123,13 +106,12 @@ implements MetaModelValidatorRefiner {
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
 
         // search for @Property(domainEvent=...), else use default event type
-        final PropertyDomainEventFacetAbstract propertyDomainEventFacet = properties.stream()
+        val propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
-                .findFirst()
                 .map(domainEvent -> (PropertyDomainEventFacetAbstract) new PropertyDomainEventFacetForPropertyAnnotation(
                         defaultFromDomainObjectIfRequired(typeSpec, domainEvent), getterFacet, holder))
                 .orElse(new PropertyDomainEventFacetDefault(
@@ -202,34 +184,27 @@ implements MetaModelValidatorRefiner {
 
 
     void processHidden(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
+        val facetHolder = processMethodContext.getFacetHolder();
+        
         // search for @Property(hidden=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        HiddenFacet facet = HiddenFacetForPropertyAnnotation.create(properties, holder);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val hiddenFacet = HiddenFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(hiddenFacet);
     }
 
     void processEditing(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val facetHolder = processMethodContext.getFacetHolder();
 
         // search for @Property(editing=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        DisabledFacet facet = DisabledFacetForPropertyAnnotation.create(properties, holder);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val disabledFacet = DisabledFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(disabledFacet);
     }
 
     void processCommand(final ProcessMethodContext processMethodContext) {
-
-        final Method method = processMethodContext.getMethod();
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-
-        final FacetHolder holder = facetHolder;
+        val facetHolder = processMethodContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
@@ -241,20 +216,20 @@ implements MetaModelValidatorRefiner {
         }
 
         // check for @Property(command=...)
-        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder, getServiceInjector());
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val commandFacet = CommandFacetForPropertyAnnotation
+                .create(propertyIfAny, getConfiguration(), facetHolder, getServiceInjector());
 
         FacetUtil.addFacet(commandFacet);
     }
 
     void processProjecting(final ProcessMethodContext processMethodContext) {
 
-        //final Class<?> cls = processMethodContext.getCls();
-        final Method method = processMethodContext.getMethod();
-        final Property property = Annotations.getAnnotation(method, Property.class);
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+        val facetHolder = processMethodContext.getFacetHolder();
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
 
-        final ProjectingFacet projectingFacet = ProjectingFacetFromPropertyAnnotation
-                .create(property, facetHolder);
+        val projectingFacet = ProjectingFacetFromPropertyAnnotation
+                .create(propertyIfAny, facetHolder);
 
         FacetUtil.addFacet(projectingFacet);
 
@@ -262,9 +237,8 @@ implements MetaModelValidatorRefiner {
 
     void processPublishing(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        
+        val holder = processMethodContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
@@ -277,8 +251,9 @@ implements MetaModelValidatorRefiner {
         }
 
         // check for @Property(publishing=...)
-        final PublishedPropertyFacet facet = PublishedPropertyFacetForPropertyAnnotation
-                .create(properties, getConfiguration(), holder);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val facet = PublishedPropertyFacetForPropertyAnnotation
+                .create(propertyIfAny, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }
@@ -286,89 +261,86 @@ implements MetaModelValidatorRefiner {
 
 
     void processMaxLength(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(maxLength=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        MaxLengthFacet facet = MaxLengthFacetForPropertyAnnotation.create(properties, holder);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val facet = MaxLengthFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
 
     void processMustSatisfy(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(mustSatisfy=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        Facet facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(properties, holder, getServiceInjector());
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(propertyIfAny, holder, getServiceInjector());
 
         FacetUtil.addFacet(facet);
     }
 
     void processNotPersisted(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        NotPersistedFacet facet = NotPersistedFacetForPropertyAnnotation.create(properties, holder);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val facet = NotPersistedFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
 
     void processOptional(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
+        val method = processMethodContext.getMethod();
 
-        final FacetHolder holder = processMethodContext.getFacetHolder();
+        val holder = processMethodContext.getFacetHolder();
 
         // check for @Nullable
-        final List<Nullable> nullableAnnotations = Annotations.getAnnotations(method, Nullable.class);
-        final Nullable nullableAnnotation = nullableAnnotations.isEmpty() ? null : nullableAnnotations.get(0);
-        final MandatoryFacet facet2 =
-                MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableAnnotation, method, holder);
+        val nullableIfAny = processMethodContext.synthesizeOnMethod(Nullable.class);
+        val facet2 =
+                MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableIfAny, method, holder);
         FacetUtil.addFacet(facet2);
         conflictingOptionalityValidator.flagIfConflict(
                 facet2, "Conflicting @Nullable with other optionality annotation");
 
         // search for @Property(optional=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        final MandatoryFacet facet3 = MandatoryFacetForPropertyAnnotation.create(properties, method, holder);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val facet3 = MandatoryFacetForPropertyAnnotation.create(propertyIfAny, method, holder);
         FacetUtil.addFacet(facet3);
         conflictingOptionalityValidator.flagIfConflict(
                 facet3, "Conflicting Property#optionality with other optionality annotation");
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
+        val holder = processMethodContext.getFacetHolder();
+        val returnType = processMethodContext.getMethod().getReturnType();
 
         // check for @Pattern first
-        final List<Pattern> patterns = Annotations.getAnnotations(processMethodContext.getMethod(), Pattern.class);
-        RegExFacet facet = RegExFacetForPatternAnnotationOnProperty.create(patterns, returnType, holder);
+        val patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
+        val facet = RegExFacetForPatternAnnotationOnProperty.create(patternIfAny, returnType, holder);
 
-        // else search for @Property(pattern=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        if (facet == null) {
-            facet = RegExFacetForPropertyAnnotation.create(properties, returnType, holder);
+        if (facet != null) {
+            FacetUtil.addFacet(facet);
+            return;
         }
-
-        FacetUtil.addFacet(facet);
+        
+        // else search for @Property(pattern=...)
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val facet2 = RegExFacetForPropertyAnnotation.create(propertyIfAny, returnType, holder);
+        FacetUtil.addFacet(facet2);
+        
+        
     }
 
 
     void processFileAccept(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
+        val holder = processMethodContext.getFacetHolder();
 
         // else search for @Property(maxLength=...)
-        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        FileAcceptFacet facet = FileAcceptFacetForPropertyAnnotation.create(properties, holder);
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val facet = FileAcceptFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }

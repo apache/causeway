@@ -19,12 +19,11 @@
 
 package org.apache.isis.metamodel.facets.properties.property.publishing;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFacetAbstract;
@@ -32,16 +31,15 @@ import org.apache.isis.metamodel.facets.properties.publish.PublishedPropertyFace
 public class PublishedPropertyFacetForPropertyAnnotation extends PublishedPropertyFacetAbstract {
 
     public static PublishedPropertyFacet create(
-            final List<Property> properties,
+            final Optional<Property> propertyIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final PublishPropertiesConfiguration setting = configuration.getServices().getPublish().getProperties();
 
-        return properties.stream()
+        return propertyIfAny
                 .map(Property::publishing)
                 .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
-                .findFirst()
                 .map(publishing -> {
 
                     switch (publishing) {

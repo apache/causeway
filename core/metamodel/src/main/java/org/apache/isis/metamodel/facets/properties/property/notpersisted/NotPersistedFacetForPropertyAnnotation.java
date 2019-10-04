@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.properties.property.notpersisted;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.applib.annotation.Property;
@@ -34,13 +34,12 @@ public class NotPersistedFacetForPropertyAnnotation extends NotPersistedFacetAbs
     }
 
     public static NotPersistedFacet create(
-            final List<Property> properties,
+            final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
-        return properties.stream()
+        return propertyIfAny
                 .map(Property::mementoSerialization)
                 .filter(mementoSerialization -> mementoSerialization == MementoSerialization.EXCLUDED)
-                .findFirst()
                 .map(mementoSerialization -> new NotPersistedFacetForPropertyAnnotation(holder))
                 .orElse(null);
     }

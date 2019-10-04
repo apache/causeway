@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.properties.property.regex;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Strings;
@@ -34,18 +34,18 @@ public class RegExFacetForPatternAnnotationOnProperty extends RegExFacetAbstract
     private final Pattern pattern;
 
     public static RegExFacet create(
-            final List<javax.validation.constraints.Pattern> patterns,
-            final Class<?> returnType, final FacetHolder holder) {
+            final Optional<javax.validation.constraints.Pattern> patternIfAny,
+            final Class<?> returnType, 
+            final FacetHolder holder) {
 
         if (!Annotations.isString(returnType)) {
             return null;
         }
 
-        return patterns.stream()
+        return patternIfAny
                 .filter(pattern -> _Strings.emptyToNull(pattern.regexp()) != null)
-                .findFirst()
                 .map(pattern ->
-                new RegExFacetForPatternAnnotationOnProperty(
+                    new RegExFacetForPatternAnnotationOnProperty(
                         pattern.regexp(), pattern.flags(), pattern.message(), holder))
                 .orElse(null);
     }

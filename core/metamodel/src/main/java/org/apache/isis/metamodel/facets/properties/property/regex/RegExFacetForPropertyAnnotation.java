@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.properties.property.regex;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Property;
@@ -35,7 +35,7 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
     private final Pattern pattern;
 
     public static RegExFacet create(
-            final List<Property> properties,
+            final Optional<Property> propertyIfAny,
             final Class<?> returnType,
             final FacetHolder holder) {
 
@@ -43,9 +43,8 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
             return null;
         }
 
-        return properties.stream()
+        return propertyIfAny
                 .filter(property -> _Strings.emptyToNull(property.regexPattern()) != null)
-                .findFirst()
                 .map(property -> new RegExFacetForPropertyAnnotation(
                         property.regexPattern(), property.regexPatternFlags(), holder,
                         property.regexPatternReplacement()))

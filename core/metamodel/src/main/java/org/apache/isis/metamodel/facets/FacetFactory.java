@@ -62,8 +62,11 @@ public interface FacetFactory {
             return cls;
         }
         
-        /** @since 2.0*/
-        public <A extends Annotation> Optional<A> synthesize(Class<A> annotationType) {
+        /** 
+         * Annotation lookup on this context's type (cls).
+         * @since 2.0
+         */
+        public <A extends Annotation> Optional<A> synthesizeOnType(Class<A> annotationType) {
             return _Annotations.synthesizeInherited(cls, annotationType);
         }
         
@@ -112,7 +115,10 @@ public interface FacetFactory {
             methodRemover.removeMethod(method);
         }
         
-        /** @since 2.0*/
+        /** 
+         * Annotation lookup on this context's method.
+         * @since 2.0
+         */
         public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {
             return _Annotations.synthesizeInherited(method, annotationType);
         }
@@ -224,6 +230,14 @@ public interface FacetFactory {
 
         public int getParamNum() {
             return paramNum;
+        }
+        
+        /** 
+         * Annotation lookup on this context's method parameter.
+         * @since 2.0
+         */
+        public <A extends Annotation> Optional<A> synthesizeOnParameter(Class<A> annotationType) {
+            return _Annotations.synthesizeInherited(super.method.getParameters()[paramNum], annotationType);
         }
     }
 

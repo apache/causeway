@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.properties.propertylayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Repainting;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.properties.renderunchanged.UnchangingFac
 public class UnchangingFacetForPropertyLayoutAnnotation extends UnchangingFacetAbstract {
 
     public static UnchangingFacet create(
-            final List<PropertyLayout> propertyLayouts,
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
-        return propertyLayouts.stream()
+        return propertyLayoutIfAny
                 .map(PropertyLayout::repainting)
                 .filter(repainting -> repainting != Repainting.NOT_SPECIFIED)
-                .findFirst()
                 .map(repainting -> {
                     boolean unchanging;
                     switch (repainting) {

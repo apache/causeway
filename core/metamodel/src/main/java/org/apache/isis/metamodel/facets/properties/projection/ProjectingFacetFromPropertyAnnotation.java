@@ -19,11 +19,15 @@
 
 package org.apache.isis.metamodel.facets.properties.projection;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetedMethod;
+
+import lombok.val;
 
 public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstract {
 
@@ -39,11 +43,15 @@ public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstra
         this.projecting = projecting;
     }
 
-    public static ProjectingFacet create(final Property property, final FacetedMethod facetHolder) {
-        if(property == null) {
+    public static ProjectingFacet create(
+            final Optional<Property> propertyIfAny, 
+            final FacetedMethod facetHolder) {
+        
+        if(!propertyIfAny.isPresent()) {
             return null;
         }
-        final Projecting projecting = property.projecting();
+        
+        val projecting = propertyIfAny.get().projecting();
         switch (projecting) {
         case PROJECTED:
             return new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder);

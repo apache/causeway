@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.facets.properties.property.command;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.metamodel.facets.actions.command.CommandFacet;
@@ -36,16 +35,15 @@ import org.apache.isis.metamodel.facets.actions.command.CommandFacetAbstract;
 public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
     public static CommandFacet create(
-            final List<Property> properties,
+            final Optional<Property> propertyIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
         final CommandPropertiesConfiguration setting = configuration.getServices().getCommand().getProperties();
 
-        return properties.stream()
+        return propertyIfAny
                 .filter(property -> property.command() != CommandReification.NOT_SPECIFIED)
-                .findFirst()
                 .map(property -> {
                     CommandReification command = property.command();
                     final CommandPersistence commandPersistence = property.commandPersistence();

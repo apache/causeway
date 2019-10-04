@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.properties.property.hidden;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
@@ -31,13 +31,12 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
 
     public static HiddenFacet create(
-            final List<Property> properties,
+            final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
-        return properties.stream()
+        return propertyIfAny
                 .map(Property::hidden)
                 .filter(where -> where != null && where != Where.NOT_SPECIFIED)
-                .findFirst()
                 .map(where -> new HiddenFacetForPropertyAnnotation(where, holder))
                 .orElse(null);
     }

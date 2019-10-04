@@ -58,7 +58,7 @@ public final class _Annotations {
     public static <A extends Annotation> Optional<A> findNearestAnnotation(
             Class<?> annotatedElement, 
             Class<A> annotationType) {
-        //XXX if synthesize has good runtime performance, than we simply us it here
+        //XXX if synthesize has good runtime performance, then we simply us it here
         return synthesize(annotatedElement, annotationType);
     }
     
@@ -126,7 +126,7 @@ public final class _Annotations {
     // -- HELPER
     
     /**
-     * @apiNote don't expose Spring's MergedAnnotation
+     * @apiNote don't expose Spring's MergedAnnotations
      */
     private static MergedAnnotations collect(AnnotatedElement annotatedElement) {
         
@@ -139,15 +139,21 @@ public final class _Annotations {
         if(ReflectionUtils.isObjectMethod(getter)) {
             return null;
         }
-        val fieldNameCandidate = fieldNameForGetter(getter);
-        if(fieldNameCandidate==null) {
+        val fieldNameCandidate1 = fieldNameForGetter(getter);
+        if(fieldNameCandidate1==null) {
             return null;
         }
+        //val fieldNameCandidate2 = "_" + fieldNameCandidate1; //XXX legacy behavior
+        
         val declaringClass = getter.getDeclaringClass();
-        for(val field : declaringClass.getDeclaredFields()) {
-            if(field.getName().equals(fieldNameCandidate)) {
+        for(val field : declaringClass.getDeclaredFields()) { //TODO use cache if appropriate ... ReflectionUtils.findField(clazz, name)
+            val fieldName = field.getName(); 
+            if(fieldName.equals(fieldNameCandidate1)) {
                 return field;
             }
+//            if(fieldName.equals(fieldNameCandidate2)) { //XXX legacy behavior
+//                return field;
+//            }
         }
         return null;
     }

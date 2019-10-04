@@ -40,8 +40,8 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
     public void process(ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
 
-        val domainServiceIfAny = processClassContext.synthesize(DomainService.class);
-        val domainServiceLayoutIfAny = processClassContext.synthesize(DomainServiceLayout.class);
+        val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
+        val domainServiceLayoutIfAny = processClassContext.synthesizeOnType(DomainServiceLayout.class);
 
         // either one is enough to treat this as a domain service
         val isAnyPresent = 

@@ -36,8 +36,8 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         val facetHolder = processClassContext.getFacetHolder();
 
-        val domainObjectLayoutIfAny = processClassContext.synthesize(DomainObjectLayout.class);
-        val viewModelLayoutIfAny = processClassContext.synthesize(ViewModelLayout.class);
+        val domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
+        val viewModelLayoutIfAny = processClassContext.synthesizeOnType(ViewModelLayout.class);
 
         val metamodelEventService = this.metamodelEventService.get();
 

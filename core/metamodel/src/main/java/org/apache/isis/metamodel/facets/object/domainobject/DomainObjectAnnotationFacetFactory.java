@@ -129,7 +129,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         }
 
         // check for @DomainObject(auditing=....)
-        val auditing = processClassContext.synthesize(DomainObject.class).map(DomainObject::auditing);
+        val auditing = processClassContext.synthesizeOnType(DomainObject.class).map(DomainObject::auditing);
         val auditableFacet = AuditableFacetForDomainObjectAnnotation
                 .create(auditing, getConfiguration(), facetHolder);
 
@@ -152,7 +152,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         }
 
         // check from @DomainObject(publishing=...)
-        val publishing = processClassContext.synthesize(DomainObject.class).map(DomainObject::publishing);
+        val publishing = processClassContext.synthesizeOnType(DomainObject.class).map(DomainObject::publishing);
         val publishedObjectFacet = PublishedObjectFacetForDomainObjectAnnotation
                 .create(publishing, getConfiguration(), facetHolder);
 
@@ -167,7 +167,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(autoCompleteRepository=...)
-        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         val facet = createFor(domainObjectIfAny, facetHolder, cls);
 
         // then add
@@ -232,7 +232,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(bounded=...)
-        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         val facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
 
         // then add
@@ -243,7 +243,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(editing=...)
-        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         ImmutableFacet facet = ImmutableFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, getConfiguration(), facetHolder);
 
@@ -256,7 +256,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         val facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(objectType=...)
-        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         val facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjectIfAny, facetHolder);
 
         //FIXME [2033] removed here (module 'metamodel'), should be re-implemented in 'jdo-common'         
@@ -276,7 +276,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
     void processNature(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
 
         if(!domainObjectIfAny.isPresent()) {
             return;
@@ -308,7 +308,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
     private void processLifecycleEvents(final ProcessClassContext processClassContext) {
         
-        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         if(!domainObjectIfAny.isPresent()) {
             return;
         }
@@ -325,7 +325,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
 
     private void processDomainEvents(final ProcessClassContext processClassContext) {
-        val domainObjectIfAny = processClassContext.synthesize(DomainObject.class);
+        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         if(!domainObjectIfAny.isPresent()) {
             return;
         }

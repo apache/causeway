@@ -19,10 +19,9 @@
 
 package org.apache.isis.metamodel.facets.properties.propertylayout;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
@@ -30,11 +29,10 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetForPropertyLayoutAnnotation extends NamedFacetAbstract {
 
     public static NamedFacet create(
-            final List<PropertyLayout> propertyLayouts,
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
-        return propertyLayouts.stream()
-                .filter(propertyLayout -> _Strings.emptyToNull(propertyLayout.named()) != null)
-                .findFirst()
+        
+        return propertyLayoutIfAny
                 .map(propertyLayout -> new NamedFacetForPropertyLayoutAnnotation(
                         propertyLayout.named(), propertyLayout.namedEscaped(), holder))
                 .orElse(null);

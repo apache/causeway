@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.properties.property.fileaccept;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.commons.internal.base._Strings;
@@ -30,13 +30,12 @@ import org.apache.isis.metamodel.facets.objectvalue.fileaccept.FileAcceptFacetAb
 public class FileAcceptFacetForPropertyAnnotation extends FileAcceptFacetAbstract {
 
     public static FileAcceptFacet create(
-            final List<Property> properties,
+            final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
-        return properties.stream()
+        return propertyIfAny
                 .map(Property::fileAccept)
                 .filter(_Strings::isNotEmpty)
-                .findFirst()
                 .map(fileAccept -> new FileAcceptFacetForPropertyAnnotation(fileAccept, holder))
                 .orElse(null);
     }

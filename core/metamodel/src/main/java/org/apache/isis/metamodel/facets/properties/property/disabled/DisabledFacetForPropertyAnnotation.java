@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.properties.property.disabled;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
@@ -30,11 +30,12 @@ import org.apache.isis.metamodel.facets.members.disabled.DisabledFacetAbstractIm
 
 public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImpl {
 
-    public static DisabledFacet create(final List<Property> properties, final FacetHolder holder) {
+    public static DisabledFacet create(
+            final Optional<Property> propertyIfAny, 
+            final FacetHolder holder) {
 
-        return properties.stream()
+        return propertyIfAny
                 .filter(property -> property.editing() != Editing.NOT_SPECIFIED)
-                .findFirst()
                 .map(property -> {
                     switch (property.editing()) {
                     case AS_CONFIGURED:

@@ -20,10 +20,8 @@
 package org.apache.isis.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
@@ -33,6 +31,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
@@ -51,10 +51,10 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, method,
                 methodRemover, facetedMethod);
 
-        final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final List<PropertyLayout> propertyLayouts = facetFactory.propertyLayoutsFrom(processMethodContext);
+        val facetHolder = facetFactory.facetHolderFrom(processMethodContext);
+        val propertyLayoutIfAny = facetFactory.propertyLayoutsFrom(processMethodContext);
 
-        facetFactory.processNamed(holder, propertyLayouts);
+        facetFactory.processNamed(facetHolder, propertyLayoutIfAny);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
@@ -79,10 +79,10 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, method,
                 methodRemover, facetedMethod);
 
-        final FacetHolder holder = facetFactory.facetHolderFrom(processMethodContext);
-        final List<PropertyLayout> propertyLayouts = facetFactory.propertyLayoutsFrom(processMethodContext);
+        val facetHoldr = facetFactory.facetHolderFrom(processMethodContext);
+        val propertyLayoutIfAny = facetFactory.propertyLayoutsFrom(processMethodContext);
 
-        facetFactory.processNamed(holder, propertyLayouts);
+        facetFactory.processNamed(facetHoldr, propertyLayoutIfAny);
 
         // then
         final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
