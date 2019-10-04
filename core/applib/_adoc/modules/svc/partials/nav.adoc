@@ -1,120 +1,120 @@
-* xref:applib:rg:about.adoc[Domain Services]
+* xref:applib:svc:about.adoc[Domain Services]
 
 
-** xref:applib:rg:intro.adoc[Introduction]
-
-
-
-** xref:applib:rg:presentation-layer-api.adoc[Presentation Layer API]
-*** xref:applib:rg:presentation-layer-api/AcceptHeaderService.adoc[AcceptHeaderService]
-*** xref:applib:rg:presentation-layer-api/BookmarkUiService.adoc[BookmarkUiService]
-*** xref:applib:rg:presentation-layer-api/ConfigurationViewService.adoc[ConfigurationViewService]
-*** xref:applib:rg:presentation-layer-api/DeepLinkService.adoc[DeepLinkService]
-*** xref:applib:rg:presentation-layer-api/GuiceBeanProvider.adoc[GuiceBeanProvider]
+** xref:applib:svc:intro.adoc[Introduction]
 
 
 
-** xref:applib:rg:presentation-layer-spi.adoc[Presentation Layer SPI]
-*** xref:applib:rg:presentation-layer-spi/ContentMappingService.adoc[ContentMappingService]
-*** xref:applib:rg:presentation-layer-spi/EmailNotificationService.adoc[EmailNotificationService]
-*** xref:applib:rg:presentation-layer-spi/ErrorReportingService.adoc[ErrorReportingService]
-*** xref:applib:rg:presentation-layer-spi/ExceptionRecognizer.adoc[ExceptionRecognizer]
-*** xref:applib:rg:presentation-layer-spi/GridLoaderService.adoc[GridLoaderService]
-*** xref:applib:rg:presentation-layer-spi/GridService.adoc[GridService]
-*** xref:applib:rg:presentation-layer-spi/GridSystemService.adoc[GridSystemService]
-*** xref:applib:rg:presentation-layer-spi/HintStore.adoc[HintStore]
-*** xref:applib:rg:presentation-layer-spi/LocaleProvider.adoc[LocaleProvider]
-*** xref:applib:rg:presentation-layer-spi/MenuBarsLoaderService.adoc[MenuBarsLoaderService]
-*** xref:applib:rg:presentation-layer-spi/MenuBarsService.adoc[MenuBarsService]
-*** xref:applib:rg:presentation-layer-spi/RoutingService.adoc[RoutingService]
-*** xref:applib:rg:presentation-layer-spi/SessionLoggingService.adoc[SessionLoggingService]
-*** xref:applib:rg:presentation-layer-spi/TableColumnOrderService.adoc[TableColumnOrderService]
-*** xref:applib:rg:presentation-layer-spi/TranslationService.adoc[TranslationService]
-*** xref:applib:rg:presentation-layer-spi/TranslationsResolver.adoc[TranslationsResolver]
-*** xref:applib:rg:presentation-layer-spi/UrlEncodingService.adoc[UrlEncodingService]
-*** xref:applib:rg:presentation-layer-spi/UserProfileService.adoc[UserProfileService]
+** xref:applib:svc:presentation-layer-api.adoc[Presentation Layer API]
+*** xref:applib:svc:presentation-layer-api/AcceptHeaderService.adoc[AcceptHeaderService]
+*** xref:applib:svc:presentation-layer-api/BookmarkUiService.adoc[BookmarkUiService]
+*** xref:applib:svc:presentation-layer-api/ConfigurationViewService.adoc[ConfigurationViewService]
+*** xref:applib:svc:presentation-layer-api/DeepLinkService.adoc[DeepLinkService]
+*** xref:applib:svc:presentation-layer-api/GuiceBeanProvider.adoc[GuiceBeanProvider]
 
 
 
-** xref:applib:rg:application-layer-api.adoc[Application Layer API]
-*** xref:applib:rg:application-layer-api/ActionInvocationContext.adoc[ActionInvocationContext]
-
-*** xref:applib:rg:application-layer-api/BackgroundService.adoc[BackgroundService]
-**** xref:applib:rg:application-layer-api/BackgroundService/BackgroundCommandExecution.adoc[BackgroundCommandExecution]
-**** xref:applib:rg:application-layer-api/BackgroundService/Quartz.adoc[Quartz]
-
-
-*** xref:applib:rg:application-layer-api/CommandContext.adoc[CommandContext]
-*** xref:applib:rg:application-layer-api/DtoMappingHelper.adoc[DtoMappingHelper]
-*** xref:applib:rg:application-layer-api/InteractionContext.adoc[InteractionContext]
-*** xref:applib:rg:application-layer-api/MessageService.adoc[MessageService]
-*** xref:applib:rg:application-layer-api/SessionManagementService.adoc[SessionManagementService]
-*** xref:applib:rg:application-layer-api/TitleService.adoc[TitleService]
-*** xref:applib:rg:application-layer-api/TransactionService.adoc[TransactionService]
-*** xref:applib:rg:application-layer-api/WrapperFactory.adoc[WrapperFactory]
-
-
-
-** xref:applib:rg:application-layer-spi.adoc[Application Layer SPI]
-*** xref:applib:rg:application-layer-spi/BackgroundCommandService.adoc[BackgroundCommandService]
-*** xref:applib:rg:application-layer-spi/CommandService.adoc[CommandService]
-*** xref:applib:rg:application-layer-spi/HomePageProviderService.adoc[HomePageProviderService]
-*** xref:applib:rg:application-layer-spi/HealthCheckService.adoc[HealthCheckService]
+** xref:applib:svc:presentation-layer-spi.adoc[Presentation Layer SPI]
+*** xref:applib:svc:presentation-layer-spi/ContentMappingService.adoc[ContentMappingService]
+*** xref:applib:svc:presentation-layer-spi/EmailNotificationService.adoc[EmailNotificationService]
+*** xref:applib:svc:presentation-layer-spi/ErrorReportingService.adoc[ErrorReportingService]
+*** xref:applib:svc:presentation-layer-spi/ExceptionRecognizer.adoc[ExceptionRecognizer]
+*** xref:applib:svc:presentation-layer-spi/GridLoaderService.adoc[GridLoaderService]
+*** xref:applib:svc:presentation-layer-spi/GridService.adoc[GridService]
+*** xref:applib:svc:presentation-layer-spi/GridSystemService.adoc[GridSystemService]
+*** xref:applib:svc:presentation-layer-spi/HintStore.adoc[HintStore]
+*** xref:applib:svc:presentation-layer-spi/LocaleProvider.adoc[LocaleProvider]
+*** xref:applib:svc:presentation-layer-spi/MenuBarsLoaderService.adoc[MenuBarsLoaderService]
+*** xref:applib:svc:presentation-layer-spi/MenuBarsService.adoc[MenuBarsService]
+*** xref:applib:svc:presentation-layer-spi/RoutingService.adoc[RoutingService]
+*** xref:applib:svc:presentation-layer-spi/SessionLoggingService.adoc[SessionLoggingService]
+*** xref:applib:svc:presentation-layer-spi/TableColumnOrderService.adoc[TableColumnOrderService]
+*** xref:applib:svc:presentation-layer-spi/TranslationService.adoc[TranslationService]
+*** xref:applib:svc:presentation-layer-spi/TranslationsResolver.adoc[TranslationsResolver]
+*** xref:applib:svc:presentation-layer-spi/UrlEncodingService.adoc[UrlEncodingService]
+*** xref:applib:svc:presentation-layer-spi/UserProfileService.adoc[UserProfileService]
 
 
 
-** xref:applib:rg:core-domain-api.adoc[Core Domain API]
-*** xref:applib:rg:core-domain-api/ClockService.adoc[ClockService]
-*** xref:applib:rg:core-domain-api/ConfigurationService.adoc[ConfigurationService]
-*** xref:applib:rg:core-domain-api/EventBusService.adoc[EventBusService]
-*** xref:applib:rg:core-domain-api/FactoryService.adoc[FactoryService]
-*** xref:applib:rg:core-domain-api/Scratchpad.adoc[Scratchpad.]
-*** xref:applib:rg:core-domain-api/UserService.adoc[UserService]
+** xref:applib:svc:application-layer-api.adoc[Application Layer API]
+*** xref:applib:svc:application-layer-api/ActionInvocationContext.adoc[ActionInvocationContext]
+
+*** xref:applib:svc:application-layer-api/BackgroundService.adoc[BackgroundService]
+**** xref:applib:svc:application-layer-api/BackgroundService/BackgroundCommandExecution.adoc[BackgroundCommandExecution]
+**** xref:applib:svc:application-layer-api/BackgroundService/Quartz.adoc[Quartz]
+
+
+*** xref:applib:svc:application-layer-api/CommandContext.adoc[CommandContext]
+*** xref:applib:svc:application-layer-api/DtoMappingHelper.adoc[DtoMappingHelper]
+*** xref:applib:svc:application-layer-api/InteractionContext.adoc[InteractionContext]
+*** xref:applib:svc:application-layer-api/MessageService.adoc[MessageService]
+*** xref:applib:svc:application-layer-api/SessionManagementService.adoc[SessionManagementService]
+*** xref:applib:svc:application-layer-api/TitleService.adoc[TitleService]
+*** xref:applib:svc:application-layer-api/TransactionService.adoc[TransactionService]
+*** xref:applib:svc:application-layer-api/WrapperFactory.adoc[WrapperFactory]
 
 
 
-** xref:applib:rg:integration-api.adoc[Integration API]
-*** xref:applib:rg:integration-api/BookmarkService.adoc[BookmarkService]
-*** xref:applib:rg:integration-api/EmailService.adoc[EmailService]
-*** xref:applib:rg:integration-api/JaxbService.adoc[JaxbService]
-*** xref:applib:rg:integration-api/MementoService.adoc[MementoService]
-*** xref:applib:rg:integration-api/XmlSnapshotService.adoc[XmlSnapshotService]
+** xref:applib:svc:application-layer-spi.adoc[Application Layer SPI]
+*** xref:applib:svc:application-layer-spi/BackgroundCommandService.adoc[BackgroundCommandService]
+*** xref:applib:svc:application-layer-spi/CommandService.adoc[CommandService]
+*** xref:applib:svc:application-layer-spi/HomePageProviderService.adoc[HomePageProviderService]
+*** xref:applib:svc:application-layer-spi/HealthCheckService.adoc[HealthCheckService]
 
 
 
-** xref:applib:rg:metadata-api.adoc[Metadata API]
-*** xref:applib:rg:metadata-api/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository]
-*** xref:applib:rg:metadata-api/LayoutService.adoc[LayoutService]
-*** xref:applib:rg:metadata-api/MetamodelService.adoc[MetamodelService]
-*** xref:applib:rg:metadata-api/ServiceRegistry.adoc[ServiceRegistry]
-*** xref:applib:rg:metadata-api/SwaggerService.adoc[SwaggerService]
+** xref:applib:svc:core-domain-api.adoc[Core Domain API]
+*** xref:applib:svc:core-domain-api/ClockService.adoc[ClockService]
+*** xref:applib:svc:core-domain-api/ConfigurationService.adoc[ConfigurationService]
+*** xref:applib:svc:core-domain-api/EventBusService.adoc[EventBusService]
+*** xref:applib:svc:core-domain-api/FactoryService.adoc[FactoryService]
+*** xref:applib:svc:core-domain-api/Scratchpad.adoc[Scratchpad.]
+*** xref:applib:svc:core-domain-api/UserService.adoc[UserService]
 
 
 
-** xref:applib:rg:testing.adoc[Testing]
-*** xref:applib:rg:testing/ExecutionParametersService.adoc[ExecutionParametersService]
-*** xref:applib:rg:testing/FixtureScripts.adoc[FixtureScripts]
-*** xref:applib:rg:testing/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider]
-*** xref:applib:rg:testing/SudoService.adoc[SudoService]
-*** xref:applib:rg:testing/SwitchUserService.adoc[SwitchUserService]
+** xref:applib:svc:integration-api.adoc[Integration API]
+*** xref:applib:svc:integration-api/BookmarkService.adoc[BookmarkService]
+*** xref:applib:svc:integration-api/EmailService.adoc[EmailService]
+*** xref:applib:svc:integration-api/JaxbService.adoc[JaxbService]
+*** xref:applib:svc:integration-api/MementoService.adoc[MementoService]
+*** xref:applib:svc:integration-api/XmlSnapshotService.adoc[XmlSnapshotService]
 
 
 
-** xref:applib:rg:persistence-layer-api.adoc[Persistence Layer API]
-*** xref:applib:rg:persistence-layer-api/HsqlDbManagerMenu.adoc[HsqlDbManagerMenu]
-*** xref:applib:rg:persistence-layer-api/IsisJdoSupport.adoc[JdoSupport]
-*** xref:applib:rg:persistence-layer-api/MetricsService.adoc[MetricsService]
-*** xref:applib:rg:persistence-layer-api/QueryResultsCache.adoc[QueryResultsCache]
-*** xref:applib:rg:persistence-layer-api/RepositoryService.adoc[RepositoryService]
+** xref:applib:svc:metadata-api.adoc[Metadata API]
+*** xref:applib:svc:metadata-api/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository]
+*** xref:applib:svc:metadata-api/LayoutService.adoc[LayoutService]
+*** xref:applib:svc:metadata-api/MetamodelService.adoc[MetamodelService]
+*** xref:applib:svc:metadata-api/ServiceRegistry.adoc[ServiceRegistry]
+*** xref:applib:svc:metadata-api/SwaggerService.adoc[SwaggerService]
 
 
 
-** xref:applib:rg:persistence-layer-spi.adoc[Persistence Layer SPI]
-*** xref:applib:rg:persistence-layer-spi/AuditerService.adoc[AuditerService]
-*** xref:applib:rg:persistence-layer-spi/PublisherService.adoc[PublisherService]
-*** xref:applib:rg:persistence-layer-spi/UserRegistrationService.adoc[UserRegistrationService]
+** xref:applib:svc:testing.adoc[Testing]
+*** xref:applib:svc:testing/ExecutionParametersService.adoc[ExecutionParametersService]
+*** xref:applib:svc:testing/FixtureScripts.adoc[FixtureScripts]
+*** xref:applib:svc:testing/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider]
+*** xref:applib:svc:testing/SudoService.adoc[SudoService]
+*** xref:applib:svc:testing/SwitchUserService.adoc[SwitchUserService]
 
 
-** xref:applib:rg:bootstrapping-spi.adoc[Bootstrapping SPI]
-*** xref:applib:rg:bootstrapping-spi/ClassDiscoveryService.adoc[ClassDiscoveryService]
+
+** xref:applib:svc:persistence-layer-api.adoc[Persistence Layer API]
+*** xref:applib:svc:persistence-layer-api/HsqlDbManagerMenu.adoc[HsqlDbManagerMenu]
+*** xref:applib:svc:persistence-layer-api/IsisJdoSupport.adoc[JdoSupport]
+*** xref:applib:svc:persistence-layer-api/MetricsService.adoc[MetricsService]
+*** xref:applib:svc:persistence-layer-api/QueryResultsCache.adoc[QueryResultsCache]
+*** xref:applib:svc:persistence-layer-api/RepositoryService.adoc[RepositoryService]
+
+
+
+** xref:applib:svc:persistence-layer-spi.adoc[Persistence Layer SPI]
+*** xref:applib:svc:persistence-layer-spi/AuditerService.adoc[AuditerService]
+*** xref:applib:svc:persistence-layer-spi/PublisherService.adoc[PublisherService]
+*** xref:applib:svc:persistence-layer-spi/UserRegistrationService.adoc[UserRegistrationService]
+
+
+** xref:applib:svc:bootstrapping-spi.adoc[Bootstrapping SPI]
+*** xref:applib:svc:bootstrapping-spi/ClassDiscoveryService.adoc[ClassDiscoveryService]
 
