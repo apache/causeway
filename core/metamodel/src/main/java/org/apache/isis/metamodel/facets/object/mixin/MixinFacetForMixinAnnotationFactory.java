@@ -52,7 +52,7 @@ extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
         val facetHolder = processClassContext.getFacetHolder();
         
         val mixinFacet = MixinFacetForMixinAnnotation
-                .create(candidateMixinType, facetHolder, getServiceInjector());
+                .create(mixinIfAny.get(), candidateMixinType, facetHolder, getServiceInjector());
         facetHolder.addFacet(mixinFacet);
     }
 

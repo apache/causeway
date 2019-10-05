@@ -19,8 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.mixin;
 
-import static org.apache.isis.commons.internal.base._With.tryOrDefault;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -47,13 +45,13 @@ extends SingleValueFacetAbstract<String> implements MixinFacet {
     public MixinFacetAbstract(
             final Class<?> mixinType,
             final String value, 
-            final Class<?> constructorType,
+            final Constructor<?> constructor,
             final FacetHolder holder) {
 
         super(type(), value, holder);
         this.mixinType = mixinType;
-        this.constructorType = constructorType;
-        this.constructor = tryOrDefault(()->mixinType.getConstructor(constructorType), null); 
+        this.constructor = constructor;
+        this.constructorType = constructor.getParameterTypes()[0];
     }
 
     @Override

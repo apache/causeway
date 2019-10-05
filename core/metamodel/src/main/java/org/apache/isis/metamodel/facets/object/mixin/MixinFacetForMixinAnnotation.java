@@ -23,8 +23,11 @@ import java.lang.reflect.Constructor;
 
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+
+import lombok.val;
 
 public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
 
@@ -35,31 +38,27 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
     private MixinFacetForMixinAnnotation(
             final Class<?> mixinType,
             final String value, 
-            final Class<?> constructorType,
+            final Constructor<?> constructor,
             final FacetHolder holder) {
 
-        super(mixinType, value, constructorType, holder);
+        super(mixinType, value, constructor, holder);
     }
 
     public static MixinFacet create(
+            final Mixin mixin, 
             final Class<?> candidateMixinType, 
             final FacetHolder facetHolder,
             final ServiceInjector servicesInjector) {
         
-        final Mixin mixin = candidateMixinType.getAnnotation(Mixin.class);
-        if(mixin == null) {
-            return null;
-        }
-        final Constructor<?>[] constructors = candidateMixinType.getConstructors();
-        for (Constructor<?> constructor : constructors) {
-            final Class<?>[] constructorTypes = constructor.getParameterTypes();
-            if(constructorTypes.length != 1) {
-                continue;
-            }
-            final Class<?> constructorType = constructorTypes[0];
-            return new MixinFacetForMixinAnnotation(candidateMixinType, mixin.method(), constructorType, facetHolder);
-        }
-        return null;
+        val constructorIfAny = _Reflect.getPublic1ArgConstructor(candidateMixinType);
+        return constructorIfAny
+                .map(constructor -> new MixinFacetForMixinAnnotation(
+                        candidateMixinType, 
+                        mixin.method(), 
+                        constructor, 
+                        facetHolder))
+                .orElse(null);
+
     }
 
 }

@@ -29,10 +29,12 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -406,6 +408,17 @@ public final class _Reflect {
             }
         }
         return false;
+    }
+
+    public static Optional<Constructor<?>> getPublic1ArgConstructor(Class<?> cls) {
+        val constructors = cls.getConstructors();
+        for (val constructor : constructors) {
+            if(constructor.getParameterCount()==1 && 
+                    Modifier.isPublic(constructor.getModifiers())) {
+                return Optional.of(constructor);
+            }
+        }
+        return Optional.empty();
     }
 
 

@@ -88,8 +88,8 @@ abstract class MixinIntendedAs {
                         facetHolder);
         
         programmingModel.getList().stream()
-        .filter(facetFactory->!facetFactory.getClass().getSimpleName().startsWith("Grid"))
-        .peek(facetFactory->System.out.println("### " + facetFactory.getClass().getName()))
+//        .filter(facetFactory->!facetFactory.getClass().getSimpleName().startsWith("Grid"))
+//        .peek(facetFactory->System.out.println("### " + facetFactory.getClass().getName()))
         .forEach(facetFactory->facetFactory.process(processClassContext));
         
         return facetHolder;

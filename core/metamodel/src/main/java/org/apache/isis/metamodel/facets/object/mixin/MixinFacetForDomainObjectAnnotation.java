@@ -19,11 +19,13 @@
 
 package org.apache.isis.metamodel.facets.object.mixin;
 
+import java.lang.reflect.Constructor;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
@@ -38,7 +40,7 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
     private MixinFacetForDomainObjectAnnotation(
             final Class<?> mixinType,
             final String value, 
-            final Class<?> constructorType,
+            final Constructor<?> constructorType,
             final FacetHolder holder) {
 
         super(mixinType, value, constructorType, holder);
@@ -53,21 +55,16 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
         return domainObjectIfAny
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .map(domainObject -> {
-                    val constructors = candidateMixinType.getConstructors();
-                    for (val constructor : constructors) {
-                        if(constructor.getParameterCount() != 1) {
-                            continue;
-                        }
-                        val constructorTypes = constructor.getParameterTypes();
-                        val constructorType = constructorTypes[0];
-                        return new MixinFacetForDomainObjectAnnotation(
+                    
+                    val constructorIfAny = _Reflect.getPublic1ArgConstructor(candidateMixinType);
+                    
+                    return constructorIfAny
+                    .map(constructor -> new MixinFacetForDomainObjectAnnotation(
                                 candidateMixinType, 
                                 domainObject.mixinMethod(), 
-                                constructorType, 
-                                facetHolder);
-                    }
-                    // else
-                    return null;
+                                constructor, 
+                                facetHolder))
+                    .orElse(null);
                 })
                 .orElse(null);
     }
