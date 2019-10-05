@@ -31,6 +31,8 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 
 /**
  * Domain semantics for domain object collection.
@@ -208,5 +210,14 @@ public @interface Action {
      */
     String associateWithSequence() default "1";
 
-
+    /**
+     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     *
+     * <p>
+     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+     * </p>
+     *
+     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     */
+    String fileAccept() default "";
 }

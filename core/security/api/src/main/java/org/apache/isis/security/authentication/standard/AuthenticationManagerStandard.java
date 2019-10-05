@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -39,16 +40,23 @@ import org.apache.isis.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.security.authentication.manager.RegistrationDetails;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.Getter;
 import lombok.val;
 
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
     private final Map<String, String> userByValidationCode = _Maps.newHashMap();
     private final List<Authenticator> authenticators = _Lists.newArrayList();
-    private RandomCodeGenerator randomCodeGenerator;
+    private _Lazy<RandomCodeGenerator> randomCodeGenerator =
+            _Lazy.threadSafe(this::getDefaultRandomCodeGenerator);
+    
+    @Getter
+    private RandomCodeGenerator defaultRandomCodeGenerator = new RandomCodeGenerator10Chars();
 
-    private @Inject ServiceRegistry serviceRegistry;
+    @Inject
+    private ServiceRegistry serviceRegistry;
 
     @PostConstruct
     public void preInit() {
@@ -68,7 +76,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      */
     @Override
     public final void init() {
-        defaultRandomCodeGeneratorIfNecessary();
         addDefaultAuthenticators();
         if (authenticators.size() == 0) {
             throw new IsisException("No authenticators specified");
@@ -78,11 +85,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         }
     }
 
-    private void defaultRandomCodeGeneratorIfNecessary() {
-        if (randomCodeGenerator == null) {
-            randomCodeGenerator = new RandomCodeGenerator10Chars();
-        }
-    }
 
     /**
      * optional hook method
@@ -131,7 +133,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     private String getUnusedRandomCode() {
         String code;
         do {
-            code = randomCodeGenerator.generateRandomCode();
+            code = randomCodeGenerator.get().generateRandomCode();
         } while (userByValidationCode.containsKey(code));
 
         return code;
@@ -212,14 +214,10 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // RandomCodeGenerator
     // //////////////////////////////////////////////////////////
 
-
-    /**
-     * For injection; will {@link #defaultRandomCodeGeneratorIfNecessary()
-     * default} otherwise.
-     */
     public void setRandomCodeGenerator(final RandomCodeGenerator randomCodeGenerator) {
-        assert randomCodeGenerator != null;
-        this.randomCodeGenerator = randomCodeGenerator;
+        requires(randomCodeGenerator, "randomCodeGenerator");
+        this.defaultRandomCodeGenerator = randomCodeGenerator;
+        this.randomCodeGenerator.clear(); // invalidate
     }
 
     // //////////////////////////////////////////////////////////

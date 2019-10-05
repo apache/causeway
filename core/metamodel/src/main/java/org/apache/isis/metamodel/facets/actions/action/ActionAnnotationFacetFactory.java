@@ -42,6 +42,7 @@ import org.apache.isis.metamodel.facets.actions.action.prototype.PrototypeFacetF
 import org.apache.isis.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
+import org.apache.isis.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
 import org.apache.isis.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -71,6 +72,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         processTypeOf(processMethodContext);
         processAssociateWith(processMethodContext);
+        
+        processFileAccept(processMethodContext);
     }
 
     void processInvocation(final ProcessMethodContext processMethodContext) {
@@ -99,18 +102,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     .map(Action::domainEvent)
                     .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
                     .filter(domainEvent -> {
-                        
-                        
+
+
                         if(!ActionDomainEvent.class.isAssignableFrom(domainEvent)) {
                             System.out.println("#### " + actionMethod + " -> " + domainEvent);
                             return false;
                         }
-                        
+
                         return true;
                     })
                     .map(domainEvent ->
-                    (ActionDomainEventFacetAbstract) new ActionDomainEventFacetForActionAnnotation(
-                            defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
+                            (ActionDomainEventFacetAbstract) 
+                            new ActionDomainEventFacetForActionAnnotation(
+                                    defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
                     .orElse(
                             new ActionDomainEventFacetDefault(
                                     defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), holder)
@@ -280,6 +284,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             }
         });
         
+
+    }
+    
+    void processFileAccept(final ProcessMethodContext processMethodContext) {
+
+        val holder = processMethodContext.getFacetHolder();
+
+        // check for @Action(fileAccept=...)
+
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        
+        val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
+        FacetUtil.addFacet(facet);
 
     }
 
