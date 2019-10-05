@@ -18,17 +18,20 @@
  */
 package org.apache.isis.testdomain.model.bad;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.value.Blob;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class OrphanedActionSupport {
+public class InvalidPropertyAnnotationOnAction {
 
-    // should fail
-    @Model
-    public boolean hideOrphaned() {
-        return false;
+    // TODO as this is no getter representing a property, @Property should not be allowed here 
+    
+    @Action @Property(fileAccept=".xlsx")
+    public Blob exportToJson() {
+        return null;
     }
     
 }

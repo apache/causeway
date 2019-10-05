@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.domainmodel;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -36,9 +37,10 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
-import org.apache.isis.testdomain.model.bad.OrphanedActionSupport;
-import org.apache.isis.testdomain.model.bad.OrphanedCollectionSupport;
-import org.apache.isis.testdomain.model.bad.OrphanedPropertySupport;
+import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
+import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
+import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
+import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -90,7 +92,7 @@ class DomainModelTest_usingBadDomain {
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
-                OrphanedActionSupport.class, 
+                InvalidOrphanedActionSupport.class, 
                 "is assumed to support"));
     }
     
@@ -112,7 +114,7 @@ class DomainModelTest_usingBadDomain {
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
-                OrphanedPropertySupport.class, 
+                InvalidOrphanedPropertySupport.class, 
                 "is assumed to support"));
     }
     
@@ -123,10 +125,22 @@ class DomainModelTest_usingBadDomain {
         
         assertThrows(DomainModelException.class, validateDomainModel::run);
         assertTrue(validateDomainModel.anyMatchesContaining(
-                OrphanedCollectionSupport.class, 
+                InvalidOrphanedCollectionSupport.class, 
                 "is assumed to support"));
     }
     
+    @Test @Disabled("this case has no vaildation refiner yet")
+    void invalidPropertyAnnotationOnAction_shouldFail() {
+        
+        val validateDomainModel = new ValidateDomainModel();
+        
+        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertTrue(validateDomainModel.anyMatchesContaining(
+                InvalidPropertyAnnotationOnAction.class, 
+                "TODO"));
+    }
+    
+
     
 
 }

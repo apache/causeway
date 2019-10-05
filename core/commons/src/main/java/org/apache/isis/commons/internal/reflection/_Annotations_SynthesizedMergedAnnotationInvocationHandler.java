@@ -190,7 +190,8 @@ implements InvocationHandler {
         
         val defaultValue = method.getDefaultValue();
         
-        val attributeValue = this.mergedAnnotations.stream()
+        // for all discovered annotations of this.type determine the effective (attribute) value
+        val attributeValue = this.mergedAnnotations.stream(this.type)
         .map(annotation->(Object)annotation.getValue(name, type).orElse(null))
         .filter(_NullSafe::isPresent)
         .filter(value->!value.equals(defaultValue))

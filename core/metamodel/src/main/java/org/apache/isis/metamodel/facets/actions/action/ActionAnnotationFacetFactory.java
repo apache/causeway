@@ -97,20 +97,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
 
             // search for @Action(domainEvent=...), else use the default event type
-            final ActionDomainEventFacetAbstract actionDomainEventFacet =
+            val actionDomainEventFacet =
                     actionIfAny
                     .map(Action::domainEvent)
                     .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
-                    .filter(domainEvent -> {
-
-
-                        if(!ActionDomainEvent.class.isAssignableFrom(domainEvent)) {
-                            System.out.println("#### " + actionMethod + " -> " + domainEvent);
-                            return false;
-                        }
-
-                        return true;
-                    })
                     .map(domainEvent ->
                             (ActionDomainEventFacetAbstract) 
                             new ActionDomainEventFacetForActionAnnotation(

@@ -23,11 +23,11 @@ import org.apache.isis.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Nature;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class OrphanedCollectionSupport {
+public class InvalidOrphanedActionSupport {
 
     // should fail
     @Model
-    public boolean hideMyCollection() {
+    public boolean hideOrphaned() {
         return false;
     }
     

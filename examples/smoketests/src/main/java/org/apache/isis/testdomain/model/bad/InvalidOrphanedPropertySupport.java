@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Nature;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class OrphanedPropertySupport {
+public class InvalidOrphanedPropertySupport {
 
     // should fail
     @Model
