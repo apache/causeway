@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -25,12 +27,16 @@ import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.config.IsisPresets;
+import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -41,6 +47,7 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_headless.class,
+                Configuration_usingValidDomain.class,
                 Configuration_usingInvalidDomain.class
         }, 
         properties = {
@@ -49,23 +56,53 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.DebugValidation,
     IsisPresets.DebugProgrammingModel,
-    
+
 })
 class AnnotationSyntesizerTest {
 
+    @Inject private MetaModelService metaModelService;
+    @Inject private JaxbService jaxbService;
+
     @Test
     void propertyAnnotationOnAction_shouldNotContributeToSynthesizedAction() {
-        
+
         val actionMethod = ReflectionUtils.findMethod(InvalidPropertyAnnotationOnAction.class, "exportToJson");
         assertNotNull(actionMethod);
-        
+
         val action = _Annotations.synthesizeInherited(actionMethod, Action.class).get();
         val domainEvent = action.domainEvent();
-        
+
         if(!ActionDomainEvent.class.isAssignableFrom(domainEvent)) {
             fail(String.format("wrong event type resolved on %s -> %s", actionMethod, domainEvent));
         }
 
     }
-    
+
+    //@Test 
+    void debug() {
+
+
+        val config = new MetaModelService.Config()
+                //            .withIgnoreNoop()
+                //            .withIgnoreAbstractClasses()
+                //            .withIgnoreBuiltInValueTypes()
+                //            .withIgnoreInterfaces()
+                //.withPackagePrefix("*")
+                .withPackagePrefix("org.apache.isis.testdomain.model.")
+                ;
+
+        System.out.println("!!! listing MM");
+        val metamodelDto = metaModelService.exportMetaModel(config);
+        for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
+            System.out.println("dc: " + domainClass.getId());
+            val xmlString = jaxbService.toXml(domainClass);
+            System.out.println(xmlString);
+        }
+        System.out.println("!!! ---");
+
+//        val validateDomainModel = new ValidateDomainModel();
+//        validateDomainModel.run(); // should not throw
+
+    }
+
 }

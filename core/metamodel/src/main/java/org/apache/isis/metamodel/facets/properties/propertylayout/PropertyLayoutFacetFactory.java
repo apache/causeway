@@ -72,8 +72,16 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     void processDescribedAs(
             final FacetHolder holder,
             final Optional<PropertyLayout> propertyLayout) {
+        
         val describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         FacetUtil.addFacet(describedAsFacet);
+        
+        val m = (FacetedMethod) holder;
+        val c = m.getOwningType();
+        if(c.getSimpleName().equals("TemporalDemo")) {
+            System.out.println("### " + m.getMethod().getName() + " -> " + describedAsFacet);
+        }
+        
     }
 
     void processPromptStyle(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
