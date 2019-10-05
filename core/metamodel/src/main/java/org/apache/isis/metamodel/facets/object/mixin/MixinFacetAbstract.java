@@ -19,8 +19,9 @@
 
 package org.apache.isis.metamodel.facets.object.mixin;
 
+import static org.apache.isis.commons.internal.base._With.tryOrDefault;
+
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -28,11 +29,16 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
-public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String> implements MixinFacet {
+import lombok.val;
+
+public abstract class MixinFacetAbstract 
+extends SingleValueFacetAbstract<String> implements MixinFacet {
 
     private final Class<?> mixinType;
     private final Class<?> constructorType;
+    private final Constructor<?> constructor;
 
     public static Class<? extends Facet> type() {
         return MixinFacet.class;
@@ -47,6 +53,7 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
         super(type(), value, holder);
         this.mixinType = mixinType;
         this.constructorType = constructorType;
+        this.constructor = tryOrDefault(()->mixinType.getConstructor(constructorType), null); 
     }
 
     @Override
@@ -59,21 +66,20 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
 
     @Override
     public Object instantiate(final Object domainPojo) {
+        if(constructor == null) {
+            return null; // invalid mix-in declaration; ought we to fail-fast?
+        }
         if(domainPojo == null) {
             return null;
         }
-        if(!constructorType.isAssignableFrom(domainPojo.getClass())) {
+        if(!isMixinFor(domainPojo.getClass())) {
             // shouldn't happen; ought we to fail-fast instead?
             return null;
         }
         try {
-            final Constructor<?> constructor = mixinType.getConstructor(constructorType);
-            final Object mixinPojo = constructor.newInstance(domainPojo);
+            val mixinPojo = constructor.newInstance(domainPojo);
             getServiceInjector().injectServicesInto(mixinPojo);
             return mixinPojo;
-        } catch (NoSuchMethodException e) {
-            // shouldn't happen; ought we to fail-fast instead?
-            return null;
         } catch (InvocationTargetException e) {
             // shouldn't happen; ought we to fail-fast instead?
             return null;
@@ -87,21 +93,35 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
     }
 
     @Override
-    public ObjectAdapter mixedIn(ObjectAdapter mixinAdapter, final Policy policy) {
+    public ObjectAdapter mixedIn(ManagedObject mixinAdapter, Policy policy) {
+        val mixinPojo = mixinAdapter.getPojo();
+        val holderPojo = holderPojoFor(mixinPojo, policy);
+        return holderPojo!=null
+                ? getObjectAdapterProvider().adapterFor(holderPojo)
+                        : null;
+    }
 
-        final Object mixin = mixinAdapter.getPojo();
-
-        final Field[] declaredFields = mixinType.getDeclaredFields();
-        for (final Field declaredField : declaredFields) {
-            if(declaredField.getType().isAssignableFrom(constructorType)) {
-                declaredField.setAccessible(true);
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("mixinType", mixinType);
+        attributeMap.put("constructorType", constructorType);
+    }
+    
+    // -- HELPER
+    
+    private Object holderPojoFor(Object mixinPojo, Policy policy) {
+        val mixinFields = mixinType.getDeclaredFields();
+        for (val mixinField : mixinFields) {
+            if(mixinField.getType().isAssignableFrom(constructorType)) {
+                mixinField.setAccessible(true);
                 try {
-                    Object o = declaredField.get(mixin);
-                    return getObjectAdapterProvider().adapterFor(o);
+                    val holderPojo = mixinField.get(mixinPojo);
+                    return holderPojo;
                 } catch (IllegalAccessException e) {
                     if(policy == Policy.FAIL_FAST) {
                         throw new RuntimeException(
-                                "Unable to access " + declaredField + " for " + getTitleService().titleOf(mixin));
+                                "Unable to access " + mixinField + " for " + getTitleService().titleOf(mixinPojo));
                     }
                     // otherwise continue to next possible field.
                 }
@@ -109,16 +129,10 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
         }
         if(policy == Policy.FAIL_FAST) {
             throw new RuntimeException(
-                    "Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixin)
+                    "Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixinPojo)
                     + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
         }
         // else just...
         return null;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("mixinType", mixinType);
-        attributeMap.put("constructorType", constructorType);
     }
 }

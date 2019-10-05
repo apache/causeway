@@ -18,10 +18,8 @@
  */
 package org.apache.isis.metamodel.facets.object.mixin;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
 public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValidationFailures {
@@ -33,26 +31,19 @@ public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValida
     }
 
     public boolean ensureMixinType(final Class<?> candidateMixinType) {
-        boolean mixinType = has1ArgConstructor(candidateMixinType);
-        if (mixinType) {
+
+        if (_Reflect.hasPublic1ArgConstructor(candidateMixinType)) {
             return true;
         }
+        
         addFailure(
                 Identifier.classIdentifier(candidateMixinType),
                 "%s: annotated with %s annotation but does not have a public 1-arg constructor",
                 candidateMixinType.getName(), 
                 annotation);
+        
         return false;
     }
 
-    private static boolean has1ArgConstructor(final Class<?> cls) {
-        final Constructor<?>[] constructors = cls.getConstructors();
-        for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if (parameterTypes.length == 1 && Modifier.isPublic(constructor.getModifiers())) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
 }

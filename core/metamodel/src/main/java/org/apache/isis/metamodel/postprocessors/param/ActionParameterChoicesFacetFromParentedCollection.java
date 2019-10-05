@@ -30,6 +30,8 @@ import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
+import lombok.val;
+
 public class ActionParameterChoicesFacetFromParentedCollection extends ActionParameterChoicesFacetAbstract {
 
     private final OneToManyAssociation otma;
@@ -54,10 +56,11 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
     }
 
     /**
-     * in the case of a mixin action, the target passed to the facet is actually the mixin itself, not the mixee.
+     * in the case of a mixin action, the target passed to the facet is actually the mixin itself, 
+     * not the mixee.
      */
     private ObjectAdapter determineParentAdapter(final ObjectAdapter target) {
-        final MixinFacet mixinFacet = target.getSpecification().getFacet(MixinFacet.class);
+        val mixinFacet = target.getSpecification().getFacet(MixinFacet.class);
         ObjectAdapter mixedInTarget = null;
         if(mixinFacet != null) {
             mixedInTarget = mixinFacet.mixedIn(target, MixinFacet.Policy.FAIL_FAST);
@@ -65,7 +68,8 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
         return mixedInTarget != null ? mixedInTarget : target;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("oneToManyAssociation", otma);
     }

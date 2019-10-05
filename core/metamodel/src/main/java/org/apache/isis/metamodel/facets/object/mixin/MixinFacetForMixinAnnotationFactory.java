@@ -20,15 +20,18 @@
 package org.apache.isis.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
-public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+import lombok.val;
 
-    private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@Mixin");
+public class MixinFacetForMixinAnnotationFactory 
+extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+
+    private final MetaModelValidatorForMixinTypes mixinTypeValidator = 
+            new MetaModelValidatorForMixinTypes("@Mixin");
 
     public MixinFacetForMixinAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -37,20 +40,19 @@ public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract im
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        final Class<?> candidateMixinType = processClassContext.getCls();
-
-        final Mixin mixinAnnotation = candidateMixinType.getAnnotation(Mixin.class);
-        if(mixinAnnotation == null) {
+        val mixinIfAny = processClassContext.synthesizeOnType(Mixin.class);
+        if(!mixinIfAny.isPresent()) {
             return;
         }
 
+        val candidateMixinType = processClassContext.getCls();
         if (!mixinTypeValidator.ensureMixinType(candidateMixinType)) {
             return;
         }
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-
-        final MixinFacet mixinFacet = MixinFacetForMixinAnnotation.create(candidateMixinType, facetHolder,
-                getServiceInjector());
+        val facetHolder = processClassContext.getFacetHolder();
+        
+        val mixinFacet = MixinFacetForMixinAnnotation
+                .create(candidateMixinType, facetHolder, getServiceInjector());
         facetHolder.addFacet(mixinFacet);
     }
 

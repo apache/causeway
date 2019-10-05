@@ -19,17 +19,28 @@
 
 package org.apache.isis.metamodel.facets.object.mixin;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.SingleValueFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 /**
- * Applies to {@link ObjectSpecification}s of classes that can act as a mix-in, namely that they are annotated
- * appropriately (eg {@link org.apache.isis.applib.annotation.Mixin} or {@link DomainObject} with
- * {@link DomainObject#nature()} of {@link Nature#MIXIN}) and which have a 1-arg constructor accepting an object
- * (being the object this is a mix-in for).
+ * Applies to {@link ObjectSpecification}s of classes that can act as a mix-in. 
+ * <p>
+ * Mix-ins are annotated e.g. {@link Mixin} or {@link DomainObject} with
+ * {@link DomainObject#nature()} of {@link Nature#MIXIN}) and have a public 1-arg 
+ * constructor accepting an object (the mix-in's <i>holder</i>), being the object 
+ * this is a mix-in for.
+ * <p>
+ * Since 2.0 there are additional annotations, that when declared on a type, make
+ * the type recognized as a mix-in. These are {@link Action}, {@link Property} and
+ * {@link Collection}.   
  */
 public interface MixinFacet extends SingleValueFacet<String> {
 
@@ -41,14 +52,15 @@ public interface MixinFacet extends SingleValueFacet<String> {
     }
 
     /**
-     * Returns the (adapter of the) domain object that a mixin adapter contains.
+     * Returns the (adapter of the) domain object that is the <i>holder</i> of the 
+     * given mix-in adapter.
      */
-    ObjectAdapter mixedIn(ObjectAdapter mixinAdapter, final Policy policy);
+    ObjectAdapter mixedIn(ManagedObject mixinAdapter, Policy policy);
 
     /**
-     * Returns the mixin around the provided domain object
+     * Returns the mix-in around the provided domain object (<i>holder</i>)
      */
-    Object instantiate(Object domainPojo);
+    Object instantiate(Object holderPojo);
 
 
 

@@ -192,7 +192,7 @@ public class PojoAdapterBuilder {
     public PojoAdapter build() {
         final RootOid rootOid = persistence.createOid(objectSpecId, identifier);
         final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
-        final PojoAdapter pojoAdapter = PojoAdapter.of(pojo, oid, authenticationSession,
+        final PojoAdapter pojoAdapter = PojoAdapter.of(pojo, oid,
                 specificationLoader, persistenceSession);
         if(persistence == Persistence.PERSISTENT && version != null) {
             pojoAdapter.setVersion(version);

@@ -18,15 +18,20 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
+import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.good.ProperActionSupport;
 
 import lombok.val;
 
@@ -75,6 +80,11 @@ class DomainModelTest_usingGoodDomain {
         val validateDomainModel = new ValidateDomainModel();
         validateDomainModel.run(); // should not throw
         
+        // check whether mix-ins are picked up as they should
+        val specLoader = MetaModelContext.current().getSpecificationLoader();
+        val holderSpec = specLoader.loadSpecification(ProperActionSupport.class, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        val oa = holderSpec.getObjectAction("mixin"); // proper mix-in support
+        assertNotNull(oa);
     }
     
 

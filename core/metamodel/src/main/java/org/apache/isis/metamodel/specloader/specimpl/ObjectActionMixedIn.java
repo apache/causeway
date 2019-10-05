@@ -148,7 +148,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
                     (ObjectActionParameterAbstract) mixinActionParameters.get(paramNum);
 
             final TypedHolder paramPeer = paramPeers.get(paramNum);
-            final ObjectSpecification specification = getSpecificationLoader().loadSpecification(paramPeer.getType()); 
+            getSpecificationLoader().loadSpecification(paramPeer.getType());
 
             final ObjectActionParameterMixedIn mixedInParameter =
                     mixinParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR

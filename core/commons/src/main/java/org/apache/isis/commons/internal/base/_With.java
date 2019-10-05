@@ -22,13 +22,17 @@ package org.apache.isis.commons.internal.base;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
+
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -305,7 +309,31 @@ public final class _With<T> {
         return create(StringBuilder::new, initializer);
     }
 
+    // -- EXCEPTION SWALLOW IDIOMS
+    
+    /**
+     * Returns Optional of the callable's result after invocation. Any exception during
+     * invocation will result in an empty Optional.  
+     */
+    public static <T> Optional<T> tryCall(Callable<T> callable) {
+        try {
+            val result = callable.call();
+            return Optional.ofNullable(result);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 
-
+    /**
+     * Returns the callable's result after invocation. Any exception during
+     * invocation will result in the defaultValue being returned instead.  
+     */
+    public static <T> T tryOrDefault(Callable<T> callable, T defaultValue) {
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
 
 }

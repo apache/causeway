@@ -32,13 +32,15 @@ public class GridFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
+        if(gridService.get()==null) {
+            return;
+        }
         val facetHolder = processClassContext.getFacetHolder();
-
         FacetUtil.addFacet(GridFacetDefault.create(facetHolder, gridService.get()));
     }
     
     private final _Lazy<GridService> gridService = _Lazy.threadSafe(()->
-        getServiceRegistry().lookupServiceElseFail(GridService.class));
+        getServiceRegistry().lookupService(GridService.class).orElse(null));
     
 
 

@@ -42,8 +42,10 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
     }
 
     public static MixinFacet create(
-            final Class<?> candidateMixinType, final FacetHolder facetHolder,
+            final Class<?> candidateMixinType, 
+            final FacetHolder facetHolder,
             final ServiceInjector servicesInjector) {
+        
         final Mixin mixin = candidateMixinType.getAnnotation(Mixin.class);
         if(mixin == null) {
             return null;

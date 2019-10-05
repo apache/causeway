@@ -41,8 +41,8 @@ public class IteratorFilteringFacetFactory extends FacetFactoryAbstract implemen
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        processClassContaxt.removeMethod(MethodScope.OBJECT, "iterator", java.util.Iterator.class, new Class[] {});
+    public void process(final ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "iterator", java.util.Iterator.class, new Class[] {});
     }
 
     @Override

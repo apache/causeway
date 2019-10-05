@@ -19,6 +19,9 @@
 
 package org.apache.isis.commons.internal.reflection;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -44,8 +47,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -391,6 +393,19 @@ public final class _Reflect {
             return pd.getReadMethod();
         }
         return null;
+    }
+    
+    // -- COMMON CONSTRUCTOR IDIOMS
+
+    public static boolean hasPublic1ArgConstructor(Class<?> cls) {
+        val constructors = cls.getConstructors();
+        for (val constructor : constructors) {
+            if(constructor.getParameterCount()==1 && 
+                    Modifier.isPublic(constructor.getModifiers())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

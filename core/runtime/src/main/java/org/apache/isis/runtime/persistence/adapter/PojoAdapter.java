@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtime.persistence.adapter;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -36,17 +38,11 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.security.authentication.AuthenticationSession;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 public final class PojoAdapter implements ObjectAdapter {
 
-    private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
     private final PersistenceSession persistenceSession;
 
@@ -78,32 +74,28 @@ public final class PojoAdapter implements ObjectAdapter {
             final IsisSession isisSession,
             final PersistenceSession persistenceSession) {
 
-        val authenticationSession = isisSession.getAuthenticationSession(); 
         val specificationLoader = isisSession.getSpecificationLoader();
 
-        return new PojoAdapter(pojo, oid, authenticationSession, specificationLoader, persistenceSession);
+        return new PojoAdapter(pojo, oid, specificationLoader, persistenceSession);
     }
 
     public static PojoAdapter of(
             final Object pojo,
             final Oid oid,
-            final AuthenticationSession authenticationSession,
             final SpecificationLoader specificationLoader,
             final PersistenceSession persistenceSession) {
-        return new PojoAdapter(pojo, oid, authenticationSession, specificationLoader, persistenceSession);
+        return new PojoAdapter(pojo, oid, specificationLoader, persistenceSession);
     }
 
     private PojoAdapter(
             final Object pojo,
             final Oid oid,
-            final AuthenticationSession authenticationSession,
             final SpecificationLoader specificationLoader,
             final PersistenceSession persistenceSession) {
 
         Objects.requireNonNull(pojo);
 
         this.specificationLoader = specificationLoader;
-        this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
 
         if (pojo instanceof ObjectAdapter) {

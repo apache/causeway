@@ -67,7 +67,6 @@ public class PojoAdapterTest {
         adapter = PojoAdapter.of(
                 domainObject, 
                 Factory.persistentOf(ObjectSpecId.of("CUS"), "1"),
-                mockAuthenticationSession,
                 mockSpecificationLoader, 
                 mockPersistenceSession);
 

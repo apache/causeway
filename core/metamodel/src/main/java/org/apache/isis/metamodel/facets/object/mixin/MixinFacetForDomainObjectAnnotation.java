@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.object.mixin;
 
-import java.lang.reflect.Constructor;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -27,6 +26,8 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+
+import lombok.val;
 
 public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
 
@@ -52,16 +53,18 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
         return domainObjectIfAny
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .map(domainObject -> {
-                    final Constructor<?>[] constructors = candidateMixinType.getConstructors();
-                    for (Constructor<?> constructor : constructors) {
-                        final Class<?>[] constructorTypes = constructor.getParameterTypes();
-                        if(constructorTypes.length != 1) {
+                    val constructors = candidateMixinType.getConstructors();
+                    for (val constructor : constructors) {
+                        if(constructor.getParameterCount() != 1) {
                             continue;
                         }
-                        final Class<?> constructorType = constructorTypes[0];
+                        val constructorTypes = constructor.getParameterTypes();
+                        val constructorType = constructorTypes[0];
                         return new MixinFacetForDomainObjectAnnotation(
-                                candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder
-                                );
+                                candidateMixinType, 
+                                domainObject.mixinMethod(), 
+                                constructorType, 
+                                facetHolder);
                     }
                     // else
                     return null;
