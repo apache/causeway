@@ -416,9 +416,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // plugin factories
         factoriesFromPlugins.getFactories(FacetFactoryCategory.AFTER_BUILT_IN).forEach(this::addFactory);
 
-        // setup annotation processing
-        _Annotations.getVetoedAnnotationsOnField()
-        .add(Action.class);
     }
 
     @Override

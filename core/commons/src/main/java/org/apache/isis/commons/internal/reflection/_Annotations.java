@@ -19,11 +19,12 @@
 package org.apache.isis.commons.internal.reflection;
 
 import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
@@ -31,10 +32,8 @@ import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;
 
@@ -200,11 +199,19 @@ public final class _Annotations {
         return _Strings.decapitalize(fieldName);
     }
 
-    @Getter
-    private static Set<Class<? extends Annotation>> vetoedAnnotationsOnField = _Sets.newHashSet();
     
     private static boolean searchAnnotationOnField(Class<? extends Annotation> annotationType) {
-        return !vetoedAnnotationsOnField.contains(annotationType);
+        val target = annotationType.getAnnotation(Target.class);
+        if(target==null) {
+            return false;
+        }
+        for(val elementType : target.value()) {
+            if(elementType == ElementType.FIELD) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
 }
