@@ -55,4 +55,11 @@ public final class _Assert {
         }
     }
 
+    public static void assertTypeIsInstanceOf(Class<?> type, Class<?> requiredType) {
+        if(!requiredType.isAssignableFrom(type)) {
+            throw new IsisAssertException(String.format(
+                    "unexpected type: '%s' is not an instance of '%s' ", ""+type, ""+requiredType));
+        }
+    }
+
 }

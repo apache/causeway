@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -60,7 +61,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
             final Class<? extends ActionDomainEvent<?>> eventType,
                     final FacetHolder holder) {
         super(type(), holder, eventType);
-        this.eventType = eventType;
+        setEventType(eventType);
 
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
@@ -82,6 +83,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         return _Casts.uncheckedCast(eventType);
     }
     public void setEventType(final Class<? extends ActionDomainEvent<?>> eventType) {
+        _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
         this.eventType = eventType;
     }
 

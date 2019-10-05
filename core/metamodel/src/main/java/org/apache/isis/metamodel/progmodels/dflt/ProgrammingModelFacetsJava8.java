@@ -19,8 +19,10 @@ package org.apache.isis.metamodel.progmodels.dflt;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Plugin;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -414,6 +416,9 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // plugin factories
         factoriesFromPlugins.getFactories(FacetFactoryCategory.AFTER_BUILT_IN).forEach(this::addFactory);
 
+        // setup annotation processing
+        _Annotations.getVetoedAnnotationsOnField()
+        .add(Action.class);
     }
 
     @Override

@@ -249,7 +249,7 @@ public final class _AnnotationsLegacy  {
     }
 
 
-//XXX optimization
+//XXX optimization?
 //    private static List<Class<?>> fieldAnnotationClasses = 
 //            _Lists.of(
 //                    Property.class,

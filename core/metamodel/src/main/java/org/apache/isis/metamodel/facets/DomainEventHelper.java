@@ -34,6 +34,7 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.services.events.MetamodelEventService;
@@ -69,6 +70,8 @@ public class DomainEventHelper {
                     final ManagedObject[] argumentAdapters,
                     final Command command,
                     final ObjectAdapter resultAdapter) {
+        
+        _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
 
         try {
             final ActionDomainEvent<S> event;
@@ -123,20 +126,20 @@ public class DomainEventHelper {
 
     static <S> ActionDomainEvent<S> newActionDomainEvent(
             final Class<? extends ActionDomainEvent<S>> type,
-                    final Identifier identifier,
-                    final S source,
-                    final Object... arguments) 
+            final Identifier identifier,
+            final S source,
+            final Object... arguments) 
         throws InstantiationException, IllegalAccessException, IllegalArgumentException, 
         InvocationTargetException, NoSuchMethodException, SecurityException {
-
+        
         final Constructor<?>[] constructors = type.getConstructors();
 
         // no-arg constructor
-        for (final Constructor<?> constructor : constructors) {
+        for (final Constructor<?> constructor : type.getConstructors()) {
             if(constructor.getParameterCount() == 0) {
                 final Object event = constructor.newInstance();
                 final ActionDomainEvent<S> ade = uncheckedCast(event);
-
+                
                 ade.initSource(source);
                 ade.setIdentifier(identifier);
                 ade.setArguments(asList(arguments));
@@ -183,6 +186,8 @@ public class DomainEventHelper {
                     final ManagedObject mixedInAdapter,
                     final T oldValue,
                     final T newValue) {
+        
+        _Assert.assertTypeIsInstanceOf(eventType, PropertyDomainEvent.class);
 
         try {
             final PropertyDomainEvent<S, T> event;
@@ -278,6 +283,9 @@ public class DomainEventHelper {
                     final ManagedObject mixedInAdapter,
                     final CollectionDomainEvent.Of of,
                     final T reference) {
+        
+        _Assert.assertTypeIsInstanceOf(eventType, CollectionDomainEvent.class);
+        
         try {
             final CollectionDomainEvent<S, T> event;
             if (existingEvent != null && phase.isExecuted()) {

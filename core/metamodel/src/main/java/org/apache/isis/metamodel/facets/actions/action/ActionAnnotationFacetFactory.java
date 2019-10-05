@@ -98,6 +98,16 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     actionIfAny
                     .map(Action::domainEvent)
                     .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
+                    .filter(domainEvent -> {
+                        
+                        
+                        if(!ActionDomainEvent.class.isAssignableFrom(domainEvent)) {
+                            System.out.println("#### " + actionMethod + " -> " + domainEvent);
+                            return false;
+                        }
+                        
+                        return true;
+                    })
                     .map(domainEvent ->
                     (ActionDomainEventFacetAbstract) new ActionDomainEventFacetForActionAnnotation(
                             defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
