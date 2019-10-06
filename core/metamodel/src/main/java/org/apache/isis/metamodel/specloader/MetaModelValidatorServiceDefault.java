@@ -20,8 +20,6 @@ package org.apache.isis.metamodel.specloader;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
-
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.factory.InstanceUtil;
@@ -30,7 +28,6 @@ import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorService;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -38,10 +35,11 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0
  */
-@Service @Log4j2
-public class MetaModelValidatorServiceDefault implements MetaModelValidatorService {
+//@Service 
+@Log4j2
+@Deprecated
+class MetaModelValidatorServiceDefault {
 
-    @Override
     public MetaModelValidator get() {
         return metaModelValidator.get();
     }
@@ -55,7 +53,7 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
     private _Lazy<MetaModelValidator> metaModelValidator = 
             _Lazy.threadSafe(this::createMetaModelValidator);
 
-    private MetaModelValidator createMetaModelValidator() {
+    private MetaModelValidatorComposite createMetaModelValidator() {
 
         log.debug("About to create the composite MetaModelValidator.");
         
@@ -67,14 +65,14 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
         val mmValidatorComposite = MetaModelValidatorComposite.asComposite(mmValidator);
 
         val programmingModel = programmingModelService.get();
+        //programmingModel.refineMetaModelValidator(mmValidatorComposite);
+        
         val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
 
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);
             metaModelRefiner.refineMetaModelValidator(mmValidatorComposite);
         }
-
-        programmingModel.refineMetaModelValidator(mmValidatorComposite);
         
         if(log.isDebugEnabled()) {
             

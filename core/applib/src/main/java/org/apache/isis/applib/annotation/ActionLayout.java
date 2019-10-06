@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * Layout hints for actions.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActionLayout {
 

@@ -30,7 +30,7 @@ import java.util.Comparator;
  * Layout hints for collections.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CollectionLayout {
 

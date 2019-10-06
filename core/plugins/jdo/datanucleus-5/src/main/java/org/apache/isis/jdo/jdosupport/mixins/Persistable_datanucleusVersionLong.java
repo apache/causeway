@@ -40,8 +40,7 @@ public class Persistable_datanucleusVersionLong {
         this.persistable = persistable;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusVersionLong> {
-        private static final long serialVersionUID = 1L;}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusVersionLong> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

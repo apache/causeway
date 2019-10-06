@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -32,9 +33,9 @@ import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 import lombok.val;
 
@@ -44,9 +45,9 @@ abstract class MixinIntendedAs {
 
     protected void setUp() throws Exception {
 
-        programmingModel = new ProgrammingModelFacetsJava8(
-                ProgrammingModelAbstract.DeprecatedPolicy.IGNORE);
-        programmingModel.init();
+        val mmValidator = MetaModelValidatorComposite.asComposite(new MetaModelValidatorDefault()); 
+        
+        programmingModel = new ProgrammingModelFacetsJava8();
         
         // PRODUCTION
 
@@ -54,12 +55,13 @@ abstract class MixinIntendedAs {
                 .specificationLoader(SpecificationLoaderDefault.getInstance(
                         new IsisConfiguration(),
                         new IsisSystemEnvironment(),
-                        new ProgrammingModelFacetsJava8(ProgrammingModelAbstract.DeprecatedPolicy.HONOUR),
-                        new MetaModelValidatorDefault()))
+                        programmingModel,
+                        mmValidator))
 //                .serviceInjector(mockServiceInjector)
 //                .serviceRegistry(mockServiceRegistry)
                 .build());
         
+        programmingModel.init(_Predicates.alwaysTrue(), mmValidator);
         MetaModelContext.current().getSpecificationLoader().init();
         
     }
@@ -87,7 +89,7 @@ abstract class MixinIntendedAs {
                         MethodRemoverConstants.NOOP, 
                         facetHolder);
         
-        programmingModel.getList().stream()
+        programmingModel.stream()
 //        .filter(facetFactory->!facetFactory.getClass().getSimpleName().startsWith("Grid"))
 //        .peek(facetFactory->System.out.println("### " + facetFactory.getClass().getName()))
         .forEach(facetFactory->facetFactory.process(processClassContext));
@@ -114,7 +116,7 @@ abstract class MixinIntendedAs {
                         MethodRemoverConstants.NOOP, 
                         facetedMethodParameter);
         
-        programmingModel.getList()
+        programmingModel.stream()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
         
         return facetedMethodParameter;

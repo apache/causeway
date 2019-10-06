@@ -48,8 +48,7 @@ public class Persistable_downloadJdoMetadata {
         this.persistable = persistable;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_downloadJdoMetadata> {
-        private static final long serialVersionUID = 1L;}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

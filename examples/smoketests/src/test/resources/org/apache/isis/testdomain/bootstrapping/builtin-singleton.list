@@ -48,7 +48,6 @@ org.apache.isis.metamodel.services.title.TitleServiceDefault
 org.apache.isis.metamodel.services.user.UserServiceDefault
 org.apache.isis.metamodel.services.user.UserServiceDefault$SudoServiceSpi
 org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault
-org.apache.isis.metamodel.specloader.MetaModelValidatorServiceDefault
 org.apache.isis.metamodel.specloader.ProgrammingModelServiceDefault
 org.apache.isis.metamodel.specloader.SpecificationLoaderDefault
 org.apache.isis.runtime.services.authsess.AuthenticationSessionProviderDefault

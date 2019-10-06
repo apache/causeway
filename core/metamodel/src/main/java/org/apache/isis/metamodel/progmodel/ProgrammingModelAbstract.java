@@ -20,136 +20,99 @@
 package org.apache.isis.metamodel.progmodel;
 
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
+import lombok.Getter;
+import lombok.val;
+
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
-    private final List<FacetFactory> facetFactories = _Lists.newArrayList();
-    private final List<Object> facetFactoryInstancesOrClasses = _Lists.newLinkedList();
-
-    public enum DeprecatedPolicy {
-        IGNORE,
-        HONOUR;
-    }
-
-    protected final DeprecatedPolicy deprecatedPolicy;
-
-    public ProgrammingModelAbstract(
-            final DeprecatedPolicy deprecatedPolicy) {
-
-        this.deprecatedPolicy = deprecatedPolicy;
-    }
+    @Getter(onMethod = @__(@Override))
+    private final List<ObjectSpecificationPostProcessor> postProcessors = _Lists.newArrayList();
+    
+    private List<FacetFactory> unmodifiableFactories;
 
     @Override
-    public void init() {
-        initializeIfRequired();
-    }
-
-    private void initializeIfRequired() {
-        if(!facetFactories.isEmpty()) {
-            return;
-        }
-        initialize();
-    }
-
-    private void initialize() {
-        for (final Object factoryInstanceOrClass : facetFactoryInstancesOrClasses) {
-            final FacetFactory facetFactory = asFacetFactory(factoryInstanceOrClass);
-            facetFactories.add(facetFactory);
-        }
-    }
-
-    private static FacetFactory asFacetFactory(final Object factoryInstanceOrClass) {
-        if(factoryInstanceOrClass instanceof FacetFactory) {
-            return (FacetFactory) factoryInstanceOrClass;
-        } else {
-            @SuppressWarnings("unchecked") final
-            Class<? extends FacetFactory> factoryClass = (Class<? extends FacetFactory>) factoryInstanceOrClass;
-            return (FacetFactory) InstanceUtil.createInstance(factoryClass);
-        }
-    }
-
-    private void assertNotInitialized() {
-        if(!facetFactories.isEmpty()) {
-            throw new IllegalStateException("Programming model already initialized");
-        }
-    }
-
-
-    @Override
-    public final List<FacetFactory> getList() {
-        initializeIfRequired();
-        return Collections.unmodifiableList(facetFactories);
-    }
-
-    @Override
-    public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
-        addFactory(factoryClass, Position.END);
-    }
-
-    @Override
-    public final void addFactory(final Class<? extends FacetFactory> factoryClass, final Position position) {
-        addFactory((Object)factoryClass, position);
-    }
-
-    @Override
-    public void addFactory(final FacetFactory facetFactory) {
-        addFactory(facetFactory, Position.END);
-    }
-
-    @Override
-    public void addFactory(final FacetFactory facetFactory, final Position position) {
-        addFactory((Object)facetFactory, position);
-    }
-
-    private void addFactory(final Object facetFactoryInstanceOrClass, final Position position) {
+    public <T extends FacetFactory> void add(
+            ProcessingOrder order, 
+            Class<T> type, 
+            Supplier<? extends T> supplier, 
+            Marker ... markers) {
+        
         assertNotInitialized();
-        if(deprecatedPolicy == DeprecatedPolicy.IGNORE) {
-            if( facetFactoryInstanceOrClass instanceof FacetFactory) {
-                if(facetFactoryInstanceOrClass instanceof DeprecatedMarker) {
-                    return;
-                }
-            } else if (facetFactoryInstanceOrClass instanceof Class) {
-                if(DeprecatedMarker.class.isAssignableFrom((Class<?>)facetFactoryInstanceOrClass)) {
-                    return;
-                }
-            }
-        }
-        switch (position){
-        case BEGINNING:
-            facetFactoryInstancesOrClasses.add(0, facetFactoryInstanceOrClass);
-            break;
-        case END:
-            facetFactoryInstancesOrClasses.add(facetFactoryInstanceOrClass);
-        }
+        
+        val factoryEntry = FactoryEntry.of(type, supplier, markers);
+        factoryEntriesByOrder.putElement(order, factoryEntry);
     }
 
-
     @Override
-    public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
+    public void init(
+            Predicate<FactoryEntry<?>> filter, 
+            MetaModelValidatorComposite metaModelValidator) {
+        
         assertNotInitialized();
-        for (Iterator<Object> iterator = facetFactoryInstancesOrClasses.iterator(); iterator.hasNext(); ) {
-            final Object factoryInstanceOrClass = iterator.next();
-            if(factoryInstanceOrClass == factoryClass || factoryClass.isAssignableFrom(factoryInstanceOrClass.getClass())) {
-                iterator.remove();
-            }
-        }
-    }
-
-    @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        for (final FacetFactory facetFactory : getList()) {
+        
+        for (val facetFactory : snapshot(filter)) {
             if(facetFactory instanceof MetaModelValidatorRefiner) {
-                final MetaModelValidatorRefiner metaModelValidatorRefiner = (MetaModelValidatorRefiner) facetFactory;
+                val metaModelValidatorRefiner = (MetaModelValidatorRefiner) facetFactory;
                 metaModelValidatorRefiner.refineMetaModelValidator(metaModelValidator);
             }
         }
+        
+        this.unmodifiableFactories = 
+                Collections.unmodifiableList(snapshot(filter));
     }
+
+    @Override
+    public Stream<FacetFactory> stream() {
+        if(unmodifiableFactories==null) {
+            return Stream.empty();
+        }
+        return unmodifiableFactories.stream();
+    }
+    
+    // -- HELPER
+
+    private boolean isInitialized() {
+        return unmodifiableFactories!=null;
+    }
+    
+    private void assertNotInitialized() {
+        if(isInitialized()) {
+            throw _Exceptions.unrecoverable(
+                    "The programming-model was already initialized, it cannot be altered.");
+        }
+    }
+    
+    private final SetMultimap<ProcessingOrder, FactoryEntry<?>> 
+        factoryEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
+    
+    private List<FacetFactory> snapshot(Predicate<FactoryEntry<?>> filter) {
+        val factories = _Lists.<FacetFactory>newArrayList();
+        for(val processinOrder : ProcessingOrder.values()) {
+            val factoryEntrySet = factoryEntriesByOrder.get(processinOrder);
+            if(factoryEntrySet==null) {
+                continue;
+            }
+            for(val factoryEntry : factoryEntrySet) {
+                if(filter.test(factoryEntry)) {
+                    factories.add(factoryEntry.getFactoryInstance());
+                }
+            }
+        }
+        return factories;
+    }
+
 }

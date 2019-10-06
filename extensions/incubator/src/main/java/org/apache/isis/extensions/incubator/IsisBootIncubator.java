@@ -16,19 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.sse;
+package org.apache.isis.extensions.incubator;
 
-import org.apache.isis.extensions.sse.facets.SseAnnotationFacetFactory;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public class SsePlugin implements ProgrammingModelPlugin {
-
-    @Override
-    public void plugin(FactoryCollector collector) {
-        
-        collector.addFactory(
-                new SseAnnotationFacetFactory(), FacetFactoryCategory.AFTER_BUILT_IN);
-        
-    }
+@Configuration
+@Import({
+    IncubatorMetaModelPlugin.class
+})
+public class IsisBootIncubator {
 
 }

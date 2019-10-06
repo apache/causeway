@@ -18,17 +18,27 @@
  */
 package org.apache.isis.extensions.incubator;
 
-import org.apache.isis.metamodel.facets.actions.support.SupportingMethodValidatorRefinerFactory;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelPlugin;
+import org.springframework.stereotype.Component;
 
-public class IncubatorPlugin implements ProgrammingModelPlugin {
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.metamodel.facets.actions.support.SupportingMethodValidatorRefinerFactory;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+
+@Component
+public class IncubatorMetaModelPlugin implements MetaModelRefiner {
 
     @Override
-    public void plugin(FactoryCollector collector) {
-        
-        collector.addFactory(
-                new SupportingMethodValidatorRefinerFactory(), FacetFactoryCategory.AFTER_BUILT_IN);
-        
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
+    }
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.add(
+                ProgrammingModel.ProcessingOrder.C2_AFTER_METHOD_REMOVING, 
+                SupportingMethodValidatorRefinerFactory.class,
+                ProgrammingModel.Marker.INCUBATING
+                );
     }
 
 }

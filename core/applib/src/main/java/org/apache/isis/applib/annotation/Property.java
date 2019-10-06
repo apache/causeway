@@ -41,7 +41,7 @@ import org.apache.isis.applib.value.Clob;
  * Domain semantics for domain object property.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
 

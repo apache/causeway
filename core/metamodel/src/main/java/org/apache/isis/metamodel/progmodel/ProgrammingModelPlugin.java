@@ -18,83 +18,9 @@
  */
 package org.apache.isis.metamodel.progmodel;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
+@Deprecated // use the MetaModelRefiner interface instead, then provision with Spring
+interface ProgrammingModelPlugin {
 
-import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
-import org.apache.isis.metamodel.facets.FacetFactory;
-
-public interface ProgrammingModelPlugin {
-
-    // -- CONTRACT
-
-    /**
-     * Guides the priority at which facet factories are registered.
-     * There is no other use.
-     * @apiNote extend as needed
-     */
-    public static enum FacetFactoryCategory {
-        /**
-         * registers the provided factory after built-in value factory providers
-         */
-        VALUE,
-        
-        /**
-         * registers the provided factory after all built-in factories
-         */
-        AFTER_BUILT_IN,
-        ;
-    }
-
-    public static interface FactoryCollector {
-
-        /**
-         *
-         * @param factoryClass
-         * @param category
-         */
-        public void addFactory(FacetFactory facetFactory, final FacetFactoryCategory category);
-
-        /**
-         *
-         * @param category
-         * @return
-         */
-        public Set<FacetFactory> getFactories(FacetFactoryCategory category);
-
-    }
-
-    public static FactoryCollector newCollector() {
-        return new FactoryCollector() {
-
-            final SetMultimap<FacetFactoryCategory, FacetFactory> factoriesByCategory =
-                    _Multimaps.newSetMultimap();
-
-            @Override
-            public void addFactory(FacetFactory factory, FacetFactoryCategory category) {
-                Objects.requireNonNull(factory);
-                Objects.requireNonNull(category);
-                factoriesByCategory.putElement(category, factory);
-            }
-
-            @Override
-            public Set<FacetFactory> getFactories(final FacetFactoryCategory category) {
-                if(category==null) {
-                    return Collections.emptySet();
-                }
-                return Collections.unmodifiableSet(
-                        factoriesByCategory.getOrDefault(category, Collections.emptySet())	);
-
-            }
-        };
-    }
-
-    // -- INTERFACE
-
-    public void plugin(FactoryCollector collector);
-
-    // --
+    public void plugInto(ProgrammingModel programmingModel);
 
 }

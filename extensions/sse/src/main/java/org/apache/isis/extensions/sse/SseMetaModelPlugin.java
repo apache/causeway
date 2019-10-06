@@ -18,18 +18,26 @@
  */
 package org.apache.isis.extensions.sse;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
 
-import org.apache.isis.extensions.sse.services.SseServiceDefault;
-import org.apache.isis.extensions.sse.webapp.WebModuleServerSentEvents;
+import org.apache.isis.extensions.sse.facets.SseAnnotationFacetFactory;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
-@Configuration
-@Import({
-    SseMetaModelPlugin.class,
-    SseServiceDefault.class,
-    WebModuleServerSentEvents.class
-})
-public class IsisBootSse {
+@Component
+public class SseMetaModelPlugin implements MetaModelRefiner {
+
+    @Override
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
+    }
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.add(
+                ProgrammingModel.ProcessingOrder.Z2_AFTER_FINALLY, 
+                SseAnnotationFacetFactory.class, 
+                ProgrammingModel.Marker.INCUBATING);
+    }
 
 }

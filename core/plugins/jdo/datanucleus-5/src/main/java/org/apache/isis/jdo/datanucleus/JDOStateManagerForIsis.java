@@ -108,7 +108,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     }
 
     @Override
-    public void initialiseForCachedPC(CachedPC cachedPC, Object id) {
+    public void initialiseForCachedPC(CachedPC<Persistable> cachedPC, Object id) {
         super.initialiseForCachedPC(cachedPC, id);
         mapIntoIsis(myPC);
     }

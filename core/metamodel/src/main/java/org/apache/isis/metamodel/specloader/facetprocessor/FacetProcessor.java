@@ -129,8 +129,8 @@ public class FacetProcessor {
         cleanUp(); 
         
         serviceInjector = MetaModelContext.current().getServiceInjector();
-        val facetFactoryList = programmingModel.getList();
-        facetFactoryList.forEach(this::registerFactory);
+        programmingModel.stream()
+        .forEach(this::registerFactory);
     }
 
     public void shutdown() {

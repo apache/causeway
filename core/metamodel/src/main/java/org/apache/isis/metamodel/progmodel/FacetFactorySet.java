@@ -22,12 +22,12 @@ package org.apache.isis.metamodel.progmodel;
 import java.util.List;
 
 import org.apache.isis.commons.internal.factory.InstanceUtil;
-import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.ReflectorConstants;
 
-public interface FacetFactorySet {
+@Deprecated
+interface FacetFactorySet {
 
     List<FacetFactory> getList();
 
@@ -40,22 +40,6 @@ public interface FacetFactorySet {
     void addFactory(FacetFactory facetFactory, Position position);
 
     void removeFactory(Class<? extends FacetFactory> facetFactoryClass);
-
-    /**
-     * Key used to lookup comma-separated list of {@link FacetFactory}s to
-     * include.
-     *
-     * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
-     */
-    String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.include";
-
-    /**
-     * Key used to lookup comma-separated list of {@link FacetFactory}s to
-     * exclude.
-     *
-     * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
-     */
-    String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.exclude";
 
     /**
      * This is a bit nasty, but currently the bootstrapping of the metamodel for integration tests vs the webapp differs;

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.jdo.persistence;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.isis.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
@@ -35,27 +37,30 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposit
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorToCheckModuleExtent;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorToCheckObjectSpecIdsUnique;
 
+@Component
 public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefiner {
 
+    final ProgrammingModel.ProcessingOrder order = 
+            ProgrammingModel.ProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+    
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addFactory(
-                new JdoPersistenceCapableAnnotationFacetFactory(), ProgrammingModel.Position.BEGINNING);
-        programmingModel.addFactory(new JdoDatastoreIdentityAnnotationFacetFactory());
+        programmingModel.add(order, JdoPersistenceCapableAnnotationFacetFactory.class);
+        programmingModel.add(order, JdoDatastoreIdentityAnnotationFacetFactory.class);
 
-        programmingModel.addFactory(new JdoPrimaryKeyAnnotationFacetFactory());
-        programmingModel.addFactory(new JdoNotPersistentAnnotationFacetFactory());
-        programmingModel.addFactory(new JdoDiscriminatorAnnotationFacetFactory());
-        programmingModel.addFactory(new JdoVersionAnnotationFacetFactory());
+        programmingModel.add(order, JdoPrimaryKeyAnnotationFacetFactory.class);
+        programmingModel.add(order, JdoNotPersistentAnnotationFacetFactory.class);
+        programmingModel.add(order, JdoDiscriminatorAnnotationFacetFactory.class);
+        programmingModel.add(order, JdoVersionAnnotationFacetFactory.class);
 
-        programmingModel.addFactory(new JdoQueryAnnotationFacetFactory());
+        programmingModel.add(order, JdoQueryAnnotationFacetFactory.class);
 
-        programmingModel.addFactory(new BigDecimalDerivedFromJdoColumnAnnotationFacetFactory());
-        programmingModel.addFactory(new MaxLengthDerivedFromJdoColumnAnnotationFacetFactory());
+        programmingModel.add(order, BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class);
+        programmingModel.add(order, MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class);
         // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
-        programmingModel.addFactory(new MandatoryFromJdoColumnAnnotationFacetFactory());
+        programmingModel.add(order, MandatoryFromJdoColumnAnnotationFacetFactory.class);
     }
 
     @Override

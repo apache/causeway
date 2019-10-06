@@ -292,6 +292,23 @@ public class _Multimaps {
         };
     }
 
+    // -- SHORTCUTS
+    
+    /**
+     * @return HashMap of Lists with given listFactory
+     */
+    public static <K, V> ListMultimap<K, V> newListMultimap(Supplier<List<V>> listFactory){
+        return newListMultimap(HashMap<K, List<V>>::new, listFactory);
+    }
+    
+    /**
+     * 
+     * @return HashMap of Sets with given setFactory
+     */
+    public static <K, V> SetMultimap<K, V> newSetMultimap(Supplier<Set<V>> setFactory){
+        return newSetMultimap(HashMap<K, Set<V>>::new, setFactory);
+    }
+    
     // -- CONVENIENT DEFAULTS
 
     /**

@@ -19,7 +19,10 @@
 
 package org.apache.isis.metamodel.specloader;
 
-import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +34,7 @@ import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -40,14 +44,13 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
 
 import lombok.val;
 
@@ -88,13 +91,25 @@ abstract class SpecificationLoaderTestAbstract {
             return mock;
         }
 
+        MetaModelValidatorComposite getMetaModelValidatorComposite() {
+            return MetaModelValidatorComposite.asComposite(new MetaModelValidatorDefault());
+        }
+        
+        ProgrammingModel getProgrammingModel() {
+            return  new ProgrammingModelFacetsJava8();
+        }
+        
         //@Produces
-        SpecificationLoader getSpecificationLoader(IsisConfiguration configuration) {
+        SpecificationLoader getSpecificationLoader(
+                IsisConfiguration configuration,
+                ProgrammingModel programmingModel,
+                MetaModelValidatorComposite mmValidator) {
+            
             return SpecificationLoaderDefault.getInstance(
                     configuration,
                     new IsisSystemEnvironment(),
-                    new ProgrammingModelFacetsJava8(ProgrammingModelAbstract.DeprecatedPolicy.HONOUR),
-                    new MetaModelValidatorDefault());
+                    programmingModel,
+                    mmValidator);
         }
 
     }
@@ -118,10 +133,19 @@ abstract class SpecificationLoaderTestAbstract {
         // PRODUCTION
 
         val producers = new Producers();
+        
+        val mmValidator = producers.getMetaModelValidatorComposite(); 
+        val programmingModel = producers.getProgrammingModel();
 
         MetaModelContext.preset(MetaModelContext.builder()
                 .configuration(isisConfiguration = producers.newConfiguration())
-                .specificationLoader(specificationLoader = producers.getSpecificationLoader(isisConfiguration))
+                .specificationLoader(specificationLoader = producers
+                    .getSpecificationLoader(
+                            isisConfiguration,
+                            programmingModel,
+                            mmValidator
+                            )
+                    )
                 .translationService(producers.mockTranslationService())
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
                 .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())
@@ -129,6 +153,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .singleton(mockGridService = producers.mockGridService())
                 .build());
 
+        programmingModel.init(_Predicates.alwaysTrue(), mmValidator);
 
         _Timing.runVerbose("specificationLoader.init()", specificationLoader::init);
 

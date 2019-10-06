@@ -18,6 +18,8 @@
  */
 package org.apache.isis.metamodel.specloader;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,11 +50,8 @@ import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorService;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.schema.utils.CommonDtoUtils;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -81,17 +80,16 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private ProgrammingModel programmingModel;
     private FacetProcessor facetProcessor;
 
-
     private MetaModelValidator metaModelValidator;
+    private PostProcessor postProcessor;
+    
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
-    private PostProcessor postProcessor;
 
     @PostConstruct
     public void preInit() {
         this.programmingModel = programmingModelService.get();
-        this.metaModelValidator = metaModelValidatorService.get();
-
+        this.metaModelValidator = programmingModelService.getMetaModelValidator();
         this.facetProcessor = new FacetProcessor(programmingModel);
         this.postProcessor = new PostProcessor(programmingModel);
     }
@@ -132,11 +130,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
         
         // initialize subcomponents
-        programmingModel.init();
         facetProcessor.init();
-
         postProcessor.init();
-        metaModelValidator.init();
+        
 
         // need to completely load services and mixins (synchronously)
         log.info("Loading all specs (up to state of {})", IntrospectionState.NOT_INTROSPECTED);
@@ -404,7 +400,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     // -- DEPS
 
     @Inject private ProgrammingModelService programmingModelService;
-    @Inject private MetaModelValidatorService metaModelValidatorService; 
     @Inject private IsisConfiguration isisConfiguration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
 

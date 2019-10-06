@@ -33,12 +33,14 @@ import org.apache.isis.jdo.datanucleus.DataNucleusSettings;
 import org.apache.isis.jdo.datanucleus.service.JdoPersistenceLifecycleService;
 import org.apache.isis.jdo.jdosupport.IsisJdoSupportDN5;
 import org.apache.isis.jdo.jdosupport.mixins.Persistable_datanucleusIdLong;
+import org.apache.isis.jdo.metamodel.JdoProgrammingModelPlugin;
 import org.apache.isis.jdo.metrics.MetricsServiceDefault;
 import org.apache.isis.jdo.persistence.IsisPlatformTransactionManagerForJdo;
 
 @Configuration
 @Import({
     DataNucleusSettings.class, // config bean
+    JdoProgrammingModelPlugin.class, // metamodel extensions
     JdoPersistenceLifecycleService.class,
     MetricsServiceDefault.class,
     IsisJdoSupportDN5.class,

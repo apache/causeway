@@ -20,9 +20,13 @@ package org.apache.isis.metamodel.progmodel;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+
 /**
  * @since 2.0
  */
 public interface ProgrammingModelService extends Supplier<ProgrammingModel> {
 
+    MetaModelValidator getMetaModelValidator();
+    
 }

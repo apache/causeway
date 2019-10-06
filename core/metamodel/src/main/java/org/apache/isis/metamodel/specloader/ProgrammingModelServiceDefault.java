@@ -18,18 +18,26 @@
  */
 package org.apache.isis.metamodel.specloader;
 
+import java.util.EnumSet;
+
 import javax.inject.Inject;
 
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.factory.InstanceUtil;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -40,11 +48,16 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
     public ProgrammingModel get() {
         return programmingModel.get();
     }
+    
+    @Getter
+    private MetaModelValidatorComposite metaModelValidator;
 
     // -- HELPER
 
     @Inject private IsisConfigurationLegacy configurationLegacy;
     @Inject private IsisConfiguration configuration;
+    @Inject private ServiceRegistry serviceRegistry;
+     
 
     private _Lazy<ProgrammingModel> programmingModel = 
             _Lazy.threadSafe(this::createProgrammingModel);
@@ -53,23 +66,56 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         
         log.debug("About to create the ProgrammingModel.");
 
-        boolean ignoreDep = configuration.getReflector().getFacets().isIgnoreDeprecated();
-        val deprecatedPolicy = ignoreDep ? ProgrammingModelAbstract.DeprecatedPolicy.IGNORE : ProgrammingModelAbstract.DeprecatedPolicy.HONOUR;
+        val programmingModel = new ProgrammingModelFacetsJava8();
 
-        val programmingModel = new ProgrammingModelFacetsJava8(deprecatedPolicy);
-        ProgrammingModel.Util.includeFacetFactories(configurationLegacy, programmingModel);
-        ProgrammingModel.Util.excludeFacetFactories(configurationLegacy, programmingModel);
+        val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
+        for (val metaModelRefiner : metaModelRefiners) {
+            metaModelRefiner.refineProgrammingModel(programmingModel);
+        }
+
+        metaModelValidator = createMetaModelValidator();
+        metaModelValidator.init();
+        
+        val isIgnoreDeprecated = configuration.getReflector().getFacets().isIgnoreDeprecated();
+        val excludingMarkers = isIgnoreDeprecated 
+                ? EnumSet.of(ProgrammingModel.Marker.DEPRECATED) 
+                        : null;
+        programmingModel.init(ProgrammingModel.excluding(excludingMarkers), metaModelValidator);
+
+        for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
+            metaModelRefiner.refineMetaModelValidator(metaModelValidator);
+        }
         
         if(log.isDebugEnabled()) {
             
-            val facetFactoryCount = programmingModel.getList().size();
+            val facetFactoryCount = programmingModel.stream().count();
             val postProcessorCount = programmingModel.getPostProcessors().size();
+            
+            val refinerCount = metaModelRefiners.size();
+            val validatorCount = metaModelValidator.size();
+            
+            log.debug("Collected {} validators after also asking {} refiners.",
+                    validatorCount,
+                    refinerCount); 
             
             log.debug("ProgrammingModel created with {} factories and {} post-processors.", 
                     facetFactoryCount, postProcessorCount);    
         }
         
         return programmingModel;
+    }
+    
+    private MetaModelValidatorComposite createMetaModelValidator() {
+
+        log.debug("About to create the composite MetaModelValidator.");
+        
+        val metaModelValidatorClassName =
+                configurationLegacy.getString(
+                        ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
+                        ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
+        val mmValidator = InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
+        val mmValidatorComposite = MetaModelValidatorComposite.asComposite(mmValidator);
+        return mmValidatorComposite;
     }
 
 }
