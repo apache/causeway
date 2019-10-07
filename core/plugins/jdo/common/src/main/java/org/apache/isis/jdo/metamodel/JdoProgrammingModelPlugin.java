@@ -18,7 +18,7 @@
  */
 package org.apache.isis.jdo.metamodel;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
@@ -33,7 +33,7 @@ import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.val;
 
-@Component
+@Service
 public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
     @Override

@@ -22,13 +22,10 @@ package org.apache.isis.metamodel.progmodel;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-
-import lombok.val;
 
 public interface ProgrammingModel {
 
@@ -113,20 +110,17 @@ public interface ProgrammingModel {
     
     <T extends FacetFactory> void addFactory(
             FacetProcessingOrder order, 
-            Class<T> type, 
-            Supplier<? extends T> supplier, 
+            T instance, 
             Marker ... markers);
     
     <T extends MetaModelValidator> void addValidator(
             ValidationOrder order, 
-            Class<T> type, 
-            Supplier<? extends T> supplier, 
+            T instance, 
             Marker ... markers);
     
     <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
             PostProcessingOrder order, 
-            Class<T> type, 
-            Supplier<? extends T> supplier, 
+            T instance, 
             Marker ... markers);
     
     
@@ -143,7 +137,7 @@ public interface ProgrammingModel {
             Marker ... markers) {
         
         final Supplier<FacetFactory> supplier = _Functions.uncheckedSupplier(type::newInstance);
-        addFactory(order, type, _Casts.uncheckedCast(supplier), markers);
+        addFactory(order, supplier.get(), markers);
     }
     
     /** shortcut for see {@link #addValidator(ValidationOrder, Class, Supplier, Marker...)} */
@@ -151,9 +145,8 @@ public interface ProgrammingModel {
             MetaModelValidator validator, 
             Marker ... markers) {
         
-        val type = validator.getClass();
         final Supplier<MetaModelValidator> supplier = ()->validator;
-        addValidator(ValidationOrder.A2_AFTER_BUILTIN, type, _Casts.uncheckedCast(supplier), markers);
+        addValidator(ValidationOrder.A2_AFTER_BUILTIN, supplier.get(), markers);
     }
 
     
@@ -169,7 +162,7 @@ public interface ProgrammingModel {
             Marker ... markers) {
         
         final Supplier<ObjectSpecificationPostProcessor> supplier = _Functions.uncheckedSupplier(type::newInstance);
-        addPostProcessor(order, type, _Casts.uncheckedCast(supplier), markers);
+        addPostProcessor(order, supplier.get(), markers);
     }
 
     

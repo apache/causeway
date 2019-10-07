@@ -52,11 +52,12 @@ public class ValidateDomainModel implements Runnable {
     @Override
     public void run() {
 
+        val specificationLoader = IsisContext.getSpecificationLoader();
+        
         val programmingModelService = IsisContext.getServiceRegistry()
                 .lookupServiceElseFail(ProgrammingModelService.class);
         this.validationFailures = programmingModelService.getValidationResult();
         
-        val specificationLoader = IsisContext.getSpecificationLoader();
 
         val objectSpecifications = specificationLoader.snapshotSpecifications();
         

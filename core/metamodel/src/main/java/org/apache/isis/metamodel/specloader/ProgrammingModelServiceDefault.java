@@ -60,7 +60,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
     
     private ProgrammingModel createProgrammingModel() {
         
-        log.debug("About to create the ProgrammingModel.");
+        log.info("About to create the ProgrammingModel.");
 
         val programmingModel = new ProgrammingModelFacetsJava8();
 
@@ -74,7 +74,7 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         // finalize the programming model (make it immutable)
         programmingModel.init(programmingModelInitFilter);
         
-        if(log.isDebugEnabled()) {
+        if(log.isInfoEnabled()) {
             
             val refinerCount = metaModelRefiners.size();
             
@@ -83,13 +83,13 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
             val postProcessorCount = programmingModel.streamPostProcessors().count();
             
             
-            log.debug("Remaining after asking {} refiners, and passing filter {}:",
+            log.info("Collected after asking {} refiners, and passing filter '{}':",
                     refinerCount,
                     programmingModelInitFilter.getClass());
             
-            log.debug(" - {} facet-factories", facetFactoryCount);
-            log.debug(" - {} validators", validatorCount);
-            log.debug(" - {} post-processors", postProcessorCount);
+            log.info(" - {} facet-factories", facetFactoryCount);
+            log.info(" - {} validators", validatorCount);
+            log.info(" - {} post-processors", postProcessorCount);
             
         }
         

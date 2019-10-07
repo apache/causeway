@@ -22,19 +22,17 @@ package org.apache.isis.metamodel.progmodel;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
@@ -52,13 +50,14 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         
         assertNotInitialized();
         
-//        for (val facetFactory : snapshot(filter)) {
-//            if(facetFactory instanceof MetaModelValidatorRefiner) {
-//                val metaModelValidatorRefiner = (MetaModelValidatorRefiner) facetFactory;
-//                metaModelValidatorRefiner.refineMetaModelValidator(metaModelValidator);
-//            }
-//        }
-        
+        // for all registered facet-factories that also implement MetaModelRefiner
+        for (val facetFactory : snapshotFactories(filter)) {
+            if(facetFactory instanceof MetaModelRefiner) {
+                val metaModelValidatorRefiner = (MetaModelRefiner) facetFactory;
+                metaModelValidatorRefiner.refineProgrammingModel(this);
+            }
+        }
+
         this.unmodifiableFactories = 
                 Collections.unmodifiableList(snapshotFactories(filter));
         this.unmodifiableValidators = 
@@ -73,25 +72,24 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     @Override
     public <T extends FacetFactory> void addFactory(
             FacetProcessingOrder order, 
-            Class<T> type, 
-            Supplier<? extends T> supplier, 
+            T instance, 
             Marker ... markers) {
         
         assertNotInitialized();
-        
-        val factoryEntry = ProgrammingModelEntry.of(type, supplier, markers);
+        val factoryEntry = ProgrammingModelEntry.of(instance, markers);
         factoryEntriesByOrder.putElement(order, factoryEntry);
     }
 
     @Override
     public <T extends MetaModelValidator> void addValidator(
             ValidationOrder order, 
-            Class<T> type,
-            Supplier<? extends T> supplier, 
+            T instance,
             Marker... markers) {
         
+        System.out.println("### " + instance);
+        
         assertNotInitialized();
-        val validatorEntry = ProgrammingModelEntry.of(type, supplier, markers);
+        val validatorEntry = ProgrammingModelEntry.of(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);
     }
     
@@ -99,12 +97,11 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     @Override
     public <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
             PostProcessingOrder order, 
-            Class<T> type,
-            Supplier<? extends T> supplier, 
+            T instance,
             Marker... markers) {
         
         assertNotInitialized();
-        val postProcessorEntry = ProgrammingModelEntry.of(type, supplier, markers);
+        val postProcessorEntry = ProgrammingModelEntry.of(instance, markers);
         postProcessorEntriesByOrder.putElement(order, postProcessorEntry);
     }
     
@@ -130,12 +127,10 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     // -- VALUE TYPE
     
-    @Value(staticConstructor = "of") @EqualsAndHashCode(of = "type")
+    @Value(staticConstructor = "of") @EqualsAndHashCode(of = "instance")
     static final class ProgrammingModelEntry<T> {
-        @NonNull Class<T> type;
-        @NonNull Supplier<? extends T> supplier; 
+        T instance;
         Marker[] markers;
-        @Getter(lazy = true) final T instance = supplier.get();
     }
     
     // -- SNAPSHOT HELPER
@@ -151,7 +146,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
                 continue;
             }
             for(val factoryEntry : factoryEntrySet) {
-                if(filter.acceptFactoryType(factoryEntry.getType(), factoryEntry.getMarkers())) {
+                if(filter.acceptFactoryType(factoryEntry.getInstance().getClass(), factoryEntry.getMarkers())) {
                     factories.add(factoryEntry.getInstance());
                 }
             }
@@ -170,7 +165,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
                 continue;
             }
             for(val validatorEntry : validatorEntrySet) {
-                if(filter.acceptValidator(validatorEntry.getType(), validatorEntry.getMarkers())) {
+                if(filter.acceptValidator(validatorEntry.getInstance().getClass(), validatorEntry.getMarkers())) {
                     validators.add(validatorEntry.getInstance());
                 }
             }
@@ -189,7 +184,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
                 continue;
             }
             for(val postProcessorEntry : postProcessorEntrySet) {
-                if(filter.acceptPostProcessor(postProcessorEntry.getType(), postProcessorEntry.getMarkers())) {
+                if(filter.acceptPostProcessor(postProcessorEntry.getInstance().getClass(), postProcessorEntry.getMarkers())) {
                     postProcessors.add(postProcessorEntry.getInstance());
                 }
             }
