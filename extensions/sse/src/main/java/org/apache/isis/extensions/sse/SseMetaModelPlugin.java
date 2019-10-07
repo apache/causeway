@@ -29,7 +29,7 @@ public class SseMetaModelPlugin implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.add(
+        programmingModel.addFactory(
                 ProgrammingModel.FacetProcessingOrder.Z2_AFTER_FINALLY, 
                 SseAnnotationFacetFactory.class, 
                 ProgrammingModel.Marker.INCUBATING);

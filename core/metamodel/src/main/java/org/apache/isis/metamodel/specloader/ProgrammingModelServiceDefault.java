@@ -64,7 +64,8 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
         val programmingModel = new ProgrammingModelFacetsJava8();
 
-        // from all plugins out there, add their contributed FacetFactories to the programming model
+        // from all plugins out there, add their contributed FacetFactories, Validators 
+        // and PostProcessors to the programming model
         val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
         for (val metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);
@@ -75,18 +76,21 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         
         if(log.isDebugEnabled()) {
             
+            val refinerCount = metaModelRefiners.size();
+            
             val facetFactoryCount = programmingModel.streamFactories().count();
             val validatorCount = programmingModel.streamValidators().count();
             val postProcessorCount = programmingModel.streamPostProcessors().count();
             
-            val refinerCount = metaModelRefiners.size();
             
-            log.debug("Collected {} validators after also asking {} refiners.",
-                    validatorCount,
-                    refinerCount); 
+            log.debug("Remaining after asking {} refiners, and passing filter {}:",
+                    refinerCount,
+                    programmingModelInitFilter.getClass());
             
-            log.debug("ProgrammingModel created with {} facet-factories and {} post-processors.", 
-                    facetFactoryCount, postProcessorCount);    
+            log.debug(" - {} facet-factories", facetFactoryCount);
+            log.debug(" - {} validators", validatorCount);
+            log.debug(" - {} post-processors", postProcessorCount);
+            
         }
         
         return programmingModel;

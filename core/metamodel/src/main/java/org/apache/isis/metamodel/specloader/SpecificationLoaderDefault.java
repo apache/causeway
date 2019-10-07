@@ -77,7 +77,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private ProgrammingModel programmingModel;
     private FacetProcessor facetProcessor;
-
     private PostProcessor postProcessor;
     
     private final SpecificationCacheDefault<ObjectSpecification> cache = 

@@ -76,6 +76,14 @@ public interface ProgrammingModel {
         Z2_AFTER_FINALLY,
     }
 
+    /**
+     * Processing order for registered meta-model validators
+     * 
+     * @apiNote Prefixes are without any semantic meaning, just to make the ordering 
+     * transparent to the human reader. 
+     * Order is defined by {@link ValidationOrder#ordinal()}
+     *
+     */
     static enum ValidationOrder {
         
         A0_BEFORE_BUILTIN,
@@ -84,6 +92,14 @@ public interface ProgrammingModel {
         
     }
     
+    /**
+     * Processing order for registered meta-model post-processors
+     * 
+     * @apiNote Prefixes are without any semantic meaning, just to make the ordering 
+     * transparent to the human reader. 
+     * Order is defined by {@link PostProcessingOrder#ordinal()}
+     *
+     */
     static enum PostProcessingOrder {
         
         A0_BEFORE_BUILTIN,
@@ -121,7 +137,7 @@ public interface ProgrammingModel {
     // -- SHORTCUTS
     
     /** shortcut for see {@link #addFactory(FacetProcessingOrder, Class, Supplier, Marker...)}*/
-    default <T extends FacetFactory> void add(
+    default <T extends FacetFactory> void addFactory(
             FacetProcessingOrder order, 
             Class<T> type, 
             Marker ... markers) {
@@ -142,8 +158,8 @@ public interface ProgrammingModel {
 
     
     /** shortcut for see {@link #addValidator(ValidationOrder, Class, Supplier, Marker...)} */
-    default void addValidator(MetaModelValidatorVisiting.Visitor visitor) {
-        addValidator(MetaModelValidatorVisiting.of(visitor));
+    default void addValidator(MetaModelValidatorVisiting.Visitor visitor, Marker ... markers) {
+        addValidator(MetaModelValidatorVisiting.of(visitor), markers);
     }
     
     /** shortcut for see {@link #addPostProcessor(PostProcessingOrder, Class, Supplier, Marker...)}*/

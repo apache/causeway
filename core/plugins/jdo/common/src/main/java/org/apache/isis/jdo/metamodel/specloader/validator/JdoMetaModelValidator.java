@@ -21,14 +21,49 @@ package org.apache.isis.jdo.metamodel.specloader.validator;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.column.MandatoryFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.column.MaxLengthDerivedFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel.Marker;
+
+import lombok.val;
 
 public class JdoMetaModelValidator {
     
     public JdoMetaModelValidator(IsisConfiguration config, ProgrammingModel programmingModel) {
+        
+        val facetProcessingOrder = 
+                ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        
+        programmingModel.addFactory(facetProcessingOrder, JdoPersistenceCapableAnnotationFacetFactory.class, Marker.JDO);
+        programmingModel.addFactory(facetProcessingOrder, JdoDatastoreIdentityAnnotationFacetFactory.class, Marker.JDO);
+
+        programmingModel.addFactory(facetProcessingOrder, JdoPrimaryKeyAnnotationFacetFactory.class, Marker.JDO);
+        programmingModel.addFactory(facetProcessingOrder, JdoNotPersistentAnnotationFacetFactory.class, Marker.JDO);
+        programmingModel.addFactory(facetProcessingOrder, JdoDiscriminatorAnnotationFacetFactory.class, Marker.JDO);
+        programmingModel.addFactory(facetProcessingOrder, JdoVersionAnnotationFacetFactory.class, Marker.JDO);
+
+        programmingModel.addFactory(facetProcessingOrder, JdoQueryAnnotationFacetFactory.class, Marker.JDO);
+
+        programmingModel.addFactory(facetProcessingOrder, BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+        programmingModel.addFactory(facetProcessingOrder, MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+        // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
+        // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
+        // and also PropertyAnnotationFactory
+        programmingModel.addFactory(facetProcessingOrder, MandatoryFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+
+        
         addValidatorToEnsureIdentityType(programmingModel);
         addValidatorToCheckForUnsupportedAnnotations(programmingModel);
     }
@@ -63,7 +98,7 @@ public class JdoMetaModelValidator {
             }
 
             return true;
-        });
+        }, Marker.JDO);
             
     }
 
@@ -77,7 +112,7 @@ public class JdoMetaModelValidator {
                             objSpec.getFullIdentifier());
                 }
                 return true;
-        });
+        }, Marker.JDO);
         
     }
 
