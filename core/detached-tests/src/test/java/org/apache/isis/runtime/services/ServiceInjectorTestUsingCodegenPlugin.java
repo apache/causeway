@@ -102,7 +102,7 @@ public class ServiceInjectorTestUsingCodegenPlugin {
         final ExecutorService executor = Executors.newFixedThreadPool(10);
 
         // setup 32 tasks
-        final List<Callable<Integer>> tasks = IntStream.range(0, 32)
+        final List<Callable<Integer>> tasks = IntStream.range(0, 1000)
                 .<Callable<Integer>>mapToObj(index->()->{
 
                     // within each task setup a new calculator instance that adds the numbers from 1 .. 100 = 5050

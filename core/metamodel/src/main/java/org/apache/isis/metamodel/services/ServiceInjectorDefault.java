@@ -56,8 +56,8 @@ public class ServiceInjectorDefault implements ServiceInjector {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private InjectorMethodEvaluator injectorMethodEvaluator;
 
-    private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newHashMap();
-    private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
+    private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newConcurrentHashMap();
+    private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newConcurrentHashMap();
 
     @Override
     public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
