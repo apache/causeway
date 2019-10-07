@@ -54,7 +54,7 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: core/testsupport/_adoc
+      start_path: antora/components/testing
       branches: HEAD
     - url: .
       start_path: core/testsupport/unittestsupport/_adoc

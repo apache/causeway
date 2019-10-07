@@ -61,7 +61,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-security-shiro</artifactId>
+			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
 
 		<!-- OTHER DEPENDENCIES -->

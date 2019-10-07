@@ -27,7 +27,7 @@
     	<relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-plugins-security-shiro</artifactId>
+    <artifactId>isis-security-shiro</artifactId>
 
     <name>Apache Isis Plugin for Security (Shiro)</name>
 	<description>
