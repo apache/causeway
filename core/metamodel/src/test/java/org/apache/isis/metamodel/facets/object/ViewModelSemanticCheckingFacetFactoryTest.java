@@ -18,10 +18,6 @@
  */
 package org.apache.isis.metamodel.facets.object;
 
-import lombok.val;
-
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,8 +28,9 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -42,6 +39,8 @@ import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class ViewModelSemanticCheckingFacetFactoryTest {
 
@@ -62,7 +61,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         _Exceptions.throwNotImplemented();
 
         final ValidationFailures validationFailures = new ValidationFailures();
-        metaModelValidator.validate(validationFailures);
+        metaModelValidator.validateInto(validationFailures);
         return validationFailures;
     }
 

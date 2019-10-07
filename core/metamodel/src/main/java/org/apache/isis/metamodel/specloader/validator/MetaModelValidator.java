@@ -21,6 +21,11 @@ package org.apache.isis.metamodel.specloader.validator;
 
 public interface MetaModelValidator {
 
-    void validate(ValidationFailures validationFailures);
+    /**
+     * Validate and then append any {@link ValidationFailure} to given validationFailures. 
+     *  
+     * @param validationFailures
+     */
+    void validateInto(ValidationFailures validationFailures);
 
 }

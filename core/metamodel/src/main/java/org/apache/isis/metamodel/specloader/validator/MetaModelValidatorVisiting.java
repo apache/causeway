@@ -46,7 +46,7 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
     @NonNull private final Visitor visitor;
 
     @Override
-    public final void validate(ValidationFailures validationFailures) {
+    public final void validateInto(ValidationFailures validationFailures) {
 
         validateAll(validationFailures);
 

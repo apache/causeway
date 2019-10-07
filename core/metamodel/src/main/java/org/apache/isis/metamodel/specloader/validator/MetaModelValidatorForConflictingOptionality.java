@@ -33,7 +33,7 @@ public class MetaModelValidatorForConflictingOptionality extends MetaModelValida
     }
 
     @Override
-    public void validate(final ValidationFailures validationFailures) {
+    public void validateInto(final ValidationFailures validationFailures) {
         validationFailures.addAll(failures);
     }
 

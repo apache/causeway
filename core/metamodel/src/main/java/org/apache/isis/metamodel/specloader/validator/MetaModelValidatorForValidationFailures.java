@@ -33,7 +33,7 @@ public class MetaModelValidatorForValidationFailures extends MetaModelValidatorA
     }
 
     @Override
-    public void validate(ValidationFailures validationFailures) {
+    public void validateInto(ValidationFailures validationFailures) {
         validationFailures.addAll(failures);
     }
 

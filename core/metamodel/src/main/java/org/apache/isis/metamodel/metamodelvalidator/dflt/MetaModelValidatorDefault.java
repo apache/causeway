@@ -29,7 +29,7 @@ public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
      * @param validationFailures
      */
     @Override
-    public void validate(ValidationFailures validationFailures) {
+    public void validateInto(ValidationFailures validationFailures) {
     }
 
 }

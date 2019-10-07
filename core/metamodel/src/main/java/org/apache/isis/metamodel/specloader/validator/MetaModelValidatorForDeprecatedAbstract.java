@@ -18,7 +18,6 @@
  */
 package org.apache.isis.metamodel.specloader.validator;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.metamodel.facets.FacetFactory;
@@ -64,7 +63,7 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
     protected abstract String failureMessageFor(Facet facet, FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext);
 
     @Override
-    public void validate(ValidationFailures validationFailures) {
+    public void validateInto(ValidationFailures validationFailures) {
 
         if(getConfiguration().getReflector().getValidator().isAllowDeprecated()) {
             return;

@@ -222,7 +222,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             validationFailures = new ValidationFailures();
 
             if(isFullIntrospect()) {
-                metaModelValidator.validate(validationFailures);
+                metaModelValidator.validateInto(validationFailures);
             } else {
                 log.info("Meta model validation skipped (full introspection of metamodel not configured)");
             }

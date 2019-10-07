@@ -50,9 +50,9 @@ public final class MetaModelValidatorComposite extends MetaModelValidatorAbstrac
     }
 
     @Override
-    public void validate(ValidationFailures validationFailures)  {
+    public void validateInto(ValidationFailures validationFailures)  {
         for (val validator : validators) {
-            validator.validate(validationFailures);
+            validator.validateInto(validationFailures);
         }
     }
 
