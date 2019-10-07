@@ -86,8 +86,6 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             T instance,
             Marker... markers) {
         
-        System.out.println("### " + instance);
-        
         assertNotInitialized();
         val validatorEntry = ProgrammingModelEntry.of(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);

@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @Inherited
 @Target({ ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Mixin(method = "act")
 public @interface ActionLayout {
 
 

@@ -83,8 +83,12 @@ class DomainModelTest_usingGoodDomain {
         // check whether mix-ins are picked up as they should
         val specLoader = MetaModelContext.current().getSpecificationLoader();
         val holderSpec = specLoader.loadSpecification(ProperActionSupport.class, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        val oa = holderSpec.getObjectAction("mixin"); // proper mix-in support
-        assertNotNull(oa);
+        
+        val oa_mixin = holderSpec.getObjectAction("mixin"); // proper mix-in support
+        assertNotNull(oa_mixin);
+        
+        val oa_action = holderSpec.getObjectAction("action"); // proper mix-in support
+        assertNotNull(oa_action);
     }
     
 

@@ -35,6 +35,7 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 @Inherited
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@Mixin(method = "coll")
 public @interface Collection {
 
     /**

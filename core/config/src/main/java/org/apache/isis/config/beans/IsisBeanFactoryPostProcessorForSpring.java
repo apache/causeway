@@ -28,8 +28,11 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.config.registry.TypeMetaData;
+
+import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.Getter;
 import lombok.val;
@@ -87,17 +90,19 @@ public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostPro
         
         val type = typeMetaData.getUnderlyingClass();
         
-        if(type.isAnnotationPresent(DomainObject.class)) {
+        
+        if(findNearestAnnotation(type, DomainObject.class).isPresent()) {
             return true;
         }
         
-        if(type.isAnnotationPresent(ViewModel.class)) {
+        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
             return true;
         }
         
-        if(type.isAnnotationPresent(Mixin.class)) {
+        if(findNearestAnnotation(type, Mixin.class).isPresent()) {
             return true;
         }
+        
         
         return false;
         

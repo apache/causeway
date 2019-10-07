@@ -29,8 +29,7 @@ public class ProperActionSupport_action {
     private final ProperActionSupport holder;
 
     // proper mix-in action
-    @Action
-    public ProperActionSupport $$() {
+    public ProperActionSupport act() {
         return holder;
     }
     

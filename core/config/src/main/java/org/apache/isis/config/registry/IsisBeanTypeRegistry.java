@@ -46,10 +46,10 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
+import org.apache.isis.commons.internal.reflection._Reflect;
 
 import static org.apache.isis.commons.internal.base._With.requires;
-import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;
-import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
+import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -197,7 +197,8 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
         requires(type, "type");
 
-        if(getAnnotation(type, Vetoed.class)!=null) {
+        
+        if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
             return BeanSort.UNKNOWN; // exclude from provisioning
         }
 
@@ -205,17 +206,17 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             return BeanSort.COLLECTION;
         }
 
-        val aDomainService = getAnnotation(type, DomainService.class);
-        if(aDomainService!=null) {
+        val aDomainService = findNearestAnnotation(type, DomainService.class);
+        if(aDomainService.isPresent()) {
             return BeanSort.MANAGED_BEAN;
         }
 
         //this takes precedence over whatever @DomainObject has to say
-        if(containsAnnotation(type, "javax.jdo.annotations.PersistenceCapable")) {
+        if(_Reflect.containsAnnotation(type, "javax.jdo.annotations.PersistenceCapable")) {
             return BeanSort.ENTITY;
         }
 
-        val aDomainObject = getAnnotation(type, DomainObject.class);
+        val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case EXTERNAL_ENTITY:
@@ -228,7 +229,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
                 return BeanSort.VIEW_MODEL;
 
             case NOT_SPECIFIED:
-                if(getAnnotation(type, ViewModel.class)!=null) {
+                if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
                     return BeanSort.VIEW_MODEL;
                 }
                 if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
@@ -242,11 +243,11 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             } 
         }
 
-        if(getAnnotation(type, Mixin.class)!=null) {
+        if(findNearestAnnotation(type, Mixin.class).isPresent()) {
             return BeanSort.MIXIN;
         }
 
-        if(getAnnotation(type, ViewModel.class)!=null) {
+        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
             return BeanSort.VIEW_MODEL;
         }
 
@@ -266,19 +267,19 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             return BeanSort.MANAGED_BEAN;
         }
 
-        if(getAnnotation(type, RequestScoped.class)!=null) {
+        if(findNearestAnnotation(type, RequestScoped.class).isPresent()) {
             return BeanSort.MANAGED_BEAN;
         }
 
-        if(getAnnotation(type, Singleton.class)!=null) {
+        if(findNearestAnnotation(type, Singleton.class).isPresent()) {
             return BeanSort.MANAGED_BEAN;
         }
 
-        if(getAnnotation(type, Service.class)!=null) {
+        if(findNearestAnnotation(type, Service.class).isPresent()) {
             return BeanSort.MANAGED_BEAN;
         }
 
-        if(getAnnotation(type, Component.class)!=null) {
+        if(findNearestAnnotation(type, Component.class).isPresent()) {
             return BeanSort.MANAGED_BEAN;
         }
 

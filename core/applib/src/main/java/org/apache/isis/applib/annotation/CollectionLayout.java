@@ -32,6 +32,7 @@ import java.util.Comparator;
 @Inherited
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Mixin(method = "coll")
 public @interface CollectionLayout {
 
 
