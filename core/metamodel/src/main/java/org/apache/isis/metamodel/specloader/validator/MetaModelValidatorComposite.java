@@ -26,7 +26,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import lombok.val;
 
 @Deprecated
-public final class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
+final class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
     private final List<MetaModelValidator> validators = _Lists.newArrayList();
 

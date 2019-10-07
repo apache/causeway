@@ -47,7 +47,6 @@ import org.apache.isis.metamodel.specloader.specimpl.FacetedMethodsBuilderContex
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -95,8 +94,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     public static SpecificationLoaderDefault getInstance (
             IsisConfiguration configuration,
             IsisSystemEnvironment isisSystemEnvironment,
-            ProgrammingModel programmingModel,
-            MetaModelValidator metaModelValidator) {
+            ProgrammingModel programmingModel) {
 
         val instance = new SpecificationLoaderDefault(); 
 

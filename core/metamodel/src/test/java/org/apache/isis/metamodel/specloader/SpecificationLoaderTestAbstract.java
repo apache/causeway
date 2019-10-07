@@ -38,14 +38,12 @@ import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -91,9 +89,6 @@ abstract class SpecificationLoaderTestAbstract {
             return mock;
         }
 
-        MetaModelValidatorComposite getMetaModelValidatorComposite() {
-            return MetaModelValidatorComposite.asComposite(new MetaModelValidatorDefault());
-        }
         
         ProgrammingModel getProgrammingModel() {
             return  new ProgrammingModelFacetsJava8();
@@ -102,14 +97,12 @@ abstract class SpecificationLoaderTestAbstract {
         //@Produces
         SpecificationLoader getSpecificationLoader(
                 IsisConfiguration configuration,
-                ProgrammingModel programmingModel,
-                MetaModelValidatorComposite mmValidator) {
+                ProgrammingModel programmingModel) {
             
             return SpecificationLoaderDefault.getInstance(
                     configuration,
                     new IsisSystemEnvironment(),
-                    programmingModel,
-                    mmValidator);
+                    programmingModel);
         }
 
     }
@@ -134,7 +127,6 @@ abstract class SpecificationLoaderTestAbstract {
 
         val producers = new Producers();
         
-        val mmValidator = producers.getMetaModelValidatorComposite(); 
         val programmingModel = producers.getProgrammingModel();
 
         MetaModelContext.preset(MetaModelContext.builder()
@@ -142,8 +134,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .specificationLoader(specificationLoader = producers
                     .getSpecificationLoader(
                             isisConfiguration,
-                            programmingModel,
-                            mmValidator
+                            programmingModel
                             )
                     )
                 .translationService(producers.mockTranslationService())

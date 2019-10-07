@@ -24,14 +24,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilter;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
@@ -52,8 +49,6 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     // -- HELPER
 
-    @Inject private IsisConfigurationLegacy configurationLegacy;
-    @Inject private IsisConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private ProgrammingModelInitFilter programmingModelInitFilter;
      
@@ -62,8 +57,6 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     private _Lazy<ValidationFailures> validationResult = 
             _Lazy.threadSafe(this::validate);
-    
-    private MetaModelValidatorComposite metaModelValidator;
     
     private ProgrammingModel createProgrammingModel() {
         
@@ -98,20 +91,6 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         
         return programmingModel;
     }
-    
-//    private MetaModelValidatorComposite createMetaModelValidator() {
-//        
-//        val metaModelValidatorClassName =
-//                configurationLegacy.getString(
-//                        ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
-//                        ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
-//        
-//        log.debug("About to create the MetaModelValidator {}.", metaModelValidatorClassName);
-//        
-//        val mmValidator = InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
-//        val mmValidatorComposite = MetaModelValidatorComposite.asComposite(mmValidator);
-//        return mmValidatorComposite;
-//    }
     
     private ValidationFailures validate() {
         val failures = new ValidationFailures();

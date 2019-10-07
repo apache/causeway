@@ -31,12 +31,10 @@ import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodRemoverConstants;
-import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 import lombok.val;
 
@@ -46,8 +44,6 @@ abstract class MixinIntendedAs {
 
     protected void setUp() throws Exception {
 
-        val mmValidator = MetaModelValidatorComposite.asComposite(new MetaModelValidatorDefault()); 
-        
         programmingModel = new ProgrammingModelFacetsJava8();
         
         // PRODUCTION
@@ -56,8 +52,7 @@ abstract class MixinIntendedAs {
                 .specificationLoader(SpecificationLoaderDefault.getInstance(
                         new IsisConfiguration(),
                         new IsisSystemEnvironment(),
-                        programmingModel,
-                        mmValidator))
+                        programmingModel))
 //                .serviceInjector(mockServiceInjector)
 //                .serviceRegistry(mockServiceRegistry)
                 .build());

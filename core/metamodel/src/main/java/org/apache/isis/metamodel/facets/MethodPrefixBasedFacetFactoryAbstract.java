@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
