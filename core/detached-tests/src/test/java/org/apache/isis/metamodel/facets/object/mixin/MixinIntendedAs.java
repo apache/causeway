@@ -32,8 +32,8 @@ import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
-import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -62,7 +62,7 @@ abstract class MixinIntendedAs {
 //                .serviceRegistry(mockServiceRegistry)
                 .build());
         
-        ((ProgrammingModelAbstract)programmingModel).init(ProgrammingModel.excludingNone());
+        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
         MetaModelContext.current().getSpecificationLoader().init();
         
     }
@@ -90,7 +90,7 @@ abstract class MixinIntendedAs {
                         MethodRemoverConstants.NOOP, 
                         facetHolder);
         
-        programmingModel.stream()
+        programmingModel.streamFactories()
 //        .filter(facetFactory->!facetFactory.getClass().getSimpleName().startsWith("Grid"))
 //        .peek(facetFactory->System.out.println("### " + facetFactory.getClass().getName()))
         .forEach(facetFactory->facetFactory.process(processClassContext));
@@ -117,7 +117,7 @@ abstract class MixinIntendedAs {
                         MethodRemoverConstants.NOOP, 
                         facetedMethodParameter);
         
-        programmingModel.stream()
+        programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
         
         return facetedMethodParameter;

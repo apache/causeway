@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.spec.DomainModelException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailure;
@@ -51,8 +52,11 @@ public class ValidateDomainModel implements Runnable {
     @Override
     public void run() {
 
+        val programmingModelService = IsisContext.getServiceRegistry()
+                .lookupServiceElseFail(ProgrammingModelService.class);
+        this.validationFailures = programmingModelService.getValidationResult();
+        
         val specificationLoader = IsisContext.getSpecificationLoader();
-        this.validationFailures = specificationLoader.validate();
 
         val objectSpecifications = specificationLoader.snapshotSpecifications();
         

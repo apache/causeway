@@ -18,7 +18,7 @@
  */
 package org.apache.isis.metamodel.progmodel;
 
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 /**
  * @since 2.0
@@ -26,6 +26,6 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 public interface ProgrammingModelService {
 
     ProgrammingModel getProgrammingModel();
-    MetaModelValidator getMetaModelValidator();
+    ValidationFailures getValidationResult();
     
 }

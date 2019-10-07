@@ -27,12 +27,12 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -51,17 +51,21 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     @Mock
     private ServiceInjector mockServicesInjector;
 
-
     private ViewModelSemanticCheckingFacetFactory facetFactory;
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
+        
+        val programmingModel = new ProgrammingModelAbstract() {};
+        facetFactory.refineProgrammingModel(programmingModel);
+        programmingModel.init(new ProgrammingModelInitFilterDefault());
+        
         facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, null));
-        final MetaModelValidatorComposite metaModelValidator = new MetaModelValidatorComposite();
-        //facetFactory.refineMetaModelValidator(metaModelValidator);
-        _Exceptions.throwNotImplemented();
+        
+        val validationFailures = new ValidationFailures();
+        
+        programmingModel.streamValidators()
+        .forEach(validator->validator.validateInto(validationFailures));
 
-        final ValidationFailures validationFailures = new ValidationFailures();
-        metaModelValidator.validateInto(validationFailures);
         return validationFailures;
     }
 

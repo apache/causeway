@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.progmodel;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -33,35 +32,23 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
-    @Getter(onMethod = @__(@Override))
-    private final List<ObjectSpecificationPostProcessor> postProcessors = _Lists.newArrayList();
-    
     private List<FacetFactory> unmodifiableFactories;
-    private List<MetaModelValidator> additionalValidators = _Lists.newArrayList();
-
-    @Override
-    public <T extends FacetFactory> void add(
-            ProcessingOrder order, 
-            Class<T> type, 
-            Supplier<? extends T> supplier, 
-            Marker ... markers) {
-        
-        assertNotInitialized();
-        
-        val factoryEntry = FactoryEntry.of(type, supplier, markers);
-        factoryEntriesByOrder.putElement(order, factoryEntry);
-    }
+    private List<MetaModelValidator> unmodifiableValidators;
+    private List<ObjectSpecificationPostProcessor> unmodifiablePostProcessors;
 
     /**
      * Finalizes the factory collection, can not be modified afterwards.
      * @param filter - the final programming model will only contain factories accepted by this filter
      */
-    public void init(Predicate<FactoryEntry<?>> filter) {
+    public void init(ProgrammingModelInitFilter filter) {
         
         assertNotInitialized();
         
@@ -73,24 +60,145 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 //        }
         
         this.unmodifiableFactories = 
-                Collections.unmodifiableList(snapshot(filter));
+                Collections.unmodifiableList(snapshotFactories(filter));
+        this.unmodifiableValidators = 
+                Collections.unmodifiableList(snapshotValidators(filter));
+        this.unmodifiablePostProcessors = 
+                Collections.unmodifiableList(snapshotPostProcessors(filter));
+        
+    }
+    
+    // -- SETUP
+
+    @Override
+    public <T extends FacetFactory> void addFactory(
+            FacetProcessingOrder order, 
+            Class<T> type, 
+            Supplier<? extends T> supplier, 
+            Marker ... markers) {
+        
+        assertNotInitialized();
+        
+        val factoryEntry = ProgrammingModelEntry.of(type, supplier, markers);
+        factoryEntriesByOrder.putElement(order, factoryEntry);
     }
 
     @Override
-    public Stream<FacetFactory> stream() {
-        if(unmodifiableFactories==null) {
-            return Stream.empty();
-        }
+    public <T extends MetaModelValidator> void addValidator(
+            ValidationOrder order, 
+            Class<T> type,
+            Supplier<? extends T> supplier, 
+            Marker... markers) {
+        
+        assertNotInitialized();
+        val validatorEntry = ProgrammingModelEntry.of(type, supplier, markers);
+        validatorEntriesByOrder.putElement(order, validatorEntry);
+    }
+    
+
+    @Override
+    public <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
+            PostProcessingOrder order, 
+            Class<T> type,
+            Supplier<? extends T> supplier, 
+            Marker... markers) {
+        
+        assertNotInitialized();
+        val postProcessorEntry = ProgrammingModelEntry.of(type, supplier, markers);
+        postProcessorEntriesByOrder.putElement(order, postProcessorEntry);
+    }
+    
+    // -- ACCESS REGISTERED INSTANCES
+    
+    @Override
+    public Stream<FacetFactory> streamFactories() {
+        assertInitialized();
         return unmodifiableFactories.stream();
     }
     
     @Override
-    public void addValidator(MetaModelValidator validator) {
-        additionalValidators.add(validator);
+    public Stream<MetaModelValidator> streamValidators() {
+        assertInitialized();
+        return unmodifiableValidators.stream();
     }
     
-    // -- HELPER
+    @Override
+    public Stream<ObjectSpecificationPostProcessor> streamPostProcessors() {
+        assertInitialized();
+        return unmodifiablePostProcessors.stream();
+    }
 
+    // -- VALUE TYPE
+    
+    @Value(staticConstructor = "of") @EqualsAndHashCode(of = "type")
+    static final class ProgrammingModelEntry<T> {
+        @NonNull Class<T> type;
+        @NonNull Supplier<? extends T> supplier; 
+        Marker[] markers;
+        @Getter(lazy = true) final T instance = supplier.get();
+    }
+    
+    // -- SNAPSHOT HELPER
+
+    private final SetMultimap<FacetProcessingOrder, ProgrammingModelEntry<? extends FacetFactory>> 
+        factoryEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
+    
+    private List<FacetFactory> snapshotFactories(ProgrammingModelInitFilter filter) {
+        val factories = _Lists.<FacetFactory>newArrayList();
+        for(val order : FacetProcessingOrder.values()) {
+            val factoryEntrySet = factoryEntriesByOrder.get(order);
+            if(factoryEntrySet==null) {
+                continue;
+            }
+            for(val factoryEntry : factoryEntrySet) {
+                if(filter.acceptFactoryType(factoryEntry.getType(), factoryEntry.getMarkers())) {
+                    factories.add(factoryEntry.getInstance());
+                }
+            }
+        }
+        return factories;
+    }
+    
+    private final SetMultimap<ValidationOrder, ProgrammingModelEntry<? extends MetaModelValidator>> 
+        validatorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
+    
+    private List<MetaModelValidator> snapshotValidators(ProgrammingModelInitFilter filter) {
+        val validators = _Lists.<MetaModelValidator>newArrayList();
+        for(val order : ValidationOrder.values()) {
+            val validatorEntrySet = validatorEntriesByOrder.get(order);
+            if(validatorEntrySet==null) {
+                continue;
+            }
+            for(val validatorEntry : validatorEntrySet) {
+                if(filter.acceptValidator(validatorEntry.getType(), validatorEntry.getMarkers())) {
+                    validators.add(validatorEntry.getInstance());
+                }
+            }
+        }
+        return validators;
+    }
+    
+    private final SetMultimap<PostProcessingOrder, ProgrammingModelEntry<? extends ObjectSpecificationPostProcessor>> 
+        postProcessorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
+    
+    private List<ObjectSpecificationPostProcessor> snapshotPostProcessors(ProgrammingModelInitFilter filter) {
+        val postProcessors = _Lists.<ObjectSpecificationPostProcessor>newArrayList();
+        for(val order : PostProcessingOrder.values()) {
+            val postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
+            if(postProcessorEntrySet==null) {
+                continue;
+            }
+            for(val postProcessorEntry : postProcessorEntrySet) {
+                if(filter.acceptPostProcessor(postProcessorEntry.getType(), postProcessorEntry.getMarkers())) {
+                    postProcessors.add(postProcessorEntry.getInstance());
+                }
+            }
+        }
+        return postProcessors;
+    }
+    
+    // -- INIT HELPER
+    
     private boolean isInitialized() {
         return unmodifiableFactories!=null;
     }
@@ -102,23 +210,12 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         }
     }
     
-    private final SetMultimap<ProcessingOrder, FactoryEntry<?>> 
-        factoryEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
-    
-    private List<FacetFactory> snapshot(Predicate<FactoryEntry<?>> filter) {
-        val factories = _Lists.<FacetFactory>newArrayList();
-        for(val processinOrder : ProcessingOrder.values()) {
-            val factoryEntrySet = factoryEntriesByOrder.get(processinOrder);
-            if(factoryEntrySet==null) {
-                continue;
-            }
-            for(val factoryEntry : factoryEntrySet) {
-                if(filter.test(factoryEntry)) {
-                    factories.add(factoryEntry.getFactoryInstance());
-                }
-            }
+    private void assertInitialized() {
+        if(!isInitialized()) {
+            throw _Exceptions.unrecoverable(
+                    "The programming-model was not initialized yet.");
         }
-        return factories;
     }
+    
 
 }

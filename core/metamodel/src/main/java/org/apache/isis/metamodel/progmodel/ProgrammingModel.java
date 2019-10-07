@@ -19,42 +19,36 @@
 
 package org.apache.isis.metamodel.progmodel;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.functions._Functions;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
-import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Value;
 import lombok.val;
 
 public interface ProgrammingModel {
 
-    // -- TYPES
+    // -- ENUM TYPES
+    
+    static enum Marker {
+        DEPRECATED, 
+        INCUBATING,
+        JDO,
+    }
     
     /**
      * Processing order for registered facet factories
      * 
      * @apiNote Prefixes are without any semantic meaning, just to make the ordering 
      * transparent to the human reader. 
-     * Order is defined by {@link ProcessingOrder#ordinal()}
+     * Order is defined by {@link FacetProcessingOrder#ordinal()}
      *
      */
-    static enum ProcessingOrder {
+    static enum FacetProcessingOrder {
         
         A1_FALLBACK_DEFAULTS,
         A2_AFTER_FALLBACK_DEFAULTS,
@@ -81,71 +75,85 @@ public interface ProgrammingModel {
         Z1_FINALLY, 
         Z2_AFTER_FINALLY,
     }
-    
-    static enum Marker {
-        DEPRECATED, 
-        INCUBATING,
+
+    static enum ValidationOrder {
+        
+        A0_BEFORE_BUILTIN,
+        A1_BUILTIN,
+        A2_AFTER_BUILTIN,
+        
     }
     
-    @Value(staticConstructor = "of") @EqualsAndHashCode(of = "type")
-    static final class FactoryEntry<T extends FacetFactory> {
-        @NonNull Class<T> type;
-        @NonNull Supplier<? extends T> supplier; 
-        Marker[] markers;
-        @Getter(lazy = true) final T factoryInstance = supplier.get();
+    static enum PostProcessingOrder {
+        
+        A0_BEFORE_BUILTIN,
+        A1_BUILTIN,
+        A2_AFTER_BUILTIN,
+        
     }
+    
     
     // -- INTERFACE
     
-    List<ObjectSpecificationPostProcessor> getPostProcessors();
-    void addValidator(MetaModelValidator validator);
+    <T extends FacetFactory> void addFactory(
+            FacetProcessingOrder order, 
+            Class<T> type, 
+            Supplier<? extends T> supplier, 
+            Marker ... markers);
     
-    <T extends FacetFactory> void add(
-            ProcessingOrder order, 
+    <T extends MetaModelValidator> void addValidator(
+            ValidationOrder order, 
+            Class<T> type, 
+            Supplier<? extends T> supplier, 
+            Marker ... markers);
+    
+    <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
+            PostProcessingOrder order, 
             Class<T> type, 
             Supplier<? extends T> supplier, 
             Marker ... markers);
     
     
-    Stream<FacetFactory> stream();
+    Stream<FacetFactory> streamFactories();
+    Stream<MetaModelValidator> streamValidators();
+    Stream<ObjectSpecificationPostProcessor> streamPostProcessors();
     
     // -- SHORTCUTS
     
+    /** shortcut for see {@link #addFactory(FacetProcessingOrder, Class, Supplier, Marker...)}*/
     default <T extends FacetFactory> void add(
-            ProcessingOrder order, 
+            FacetProcessingOrder order, 
             Class<T> type, 
             Marker ... markers) {
         
         final Supplier<FacetFactory> supplier = _Functions.uncheckedSupplier(type::newInstance);
-        add(order, type, _Casts.uncheckedCast(supplier), markers);
+        addFactory(order, type, _Casts.uncheckedCast(supplier), markers);
     }
     
+    /** shortcut for see {@link #addValidator(ValidationOrder, Class, Supplier, Marker...)} */
+    default void addValidator(
+            MetaModelValidator validator, 
+            Marker ... markers) {
+        
+        val type = validator.getClass();
+        final Supplier<MetaModelValidator> supplier = ()->validator;
+        addValidator(ValidationOrder.A2_AFTER_BUILTIN, type, _Casts.uncheckedCast(supplier), markers);
+    }
+
+    
+    /** shortcut for see {@link #addValidator(ValidationOrder, Class, Supplier, Marker...)} */
     default void addValidator(MetaModelValidatorVisiting.Visitor visitor) {
         addValidator(MetaModelValidatorVisiting.of(visitor));
     }
     
-    // -- PREDICATES
-    
-    public static Predicate<FactoryEntry<?>> excludingNone() {
-        return _Predicates.alwaysTrue();
-    }
-    
-    public static Predicate<FactoryEntry<?>> excluding(@Nullable EnumSet<Marker> excludingMarkers) {
-        if(excludingMarkers==null) {
-            return excludingNone();
-        }
-        return factoryEntry -> {
-            val markersOnFactory = factoryEntry.getMarkers();
-            if(isEmpty(markersOnFactory)) {
-                return true; // accept
-            }
-            for(val markerOnFactory : markersOnFactory) {
-                if(excludingMarkers.contains(markerOnFactory)) {
-                    return true; // don't  accept
-                }
-            }
-            return true; // accept
-        };
+    /** shortcut for see {@link #addPostProcessor(PostProcessingOrder, Class, Supplier, Marker...)}*/
+    default <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
+            PostProcessingOrder order, 
+            Class<T> type, 
+            Marker ... markers) {
+        
+        final Supplier<ObjectSpecificationPostProcessor> supplier = _Functions.uncheckedSupplier(type::newInstance);
+        addPostProcessor(order, type, _Casts.uncheckedCast(supplier), markers);
     }
 
     

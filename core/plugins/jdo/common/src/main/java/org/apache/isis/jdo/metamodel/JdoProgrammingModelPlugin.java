@@ -26,7 +26,7 @@ import org.apache.isis.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefix
 import org.apache.isis.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.progmodel.ProgrammingModel.ProcessingOrder;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel.FacetProcessingOrder;
 
 @Component
 public class JdoProgrammingModelPlugin implements MetaModelRefiner {
@@ -35,12 +35,12 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
     public void refineProgrammingModel(ProgrammingModel pm) {
 
         // come what may, we have to ignore the PersistenceCapable supertype.
-        pm.add(ProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveJdoEnhancementTypesFacetFactory.class);
+        pm.add(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveJdoEnhancementTypesFacetFactory.class);
         // so we may as well also just ignore any 'jdo' prefixed methods here also.
-        pm.add(ProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveJdoPrefixedMethodsFacetFactory.class);
+        pm.add(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveJdoPrefixedMethodsFacetFactory.class);
         // DN 4.x
-        pm.add(ProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveDatanucleusPersistableTypesFacetFactory.class);
-        pm.add(ProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveDnPrefixedMethodsFacetFactory.class);
+        pm.add(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveDatanucleusPersistableTypesFacetFactory.class);
+        pm.add(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveDnPrefixedMethodsFacetFactory.class);
 
         
     }

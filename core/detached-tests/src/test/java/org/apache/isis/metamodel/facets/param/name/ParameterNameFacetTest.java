@@ -20,23 +20,18 @@ package org.apache.isis.metamodel.facets.param.name;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-
-import lombok.val;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -52,7 +47,7 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
     @Before
     public void setUp() throws Exception {
         programmingModel = new ProgrammingModelFacetsJava8();
-        ((ProgrammingModelAbstract)programmingModel).init(ProgrammingModel.excludingNone());
+        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
         super.setUpFacetedMethodAndParameter();
     }
 
@@ -78,7 +73,7 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         final FacetFactory.ProcessParameterContext processParameterContext = 
                 new FacetFactory.ProcessParameterContext(
                         Customer.class, actionMethod, 0, null, facetedMethodParameter);
-        programmingModel.stream()
+        programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
@@ -108,7 +103,7 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         final FacetFactory.ProcessParameterContext processParameterContext = 
                 new FacetFactory.ProcessParameterContext(
                         Customer.class, actionMethod, 0, null, facetedMethodParameter);
-        programmingModel.stream().forEach(facetFactory->facetFactory.processParams(processParameterContext));
+        programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
         // then
         final NamedFacet namedFacet = facetedMethodParameter.getFacet(NamedFacet.class);

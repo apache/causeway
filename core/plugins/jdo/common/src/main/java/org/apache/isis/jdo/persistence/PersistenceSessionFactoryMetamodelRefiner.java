@@ -42,8 +42,8 @@ import lombok.val;
 @Component
 public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefiner {
 
-    final ProgrammingModel.ProcessingOrder order = 
-            ProgrammingModel.ProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+    final ProgrammingModel.FacetProcessingOrder order = 
+            ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
     
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {

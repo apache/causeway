@@ -18,8 +18,6 @@
  */
 package org.apache.isis.metamodel.specloader;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,8 +48,9 @@ import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.schema.utils.CommonDtoUtils;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -80,7 +79,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private ProgrammingModel programmingModel;
     private FacetProcessor facetProcessor;
 
-    private MetaModelValidator metaModelValidator;
     private PostProcessor postProcessor;
     
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
@@ -89,7 +87,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @PostConstruct
     public void preInit() {
         this.programmingModel = programmingModelService.getProgrammingModel();
-        this.metaModelValidator = programmingModelService.getMetaModelValidator();
         this.facetProcessor = new FacetProcessor(programmingModel);
         this.postProcessor = new PostProcessor(programmingModel);
     }
@@ -106,7 +103,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         instance.isisConfiguration = configuration;
         instance.isisSystemEnvironment = isisSystemEnvironment;
         instance.programmingModel = programmingModel;
-        instance.metaModelValidator = metaModelValidator;
 
         instance.facetProcessor = new FacetProcessor(programmingModel);
         instance.postProcessor = new PostProcessor(programmingModel);
@@ -212,25 +208,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info("shutting down {}", this);
     }
 
-    // -- VALIDATION
-
-    private ValidationFailures validationFailures;
-
-    @Override
-    public ValidationFailures validate() {
-        if(validationFailures == null) {
-            validationFailures = new ValidationFailures();
-
-            if(isFullIntrospect()) {
-                metaModelValidator.validateInto(validationFailures);
-            } else {
-                log.info("Meta model validation skipped (full introspection of metamodel not configured)");
-            }
-
-        }
-        return validationFailures;
-    }
-
     /**
      * @return whether current introspection mode is 'full', dependent on current
      * deployment mode and configuration
@@ -238,7 +215,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private boolean isFullIntrospect() {
         return IntrospectionMode.isFullIntrospect(isisConfiguration, isisSystemEnvironment);
     }
-
 
     // -- SPEC LOADING
 

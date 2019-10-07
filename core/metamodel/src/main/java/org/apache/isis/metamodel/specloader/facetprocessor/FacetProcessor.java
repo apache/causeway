@@ -129,7 +129,7 @@ public class FacetProcessor {
         cleanUp(); 
         
         serviceInjector = MetaModelContext.current().getServiceInjector();
-        programmingModel.stream()
+        programmingModel.streamFactories()
         .forEach(this::registerFactory);
     }
 

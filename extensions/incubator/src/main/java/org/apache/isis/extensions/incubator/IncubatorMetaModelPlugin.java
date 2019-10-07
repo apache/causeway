@@ -30,7 +30,7 @@ public class IncubatorMetaModelPlugin implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         programmingModel.add(
-                ProgrammingModel.ProcessingOrder.C2_AFTER_METHOD_REMOVING, 
+                ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, 
                 SupportingMethodValidatorRefinerFactory.class,
                 ProgrammingModel.Marker.INCUBATING
                 );

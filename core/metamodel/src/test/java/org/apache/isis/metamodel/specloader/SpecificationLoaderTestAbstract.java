@@ -19,10 +19,6 @@
 
 package org.apache.isis.metamodel.specloader;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +30,6 @@ import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -46,12 +41,16 @@ import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.security.authentication.AuthenticationSessionProvider;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
 
 import lombok.val;
 
@@ -154,7 +153,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .singleton(mockGridService = producers.mockGridService())
                 .build());
 
-        ((ProgrammingModelAbstract)programmingModel).init(ProgrammingModel.excludingNone());
+        ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
 
         _Timing.runVerbose("specificationLoader.init()", specificationLoader::init);
 

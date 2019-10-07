@@ -19,10 +19,13 @@
 package org.apache.isis.metamodel.specloader.postprocessor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.isis.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class PostProcessor {
 
@@ -35,17 +38,12 @@ public class PostProcessor {
     }
 
     public void init() {
-        postProcessors = programmingModel.getPostProcessors();
-        //        for (final ObjectSpecificationPostProcessor postProcessor : postProcessors) {
-        //            if(postProcessor instanceof ServicesInjectorAware) {
-        //                final ServicesInjectorAware servicesInjectorAware = (ServicesInjectorAware) postProcessor;
-        //                servicesInjectorAware.setServicesInjector(servicesInjector);
-        //            }
-        //        }
+        postProcessors = programmingModel.streamPostProcessors().collect(Collectors.toList());
     }
+    
     public void postProcess(final ObjectSpecification objectSpecification) {
 
-        for (final ObjectSpecificationPostProcessor postProcessor : postProcessors) {
+        for (val postProcessor : postProcessors) {
             postProcessor.postProcess(objectSpecification);
         }
 

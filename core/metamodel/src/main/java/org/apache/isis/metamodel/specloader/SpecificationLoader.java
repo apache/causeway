@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 /**
  * Builds the meta-model.
@@ -68,7 +67,7 @@ public interface SpecificationLoader {
     //	                    "Failed to lookup ObjectSpecification by its id '" + objectSpecId + "'"));
     //	}
 
-    ValidationFailures validate();
+    //ValidationFailures validate();
 
     void reloadSpecification(Class<?> domainType);
 

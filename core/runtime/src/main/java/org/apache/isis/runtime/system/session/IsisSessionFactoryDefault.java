@@ -20,11 +20,8 @@
 package org.apache.isis.runtime.system.session;
 
 import java.io.File;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.stream.Stream;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -33,23 +30,13 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.title.TitleService;
-import org.apache.isis.commons.collections.Bin;
-import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.validator.MetaModelDeficiencies;
-import org.apache.isis.runtime.system.MessageRegistry;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.runtime.system.internal.IsisLocaleInitializer;
@@ -76,7 +63,6 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2 
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
-    @Inject private ServiceRegistry serviceRegistry;
     @Inject private AuthenticationManager authenticationManager;
     @Inject private RuntimeEventService runtimeEventService;
     @Inject private SpecificationLoader specificationLoader;
@@ -116,11 +102,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         taskList.await();
 
         runtimeEventService.fireAppPostMetamodel();
-        //TODO[2158] start validation here?
-        
 
-        //initServicesAndRunFixtures();
-        //doInSession(this::validateMetamodel);
     }
 
     private void initMetamodel() {
@@ -148,65 +130,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         authenticationManager.init();
         authorizationManager.init();
     }
-    
-    private void validateMetamodel() {
-        //TODO[2158] these are all validations, hence should be implemented as validation refiners?!
 
-        //
-        // translateServicesAndEnumConstants
-        //
-        val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
-
-        final Stream<Object> domainServices = serviceRegistry
-                .streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
-                .map(BeanAdapter::getInstance)
-                .filter(Bin::isCardinalityOne)
-                .map(Bin::getSingleton)
-                .map(Optional::get)
-                ;
-
-        domainServices.forEach(domainService->{
-            final String unused = titleService.titleOf(domainService);
-            _Blackhole.consume(unused);
-        });
-
-
-        // (previously we took a protective copy to avoid a concurrent modification exception,
-        // but this is now done by SpecificationLoader itself)
-        for (final ObjectSpecification objSpec : IsisContext.getSpecificationLoader().snapshotSpecifications()) {
-            final Class<?> correspondingClass = objSpec.getCorrespondingClass();
-            if(correspondingClass.isEnum()) {
-                final Object[] enumConstants = correspondingClass.getEnumConstants();
-                for (Object enumConstant : enumConstants) {
-                    final String unused = titleService.titleOf(enumConstant);
-                    _Blackhole.consume(unused);
-                }
-            }
-        }
-
-        // as used by the Wicket UI
-        final TranslationService translationService = 
-                serviceRegistry.lookupServiceElseFail(TranslationService.class);
-
-        final String context = IsisSessionFactory.class.getName();
-        final MessageRegistry messageRegistry = new MessageRegistry();
-        final List<String> messages = messageRegistry.listMessages();
-        for (String message : messages) {
-            translationService.translate(context, message);
-        }
-
-        // meta-model validation ...            
-        val mmDeficiencies = specificationLoader.validate().getDeficienciesIfAny(); 
-        if(mmDeficiencies!=null) {
-            // no need to use a higher level, such as error(...); the calling code will expose any metamodel
-            // validation errors in their own particular way.
-            if(log.isDebugEnabled()) {
-                log.debug("Meta model invalid", mmDeficiencies.getValidationErrorsAsString());
-            }
-            _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
-        }
-
-    }
 
     @PreDestroy
     public void shutdown() {
