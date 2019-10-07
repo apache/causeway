@@ -23,14 +23,9 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.extensions.sse.facets.SseAnnotationFacetFactory;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 @Component
 public class SseMetaModelPlugin implements MetaModelRefiner {
-
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-    }
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {

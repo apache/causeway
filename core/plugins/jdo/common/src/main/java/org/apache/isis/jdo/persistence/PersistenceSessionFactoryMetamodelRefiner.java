@@ -33,9 +33,11 @@ import org.apache.isis.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotat
 import org.apache.isis.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorToCheckModuleExtent;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorToCheckObjectSpecIdsUnique;
+import org.apache.isis.runtime.system.context.IsisContext;
+
+import lombok.val;
 
 @Component
 public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefiner {
@@ -61,12 +63,13 @@ public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefin
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
         programmingModel.add(order, MandatoryFromJdoColumnAnnotationFacetFactory.class);
-    }
 
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new JdoMetaModelValidator());
-        metaModelValidator.add(new MetaModelValidatorToCheckObjectSpecIdsUnique());
-        metaModelValidator.add(new MetaModelValidatorToCheckModuleExtent());
+        
+        val config = IsisContext.getConfiguration();
+        
+        // these validators add themselves to the programming model
+        new JdoMetaModelValidator(config, programmingModel);
+        new MetaModelValidatorToCheckObjectSpecIdsUnique(config, programmingModel);
+        new MetaModelValidatorToCheckModuleExtent(config, programmingModel);
     }
 }

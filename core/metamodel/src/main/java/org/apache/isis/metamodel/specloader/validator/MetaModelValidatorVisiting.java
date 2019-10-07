@@ -25,22 +25,25 @@ import java.util.List;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(staticName = "of")
 public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
+    @FunctionalInterface
     public interface Visitor {
         /**
          * @return <tt>true</tt> continue visiting specs.
          */
         boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures);
     }
+    
     public interface SummarizingVisitor extends Visitor {
         void summarize(ValidationFailures validationFailures);
     }
-
-    private final Visitor visitor;
-    public MetaModelValidatorVisiting(final Visitor visitor) {
-        this.visitor = visitor;
-    }
+    
+    @NonNull private final Visitor visitor;
 
     @Override
     public final void validate(ValidationFailures validationFailures) {

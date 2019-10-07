@@ -18,7 +18,6 @@
  */
 package org.apache.isis.jdo.metamodel.facets.prop.column;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.jdo.annotations.Column;
@@ -31,26 +30,25 @@ import org.apache.isis.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerived
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
-import org.apache.isis.metamodel.facets.Annotations;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
-
-public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract 
+implements MetaModelRefiner {
 
     public MandatoryFromJdoColumnAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -116,8 +114,8 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
     }
 
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(newValidatorVisitor());
     }
 
     private Visitor newValidatorVisitor() {

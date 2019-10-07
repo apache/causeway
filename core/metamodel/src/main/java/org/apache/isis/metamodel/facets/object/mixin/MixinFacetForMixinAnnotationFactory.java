@@ -21,14 +21,14 @@ package org.apache.isis.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
 import lombok.val;
 
 public class MixinFacetForMixinAnnotationFactory 
-extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+extends FacetFactoryAbstract implements MetaModelRefiner {
 
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = 
             new MetaModelValidatorForMixinTypes("@Mixin");
@@ -56,10 +56,9 @@ extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
         facetHolder.addFacet(mixinFacet);
     }
 
-
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(mixinTypeValidator);
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(mixinTypeValidator);
     }
 
 }

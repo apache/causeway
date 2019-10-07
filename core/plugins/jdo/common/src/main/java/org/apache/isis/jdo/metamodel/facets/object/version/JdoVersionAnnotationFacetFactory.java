@@ -24,16 +24,17 @@ import javax.jdo.annotations.Version;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
-public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     public JdoVersionAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -56,10 +57,9 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
         FacetUtil.addFacet(new JdoVersionFacetFromAnnotation(processClassContext.getFacetHolder()));
     }
 
-
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(newValidatorVisitor());
     }
 
     Visitor newValidatorVisitor() {
@@ -95,6 +95,8 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
             }
         };
     }
+
+
 
 
 }

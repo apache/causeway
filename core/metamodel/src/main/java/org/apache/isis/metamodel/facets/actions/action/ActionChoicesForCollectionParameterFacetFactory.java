@@ -19,30 +19,30 @@
 
 package org.apache.isis.metamodel.facets.actions.action;
 
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+
+import lombok.val;
 
 /**
  * Ensures that every action that has a collection parameter has a choices facet for that parameter.
  */
 public class ActionChoicesForCollectionParameterFacetFactory extends FacetFactoryAbstract
-implements MetaModelValidatorRefiner {
+implements MetaModelRefiner {
 
     public ActionChoicesForCollectionParameterFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -56,14 +56,15 @@ implements MetaModelValidatorRefiner {
     }
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        final boolean doCheck = getConfiguration().getReflector().getValidator().isActionCollectionParameterChoices();
-        if(!doCheck) {
+        val shouldCheck = getConfiguration().getReflector().getValidator().isActionCollectionParameterChoices();
+        if(!shouldCheck) {
             return;
         }
 
-        final MetaModelValidator validator = new MetaModelValidatorVisiting(
+        programmingModel.addValidator(
+                
                 new MetaModelValidatorVisiting.Visitor() {
                     @Override
                     public boolean visit(
@@ -144,7 +145,7 @@ implements MetaModelValidatorRefiner {
                                 paramNum);
                     }
                 });
-        metaModelValidator.add(validator);
+        
     }
 
 }

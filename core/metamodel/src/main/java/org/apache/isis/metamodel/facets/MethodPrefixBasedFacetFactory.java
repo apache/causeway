@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.facets;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 
 /**
@@ -31,7 +31,7 @@ import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
  * <p>
  * Used by {@link FacetProcessor#recognizes(java.lang.reflect.Method)}.
  */
-public interface MethodPrefixBasedFacetFactory extends FacetFactory, MetaModelValidatorRefiner {
+public interface MethodPrefixBasedFacetFactory extends FacetFactory, MetaModelRefiner {
 
     /**
      * All prefixes recognized by this {@link FacetFactory}.

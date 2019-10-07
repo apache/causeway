@@ -30,15 +30,15 @@ import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.actions.homepage.HomePageFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -47,7 +47,8 @@ import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 import lombok.val;
 
-public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner{
+public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     public HomePageFacetAnnotationFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -63,12 +64,9 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
         FacetUtil.addFacet(new HomePageFacetAnnotation(facetHolder));
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner#refineMetaModelValidator(org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.commons.config.IsisConfiguration)
-     */
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(newValidatorVisitor());
     }
 
     private Visitor newValidatorVisitor() {

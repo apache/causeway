@@ -27,7 +27,7 @@ import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -53,15 +53,15 @@ import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForP
 import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.metamodel.util.EventUtil;
 
 import lombok.val;
 
 public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract 
-implements MetaModelValidatorRefiner {
+implements MetaModelRefiner {
 
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = 
             new MetaModelValidatorForConflictingOptionality();
@@ -348,10 +348,9 @@ implements MetaModelValidatorRefiner {
     // //////////////////////////////////////
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(conflictingOptionalityValidator);
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(conflictingOptionalityValidator);
     }
-
 
 
 }

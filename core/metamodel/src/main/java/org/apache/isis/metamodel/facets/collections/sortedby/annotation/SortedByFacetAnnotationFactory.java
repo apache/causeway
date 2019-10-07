@@ -24,9 +24,10 @@ import java.util.stream.Stream;
 
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.collections.sortedby.SortedByFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
@@ -39,7 +40,8 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
  * There is no check that the value is a {@link Comparator}; instead this is done through
  * the {@link #refineMetaModelValidator(MetaModelValidatorComposite, IsisConfigurationLegacy)}.
  */
-public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     public SortedByFacetAnnotationFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -54,8 +56,8 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
     }
 
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(newValidatorVisitor());
     }
 
     protected Visitor newValidatorVisitor() {

@@ -19,9 +19,8 @@
 
 package org.apache.isis.metamodel.progmodel;
 
-import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
-
 import java.util.EnumSet;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -32,7 +31,10 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,12 +42,12 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
-public interface ProgrammingModel 
-extends /*FacetFactorySet,*/ PostProcessorSet /*, MetaModelValidatorRefiner*/ {
+public interface ProgrammingModel {
 
     // -- TYPES
     
     /**
+     * Processing order for registered facet factories
      * 
      * @apiNote Prefixes are without any semantic meaning, just to make the ordering 
      * transparent to the human reader. 
@@ -95,18 +97,15 @@ extends /*FacetFactorySet,*/ PostProcessorSet /*, MetaModelValidatorRefiner*/ {
     
     // -- INTERFACE
     
+    List<ObjectSpecificationPostProcessor> getPostProcessors();
+    void addValidator(MetaModelValidator validator);
+    
     <T extends FacetFactory> void add(
             ProcessingOrder order, 
             Class<T> type, 
             Supplier<? extends T> supplier, 
             Marker ... markers);
     
-    /**
-     * Finalizes the factory collection, can not be modified afterwards.
-     * @param filter - the final programming model will only contain factories accepted by this filter
-     * @param metaModelValidator
-     */
-    void init(Predicate<FactoryEntry<?>> filter, MetaModelValidatorComposite metaModelValidator);
     
     Stream<FacetFactory> stream();
     
@@ -121,11 +120,19 @@ extends /*FacetFactorySet,*/ PostProcessorSet /*, MetaModelValidatorRefiner*/ {
         add(order, type, _Casts.uncheckedCast(supplier), markers);
     }
     
+    default void addValidator(MetaModelValidatorVisiting.Visitor visitor) {
+        addValidator(MetaModelValidatorVisiting.of(visitor));
+    }
+    
     // -- PREDICATES
+    
+    public static Predicate<FactoryEntry<?>> excludingNone() {
+        return _Predicates.alwaysTrue();
+    }
     
     public static Predicate<FactoryEntry<?>> excluding(@Nullable EnumSet<Marker> excludingMarkers) {
         if(excludingMarkers==null) {
-            return _Predicates.alwaysTrue();
+            return excludingNone();
         }
         return factoryEntry -> {
             val markersOnFactory = factoryEntry.getMarkers();
@@ -141,6 +148,5 @@ extends /*FacetFactorySet,*/ PostProcessorSet /*, MetaModelValidatorRefiner*/ {
         };
     }
 
-    
     
 }

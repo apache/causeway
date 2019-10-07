@@ -88,7 +88,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @PostConstruct
     public void preInit() {
-        this.programmingModel = programmingModelService.get();
+        this.programmingModel = programmingModelService.getProgrammingModel();
         this.metaModelValidator = programmingModelService.getMetaModelValidator();
         this.facetProcessor = new FacetProcessor(programmingModel);
         this.postProcessor = new PostProcessor(programmingModel);

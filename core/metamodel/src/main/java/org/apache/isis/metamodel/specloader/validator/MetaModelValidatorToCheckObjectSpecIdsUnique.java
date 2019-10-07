@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
@@ -32,22 +34,20 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
-public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValidatorComposite {
+public class MetaModelValidatorToCheckObjectSpecIdsUnique {
 
-    public MetaModelValidatorToCheckObjectSpecIdsUnique() {
-        addValidatorToEnsureUniqueObjectIds();
-    }
-
-    @Override
-    public void validate(final ValidationFailures validationFailures) {
-        boolean check = getConfiguration().getReflector().getValidator().isEnsureUniqueObjectTypes();
-        if(!check) {
+    public MetaModelValidatorToCheckObjectSpecIdsUnique(
+            IsisConfiguration configuration, 
+            ProgrammingModel programmingModel) {
+     
+        val shouldCheck = configuration.getReflector().getValidator().isEnsureUniqueObjectTypes();
+        if(!shouldCheck) {
             return;
         }
-        super.validate(validationFailures);
+        addValidatorToEnsureUniqueObjectIds(programmingModel);
     }
-
-    private void addValidatorToEnsureUniqueObjectIds() {
+    
+    private void addValidatorToEnsureUniqueObjectIds(ProgrammingModel programmingModel) {
 
         final Map<ObjectSpecId, List<ObjectSpecification>> specsById = _Maps.newHashMap();
 
@@ -89,7 +89,6 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
 
         };
 
-
-        add(new MetaModelValidatorVisiting(ensureUniqueObjectIds));
+        programmingModel.addValidator(ensureUniqueObjectIds);
     }
 }

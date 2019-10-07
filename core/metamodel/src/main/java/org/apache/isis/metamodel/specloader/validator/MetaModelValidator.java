@@ -21,9 +21,6 @@ package org.apache.isis.metamodel.specloader.validator;
 
 public interface MetaModelValidator {
 
-    void init();
-    void shutdown();
-
     void validate(ValidationFailures validationFailures);
 
 }

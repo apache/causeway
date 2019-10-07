@@ -36,17 +36,16 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.recreatable.RecreatableObjectFacetForXmlRootElementAnnotation;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
@@ -54,7 +53,7 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
  * just adds a validator
  */
 public class JaxbFacetFactory extends FacetFactoryAbstract
-implements MetaModelValidatorRefiner {
+implements MetaModelRefiner {
 
     public JaxbFacetFactory() {
         super(FeatureType.OBJECTS_AND_PROPERTIES);
@@ -148,12 +147,12 @@ implements MetaModelValidatorRefiner {
     // --
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<PropertyValidator> propertyValidators = getPropertyValidators(getConfiguration());
 
-        final MetaModelValidator validator = new MetaModelValidatorVisiting(
+        programmingModel.addValidator(
                 new MetaModelValidatorVisiting.Visitor() {
                     @Override
                     public boolean visit(
@@ -196,7 +195,7 @@ implements MetaModelValidatorRefiner {
 
                     }
                 });
-        metaModelValidator.add(validator);
+        
     }
 
     private List<TypeValidator> getTypeValidators(IsisConfiguration configuration) {

@@ -22,17 +22,15 @@ package org.apache.isis.metamodel.facetapi;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
 
 /**
- * Provides the ability for components to inform/alter/adjust/refine the metamodel
- * (the {@link MetaModelValidator}) and also the {@link ProgrammingModel}).
- *
- * @see MetaModelValidatorRefiner
+ * Provides the ability for components to inform/alter/adjust/refine the meta-model
+ * the {@link ProgrammingModel}). 
+ * 
  */
-public interface MetaModelRefiner extends MetaModelValidatorRefiner {
-
+public interface MetaModelRefiner {
+    
     void refineProgrammingModel(ProgrammingModel programmingModel);
 
     // -- LOOKUP ALL REFINERS

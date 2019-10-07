@@ -26,16 +26,16 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.annotation.ViewModelLayout;
-import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
 
-public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
 
     public ViewModelSemanticCheckingFacetFactory() {
@@ -179,10 +179,9 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
 
     }
 
-
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(validator);
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(validator);
     }
 
 

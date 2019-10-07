@@ -20,60 +20,56 @@ package org.apache.isis.jdo.metamodel.specloader.validator;
 
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.parented.ParentedCollectionFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
-public class JdoMetaModelValidator extends MetaModelValidatorComposite {
-
-    public JdoMetaModelValidator() {
-        addValidatorToEnsureIdentityType();
-        addValidatorToCheckForUnsupportedAnnotations();
+public class JdoMetaModelValidator {
+    
+    public JdoMetaModelValidator(IsisConfiguration config, ProgrammingModel programmingModel) {
+        addValidatorToEnsureIdentityType(programmingModel);
+        addValidatorToCheckForUnsupportedAnnotations(programmingModel);
     }
 
-    private void addValidatorToEnsureIdentityType() {
-        MetaModelValidatorVisiting.Visitor ensureIdentityType = new MetaModelValidatorVisiting.Visitor(){
-            @Override
-            public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
-                final JdoPersistenceCapableFacet jpcf = objSpec.getFacet(JdoPersistenceCapableFacet.class);
-                if(jpcf == null) {
-                    return true;
-                }
-                final IdentityType identityType = jpcf.getIdentityType();
-                if(identityType == IdentityType.APPLICATION) {
-                    // ok
-
-                } else if(identityType == IdentityType.NONDURABLE) {
-                    // ok; for use with DN view objects (http://www.datanucleus.org/products/accessplatform_3_2/datastores/rdbms_views.html)
-
-                } else if(identityType == IdentityType.DATASTORE || identityType == IdentityType.UNSPECIFIED) {
-
-                    // TODO: ensure that DATASTORE has recognised @DatastoreIdentity attribute
-
-                } else {
-                    // in fact, at the time of writing there are no others, so this is theoretical in case there is
-                    // a future change to the JDO spec
-                    validationFailures.add(
-                            objSpec.getIdentifier(),
-                            "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
-                            objSpec.getFullIdentifier(),
-                            identityType);
-                }
-
+    private void addValidatorToEnsureIdentityType(ProgrammingModel programmingModel) {
+        
+        programmingModel.addValidator((objSpec, validationFailures) -> {
+        
+            final JdoPersistenceCapableFacet jpcf = objSpec.getFacet(JdoPersistenceCapableFacet.class);
+            if(jpcf == null) {
                 return true;
-            }};
+            }
+            final IdentityType identityType = jpcf.getIdentityType();
+            if(identityType == IdentityType.APPLICATION) {
+                // ok
 
-            add(new MetaModelValidatorVisiting(ensureIdentityType));
+            } else if(identityType == IdentityType.NONDURABLE) {
+                // ok; for use with DN view objects (http://www.datanucleus.org/products/accessplatform_3_2/datastores/rdbms_views.html)
+
+            } else if(identityType == IdentityType.DATASTORE || identityType == IdentityType.UNSPECIFIED) {
+
+                // TODO: ensure that DATASTORE has recognised @DatastoreIdentity attribute
+
+            } else {
+                // in fact, at the time of writing there are no others, so this is theoretical in case there is
+                // a future change to the JDO spec
+                validationFailures.add(
+                        objSpec.getIdentifier(),
+                        "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
+                        objSpec.getFullIdentifier(),
+                        identityType);
+            }
+
+            return true;
+        });
+            
     }
 
-    private void addValidatorToCheckForUnsupportedAnnotations() {
-        MetaModelValidatorVisiting.Visitor ensureIdentityType = new MetaModelValidatorVisiting.Visitor(){
-            @Override
-            public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
+    private void addValidatorToCheckForUnsupportedAnnotations(ProgrammingModel programmingModel) {
+        
+        programmingModel.addValidator((objSpec, validationFailures) -> {
                 if (objSpec.containsDoOpFacet(ParentedCollectionFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
                     validationFailures.add(
                             objSpec.getIdentifier(),
@@ -81,9 +77,8 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
                             objSpec.getFullIdentifier());
                 }
                 return true;
-            }};
-
-            add(new MetaModelValidatorVisiting(ensureIdentityType));
+        });
+        
     }
 
 

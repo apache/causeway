@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -33,6 +32,8 @@ import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -61,7 +62,7 @@ abstract class MixinIntendedAs {
 //                .serviceRegistry(mockServiceRegistry)
                 .build());
         
-        programmingModel.init(_Predicates.alwaysTrue(), mmValidator);
+        ((ProgrammingModelAbstract)programmingModel).init(ProgrammingModel.excludingNone());
         MetaModelContext.current().getSpecificationLoader().init();
         
     }

@@ -27,19 +27,17 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
@@ -47,7 +45,7 @@ import lombok.val;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactory
 extends FacetFactoryAbstract
-implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
+implements MetaModelRefiner, ObjectSpecIdFacetFactory {
 
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
@@ -96,52 +94,53 @@ implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
     }
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        final boolean doCheck = getConfiguration().getReflector().getValidator().isExplicitObjectType();
 
-        if(!doCheck) {
+
+        val shouldCheck = getConfiguration().getReflector().getValidator().isExplicitObjectType();
+        if(!shouldCheck) {
             return;
         }
 
-        final MetaModelValidator validator = new MetaModelValidatorVisiting(
-                new MetaModelValidatorVisiting.Visitor() {
-                    @Override
-                    public boolean visit(
-                            final ObjectSpecification objectSpec,
-                            final ValidationFailures validationFailures) {
-                        validate(objectSpec, validationFailures);
-                        return true;
+        programmingModel.addValidator(
+
+            new MetaModelValidatorVisiting.Visitor() {
+                
+                @Override
+                public boolean visit(
+                        ObjectSpecification objectSpec,
+                        ValidationFailures validationFailures) {
+                    validate(objectSpec, validationFailures);
+                    return true;
+                }
+    
+                private void validate(
+                        ObjectSpecification objectSpec,
+                        ValidationFailures validationFailures) {
+                    if(skip(objectSpec)) {
+                        return;
                     }
-
-                    private void validate(
-                            final ObjectSpecification objectSpec,
-                            final ValidationFailures validationFailures) {
-                        if(skip(objectSpec)) {
-                            return;
-                        }
-                        val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
-                        if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
-                            validationFailures.add(
-                                    objectSpec.getIdentifier(),
-                                    "%s: the object type must be specified explicitly ('%s' config property). "
-                                            + "Defaulting the object type from the package/class/package name can lead "
-                                            + "to data migration issues for apps deployed to production (if the class is "
-                                            + "subsequently refactored). "
-                                            + "Use @Discriminator, @DomainObject(objectType=...) or "
-                                            + "@PersistenceCapable(schema=...) to specify explicitly.",
-                                    objectSpec.getFullIdentifier(),
-                                    "'isis.reflector.validator.explicitObjectType'");
-                        }
+                    val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
+                    if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
+                        validationFailures.add(
+                                objectSpec.getIdentifier(),
+                                "%s: the object type must be specified explicitly ('%s' config property). "
+                                        + "Defaulting the object type from the package/class/package name can lead "
+                                        + "to data migration issues for apps deployed to production (if the class is "
+                                        + "subsequently refactored). "
+                                        + "Use @Discriminator, @DomainObject(objectType=...) or "
+                                        + "@PersistenceCapable(schema=...) to specify explicitly.",
+                                        objectSpec.getFullIdentifier(),
+                                "'isis.reflector.validator.explicitObjectType'");
                     }
+                }
+    
+                private boolean skip(ObjectSpecification objectSpec) {
+                    return !check(objectSpec);
+                }
+            });
 
-                    private boolean skip(final ObjectSpecification objectSpec) {
-                        return !check(objectSpec);
-                    }
-
-
-                });
-        metaModelValidator.add(validator);
     }
 
     public static boolean check(final ObjectSpecification objectSpec) {
@@ -157,7 +156,7 @@ implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
             return true;
         }
         if (objectSpec.isViewModel()) {
-            final ViewModelFacet viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
+            //final ViewModelFacet viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
             // don't check JAXB DTOs
             final XmlType xmlType = objectSpec.getCorrespondingClass().getAnnotation(XmlType.class);
             if(xmlType != null) {

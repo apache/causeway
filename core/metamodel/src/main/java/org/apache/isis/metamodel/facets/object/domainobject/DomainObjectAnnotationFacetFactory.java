@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
@@ -70,9 +70,9 @@ import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -82,7 +82,7 @@ import lombok.val;
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
-implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
+implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
 
     private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid = new MetaModelValidatorForValidationFailures();
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
@@ -479,12 +479,10 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         .ifPresent(FacetUtil::addFacet);
     }
 
-    // //////////////////////////////////////
-
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+        programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
             @Override
             public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
 
@@ -540,10 +538,10 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 }
             }
 
-        }));
+        });
 
-        metaModelValidator.add(autoCompleteMethodInvalid);
-        metaModelValidator.add(mixinTypeValidator);
+        programmingModel.addValidator(autoCompleteMethodInvalid);
+        programmingModel.addValidator(mixinTypeValidator);
     }
 
     // //////////////////////////////////////

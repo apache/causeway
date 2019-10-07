@@ -33,19 +33,16 @@ import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
 public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
-implements MetaModelValidatorRefiner, PostConstructMethodCache {
+implements MetaModelRefiner, PostConstructMethodCache {
 
     public RecreatableObjectFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -98,25 +95,23 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
     // //////////////////////////////////////
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-            @Override
-            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
-                final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-                final Facet underlyingFacet = facet != null ? facet.getUnderlyingFacet() : null;
-                if(underlyingFacet != null && underlyingFacet.getClass() != facet.getClass()) {
-                    validationFailures.add(
-                            objectSpec.getIdentifier(),
-                            "%s: has multiple incompatible annotations/interfaces indicating that " +
-                                    "it is a recreatable object of some sort (%s and %s)",
-                                    objectSpec.getFullIdentifier(),
-                                    facet.getClass().getSimpleName(),
-                                    underlyingFacet.getClass().getSimpleName());
-                }
-                return true;
+        programmingModel.addValidator((objectSpec, validationFailures) -> {
+
+            final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+            final Facet underlyingFacet = facet != null ? facet.getUnderlyingFacet() : null;
+            if(underlyingFacet != null && underlyingFacet.getClass() != facet.getClass()) {
+                validationFailures.add(
+                        objectSpec.getIdentifier(),
+                        "%s: has multiple incompatible annotations/interfaces indicating that " +
+                                "it is a recreatable object of some sort (%s and %s)",
+                                objectSpec.getFullIdentifier(),
+                                facet.getClass().getSimpleName(),
+                                underlyingFacet.getClass().getSimpleName());
             }
-        }));
+            return true;
+        });
     }
 
 

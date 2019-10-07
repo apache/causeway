@@ -25,14 +25,6 @@ public abstract class MetaModelValidatorAbstract
 implements MetaModelValidator, MetaModelContext.Delegating {
 
     @Override
-    public void init() {
-    }
-
-    @Override
-    public void shutdown() {
-    }
-
-    @Override
     public MetaModelContext getMetaModelContext() {
         return MetaModelContext.current();
     }

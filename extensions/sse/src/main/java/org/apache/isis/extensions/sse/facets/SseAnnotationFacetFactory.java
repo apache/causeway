@@ -22,14 +22,11 @@ package org.apache.isis.extensions.sse.facets;
 import org.apache.isis.extensions.sse.api.ServerSentEvents;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 import lombok.val;
 
-public class SseAnnotationFacetFactory extends FacetFactoryAbstract 
-implements MetaModelValidatorRefiner {
+public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public SseAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -48,10 +45,6 @@ implements MetaModelValidatorRefiner {
         val facet = SseObserveFacetForServerSentEventsAnnotation.create(serverSentEventsIfAny, facetHolder);
 
         FacetUtil.addFacet(facet);
-    }
-
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
     }
 
 

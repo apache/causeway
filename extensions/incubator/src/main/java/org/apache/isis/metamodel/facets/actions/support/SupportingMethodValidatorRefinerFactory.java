@@ -29,13 +29,11 @@ import org.apache.isis.applib.annotation.Model;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -45,7 +43,7 @@ import lombok.val;
  *
  */
 public class SupportingMethodValidatorRefinerFactory extends FacetFactoryAbstract 
-implements MetaModelValidatorRefiner {
+implements MetaModelRefiner {
 
     public SupportingMethodValidatorRefinerFactory() {
         super(Collections.emptyList()); // does not contribute any facets
@@ -57,78 +55,75 @@ implements MetaModelValidatorRefiner {
     }
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+        programmingModel.addValidator((spec, validationFailures) -> {
 
-            @Override
-            public boolean visit(ObjectSpecification spec, ValidationFailures validationFailures) {
+            val type = spec.getCorrespondingClass();
 
-                val type = spec.getCorrespondingClass();
-                
-                // methods known to the metamodel
-                val recognizedMethods = spec.streamFacetHolders()
-                .flatMap(FacetHolder::streamFacets)
-                .filter(ImperativeFacet.class::isInstance)
-                .map(ImperativeFacet.class::cast)
-                .map(ImperativeFacet::getMethods)
-                .flatMap(List::stream)
-                .collect(Collectors.toCollection(HashSet::new));
-                
-                // methods intended by the coder to be known to the metamodel
-                val intendedMethods = _Sets.<Method>newHashSet(); 
-                for(val method: type.getDeclaredMethods()) {
-                    if(method.getDeclaredAnnotation(Model.class)!=null) {
-                        intendedMethods.add(method);
-                    }
+            // methods known to the metamodel
+            val recognizedMethods = spec.streamFacetHolders()
+                    .flatMap(FacetHolder::streamFacets)
+                    .filter(ImperativeFacet.class::isInstance)
+                    .map(ImperativeFacet.class::cast)
+                    .map(ImperativeFacet::getMethods)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toCollection(HashSet::new));
+
+            // methods intended by the coder to be known to the metamodel
+            val intendedMethods = _Sets.<Method>newHashSet(); 
+            for(val method: type.getDeclaredMethods()) {
+                if(method.getDeclaredAnnotation(Model.class)!=null) {
+                    intendedMethods.add(method);
                 }
-                
-                // methods intended by the coder but not known to the metamodel
-                val notRecognizedMethods =
-                        _Sets.minus(intendedMethods, recognizedMethods);
-
-                // find reasons about why these are not recognized    
-                notRecognizedMethods.forEach(notRecognizedMethod->{
-                    val unmetContraints = unmetContraints(spec, notRecognizedMethod);
-
-                    val messageFormat = "%s#%s: has annotion %s, is assumed to support "
-                            + "a property, collection or action. Unmet constraint(s): %s";
-                    validationFailures.add(
-                            spec.getIdentifier(),
-                            messageFormat,
-                            spec.getIdentifier().getClassName(),
-                            notRecognizedMethod.getName(),
-                            Model.class.getSimpleName(),
-                            unmetContraints.stream()
-                            .collect(Collectors.joining("; ")));
-                });
-                        
-                
-                return true; // continue
             }
 
-        }));
+            // methods intended by the coder but not known to the metamodel
+            val notRecognizedMethods =
+                    _Sets.minus(intendedMethods, recognizedMethods);
+
+            // find reasons about why these are not recognized    
+            notRecognizedMethods.forEach(notRecognizedMethod->{
+                val unmetContraints = unmetContraints(spec, notRecognizedMethod);
+
+                val messageFormat = "%s#%s: has annotion %s, is assumed to support "
+                        + "a property, collection or action. Unmet constraint(s): %s";
+                validationFailures.add(
+                        spec.getIdentifier(),
+                        messageFormat,
+                        spec.getIdentifier().getClassName(),
+                        notRecognizedMethod.getName(),
+                        Model.class.getSimpleName(),
+                        unmetContraints.stream()
+                        .collect(Collectors.joining("; ")));
+            });
+
+
+            return true; // continue
+        });
 
     }
-    
+
     // -- VALIDATION LOGIC
-    
+
     private List<String> unmetContraints(
             ObjectSpecification spec, 
             Method method) {
-        
+
         //val type = spec.getCorrespondingClass();
         val unmetContraints = _Lists.<String>newArrayList();
-        
+
         final int modifiers = method.getModifiers();
         if (!Modifier.isPublic(modifiers)) {
             unmetContraints.add("method must be 'public'");
             return unmetContraints; // don't check any further
         } 
-        
+
         unmetContraints.add("misspelled prefix or unsupported method signature");
         return unmetContraints;
-        
+
     }
+
+
 
 }

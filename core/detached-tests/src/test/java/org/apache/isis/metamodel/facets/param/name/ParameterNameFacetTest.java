@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.facets.param.name;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.junit.After;
 import org.junit.Assert;
@@ -50,9 +51,8 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
     @Before
     public void setUp() throws Exception {
-        val mmValidator = MetaModelValidatorComposite.asComposite(new MetaModelValidatorDefault());
         programmingModel = new ProgrammingModelFacetsJava8();
-        programmingModel.init(_Predicates.alwaysTrue(), mmValidator);
+        ((ProgrammingModelAbstract)programmingModel).init(ProgrammingModel.excludingNone());
         super.setUpFacetedMethodAndParameter();
     }
 

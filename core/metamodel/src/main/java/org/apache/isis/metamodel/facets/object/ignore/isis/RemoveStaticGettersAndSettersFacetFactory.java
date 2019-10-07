@@ -22,13 +22,12 @@ package org.apache.isis.metamodel.facets.object.ignore.isis;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.methodutils.MethodScope;
-import org.apache.isis.metamodel.progmodel.DeprecatedMarker;
 
 /**
  * Removes any static getter or setter methods.
  */
 @Deprecated
-public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstract implements DeprecatedMarker {
+public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstract {
 
     public RemoveStaticGettersAndSettersFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

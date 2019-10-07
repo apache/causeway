@@ -24,20 +24,19 @@ import java.util.regex.Pattern;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.JdoMetamodelUtil;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
-public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+import lombok.val;
+
+public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract 
+implements MetaModelRefiner {
 
     public JdoQueryAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -67,21 +66,19 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
                     namedQueryAnnotation, facetHolder));
         }
     }
-
+    
     @Override
-    public void refineMetaModelValidator(
-            final MetaModelValidatorComposite metaModelValidator) {
-
-        final boolean validateFromClause = getConfiguration().getReflector().getValidator().isJdoqlFromClause();
-        if (validateFromClause) {
-            final MetaModelValidator queryFromValidator = new MetaModelValidatorVisiting(new VisitorForFromClause(this));
-            metaModelValidator.add(queryFromValidator);
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        val isValidateFromClause = 
+                getConfiguration().getReflector().getValidator().isJdoqlFromClause();
+        if (isValidateFromClause) {
+            programmingModel.addValidator(new VisitorForFromClause(this));
         }
 
-        final boolean validateVariablesClause = getConfiguration().getReflector().getValidator().isJdoqlVariablesClause();
-        if (validateVariablesClause) {
-            final MetaModelValidator queryFromValidator = new MetaModelValidatorVisiting(new VisitorForVariablesClause(this));
-            metaModelValidator.add(queryFromValidator);
+        val isValidateVariablesClause = 
+                getConfiguration().getReflector().getValidator().isJdoqlVariablesClause();
+        if (isValidateVariablesClause) {
+            programmingModel.addValidator(new VisitorForVariablesClause(this));
         }
     }
 
@@ -97,5 +94,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Matcher matcher = variablesPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;
     }
+
+
 
 }

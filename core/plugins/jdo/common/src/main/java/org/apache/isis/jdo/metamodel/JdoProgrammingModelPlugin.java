@@ -27,14 +27,9 @@ import org.apache.isis.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTy
 import org.apache.isis.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel.ProcessingOrder;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 @Component
 public class JdoProgrammingModelPlugin implements MetaModelRefiner {
-
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-    }
 
     @Override
     public void refineProgrammingModel(ProgrammingModel pm) {

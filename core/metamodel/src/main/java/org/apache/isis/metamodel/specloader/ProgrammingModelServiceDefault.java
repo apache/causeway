@@ -19,6 +19,7 @@
 package org.apache.isis.metamodel.specloader;
 
 import java.util.EnumSet;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
@@ -30,8 +31,8 @@ import org.apache.isis.commons.internal.factory.InstanceUtil;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel.FactoryEntry;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
@@ -45,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
     @Override
-    public ProgrammingModel get() {
+    public ProgrammingModel getProgrammingModel() {
         return programmingModel.get();
     }
     
@@ -68,23 +69,16 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
 
         val programmingModel = new ProgrammingModelFacetsJava8();
 
+        // from all plugins out there, add their contributed FacetFactories to the programming model
         val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
         for (val metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);
         }
 
         metaModelValidator = createMetaModelValidator();
-        metaModelValidator.init();
-        
-        val isIgnoreDeprecated = configuration.getReflector().getFacets().isIgnoreDeprecated();
-        val excludingMarkers = isIgnoreDeprecated 
-                ? EnumSet.of(ProgrammingModel.Marker.DEPRECATED) 
-                        : null;
-        programmingModel.init(ProgrammingModel.excluding(excludingMarkers), metaModelValidator);
 
-        for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
-            metaModelRefiner.refineMetaModelValidator(metaModelValidator);
-        }
+        // finalize the programming model (make it immutable)
+        programmingModel.init(createFacetFactoryFilter());
         
         if(log.isDebugEnabled()) {
             
@@ -106,16 +100,25 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
     }
     
     private MetaModelValidatorComposite createMetaModelValidator() {
-
-        log.debug("About to create the composite MetaModelValidator.");
         
         val metaModelValidatorClassName =
                 configurationLegacy.getString(
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
+        
+        log.debug("About to create the MetaModelValidator {}.", metaModelValidatorClassName);
+        
         val mmValidator = InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
         val mmValidatorComposite = MetaModelValidatorComposite.asComposite(mmValidator);
         return mmValidatorComposite;
+    }
+    
+    private Predicate<FactoryEntry<?>> createFacetFactoryFilter() {
+        val isIgnoreDeprecated = configuration.getReflector().getFacets().isIgnoreDeprecated();
+        val facetFactoryFilter = isIgnoreDeprecated 
+                ? ProgrammingModel.excluding(EnumSet.of(ProgrammingModel.Marker.DEPRECATED)) 
+                        : ProgrammingModel.excludingNone();
+        return facetFactoryFilter;
     }
 
 }

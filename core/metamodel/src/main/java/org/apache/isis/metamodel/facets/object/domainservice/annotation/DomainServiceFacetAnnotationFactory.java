@@ -26,14 +26,14 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -41,7 +41,7 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import lombok.val;
 
 public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract 
-implements MetaModelValidatorRefiner {
+implements MetaModelRefiner {
 
     private MetaModelValidatorForValidationFailures mixinOnlyValidator =
             new MetaModelValidatorForValidationFailures();
@@ -91,13 +91,13 @@ implements MetaModelValidatorRefiner {
         }
     }
 
-
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-
-        final boolean serviceActionsOnly = getConfiguration().getReflector().getValidator().isServiceActionsOnly();
-        if (serviceActionsOnly) {
-            metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        
+        val isServiceActionsOnly = getConfiguration().getReflector().getValidator().isServiceActionsOnly();
+        if (isServiceActionsOnly) {
+            
+            programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
 
                 @Override
                 public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
@@ -132,12 +132,12 @@ implements MetaModelValidatorRefiner {
                             "'isis.reflector.validator.serviceActionsOnly'",
                             associationNames);
                 }
-            }));
+            });
         }
 
-        boolean mixinsOnly = getConfiguration().getReflector().getValidator().isMixinsOnly();
-        if (mixinsOnly) {
-            metaModelValidator.add(mixinOnlyValidator);
+        val isMixinsOnly = getConfiguration().getReflector().getValidator().isMixinsOnly();
+        if (isMixinsOnly) {
+            programmingModel.addValidator(mixinOnlyValidator);
         }
 
     }

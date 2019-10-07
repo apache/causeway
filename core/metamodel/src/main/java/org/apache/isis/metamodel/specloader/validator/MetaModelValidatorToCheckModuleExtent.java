@@ -23,25 +23,27 @@ import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorComposite {
+import lombok.val;
 
-    public MetaModelValidatorToCheckModuleExtent() {
-        addValidatorToCheckModuleExtent();
-    }
+public class MetaModelValidatorToCheckModuleExtent {
 
-    @Override
-    public void validate(final ValidationFailures validationFailures) {
-        boolean check = getConfiguration().getReflector().getValidator().isCheckModuleExtent();
-        if(!check) {
+    public MetaModelValidatorToCheckModuleExtent(
+            IsisConfiguration configuration, 
+            ProgrammingModel programmingModel) {
+        
+        val shouldCheck = configuration.getReflector().getValidator().isCheckModuleExtent();
+        if(!shouldCheck) {
             return;
         }
-
-        super.validate(validationFailures);
+        addValidatorToCheckModuleExtent(programmingModel);
+        
     }
 
-    private void addValidatorToCheckModuleExtent() {
+    private void addValidatorToCheckModuleExtent(ProgrammingModel programmingModel) {
 
         final Map<String, List<String>> domainObjectClassNamesByPackage = _Maps.newTreeMap();
 
@@ -113,6 +115,6 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
             //            }
         };
 
-        add(new MetaModelValidatorVisiting(visitor));
+        programmingModel.addValidator(visitor);
     }
 }

@@ -23,14 +23,9 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.actions.support.SupportingMethodValidatorRefinerFactory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 @Component
 public class IncubatorMetaModelPlugin implements MetaModelRefiner {
-
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-    }
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {

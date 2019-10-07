@@ -31,18 +31,16 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.metamodel.methodutils.MethodScope;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
-public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class TitleAnnotationFacetFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     private static final String TITLE_METHOD_NAME = "title";
 
@@ -149,44 +147,41 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
      * precedence.
      */
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-            @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                final Class<?> cls = objectSpec.getCorrespondingClass();
+        programmingModel.addValidator((objectSpec, validationFailures) -> {
 
-                final Method titleMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE_METHOD_NAME, String.class, null);
-                if (titleMethod == null) {
-                    return true;
-                }
+            final Class<?> cls = objectSpec.getCorrespondingClass();
 
-                // determine if cls contains an @Title annotated method, not inherited from superclass
-                final Class<?> supClass = cls.getSuperclass();
-                if (supClass == null) {
-                    return true;
-                }
-
-                final List<Method> methods = methodsWithTitleAnnotation(cls);
-                final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
-                if (methods.size() > superClassMethods.size()) {
-                    validationFailures.add(
-                            objectSpec.getIdentifier(),
-                            "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
-                            objectSpec.getIdentifier().getClassName(),
-                            TITLE_METHOD_NAME,
-                            Title.class.getName());
-                }
-
+            final Method titleMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE_METHOD_NAME, String.class, null);
+            if (titleMethod == null) {
                 return true;
             }
 
-            private List<Method> methodsWithTitleAnnotation(final Class<?> cls) {
-                return MethodFinderUtils.findMethodsWithAnnotation(cls, MethodScope.OBJECT, Title.class);
+            // determine if cls contains an @Title annotated method, not inherited from superclass
+            final Class<?> supClass = cls.getSuperclass();
+            if (supClass == null) {
+                return true;
             }
 
-        }));
+            final List<Method> methods = methodsWithTitleAnnotation(cls);
+            final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
+            if (methods.size() > superClassMethods.size()) {
+                validationFailures.add(
+                        objectSpec.getIdentifier(),
+                        "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
+                        objectSpec.getIdentifier().getClassName(),
+                        TITLE_METHOD_NAME,
+                        Title.class.getName());
+            }
+
+            return true;
+
+        });
     }
 
+    private static List<Method> methodsWithTitleAnnotation(final Class<?> cls) {
+        return MethodFinderUtils.findMethodsWithAnnotation(cls, MethodScope.OBJECT, Title.class);
+    }
 
 }

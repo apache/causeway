@@ -25,7 +25,7 @@ import javax.validation.constraints.Pattern;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
@@ -35,12 +35,13 @@ import org.apache.isis.metamodel.facets.param.parameter.maxlen.MaxLengthFacetFor
 import org.apache.isis.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 
 import lombok.val;
 
-public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
 
@@ -117,10 +118,9 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         FacetUtil.addFacet(FileAcceptFacetForParameterAnnotation.create(parameterIfAny, holder));
     }
 
-
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(conflictingOptionalityValidator);
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(conflictingOptionalityValidator);
     }
 
 

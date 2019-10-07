@@ -28,16 +28,16 @@ import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersist
 import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
@@ -45,7 +45,8 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import lombok.val;
 
 
-public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     private static final int DEFAULT_LENGTH = BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
     private static final int DEFAULT_SCALE = BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
@@ -102,10 +103,9 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                                 : defaultVal;
     }
 
-
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(newValidatorVisitor());
     }
 
     private Visitor newValidatorVisitor() {

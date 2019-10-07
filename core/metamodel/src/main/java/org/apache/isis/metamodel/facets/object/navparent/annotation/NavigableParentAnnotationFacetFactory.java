@@ -27,14 +27,11 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facetapi.MetaModelValidatorRefiner;
+import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 
 /**
  * For detailed behavioral specification see
@@ -43,7 +40,8 @@ import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
  * @since 2.0
  *
  */
-public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
     public NavigableParentAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -106,58 +104,56 @@ public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract 
      * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
      */
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
-        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-            @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                final Class<?> cls = objectSpec.getCorrespondingClass();
+        programmingModel.addValidator((objectSpec, validationFailures) -> {
 
-                final List<Annotations.Evaluator<PropertyLayout>> evaluators =
-                        Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class,
-                                NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet);
 
-                if (_NullSafe.isEmpty(evaluators)) {
-                    return true; // no conflict, continue validation processing
-                } else if (evaluators.size()>1) {
+            final Class<?> cls = objectSpec.getCorrespondingClass();
+
+            final List<Annotations.Evaluator<PropertyLayout>> evaluators =
+                    Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class,
+                            NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet);
+
+            if (_NullSafe.isEmpty(evaluators)) {
+                return true; // no conflict, continue validation processing
+            } else if (evaluators.size()>1) {
+
+                validationFailures.add(
+                        objectSpec.getIdentifier(),
+                        "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
+                                + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
+                                objectSpec.getIdentifier().getClassName(),
+                                PropertyLayout.class.getName());
+
+                return true; // continue validation processing
+            }
+
+            final Annotations.Evaluator<PropertyLayout> parentEvaluator = evaluators.get(0);
+
+            if(parentEvaluator instanceof Annotations.FieldEvaluator) {
+                // we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
+
+                final Annotations.FieldEvaluator<PropertyLayout> fieldEvaluator =
+                        (Annotations.FieldEvaluator<PropertyLayout>) parentEvaluator;
+
+                if(!fieldEvaluator.getGetter(cls).isPresent()) {
 
                     validationFailures.add(
                             objectSpec.getIdentifier(),
-                            "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
-                                    + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
+                            "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
+                                    + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
                                     objectSpec.getIdentifier().getClassName(),
+                                    fieldEvaluator.getField().getName(),
                                     PropertyLayout.class.getName());
-
-                    return true; // continue validation processing
                 }
-
-                final Annotations.Evaluator<PropertyLayout> parentEvaluator = evaluators.get(0);
-
-                if(parentEvaluator instanceof Annotations.FieldEvaluator) {
-                    // we have a @Parent annotated field (useful if one uses lombok's @Getter on a field)
-
-                    final Annotations.FieldEvaluator<PropertyLayout> fieldEvaluator =
-                            (Annotations.FieldEvaluator<PropertyLayout>) parentEvaluator;
-
-                    if(!fieldEvaluator.getGetter(cls).isPresent()) {
-
-                        validationFailures.add(
-                                objectSpec.getIdentifier(),
-                                "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
-                                        + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
-                                        objectSpec.getIdentifier().getClassName(),
-                                        fieldEvaluator.getField().getName(),
-                                        PropertyLayout.class.getName());
-                    }
-
-                }
-
-
-                return true; //continue validation processing
 
             }
 
-        }));
+
+            return true; //continue validation processing
+
+        });
     }
 
 

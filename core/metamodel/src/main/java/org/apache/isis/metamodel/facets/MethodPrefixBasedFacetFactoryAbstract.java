@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
@@ -51,8 +52,10 @@ implements MethodPrefixBasedFacetFactory {
     }
 
  
+    
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    
         
 //XXX[2161] replaced by SupportingMethodValidatorRefinerFactory, which changes behavior!     
         
@@ -64,7 +67,7 @@ implements MethodPrefixBasedFacetFactory {
 //                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
 //                ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
 //
-//        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+//        programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
 //
 //            @Override
 //            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
@@ -101,8 +104,8 @@ implements MethodPrefixBasedFacetFactory {
 //                });
 //
 //                return true;
-//            }
-//        }));
+//            
+//        });
     }
 
 }

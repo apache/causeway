@@ -64,14 +64,14 @@ class MetaModelValidatorServiceDefault {
         val mmValidator = InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
         val mmValidatorComposite = MetaModelValidatorComposite.asComposite(mmValidator);
 
-        val programmingModel = programmingModelService.get();
+        val programmingModel = programmingModelService.getProgrammingModel();
         //programmingModel.refineMetaModelValidator(mmValidatorComposite);
         
         val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
 
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);
-            metaModelRefiner.refineMetaModelValidator(mmValidatorComposite);
+            //metaModelRefiner.refineMetaModelValidator(mmValidatorComposite);
         }
         
         if(log.isDebugEnabled()) {

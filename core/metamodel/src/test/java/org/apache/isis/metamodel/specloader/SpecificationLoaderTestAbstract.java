@@ -45,6 +45,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.metamodel.services.persistsession.ObjectAdapterService;
@@ -153,7 +154,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .singleton(mockGridService = producers.mockGridService())
                 .build());
 
-        programmingModel.init(_Predicates.alwaysTrue(), mmValidator);
+        ((ProgrammingModelAbstract)programmingModel).init(ProgrammingModel.excludingNone());
 
         _Timing.runVerbose("specificationLoader.init()", specificationLoader::init);
 
