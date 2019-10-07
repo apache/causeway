@@ -32,6 +32,8 @@ import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 
+import lombok.val;
+
 public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
@@ -42,6 +44,12 @@ public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest e
         facetFactory = new PropertyAnnotationFacetFactory();
     }
 
+    private void processOptional(
+            PropertyAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        facetFactory.processOptional(processMethodContext, propertyIfAny);
+    }
+    
     public void testPropertyAnnotationWithOptionalityPickedUpOnProperty() {
 
         class Customer {
@@ -52,7 +60,7 @@ public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest e
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processOptional(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -62,7 +70,6 @@ public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest e
     public void testPropertyAnnotationIgnoredForPrimitiveOnProperty() {
 
         class Customer {
-            @SuppressWarnings("unused")
             @Property(optionality = Optionality.OPTIONAL)
             public int getNumberOfOrders() {
                 return 0;
@@ -70,7 +77,7 @@ public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest e
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processOptional(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         assertNotNull(facetedMethod.getFacet(MandatoryFacet.class));
     }
@@ -85,7 +92,7 @@ public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest e
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processOptional(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -103,7 +110,7 @@ public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest e
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processOptional(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }

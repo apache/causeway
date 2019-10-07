@@ -29,8 +29,16 @@ import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotationFacetFactoryTest {
 
+    private void processSemantics(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processSemantics(processMethodContext, actionIfAny);
+    }
+    
     @Test
     public void whenSafe() {
 
@@ -46,7 +54,7 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processSemantics(processMethodContext);
+        processSemantics(facetFactory, processMethodContext);
 
         // then
         final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
@@ -69,7 +77,7 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processSemantics(processMethodContext);
+        processSemantics(facetFactory, processMethodContext);
 
         // then
         final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
@@ -92,7 +100,7 @@ public class ActionAnnotationFacetFactoryTest_Semantics extends ActionAnnotation
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processSemantics(processMethodContext);
+        processSemantics(facetFactory, processMethodContext);
 
         // then
         final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);

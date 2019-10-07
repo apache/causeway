@@ -31,6 +31,8 @@ import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 
+import lombok.val;
+
 public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
@@ -42,6 +44,12 @@ public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         facetFactory = new PropertyAnnotationFacetFactory();
     }
 
+    private void processOptional(
+            PropertyAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        facetFactory.processOptional(processMethodContext, propertyIfAny);
+    }
+    
     public void testMandatoryAnnotationPickedUpOnProperty() {
 
         class Customer {
@@ -52,7 +60,7 @@ public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processOptional(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processOptional(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);

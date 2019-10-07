@@ -32,6 +32,8 @@ import org.apache.isis.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
@@ -48,6 +50,12 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         facetFactory = null;
         super.tearDown();
     }
+    
+    private void processEditing(
+            PropertyAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        facetFactory.processEditing(processMethodContext, propertyIfAny);
+    }
 
     public void testDisabledAnnotationPickedUpOnProperty() {
         class Customer {
@@ -58,7 +66,7 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processEditing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
@@ -79,7 +87,7 @@ public class DisabledAnnotationOnPropertyFacetFactoryTest extends AbstractFacetF
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processEditing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);

@@ -33,13 +33,13 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.commons.MethodUtil;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.exceptions.MetaModelException;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
-import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -125,7 +125,7 @@ public class FacetedMethodsBuilder {
         
     }
 
-    private final ObjectSpecificationAbstract spec;
+    private final ObjectSpecificationAbstract inspectedTypeSpec;
 
     private final Class<?> introspectedClass;
    // private final Set<Method> methodsRemaining;
@@ -157,7 +157,7 @@ public class FacetedMethodsBuilder {
             log.debug("creating JavaIntrospector for {}", spec.getFullIdentifier());
         }
 
-        this.spec = spec;
+        this.inspectedTypeSpec = spec;
         this.introspectedClass = spec.getCorrespondingClass();
         
         val methodsRemaining = introspectedClass.getMethods();
@@ -189,7 +189,7 @@ public class FacetedMethodsBuilder {
         if (log.isDebugEnabled()) {
             log.debug("introspecting {}: objectSpecId", getClassName());
         }
-        getFacetProcessor().processObjectSpecId(introspectedClass, spec);
+        getFacetProcessor().processObjectSpecId(introspectedClass, inspectedTypeSpec);
     }
     public void introspectClass() {
         if (log.isDebugEnabled()) {
@@ -199,11 +199,11 @@ public class FacetedMethodsBuilder {
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
 
-        getFacetProcessor().process(introspectedClass, methodRemover, spec);
+        getFacetProcessor().process(introspectedClass, methodRemover, inspectedTypeSpec);
 
         // if this class has additional facets (as per @Facets), then process
         // them.
-        final FacetsFacet facetsFacet = spec.getFacet(FacetsFacet.class);
+        final FacetsFacet facetsFacet = inspectedTypeSpec.getFacet(FacetsFacet.class);
         if (facetsFacet != null) {
             final Class<? extends FacetFactory>[] facetFactories = facetsFacet.facetFactories();
             for (final Class<? extends FacetFactory> facetFactorie : facetFactories) {
@@ -214,7 +214,7 @@ public class FacetedMethodsBuilder {
                     throw new IsisException(e);
                 }
                 getFacetProcessor().injectDependenciesInto(facetFactory);
-                facetFactory.process(new ProcessClassContext(introspectedClass, methodRemover, spec));
+                facetFactory.process(new ProcessClassContext(introspectedClass, methodRemover, inspectedTypeSpec));
             }
         }
 
@@ -248,9 +248,9 @@ public class FacetedMethodsBuilder {
         });
 
         // Ensure all return types are known
-        final Set<Class<?>> typesToLoad = _Sets.newHashSet();
-        for (final Method method : associationCandidateMethods) {
-            specificationTraverser.traverseTypes(method, typesToLoad);
+        val typesToLoad = _Sets.<Class<?>>newHashSet();
+        for (val method : associationCandidateMethods) {
+            specificationTraverser.traverseTypes(method, typesToLoad::add);
         }
         typesToLoad.remove(introspectedClass);
 
@@ -357,16 +357,17 @@ public class FacetedMethodsBuilder {
 
     private List<FacetedMethod> findActionFacetedMethods(
             final MethodScope methodScope) {
+        
         if (log.isDebugEnabled()) {
             log.debug("introspecting {}: actions", getClassName());
         }
         val actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
-        collectActionFacetedMethods(actionFacetedMethods, methodScope);
+        collectActionFacetedMethods(actionFacetedMethods::add, methodScope);
         return actionFacetedMethods;
     }
 
     private void collectActionFacetedMethods(
-            final List<FacetedMethod> actionFacetedMethods,
+            final Consumer<FacetedMethod> onActionFacetedMethod,
             final MethodScope methodScope) {
 
         if (log.isDebugEnabled()) {
@@ -376,7 +377,7 @@ public class FacetedMethodsBuilder {
         methodRemover.removeIf(method->{
             val actionPeer = findActionFacetedMethod(methodScope, method);
             if (actionPeer != null) {
-                actionFacetedMethods.add(actionPeer);
+                onActionFacetedMethod.accept(actionPeer);
                 return true;
             }
             return false;
@@ -434,14 +435,13 @@ public class FacetedMethodsBuilder {
             return false;
         }
 
-        final Set<Class<?>> typesToLoad = _Sets.newHashSet();
-        specificationTraverser.traverseTypes(actionMethod, typesToLoad);
+        val typesToLoad = _Sets.<Class<?>>newHashSet();
+        specificationTraverser.traverseTypes(actionMethod, typesToLoad::add);
 
         val specLoader = getSpecificationLoader();
-        val upTo = IntrospectionState.TYPE_INTROSPECTED;
 
         val anyLoadedAsNull = typesToLoad.stream()
-                .map(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo))
+                .map(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
                 .anyMatch(spec->spec==null);
 
         if (anyLoadedAsNull) {
@@ -452,26 +452,34 @@ public class FacetedMethodsBuilder {
         if (!loadParamSpecs(actionMethod)) {
             return false;
         }
-
+        
+        if(this.inspectedTypeSpec.isMixin()) {
+            // we are introspecting a mixin type, so accept this method for further processing
+            log.debug("  identified possible mixin´s 'main' action {0}", actionMethod);
+            return true;
+        } 
+        
         if(explicitActionAnnotationConfigured()) {
-            if(!Annotations.isAnnotationPresent(actionMethod, Action.class)) {
-                return false;
-            }
-            // we have @Action, so fall through
             
-        } else {
+            if(_Annotations.isPresent(actionMethod, Action.class)) {
+                log.debug("  identified action {0}", actionMethod);
+                return true;
+            }
+            // we have no @Action, so dismiss
+            return false;
+            
+        } 
 
-            // exclude those that have eg. reserved prefixes
-            if (getFacetProcessor().recognizes(actionMethod)) {
-                return false;
-            }
-            // we have a valid action candidate, so fall through
-            
+        // exclude those that have eg. reserved prefixes
+        if (getFacetProcessor().recognizes(actionMethod)) {
+            return false;
         }
+        // we have a valid action candidate, so fall through
         
         log.debug("  identified action {0}", actionMethod);
         return true;
     }
+
 
     private boolean explicitActionAnnotationConfigured() {
         return explicitAnnotationsForActions;

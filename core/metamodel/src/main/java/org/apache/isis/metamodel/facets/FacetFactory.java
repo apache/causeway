@@ -25,14 +25,21 @@ import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.methodutils.MethodScope;
+import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
+
+import lombok.val;
 
 public interface FacetFactory {
 
@@ -118,11 +125,61 @@ public interface FacetFactory {
         }
         
         /** 
-         * Annotation lookup on this context's method.
+         * Annotation lookup on this context's method..
          * @since 2.0
          */
         public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {
             return _Annotations.synthesizeInherited(method, annotationType);
+        }
+        
+        /** 
+         * Annotation lookup on this context's method, if not found, extends search to type in case 
+         * the predicate {@link #isMixinMain} evaluates {@code true}.
+         * @since 2.0
+         */
+        public <A extends Annotation> Optional<A> synthesizeOnMethodOrMixinType(Class<A> annotationType) {
+            return computeIfAbsent(synthesizeOnMethod(annotationType),
+                    ()-> isMixinMain()
+                        ? synthesizeOnType(annotationType)
+                                : Optional.empty() ) ;
+        }
+        
+        /**
+         * Whether we are currently processing a mixin type AND this context's method can be identified 
+         * as the main method of the processed mixin class.
+         * @since 2.0
+         */
+        public boolean isMixinMain() {
+            return isMixinMain.get();
+        }
+
+        private final _Lazy<Boolean> isMixinMain = _Lazy.threadSafe(this::computeIsMixinMain);
+        
+        private boolean computeIsMixinMain() {
+            val specLoader = MetaModelContext.current().getSpecificationLoader();
+            val spec_ofTypeCurrentlyProcessing = specLoader
+                    .loadSpecification(getCls(), IntrospectionState.TYPE_INTROSPECTED);
+            if(!spec_ofTypeCurrentlyProcessing.isMixin()) {
+                return false;
+            }
+            val mixinMember = spec_ofTypeCurrentlyProcessing
+                    .getMixedInMember(spec_ofTypeCurrentlyProcessing);
+            if(!mixinMember.isPresent()) {
+                return false;
+            }
+            val actionMethod_ofMixinMember = ((ObjectActionMixedIn)mixinMember.get())
+                    .getFacetedMethod().getMethod();
+            
+            return getMethod().equals(actionMethod_ofMixinMember);
+        }
+        
+        private static <T> Optional<T> computeIfAbsent(
+                Optional<T> optional,
+                Supplier<Optional<T>> supplier) {
+            
+            return optional.isPresent() ? 
+                    optional
+                        : supplier.get();
         }
 
     }
@@ -203,7 +260,7 @@ public interface FacetFactory {
         public FeatureType getFeatureType() {
             return featureType;
         }
-
+        
     }
 
     /**
@@ -270,4 +327,6 @@ public interface FacetFactory {
      * annotation if present.
      */
     void processParams(ProcessParameterContext processParameterContext);
+
+    
 }

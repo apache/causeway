@@ -502,8 +502,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return superclassSpec != null && superclassSpec.isOfType(specification);
     }
 
-
-
     // -- Name, Description, Persistability
     /**
      * The name according to any available {@link org.apache.isis.metamodel.facets.all.named.NamedFacet},
@@ -1329,5 +1327,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         return BeanSort.UNKNOWN;
     }
+
+
 
 }

@@ -29,6 +29,8 @@ import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 
+import lombok.val;
+
 public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private PropertyAnnotationFacetFactory facetFactory;
@@ -39,6 +41,12 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
         facetFactory = new PropertyAnnotationFacetFactory();
     }
 
+    private void processNotPersisted(
+            PropertyAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        facetFactory.processNotPersisted(processMethodContext, propertyIfAny);
+    }
+    
     public void testAnnotationPickedUpOnProperty() {
 
         class Customer {
@@ -50,7 +58,7 @@ public class NotPersistedAnnotationOnPropertyFacetFactoryTest extends AbstractFa
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processNotPersisted(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processNotPersisted(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);

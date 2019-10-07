@@ -29,11 +29,19 @@ import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
+import lombok.val;
+
 public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     //private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ActionAnnotationFacetFactory facetFactory;
+    
+    private void processRestrictTo(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processRestrictTo(processMethodContext, actionIfAny);
+    }
 
     @Override
     protected void setUp() throws Exception {
@@ -56,7 +64,7 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processRestrictTo(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processRestrictTo(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
         assertNotNull(facet);

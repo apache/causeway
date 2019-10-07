@@ -25,11 +25,14 @@ import javax.validation.constraints.Pattern;
 
 import org.junit.Before;
 
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
+
+import lombok.val;
 
 public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -42,10 +45,15 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
         facetFactory = new PropertyAnnotationFacetFactory();
     }
 
+    private void processRegEx(
+            PropertyAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        facetFactory.processRegEx(processMethodContext, propertyIfAny);
+    }
+    
     public void testRegExAnnotationPickedUpOnProperty() {
 
         class Customer {
-            @SuppressWarnings("unused")
             @Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE })
             public String getFirstName() {
                 return null;
@@ -53,7 +61,7 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.processRegEx(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processRegEx(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RegExFacet.class);
         assertNotNull(facet);
@@ -73,7 +81,7 @@ public class RegExAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFact
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.processRegEx(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processRegEx(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));
     }

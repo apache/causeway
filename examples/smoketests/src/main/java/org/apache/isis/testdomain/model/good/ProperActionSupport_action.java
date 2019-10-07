@@ -29,6 +29,7 @@ public class ProperActionSupport_action {
     private final ProperActionSupport holder;
 
     // proper mix-in action
+    //@Action // <-- inferred by annotation on type above
     public ProperActionSupport act() {
         return holder;
     }

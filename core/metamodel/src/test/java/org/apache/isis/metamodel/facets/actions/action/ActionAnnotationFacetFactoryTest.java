@@ -57,7 +57,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         context.checking(new Expectations() {{
             allowing(mockSpecificationLoader).loadSpecification(cls);
             will(returnValue(mockTypeSpec));
-
+            
             allowing(mockSpecificationLoader).loadSpecification(returnType);
             will(returnValue(mockReturnTypeSpec));
         }});

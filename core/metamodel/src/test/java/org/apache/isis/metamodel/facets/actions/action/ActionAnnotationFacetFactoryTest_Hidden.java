@@ -31,8 +31,16 @@ import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFacetFactoryTest {
 
+    private void processHidden(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processHidden(processMethodContext, actionIfAny);
+    }
+    
     @Test
     public void withAnnotation() {
 
@@ -49,7 +57,7 @@ public class ActionAnnotationFacetFactoryTest_Hidden extends ActionAnnotationFac
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processHidden(processMethodContext);
+        processHidden(facetFactory, processMethodContext);
 
         // then
         final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);

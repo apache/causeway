@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.actions.action;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
@@ -58,25 +60,28 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        processInvocation(processMethodContext);
-        processHidden(processMethodContext);
-        processRestrictTo(processMethodContext);
-        processSemantics(processMethodContext);
-
-        // must come after processing semantics
-        processCommand(processMethodContext);
-
-        // must come after processing semantics
-        processPublishing(processMethodContext);
-
-        processTypeOf(processMethodContext);
-        processAssociateWith(processMethodContext);
         
-        processFileAccept(processMethodContext);
+        val actionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Action.class);
+        
+        processInvocation(processMethodContext, actionIfAny);
+        processHidden(processMethodContext, actionIfAny);
+        processRestrictTo(processMethodContext, actionIfAny);
+        processSemantics(processMethodContext, actionIfAny);
+
+        // must come after processing semantics
+        processCommand(processMethodContext, actionIfAny);
+
+        // must come after processing semantics
+        processPublishing(processMethodContext, actionIfAny);
+
+        processTypeOf(processMethodContext, actionIfAny);
+        processAssociateWith(processMethodContext, actionIfAny);
+        
+        processFileAccept(processMethodContext, actionIfAny);
     }
 
-    void processInvocation(final ProcessMethodContext processMethodContext) {
+
+    void processInvocation(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val actionMethod = processMethodContext.getMethod();
 
@@ -94,7 +99,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
-            val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+            
 
             // search for @Action(domainEvent=...), else use the default event type
             val actionDomainEventFacet =
@@ -152,37 +157,35 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         return actionDomainEventType;
     }
 
-    void processHidden(final ProcessMethodContext processMethodContext) {
+    void processHidden(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Action(hidden=...)
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         val facet = HiddenFacetForActionAnnotation.create(actionIfAny, holder);
         FacetUtil.addFacet(facet);
     }
 
-    void processRestrictTo(final ProcessMethodContext processMethodContext) {
+    void processRestrictTo(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Action(restrictTo=...)
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        @SuppressWarnings("deprecation")
         val facet = PrototypeFacetForActionAnnotation.create(actionIfAny, holder,
                 ()->IsisSystemEnvironment.get().getDeploymentType());
 
         FacetUtil.addFacet(facet);
     }
 
-    void processSemantics(final ProcessMethodContext processMethodContext) {
+    void processSemantics(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Action(semantics=...)
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         val facet = ActionSemanticsFacetForActionAnnotation.create(actionIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
 
-    void processCommand(final ProcessMethodContext processMethodContext) {
+    void processCommand(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val facetHolder = processMethodContext.getFacetHolder();
 
@@ -196,13 +199,12 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(command=...)
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         val commandFacet = CommandFacetForActionAnnotation.create(actionIfAny, getConfiguration(), getServiceInjector(), facetHolder);
 
         FacetUtil.addFacet(commandFacet);
     }
 
-    void processPublishing(final ProcessMethodContext processMethodContext) {
+    void processPublishing(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val holder = processMethodContext.getFacetHolder();
 
@@ -217,13 +219,12 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(publishing=...)
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         val facet = PublishedActionFacetForActionAnnotation.create(actionIfAny, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }
 
-    void processTypeOf(final ProcessMethodContext processMethodContext) {
+    void processTypeOf(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val method = processMethodContext.getMethod();
         val holder = processMethodContext.getFacetHolder();
@@ -234,7 +235,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(typeOf=...)
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         TypeOfFacet typeOfFacet = actionIfAny
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf != null && typeOf != Object.class)
@@ -256,13 +256,12 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         FacetUtil.addFacet(typeOfFacet);
     }
 
-    void processAssociateWith(final ProcessMethodContext processMethodContext) {
+    void processAssociateWith(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Action(associateWith=...)
 
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         actionIfAny.ifPresent(action->{
             val associateWith = action.associateWith();
             if(!_Strings.isNullOrEmpty(associateWith)) {
@@ -277,14 +276,11 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     }
     
-    void processFileAccept(final ProcessMethodContext processMethodContext) {
+    void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Action(fileAccept=...)
-
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
-        
         val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
         FacetUtil.addFacet(facet);
 

@@ -33,8 +33,15 @@ import org.apache.isis.metamodel.facets.actions.action.typeof.TypeOfFacetForActi
 import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFacetFactoryTest {
 
+    private void processTypeOf(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processTypeOf(processMethodContext, actionIfAny);
+    }
 
     @Test
     public void whenDeprecatedTypeOfAnnotationOnActionNotReturningCollection() {
@@ -52,7 +59,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processTypeOf(processMethodContext);
+        processTypeOf(facetFactory, processMethodContext);
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
@@ -78,7 +85,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processTypeOf(processMethodContext);
+        processTypeOf(facetFactory, processMethodContext);
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
@@ -105,7 +112,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processTypeOf(processMethodContext);
+        processTypeOf(facetFactory, processMethodContext);
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
@@ -130,7 +137,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processTypeOf(processMethodContext);
+        processTypeOf(facetFactory, processMethodContext);
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
@@ -157,7 +164,7 @@ public class ActionAnnotationFacetFactoryTest_TypeOf extends ActionAnnotationFac
 
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processTypeOf(processMethodContext);
+        processTypeOf(facetFactory, processMethodContext);
 
         // then
         final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);

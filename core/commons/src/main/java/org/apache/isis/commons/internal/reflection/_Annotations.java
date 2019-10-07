@@ -48,6 +48,20 @@ import lombok.val;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _Annotations {
     
+    /**
+     * Determine if the specified annotation is either directly present or meta-present. 
+     * 
+     * @param <A>
+     * @param annotatedElement
+     * @param annotationType
+     * @return non-null
+     */
+    public static <A extends Annotation> boolean isPresent(
+            AnnotatedElement annotatedElement, 
+            Class<A> annotationType) {
+
+        return collect(annotatedElement).isPresent(annotationType);
+    }
     
     /**
      * Optionally returns the 'nearest' annotation of given type based on presence.
@@ -58,7 +72,7 @@ public final class _Annotations {
      * @return non-null
      */
     public static <A extends Annotation> Optional<A> findNearestAnnotation(
-            Class<?> annotatedElement, 
+            AnnotatedElement annotatedElement, 
             Class<A> annotationType) {
         //XXX if synthesize has good runtime performance, then we simply us it here
         return synthesize(annotatedElement, annotationType);

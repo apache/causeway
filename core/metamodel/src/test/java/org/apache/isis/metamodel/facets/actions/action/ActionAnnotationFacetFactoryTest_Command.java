@@ -43,15 +43,23 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import lombok.val;
+
 public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFacetFactoryTest {
 
+    private void processCommand(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processCommand(processMethodContext, actionIfAny);
+    }
+    
     @Test
     public void givenHasTransactionId_thenIgnored() {
         // given
         final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -69,7 +77,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processCommand(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -87,7 +95,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processCommand(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -107,7 +115,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processCommand(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
     }
 
@@ -119,7 +127,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processCommand(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -136,7 +144,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         allowingCommandConfigurationToReturn(CommandActionsConfiguration.ALL);
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
+        processCommand(facetFactory, new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null,
                 actionMethod, mockMethodRemover, facetedMethod));
 
         // then
@@ -159,7 +167,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
 
-        facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);
         assertNull(facet);
@@ -185,7 +193,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -207,7 +215,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         allowingCommandConfigurationToReturn(CommandActionsConfiguration.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
     }
 
     @Test
@@ -222,7 +230,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         allowingCommandConfigurationToReturn(CommandActionsConfiguration.NONE);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);
         assertNull(facet);
@@ -246,7 +254,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         allowingCommandConfigurationToReturn(CommandActionsConfiguration.ALL);
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -271,7 +279,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         allowingCommandConfigurationToReturn(CommandActionsConfiguration.NONE);
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -294,7 +302,7 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
         allowingCommandConfigurationToReturn(CommandActionsConfiguration.NONE);
 
         // when
-        facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);

@@ -89,6 +89,9 @@ class DomainModelTest_usingGoodDomain {
         
         val oa_action = holderSpec.getObjectAction("action"); // proper mix-in support
         assertNotNull(oa_action);
+        
+        val oa_property = holderSpec.getAssociation("property"); // proper mix-in support
+        assertNotNull(oa_property);
     }
     
 

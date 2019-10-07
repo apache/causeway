@@ -27,8 +27,16 @@ import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacet;
 
 import static org.junit.Assert.assertNull;
 
+import lombok.val;
+
 public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotationFacetFactoryTest {
 
+    private void processRestrictTo(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processRestrictTo(processMethodContext, actionIfAny);
+    }
+    
     @Test
     public void whenRestrictedToPrototyping() {
 
@@ -45,7 +53,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processRestrictTo(processMethodContext);
+        processRestrictTo(facetFactory, processMethodContext);
 
         // then
         final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
@@ -68,7 +76,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processRestrictTo(processMethodContext);
+        processRestrictTo(facetFactory, processMethodContext);
 
         // then
         final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
@@ -91,7 +99,7 @@ public class ActionAnnotationFacetFactoryTest_RestrictTo extends ActionAnnotatio
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processRestrictTo(processMethodContext);
+        processRestrictTo(facetFactory, processMethodContext);
 
         // then
         final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);

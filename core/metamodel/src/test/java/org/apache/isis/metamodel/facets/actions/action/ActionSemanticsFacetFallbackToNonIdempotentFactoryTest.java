@@ -21,15 +21,24 @@ package org.apache.isis.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
+import lombok.val;
+
 public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest extends AbstractFacetFactoryTest {
 
     private ActionAnnotationFacetFactory facetFactory;
+    
+    private void processSemantics(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processSemantics(processMethodContext, actionIfAny);
+    }
 
     @Override
     protected void setUp() throws Exception {
@@ -52,7 +61,7 @@ public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest extends Abst
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.processSemantics(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processSemantics(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
         assertNotNull(facet);

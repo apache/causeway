@@ -37,15 +37,22 @@ import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocati
 import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotationFacetFactoryTest {
 
+    private void processInvocation(
+            ActionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        facetFactory.processInvocation(processMethodContext, actionIfAny);
+    }
+    
     @Test
     public void withPostsActionInvokedEvent() {
 
         class Customer {
 
-            class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-                private static final long serialVersionUID = 1L; }
+            class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {}
 
             @Action(domainEvent = SomeActionInvokedDomainEvent.class)
             public void someAction() {
@@ -65,7 +72,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processInvocation(processMethodContext);
+        processInvocation(facetFactory, processMethodContext);
 
         // then
         final ActionDomainEventFacet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -86,8 +93,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
 
         class Customer {
 
-            class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-                private static final long serialVersionUID = 1L; }
+            class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {}
 
             @Action(domainEvent = SomeActionInvokedDomainEvent.class)
             public void someAction() {
@@ -105,7 +111,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processInvocation(processMethodContext);
+        processInvocation(facetFactory, processMethodContext);
 
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -129,8 +135,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
 
         class Customer {
 
-            class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
-                private static final long serialVersionUID = 1L; }
+            class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {}
 
             @Action(domainEvent= SomeActionInvokedDomainEvent.class)
             public void someAction() {
@@ -148,7 +153,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processInvocation(processMethodContext);
+        processInvocation(facetFactory, processMethodContext);
 
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -186,7 +191,7 @@ public class ActionAnnotationFacetFactoryTest_Invocation extends ActionAnnotatio
         // when
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(
                 cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        facetFactory.processInvocation(processMethodContext);
+        processInvocation(facetFactory, processMethodContext);
 
         // then
         final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);

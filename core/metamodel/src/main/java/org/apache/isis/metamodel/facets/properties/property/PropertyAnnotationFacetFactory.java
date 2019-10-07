@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.properties.property;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
@@ -70,25 +72,28 @@ implements MetaModelRefiner {
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
-
+    
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        processModify(processMethodContext);
-        processHidden(processMethodContext);
-        processEditing(processMethodContext);
-        processCommand(processMethodContext);
-        processProjecting(processMethodContext);
-        processPublishing(processMethodContext);
-        processMaxLength(processMethodContext);
-        processMustSatisfy(processMethodContext);
-        processNotPersisted(processMethodContext);
-        processOptional(processMethodContext);
-        processRegEx(processMethodContext);
-        processFileAccept(processMethodContext);
+        
+        val propertyIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Property.class);
+        
+        processModify(processMethodContext, propertyIfAny);
+        processHidden(processMethodContext, propertyIfAny);
+        processEditing(processMethodContext, propertyIfAny);
+        processCommand(processMethodContext, propertyIfAny);
+        processProjecting(processMethodContext, propertyIfAny);
+        processPublishing(processMethodContext, propertyIfAny);
+        processMaxLength(processMethodContext, propertyIfAny);
+        processMustSatisfy(processMethodContext, propertyIfAny);
+        processNotPersisted(processMethodContext, propertyIfAny);
+        processOptional(processMethodContext, propertyIfAny);
+        processRegEx(processMethodContext, propertyIfAny);
+        processFileAccept(processMethodContext, propertyIfAny);
     }
 
 
-    void processModify(final ProcessMethodContext processMethodContext) {
+    void processModify(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
 
         val cls = processMethodContext.getCls();
         val typeSpec = getSpecificationLoader().loadSpecification(cls);
@@ -106,7 +111,6 @@ implements MetaModelRefiner {
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
 
         // search for @Property(domainEvent=...), else use default event type
         val propertyDomainEventFacet = propertyIfAny
@@ -183,27 +187,25 @@ implements MetaModelRefiner {
 
 
 
-    void processHidden(final ProcessMethodContext processMethodContext) {
+    void processHidden(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
         
         // search for @Property(hidden=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val hiddenFacet = HiddenFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
         FacetUtil.addFacet(hiddenFacet);
     }
 
-    void processEditing(final ProcessMethodContext processMethodContext) {
+    void processEditing(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
         // search for @Property(editing=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val disabledFacet = DisabledFacetForPropertyAnnotation.create(propertyIfAny, facetHolder);
 
         FacetUtil.addFacet(disabledFacet);
     }
 
-    void processCommand(final ProcessMethodContext processMethodContext) {
+    void processCommand(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
         //
@@ -216,17 +218,15 @@ implements MetaModelRefiner {
         }
 
         // check for @Property(command=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val commandFacet = CommandFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), facetHolder, getServiceInjector());
 
         FacetUtil.addFacet(commandFacet);
     }
 
-    void processProjecting(final ProcessMethodContext processMethodContext) {
+    void processProjecting(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
 
         val facetHolder = processMethodContext.getFacetHolder();
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
 
         val projectingFacet = ProjectingFacetFromPropertyAnnotation
                 .create(propertyIfAny, facetHolder);
@@ -235,7 +235,7 @@ implements MetaModelRefiner {
 
     }
 
-    void processPublishing(final ProcessMethodContext processMethodContext) {
+    void processPublishing(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
 
         
         val holder = processMethodContext.getFacetHolder();
@@ -251,7 +251,6 @@ implements MetaModelRefiner {
         }
 
         // check for @Property(publishing=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val facet = PublishedPropertyFacetForPropertyAnnotation
                 .create(propertyIfAny, getConfiguration(), holder);
 
@@ -260,38 +259,35 @@ implements MetaModelRefiner {
 
 
 
-    void processMaxLength(final ProcessMethodContext processMethodContext) {
+    void processMaxLength(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
 
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(maxLength=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val facet = MaxLengthFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
 
-    void processMustSatisfy(final ProcessMethodContext processMethodContext) {
+    void processMustSatisfy(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(mustSatisfy=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(propertyIfAny, holder, getServiceInjector());
 
         FacetUtil.addFacet(facet);
     }
 
-    void processNotPersisted(final ProcessMethodContext processMethodContext) {
+    void processNotPersisted(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val facet = NotPersistedFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         FacetUtil.addFacet(facet);
     }
 
-    void processOptional(final ProcessMethodContext processMethodContext) {
+    void processOptional(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
 
         val method = processMethodContext.getMethod();
 
@@ -306,14 +302,13 @@ implements MetaModelRefiner {
                 facet2, "Conflicting @Nullable with other optionality annotation");
 
         // search for @Property(optional=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val facet3 = MandatoryFacetForPropertyAnnotation.create(propertyIfAny, method, holder);
         FacetUtil.addFacet(facet3);
         conflictingOptionalityValidator.flagIfConflict(
                 facet3, "Conflicting Property#optionality with other optionality annotation");
     }
 
-    void processRegEx(final ProcessMethodContext processMethodContext) {
+    void processRegEx(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
         val returnType = processMethodContext.getMethod().getReturnType();
 
@@ -327,7 +322,6 @@ implements MetaModelRefiner {
         }
         
         // else search for @Property(pattern=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val facet2 = RegExFacetForPropertyAnnotation.create(propertyIfAny, returnType, holder);
         FacetUtil.addFacet(facet2);
         
@@ -335,11 +329,10 @@ implements MetaModelRefiner {
     }
 
 
-    void processFileAccept(final ProcessMethodContext processMethodContext) {
+    void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
         // else search for @Property(maxLength=...)
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         val facet = FileAcceptFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         FacetUtil.addFacet(facet);

@@ -16,23 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.testdomain.model.good;
 
-package org.apache.isis.metamodel.specloader.traverser;
+import org.apache.isis.applib.annotation.Model;
+import org.apache.isis.applib.annotation.Property;
 
-import java.lang.reflect.Method;
-import java.util.function.Consumer;
+import lombok.RequiredArgsConstructor;
 
-public class SpecificationTraverser {
+@Property @RequiredArgsConstructor
+public class ProperActionSupport_property {
+    
+    private final ProperActionSupport holder;
 
-    /**
-     * Traverses the return types of each method.
-     *
-     * <p>
-     * It's possible for there to be multiple return types: the generic type,
-     * and the parameterized type.
-     */
-    public void traverseTypes(final Method method, final Consumer<Class<?>> onTypeDiscovered) {
-        new TypeExtractorMethodReturn(method).forEach(onTypeDiscovered);
+    //@Action(semantics=SAFE)   // <-- inferred (required)
+    //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
+    public String prop() {
+        return holder.toString();
+    }
+    
+    // proper support
+    @Model
+    public boolean hide$$() {
+        return false;
     }
 
+    
 }
