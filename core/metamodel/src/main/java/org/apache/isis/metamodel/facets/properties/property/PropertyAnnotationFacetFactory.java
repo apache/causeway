@@ -79,22 +79,7 @@ implements MetaModelRefiner {
         
         val propertyIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Property.class);
         
-        if(processMethodContext.isMixinMain() && propertyIfAny.isPresent()) {
-
-//            XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
-//            val isPropertyTypeLevel = !processMethodContext.synthesizeOnMethod(Property.class).isPresent();
-//            if(isPropertyTypeLevel) 
-            {
-
-                //XXX[1998] if @Property detected on method or type level infer:    
-                //@Action(semantics=SAFE)
-                //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
-                val facetedMethod = processMethodContext.getFacetHolder();
-                FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-                //facetedMethod.addFacet(new NotContributedFacetForActionLayoutAnnotation(Contributed.AS_ASSOCIATION, facetedMethod));
-            }
-
-        }
+        inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
         
         processModify(processMethodContext, propertyIfAny);
         processHidden(processMethodContext, propertyIfAny);
@@ -110,6 +95,24 @@ implements MetaModelRefiner {
         processFileAccept(processMethodContext, propertyIfAny);
     }
 
+
+    void inferIntentWhenOnTypeLevel(ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
+        if(!processMethodContext.isMixinMain() || !propertyIfAny.isPresent()) {
+            return; // no @Property found neither type nor method
+        }
+
+        //          XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
+        //          val isPropertyMethodLevel = processMethodContext.synthesizeOnMethod(Property.class).isPresent();
+        //          if(isPropertyMethodLevel) return; 
+
+        //[1998] if @Property detected on method or type level infer:    
+        //@Action(semantics=SAFE)
+        //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
+        val facetedMethod = processMethodContext.getFacetHolder();
+        FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+        //facetedMethod.addFacet(new NotContributedFacetForActionLayoutAnnotation(Contributed.AS_ASSOCIATION, facetedMethod));
+        
+    }
 
     void processModify(final ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
 

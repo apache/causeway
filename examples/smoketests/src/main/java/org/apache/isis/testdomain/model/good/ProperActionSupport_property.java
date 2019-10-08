@@ -20,10 +20,13 @@ package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
-@Property @RequiredArgsConstructor
+@Property
+@PropertyLayout(named = "foo", describedAs = "bar")
+@RequiredArgsConstructor
 public class ProperActionSupport_property {
     
     private final ProperActionSupport holder;

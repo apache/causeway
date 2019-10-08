@@ -19,11 +19,14 @@
 package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Action @RequiredArgsConstructor
+@Action 
+@ActionLayout(named = "foo", describedAs = "bar")  
+@RequiredArgsConstructor
 public class ProperActionSupport_action {
     
     private final ProperActionSupport holder;

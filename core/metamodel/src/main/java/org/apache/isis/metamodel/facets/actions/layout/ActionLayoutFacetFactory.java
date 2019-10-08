@@ -53,7 +53,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        val actionLayoutIfAny = processMethodContext.synthesizeOnMethod(ActionLayout.class);
+        val actionLayoutIfAny = processMethodContext.synthesizeOnMethodOrMixinType(ActionLayout.class);
         
         // bookmarkable
         BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation

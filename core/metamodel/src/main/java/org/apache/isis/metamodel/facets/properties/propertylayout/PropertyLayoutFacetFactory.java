@@ -188,7 +188,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     }
 
     Optional<PropertyLayout> propertyLayoutsFrom(final ProcessMethodContext processMethodContext) {
-        return processMethodContext.synthesizeOnMethod(PropertyLayout.class);
+        return processMethodContext.synthesizeOnMethodOrMixinType(PropertyLayout.class);
     }
 
 

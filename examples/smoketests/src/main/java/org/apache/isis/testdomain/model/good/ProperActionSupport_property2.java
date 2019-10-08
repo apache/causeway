@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.model.good;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Model;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +33,7 @@ public class ProperActionSupport_property2 {
     //@Action(semantics=SAFE)   // <-- inferred (required)
     //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
     @Property
+    @PropertyLayout(named= "foo", describedAs = "bar")
     public String $$() {
         return holder.toString();
     }

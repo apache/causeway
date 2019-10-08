@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
@@ -89,12 +90,21 @@ class DomainModelTest_usingGoodDomain {
         
         val oa_action = holderSpec.getObjectAction("action"); // when @Action at type level
         assertNotNull(oa_action);
+        assertEquals("action", oa_action.getId());
+        assertEquals("foo", oa_action.getName());
+        assertEquals("bar", oa_action.getDescription());
         
         val oa_property = holderSpec.getAssociation("property"); // when @Property at type level
         assertNotNull(oa_property);
+        assertEquals("property", oa_property.getId());
+        assertEquals("foo", oa_property.getName());
+        assertEquals("bar", oa_property.getDescription());
         
         val oa_property2 = holderSpec.getAssociation("property2"); // when @Property at method level
         assertNotNull(oa_property2);
+        assertEquals("property2", oa_property2.getId());
+        assertEquals("foo", oa_property2.getName());
+        assertEquals("bar", oa_property2.getDescription());
     }
     
 
