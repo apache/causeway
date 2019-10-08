@@ -18,9 +18,9 @@ xref:vro:ROOT:architecture.adoc[architecture] chapter.
 
 
 
-include::vro:ROOT:simplified-representations/apache-isis-profile.adoc[leveloffset=+1]
-include::vro:ROOT:simplified-representations/domain-object.adoc[leveloffset=+1]
-include::vro:ROOT:simplified-representations/object-collection.adoc[leveloffset=+1]
-include::vro:ROOT:simplified-representations/action-invocation.adoc[leveloffset=+1]
-include::vro:ROOT:simplified-representations/other-representations.adoc[leveloffset=+1]
-include::vro:ROOT:simplified-representations/configuration-properties.adoc[leveloffset=+1]
+include::simplified-representations/apache-isis-profile.adoc[leveloffset=+1]
+include::simplified-representations/domain-object.adoc[leveloffset=+1]
+include::simplified-representations/object-collection.adoc[leveloffset=+1]
+include::simplified-representations/action-invocation.adoc[leveloffset=+1]
+include::simplified-representations/other-representations.adoc[leveloffset=+1]
+include::simplified-representations/configuration-properties.adoc[leveloffset=+1]
