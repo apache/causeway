@@ -24,16 +24,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -54,10 +51,8 @@ import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.facetapi.Facet;
-import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facetapi.FeatureType;
-import org.apache.isis.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
@@ -81,7 +76,6 @@ import org.apache.isis.metamodel.interactions.InteractionContext;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.metamodel.spec.ActionType;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
@@ -89,11 +83,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.postprocessor.PostProcessor;
@@ -113,9 +104,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         private final Set<ObjectSpecification> classes = _Sets.newConcurrentHashSet();
 
         public void addSubclass(final ObjectSpecification subclass) {
-            if(classes.contains(subclass)) {
-                return;
-            }
             classes.add(subclass);
         }
 
@@ -124,10 +112,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         public Collection<ObjectSpecification> toCollection() {
-            return Collections.unmodifiableSet(classes);
+            return Collections.unmodifiableSet(classes); //just a view, thread-safe only if classes is thread-safe
         }
     }
 
+//XXX drop-in for the above, 
 //    private static class Subclasses {
 //        private final List<ObjectSpecification> classes = new ArrayList<>();
 //
@@ -153,7 +142,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     //protected final ServiceInjector servicesInjector;
 
     private final MetaModelContext context;
-    private PostProcessor postProcessor;
+    private final PostProcessor postProcessor;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
@@ -210,7 +199,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
 
-    private final static Set<String> exclusions = _Sets.of( //TODO[2133] make this configurable, or find an alternative, perhaps a specific type annotation?
+    private final static Set<String> exclusionsFromMetamodel = _Sets.of( 
+            //TODO[2133] make this configurable, or find an alternative, 
+            // perhaps a specific type annotation? ... @Programmatic
             "org.apache.isis.extensions.fixtures.fixturescripts.FixtureResult",
             "org.apache.isis.extensions.fixtures.fixturescripts.FixtureScript"
             );
@@ -230,7 +221,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
         this.excludedFromMetamodel = _Reflect
                 .streamTypeHierarchy(introspectedClass, /*includeInterfaces*/ false)
-                .anyMatch(type->exclusions.contains(type.getName())); 
+                .anyMatch(type->exclusionsFromMetamodel.contains(type.getName())); 
 
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
@@ -250,11 +241,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public ObjectSpecId getSpecId() {
         if(specId == null) {
-            final ObjectSpecIdFacet facet = getFacet(ObjectSpecIdFacet.class);
-            if(facet == null) {
+            val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
+            if(objectSpecIdFacet == null) {
                 throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
             }
-            specId = facet.value();
+            specId = objectSpecIdFacet.value();
         }
         return specId;
     }
@@ -367,7 +358,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         // downcast required because addSubclass is (deliberately) not public
         // API
-        final ObjectSpecificationAbstract introspectableSpec = (ObjectSpecificationAbstract) supertypeSpec;
+        val introspectableSpec = (ObjectSpecificationAbstract) supertypeSpec;
         introspectableSpec.updateSubclasses(this);
     }
 
@@ -382,7 +373,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
-        val orderedAssociations = sortAssociations(associations);
+        val orderedAssociations = Utils.sortAssociations(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
@@ -391,11 +382,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected void sortCacheAndUpdateActions(final List<ObjectAction> objectActions) {
-        final List<ObjectAction> orderedActions = sortActions(objectActions);
+        val orderedActions = Utils.sortActions(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
-            unmodifiableActions.clear();
+            unmodifiableActions.clear(); // invalidate
 
             for (val actionType : ActionType.values()) {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
@@ -425,10 +416,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public String getTitle(
-            ManagedObject contextAdapterIfAny,
-            ManagedObject targetAdapter) {
+            final ManagedObject contextAdapterIfAny,
+            final ManagedObject targetAdapter) {
+        
         if (titleFacet != null) {
-            final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
+            val titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
             if (!_Strings.isEmpty(titleString)) {
                 return titleString;
             }
@@ -454,8 +446,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
 
-
-    // -- Hierarchical
+    // -- HIERARCHICAL
+    
     /**
      * Determines if this class represents the same class, or a subclass, of the
      * specified class.
@@ -482,15 +474,15 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (specification.getSpecId().equals(this.getSpecId())) {
             return true;
         }
-        for (final ObjectSpecification interfaceSpec : interfaces()) {
+        for (val interfaceSpec : interfaces()) {
             if (interfaceSpec.isOfType(specification)) {
                 return true;
             }
         }
 
         // this is a bit of a workaround; the metamodel doesn't have the interfaces for enums.
-        final Class<?> correspondingClass = getCorrespondingClass();
-        final Class<?> possibleSupertypeClass = specification.getCorrespondingClass();
+        val correspondingClass = getCorrespondingClass();
+        val possibleSupertypeClass = specification.getCorrespondingClass();
         if(correspondingClass != null && possibleSupertypeClass != null &&
                 Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
             if(possibleSupertypeClass.isAssignableFrom(correspondingClass)) {
@@ -498,18 +490,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
         }
 
-        final ObjectSpecification superclassSpec = superclass();
+        val superclassSpec = superclass();
         return superclassSpec != null && superclassSpec.isOfType(specification);
     }
 
-    // -- Name, Description, Persistability
+    // -- NAME, DESCRIPTION, PERSISTABILITY
+    
     /**
      * The name according to any available {@link org.apache.isis.metamodel.facets.all.named.NamedFacet},
      * but falling back to {@link #getFullIdentifier()} otherwise.
      */
     @Override
     public String getSingularName() {
-        final NamedFacet namedFacet = getFacet(NamedFacet.class);
+        val namedFacet = getFacet(NamedFacet.class);
         return namedFacet != null? namedFacet.value() : this.getFullIdentifier();
     }
 
@@ -519,7 +512,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     @Override
     public String getPluralName() {
-        final PluralFacet pluralFacet = getFacet(PluralFacet.class);
+        val pluralFacet = getFacet(PluralFacet.class);
         return pluralFacet.value();
     }
 
@@ -529,8 +522,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     @Override
     public String getDescription() {
-        final DescribedAsFacet describedAsFacet = getFacet(DescribedAsFacet.class);
-        final String describedAs = describedAsFacet.value();
+        val describedAsFacet = getFacet(DescribedAsFacet.class);
+        val describedAs = describedAsFacet.value();
         return describedAs == null ? "" : describedAs;
     }
 
@@ -540,14 +533,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     @Override
     public String getHelp() {
-        final HelpFacet helpFacet = getFacet(HelpFacet.class);
+        val helpFacet = getFacet(HelpFacet.class);
         return helpFacet == null ? null : helpFacet.value();
     }
 
 
-
-
-    // -- Facet Handling
+    // -- FACET HANDLING
 
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
@@ -609,16 +600,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return null;
     }
 
-
-    // -- Identifier
     @Override
     public Identifier getIdentifier() {
         return identifier;
     }
 
-
-
-    // -- createTitleInteractionContext
     @Override
     public ObjectTitleContext createTitleInteractionContext(
             final AuthenticationSession session, 
@@ -629,9 +615,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 interactionMethod);
     }
 
-
-
-    // -- Superclass, Interfaces, Subclasses, isAbstract
+    // -- SUPERCLASS, INTERFACES, SUBCLASSES, IS-ABSTRACT
+    
     @Override
     public ObjectSpecification superclass() {
         return superclassSpec;
@@ -685,7 +670,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return isAbstract;
     }
 
-    // -- Associations
+    // -- ASSOCIATIONS
 
     @Override
     public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
@@ -704,11 +689,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public ObjectMember getMember(final String memberId) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        final ObjectAction objectAction = getObjectAction(memberId);
+        val objectAction = getObjectAction(memberId);
         if(objectAction != null) {
             return objectAction;
         }
-        final ObjectAssociation association = getAssociation(memberId);
+        val association = getAssociation(memberId);
         if(association != null) {
             return association;
         }
@@ -781,148 +766,45 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
 
-    // -- sorting
 
-    private List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
-        final List<ObjectAssociation> orderedAssociations = _Lists.newArrayList();
-        sortAssociations(orderSet, orderedAssociations);
-        return orderedAssociations;
-    }
-
-    private static void sortAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
-        for (final Object element : orderSet) {
-            if (element instanceof OneToManyAssociation) {
-                associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof OneToOneAssociation) {
-                associationsToAppendTo.add((ObjectAssociation) element);
-            } else if (element instanceof DeweyOrderSet) {
-                // just flatten.
-                DeweyOrderSet childOrderSet = (DeweyOrderSet) element;
-                sortAssociations(childOrderSet, associationsToAppendTo);
-            } else {
-                throw new UnknownTypeException(element);
-            }
-        }
-    }
-
-    private static List<ObjectAction> sortActions(final List<ObjectAction> actions) {
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(actions);
-        final List<ObjectAction> orderedActions = _Lists.newArrayList();
-        sortActions(orderSet, orderedActions);
-        return orderedActions;
-    }
-
-    private static void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
-        for (final Object element : orderSet) {
-            if(element instanceof ObjectAction) {
-                final ObjectAction objectAction = (ObjectAction) element;
-                actionsToAppendTo.add(objectAction);
-            }
-            else if (element instanceof DeweyOrderSet) {
-                final DeweyOrderSet set = ((DeweyOrderSet) element);
-                final List<ObjectAction> actions = _Lists.newArrayList();
-                sortActions(set, actions);
-                actionsToAppendTo.addAll(actions);
-            } else {
-                throw new UnknownTypeException(element);
-            }
-        }
-    }
 
     private Stream<BeanAdapter> streamServiceBeans() {
         return context.getServiceRegistry().streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN);
     }
 
-    // -- contributee associations (properties and collections)
+    // -- CONTRIBUTEE ASSOCIATIONS (PROPERTIES AND COLLECTIONS)
 
     private List<ObjectAssociation> createContributeeAssociations() {
         if (isManagedBean() || isValue()) {
             return Collections.emptyList();
         }
-        final List<ObjectAssociation> contributeeAssociations = _Lists.newArrayList();
+        val contributeeAssociations = _Lists.<ObjectAssociation>newArrayList();
         streamServiceBeans()
-        .forEach(serviceBean->addContributeeAssociationsIfAny(serviceBean, contributeeAssociations));
+        .forEach(serviceBean->forEachContributeeAssociation(serviceBean, contributeeAssociations::add));
         return contributeeAssociations;
     }
 
-    private void addContributeeAssociationsIfAny(
-            final BeanAdapter serviceBean, 
-            final List<ObjectAssociation> contributeeAssociationsToAppendTo) {
+    private void forEachContributeeAssociation(
+            BeanAdapter serviceBean, 
+            Consumer<ObjectAssociation> onNewContributeeAssociation) {
 
-        final Class<?> serviceClass = serviceBean.getBeanClass();
-        final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass,
+        val serviceClass = serviceBean.getBeanClass();
+        val specification = specificationLoader.loadSpecification(serviceClass,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         if (specification == this) {
             return;
         }
-        final List<ObjectAssociation> contributeeAssociations = createContributeeAssociations(serviceBean);
-        contributeeAssociationsToAppendTo.addAll(contributeeAssociations);
-    }
-
-    private boolean canAdd(ObjectAction serviceAction) {
-        if (isAlwaysHidden(serviceAction)) {
-            return false;
-        }
-        final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
-        if(notContributed != null && notContributed.toAssociations()) {
-            return false;
-        }
-        if(!serviceAction.hasReturn()) {
-            return false;
-        }
-        if (serviceAction.getParameterCount() != 1 || contributeeParameterMatchOf(serviceAction) == -1) {
-            return false;
-        }
-        if(!(serviceAction instanceof ObjectActionDefault)) {
-            return false;
-        }
-        if(!serviceAction.getSemantics().isSafeInNature()) {
-            return false;
-        }
-        return true;
-    }
-
-    private List<ObjectAssociation> createContributeeAssociations(final BeanAdapter serviceBean) {
-        final Class<?> serviceClass = serviceBean.getBeanClass();
-        final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
         final Stream<ObjectAction> serviceActions = specification
                 .streamObjectActions(ActionType.USER, Contributed.INCLUDED);
 
-        return serviceActions
-                .filter(this::canAdd)
-                .map(serviceAction->(ObjectActionDefault) serviceAction)
-                .map(createContributeeAssociationFunctor(serviceBean, this))
-                .collect(Collectors.toList());
-
+        serviceActions
+                .filter(Predicates.isContributeeAssociation(this))
+                .map(ObjectActionDefault.class::cast)
+                .map(Factories.contributeeAssociation(serviceBean, this))
+                .peek(facetProcessor::processMemberOrder)
+                .forEach(onNewContributeeAssociation);
     }
-
-    private Function<ObjectActionDefault, ObjectAssociation> createContributeeAssociationFunctor(
-            final BeanAdapter serviceBean,
-            final ObjectSpecification contributeeType) {
-
-        return new Function<ObjectActionDefault, ObjectAssociation>(){
-            @Override
-            public ObjectAssociation apply(ObjectActionDefault input) {
-                final ObjectSpecification returnType = input.getReturnType();
-                final ObjectAssociationAbstract association = createObjectAssociation(input, returnType);
-                facetProcessor.processMemberOrder(association);
-                return association;
-            }
-
-            private ObjectAssociationAbstract createObjectAssociation(
-                    final ObjectActionDefault input,
-                    final ObjectSpecification returnType) {
-                if (returnType.isNotCollection()) {
-                    return new OneToOneAssociationContributee(serviceBean, input, contributeeType);
-                } else {
-                    return new OneToManyAssociationContributee(serviceBean, input, contributeeType);
-                }
-            }
-        };
-    }
-
 
 
     // -- mixin associations (properties and collections)
@@ -939,22 +821,22 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         val mixedInAssociations = _Lists.<ObjectAssociation>newArrayList();
 
-        for (final Class<?> mixinType : mixinTypes) {
-            addMixedInAssociationsIfAny(mixinType, mixedInAssociations);
+        for (val mixinType : mixinTypes) {
+            forEachMixedInAssociation(mixinType, mixedInAssociations::add);
         }
         return mixedInAssociations;
     }
 
-    private void addMixedInAssociationsIfAny(
+    private void forEachMixedInAssociation(
             final Class<?> mixinType, 
-            final List<ObjectAssociation> toAppendTo) {
+            final Consumer<ObjectAssociation> onNewMixedInAssociation) {
 
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(mixinType,
+        val specification = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         if (specification == this) {
             return;
         }
-        final MixinFacet mixinFacet = specification.getFacet(MixinFacet.class);
+        val mixinFacet = specification.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             // this shouldn't happen; perhaps it would be more correct to throw an exception?
             return;
@@ -962,59 +844,19 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return;
         }
+        val mixinMethodName = mixinFacet.value();
 
-        final Stream<ObjectActionDefault> mixinActions = objectActionsOf(specification);
+        final Stream<ObjectAction> mixinActions = specification
+                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
 
         mixinActions
-        .filter((ObjectActionDefault input) -> {
-            final NotContributedFacet notContributedFacet = input.getFacet(NotContributedFacet.class);
-            if (notContributedFacet == null || !notContributedFacet.toActions()) {
-                return false;
-            }
-            if(input.getParameterCount() != 0) {
-                return false;
-            }
-            if(!input.getSemantics().isSafeInNature()) {
-                return false;
-            }
-            return true;
-        })
-        .map(createMixedInAssociationFunctor(this, mixinType, mixinFacet.value()))
-        .forEach(toAppendTo::add);
+        .filter(Predicates::isMixedInAssociation)
+        .map(ObjectActionDefault.class::cast)
+        .map(Factories.mixedInAssociation(this, mixinType, mixinMethodName))
+        .peek(facetProcessor::processMemberOrder)
+        .forEach(onNewMixedInAssociation);
 
     }
-
-    private Stream<ObjectActionDefault> objectActionsOf(final ObjectSpecification specification) {
-        return specification.streamObjectActions(ActionType.ALL, Contributed.INCLUDED)
-                .map(a->(ObjectActionDefault)a);
-    }
-
-    private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
-            final ObjectSpecification mixedInType,
-            final Class<?> mixinType,
-            final String mixinMethodName) {
-        return new Function<ObjectActionDefault, ObjectAssociation>(){
-            @Override
-            public ObjectAssociation apply(final ObjectActionDefault mixinAction) {
-                final ObjectAssociationAbstract association = createObjectAssociation(mixinAction);
-                facetProcessor.processMemberOrder(association);
-                return association;
-            }
-
-            ObjectAssociationAbstract createObjectAssociation(
-                    final ObjectActionDefault mixinAction) {
-                final ObjectSpecification returnType = mixinAction.getReturnType();
-                if (returnType.isNotCollection()) {
-                    return new OneToOneAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, mixinMethodName);
-                } else {
-                    return new OneToManyAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, mixinMethodName);
-                }
-            }
-        };
-    }
-
 
 
     // -- contributee actions
@@ -1029,37 +871,25 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (isManagedBean() || isValue()) {
             return Collections.emptyList();
         }
-        final List<ObjectAction> contributeeActions = _Lists.newArrayList();
+        val contributeeActions = _Lists.<ObjectAction>newArrayList();
         streamServiceBeans()
-        .forEach(serviceBean->addContributeeActionsIfAny(serviceBean, contributeeActions));
+        .forEach(serviceBean->forEachContributeeAction(serviceBean, contributeeActions::add));
         return contributeeActions;
     }
 
-    private boolean canAddContributee(final ObjectAction serviceAction) {
-        if (isAlwaysHidden(serviceAction)) {
-            return false;
-        }
-        final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
-        if(notContributed != null && notContributed.toActions()) {
-            return false;
-        }
-        if(!(serviceAction instanceof ObjectActionDefault)) {
-            return false;
-        }
-        return true;
-    }
 
-    private void addContributeeActionsIfAny(
+
+    private void forEachContributeeAction(
             final Object servicePojo,
-            final List<ObjectAction> contributeeActionsToAppendTo) {
+            final Consumer<ObjectAction> onNewContributeeAction) {
 
         if(log.isDebugEnabled()) {
             log.debug("{} : addContributeeActionsIfAny(...); servicePojo class is: {}", 
                     this.getFullIdentifier(), servicePojo.getClass().getName());
         }
 
-        final Class<?> serviceType = servicePojo.getClass();
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(serviceType,
+        val serviceType = servicePojo.getClass();
+        val specification = getSpecificationLoader().loadSpecification(serviceType,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         if (specification == this) {
             return;
@@ -1069,42 +899,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
 
         serviceActions
-        .filter(this::canAddContributee)
-        .map(serviceAction->(ObjectActionDefault) serviceAction)
-        .forEach(contributedAction->{
+        .filter(Predicates.isContributeeAction(this))
+        .map(ObjectActionDefault.class::cast)
+        .map(Factories.contributeeAction(this, servicePojo))
+        .peek(facetProcessor::processMemberOrder)
+        .forEach(onNewContributeeAction);
 
-            // see if qualifies by inspecting all parameters
-            final int contributeeParam = contributeeParameterMatchOf(contributedAction);
-            if(contributeeParam == -1) {
-                return;
-            }
-
-            ObjectActionContributee contributeeAction =
-                    new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, this);
-            facetProcessor.processMemberOrder(contributeeAction);
-            contributeeActionsToAppendTo.add(contributeeAction);
-        });
-
-    }
-
-    private boolean isAlwaysHidden(final FacetHolder holder) {
-        final HiddenFacet hiddenFacet = holder.getFacet(HiddenFacet.class);
-        return hiddenFacet != null && hiddenFacet.where() == Where.ANYWHERE;
-    }
-
-
-
-    /**
-     * @param serviceAction - number of the parameter that matches, or -1 if none.
-     */
-    private int contributeeParameterMatchOf(final ObjectAction serviceAction) {
-        final List<ObjectActionParameter> params = serviceAction.getParameters();
-        for (final ObjectActionParameter param : params) {
-            if (isOfType(param.getSpecification())) {
-                return param.getNumber();
-            }
-        }
-        return -1;
     }
 
 
@@ -1127,37 +927,24 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         val mixedInActions = _Lists.<ObjectAction>newArrayList();
-        for (final Class<?> mixinType : mixinTypes) {
-            addMixedInActionsIfAny(mixinType, mixedInActions);
+        for (val mixinType : mixinTypes) {
+            forEachMixedInAction(mixinType, mixedInActions::add);
         }
         return mixedInActions;
     }
 
-    private boolean canAddMixin(ObjectAction mixinTypeAction) {
-        if (isAlwaysHidden(mixinTypeAction)) {
-            return false;
-        }
-        if(!(mixinTypeAction instanceof ObjectActionDefault)) {
-            return false;
-        }
-        final ObjectActionDefault mixinAction = (ObjectActionDefault) mixinTypeAction;
-        final NotContributedFacet notContributedFacet = mixinAction.getFacet(NotContributedFacet.class);
-        if(notContributedFacet != null && notContributedFacet.toActions()) {
-            return false;
-        }
-        return true;
-    }
 
-    private void addMixedInActionsIfAny(
+
+    private void forEachMixedInAction(
             final Class<?> mixinType,
-            final List<ObjectAction> mixedInActionsToAppendTo) {
+            final Consumer<ObjectAction> onNewMixedInAction) {
 
-        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
+        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         if (mixinSpec == this) {
             return;
         }
-        final MixinFacet mixinFacet = mixinSpec.getFacet(MixinFacet.class);
+        val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             // this shouldn't happen; perhaps it would be more correct to throw an exception?
             return;
@@ -1170,21 +957,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
 
         mixinActions
-        .filter(this::canAddMixin)
-        .forEach(mixinTypeAction->{
-            ObjectActionMixedIn mixedInAction =
-                    new ObjectActionMixedIn(mixinType, mixinFacet.value(), (ObjectActionDefault)mixinTypeAction, this);
-            facetProcessor.processMemberOrder(mixedInAction);
-            mixedInActionsToAppendTo.add(mixedInAction);
-        });
+        .filter(Predicates::isMixedInAction)
+        .map(ObjectActionDefault.class::cast)
+        .map(Factories.mixedInAction(this, mixinType, mixinFacet.value()))
+        .peek(facetProcessor::processMemberOrder)
+        .forEach(onNewMixedInAction);
 
     }
 
-
-
-    // -- validity
+    // -- VALIDITY
+    
     @Override
-    public Consent isValid(final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    public Consent isValid(
+            final ManagedObject targetAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        
         return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
     }
 
@@ -1192,7 +979,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public InteractionResult isValidResult(
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectValidityContext validityContext =
+        val validityContext =
                 createValidityInteractionContext(
                         targetAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
@@ -1295,16 +1082,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     protected BeanSort sortOf(ObjectSpecification spec) {
-        //TODO [2033] this is the way we want it to work in the future; 
-        //	by now we do prime the #managedObjectSort in case its a service in the default service implementation        
-        //        if(containsFacet(BeanFacet.class)) {
-        //            return ManagedObjectSort.DOMAIN_SERVICE;
-        //        }
-        if(isManagedBean()) {
+
+        if(isManagedBean()) { // <-- not a facet, because we get this information earlier (during class scanning)
             return BeanSort.MANAGED_BEAN;
         }
-        //
-
         if(containsFacet(ValueFacet.class)) {
             return BeanSort.VALUE;
         }
