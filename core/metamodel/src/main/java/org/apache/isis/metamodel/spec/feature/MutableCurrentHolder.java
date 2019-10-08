@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.spec.feature;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Mix-in interface for {@link ObjectAction}s that reference or otherwise
@@ -47,8 +48,8 @@ public interface MutableCurrentHolder extends CurrentHolder {
      * @param interactionInitiatedBy
      */
     void set(
-            final ObjectAdapter owner,
-            final ObjectAdapter newValue,
+            final ManagedObject owner,
+            final ManagedObject newValue,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -57,7 +58,7 @@ public interface MutableCurrentHolder extends CurrentHolder {
      * @param newValue
      */
     void set(
-            final ObjectAdapter owner,
-            final ObjectAdapter newValue);
+            final ManagedObject owner,
+            final ManagedObject newValue);
 
 }

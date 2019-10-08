@@ -36,6 +36,7 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
@@ -45,6 +46,8 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
+
+import lombok.val;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -381,11 +384,11 @@ implements ObjectAdapterModel, UiHintContainer {
         adapterMemento.resetVersion();
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
             OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
-            final ScalarModel scalarModel = propertyScalarModels.get(pm);
-            final ObjectAdapter adapter = getObject();
-            final ObjectAdapter associatedAdapter =
+            val scalarModel = propertyScalarModels.get(pm);
+            val adapter = getObject();
+            val associatedAdapter =
                     otoa.get(adapter, InteractionInitiatedBy.USER);
-            scalarModel.setObject(associatedAdapter);
+            scalarModel.setObject(ManagedObject.promote(associatedAdapter));
         }
     }
 

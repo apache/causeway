@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.facets.value.doubles;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class DoublePrimitiveValueSemanticsProvider extends DoubleValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -45,7 +45,7 @@ public class DoublePrimitiveValueSemanticsProvider extends DoubleValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter inObject) {
+    public ManagedObject getDefault(final ManagedObject inObject) {
         return createAdapter(double.class, new Double(0.0));
     }
 

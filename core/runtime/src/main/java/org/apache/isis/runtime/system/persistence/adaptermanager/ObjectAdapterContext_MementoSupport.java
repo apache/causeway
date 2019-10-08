@@ -34,6 +34,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
@@ -48,6 +49,7 @@ import org.apache.isis.runtime.system.persistence.adaptermanager.ObjectAdapterCo
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -213,8 +215,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             final OneToManyAssociation otma, 
             final CollectionData collectionData) {
 
-        final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
-        final Set<ObjectAdapter> original = CollectionFacet.Utils.streamAdapters(collection)
+        val collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
+        final Set<ObjectAdapter> original = CollectionFacet.Utils.streamAdapters(ManagedObject.promote(collection))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         final Set<ObjectAdapter> incoming = collectionData.streamElements()
                 .map(this::recreateReference)

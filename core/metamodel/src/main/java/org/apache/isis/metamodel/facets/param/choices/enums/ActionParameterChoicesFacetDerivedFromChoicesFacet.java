@@ -22,12 +22,12 @@ package org.apache.isis.metamodel.facets.param.choices.enums;
 import java.util.List;
 
 import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.TypedHolder;
 import org.apache.isis.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
@@ -38,9 +38,10 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
 
     @Override
     public Object[] getChoices(
-            final ObjectAdapter adapter,
-            final List<ObjectAdapter> arguments,
+            final ManagedObject adapter,
+            final List<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final FacetHolder facetHolder = getFacetHolder();
         final TypedHolder paramPeer = (TypedHolder) facetHolder;
         final ObjectSpecification noSpec = getSpecification(paramPeer.getType());

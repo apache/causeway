@@ -31,6 +31,7 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.CollectionUtils;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
@@ -64,7 +65,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
     @Override
     public Object[] getChoices(
-            final ObjectAdapter owningAdapter,
+            final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final Object options = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);

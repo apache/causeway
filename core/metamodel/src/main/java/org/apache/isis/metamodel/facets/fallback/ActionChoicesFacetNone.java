@@ -19,10 +19,10 @@
 
 package org.apache.isis.metamodel.facets.fallback;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
 
@@ -32,9 +32,9 @@ public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
 
     @Override
     public Object[][] getChoices(
-            final ObjectAdapter inObject,
+            final ManagedObject inObject,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ObjectAdapter[0][0];
+        return new ManagedObject[0][0];
     }
 
     @Override

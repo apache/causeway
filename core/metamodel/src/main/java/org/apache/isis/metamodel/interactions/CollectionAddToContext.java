@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionAddToEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -31,12 +31,12 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
  */
 public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent> implements ProposedHolder {
 
-    private final ObjectAdapter proposed;
+    private final ManagedObject proposed;
 
     public CollectionAddToContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Identifier id,
-            final ObjectAdapter proposed,
+            final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.COLLECTION_ADD_TO, targetAdapter, id, interactionInitiatedBy);
 
@@ -44,13 +44,13 @@ public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent
     }
 
     @Override
-    public ObjectAdapter getProposed() {
+    public ManagedObject getProposed() {
         return proposed;
     }
 
     @Override
     public CollectionAddToEvent createInteractionEvent() {
-        return new CollectionAddToEvent(ObjectAdapter.Util.unwrapPojo(getTarget()), getIdentifier(), ObjectAdapter.Util.unwrapPojo(getProposed()));
+        return new CollectionAddToEvent(ManagedObject.unwrapPojo(getTarget()), getIdentifier(), ManagedObject.unwrapPojo(getProposed()));
     }
 
 }

@@ -57,7 +57,6 @@ import org.apache.isis.metamodel.facets.object.domainobject.domainevents.Collect
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
 import org.apache.isis.metamodel.facets.object.projection.ident.IconFacetDerivedFromProjectionFacet;
 import org.apache.isis.metamodel.facets.object.projection.ident.TitleFacetDerivedFromProjectionFacet;
@@ -108,6 +107,8 @@ import org.apache.isis.metamodel.specloader.specimpl.ObjectActionParameterAbstra
 import org.apache.isis.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.isis.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
+
+import lombok.val;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
@@ -221,20 +222,20 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
     }
 
     private void deriveProjectionFacets(final ObjectSpecification objectSpecification) {
-        final ProjectionFacet projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
+        val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
         if (projectionFacet == null) {
             return;
         }
         FacetUtil.addFacet(projectionFacet);
-        final TitleFacet titleFacet = objectSpecification.getFacet(TitleFacet.class);
+        val titleFacet = objectSpecification.getFacet(TitleFacet.class);
         if(canOverwrite(titleFacet)) {
             FacetUtil.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
-        final IconFacet iconFacet = objectSpecification.getFacet(IconFacet.class);
+        val iconFacet = objectSpecification.getFacet(IconFacet.class);
         if(canOverwrite(iconFacet)) {
             FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }
-        final CssClassFacet cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
+        val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
         if(canOverwrite(cssClassFacet)) {
             FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
         }

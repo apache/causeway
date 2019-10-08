@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.facets.value.bytes;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class BytePrimitiveValueSemanticsProvider extends ByteValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -45,7 +45,7 @@ public class BytePrimitiveValueSemanticsProvider extends ByteValueSemanticsProvi
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+    public ManagedObject getDefault(final ManagedObject adapter) {
         return createAdapter(byte.class, Byte.valueOf((byte) 0));
     }
 

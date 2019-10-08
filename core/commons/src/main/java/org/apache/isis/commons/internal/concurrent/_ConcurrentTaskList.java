@@ -48,8 +48,8 @@ public class _ConcurrentTaskList {
     
     private final List<_ConcurrentTask<?>> tasks = _Lists.newArrayList();
     private final AtomicBoolean wasStarted = new AtomicBoolean();
-    private final CountDownLatch countDownLatch = new CountDownLatch(1);
-    private final AwaitableLatch awaitableLatch = AwaitableLatch.of(countDownLatch);
+    private final CountDownLatch allFinishedLatch = new CountDownLatch(1);
+    private final AwaitableLatch awaitableLatch = AwaitableLatch.of(allFinishedLatch);
     private final LongAdder tasksExecuted = new LongAdder();
     private long executionTimeNanos;
     
@@ -97,14 +97,16 @@ public class _ConcurrentTaskList {
         
         if(context.shouldRunSequential()) {
             for(_ConcurrentTask<?> task : tasks) {
-                task.run();
+                task.run(); // exceptions are swallowed, to be found in the _ConcurrentTask object 
                 tasksExecuted.increment();
             }
-            countDownLatch.countDown();
             executionTimeNanos = System.nanoTime() - t0;
-            logExecutionSummary(context);
+            onFinished(context);
+            allFinishedLatch.countDown();
             return this;
         }
+        
+        // else run with executor ...
         
         val futures = new ArrayList<Future<?>>(tasks.size());
         
@@ -127,9 +129,10 @@ public class _ConcurrentTaskList {
                     }
                     
                 }
-                countDownLatch.countDown();
                 executionTimeNanos = System.nanoTime() - t0;
-                logExecutionSummary(context);
+                
+                onFinished(context);
+                allFinishedLatch.countDown();
             }
             
         };
@@ -158,7 +161,17 @@ public class _ConcurrentTaskList {
     
     // -- EXECUTION LOGGING
     
-    private void logExecutionSummary(_ConcurrentContext context) {
+    private void onFinished(_ConcurrentContext context) {
+        
+        for(val task: tasks) {
+            if(task.getFailedWith()!=null) {
+                log.error("----------------------------------------");
+                log.error("Failed TaskList: " + this.getName());
+                log.error("Failed Task: " + task.getName());
+                log.error("----------------------------------------", task.getFailedWith());
+            }
+        }
+        
         if(!context.enableExecutionLogging) {
             return;
         }

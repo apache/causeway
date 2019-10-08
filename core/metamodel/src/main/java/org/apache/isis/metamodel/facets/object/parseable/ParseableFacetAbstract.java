@@ -26,6 +26,7 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public abstract class ParseableFacetAbstract extends FacetAbstract implements ParseableFacet {
 
@@ -74,14 +75,15 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
 
     @Override
     public ObjectAdapter parseTextEntry(
-            final ObjectAdapter original,
+            final ManagedObject original,
             final String entryText,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         return parseableFacetUsingParser.parseTextEntry(original, entryText, interactionInitiatedBy);
     }
 
     @Override
-    public String parseableTitle(final ObjectAdapter existing) {
+    public String parseableTitle(final ManagedObject existing) {
         return parseableFacetUsingParser.parseableTitle(existing);
     }
 }

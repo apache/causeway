@@ -41,6 +41,8 @@ import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember {
 
     /**
@@ -125,18 +127,18 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     }
 
     @Override
-    public ObjectAdapter get(
-            final ObjectAdapter mixedInAdapter,
+    public ManagedObject get(
+            final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
 
         return getPublishingServiceInternal().withPublishingSuppressed(
-                new PublishingServiceInternal.Block<ObjectAdapter>(){
+                new PublishingServiceInternal.Block<ManagedObject>(){
                     @Override
-                    public ObjectAdapter exec() {
+                    public ManagedObject exec() {
                         return mixinAction.executeInternal(
-                                mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
+                                mixinAdapter, mixedInAdapter, new ManagedObject[0], interactionInitiatedBy);
                     }
                 }
                 );
@@ -163,7 +165,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
@@ -176,7 +178,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);

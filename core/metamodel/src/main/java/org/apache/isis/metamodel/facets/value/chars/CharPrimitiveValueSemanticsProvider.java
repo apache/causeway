@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.facets.value.chars;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -45,7 +45,7 @@ public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProvi
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter inObject) {
+    public ManagedObject getDefault(final ManagedObject inObject) {
         return createAdapter(char.class, Character.valueOf(' '));
     }
 

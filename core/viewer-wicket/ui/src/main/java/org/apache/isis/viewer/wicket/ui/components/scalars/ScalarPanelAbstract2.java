@@ -50,6 +50,7 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
@@ -141,7 +142,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         // could almost certainly simplify this... (used by visibility and usability checks)
         final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
         final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
-        final ObjectAdapter realTargetAdapter = action.realTargetAdapter(targetAdapter);
+        final ManagedObject realTargetAdapter = action.realTargetAdapter(targetAdapter);
 
         // check visibility
         final Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);

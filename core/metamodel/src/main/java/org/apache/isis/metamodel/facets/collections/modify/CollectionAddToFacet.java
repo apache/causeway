@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.collections.modify;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Add object to a collection.
@@ -32,6 +32,6 @@ import org.apache.isis.metamodel.facetapi.Facet;
  */
 public interface CollectionAddToFacet extends Facet {
 
-    public void add(ObjectAdapter inObject, ObjectAdapter value, final InteractionInitiatedBy interactionInitiatedBy);
+    public void add(ManagedObject inObject, ManagedObject value, InteractionInitiatedBy interactionInitiatedBy);
 
 }

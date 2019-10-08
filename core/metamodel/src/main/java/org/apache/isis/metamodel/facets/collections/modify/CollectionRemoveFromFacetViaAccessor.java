@@ -29,6 +29,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFacetAbstract implements ImperativeFacet {
 
@@ -57,9 +58,10 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
 
     @Override
     public void remove(
-            final ObjectAdapter owningAdapter,
-            final ObjectAdapter elementAdapter,
+            final ManagedObject owningAdapter,
+            final ManagedObject elementAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         collection.remove(ObjectAdapter.Util.unwrapPojo(elementAdapter));

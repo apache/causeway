@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.properties.defaults;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Provides a default value for a property of a newly created object.
@@ -42,5 +42,5 @@ public interface PropertyDefaultFacet extends Facet {
     /**
      * The default value for this property in a newly created object.
      */
-    public ObjectAdapter getDefault(ObjectAdapter inObject);
+    public ManagedObject getDefault(ManagedObject inObject);
 }

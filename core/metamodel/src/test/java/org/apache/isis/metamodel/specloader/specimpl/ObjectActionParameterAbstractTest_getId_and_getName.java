@@ -33,6 +33,7 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.TypedHolder;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -69,7 +70,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         private ObjectSpecification objectSpec;
 
         @Override
-        public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
+        public ObjectAdapter get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
 
@@ -80,7 +81,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         @Override
         public String isValid(
-                final ObjectAdapter objectAdapter,
+                final ManagedObject objectAdapter,
                 final Object proposedValue,
                 final InteractionInitiatedBy interactionInitiatedBy) {
             return null;

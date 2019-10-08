@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.facets.param.choices;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacetAbstract {
 
@@ -33,10 +33,11 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
 
     @Override
     public Object[] getChoices(
-            final ObjectAdapter adapter,
-            final List<ObjectAdapter> arguments,
+            final ManagedObject adapter,
+            final List<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ObjectAdapter[0];
+        
+        return new ManagedObject[0];
     }
 
     @Override

@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.util.snapshot;
 
 import org.w3c.dom.Element;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Represents a place in the graph to be navigated; really just wraps an object
@@ -33,10 +33,10 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
  */
 final class Place {
     private static final String USER_DATA_XSD_KEY = "XSD";
-    private final ObjectAdapter object;
+    private final ManagedObject object;
     private final Element element;
 
-    Place(final ObjectAdapter object, final Element element) {
+    Place(final ManagedObject object, final Element element) {
         this.object = object;
         this.element = element;
     }
@@ -45,7 +45,7 @@ final class Place {
         return element;
     }
 
-    public ObjectAdapter getObject() {
+    public ManagedObject getObject() {
         return object;
     }
 

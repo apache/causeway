@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ParseValueEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
@@ -33,19 +33,20 @@ import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
  */
 public class ParseValueContext extends ValidityContext<ParseValueEvent> implements ProposedHolder {
 
-    private final ObjectAdapter proposed;
+    private final ManagedObject proposed;
 
     public ParseValueContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Identifier identifier,
-            final ObjectAdapter proposed,
+            final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         super(InteractionContextType.PARSE_VALUE, targetAdapter, identifier, interactionInitiatedBy);
         this.proposed = proposed;
     }
 
     @Override
-    public ObjectAdapter getProposed() {
+    public ManagedObject getProposed() {
         return proposed;
     }
 

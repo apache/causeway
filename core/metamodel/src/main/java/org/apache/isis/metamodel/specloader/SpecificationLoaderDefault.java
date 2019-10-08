@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -28,8 +29,10 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -81,7 +84,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
-
+    
     @PostConstruct
     public void preInit() {
         this.programmingModel = programmingModelService.getProgrammingModel();
@@ -234,12 +237,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if (substitutedType == null) {
             return null;
         }
-
+        
         val typeName = substitutedType.getName();
 
         final ObjectSpecification cachedSpec;
         
-        //XXX don't block on long running code ... 'spec.introspectUpTo(upTo);'
+        // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
         synchronized (cache) {
             cachedSpec = cache.computeIfAbsent(typeName, __->createSpecification(substitutedType));
         }
@@ -272,8 +275,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
-
-        // ... and create the specs
+        
+         // ... and create the specs
         final ObjectSpecification objectSpec;
         if (FreeStandingList.class.isAssignableFrom(cls)) {
 

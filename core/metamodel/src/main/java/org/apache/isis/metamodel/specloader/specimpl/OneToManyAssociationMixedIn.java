@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -137,15 +136,16 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     @Override
-    public ObjectAdapter get(
-            final ObjectAdapter mixedInAdapter,
+    public ManagedObject get(
+            final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        
+        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         return getPublishingServiceInternal().withPublishingSuppressed(
-                new PublishingServiceInternal.Block<ObjectAdapter>() {
-                    @Override public ObjectAdapter exec() {
+                new PublishingServiceInternal.Block<ManagedObject>() {
+                    @Override public ManagedObject exec() {
                         return mixinAction.executeInternal(
-                                mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
+                                mixinAdapter, mixedInAdapter, new ManagedObject[0], interactionInitiatedBy);
                     }
                 });
     }
@@ -171,7 +171,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
@@ -184,7 +184,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
                         mixinAdapter, interactionInitiatedBy, where);

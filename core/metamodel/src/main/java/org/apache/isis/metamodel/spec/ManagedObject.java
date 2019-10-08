@@ -19,7 +19,11 @@
 
 package org.apache.isis.metamodel.spec;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -186,6 +190,48 @@ public interface ManagedObject {
             }
         };
     }
+    
+    // -- UNWRAPPING
+    
+    public static Object unwrapPojo(final ManagedObject adapter) {
+        return adapter != null ? adapter.getPojo() : null;
+    }
+    
+    public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
+        if (adapters == null) {
+            return null;
+        }
+        final Object[] unwrappedObjects = new Object[adapters.length];
+        int i = 0;
+        for (final ManagedObject adapter : adapters) {
+            unwrappedObjects[i++] = unwrapPojo(adapter);
+        }
+        return unwrappedObjects;
+    }
+    
+    public static List<Object> unwrapPojoListElseEmpty(Collection<ManagedObject> adapters) {
+        if (adapters == null) {
+            return Collections.emptyList();
+        }
+        return adapters.stream()
+            .map(ManagedObject::unwrapPojo)
+            .collect(Collectors.toList());
+    }
+
+//    @Deprecated
+//    public default ObjectAdapter promote() {
+//        return (ObjectAdapter) this; 
+//    }
+
+    @Deprecated
+    public static ObjectAdapter promote(ManagedObject managedObject) {
+        if(managedObject==null) {
+            return null;
+        }
+        return (ObjectAdapter) managedObject;
+    }
+
+
 
 
 }

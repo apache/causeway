@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.facets.properties.defaults;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
 
@@ -32,7 +33,7 @@ public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {
      * Provides a default of <tt>null</tt>.
      */
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter inObject) {
+    public ManagedObject getDefault(final ManagedObject inObject) {
         return null;
     }
 

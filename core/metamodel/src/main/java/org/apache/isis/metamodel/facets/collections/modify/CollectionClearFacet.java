@@ -19,8 +19,8 @@
 
 package org.apache.isis.metamodel.facets.collections.modify;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Clear all objects from a collection.
@@ -32,5 +32,5 @@ import org.apache.isis.metamodel.facetapi.Facet;
  */
 public interface CollectionClearFacet extends Facet {
 
-    public void clear(ObjectAdapter inObject);
+    public void clear(ManagedObject inObject);
 }

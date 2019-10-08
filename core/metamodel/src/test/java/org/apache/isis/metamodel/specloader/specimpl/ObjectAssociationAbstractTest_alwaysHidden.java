@@ -92,30 +92,30 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
 
             @Override
             public ObjectAdapter get(
-                    final ObjectAdapter fromObject,
+                    final ManagedObject fromObject,
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
 
             @Override
-            public boolean isEmpty(final ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy) {
+            public boolean isEmpty(final ManagedObject adapter, final InteractionInitiatedBy interactionInitiatedBy) {
                 return false;
             }
 
             @Override
-            public ObjectAdapter[] getChoices(
-                    final ObjectAdapter object,
+            public ManagedObject[] getChoices(
+                    final ManagedObject object,
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
 
             @Override
-            public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+            public ManagedObject getDefault(final ManagedObject adapter) {
                 return null;
             }
 
             @Override
-            public void toDefault(final ObjectAdapter target) {
+            public void toDefault(final ManagedObject target) {
             }
 
             @Override
@@ -143,8 +143,8 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public ObjectAdapter[] getAutoComplete(
-                    final ObjectAdapter object,
+            public ManagedObject[] getAutoComplete(
+                    final ManagedObject object,
                     final String searchArg,
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;

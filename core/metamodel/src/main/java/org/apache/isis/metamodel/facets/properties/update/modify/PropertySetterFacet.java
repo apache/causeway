@@ -19,10 +19,10 @@
 
 package org.apache.isis.metamodel.facets.properties.update.modify;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
 /**
@@ -43,7 +43,7 @@ public interface PropertySetterFacet extends Facet {
      */
     void setProperty(
             final OneToOneAssociation owningAssociation,
-            final ObjectAdapter inObject,
-            final ObjectAdapter value,
+            final ManagedObject inObject,
+            final ManagedObject value,
             final InteractionInitiatedBy interactionInitiatedBy);
 }

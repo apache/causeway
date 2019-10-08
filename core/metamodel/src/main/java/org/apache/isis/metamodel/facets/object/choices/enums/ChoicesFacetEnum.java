@@ -21,10 +21,10 @@ package org.apache.isis.metamodel.facets.object.choices.enums;
 
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.objectvalue.choices.ChoicesFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ChoicesFacetEnum extends ChoicesFacetAbstract {
 
@@ -37,7 +37,7 @@ public class ChoicesFacetEnum extends ChoicesFacetAbstract {
 
     @Override
     public Object[] getChoices(
-            final ObjectAdapter adapter,
+            final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return choices;
     }

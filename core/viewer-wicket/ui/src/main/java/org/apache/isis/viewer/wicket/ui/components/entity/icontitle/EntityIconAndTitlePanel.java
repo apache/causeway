@@ -33,6 +33,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -46,6 +47,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
@@ -153,12 +156,12 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         final ObjectAdapterModel redirectToModel;
 
         if(targetAdapter != null) {
-            final ProjectionFacet projectionFacet = entityModel.getTypeOfSpecification().getFacet(ProjectionFacet.class);
+            val projectionFacet = entityModel.getTypeOfSpecification().getFacet(ProjectionFacet.class);
 
-            final ObjectAdapter redirectToAdapter =
+            val redirectToAdapter =
                     projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
 
-                    redirectToModel = new EntityModel(redirectToAdapter);
+                    redirectToModel = new EntityModel(ManagedObject.promote(redirectToAdapter));
         } else {
             redirectToModel = entityModel;
         }

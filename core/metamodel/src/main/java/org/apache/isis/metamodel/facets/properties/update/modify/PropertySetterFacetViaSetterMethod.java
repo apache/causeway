@@ -28,6 +28,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
 public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstract implements ImperativeFacet {
@@ -56,9 +57,10 @@ public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstr
     @Override
     public void setProperty(
             final OneToOneAssociation owningAssociation,
-            final ObjectAdapter adapter,
-            final ObjectAdapter valueAdapter,
+            final ManagedObject adapter,
+            final ManagedObject valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         ObjectAdapter.InvokeUtils.invoke(method, adapter, valueAdapter);
     }
 

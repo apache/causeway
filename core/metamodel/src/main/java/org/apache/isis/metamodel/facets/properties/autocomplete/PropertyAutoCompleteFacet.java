@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.properties.autocomplete;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Provides a set of auto-complete choices for a property.
@@ -41,7 +41,7 @@ public interface PropertyAutoCompleteFacet extends Facet {
      * Gets the available auto-complete choices for this property.
      */
     public Object[] autoComplete(
-            final ObjectAdapter inObject,
+            final ManagedObject inObject,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy);
     /**

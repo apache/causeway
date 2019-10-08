@@ -25,8 +25,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -46,7 +44,6 @@ import org.apache.isis.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.metamodel.facets.TypedHolder;
 import org.apache.isis.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.MinLengthUtil;
@@ -97,7 +94,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
      * {@link ObjectAdapter}.
      */
     @Override
-    public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
+    public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
         throw _Exceptions.unexpectedCodeReach();
         //FIXME[ISIS-1976] marked for removal (must be dead code, since MutableProposedHolder has no implementation)
         //        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
@@ -296,12 +293,12 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter adapter,
+    public ManagedObject[] getAutoComplete(
+            final ManagedObject adapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final List<ObjectAdapter> adapters = _Lists.newArrayList();
+        final List<ManagedObject> adapters = _Lists.newArrayList();
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
@@ -318,7 +315,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             addAllInstancesForType(adapters);
         }
          */
-        return adapters.toArray(new ObjectAdapter[0]);
+        return adapters.toArray(new ManagedObject[0]);
     }
 
     @Override
@@ -338,23 +335,23 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public ObjectAdapter[] getChoices(
-            final ObjectAdapter adapter,
-            final ObjectAdapter[] argumentsIfAvailable,
+    public ManagedObject[] getChoices(
+            final ManagedObject adapter,
+            final ManagedObject[] argumentsIfAvailable,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final List<ObjectAdapter> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
+        final List<ManagedObject> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
 
-        final ObjectAdapter target = targetForDefaultOrChoices(adapter);
-        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
+        final ManagedObject target = targetForDefaultOrChoices(adapter);
+        final List<ManagedObject> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
 
         return findChoices(target, args, interactionInitiatedBy);
     }
 
-    private ObjectAdapter[] findChoices(
-            final ObjectAdapter target,
-            final List<ObjectAdapter> args,
+    private ManagedObject[] findChoices(
+            final ManagedObject target,
+            final List<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final List<ObjectAdapter> adapters = _Lists.newArrayList();
+        final List<ManagedObject> adapters = _Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
@@ -362,7 +359,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                     interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
-                ObjectAdapter adapter = choice != null? getObjectAdapterProvider().adapterFor(choice) : null;
+                ManagedObject adapter = choice != null? getObjectAdapterProvider().adapterFor(choice) : null;
                 adapters.add(adapter);
             }
         }
@@ -372,7 +369,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             addAllInstancesForType(adapters);
         }
          */
-        return adapters.toArray(new ObjectAdapter[adapters.size()]);
+        return adapters.toArray(new ManagedObject[adapters.size()]);
     }
 
 
@@ -380,20 +377,20 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // -- Defaults
 
     @Override
-    public ObjectAdapter getDefault(
-            final ObjectAdapter adapter,
-            final ObjectAdapter[] argumentsIfAvailable,
+    public ManagedObject getDefault(
+            final ManagedObject adapter,
+            final ManagedObject[] argumentsIfAvailable,
             final Integer paramNumUpdated) {
 
-        final ObjectAdapter target = targetForDefaultOrChoices(adapter);
-        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argumentsIfAvailable != null ? Arrays.asList(argumentsIfAvailable) : null);
+        final ManagedObject target = targetForDefaultOrChoices(adapter);
+        final List<ManagedObject> args = argsForDefaultOrChoices(adapter, argumentsIfAvailable != null ? Arrays.asList(argumentsIfAvailable) : null);
 
         return findDefault(target, args, paramNumUpdated);
     }
 
-    private ObjectAdapter findDefault(
-            final ObjectAdapter target,
-            final List<ObjectAdapter> args,
+    private ManagedObject findDefault(
+            final ManagedObject target,
+            final List<ManagedObject> args,
             final Integer paramNumUpdated) {
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
@@ -411,16 +408,16 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter adapter) {
+    protected ManagedObject targetForDefaultOrChoices(final ManagedObject adapter) {
         return adapter;
     }
 
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected List<ObjectAdapter> argsForDefaultOrChoices(
-            final ObjectAdapter adapter,
-            final List<ObjectAdapter> argumentsIfAvailable) {
+    protected List<ManagedObject> argsForDefaultOrChoices(
+            final ManagedObject adapter,
+            final List<ManagedObject> argumentsIfAvailable) {
         return argumentsIfAvailable;
     }
 
@@ -457,34 +454,23 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    /**
-     * unused - incorporated into the {@link ChoicesFacetFromBoundedAbstract}
-     */
-    @SuppressWarnings("unused")
-    private <T> void addAllInstancesForType(final List<ObjectAdapter> adapters) {
-        final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
-        final List<ObjectAdapter> allInstancesAdapter = getObjectPersistor().allMatchingQuery(query);
-        for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
-            adapters.add(choiceAdapter);
-        }
-    }
-
-
+  
     //region > Visibility
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
-            final ObjectAdapter objectAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject objectAdapter,
+            final ManagedObject[] proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         return new ActionArgVisibilityContext(
                 objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override
     public Consent isVisible(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] pendingArguments,
+            final ManagedObject targetAdapter,
+            final ManagedObject[] pendingArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final VisibilityContext<?> ic = createArgumentVisibilityContext(
@@ -500,18 +486,19 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     //region > Usability
 
     private ActionArgUsabilityContext createArgumentUsabilityContext(
-            final ObjectAdapter objectAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject objectAdapter,
+            final ManagedObject[] proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         return new ActionArgUsabilityContext(
                 objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override
     public Consent isUsable(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] pendingArguments,
+            final ManagedObject targetAdapter,
+            final ManagedObject[] pendingArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final UsabilityContext<?> ic = createArgumentUsabilityContext(
@@ -529,21 +516,22 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
-            final ObjectAdapter objectAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject objectAdapter,
+            final ManagedObject[] proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         return new ActionArgValidityContext(
                 objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override
     public String isValid(
-            final ObjectAdapter objectAdapter,
+            final ManagedObject objectAdapter,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        ObjectAdapter proposedValueAdapter = null;
+        ManagedObject proposedValueAdapter = null;
         ObjectSpecification proposedValueSpec;
         if(proposedValue != null) {
             proposedValueAdapter = getObjectAdapterProvider().adapterFor(proposedValue);
@@ -556,7 +544,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             }
         }
 
-        final ObjectAdapter[] argumentAdapters = arguments(proposedValueAdapter);
+        final ManagedObject[] argumentAdapters = arguments(proposedValueAdapter);
         final ValidityContext<?> ic = createProposedArgumentInteractionContext(
                 objectAdapter, argumentAdapters, getNumber(), interactionInitiatedBy
                 );
@@ -576,9 +564,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
      * to do this in two passes, one to build up the argument set as a single
      * unit, and then validate each in turn.
      */
-    private ObjectAdapter[] arguments(final ObjectAdapter proposedValue) {
+    private ManagedObject[] arguments(final ManagedObject proposedValue) {
         final int parameterCount = getAction().getParameterCount();
-        final ObjectAdapter[] arguments = new ObjectAdapter[parameterCount];
+        final ManagedObject[] arguments = new ManagedObject[parameterCount];
         arguments[getNumber()] = proposedValue;
         return arguments;
     }

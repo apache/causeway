@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.facets.value.shortint;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class ShortPrimitiveValueSemanticsProvider extends ShortValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -45,7 +45,7 @@ public class ShortPrimitiveValueSemanticsProvider extends ShortValueSemanticsPro
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter inObject) {
+    public ManagedObject getDefault(final ManagedObject inObject) {
         return createAdapter(short.class, Short.valueOf((short) 0));
     }
 

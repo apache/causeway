@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -56,6 +55,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.CommandDto;
+
+import lombok.val;
 
 public class OneToOneAssociationDefault extends ObjectAssociationAbstract implements OneToOneAssociation {
 
@@ -121,7 +122,10 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     // -- init
     @Override
-    public void initAssociation(final ObjectAdapter ownerAdapter, final ObjectAdapter referencedAdapter) {
+    public void initAssociation(
+            final ManagedObject ownerAdapter, 
+            final ManagedObject referencedAdapter) {
+        
         final PropertyInitializationFacet initializerFacet = getFacet(PropertyInitializationFacet.class);
         if (initializerFacet != null) {
             initializerFacet.initProperty(ownerAdapter, referencedAdapter);
@@ -133,8 +137,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     // -- Access (get, isEmpty)
 
     @Override
-    public ObjectAdapter get(
-            final ObjectAdapter ownerAdapter,
+    public ManagedObject get(
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
@@ -166,15 +170,15 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     @Override
-    public boolean isEmpty(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    public boolean isEmpty(final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return get(ownerAdapter, interactionInitiatedBy) == null;
     }
 
     // -- Set
     @Override
     public void set(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter newReferencedAdapter) {
+            final ManagedObject ownerAdapter,
+            final ManagedObject newReferencedAdapter) {
         set(ownerAdapter, newReferencedAdapter, InteractionInitiatedBy.USER);
     }
 
@@ -184,8 +188,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
      */
     @Override
     public void set(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter newReferencedAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setupCommand(ownerAdapter, newReferencedAdapter);
@@ -194,8 +198,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     private void setInternal(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter newReferencedAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if (newReferencedAdapter != null) {
             setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
@@ -205,8 +209,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     private void setValue(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter newReferencedAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertySetterFacet setterFacet = getFacet(PropertySetterFacet.class);
@@ -214,9 +218,9 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             return;
         }
 
-        if (    ownerAdapter.isRepresentingPersistent() &&
+        if (    ManagedObject.promote(ownerAdapter).isRepresentingPersistent() &&
                 newReferencedAdapter != null &&
-                newReferencedAdapter.isTransient() &&
+                ManagedObject.promote(newReferencedAdapter).isTransient() &&
                 !newReferencedAdapter.getSpecification().isParented()) {
 
             // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
@@ -227,8 +231,9 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     private void clearValue(
-            final ObjectAdapter ownerAdapter,
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final PropertyClearFacet facet = getFacet(PropertyClearFacet.class);
         facet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
@@ -237,7 +242,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     // -- defaults
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter ownerAdapter) {
+    public ManagedObject getDefault(final ManagedObject ownerAdapter) {
         PropertyDefaultFacet propertyDefaultFacet = getFacet(PropertyDefaultFacet.class);
         // if no default on the association, attempt to find a default on the
         // specification (eg an int should
@@ -252,14 +257,14 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     @Override
-    public void toDefault(final ObjectAdapter ownerAdapter) {
+    public void toDefault(final ManagedObject ownerAdapter) {
         // don't default optional fields
         final MandatoryFacet mandatoryFacet = getFacet(MandatoryFacet.class);
         if (mandatoryFacet != null && mandatoryFacet.isInvertedSemantics()) {
             return;
         }
 
-        final ObjectAdapter defaultValue = getDefault(ownerAdapter);
+        final ManagedObject defaultValue = getDefault(ownerAdapter);
         if (defaultValue != null) {
             initAssociation(ownerAdapter, defaultValue);
         }
@@ -274,11 +279,11 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     @Override
-    public ObjectAdapter[] getChoices(
-            final ObjectAdapter ownerAdapter,
+    public ManagedObject[] getChoices(
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
+        val propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
         if (propertyChoicesFacet == null) {
             return null;
         }
@@ -287,10 +292,10 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
                 ownerAdapter,
                 interactionInitiatedBy);
 
-        List<ObjectAdapter> adapters = _NullSafe.stream(pojoOptions)
+        List<ManagedObject> adapters = _NullSafe.stream(pojoOptions)
                 .map(  getObjectAdapterProvider()::adapterFor )
                 .collect(Collectors.toList());
-        return adapters.toArray(new ObjectAdapter[]{});
+        return adapters.toArray(new ManagedObject[]{});
     }
 
 
@@ -301,15 +306,15 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter ownerAdapter,
+    public ManagedObject[] getAutoComplete(
+            final ManagedObject ownerAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
         final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg,
                 interactionInitiatedBy);
         if (pojoOptions != null) {
-            final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
+            final ManagedObject[] options = new ManagedObject[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {
                 options[i] = getObjectAdapterProvider().adapterFor(pojoOptions[i]);
             }
@@ -330,8 +335,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
      * Internal API
      */
     public void setupCommand(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapterOrNull) {
+            final ManagedObject targetAdapter,
+            final ManagedObject valueAdapterOrNull) {
 
         setupCommandTarget(targetAdapter, valueAdapterOrNull);
         setupCommandMemberIdentifier();
@@ -339,16 +344,16 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     private void setupCommandTarget(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapter) {
+            final ManagedObject targetAdapter,
+            final ManagedObject valueAdapter) {
 
         final String arguments = CommandUtil.argDescriptionFor(valueAdapter);
         setupCommandTarget(targetAdapter, arguments);
     }
 
     private void setupCommandMementoAndExecutionContext(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapterOrNull) {
+            final ManagedObject targetAdapter,
+            final ManagedObject valueAdapterOrNull) {
 
         final CommandDtoServiceInternal commandDtoServiceInternal = getCommandDtoService();
         final CommandDto dto = commandDtoServiceInternal.asCommandDto(
@@ -370,10 +375,6 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
     }
-
-
-
-
 
 
 }

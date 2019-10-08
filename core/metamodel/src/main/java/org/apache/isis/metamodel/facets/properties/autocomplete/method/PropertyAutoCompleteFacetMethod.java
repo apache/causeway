@@ -33,6 +33,7 @@ import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAbstract implements ImperativeFacet {
@@ -72,7 +73,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
 
     @Override
     public Object[] autoComplete(
-            final ObjectAdapter owningAdapter,
+            final ManagedObject owningAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -86,12 +87,12 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
         final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
         final Class<?> propertyType = facetedMethod.getType();
 
-        final List<ObjectAdapter> visibleAdapters =
+        final List<ManagedObject> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> filteredObjects =
-                _Lists.map(visibleAdapters, ObjectAdapter.Util::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification propertySpec = getSpecification(propertyType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getObjectAdapterProvider());

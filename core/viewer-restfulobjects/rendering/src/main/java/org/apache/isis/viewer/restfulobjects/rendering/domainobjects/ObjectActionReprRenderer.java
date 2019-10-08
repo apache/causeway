@@ -30,6 +30,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
@@ -179,12 +180,12 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     private Object choicesFor(
             final ObjectActionParameter param,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter[] choiceAdapters = param.getChoices(objectAdapter, null, interactionInitiatedBy);
+        final ManagedObject[] choiceAdapters = param.getChoices(objectAdapter, null, interactionInitiatedBy);
         if (choiceAdapters == null || choiceAdapters.length == 0) {
             return null;
         }
         final List<Object> list = _Lists.newArrayList();
-        for (final ObjectAdapter choiceAdapter : choiceAdapters) {
+        for (final ManagedObject choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
             final ObjectSpecification choiceSpec = choiceAdapter.getSpecification();
@@ -194,7 +195,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private Object defaultFor(final ObjectActionParameter param) {
-        final ObjectAdapter defaultAdapter = param.getDefault(objectAdapter, null, null);
+        final ManagedObject defaultAdapter = param.getDefault(objectAdapter, null, null);
         if (defaultAdapter == null) {
             return null;
         }

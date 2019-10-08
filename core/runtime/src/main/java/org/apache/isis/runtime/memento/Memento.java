@@ -34,6 +34,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
@@ -41,6 +42,7 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -126,15 +128,15 @@ public class Memento implements Serializable {
     private void createAssociationData(final ObjectAdapter adapter, final ObjectData data, final ObjectAssociation objectAssoc) {
         Object assocData;
         if (objectAssoc.isOneToManyAssociation()) {
-            final ObjectAdapter collAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-            assocData = createCollectionData(collAdapter);
+            val collAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+            assocData = createCollectionData(ManagedObject.promote(collAdapter));
         } else if (objectAssoc.getSpecification().isEncodeable()) {
             final EncodableFacet facet = objectAssoc.getSpecification().getFacet(EncodableFacet.class);
-            final ObjectAdapter value = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+            val value = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
             assocData = facet.toEncodedString(value);
         } else if (objectAssoc.isOneToOneAssociation()) {
-            final ObjectAdapter referencedAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-            assocData = createReferenceData(referencedAdapter);
+            val referencedAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+            assocData = createReferenceData(ManagedObject.promote(referencedAdapter));
         } else {
             throw new UnknownTypeException(objectAssoc);
         }

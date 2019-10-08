@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.object.encodeable;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Indicates that this class can be encoded/decoded as a string.
@@ -38,5 +39,5 @@ public interface EncodableFacet extends MultipleValueFacet {
      * Equivalent to {@link EncoderDecoder#toEncodedString(Object)}, though may
      * be implemented through some other equivalent mechanism.
      */
-    String toEncodedString(ObjectAdapter object);
+    String toEncodedString(ManagedObject object);
 }

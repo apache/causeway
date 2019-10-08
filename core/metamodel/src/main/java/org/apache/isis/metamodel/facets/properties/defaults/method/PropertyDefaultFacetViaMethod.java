@@ -29,7 +29,9 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract implements ImperativeFacet {
 
@@ -57,7 +59,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     }
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter owningAdapter) {
+    public ManagedObject getDefault(final ManagedObject owningAdapter) {
         final Object result = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (result == null) {
             return null;
@@ -65,8 +67,8 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
         return createAdapter(method.getReturnType(), result);
     }
 
-    private ObjectAdapter createAdapter(final Class<?> type, final Object object) {
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(type);
+    private ManagedObject createAdapter(final Class<?> type, final Object object) {
+        val specification = getSpecificationLoader().loadSpecification(type);
         if (specification.isNotCollection()) {
             return getObjectAdapterProvider().adapterFor(object);
         } else {

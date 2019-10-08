@@ -19,12 +19,11 @@
 
 package org.apache.isis.metamodel.facets.object.projection;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface ProjectionFacet extends Facet {
 
-    ObjectAdapter projected(final ManagedObject owningAdapter);
+    ManagedObject projected(ManagedObject owningAdapter);
 
 }

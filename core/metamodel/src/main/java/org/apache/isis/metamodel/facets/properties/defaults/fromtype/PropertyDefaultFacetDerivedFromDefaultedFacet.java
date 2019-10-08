@@ -21,11 +21,11 @@ package org.apache.isis.metamodel.facets.properties.defaults.fromtype;
 
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract implements PropertyDefaultFacet {
 
@@ -39,7 +39,7 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
     }
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter inObject) {
+    public ManagedObject getDefault(final ManagedObject inObject) {
         if (getIdentified() == null) {
             return null;
         }

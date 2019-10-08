@@ -18,10 +18,10 @@
  */
 package org.apache.isis.metamodel.specloader.specimpl;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.interactions.ActionArgValidityContext;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
 public abstract class ObjectActionParameterMixedInAbstract
@@ -40,8 +40,8 @@ implements ObjectActionParameterMixedIn {
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter mixedInAdapter,
+    public ManagedObject[] getAutoComplete(
+            final ManagedObject mixedInAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return mixinParameter.getAutoComplete(
@@ -50,22 +50,22 @@ implements ObjectActionParameterMixedIn {
     }
 
     @Override
-    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter mixedInAdapter) {
+    protected ManagedObject targetForDefaultOrChoices(final ManagedObject mixedInAdapter) {
         return mixinAdapterFor(mixedInAdapter);
     }
 
-    private ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
+    private ManagedObject mixinAdapterFor(final ManagedObject mixedInAdapter) {
         return mixedInAction.mixinAdapterFor(mixedInAdapter);
     }
 
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter targetObject = mixinAdapterFor(mixedInAdapter);
+        final ManagedObject targetObject = mixinAdapterFor(mixedInAdapter);
 
         final ActionArgValidityContext actionArgValidityContext = new ActionArgValidityContext(
                 targetObject, mixedInAction.mixinAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);

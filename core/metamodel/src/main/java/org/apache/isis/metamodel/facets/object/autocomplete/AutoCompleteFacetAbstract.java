@@ -35,6 +35,7 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
 
@@ -68,14 +69,15 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     }
 
     @Override
-    public List<ObjectAdapter> execute(
+    public List<ManagedObject> execute(
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter resultAdapter =
-                getPublishingServiceInternal().withPublishingSuppressed(new PublishingServiceInternal.Block<ObjectAdapter>() {
+        final ManagedObject resultAdapter =
+                getPublishingServiceInternal().withPublishingSuppressed(
+                        new PublishingServiceInternal.Block<ManagedObject>() {
                     @Override
-                    public ObjectAdapter exec() {
+                    public ManagedObject exec() {
                         final Object list = invoke();
                         return adapterProvider.adapterFor(list);
                     }
@@ -94,7 +96,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             return Collections.emptyList();
         }
 
-        final Stream<ObjectAdapter> adapterList = CollectionFacet.Utils.streamAdapters(resultAdapter) ;
+        final Stream<ManagedObject> adapterList = CollectionFacet.Utils.streamAdapters(resultAdapter) ;
 
         return ObjectAdapter.Util.visibleAdapters(adapterList, interactionInitiatedBy);
     }

@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionRemoveFromEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
@@ -33,12 +33,12 @@ import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
  */
 public class CollectionRemoveFromContext extends ValidityContext<CollectionRemoveFromEvent> implements ProposedHolder{
 
-    private final ObjectAdapter proposed;
+    private final ManagedObject proposed;
 
     public CollectionRemoveFromContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Identifier identifier,
-            final ObjectAdapter proposed,
+            final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.COLLECTION_REMOVE_FROM, targetAdapter, identifier, interactionInitiatedBy);
 
@@ -46,7 +46,7 @@ public class CollectionRemoveFromContext extends ValidityContext<CollectionRemov
     }
 
     @Override
-    public ObjectAdapter getProposed() {
+    public ManagedObject getProposed() {
         return proposed;
     }
 

@@ -35,6 +35,7 @@ import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ManagedObjectState;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -407,9 +408,9 @@ class DomainResourceHelper {
         // invoke
         final ObjectAdapter mixedInAdapter = null; // action will automatically fill in if a mixin
         final ObjectAdapter[] argAdapterArr = argAdapters.toArray(new ObjectAdapter[argAdapters.size()]);
-        final ObjectAdapter returnedAdapter = action.execute(
+        final ObjectAdapter returnedAdapter = ManagedObject.promote(action.execute(
                 objectAdapter,  mixedInAdapter, argAdapterArr,
-                InteractionInitiatedBy.USER);
+                InteractionInitiatedBy.USER));
 
         final ObjectAndActionInvocation objectAndActionInvocation =
                 new ObjectAndActionInvocation(objectAdapter, action, arguments, argAdapters, returnedAdapter, selfLink);

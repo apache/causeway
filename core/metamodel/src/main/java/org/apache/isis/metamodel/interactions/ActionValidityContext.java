@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
@@ -35,13 +35,13 @@ import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 public class ActionValidityContext extends ValidityContext<ActionInvocationEvent> implements ActionInteractionContext {
 
     private final ObjectAction objectAction;
-    private final ObjectAdapter[] args;
+    private final ManagedObject[] args;
 
     public ActionValidityContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ObjectAdapter[] args,
+            final ManagedObject[] args,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);
         this.objectAction = objectAction;
@@ -53,13 +53,13 @@ public class ActionValidityContext extends ValidityContext<ActionInvocationEvent
         return objectAction;
     }
 
-    public ObjectAdapter[] getArgs() {
+    public ManagedObject[] getArgs() {
         return args;
     }
 
     @Override
     public ActionInvocationEvent createInteractionEvent() {
-        return new ActionInvocationEvent(unwrapPojo(getTarget()), getIdentifier(), ObjectAdapter.Util.unwrapPojoArray(getArgs()));
+        return new ActionInvocationEvent(unwrapPojo(getTarget()), getIdentifier(), ManagedObject.unwrapPojoArray(getArgs()));
     }
 
 }

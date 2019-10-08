@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -34,6 +33,7 @@ import org.apache.isis.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.metamodel.facets.value.biginteger.BigIntegerValueFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -43,6 +43,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
+
+import lombok.val;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
@@ -84,12 +86,12 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // ///////////////////////////////////////////////////
 
     private Object addValue(final LinkFollowSpecs linkFollower) {
-        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        val valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, else the compile time type of the member otherwise
-        final ObjectSpecification spec = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
+        val spec = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
 
-        final ValueFacet valueFacet = spec.getFacet(ValueFacet.class);
+        val valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
             String format = null;
             final Class<?> specClass = spec.getCorrespondingClass();
@@ -114,11 +116,12 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
                     format = String.format("big-integer");
                 }
             }
-            return JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation, format, rendererContext.suppressMemberExtensions());
+            return JsonValueEncoder.appendValueAndFormat(
+                    spec, ManagedObject.promote(valueAdapter), representation, format, rendererContext.suppressMemberExtensions());
         }
 
         boolean eagerlyRender =
-                (renderEagerly() && rendererContext.canEagerlyRender(valueAdapter))
+                (renderEagerly() && rendererContext.canEagerlyRender(ManagedObject.promote(valueAdapter)))
                 || (linkFollower != null && !linkFollower.isTerminated());
 
         if(valueAdapter == null) {
@@ -129,11 +132,11 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
             final String title = titleFacet.title(valueAdapter);
 
-            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, valueAdapter).withTitle(title);
+            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, ManagedObject.promote(valueAdapter)).withTitle(title);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, linkFollower, JsonRepresentation.newMap()
                         );
-                renderer.with(valueAdapter);
+                renderer.with(ManagedObject.promote(valueAdapter));
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
                 }
@@ -212,7 +215,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     private Object propertyChoices() {
-        final ObjectAdapter[] choiceAdapters =
+        final ManagedObject[] choiceAdapters =
                 objectMember.getChoices(
                         objectAdapter,
                         getInteractionInitiatedBy());
@@ -220,7 +223,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             return null;
         }
         final List<Object> list = _Lists.newArrayList();
-        for (final ObjectAdapter choiceAdapter : choiceAdapters) {
+        for (val choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 

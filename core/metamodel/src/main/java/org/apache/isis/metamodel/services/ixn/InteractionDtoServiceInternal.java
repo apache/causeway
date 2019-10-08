@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.services.ixn;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
@@ -32,14 +32,14 @@ public interface InteractionDtoServiceInternal {
     @Programmatic
     ActionInvocationDto asActionInvocationDto(
             ObjectAction objectAction,
-            ObjectAdapter targetAdapter,
-            List<ObjectAdapter> argumentAdapters);
+            ManagedObject targetAdapter,
+            List<ManagedObject> argumentAdapters);
 
     @Programmatic
     PropertyEditDto asPropertyEditDto(
             OneToOneAssociation property,
-            ObjectAdapter targetAdapter,
-            ObjectAdapter newValueAdapterIfAny);
+            ManagedObject targetAdapter,
+            ManagedObject newValueAdapterIfAny);
 
     @Programmatic
     ActionInvocationDto updateResult(

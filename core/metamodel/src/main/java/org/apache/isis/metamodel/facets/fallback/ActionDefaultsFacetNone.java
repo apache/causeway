@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.fallback;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
 
@@ -30,7 +30,7 @@ public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
     }
 
     @Override
-    public Object[] getDefaults(final ObjectAdapter inObject) {
+    public Object[] getDefaults(final ManagedObject inObject) {
         return null;
     }
 

@@ -21,9 +21,9 @@ package org.apache.isis.metamodel.facets.value.floats;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -45,7 +45,7 @@ public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsPro
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+    public ManagedObject getDefault(final ManagedObject adapter) {
         return createAdapter(float.class, new Float(0.0f));
     }
 

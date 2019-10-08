@@ -31,6 +31,7 @@ import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract implements ImperativeFacet {
 
@@ -72,7 +73,7 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     }
 
     @Override
-    public Object[] getDefaults(final ObjectAdapter owningAdapter) {
+    public Object[] getDefaults(final ManagedObject owningAdapter) {
         return (Object[]) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
     }
 

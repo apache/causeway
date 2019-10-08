@@ -57,6 +57,7 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.metamodel.spec.feature.Contributed;
@@ -261,7 +262,7 @@ public class XmlSnapshot implements Snapshot {
      * using appendXml passing in a rootElement and a new schemaManager - see
      * {@link XmlSnapshot}).
      */
-    private Element appendXml(final Place parentPlace, final ObjectAdapter childObject) {
+    private Element appendXml(final Place parentPlace, final ManagedObject childObject) {
 
         if (log.isDebugEnabled()) {
             log.debug("appendXml({}{})", log("parentPlace", parentPlace), andlog("childObj", childObject));
@@ -295,7 +296,7 @@ public class XmlSnapshot implements Snapshot {
     }
 
     private boolean appendXmlThenIncludeRemaining(
-            final Place parentPlace, final ObjectAdapter referencedObject,
+            final Place parentPlace, final ManagedObject referencedObject,
             final Vector<String> fieldNames, final String annotation) {
 
         if (log.isDebugEnabled()) {
@@ -334,7 +335,7 @@ public class XmlSnapshot implements Snapshot {
         return v;
     }
 
-    public ObjectAdapter getObject() {
+    public ManagedObject getObject() {
         return rootPlace.getObject();
     }
 
@@ -420,7 +421,7 @@ public class XmlSnapshot implements Snapshot {
                     andlog("annotation", annotation));
         }
 
-        final ObjectAdapter object = place.getObject();
+        final ManagedObject object = place.getObject();
         final Element xmlElement = place.getXmlElement();
 
         // we use a copy of the path so that we can safely traverse collections
@@ -496,7 +497,7 @@ public class XmlSnapshot implements Snapshot {
             }
 
             final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-            final ObjectAdapter referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
+            final ManagedObject referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
                     InteractionInitiatedBy.FRAMEWORK);
 
             if (referencedObject == null) {
@@ -517,7 +518,7 @@ public class XmlSnapshot implements Snapshot {
             }
 
             final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
-            final ObjectAdapter collection = oneToManyAssociation.get(fieldPlace.getObject(),
+            final ManagedObject collection = oneToManyAssociation.get(fieldPlace.getObject(),
                     InteractionInitiatedBy.FRAMEWORK);
 
             if (log.isDebugEnabled()) {
@@ -620,7 +621,7 @@ public class XmlSnapshot implements Snapshot {
         return childElement;
     }
 
-    Place objectToElement(final ObjectAdapter adapter) {
+    Place objectToElement(final ManagedObject adapter) {
 
         if (log.isDebugEnabled()) {
             log.debug("objectToElement({})", log("object", adapter));
@@ -710,7 +711,7 @@ public class XmlSnapshot implements Snapshot {
                 // locally
                 // scoped name
 
-                ObjectAdapter value;
+                ManagedObject value;
                 try {
                     value = valueAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
 
@@ -761,7 +762,7 @@ public class XmlSnapshot implements Snapshot {
                 // scoped
                 // name
 
-                ObjectAdapter referencedObjectAdapter;
+                ManagedObject referencedObjectAdapter;
 
                 try {
                     referencedObjectAdapter = oneToOneAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
@@ -799,7 +800,7 @@ public class XmlSnapshot implements Snapshot {
                 // scoped
                 // name
 
-                ObjectAdapter collection;
+                ManagedObject collection;
                 try {
                     collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
                     final ObjectSpecification referencedTypeNos = oneToManyAssociation.getSpecification();
@@ -847,9 +848,9 @@ public class XmlSnapshot implements Snapshot {
         return place;
     }
 
-    private final Map<ObjectAdapter, String> viewModelFakeOids = _Maps.newHashMap();
+    private final Map<ManagedObject, String> viewModelFakeOids = _Maps.newHashMap();
 
-    private String oidAsString(final ObjectAdapter adapter) {
+    private String oidAsString(final ManagedObject adapter) {
         if (adapter.getPojo() instanceof ViewModel) {
             // return a fake oid for view models;
             // a snapshot may be being used to create the memento/OID
@@ -860,7 +861,7 @@ public class XmlSnapshot implements Snapshot {
             }
             return fakeOid;
         } else {
-            return adapter.getOid().enString();
+            return ManagedObject.promote(adapter).getOid().enString();
         }
     }
 

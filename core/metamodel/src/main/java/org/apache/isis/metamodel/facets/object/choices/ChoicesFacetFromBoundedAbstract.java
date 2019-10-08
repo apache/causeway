@@ -105,13 +105,13 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Object[] getChoices(
-            ObjectAdapter adapter,
+            ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val context = MetaModelContext.current();
         val repository = context.getRepositoryService();
 
-        final Predicate<ObjectAdapter> visibilityFilter = 
+        final Predicate<ManagedObject> visibilityFilter = 
                 objectAdapter -> ObjectAdapter.Util.isVisible(objectAdapter, interactionInitiatedBy); 
 
                 val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter);

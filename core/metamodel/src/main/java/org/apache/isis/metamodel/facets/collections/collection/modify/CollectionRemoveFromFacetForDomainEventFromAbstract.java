@@ -26,7 +26,6 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -34,6 +33,7 @@ import org.apache.isis.metamodel.facets.DomainEventHelper;
 import org.apache.isis.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
@@ -67,15 +67,15 @@ implements CollectionRemoveFromFacet {
 
     @Override
     public void remove(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter referencedObjectAdapter,
+            final ManagedObject targetAdapter,
+            final ManagedObject referencedObjectAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if (this.collectionRemoveFromFacet == null) {
             return;
         }
 
 
-        final Object referencedObject = ObjectAdapter.Util.unwrapPojo(referencedObjectAdapter);
+        final Object referencedObject = ManagedObject.unwrapPojo(referencedObjectAdapter);
 
         // get hold of underlying collection
         // passing null through for authenticationSession/deploymentType means to avoid any visibility filtering.
@@ -88,7 +88,7 @@ implements CollectionRemoveFromFacet {
 
         // contains the element, so
         // execute the remove wrapped between the executing and executed events ...
-        final ObjectAdapter mixedInAdapter = null;
+        final ManagedObject mixedInAdapter = null;
 
         // ... post the executing event
         final CollectionDomainEvent<?, ?> event =

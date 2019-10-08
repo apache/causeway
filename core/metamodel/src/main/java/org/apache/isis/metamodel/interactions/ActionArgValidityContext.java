@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
@@ -35,15 +36,15 @@ import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 public class ActionArgValidityContext extends ValidityContext<ActionArgumentEvent> implements ProposedHolder, ActionInteractionContext {
 
     private final ObjectAction objectAction;
-    private final ObjectAdapter[] args;
+    private final ManagedObject[] args;
     private final int position;
-    private final ObjectAdapter proposed;
+    private final ManagedObject proposed;
 
     public ActionArgValidityContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ObjectAdapter[] args,
+            final ManagedObject[] args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, targetAdapter, id, interactionInitiatedBy);
@@ -59,7 +60,7 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
         return objectAction;
     }
 
-    public ObjectAdapter[] getArgs() {
+    public ManagedObject[] getArgs() {
         return args;
     }
 
@@ -68,7 +69,7 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
     }
 
     @Override
-    public ObjectAdapter getProposed() {
+    public ManagedObject getProposed() {
         return proposed;
     }
 

@@ -24,6 +24,8 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
+import lombok.val;
+
 public class AdapterAndProperty {
 
     private final ObjectAdapter objectAdapter;
@@ -100,7 +102,7 @@ public class AdapterAndProperty {
     }
 
     Object getPropertyValue() {
-        ObjectAdapter referencedAdapter = property.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
+        val referencedAdapter = property.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
         return referencedAdapter == null ? null : referencedAdapter.getPojo();
     }
 

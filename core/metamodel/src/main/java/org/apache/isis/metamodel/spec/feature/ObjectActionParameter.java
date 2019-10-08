@@ -25,11 +25,11 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Vetoed;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.interactions.ActionArgValidityContext;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 /**
@@ -74,8 +74,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
-            final ObjectAdapter targetObject,
-            final ObjectAdapter[] args,
+            final ManagedObject targetObject,
+            final ManagedObject[] args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy);
 
@@ -90,8 +90,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from, based on the input search argument.
      */
-    ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter adapter,
+    ManagedObject[] getAutoComplete(
+            final ManagedObject adapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy);
 
@@ -108,15 +108,15 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from.
      */
-    ObjectAdapter[] getChoices(
-            final ObjectAdapter adapter,
-            final ObjectAdapter[] argumentsIfAvailable,
+    ManagedObject[] getChoices(
+            final ManagedObject adapter,
+            final ManagedObject[] argumentsIfAvailable,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
-    ObjectAdapter getDefault(
-            ObjectAdapter adapter,
-            final ObjectAdapter[] argumentsIfAvailable,
+    ManagedObject getDefault(
+            ManagedObject adapter,
+            final ManagedObject[] argumentsIfAvailable,
             final Integer paramNumUpdated);
 
 
@@ -128,8 +128,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     Consent isVisible(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] pendingArguments,
+            final ManagedObject targetAdapter,
+            final ManagedObject[] pendingArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -140,8 +140,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     Consent isUsable(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] pendingArguments,
+            final ManagedObject targetAdapter,
+            final ManagedObject[] pendingArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -153,7 +153,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     String isValid(
-            final ObjectAdapter adapter,
+            final ManagedObject adapter,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy);
 

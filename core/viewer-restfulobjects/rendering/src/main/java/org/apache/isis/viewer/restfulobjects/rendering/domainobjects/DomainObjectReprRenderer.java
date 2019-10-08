@@ -28,6 +28,7 @@ import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.metamodel.services.ServiceUtil;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -443,14 +444,14 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     //
     // ///////////////////////////////////////////////////////////////////
 
-    public static Object valueOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec) {
-        if(objectAdapter.isValue()) {
+    public static Object valueOrRef(final RendererContext resourceContext, final ManagedObject objectAdapter, final ObjectSpecification objectSpec) {
+        if(ManagedObject.promote(objectAdapter).isValue()) {
             String format = null; // TODO
             return JsonValueEncoder.asObject(objectAdapter, format);
         }
         final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
         final String title = titleFacet.title(objectAdapter);
-        return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
+        return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, ManagedObject.promote(objectAdapter)).withTitle(title).build();
     }
 
 

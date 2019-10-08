@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.properties.update.clear;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 
 /**
@@ -38,6 +38,6 @@ public interface PropertyClearFacet extends Facet {
 
     void clearProperty(
             final OneToOneAssociation owningProperty,
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 }

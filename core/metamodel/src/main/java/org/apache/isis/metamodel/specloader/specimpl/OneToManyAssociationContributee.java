@@ -24,7 +24,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.ioc.BeanAdapter;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -44,7 +43,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 
-public class OneToManyAssociationContributee extends OneToManyAssociationDefault implements ContributeeMember {
+public class OneToManyAssociationContributee 
+extends OneToManyAssociationDefault implements ContributeeMember {
 
     private final BeanAdapter serviceBean;
     private final ObjectAction serviceAction;
@@ -118,8 +118,11 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
     }
 
     @Override
-    public ObjectAdapter get(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-        return serviceAction.execute(getServiceAdapter(), null, new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
+    public ManagedObject get(
+            final ManagedObject ownerAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        
+        return serviceAction.execute(getServiceAdapter(), null, new ManagedObject[]{ownerAdapter}, interactionInitiatedBy);
     }
 
     @Override
@@ -172,7 +175,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
         return facetHolder;
     }
 
-    private ObjectAdapter getServiceAdapter() {
+    private ManagedObject getServiceAdapter() {
         return getObjectAdapterProvider().adapterForBean(serviceBean);
     }
 

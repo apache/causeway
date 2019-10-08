@@ -24,14 +24,16 @@ import java.util.List;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.StringExtensions;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
+
+import lombok.val;
 
 /**
  * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> and <tt>BackgroundServiceDefault</tt>.
@@ -44,7 +46,7 @@ public class CommandUtil {
         return objectMember.getName();
     }
 
-    public static String targetClassNameFor(final ObjectAdapter targetAdapter) {
+    public static String targetClassNameFor(final ManagedObject targetAdapter) {
         return StringExtensions.asNaturalName2(targetAdapter.getSpecification().getSingularName());
     }
 
@@ -52,7 +54,7 @@ public class CommandUtil {
         return objectMember.getIdentifier().toClassAndNameIdentityString();
     }
 
-    public static String argDescriptionFor(final ObjectAdapter valueAdapter) {
+    public static String argDescriptionFor(final ManagedObject valueAdapter) {
         final StringBuilder buf = new StringBuilder();
         if(valueAdapter != null) {
             appendArg(buf, "new value", valueAdapter);
@@ -61,10 +63,12 @@ public class CommandUtil {
         }
         return buf.toString();
     }
+    
     public static String argDescriptionFor(
             final ObjectAction owningAction,
-            final ObjectAdapter[] arguments) {
-        final StringBuilder argsBuf = new StringBuilder();
+            final ManagedObject[] arguments) {
+        
+        val argsBuf = new StringBuilder();
         List<ObjectActionParameter> parameters = owningAction.getParameters();
         if(parameters.size() == arguments.length) {
             // should be the case
@@ -76,8 +80,9 @@ public class CommandUtil {
         return argsBuf.toString();
     }
 
-    public static Bookmark bookmarkFor(final ObjectAdapter adapter) {
-        final Oid oid = adapter.getOid();
+    public static Bookmark bookmarkFor(final ManagedObject adapter) {
+        
+        final Oid oid = ManagedObject.promote(adapter).getOid();
         if(!(oid instanceof RootOid)) {
             return null;
         }
@@ -88,7 +93,8 @@ public class CommandUtil {
     static void appendParamArg(
             final StringBuilder buf,
             final ObjectActionParameter param,
-            final ObjectAdapter objectAdapter) {
+            final ManagedObject objectAdapter) {
+        
         final String name = param.getName();
         appendArg(buf, name, objectAdapter);
     }
@@ -96,15 +102,19 @@ public class CommandUtil {
     private static void appendArg(
             final StringBuilder buf,
             final String name,
-            final ObjectAdapter objectAdapter) {
+            final ManagedObject objectAdapter) {
+        
         String titleOf = objectAdapter != null? objectAdapter.titleString(null): "null";
         buf.append(name).append(": ").append(titleOf).append("\n");
     }
 
-    public static ObjectAdapter[] adaptersFor(final Object[] args, final ObjectAdapterProvider adapterProvider) {
+    public static ManagedObject[] adaptersFor(
+            final Object[] args, 
+            final ObjectAdapterProvider adapterProvider) {
+        
         return _NullSafe.stream(args)
                 .map(adapterProvider::adapterFor)
-                .collect(_Arrays.toArray(ObjectAdapter.class, _NullSafe.size(args)));
+                .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
 
 }

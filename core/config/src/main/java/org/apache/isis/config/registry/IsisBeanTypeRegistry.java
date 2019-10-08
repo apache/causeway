@@ -267,17 +267,9 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             return BeanSort.MANAGED_BEAN;
         }
 
-        if(findNearestAnnotation(type, RequestScoped.class).isPresent()) {
-            return BeanSort.MANAGED_BEAN;
-        }
-
-        if(findNearestAnnotation(type, Singleton.class).isPresent()) {
-            return BeanSort.MANAGED_BEAN;
-        }
-
-        if(findNearestAnnotation(type, Service.class).isPresent()) {
-            return BeanSort.MANAGED_BEAN;
-        }
+//        if(findNearestAnnotation(type, RequestScoped.class).isPresent()) {
+//            return BeanSort.MANAGED_BEAN;
+//        }
 
         if(findNearestAnnotation(type, Component.class).isPresent()) {
             return BeanSort.MANAGED_BEAN;

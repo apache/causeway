@@ -24,7 +24,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
@@ -127,7 +126,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    public ObjectAdapter realTargetAdapter(final ObjectAdapter targetAdapter) {
+    public ManagedObject realTargetAdapter(final ManagedObject targetAdapter) {
         return mixinAdapterFor(targetAdapter);
     }
 
@@ -165,7 +164,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
@@ -177,7 +176,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
 
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
@@ -185,31 +184,31 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    public ObjectAdapter[] getDefaults(final ObjectAdapter mixedInAdapter) {
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixedInAdapter);
+    public ManagedObject[] getDefaults(final ManagedObject mixedInAdapter) {
+        final ManagedObject mixinAdapter = mixinAdapterFor(mixedInAdapter);
         return mixinAction.getDefaults(mixinAdapter);
     }
 
     @Override
-    public ObjectAdapter[][] getChoices(
-            final ObjectAdapter mixedInAdapter,
+    public ManagedObject[][] getChoices(
+            final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixedInAdapter);
+        final ManagedObject mixinAdapter = mixinAdapterFor(mixedInAdapter);
         return mixinAction.getChoices(mixinAdapter, interactionInitiatedBy);
     }
 
-    protected ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
+    protected ManagedObject mixinAdapterFor(final ManagedObject mixedInAdapter) {
         return mixinAdapterFor(mixinType, mixedInAdapter);
     }
 
     @Override
     protected void validateArgumentSet(
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
 
-        final ObjectAdapter targetObject = mixinAdapterFor(mixinType, mixedInAdapter);
+        final ManagedObject targetObject = mixinAdapterFor(mixinType, mixedInAdapter);
 
         final ValidityContext<?> ic =
                 mixinAction.createActionInvocationInteractionContext(targetObject, proposedArguments, interactionInitiatedBy);
@@ -221,15 +220,15 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
 
     @Override
-    public ObjectAdapter execute(
-            final ObjectAdapter target,         // will be the mixedInAdapter
-            final ObjectAdapter mixedInAdapter, // will be passed in as null
-            final ObjectAdapter[] arguments,
+    public ManagedObject execute(
+            final ManagedObject target,         // will be the mixedInAdapter
+            final ManagedObject mixedInAdapter, // will be passed in as null
+            final ManagedObject[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
 
-        final ObjectAdapter targetAdapter = mixinAdapterFor(mixinType, target);
-        final ObjectAdapter actualMixedInAdapter = target;
+        final ManagedObject targetAdapter = mixinAdapterFor(mixinType, target);
+        final ManagedObject actualMixedInAdapter = target;
 
         setupCommand(actualMixedInAdapter, arguments);
 

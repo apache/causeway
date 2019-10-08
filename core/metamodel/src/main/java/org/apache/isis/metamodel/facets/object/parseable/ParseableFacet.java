@@ -23,6 +23,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Indicates that this class can parse an entry string.
@@ -37,7 +38,7 @@ public interface ParseableFacet extends MultipleValueFacet {
      * be implemented through some other mechanism.
      */
     ObjectAdapter parseTextEntry(
-            final ObjectAdapter original,
+            final ManagedObject original,
             final String text,
             final InteractionInitiatedBy interactionInitiatedBy);
 
@@ -51,5 +52,5 @@ public interface ParseableFacet extends MultipleValueFacet {
      * field. So, a date might be rendered via a {@link TitleFacet} as
      * <tt>May 2, 2007</tt>, but its parseable form might be <tt>20070502</tt>.
      */
-    String parseableTitle(ObjectAdapter obj);
+    String parseableTitle(ManagedObject obj);
 }

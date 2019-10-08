@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeature {
 
@@ -41,9 +41,9 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * @see #addElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
      */
     Consent isValidToAdd(
-            ObjectAdapter owningObjectAdapter,
-            ObjectAdapter proposedObjectToAdd,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject owningObjectAdapter,
+            ManagedObject proposedObjectToAdd,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Add the specified element to this collection field in the specified
@@ -56,9 +56,9 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * @see #isValidToAdd(ObjectAdapter, ObjectAdapter)
      */
     void addElement(
-            ObjectAdapter owningObjectAdapter,
-            ObjectAdapter objectToAdd,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject owningObjectAdapter,
+            ManagedObject objectToAdd,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     // /////////////////////////////////////////////////////////////
     // remove
@@ -76,9 +76,9 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * @see #removeElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
      */
     Consent isValidToRemove(
-            ObjectAdapter owningObjectAdapter,
-            ObjectAdapter proposedObjectToRemove,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject owningObjectAdapter,
+            ManagedObject proposedObjectToRemove,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Remove the specified element from this collection field in the specified
@@ -91,20 +91,10 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * @see #isValidToRemove(ObjectAdapter, ObjectAdapter)
      */
     void removeElement(
-            ObjectAdapter owningObjectAdapter,
-            ObjectAdapter oObjectToRemove,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject owningObjectAdapter,
+            ManagedObject oObjectToRemove,
+            InteractionInitiatedBy interactionInitiatedBy);
 
-    // /////////////////////////////////////////////////////////////
-    // clear
-    // /////////////////////////////////////////////////////////////
 
-    /**
-     * Remove all elements from this collection field in the specified object.
-     *
-     * @deprecated - seemingly unused by any code?
-     */
-    @Deprecated
-    void clearCollection(ObjectAdapter inObject);
 
 }

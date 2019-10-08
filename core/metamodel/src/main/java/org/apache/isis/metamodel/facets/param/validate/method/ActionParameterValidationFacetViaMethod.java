@@ -60,7 +60,7 @@ public class ActionParameterValidationFacetViaMethod extends ActionParameterVali
     }
 
     @Override
-    public String invalidReason(final ManagedObject owningAdapter, final ObjectAdapter proposedArgumentAdapter) {
+    public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedArgumentAdapter) {
         final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, proposedArgumentAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;

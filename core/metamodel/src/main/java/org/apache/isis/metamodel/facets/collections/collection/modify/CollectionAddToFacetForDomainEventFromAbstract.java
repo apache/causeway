@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -33,6 +32,7 @@ import org.apache.isis.metamodel.facets.DomainEventHelper;
 import org.apache.isis.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
@@ -65,13 +65,13 @@ implements CollectionAddToFacet {
 
     @Override
     public void add(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter referencedObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+            final ManagedObject targetAdapter,
+            final ManagedObject referencedObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         if (this.collectionAddToFacet == null) {
             return;
         }
 
-        final Object referencedObject = ObjectAdapter.Util.unwrapPojo(referencedObjectAdapter);
+        final Object referencedObject = ManagedObject.unwrapPojo(referencedObjectAdapter);
 
         // get hold of underlying collection
         final Object collection = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
@@ -87,7 +87,7 @@ implements CollectionAddToFacet {
 
         // either doesn't contain object, or doesn't have set semantics, so
         // execute the add wrapped between the executing and executed events ...
-        final ObjectAdapter mixedInAdapter = null;
+        final ManagedObject mixedInAdapter = null;
 
         // ... post the executing event
 

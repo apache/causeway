@@ -41,6 +41,7 @@ import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -207,8 +208,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                         if(mixinType.isViewModel()) {
 
-                            final ObjectAdapter targetAdapterForMixin = action.realTargetAdapter(actionModel.getTargetAdapter());
-                            final EntityModel entityModelForMixin = new EntityModel(targetAdapterForMixin);
+                            final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getTargetAdapter());
+                            final EntityModel entityModelForMixin = new EntityModel(ManagedObject.promote(targetAdapterForMixin));
 
                             final GridFacet facet = mixinType.getFacet(GridFacet.class);
                             final Grid gridForMixin = facet.getGrid(targetAdapterForMixin);

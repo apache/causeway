@@ -28,13 +28,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+
+import lombok.val;
 
 public class BookmarkTreeNode implements Serializable {
 
@@ -199,21 +201,21 @@ public class BookmarkTreeNode implements Serializable {
 
         // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
         if(candidateBookmarkableModel instanceof EntityModel) {
-            EntityModel entityModel = (EntityModel) candidateBookmarkableModel;
-            final ObjectAdapter candidateAdapter = entityModel.getObject();
+            val entityModel = (EntityModel) candidateBookmarkableModel;
+            val candidateAdapter = entityModel.getObject();
             final Stream<ObjectAssociation> properties = candidateAdapter.getSpecification()
                     .streamAssociations(Contributed.EXCLUDED)
                     .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
 
             properties
             .map(objectAssoc->{
-                final ObjectAdapter parentAdapter = 
+                val parentAdapter = 
                         objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
                 return parentAdapter;
             })
             .filter(_NullSafe::isPresent)
             .map(parentAdapter->{
-                final Oid parentOid = parentAdapter.getOid();
+                final Oid parentOid = ManagedObject.promote(parentAdapter).getOid();
                 return parentOid;
             })
             .filter(_NullSafe::isPresent)

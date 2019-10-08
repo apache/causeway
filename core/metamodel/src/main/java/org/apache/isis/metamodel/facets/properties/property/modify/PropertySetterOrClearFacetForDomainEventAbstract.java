@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -45,6 +44,7 @@ import org.apache.isis.metamodel.facets.properties.update.clear.PropertyClearFac
 import org.apache.isis.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
@@ -86,8 +86,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             void invoke(
                     final PropertySetterOrClearFacetForDomainEventAbstract facet,
                     final OneToOneAssociation owningProperty,
-                    final ObjectAdapter targetAdapter,
-                    final ObjectAdapter valueAdapterOrNull,
+                    final ManagedObject targetAdapter,
+                    final ManagedObject valueAdapterOrNull,
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 facet.setterFacet.setProperty(
                         owningProperty, targetAdapter, valueAdapterOrNull, interactionInitiatedBy);
@@ -104,8 +104,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             void invoke(
                     final PropertySetterOrClearFacetForDomainEventAbstract facet,
                     final OneToOneAssociation owningProperty,
-                    final ObjectAdapter targetAdapter,
-                    final ObjectAdapter valueAdapterOrNull,
+                    final ManagedObject targetAdapter,
+                    final ManagedObject valueAdapterOrNull,
                     final InteractionInitiatedBy interactionInitiatedBy) {
 
                 facet.clearFacet.clearProperty(
@@ -119,14 +119,14 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         abstract void invoke(
                 final PropertySetterOrClearFacetForDomainEventAbstract facet,
                 final OneToOneAssociation owningProperty,
-                final ObjectAdapter targetAdapter,
-                final ObjectAdapter valueAdapterOrNull,
+                final ManagedObject targetAdapter,
+                final ManagedObject valueAdapterOrNull,
                 final InteractionInitiatedBy interactionInitiatedBy);
     }
 
     public void clearProperty(
             final OneToOneAssociation owningProperty,
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setOrClearProperty(Style.CLEAR,
@@ -136,8 +136,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     public void setProperty(
             final OneToOneAssociation owningProperty,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter newValueAdapter,
+            final ManagedObject targetAdapter,
+            final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setOrClearProperty(Style.SET,
@@ -148,11 +148,11 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     private void setOrClearProperty(
             final Style style,
             final OneToOneAssociation owningProperty,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter newValueAdapter,
+            final ManagedObject targetAdapter,
+            final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter mixedInAdapter = null;
+        final ManagedObject mixedInAdapter = null;
 
         getTransactionService().executeWithinTransaction(()->{
             doSetOrClearProperty(style, owningProperty, targetAdapter, mixedInAdapter, newValueAdapter, interactionInitiatedBy);
@@ -163,9 +163,9 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     private void doSetOrClearProperty(
             final Style style,
             final OneToOneAssociation owningProperty,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter newValueAdapter,
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         // similar code in ActionInvocationFacetFDEA
@@ -197,8 +197,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
         } else {
 
-            final Object target = ObjectAdapter.Util.unwrapPojo(targetAdapter);
-            final Object argValue = ObjectAdapter.Util.unwrapPojo(newValueAdapter);
+            final Object target = ManagedObject.unwrapPojo(targetAdapter);
+            final Object argValue = ManagedObject.unwrapPojo(newValueAdapter);
 
             final String targetMember = CommandUtil.targetMemberNameFor(owningProperty);
             final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
@@ -230,7 +230,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
                         // ... post the executing event
                         final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-                        final Object newValue = ObjectAdapter.Util.unwrapPojo(newValueAdapter);
+                        final Object newValue = ManagedObject.unwrapPojo(newValueAdapter);
 
                         final PropertyDomainEvent<?, ?> event =
                                 domainEventHelper.postEventForProperty(

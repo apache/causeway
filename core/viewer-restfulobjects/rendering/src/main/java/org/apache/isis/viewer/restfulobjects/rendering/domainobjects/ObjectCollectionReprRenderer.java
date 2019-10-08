@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -36,6 +37,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
+
+import lombok.val;
 
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
@@ -84,7 +87,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     // ///////////////////////////////////////////////////
 
     private void addValue(final LinkFollowSpecs linkFollower) {
-        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        val valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
         if (valueAdapter == null) {
             return;
         }
@@ -92,16 +95,17 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
-        final Stream<ObjectAdapter> elementAdapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
+        final Stream<ManagedObject> elementAdapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
 
         final List<JsonRepresentation> list = _Lists.newArrayList();
 
         elementAdapters.forEach(elementAdapter->{
-            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
+            final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
+                    .newLinkToBuilder(rendererContext, Rel.VALUE, ManagedObject.promote(elementAdapter));
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), followHref, JsonRepresentation.newMap()
                         );
-                renderer.with(elementAdapter);
+                renderer.with(ManagedObject.promote(elementAdapter));
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
                 }
@@ -115,8 +119,8 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         representation.mapPut("value", list);
     }
 
-    private boolean renderEagerly(ObjectAdapter valueAdapter) {
-        return renderEagerly() && rendererContext.canEagerlyRender(valueAdapter);
+    private boolean renderEagerly(ManagedObject valueAdapter) {
+        return renderEagerly() && rendererContext.canEagerlyRender(ManagedObject.promote(valueAdapter));
     }
 
     // ///////////////////////////////////////////////////

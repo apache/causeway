@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.specloader.classsubstitutor;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.metamodel.commons.ClassUtil;
 
@@ -78,14 +79,21 @@ public class ClassSubstitutor {
         if (ClassUtil.directlyImplements(cls, ProxyEnhanced.class)) {
             return getClass(cls.getSuperclass());
         }
+        
+        try {
+            // guard against cannot introspect
+            _Blackhole.consume(cls.getMethods());    
+        } catch (Throwable e) {
+            classesToIgnore.add(cls);
+            return null;
+        }
+        
         return cls;
     }
 
+    // -- HELPERS
 
-
-    // -- helpers
-
-    private final Set<Class<?>> classesToIgnore = _Sets.newHashSet();
+    private final Set<Class<?>> classesToIgnore = _Sets.newConcurrentHashSet();
     private final Set<String> classNamesToIgnore = _Sets.newHashSet();
 
 
@@ -122,8 +130,5 @@ public class ClassSubstitutor {
             }
         }
     }
-
-
-
 
 }

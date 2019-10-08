@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
@@ -163,64 +162,64 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     }
 
     @Override
-    public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
-        final ObjectAdapter[] contributorDefaults = serviceAction.getDefaults(getServiceAdapter());
-        return removeElementFromArray(contributorDefaults, contributeeParam, new ObjectAdapter[]{});
+    public ManagedObject[] getDefaults(final ManagedObject target) {
+        final ManagedObject[] contributorDefaults = serviceAction.getDefaults(getServiceAdapter());
+        return removeElementFromArray(contributorDefaults, contributeeParam, new ManagedObject[]{});
     }
 
     @Override
-    public ObjectAdapter[][] getChoices(
-            final ObjectAdapter target,
+    public ManagedObject[][] getChoices(
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(getServiceAdapter(),
+        final ManagedObject[][] serviceChoices = serviceAction.getChoices(getServiceAdapter(),
                 interactionInitiatedBy);
-        return removeElementFromArray(serviceChoices, contributeeParam, new ObjectAdapter[][]{});
+        return removeElementFromArray(serviceChoices, contributeeParam, new ManagedObject[][]{});
     }
 
     @Override
     public Consent isProposedArgumentSetValid(
-            final ObjectAdapter contributee,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject contributee,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        final ManagedObject[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
         return serviceAction.isProposedArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
     public Consent isEachIndividualArgumentValid(
-            final ObjectAdapter contributee,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject contributee,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        final ManagedObject[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
         return serviceAction.isEachIndividualArgumentValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
     public Consent isArgumentSetValid(
-            final ObjectAdapter contributee,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject contributee,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        final ManagedObject[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
         return serviceAction.isArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
-    public ObjectAdapter execute(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] argumentAdapters,
+    public ManagedObject execute(
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setupCommand(targetAdapter, argumentAdapters);
 
-        final ObjectAdapter[] serviceArguments = argsPlusContributee(targetAdapter, argumentAdapters);
+        final ManagedObject[] serviceArguments = argsPlusContributee(targetAdapter, argumentAdapters);
         return serviceAction.executeInternal(
                 getServiceAdapter(), mixedInAdapter, serviceArguments, interactionInitiatedBy);
     }
 
 
-    private ObjectAdapter[] argsPlusContributee(final ObjectAdapter contributee, final ObjectAdapter[] arguments) {
-        return addElementToArray(arguments, contributeeParam, contributee, new ObjectAdapter[]{});
+    private ManagedObject[] argsPlusContributee(final ManagedObject contributee, final ManagedObject[] arguments) {
+        return addElementToArray(arguments, contributeeParam, contributee, new ManagedObject[]{});
     }
 
     // //////////////////////////////////////
@@ -297,7 +296,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         return list.toArray(t);
     }
 
-    public ObjectAdapter getServiceAdapter() {
+    public ManagedObject getServiceAdapter() {
         return getObjectAdapterProvider().adapterFor(servicePojo);
     }
 

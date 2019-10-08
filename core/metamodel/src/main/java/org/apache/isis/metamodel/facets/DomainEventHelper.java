@@ -69,7 +69,7 @@ public class DomainEventHelper {
                     final ManagedObject mixedInAdapter,
                     final ManagedObject[] argumentAdapters,
                     final Command command,
-                    final ObjectAdapter resultAdapter) {
+                    final ManagedObject resultAdapter) {
         
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
 

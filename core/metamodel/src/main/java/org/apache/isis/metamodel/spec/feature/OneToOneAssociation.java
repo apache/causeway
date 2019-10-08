@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -37,7 +36,7 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * for re-initialising the object and not specifying an association, which
      * is only done once.
      */
-    void initAssociation(ObjectAdapter inObject, ObjectAdapter associate);
+    void initAssociation(ManagedObject inObject, ManagedObject associate);
 
 
 

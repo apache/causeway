@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.objectvalue.choices;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public interface ChoicesFacet extends Facet {
@@ -30,7 +30,7 @@ public interface ChoicesFacet extends Facet {
      * Gets a set of choices for this object.
      */
     public Object[] getChoices(
-            final ObjectAdapter adapter,
+            final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 

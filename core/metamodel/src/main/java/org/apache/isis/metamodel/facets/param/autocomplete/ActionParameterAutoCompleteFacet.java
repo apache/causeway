@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.param.autocomplete;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Obtain autocompletion for each of the parameters of the action.
@@ -34,7 +34,7 @@ import org.apache.isis.metamodel.facetapi.Facet;
 public interface ActionParameterAutoCompleteFacet extends Facet {
 
     public Object[] autoComplete(
-            final ObjectAdapter inObject,
+            final ManagedObject inObject,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy);
     /**

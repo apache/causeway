@@ -32,6 +32,7 @@ import org.apache.isis.metamodel.facets.CollectionUtils;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.metamodel.spec.DomainModelException;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -67,7 +68,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     @Override
     public Object[][] getChoices(
-            final ObjectAdapter owningAdapter,
+            final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object objectOrCollection = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
@@ -95,14 +96,14 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             return null;
         }
 
-        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
+        final ManagedObject collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
-        final List<ObjectAdapter> visibleAdapters =
+        final List<ManagedObject> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> filteredObjects =
-                _Lists.map(visibleAdapters, ObjectAdapter.Util::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getObjectAdapterProvider());

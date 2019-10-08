@@ -34,6 +34,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
@@ -87,7 +88,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
             // TODO: maybe this logic should move instead to ScalarModel.Kind#whether{Hidden/Disabled}
             final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
-            final ObjectAdapter realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
+            final ManagedObject realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
                     .realTargetAdapter(targetAdapter);
             final Consent consent = apm.getActionParameter(getSpecificationLoader())
                     .isVisible(realTargetAdapter, null, InteractionInitiatedBy.USER);

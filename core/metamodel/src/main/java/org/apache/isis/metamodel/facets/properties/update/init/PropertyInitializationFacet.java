@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.properties.update.init;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * The mechanism by which the value of the property can be initialised.
@@ -44,5 +44,5 @@ public interface PropertyInitializationFacet extends Facet {
     /**
      * Sets the value of this property.
      */
-    public void initProperty(ObjectAdapter inObject, ObjectAdapter value);
+    public void initProperty(ManagedObject inObject, ManagedObject value);
 }

@@ -28,6 +28,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaultsFacetAbstract implements ImperativeFacet {
 
@@ -67,8 +68,8 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
     @Override
     public Object getDefault(
-            final ObjectAdapter target,
-            final List<ObjectAdapter> argumentsIfAvailable,
+            final ManagedObject target,
+            final List<ManagedObject> argumentsIfAvailable,
             final Integer paramNumUpdated) {
 
         // this isn't a dependent defaults situation, so just evaluate the default.
@@ -93,7 +94,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
         // otherwise, just return the arguments that are already known; we don't want to recompute the default
         // because if we did then this would trample over any pending changes already made by the end-user.
-        final ObjectAdapter objectAdapter = argumentsIfAvailable.get(paramNum);
+        final ManagedObject objectAdapter = argumentsIfAvailable.get(paramNum);
         return objectAdapter != null ? objectAdapter.getPojo() : null;
     }
 

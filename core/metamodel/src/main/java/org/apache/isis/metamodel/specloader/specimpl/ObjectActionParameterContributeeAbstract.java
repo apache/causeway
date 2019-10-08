@@ -20,10 +20,10 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.ListExtensions;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 
 public abstract class ObjectActionParameterContributeeAbstract
@@ -47,29 +47,29 @@ implements ObjectActionParameterContributee {
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter adapter,
+    public ManagedObject[] getAutoComplete(
+            final ManagedObject adapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return serviceActionParameter.getAutoComplete(getServiceAdapter(), searchArg,
                 interactionInitiatedBy);
     }
 
-    protected ObjectAdapter getServiceAdapter() {
+    protected ManagedObject getServiceAdapter() {
         return getObjectAdapterProvider().adapterFor(servicePojo);
     }
 
     @Override
-    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter adapter) {
+    protected ManagedObject targetForDefaultOrChoices(final ManagedObject adapter) {
         return getServiceAdapter();
     }
 
     @Override
-    protected List<ObjectAdapter> argsForDefaultOrChoices(
-            final ObjectAdapter contributee,
-            final List<ObjectAdapter> argumentsIfAvailable) {
+    protected List<ManagedObject> argsForDefaultOrChoices(
+            final ManagedObject contributee,
+            final List<ManagedObject> argumentsIfAvailable) {
 
-        final List<ObjectAdapter> suppliedArgs = ListExtensions.mutableCopy(argumentsIfAvailable);
+        final List<ManagedObject> suppliedArgs = ListExtensions.mutableCopy(argumentsIfAvailable);
 
         final int contributeeParam = contributeeAction.getContributeeParam();
         ListExtensions.insert(suppliedArgs, contributeeParam, contributee);

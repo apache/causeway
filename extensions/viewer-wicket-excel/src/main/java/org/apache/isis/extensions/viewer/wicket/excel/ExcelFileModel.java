@@ -48,6 +48,8 @@ import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
+import lombok.val;
+
 class ExcelFileModel extends LoadableDetachableModel<File> {
 
     private static final long serialVersionUID = 1L;
@@ -167,7 +169,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             final Cell cell, 
             CellStyle dateCellStyle) {
 
-        final ObjectAdapter valueAdapter = property.get(objectAdapter);
+        val valueAdapter = property.get(objectAdapter);
 
         // null
         if (valueAdapter == null) {

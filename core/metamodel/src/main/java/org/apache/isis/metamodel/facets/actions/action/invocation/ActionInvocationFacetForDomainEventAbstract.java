@@ -66,12 +66,15 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.val;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
 extends ActionInvocationFacetAbstract
@@ -127,14 +130,14 @@ implements ImperativeFacet {
 
 
     @Override
-    public ObjectAdapter invoke(
+    public ManagedObject invoke(
             final ObjectAction owningAction,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] argumentAdapters,
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter executionResult = 
+        final ManagedObject executionResult = 
                 getTransactionService().executeWithinTransaction(()->
                 doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
 
@@ -143,11 +146,11 @@ implements ImperativeFacet {
         return executionResult;
     }
 
-    ObjectAdapter doInvoke(
+    ManagedObject doInvoke(
             final ObjectAction owningAction,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] argumentAdapters,
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // similar code in PropertySetterOrClearFacetFDEA
 
@@ -160,7 +163,7 @@ implements ImperativeFacet {
 
         final String actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
 
-        final ObjectAdapter returnedAdapter;
+        final ManagedObject returnedAdapter;
         if( command.getExecutor() == Command.Executor.USER &&
                 command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
 
@@ -177,11 +180,11 @@ implements ImperativeFacet {
 
         } else {
             // otherwise, go ahead and execute action in the 'foreground'
-            final ObjectAdapter mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
+            final ManagedObject mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
 
-            final Object mixinElseRegularPojo = ObjectAdapter.Util.unwrapPojo(mixinElseRegularAdapter);
+            final Object mixinElseRegularPojo = ManagedObject.unwrapPojo(mixinElseRegularAdapter);
 
-            final List<ObjectAdapter> argumentAdapterList = Arrays.asList(argumentAdapters);
+            final List<ManagedObject> argumentAdapterList = Arrays.asList(argumentAdapters);
             final List<Object> argumentPojos = ObjectAdapter.Util.unwrapPojoList(argumentAdapterList);
 
             final String targetMember = targetNameFor(owningAction, mixedInAdapter);
@@ -232,8 +235,8 @@ implements ImperativeFacet {
                         currentExecution.setEvent(event);
 
                         // invoke method
-                        final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
-                        ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
+                        val resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
+                        ManagedObject resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
 
                         // ... post the executed event
 
@@ -250,7 +253,7 @@ implements ImperativeFacet {
                         if(returnValue != resultPojo) {
                             resultAdapterPossiblyCloned = cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
                         }
-                        return ObjectAdapter.Util.unwrapPojo(resultAdapterPossiblyCloned);
+                        return ManagedObject.unwrapPojo(resultAdapterPossiblyCloned);
 
                     } catch (Exception e) {
 
@@ -320,7 +323,7 @@ implements ImperativeFacet {
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
     }
 
-    private static String targetNameFor(ObjectAction owningAction, ObjectAdapter mixedInAdapter) {
+    private static String targetNameFor(ObjectAction owningAction, ManagedObject mixedInAdapter) {
         return ObjectAction.Util.targetNameFor(owningAction, mixedInAdapter)
                 .orElseGet(()->CommandUtil.targetMemberNameFor(owningAction));
     }
@@ -336,7 +339,7 @@ implements ImperativeFacet {
     }
 
     protected Object invokeMethodElseFromCache(
-            final ObjectAdapter targetAdapter, final ObjectAdapter[] arguments)
+            final ManagedObject targetAdapter, final ManagedObject[] arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
         final Object[] executionParameters = new Object[arguments.length];
@@ -360,14 +363,14 @@ implements ImperativeFacet {
         }
     }
 
-    protected ObjectAdapter cloneIfViewModelCloneable(
+    protected ManagedObject cloneIfViewModelCloneable(
             final Object resultPojo,
-            final ObjectAdapter targetAdapter) {
+            final ManagedObject targetAdapter) {
 
         // to remove boilerplate from the domain, we automatically clone the returned object if it is a view model.
 
         if (resultPojo != null) {
-            final ObjectAdapter resultAdapter = getObjectAdapterProvider().adapterFor(resultPojo);
+            final ManagedObject resultAdapter = getObjectAdapterProvider().adapterFor(resultPojo);
             return cloneIfViewModelElse(resultAdapter, resultAdapter);
         } else {
             // if void or null, attempt to clone the original target, else return null.
@@ -375,7 +378,7 @@ implements ImperativeFacet {
         }
     }
 
-    private ObjectAdapter cloneIfViewModelElse(final ObjectAdapter adapter, final ObjectAdapter dfltAdapter) {
+    private ManagedObject cloneIfViewModelElse(final ManagedObject adapter, final ManagedObject dfltAdapter) {
 
         if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
             return dfltAdapter;
@@ -384,12 +387,12 @@ implements ImperativeFacet {
         final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
         final Object clone = viewModelFacet.clone(adapter.getPojo());
 
-        final ObjectAdapter clonedAdapter = getObjectAdapterProvider().adapterFor(clone);
+        final ManagedObject clonedAdapter = getObjectAdapterProvider().adapterFor(clone);
         return clonedAdapter;
     }
 
 
-    protected void setCommandResultIfEntity(final Command command, final ObjectAdapter resultAdapter) {
+    protected void setCommandResultIfEntity(final Command command, final ManagedObject resultAdapter) {
         if(command.getResult() != null) {
             // don't trample over any existing result, eg subsequent mixins.
             return;
@@ -427,8 +430,8 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(BookmarkService.class);
     }
 
-    protected ObjectAdapter filteredIfRequired(
-            final ObjectAdapter resultAdapter,
+    protected ManagedObject filteredIfRequired(
+            final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         if (resultAdapter == null) {
@@ -444,15 +447,15 @@ implements ImperativeFacet {
 
         if(result instanceof Collection || result.getClass().isArray()) {
 
-            final Stream<ObjectAdapter> adapters = CollectionFacet.Utils.streamAdapters(resultAdapter);
+            final Stream<ManagedObject> adapters = CollectionFacet.Utils.streamAdapters(resultAdapter);
 
-            final List<ObjectAdapter> visibleAdapters =
+            final List<ManagedObject> visibleAdapters =
                     ObjectAdapter.Util.visibleAdapters(adapters, interactionInitiatedBy);
 
             final Object visibleObjects =
                     CollectionUtils.copyOf(
                             stream(visibleAdapters)
-                            .map(ObjectAdapter.Util::unwrapPojo)
+                            .map(ManagedObject::unwrapPojo)
                             .collect(Collectors.toList()),
                             method.getReturnType());
 
@@ -475,7 +478,7 @@ implements ImperativeFacet {
         return uncheckedCast(eventType);
     }
 
-    private static Object unwrap(final ObjectAdapter adapter) {
+    private static Object unwrap(final ManagedObject adapter) {
         return adapter == null ? null : adapter.getPojo();
     }
 

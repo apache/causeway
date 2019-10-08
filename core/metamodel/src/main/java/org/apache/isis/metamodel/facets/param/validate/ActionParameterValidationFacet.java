@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.facets.param.validate;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -42,5 +41,5 @@ public interface ActionParameterValidationFacet extends Facet, ValidatingInterac
     /**
      * Reason why the validation has failed, or <tt>null</tt> if okay.
      */
-    public String invalidReason(ManagedObject target, ObjectAdapter arguments);
+    public String invalidReason(ManagedObject target, ManagedObject arguments);
 }

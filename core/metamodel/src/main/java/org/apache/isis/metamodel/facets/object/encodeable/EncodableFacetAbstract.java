@@ -25,6 +25,7 @@ import org.apache.isis.metamodel.commons.ClassExtensions;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public abstract class EncodableFacetAbstract extends FacetAbstract implements EncodableFacet {
 
@@ -78,7 +79,7 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     }
 
     @Override
-    public String toEncodedString(final ObjectAdapter object) {
+    public String toEncodedString(final ManagedObject object) {
         return encodeableFacetUsingEncoderDecoder.toEncodedString(object);
     }
 

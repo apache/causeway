@@ -38,9 +38,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
@@ -54,6 +52,7 @@ import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.metamodel.spec.ActionType;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.MixedInMember;
 
@@ -104,10 +103,10 @@ public interface ObjectAction extends ObjectMember {
      *
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
-    ObjectAdapter executeWithRuleChecking(
-            final ObjectAdapter target,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] parameters,
+    ManagedObject executeWithRuleChecking(
+            final ManagedObject target,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) throws AuthorizationException;
 
@@ -117,10 +116,10 @@ public interface ObjectAction extends ObjectMember {
      *
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
-    ObjectAdapter execute(
-            ObjectAdapter targetAdapter,
-            ObjectAdapter mixedInAdapter,
-            ObjectAdapter[] parameters,
+    ManagedObject execute(
+            ManagedObject targetAdapter,
+            ManagedObject mixedInAdapter,
+            ManagedObject[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
@@ -137,18 +136,18 @@ public interface ObjectAction extends ObjectMember {
      * </p>
      */
     Consent isProposedArgumentSetValid(
-            ObjectAdapter object,
-            ObjectAdapter[] proposedArguments,
+            ManagedObject object,
+            ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isEachIndividualArgumentValid(
-            ObjectAdapter objectAdapter,
-            ObjectAdapter[] proposedArguments,
+            ManagedObject objectAdapter,
+            ManagedObject[] proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isArgumentSetValid(
-            ObjectAdapter objectAdapter,
-            ObjectAdapter[] proposedArguments,
+            ManagedObject objectAdapter,
+            ManagedObject[] proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
 
@@ -201,7 +200,7 @@ public interface ObjectAction extends ObjectMember {
      *     For regular actions, returns same argument, but for mixin actions, will be an instance of the mixin.
      * </p>
      */
-    ObjectAdapter realTargetAdapter(ObjectAdapter targetAdapter);
+    ManagedObject realTargetAdapter(ManagedObject targetAdapter);
 
 
 
@@ -210,14 +209,14 @@ public interface ObjectAction extends ObjectMember {
     /**
      * Returns the defaults references/values to be used for the action.
      */
-    ObjectAdapter[] getDefaults(ObjectAdapter target);
+    ManagedObject[] getDefaults(ManagedObject target);
 
     /**
      * Returns a list of possible references/values for each parameter, which
      * the user can choose from.
      */
-    ObjectAdapter[][] getChoices(
-            final ObjectAdapter target,
+    ManagedObject[][] getChoices(
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
@@ -297,14 +296,15 @@ public interface ObjectAction extends ObjectMember {
             return facet != null ? facet.getPosition() : CssClassFaPosition.LEFT;
         }
 
-        public static String cssClassFor(final ObjectAction action, final ObjectAdapter objectAdapter) {
+        public static String cssClassFor(final ObjectAction action, final ManagedObject objectAdapter) {
             final CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
             return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
 
+        @SuppressWarnings("deprecation")
         public static List<ObjectAction> findTopLevel(
-                final ObjectAdapter adapter) {
+                final ManagedObject adapter) {
             final List<ObjectAction> topLevelActions = _Lists.newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
@@ -315,7 +315,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         static void addTopLevelActions(
-                final ObjectAdapter adapter,
+                final ManagedObject adapter,
                 final ActionType actionType,
                 final List<ObjectAction> topLevelActions) {
 
@@ -336,8 +336,9 @@ public interface ObjectAction extends ObjectMember {
         }
 
 
+        @SuppressWarnings("deprecation")
         public static List<ObjectAction> findForAssociation(
-                final ObjectAdapter adapter,
+                final ManagedObject adapter,
                 final ObjectAssociation association) {
 
             final List<ObjectAction> associatedActions = _Lists.newArrayList();
@@ -360,7 +361,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         static void addActions(
-                final ObjectAdapter adapter,
+                final ManagedObject adapter,
                 final ActionType type,
                 final ObjectAssociation association, final List<ObjectAction> associatedActions) {
             final ObjectSpecification objectSpecification = adapter.getSpecification();
@@ -392,7 +393,7 @@ public interface ObjectAction extends ObjectMember {
 
         public static Optional<String> targetNameFor(
                 final ObjectAction owningAction,
-                final @Nullable ObjectAdapter mixedInAdapter) {
+                final @Nullable ManagedObject mixedInAdapter) {
 
             if(mixedInAdapter != null) {
                 final ObjectSpecification onType = owningAction.getOnType();
@@ -500,9 +501,10 @@ public interface ObjectAction extends ObjectMember {
         //        }
 
         public static Predicate<ObjectAction> dynamicallyVisible(
-                final ObjectAdapter target,
+                final ManagedObject target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
+            
             return (ObjectAction objectAction) -> {
                 final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
                 return visible.isAllowed();

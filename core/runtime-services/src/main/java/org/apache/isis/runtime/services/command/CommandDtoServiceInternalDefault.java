@@ -31,11 +31,11 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
@@ -54,6 +54,8 @@ import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
+import lombok.val;
+
 @DomainService(
         nature = NatureOfService.DOMAIN
         )
@@ -68,9 +70,9 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     @Override
     public CommandDto asCommandDto(
-            final List<ObjectAdapter> targetAdapters,
+            final List<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
-            final ObjectAdapter[] argAdapters) {
+            final ManagedObject[] argAdapters) {
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
@@ -85,9 +87,9 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     @Override
     public CommandDto asCommandDto(
-            final List<ObjectAdapter> targetAdapters,
+            final List<ManagedObject> targetAdapters,
             final OneToOneAssociation property,
-            final ObjectAdapter valueAdapterOrNull) {
+            final ManagedObject valueAdapterOrNull) {
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
@@ -100,7 +102,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         return dto;
     }
 
-    private CommandDto asCommandDto(final List<ObjectAdapter> targetAdapters) {
+    private CommandDto asCommandDto(final List<ManagedObject> targetAdapters) {
         final CommandDto dto = new CommandDto();
         dto.setMajorVersion("1");
         dto.setMinorVersion("0");
@@ -108,8 +110,8 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         String transactionId = determineTransactionId().toString();
         dto.setTransactionId(transactionId);
 
-        for (ObjectAdapter targetAdapter : targetAdapters) {
-            final RootOid rootOid = (RootOid) targetAdapter.getOid();
+        for (val targetAdapter : targetAdapters) {
+            final RootOid rootOid = (RootOid) ManagedObject.promote(targetAdapter).getOid();
             final Bookmark bookmark = rootOid.asBookmark();
             final OidsDto targets = CommandDtoUtils.targetsFor(dto);
             targets.getOid().add(bookmark.toOidDto());
@@ -130,7 +132,8 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     public void addActionArgs(
             final ObjectAction objectAction,
             final ActionDto actionDto,
-            final ObjectAdapter[] argAdapters) {
+            final ManagedObject[] argAdapters) {
+        
         final String actionId = CommandUtil.memberIdentifierFor(objectAction);
         final ObjectSpecification onType = objectAction.getOnType();
         final String objectType = onType.getSpecId().asString();
@@ -143,7 +146,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final ObjectActionParameter actionParameter = actionParameters.get(paramNum);
             final String parameterName = actionParameter.getName();
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
-            final ObjectAdapter argAdapter = argAdapters[paramNum];
+            final ManagedObject argAdapter = argAdapters[paramNum];
             final Object arg = argAdapter != null? argAdapter.getPojo(): null;
             final ParamsDto parameters = CommandDtoUtils.parametersFor(actionDto);
             final List<ParamDto> parameterList = parameters.getParameter();
@@ -158,7 +161,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     public void addPropertyValue(
             final OneToOneAssociation property,
             final PropertyDto propertyDto,
-            final ObjectAdapter valueAdapter) {
+            final ManagedObject valueAdapter) {
 
         final String actionIdentifier = CommandUtil.memberIdentifierFor(property);
         final ObjectSpecification onType = property.getOnType();
@@ -171,7 +174,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         final Class<?> valueType = valueSpec.getCorrespondingClass();
 
         final ValueWithTypeDto newValue = CommonDtoUtils.newValueWithTypeDto(
-                valueType, ObjectAdapter.Util.unwrapPojo(valueAdapter), bookmarkService);
+                valueType, ManagedObject.unwrapPojo(valueAdapter), bookmarkService);
         propertyDto.setNewValue(newValue);
     }
 

@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
@@ -50,7 +49,8 @@ import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
 
-public class OneToManyAssociationDefault extends ObjectAssociationAbstract implements OneToManyAssociation {
+public class OneToManyAssociationDefault 
+extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     public OneToManyAssociationDefault(final FacetedMethod facetedMethod) {
         this(facetedMethod, specificationOf(facetedMethod.getType()));
@@ -93,23 +93,23 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     // Not API
     private ValidityContext<?> createValidateAddInteractionContext(
             final InteractionInitiatedBy interactionInitiatedBy,
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToAddAdapter) {
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToAddAdapter) {
         return new CollectionAddToContext(ownerAdapter, getIdentifier(), proposedToAddAdapter,
                 interactionInitiatedBy);
     }
 
     @Override
     public Consent isValidToAdd(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToAddAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToAddAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return isValidToAddResult(ownerAdapter, proposedToAddAdapter, interactionInitiatedBy).createConsent();
     }
 
     private InteractionResult isValidToAddResult(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToAddAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToAddAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ValidityContext<?> validityContext = createValidateAddInteractionContext(
                 interactionInitiatedBy, ownerAdapter, proposedToAddAdapter);
@@ -120,8 +120,8 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     // -- Validate Remove
     private ValidityContext<?> createValidateRemoveInteractionContext(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToRemoveAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToRemoveAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new CollectionRemoveFromContext(
                 ownerAdapter, getIdentifier(), proposedToRemoveAdapter, interactionInitiatedBy
@@ -130,16 +130,16 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     @Override
     public Consent isValidToRemove(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToRemoveAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToRemoveAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return isValidToRemoveResult(
                 ownerAdapter, proposedToRemoveAdapter, interactionInitiatedBy).createConsent();
     }
 
     private InteractionResult isValidToRemoveResult(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToRemoveAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToRemoveAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ValidityContext<?> validityContext = createValidateRemoveInteractionContext(
                 ownerAdapter, proposedToRemoveAdapter, interactionInitiatedBy);
@@ -155,8 +155,8 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     // -- get, isEmpty, add, clear
 
     @Override
-    public ObjectAdapter get(
-            final ObjectAdapter ownerAdapter,
+    public ManagedObject get(
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertyOrCollectionAccessorFacet accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
@@ -165,16 +165,16 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
             return null;
         }
 
-        val parentOid = (RootOid)ownerAdapter.getOid();
+        val parentOid = (RootOid)ManagedObject.promote(ownerAdapter).getOid();
         val newAdapter = getObjectAdapterProvider().adapterForCollection(collection, parentOid, this);
         return newAdapter.injectServices(getServiceInjector());
     }
 
     @Override
-    public boolean isEmpty(final ObjectAdapter parentAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    public boolean isEmpty(final ManagedObject parentAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         // REVIEW should we be able to determine if a collection is empty
         // without loading it?
-        final ObjectAdapter collection = get(parentAdapter, interactionInitiatedBy);
+        final ManagedObject collection = get(parentAdapter, interactionInitiatedBy);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         return facet.size(collection) == 0;
     }
@@ -183,27 +183,29 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     @Override
     public void addElement(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter referencedAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject referencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if (referencedAdapter == null) {
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
         if (readWrite()) {
-            if (ownerAdapter.isRepresentingPersistent() && referencedAdapter.isTransient()) {
+            
+            //if(ownerAdapter.getSpecification().isEntity() && !referencedAdapter.getSpecification().isEntity()) {
+            if (ManagedObject.promote(ownerAdapter).isRepresentingPersistent() && ManagedObject.promote(referencedAdapter).isTransient()) {
                 throw new IsisException("can't set a reference to a transient object from a persistent one: "
                         + ownerAdapter.titleString(null)
                         + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
             }
-            final CollectionAddToFacet facet = getFacet(CollectionAddToFacet.class);
+            val facet = getFacet(CollectionAddToFacet.class);
             facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);
         }
     }
 
     @Override
     public void removeElement(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter referencedAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject referencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if (referencedAdapter == null) {
             throw new IllegalArgumentException("element should not be null");
@@ -214,40 +216,29 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         }
     }
 
-    public void removeAllAssociations(final ObjectAdapter ownerAdapter) {
+    public void removeAllAssociations(final ManagedObject ownerAdapter) {
         final CollectionClearFacet facet = getFacet(CollectionClearFacet.class);
         facet.clear(ownerAdapter);
     }
 
-    @Override
-    public void clearCollection(final ObjectAdapter ownerAdapter) {
-        if (readWrite()) {
-            final CollectionClearFacet facet = getFacet(CollectionClearFacet.class);
-            facet.clear(ownerAdapter);
-        }
-    }
-
-
-
     // -- defaults
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter ownerAdapter) {
+    public ManagedObject getDefault(final ManagedObject ownerAdapter) {
         return null;
     }
 
     @Override
-    public void toDefault(final ObjectAdapter ownerAdapter) {
+    public void toDefault(final ManagedObject ownerAdapter) {
     }
-
 
 
     // -- choices & autoComplete
 
     @Override
-    public ObjectAdapter[] getChoices(
-            final ObjectAdapter ownerAdapter,
+    public ManagedObject[] getChoices(
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ObjectAdapter[0];
+        return new ManagedObject[0];
     }
 
     @Override
@@ -262,11 +253,11 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(
-            ObjectAdapter object,
+    public ManagedObject[] getAutoComplete(
+            ManagedObject object,
             String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ObjectAdapter[0];
+        return new ManagedObject[0];
     }
 
     @Override

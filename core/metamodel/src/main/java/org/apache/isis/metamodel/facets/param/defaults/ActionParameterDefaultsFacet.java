@@ -21,8 +21,8 @@ package org.apache.isis.metamodel.facets.param.defaults;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Obtain defaults for each of the parameters of the action.
@@ -35,7 +35,7 @@ import org.apache.isis.metamodel.facetapi.Facet;
 public interface ActionParameterDefaultsFacet extends Facet {
 
     public abstract Object getDefault(
-            ObjectAdapter target,
-            List<ObjectAdapter> parameters,
+            ManagedObject target,
+            List<ManagedObject> parameters,
             final Integer paramNumUpdated);
 }

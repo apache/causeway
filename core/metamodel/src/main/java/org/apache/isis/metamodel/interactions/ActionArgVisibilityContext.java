@@ -23,9 +23,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
@@ -38,14 +38,14 @@ import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojoArr
 public class ActionArgVisibilityContext extends VisibilityContext<ActionArgumentVisibilityEvent> implements ActionInteractionContext {
 
     private final ObjectAction objectAction;
-    private final ObjectAdapter[] args;
+    private final ManagedObject[] args;
     private final int position;
 
     public ActionArgVisibilityContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ObjectAdapter[] args,
+            final ManagedObject[] args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_PARAMETER_VISIBLE, targetAdapter, id, interactionInitiatedBy, Where.OBJECT_FORMS);
@@ -60,7 +60,7 @@ public class ActionArgVisibilityContext extends VisibilityContext<ActionArgument
         return objectAction;
     }
 
-    public ObjectAdapter[] getArgs() {
+    public ManagedObject[] getArgs() {
         return args;
     }
 

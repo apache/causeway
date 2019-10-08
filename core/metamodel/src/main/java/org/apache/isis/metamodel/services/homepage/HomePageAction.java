@@ -19,8 +19,8 @@
 package org.apache.isis.metamodel.services.homepage;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import lombok.NonNull;
@@ -33,15 +33,15 @@ import lombok.val;
 @Value(staticConstructor = "of")
 public final class HomePageAction {
 
-    @NonNull private final ObjectAdapter objectAdapter;
+    @NonNull private final ManagedObject objectAdapter;
     @NonNull private final ObjectAction objectAction;
 
     public Object getHomePagePojo() {
 
-        final ObjectAdapter mixedInAdapter = null;
-        final ObjectAdapter[] parameters = {};
+        final ManagedObject mixedInAdapter = null;
+        final ManagedObject[] parameters = {};
 
-        final ObjectAdapter resultAdapter = objectAction.executeWithRuleChecking(
+        final ManagedObject resultAdapter = objectAction.executeWithRuleChecking(
                 objectAdapter, mixedInAdapter, parameters,
                 InteractionInitiatedBy.USER,
                 WHERE_FOR_ACTION_INVOCATION);

@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.consent.InteractionResultSet;
@@ -65,6 +64,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.schema.cmd.v1.CommandDto;
+
+import lombok.val;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
 
@@ -290,8 +291,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     @Override
     public Consent isProposedArgumentSetValid(
-            final ObjectAdapter targetObject,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject targetObject,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -320,8 +321,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     @Override
     public Consent isEachIndividualArgumentValid(
-            final ObjectAdapter objectAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject objectAdapter,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -332,8 +333,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private void validateArgumentsIndividually(
-            final ObjectAdapter objectAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject objectAdapter,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         final List<ObjectActionParameter> actionParameters = getParameters();
@@ -363,8 +364,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     @Override
     public Consent isArgumentSetValid(
-            final ObjectAdapter objectAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject objectAdapter,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -374,8 +375,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     protected void validateArgumentSet(
-            final ObjectAdapter objectAdapter,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject objectAdapter,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         final ValidityContext<?> ic = createActionInvocationInteractionContext(
@@ -384,8 +385,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     ActionValidityContext createActionInvocationInteractionContext(
-            final ObjectAdapter targetObject,
-            final ObjectAdapter[] proposedArguments,
+            final ManagedObject targetObject,
+            final ManagedObject[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new ActionValidityContext(targetObject, this, getIdentifier(), proposedArguments,
                 interactionInitiatedBy);
@@ -396,10 +397,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     // -- executeWithRuleChecking, execute
 
     @Override
-    public ObjectAdapter executeWithRuleChecking(
-            final ObjectAdapter target,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] arguments,
+    public ManagedObject executeWithRuleChecking(
+            final ManagedObject target,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
@@ -432,10 +433,10 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     @Override
-    public ObjectAdapter execute(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] argumentAdapters,
+    public ManagedObject execute(
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setupCommand(targetAdapter, argumentAdapters);
@@ -446,12 +447,14 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     /**
      * private API, called by mixins and contributees.
      */
-    public ObjectAdapter executeInternal(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] argumentAdapters, final InteractionInitiatedBy interactionInitiatedBy) {
-        final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(this, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
+    public ManagedObject executeInternal(
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters, 
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        
+        val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
+        return actionInvocationFacet.invoke(this, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {
@@ -464,7 +467,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     // -- defaults
 
     @Override
-    public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
+    public ManagedObject[] getDefaults(final ManagedObject target) {
 
         final int parameterCount = getParameterCount();
         final List<ObjectActionParameter> parameters = getParameters();
@@ -502,7 +505,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             }
         }
 
-        final ObjectAdapter[] parameterDefaultAdapters = new ObjectAdapter[parameterCount];
+        final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
         for (int i = 0; i < parameterCount; i++) {
             parameterDefaultAdapters[i] = adapterFor(parameterDefaultPojos[i]);
         }
@@ -510,11 +513,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return parameterDefaultAdapters;
     }
 
-    private ObjectAdapter adapterFor(final Object pojo) {
+    private ManagedObject adapterFor(final Object pojo) {
         return pojo == null ? null : getObjectAdapterProvider().adapterFor(pojo);
     }
 
-    private static ThreadLocal<List<ObjectAdapter>> commandTargetAdaptersHolder = new ThreadLocal<>();
+    private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = new ThreadLocal<>();
 
     /**
      * A horrible hack to be able to persist a number of adapters in the command object.
@@ -523,7 +526,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      *     What is really needed is to be able to invoke an action on a number of adapters all together.
      * </p>
      */
-    public static <T> T withTargetAdapters(final List<ObjectAdapter> adapters, final Callable<T> callable) {
+    public static <T> T withTargetAdapters(final List<ManagedObject> adapters, final Callable<T> callable) {
         commandTargetAdaptersHolder.set(adapters);
         try {
             return callable.call();
@@ -540,8 +543,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     // -- choices
 
     @Override
-    public ObjectAdapter[][] getChoices(
-            final ObjectAdapter target,
+    public ManagedObject[][] getChoices(
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final int parameterCount = getParameterCount();
@@ -579,19 +582,19 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             }
         }
 
-        final ObjectAdapter[][] parameterChoicesAdapters = new ObjectAdapter[parameterCount][];
+        final ManagedObject[][] parameterChoicesAdapters = new ManagedObject[parameterCount][];
         for (int i = 0; i < parameterCount; i++) {
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
 
             if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
                 ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
                         getSpecificationLoader(), parameterChoicesPojos[i], paramSpec);
-                parameterChoicesAdapters[i] = new ObjectAdapter[parameterChoicesPojos[i].length];
+                parameterChoicesAdapters[i] = new ManagedObject[parameterChoicesPojos[i].length];
                 for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);
                 }
             } else if (paramSpec.isNotCollection()) {
-                parameterChoicesAdapters[i] = new ObjectAdapter[0];
+                parameterChoicesAdapters[i] = new ManagedObject[0];
             } else {
                 throw new UnknownTypeException(paramSpec);
             }
@@ -634,8 +637,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * {@link ObjectActionMixedIn mixed-in} and {@link ObjectActionContributee contributee}).
      */
     public void setupCommand(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters) {
+            final ManagedObject targetAdapter,
+            final ManagedObject[] argumentAdapters) {
 
         setupCommandTarget(targetAdapter, argumentAdapters);
         setupCommandMemberIdentifier();
@@ -643,34 +646,34 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private void setupCommandTarget(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters) {
+            final ManagedObject targetAdapter,
+            final ManagedObject[] argumentAdapters) {
 
         final String arguments = CommandUtil.argDescriptionFor(this, argumentAdapters);
-        setupCommandTarget(targetAdapter, arguments);
+        super.setupCommandTarget(targetAdapter, arguments);
     }
 
     private void setupCommandMementoAndExecutionContext(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters) {
+            final ManagedObject targetAdapter,
+            final ManagedObject[] argumentAdapters) {
 
-        final CommandDtoServiceInternal commandDtoServiceInternal = getCommandDtoService();
-        final List<ObjectAdapter> commandTargetAdapters =
+        val commandDtoServiceInternal = getCommandDtoService();
+        final List<ManagedObject> commandTargetAdapters =
                 commandTargetAdaptersHolder.get() != null
                 ? commandTargetAdaptersHolder.get()
                         : Collections.singletonList(targetAdapter);
 
-                final CommandDto dto = commandDtoServiceInternal.asCommandDto(
+                val commandDto = commandDtoServiceInternal.asCommandDto(
                         commandTargetAdapters, this, argumentAdapters);
 
-                setupCommandDtoAndExecutionContext(dto);
+                setupCommandDtoAndExecutionContext(commandDto);
 
     }
 
     // -- toString
 
     @Override
-    public ObjectAdapter realTargetAdapter(final ObjectAdapter targetAdapter) {
+    public ManagedObject realTargetAdapter(final ManagedObject targetAdapter) {
         return targetAdapter;
     }
 

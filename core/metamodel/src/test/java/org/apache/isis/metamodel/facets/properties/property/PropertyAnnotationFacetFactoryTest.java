@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -191,8 +190,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             FacetUtil.addFacet(new PropertySetterFacetAbstract(holder) {
                 @Override
                 public void setProperty(
-                        final OneToOneAssociation owningAssociation, final ObjectAdapter inObject,
-                        final ObjectAdapter value,
+                        final OneToOneAssociation owningAssociation, 
+                        final ManagedObject inObject,
+                        final ManagedObject value,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });
@@ -202,7 +202,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             FacetUtil.addFacet(new PropertyClearFacetAbstract(holder) {
                 @Override
                 public void clearProperty(
-                        final OneToOneAssociation owningProperty, final ObjectAdapter targetAdapter,
+                        final OneToOneAssociation owningProperty, 
+                        final ManagedObject targetAdapter,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });

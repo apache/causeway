@@ -21,11 +21,12 @@ package org.apache.isis.metamodel.facets.object.projection.ident;
 
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
+
+import lombok.val;
 
 public class IconFacetDerivedFromProjectionFacet extends IconFacetAbstract {
 
@@ -38,7 +39,7 @@ public class IconFacetDerivedFromProjectionFacet extends IconFacetAbstract {
 
     @Override
     public String iconName(final ManagedObject targetAdapter) {
-        final ObjectAdapter projectedAdapter = projectionFacet.projected(targetAdapter);
+        val projectedAdapter = projectionFacet.projected(targetAdapter);
         return projectedAdapter.getSpecification().getIconName(projectedAdapter);
     }
 

@@ -45,6 +45,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -154,7 +155,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                         // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
                         // it will switch the targetAdapter to be the mixedInAdapter transparently
                         final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
-                        final ObjectAdapter resultAdapter = objectAction.execute(
+                        final ManagedObject resultAdapter = objectAction.execute(
                                 targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                         // flush any Isis PersistenceCommands pending

@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.spec.feature;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Mix-in interface for {@link ObjectFeature}s that reference or otherwise
@@ -41,6 +42,6 @@ public interface CurrentHolder {
      * For example, if this is an {@link OneToOneAssociation}, then returns the
      * referenced object.
      */
-    ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy);
+    ManagedObject get(ManagedObject owner, InteractionInitiatedBy interactionInitiatedBy);
 
 }

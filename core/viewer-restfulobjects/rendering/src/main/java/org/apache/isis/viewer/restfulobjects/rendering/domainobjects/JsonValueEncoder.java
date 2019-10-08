@@ -40,6 +40,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -87,7 +88,7 @@ public final class JsonValueEncoder {
             return value;
         }
 
-        public Object asObject(ObjectAdapter objectAdapter, String format) {
+        public Object asObject(ManagedObject objectAdapter, String format) {
             return objectAdapter.getPojo();
         }
     }
@@ -796,7 +797,7 @@ public final class JsonValueEncoder {
         }
     }
 
-    public static Object asObject(final ObjectAdapter objectAdapter, final String format) {
+    public static Object asObject(final ManagedObject objectAdapter, final String format) {
         if (objectAdapter == null) {
             throw new IllegalArgumentException("objectAdapter cannot be null");
         }

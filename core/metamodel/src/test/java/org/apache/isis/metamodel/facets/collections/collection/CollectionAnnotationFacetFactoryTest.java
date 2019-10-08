@@ -29,7 +29,6 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -121,8 +120,8 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             FacetUtil.addFacet(new CollectionAddToFacetAbstract(holder) {
                 @Override
                 public void add(
-                        final ObjectAdapter inObject,
-                        final ObjectAdapter value,
+                        final ManagedObject inObject,
+                        final ManagedObject value,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });
@@ -132,8 +131,8 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             FacetUtil.addFacet(new CollectionRemoveFromFacetAbstract(holder) {
                 @Override
                 public void remove(
-                        final ObjectAdapter inObject,
-                        final ObjectAdapter element,
+                        final ManagedObject inObject,
+                        final ManagedObject element,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });

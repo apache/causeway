@@ -103,20 +103,14 @@ public interface ObjectAdapter extends ManagedObject {
 
         private Util() {}
 
+        @Deprecated
         public static Object unwrapPojo(final ManagedObject adapter) {
-            return adapter != null ? adapter.getPojo() : null;
+            return ManagedObject.unwrapPojo(adapter);
         }
 
+        @Deprecated// duplicate is in ManagedObject
         public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
-            if (adapters == null) {
-                return null;
-            }
-            final Object[] unwrappedObjects = new Object[adapters.length];
-            int i = 0;
-            for (final ManagedObject adapter : adapters) {
-                unwrappedObjects[i++] = unwrapPojo(adapter);
-            }
-            return unwrappedObjects;
+            return ManagedObject.unwrapPojoArray(adapters);
         }
 
         public static List<Object> unwrapPojoList(final List<? extends ManagedObject> adapters) {
@@ -191,18 +185,18 @@ public interface ObjectAdapter extends ManagedObject {
          *  @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
          * @param interactionInitiatedBy
          */
-        public static List<ObjectAdapter> visibleAdapters(
-                final ObjectAdapter collectionAdapter,
+        public static List<ManagedObject> visibleAdapters(
+                final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
 
-            final Stream<ObjectAdapter> objectAdapters = 
+            final Stream<ManagedObject> objectAdapters = 
                     CollectionFacet.Utils.streamAdapters(collectionAdapter);
 
             return visibleAdapters(objectAdapters, interactionInitiatedBy);
         }
 
-        public static List<ObjectAdapter> visibleAdapters(
-                final Stream<ObjectAdapter> objectAdapters,
+        public static List<ManagedObject> visibleAdapters(
+                final Stream<ManagedObject> objectAdapters,
                 final InteractionInitiatedBy interactionInitiatedBy) {
 
             return objectAdapters
@@ -216,20 +210,20 @@ public interface ObjectAdapter extends ManagedObject {
          * @param interactionInitiatedBy
          */
         public static boolean isVisible(
-                final ObjectAdapter adapter,
+                final ManagedObject adapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
             if(adapter == null) {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;
             }
-            if(adapter.isDestroyed()) {
+            if(ManagedObject.promote(adapter).isDestroyed()) {
                 return false;
             }
             if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { return true; }
             return isVisibleForUser(adapter);
         }
 
-        private static boolean isVisibleForUser(final ObjectAdapter adapter) {
+        private static boolean isVisibleForUser(final ManagedObject adapter) {
             final VisibilityContext<?> context = createVisibleInteractionContextForUser(adapter);
             final ObjectSpecification objectSpecification = adapter.getSpecification();
             final InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
@@ -237,7 +231,8 @@ public interface ObjectAdapter extends ManagedObject {
         }
 
         private static VisibilityContext<?> createVisibleInteractionContextForUser(
-                final ObjectAdapter objectAdapter) {
+                final ManagedObject objectAdapter) {
+            
             return new ObjectVisibilityContext(
                     objectAdapter,
                     objectAdapter.getSpecification().getIdentifier(),

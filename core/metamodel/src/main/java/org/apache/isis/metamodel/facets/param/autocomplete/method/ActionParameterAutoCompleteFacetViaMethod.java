@@ -34,6 +34,7 @@ import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetAbstract;
 import org.apache.isis.metamodel.facets.param.autocomplete.MinLengthUtil;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class ActionParameterAutoCompleteFacetViaMethod 
@@ -75,7 +76,7 @@ extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
 
     @Override
     public Object[] autoComplete(
-            final ObjectAdapter owningAdapter,
+            final ManagedObject owningAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -83,17 +84,17 @@ extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;
         }
-        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
+        final ManagedObject collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
 
-        final List<ObjectAdapter> visibleAdapters =
+        final List<ManagedObject> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> visibleObjects =
-                _Lists.map(visibleAdapters, ObjectAdapter.Util::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectAdapterProvider());

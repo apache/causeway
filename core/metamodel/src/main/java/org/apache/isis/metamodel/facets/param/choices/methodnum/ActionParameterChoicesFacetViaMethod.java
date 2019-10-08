@@ -33,6 +33,7 @@ import org.apache.isis.metamodel.facets.CollectionUtils;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
 import org.apache.isis.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements ImperativeFacet {
@@ -65,25 +66,26 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
 
     @Override
     public Object[] getChoices(
-            final ObjectAdapter adapter,
-            final List<ObjectAdapter> argumentsIfAvailable,
+            final ManagedObject adapter,
+            final List<ManagedObject> argumentsIfAvailable,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final Object choices =
                 ObjectAdapter.InvokeUtils.invokeAutofit(
                         method, adapter, argumentsIfAvailable);
         if (choices == null) {
             return _Constants.emptyObjects;
         }
-        final ObjectAdapter objectAdapter = getObjectAdapterProvider().adapterFor(choices);
+        final ManagedObject objectAdapter = getObjectAdapterProvider().adapterFor(choices);
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
 
-        final List<ObjectAdapter> visibleAdapters =
+        final List<ManagedObject> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         objectAdapter,
                         interactionInitiatedBy);
         final List<Object> visibleObjects =
-                _Lists.map(visibleAdapters, ObjectAdapter.Util::unwrapPojo);
+                _Lists.map(visibleAdapters, ManagedObject::unwrapPojo);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectAdapterProvider());

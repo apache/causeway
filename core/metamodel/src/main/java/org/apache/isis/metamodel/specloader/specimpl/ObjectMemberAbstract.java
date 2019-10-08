@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -59,6 +58,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
+
+import lombok.val;
 
 public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelContext.Delegating {
 
@@ -317,13 +318,14 @@ public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelCon
     /**
      * For mixins
      */
-    ObjectAdapter mixinAdapterFor(
+    ManagedObject mixinAdapterFor(
             final Class<?> mixinType,
             final ManagedObject mixedInAdapter) {
-        final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
-        final MixinFacet mixinFacet = objectSpecification.getFacet(MixinFacet.class);
-        final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getPojo());
-        return getObjectAdapterProvider().adapterFor(mixinPojo);
+        
+        val spec = getSpecificationLoader().loadSpecification(mixinType);
+        val mixinFacet = spec.getFacet(MixinFacet.class);
+        val mixinPojo = mixinFacet.instantiate(mixedInAdapter.getPojo());
+        return ManagedObject.of(spec, mixinPojo);
     }
 
     static String determineNameFrom(final ObjectAction mixinAction) {
@@ -388,7 +390,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelCon
     // -- command (setup)
 
 
-    protected void setupCommandTarget(final ObjectAdapter targetAdapter, final String arguments) {
+    protected void setupCommandTarget(final ManagedObject targetAdapter, final String arguments) {
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 

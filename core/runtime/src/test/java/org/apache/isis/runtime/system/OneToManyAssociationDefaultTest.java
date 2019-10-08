@@ -35,6 +35,7 @@ import org.apache.isis.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -131,9 +132,15 @@ public class OneToManyAssociationDefaultTest {
                 oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
                 will(returnValue(false));
 
+//                oneOf(mockOwnerAdapter).promote();
+//                will(returnValue(mockOwnerAdapter));
+                
                 oneOf(mockOwnerAdapter).isRepresentingPersistent();
                 will(returnValue(true));
 
+//                oneOf(mockAssociatedAdapter).promote();
+//                will(returnValue(mockAssociatedAdapter));
+                
                 oneOf(mockAssociatedAdapter).isTransient();
                 will(returnValue(false));
 

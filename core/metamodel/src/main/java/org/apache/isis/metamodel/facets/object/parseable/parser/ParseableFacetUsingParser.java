@@ -36,6 +36,7 @@ import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.metamodel.interactions.ParseValueContext;
 import org.apache.isis.metamodel.interactions.ValidityContext;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
@@ -58,9 +59,10 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
     @Override
     public ObjectAdapter parseTextEntry(
-            final ObjectAdapter contextAdapter,
+            final ManagedObject contextAdapter,
             final String entry,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         if (entry == null) {
             throw new IllegalArgumentException("An entry must be provided");
         }
@@ -117,8 +119,8 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
      */
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public String parseableTitle(final ObjectAdapter contextAdapter) {
-        final Object pojo = ObjectAdapter.Util.unwrapPojo(contextAdapter);
+    public String parseableTitle(final ManagedObject contextAdapter) {
+        final Object pojo = ManagedObject.unwrapPojo(contextAdapter);
 
         getServiceInjector().injectServicesInto(parser);
         return ((Parser)parser).parseableTitleOf(pojo);

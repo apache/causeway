@@ -66,7 +66,8 @@ public class ActionParameterDisabledFacetViaMethod extends ActionParameterDisabl
     }
 
     @Override
-    public String disabledReason(final ManagedObject owningAdapter, final ObjectAdapter[] argumentAdapters) {
+    public String disabledReason(final ManagedObject owningAdapter, final ManagedObject[] argumentAdapters) {
+        
         final Object returnValue = ObjectAdapter.InvokeUtils.invokeAutofit(method, owningAdapter, argumentAdapters != null ? Arrays.asList(argumentAdapters) : null);
         if(returnValue instanceof String) {
             return (String) returnValue;

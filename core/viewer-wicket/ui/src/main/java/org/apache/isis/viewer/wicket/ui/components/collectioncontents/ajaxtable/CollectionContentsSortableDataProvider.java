@@ -39,6 +39,7 @@ import org.apache.isis.metamodel.consent.InteractionResult;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
@@ -158,9 +159,9 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
             @Override
             public int compare(final ObjectAdapter p, final ObjectAdapter q) {
-                final ObjectAdapter pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
-                final ObjectAdapter qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
-                Ordering<ObjectAdapter> naturalOrdering;
+                final ManagedObject pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
+                final ManagedObject qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
+                Ordering<ManagedObject> naturalOrdering;
                 if(ascending){
                     naturalOrdering = ORDERING_BY_NATURAL.nullsFirst();
                 } else {
@@ -172,9 +173,9 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         return ordering;
     }
 
-    private static Ordering<ObjectAdapter> ORDERING_BY_NATURAL = new Ordering<ObjectAdapter>(){
+    private static Ordering<ManagedObject> ORDERING_BY_NATURAL = new Ordering<ManagedObject>(){
         @Override
-        public int compare(final ObjectAdapter p, final ObjectAdapter q) {
+        public int compare(final ManagedObject p, final ManagedObject q) {
             final Object pPojo = p.getPojo();
             final Object qPojo = q.getPojo();
             if(!(pPojo instanceof Comparable) || !(qPojo instanceof Comparable)) {

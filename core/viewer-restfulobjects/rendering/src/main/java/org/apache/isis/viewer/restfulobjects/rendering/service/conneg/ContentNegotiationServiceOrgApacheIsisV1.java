@@ -35,6 +35,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
@@ -48,6 +49,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+
+import lombok.val;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 @Order(200) //in effect, is the relative priority (lower numbers have higher priority)
@@ -386,13 +389,14 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final JsonRepresentation representation, 
             final EnumSet<SuppressionType> suppression) {
 
-        final InteractionInitiatedBy interactionInitiatedBy = determineInteractionInitiatedByFrom(rendererContext);
-        final ObjectAdapter valueAdapter = collection.get(objectAdapter, interactionInitiatedBy);
+        val interactionInitiatedBy = determineInteractionInitiatedByFrom(rendererContext);
+        val valueAdapter = collection.get(objectAdapter, interactionInitiatedBy);
         if (valueAdapter == null) {
             return;
         }
 
-        final Stream<ObjectAdapter> adapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
+        final Stream<ObjectAdapter> adapters = CollectionFacet.Utils.streamAdapters(valueAdapter)
+                .map(x->ManagedObject.promote(x));
         appendStreamTo(rendererContext, adapters, representation, suppression);
     }
 

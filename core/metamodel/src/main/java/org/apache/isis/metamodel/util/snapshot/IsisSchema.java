@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.util.snapshot;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Utility methods relating to the Isis meta model.
@@ -171,7 +171,7 @@ final class IsisSchema {
      * Additionally, if the <code>addOids</code> parameter is set, also adds
      * <code>&lt;oids&gt;</code> child elements.
      */
-    void setIsisCollection(final Element element, final String prefix, final String fullyQualifiedClassName, final ObjectAdapter collection) {
+    void setIsisCollection(final Element element, final String prefix, final String fullyQualifiedClassName, final ManagedObject collection) {
         setAttribute(element, "feature", FEATURE_COLLECTION);
         setAttribute(element, "type", prefix + ":" + fullyQualifiedClassName);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);

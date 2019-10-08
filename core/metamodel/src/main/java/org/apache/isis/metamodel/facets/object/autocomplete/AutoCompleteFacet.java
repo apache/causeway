@@ -21,13 +21,13 @@ package org.apache.isis.metamodel.facets.object.autocomplete;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public interface AutoCompleteFacet extends Facet {
 
-    List<ObjectAdapter> execute(
+    List<ManagedObject> execute(
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy);
 

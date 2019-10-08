@@ -38,15 +38,14 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -67,23 +66,24 @@ extends ObjectAdapterMementoProviderAbstract {
     protected List<ObjectAdapterMemento> obtainMementos(String term) {
         final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
         final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-        final List<ObjectAdapter> autoCompleteAdapters =
-                autoCompleteFacet.execute(term,
-                        InteractionInitiatedBy.USER);
-        return _Lists.map(autoCompleteAdapters, ObjectAdapterMemento::ofAdapter);
+        final List<ManagedObject> autoCompleteAdapters =
+                autoCompleteFacet.execute(term,InteractionInitiatedBy.USER);
+        return _Lists.map(autoCompleteAdapters, a->ObjectAdapterMemento.ofAdapter(ManagedObject.promote(a)));
     }
 
     @Override
     public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-        final Function<String, ObjectAdapterMemento> function = (final String input) -> {
-            if(NULL_PLACEHOLDER.equals(input)) {
-                return null;
-            }
-            final RootOid oid = RootOid.deString(input);
-            final ObjectAdapterMemento oam = ObjectAdapterMemento.ofRootOid(oid);
-            return oam;
-        };
-        return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
+
+        return _NullSafe.stream(ids)
+                .map(id -> {
+                    if(NULL_PLACEHOLDER.equals(id)) {
+                        return null;
+                    }
+                    final RootOid oid = RootOid.deString(id);
+                    final ObjectAdapterMemento oam = ObjectAdapterMemento.ofRootOid(oid);
+                    return oam;
+                })
+                .collect(Collectors.toList());
 
     }
 

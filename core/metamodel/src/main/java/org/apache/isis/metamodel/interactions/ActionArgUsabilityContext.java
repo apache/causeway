@@ -23,9 +23,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionContextType;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
@@ -40,14 +40,14 @@ extends UsabilityContext<ActionArgumentUsabilityEvent>
 implements ActionInteractionContext {
 
     private final ObjectAction objectAction;
-    private final ObjectAdapter[] args;
+    private final ManagedObject[] args;
     private final int position;
 
     public ActionArgUsabilityContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final ObjectAdapter[] args,
+            final ManagedObject[] args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_PARAMETER_USABLE, targetAdapter, id, interactionInitiatedBy, Where.OBJECT_FORMS);
@@ -62,7 +62,7 @@ implements ActionInteractionContext {
         return objectAction;
     }
 
-    public ObjectAdapter[] getArgs() {
+    public ManagedObject[] getArgs() {
         return args;
     }
 

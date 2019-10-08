@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
@@ -54,8 +55,8 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     @Override
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
-            final ObjectAdapter targetAdapter,
-            final List<ObjectAdapter> argumentAdapters) {
+            final ManagedObject targetAdapter,
+            final List<ManagedObject> argumentAdapters) {
 
         final Interaction interaction = interactionContext.getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
@@ -99,8 +100,8 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     @Override
     public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter newValueAdapterIfAny) {
+            final ManagedObject targetAdapter,
+            final ManagedObject newValueAdapterIfAny) {
 
         final Interaction interaction = interactionContext.getInteraction();
 

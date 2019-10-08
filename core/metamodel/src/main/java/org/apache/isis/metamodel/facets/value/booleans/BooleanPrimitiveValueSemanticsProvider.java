@@ -24,6 +24,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 
 public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -47,29 +48,9 @@ public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemantic
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter inObject) {
+    public ObjectAdapter getDefault(final ManagedObject inObject) {
         return createAdapter(boolean.class, Boolean.FALSE);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // BooleanValueFacet impl
-    // //////////////////////////////////////////////////////////////////
-
-    //    @Override
-    //    public void reset(final ObjectAdapter object) {
-    //        object.replacePojo(Boolean.FALSE);
-    //    }
-    //
-    //    @Override
-    //    public void set(final ObjectAdapter object) {
-    //        object.replacePojo(Boolean.TRUE);
-    //    }
-    //
-    //    @Override
-    //    public void toggle(final ObjectAdapter object) {
-    //        final boolean current = ((Boolean) object.getObject()).booleanValue();
-    //        final boolean toggled = !current;
-    //        object.replacePojo(Boolean.valueOf(toggled));
-    //    }
 
 }

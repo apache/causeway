@@ -21,9 +21,11 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -44,6 +46,7 @@ import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.metamodel.facets.value.string.StringValueSemanticsProvider;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -141,7 +144,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 }
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
-                    final ObjectAdapter currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
+                    final ManagedObject currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
                     final ObjectAdapter proposedAdapter =
                             parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, InteractionInitiatedBy.USER);
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
@@ -191,7 +194,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
-                return property.getDefault(parentAdapter);
+                return ManagedObject.promote(property.getDefault(parentAdapter));
             }
 
             @Override
@@ -210,7 +213,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
-                final ObjectAdapter[] choices = property.getChoices(
+                final ManagedObject[] choices = property.getChoices(
                         parentAdapter,
                         InteractionInitiatedBy.USER);
 
@@ -234,7 +237,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ObjectAdapter[] choices =
+                final ManagedObject[] choices =
                         property.getAutoComplete(
                                 parentAdapter, searchArg,
                                 InteractionInitiatedBy.USER);
@@ -427,7 +430,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
                 final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
-                return actionParameter.getDefault(parentAdapter, argsIfAvailable, paramNumUpdated);
+                return ManagedObject.promote(actionParameter.getDefault(parentAdapter, argsIfAvailable, paramNumUpdated)
+                       );
             }
 
             @Override
@@ -446,7 +450,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
                 final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
 
-                final ObjectAdapter[] choices =
+                final ManagedObject[] choices =
                         actionParameter.getChoices(
                                 parentAdapter, argumentsIfAvailable,
                                 InteractionInitiatedBy.USER);
@@ -469,7 +473,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
                 final ObjectAdapter parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ObjectAdapter[] choices = actionParameter.getAutoComplete(
+                final ManagedObject[] choices = actionParameter.getAutoComplete(
                         parentAdapter, searchArg,
                         InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
@@ -542,8 +546,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                         scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter, null, null);
-                scalarModel.setObject(defaultAdapter);
+                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, null, null);
+                scalarModel.setObject(ManagedObject.promote(defaultAdapter));
             }
 
             @Override
@@ -590,9 +594,11 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
         };
 
-        private static List<ObjectAdapter> choicesAsList(final ObjectAdapter[] choices) {
+        private static List<ObjectAdapter> choicesAsList(final ManagedObject[] choices) {
             if (choices != null && choices.length > 0) {
-                return Arrays.asList(choices);
+                return Stream.of(choices)
+                        .map(x->ManagedObject.promote(x))
+                        .collect(Collectors.toList());
             }
             return Collections.emptyList();
         }
@@ -758,7 +764,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
         final ObjectAdapter associatedAdapter;
         if (visibility.isAllowed()) {
-            associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
+            associatedAdapter = ManagedObject.promote(property.get(parentAdapter, InteractionInitiatedBy.USER));
         } else {
             associatedAdapter = null;
         }

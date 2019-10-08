@@ -19,7 +19,6 @@
 
 package org.apache.isis.metamodel.specloader.specimpl;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facets.FacetedMethod;
@@ -27,6 +26,7 @@ import org.apache.isis.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
@@ -80,7 +80,7 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
     }
 
     @Override
-    public abstract boolean isEmpty(final ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy);
+    public abstract boolean isEmpty(final ManagedObject adapter, final InteractionInitiatedBy interactionInitiatedBy);
 
     @Override
     public boolean isOneToOneAssociation() {

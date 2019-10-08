@@ -62,6 +62,7 @@ import org.apache.isis.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFace
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.metamodel.spec.ActionType;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -457,8 +458,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         final ObjectAction action = getAction();
 
         // if this action is a mixin, then it will fill in the details automatically.
-        final ObjectAdapter mixedInAdapter = null;
-        final ObjectAdapter resultAdapter =
+        val mixedInAdapter = (ManagedObject)null;
+        val resultAdapter =
                 action.executeWithRuleChecking(
                         targetAdapter, mixedInAdapter, arguments,
                         InteractionInitiatedBy.USER,
@@ -468,8 +469,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
                 .select(RoutingService.class)
                 .stream();
 
-        final Object resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
-
+        val resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
         val pojoToAdapter = IsisContext.pojoToAdapter();
 
         return routingServices
@@ -479,7 +479,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
                 .map(pojoToAdapter)
                 .filter(_NullSafe::isPresent)
                 .findFirst()
-                .orElse(resultAdapter);
+                .orElse(ManagedObject.promote(resultAdapter));
 
     }
 

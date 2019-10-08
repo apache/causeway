@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.properties.choices;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Provides a set of choices for a property.
@@ -45,6 +45,6 @@ public interface PropertyChoicesFacet extends Facet {
      * Gets the available choices for this property.
      */
     public Object[] getChoices(
-            final ObjectAdapter adapter,
+            final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 }

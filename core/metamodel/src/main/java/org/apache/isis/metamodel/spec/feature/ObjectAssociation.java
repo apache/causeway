@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.WhereValueFacet;
@@ -40,6 +39,7 @@ import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.layout.memberorderfacet.MemberOrderComparator;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.util.DeweyOrderComparator;
 
@@ -51,7 +51,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     /**
      * As per {@link #get(ObjectAdapter, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
      */
-    public default ObjectAdapter get(ObjectAdapter owner) {
+    public default ManagedObject get(ManagedObject owner) {
         return get(owner, InteractionInitiatedBy.USER);
     }
 
@@ -64,19 +64,21 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * referenced object.
      */
     @Override
-    ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy);
+    ManagedObject get(
+            ManagedObject owner, 
+            InteractionInitiatedBy interactionInitiatedBy);
 
     //Instance get(final Instance owner, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Return the default for this property.
      */
-    ObjectAdapter getDefault(ObjectAdapter adapter);
+    ManagedObject getDefault(ManagedObject adapter);
 
     /**
      * Set the property to it default references/values.
      */
-    public void toDefault(ObjectAdapter target);
+    public void toDefault(ManagedObject target);
 
     /**
      * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
@@ -87,9 +89,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns a list of possible references/values for this field, which the
      * user can choose from.
      */
-    public ObjectAdapter[] getChoices(
-            final ObjectAdapter object,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    public ManagedObject[] getChoices(
+            ManagedObject object,
+            InteractionInitiatedBy interactionInitiatedBy);
 
 
     /**
@@ -101,10 +103,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns a list of possible references/values for this field, which the
      * user can choose from, based on the provided search argument.
      */
-    public ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter object,
-            final String searchArg,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    public ManagedObject[] getAutoComplete(
+            ManagedObject object,
+            String searchArg,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     int getAutoCompleteMinLength();
 
@@ -118,7 +120,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns <code>true</code> if this field on the specified object is deemed
      * to be empty, or has no content.
      */
-    boolean isEmpty(ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy);
+    boolean isEmpty(ManagedObject target, InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Determines if this field must be complete before the object is in a valid

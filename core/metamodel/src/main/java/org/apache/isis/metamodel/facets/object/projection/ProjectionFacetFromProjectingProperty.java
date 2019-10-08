@@ -20,7 +20,6 @@
 package org.apache.isis.metamodel.facets.object.projection;
 
 import org.apache.isis.applib.annotation.Projecting;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.projection.ProjectingFacet;
@@ -28,6 +27,8 @@ import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+
+import lombok.val;
 
 public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstract {
 
@@ -40,27 +41,25 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     private ProjectionFacetFromProjectingProperty(
             final OneToOneAssociation projectingProperty,
             final FacetHolder holder) {
-        super( holder);
+        
+        super(holder);
         this.projectingProperty = projectingProperty;
     }
 
     public static ProjectionFacet create(final ObjectSpecification objectSpecification) {
         return objectSpecification.streamProperties(Contributed.EXCLUDED)
-                .filter(otoa -> {
-                    final ProjectingFacet projectingFacet = otoa
-                            .getFacet(ProjectingFacet.class);
-                    return projectingFacet != null && !projectingFacet.isNoop()
-                            && projectingFacet.value() == Projecting.PROJECTED;
-                })
-                .map(otoa -> new ProjectionFacetFromProjectingProperty(otoa, objectSpecification))
-                .findFirst()
-                .orElse(null);
+        .filter(propertySpec -> {
+            val projectingFacet = propertySpec.getFacet(ProjectingFacet.class);
+            return projectingFacet != null && !projectingFacet.isNoop()
+                    && projectingFacet.value() == Projecting.PROJECTED;
+        })
+        .findFirst()
+        .map(propertySpec -> new ProjectionFacetFromProjectingProperty(propertySpec, objectSpecification))
+        .orElse(null);
     }
 
     @Override
-    public ObjectAdapter projected(final ManagedObject owningAdapter) {
-        return owningAdapter instanceof ObjectAdapter
-                ? projectingProperty.get((ObjectAdapter) owningAdapter)
-                        : null ;
+    public ManagedObject projected(final ManagedObject owningAdapter) {
+        return projectingProperty.get(owningAdapter);
     }
 }

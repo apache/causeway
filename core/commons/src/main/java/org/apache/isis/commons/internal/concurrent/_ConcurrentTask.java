@@ -42,7 +42,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
         NOT_STARTED,
         STARTED,
         FAILED,
-        COMPLETED
+        SUCCEEDED
     }
 
     public abstract String getName();
@@ -52,7 +52,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
     @Getter private long completedAtNanos;
     @Getter private long failedAtNanos;
     @Getter private T completedWith;
-    @Getter private Exception failedWith;
+    @Getter private Throwable failedWith;
 
     protected synchronized void preCall() {
         if(startedAtNanos>0L) {
@@ -65,7 +65,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
         status = State.STARTED;
     }
     
-    protected void postCall(T completedWith, Exception failedWith) {
+    protected void postCall(T completedWith, Throwable failedWith) {
         if(failedWith!=null) {
             this.failedAtNanos = System.nanoTime();
             this.failedWith = failedWith;
@@ -73,7 +73,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
         } else {
             this.completedAtNanos = System.nanoTime();
             this.completedWith = completedWith;
-            this.status = State.COMPLETED;
+            this.status = State.SUCCEEDED;
         }
     }
     
@@ -86,7 +86,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
         try {
             val completedWith = innerCall();
             postCall(completedWith, /*failedWith*/ null);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             postCall(/*completedWith*/ null, e);
         }
 

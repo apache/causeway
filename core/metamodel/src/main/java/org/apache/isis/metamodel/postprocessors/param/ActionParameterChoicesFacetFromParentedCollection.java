@@ -22,12 +22,12 @@ package org.apache.isis.metamodel.postprocessors.param;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
@@ -45,23 +45,23 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
 
     @Override
     public Object[] getChoices(
-            final ObjectAdapter target,
-            final List<ObjectAdapter> arguments,
+            final ManagedObject target,
+            final List<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter parentAdapter = determineParentAdapter(target);
-        final ObjectAdapter objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
-        final List<ObjectAdapter> objectAdapters = CollectionFacet.Utils.toAdapterList(objectAdapter);
-        return ObjectAdapter.Util.unwrapPojoArray(objectAdapters.toArray(new ObjectAdapter[0]));
+        final ManagedObject parentAdapter = determineParentAdapter(target);
+        final ManagedObject objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
+        final List<ManagedObject> objectAdapters = CollectionFacet.Utils.toAdapterList(objectAdapter);
+        return ManagedObject.unwrapPojoArray(objectAdapters.toArray(new ManagedObject[0]));
     }
 
     /**
      * in the case of a mixin action, the target passed to the facet is actually the mixin itself, 
      * not the mixee.
      */
-    private ObjectAdapter determineParentAdapter(final ObjectAdapter target) {
+    private ManagedObject determineParentAdapter(final ManagedObject target) {
         val mixinFacet = target.getSpecification().getFacet(MixinFacet.class);
-        ObjectAdapter mixedInTarget = null;
+        ManagedObject mixedInTarget = null;
         if(mixinFacet != null) {
             mixedInTarget = mixinFacet.mixedIn(target, MixinFacet.Policy.FAIL_FAST);
         }

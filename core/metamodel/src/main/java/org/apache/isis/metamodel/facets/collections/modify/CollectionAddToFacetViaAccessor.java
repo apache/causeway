@@ -29,6 +29,7 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstract implements ImperativeFacet {
 
@@ -55,12 +56,12 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
 
     @Override
     public void add(
-            final ObjectAdapter owningAdapter,
-            final ObjectAdapter elementAdapter,
+            final ManagedObject owningAdapter,
+            final ManagedObject elementAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
-        final Object elementPojo = ObjectAdapter.Util.unwrapPojo(elementAdapter);
+        final Object elementPojo = ManagedObject.unwrapPojo(elementAdapter);
         collection.add(elementPojo);
     }
 

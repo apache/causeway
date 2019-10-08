@@ -21,7 +21,7 @@ package org.apache.isis.metamodel.services.command;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.ActionDto;
@@ -42,9 +42,9 @@ public interface CommandDtoServiceInternal {
      */
     @Programmatic
     CommandDto asCommandDto(
-            final List<ObjectAdapter> targetAdapters,
+            final List<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
-            final ObjectAdapter[] argAdapters);
+            final ManagedObject[] argAdapters);
 
     /**
      * Returns a JAXB DTO (hence convertible to XML) that represents the intention to edit (set or clear) a property on
@@ -52,20 +52,20 @@ public interface CommandDtoServiceInternal {
      */
     @Programmatic
     CommandDto asCommandDto(
-            final List<ObjectAdapter> targetAdapters,
+            final List<ManagedObject> targetAdapters,
             final OneToOneAssociation association,
-            final ObjectAdapter valueAdapterOrNull);
+            final ManagedObject valueAdapterOrNull);
 
     @Programmatic
     void addActionArgs(
             final ObjectAction objectAction,
             final ActionDto actionDto,
-            final ObjectAdapter[] argAdapters);
+            final ManagedObject[] argAdapters);
 
     @Programmatic
     void addPropertyValue(
             final OneToOneAssociation property,
             final PropertyDto propertyDto,
-            final ObjectAdapter valueAdapter);
+            final ManagedObject valueAdapter);
 
 }

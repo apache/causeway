@@ -45,6 +45,7 @@ import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -167,7 +168,7 @@ implements LinksProvider, UiHintContainer {
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection(
                         entityCollectionModel.getSpecificationLoader());
 
-                final ObjectAdapter collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
+                final ManagedObject collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
 
                 final List<Object> objectList = asIterable(collectionAsAdapter);
 
@@ -189,7 +190,7 @@ implements LinksProvider, UiHintContainer {
             }
 
             @SuppressWarnings("unchecked")
-            private List<Object> asIterable(final ObjectAdapter collectionAsAdapter) {
+            private List<Object> asIterable(final ManagedObject collectionAsAdapter) {
                 if(collectionAsAdapter==null) {
                     return Collections.emptyList();
                 }

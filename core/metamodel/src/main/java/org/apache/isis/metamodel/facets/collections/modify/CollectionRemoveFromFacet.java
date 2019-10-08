@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.collections.modify;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.metamodel.facetapi.Facet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 /**
  * Remove object to a collection.
@@ -33,7 +33,7 @@ import org.apache.isis.metamodel.facetapi.Facet;
 public interface CollectionRemoveFromFacet extends Facet {
 
     public void remove(
-            final ObjectAdapter inObject,
-            final ObjectAdapter element,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject inObject,
+            ManagedObject element,
+            InteractionInitiatedBy interactionInitiatedBy);
 }

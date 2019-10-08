@@ -21,10 +21,10 @@ package org.apache.isis.metamodel.facets.param.defaults.fromtype;
 
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultedFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefaultsFacetAbstract {
 
@@ -43,7 +43,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
      * conceivably change.
      */
     @Override
-    public Object[] getDefaults(final ObjectAdapter inObject) {
+    public Object[] getDefaults(final ManagedObject inObject) {
         final Object[] defaults = new Object[defaultedFacets.length];
         for (int i = 0; i < defaults.length; i++) {
             if (defaultedFacets[i] != null) {
