@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -166,9 +167,9 @@ public class FacetProcessor {
      * Delegates to all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
-    public Set<Method> findAssociationCandidateAccessors(
+    public void findAssociationCandidateAccessors(
             Collection<Method> methods, 
-            Set<Method> candidates) {
+            Consumer<Method> onCandidate) {
         
         val factories = propertyOrCollectionIdentifyingFactories.get();
         
@@ -178,11 +179,11 @@ public class FacetProcessor {
             }
             for (val facetFactory : factories) {
                 if (facetFactory.isPropertyOrCollectionAccessorCandidate(method)) {
-                    candidates.add(method);
+                    onCandidate.accept(method);
                 }
             }
         }
-        return candidates;
+        
     }
 
     /**
@@ -330,17 +331,24 @@ public class FacetProcessor {
      * @param featureType
      *            - what type of feature the method represents (property,
      *            action, collection etc)
+     * @param isMixinMain
+     *            - Whether we are currently processing a mixin type AND this context's method 
+     *            can be identified as the main method of the processed mixin class. (since 2.0)
      */
     public void process(
             Class<?> cls,
             Method method,
             MethodRemover methodRemover,
             FacetedMethod facetedMethod,
-            FeatureType featureType) {
-        
+            FeatureType featureType, 
+            boolean isMixinMain) {
         
         val processMethodContext =
-                new ProcessMethodContext(cls, featureType, method, removerElseNoopRemover(methodRemover), facetedMethod);
+                new ProcessMethodContext(
+                        cls, 
+                        featureType, 
+                        method, 
+                        removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
         
         factoryListByFeatureType.get().getOrElseEmpty(featureType)
         .forEach(facetFactory->facetFactory.process(processMethodContext));

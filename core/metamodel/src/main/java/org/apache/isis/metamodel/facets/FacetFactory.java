@@ -27,19 +27,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MethodRemover;
 import org.apache.isis.metamodel.methodutils.MethodScope;
-import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
-import lombok.val;
+import lombok.Getter;
 
 public interface FacetFactory {
 
@@ -55,7 +51,8 @@ public interface FacetFactory {
         }
     }
 
-    static class AbstractProcessWithClsContext<T extends FacetHolder> extends AbstractProcessContext<T>{
+    static class AbstractProcessWithClsContext<T extends FacetHolder>
+    extends AbstractProcessContext<T>{
 
         private final Class<?> cls;
 
@@ -81,12 +78,18 @@ public interface FacetFactory {
         
     }
 
-    static class AbstractProcessWithMethodContext<T extends FacetHolder> extends AbstractProcessWithClsContext<T> implements MethodRemover{
+    static class AbstractProcessWithMethodContext<T extends FacetHolder> 
+    extends AbstractProcessWithClsContext<T> implements MethodRemover{
 
         private final Method method;
         protected final MethodRemover methodRemover;
 
-        AbstractProcessWithMethodContext(final Class<?> cls, final Method method, final MethodRemover methodRemover, final T facetHolder) {
+        AbstractProcessWithMethodContext(
+                final Class<?> cls, 
+                final Method method, 
+                final MethodRemover methodRemover, 
+                final T facetHolder) {
+            
             super(cls, facetHolder);
             this.method = method;
             this.methodRemover = methodRemover;
@@ -123,64 +126,6 @@ public interface FacetFactory {
         public void removeMethod(final Method method) {
             methodRemover.removeMethod(method);
         }
-        
-        /** 
-         * Annotation lookup on this context's method..
-         * @since 2.0
-         */
-        public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {
-            return _Annotations.synthesizeInherited(method, annotationType);
-        }
-        
-        /** 
-         * Annotation lookup on this context's method, if not found, extends search to type in case 
-         * the predicate {@link #isMixinMain} evaluates {@code true}.
-         * @since 2.0
-         */
-        public <A extends Annotation> Optional<A> synthesizeOnMethodOrMixinType(Class<A> annotationType) {
-            return computeIfAbsent(synthesizeOnMethod(annotationType),
-                    ()-> isMixinMain()
-                        ? synthesizeOnType(annotationType)
-                                : Optional.empty() ) ;
-        }
-        
-        /**
-         * Whether we are currently processing a mixin type AND this context's method can be identified 
-         * as the main method of the processed mixin class.
-         * @since 2.0
-         */
-        public boolean isMixinMain() {
-            return isMixinMain.get();
-        }
-
-        private final _Lazy<Boolean> isMixinMain = _Lazy.threadSafe(this::computeIsMixinMain);
-        
-        private boolean computeIsMixinMain() {
-            val specLoader = MetaModelContext.current().getSpecificationLoader();
-            val spec_ofTypeCurrentlyProcessing = specLoader
-                    .loadSpecification(getCls(), IntrospectionState.TYPE_INTROSPECTED);
-            if(!spec_ofTypeCurrentlyProcessing.isMixin()) {
-                return false;
-            }
-            val mixinMember = spec_ofTypeCurrentlyProcessing
-                    .getMixedInMember(spec_ofTypeCurrentlyProcessing);
-            if(!mixinMember.isPresent()) {
-                return false;
-            }
-            val actionMethod_ofMixinMember = ((ObjectActionMixedIn)mixinMember.get())
-                    .getFacetedMethod().getMethod();
-            
-            return getMethod().equals(actionMethod_ofMixinMember);
-        }
-        
-        private static <T> Optional<T> computeIfAbsent(
-                Optional<T> optional,
-                Supplier<Optional<T>> supplier) {
-            
-            return optional.isPresent() ? 
-                    optional
-                        : supplier.get();
-        }
 
     }
 
@@ -205,7 +150,10 @@ public interface FacetFactory {
     // process class
     // //////////////////////////////////////
 
-    public static class ProcessClassContext extends AbstractProcessWithClsContext<FacetHolder> implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
+    public static class ProcessClassContext 
+    extends AbstractProcessWithClsContext<FacetHolder> 
+    implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
+        
         private final MethodRemover methodRemover;
 
         /**
@@ -244,22 +192,77 @@ public interface FacetFactory {
     // //////////////////////////////////////
 
 
-    public static class ProcessMethodContext extends AbstractProcessWithMethodContext<FacetedMethod> implements  ProcessContextWithMetadataProperties<FacetedMethod> {
-        private final FeatureType featureType;
+    public static class ProcessMethodContext 
+    extends AbstractProcessWithMethodContext<FacetedMethod> 
+    implements ProcessContextWithMetadataProperties<FacetedMethod> {
+        
+        @Getter private final FeatureType featureType;
+        @Getter private final boolean mixinMain;
 
+        /**
+         * 
+         * @param cls
+         * @param featureType
+         * @param method
+         * @param methodRemover
+         * @param facetedMethod
+         * @param isMixinMain
+         *       - Whether we are currently processing a mixin type AND this context's method can be identified 
+         *         as the main method of the processed mixin class. (since 2.0)
+         */
+        public ProcessMethodContext(
+                final Class<?> cls,
+                final FeatureType featureType,
+                final Method method,
+                final MethodRemover methodRemover,
+                final FacetedMethod facetedMethod,
+                final boolean isMixinMain) {
+            
+            super(cls, method, methodRemover, facetedMethod);
+            this.featureType = featureType;
+            this.mixinMain = false;
+        }
+        
+        /** JUnit support, historically not using 'isMixinMain' */
         public ProcessMethodContext(
                 final Class<?> cls,
                 final FeatureType featureType,
                 final Method method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
-            super(cls, method, methodRemover, facetedMethod);
-            this.featureType = featureType;
+            this(cls, featureType, method, methodRemover, facetedMethod, false);
         }
 
-        public FeatureType getFeatureType() {
-            return featureType;
+        
+        /** 
+         * Annotation lookup on this context's method..
+         * @since 2.0
+         */
+        public <A extends Annotation> Optional<A> synthesizeOnMethod(Class<A> annotationType) {
+            return _Annotations.synthesizeInherited(getMethod(), annotationType);
         }
+        
+        /** 
+         * Annotation lookup on this context's method, if not found, extends search to type in case 
+         * the predicate {@link #isMixinMain} evaluates {@code true}.
+         * @since 2.0
+         */
+        public <A extends Annotation> Optional<A> synthesizeOnMethodOrMixinType(Class<A> annotationType) {
+            return computeIfAbsent(synthesizeOnMethod(annotationType),
+                    ()-> isMixinMain()
+                        ? synthesizeOnType(annotationType)
+                                : Optional.empty() ) ;
+        }
+        
+        private static <T> Optional<T> computeIfAbsent(
+                Optional<T> optional,
+                Supplier<Optional<T>> supplier) {
+            
+            return optional.isPresent() ? 
+                    optional
+                        : supplier.get();
+        }
+
         
     }
 
@@ -274,7 +277,9 @@ public interface FacetFactory {
     // process param
     // //////////////////////////////////////
 
-    public static class ProcessParameterContext extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
+    public static class ProcessParameterContext 
+    extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
+        
         private final int paramNum;
         private final Class<?> paramType;
         private final Parameter parameter; 

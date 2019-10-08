@@ -150,15 +150,15 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
     public FacetedMethodsBuilder(
-            final ObjectSpecificationAbstract spec,
+            final ObjectSpecificationAbstract inspectedTypeSpec,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
         
         if (log.isDebugEnabled()) {
-            log.debug("creating JavaIntrospector for {}", spec.getFullIdentifier());
+            log.debug("creating JavaIntrospector for {}", inspectedTypeSpec.getFullIdentifier());
         }
 
-        this.inspectedTypeSpec = spec;
-        this.introspectedClass = spec.getCorrespondingClass();
+        this.inspectedTypeSpec = inspectedTypeSpec;
+        this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
         
         val methodsRemaining = introspectedClass.getMethods();
         this.methodRemover = new FacetedMethodsMethodRemover(introspectedClass, methodsRemaining);
@@ -240,11 +240,11 @@ public class FacetedMethodsBuilder {
             log.debug("introspecting {}: properties and collections", getClassName());
         }
         
-        final Set<Method> associationCandidateMethods = new HashSet<Method>();
+        val associationCandidateMethods = new HashSet<Method>();
         
         methodRemover.acceptRemaining(methodsRemaining->{
             getFacetProcessor()
-            .findAssociationCandidateAccessors(methodsRemaining, associationCandidateMethods);
+            .findAssociationCandidateAccessors(methodsRemaining, associationCandidateMethods::add);
         });
 
         // Ensure all return types are known
@@ -259,45 +259,52 @@ public class FacetedMethodsBuilder {
         typesToLoad.forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo));
 
         // now create FacetedMethods for collections and for properties
-        final List<FacetedMethod> associationFacetedMethods = _Lists.newArrayList();
+        val associationFacetedMethods = _Lists.<FacetedMethod>newArrayList();
 
-        findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods);
-        findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods);
+        findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods::add);
+        findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods::add);
 
         return Collections.unmodifiableList(associationFacetedMethods);
     }
 
-    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(final List<FacetedMethod> associationPeers) {
-        final List<Method> collectionAccessors = _Lists.newArrayList();
+    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(Consumer<FacetedMethod> onNewAssociationPeer) {
+        val collectionAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
-        createCollectionFacetedMethodsFromAccessors(collectionAccessors, associationPeers);
+        createCollectionFacetedMethodsFromAccessors(collectionAccessors, onNewAssociationPeer);
     }
 
     /**
      * Since the value properties and collections have already been processed,
      * this will pick up the remaining reference properties.
      */
-    private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final List<FacetedMethod> fields) {
-        final List<Method> propertyAccessors = _Lists.newArrayList();
+    private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(Consumer<FacetedMethod> onNewField) {
+        val propertyAccessors = _Lists.<Method>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
-        findAndRemovePrefixedNonVoidMethods(MethodScope.OBJECT, GET_PREFIX, Object.class, 0, propertyAccessors);
-        findAndRemovePrefixedNonVoidMethods(MethodScope.OBJECT, IS_PREFIX, Boolean.class, 0, propertyAccessors);
+        findAndRemovePrefixedNonVoidMethods(MethodScope.OBJECT, GET_PREFIX, Object.class, 0, propertyAccessors::add);
+        findAndRemovePrefixedNonVoidMethods(MethodScope.OBJECT, IS_PREFIX, Boolean.class, 0, propertyAccessors::add);
 
-        createPropertyFacetedMethodsFromAccessors(propertyAccessors, fields);
+        createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
     }
 
     private void createCollectionFacetedMethodsFromAccessors(
             final List<Method> accessorMethods,
-            final List<FacetedMethod> facetMethodsToAppendto) {
+            final Consumer<FacetedMethod> onNewFacetMethod) {
+        
         for (final Method accessorMethod : accessorMethods) {
             if (log.isDebugEnabled()) {
                 log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
 
             // create property and add facets
-            final FacetedMethod facetedMethod = FacetedMethod.createForCollection(introspectedClass, accessorMethod);
-            getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod, FeatureType.COLLECTION);
+            val facetedMethod = FacetedMethod.createForCollection(introspectedClass, accessorMethod);
+            getFacetProcessor().process(
+                    introspectedClass, 
+                    accessorMethod, 
+                    methodRemover, 
+                    facetedMethod, 
+                    FeatureType.COLLECTION,
+                    isMixinMain(accessorMethod));
 
             // figure out what the type is
             Class<?> elementType = Object.class;
@@ -312,13 +319,13 @@ public class FacetedMethodsBuilder {
                 continue;
             }
 
-            facetMethodsToAppendto.add(facetedMethod);
+            onNewFacetMethod.accept(facetedMethod);
         }
     }
 
     private void createPropertyFacetedMethodsFromAccessors(
             final List<Method> accessorMethods,
-            final List<FacetedMethod> facetedMethodsToAppendto) throws MetaModelException {
+            final Consumer<FacetedMethod> onNewFacetedMethod) throws MetaModelException {
 
         for (final Method accessorMethod : accessorMethods) {
             log.debug("  identified accessor method representing property: {}", accessorMethod);
@@ -331,12 +338,18 @@ public class FacetedMethodsBuilder {
             }
 
             // create a 1:1 association peer
-            final FacetedMethod facetedMethod = FacetedMethod.createForProperty(introspectedClass, accessorMethod);
+            val facetedMethod = FacetedMethod.createForProperty(introspectedClass, accessorMethod);
 
-            // process facets for the 1:1 association
-            getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod, FeatureType.PROPERTY);
+            // process facets for the 1:1 association (eg. contributed properties)
+            getFacetProcessor().process(
+                    introspectedClass, 
+                    accessorMethod, 
+                    methodRemover, 
+                    facetedMethod, 
+                    FeatureType.PROPERTY,
+                    isMixinMain(accessorMethod));
 
-            facetedMethodsToAppendto.add(facetedMethod);
+            onNewFacetedMethod.accept(facetedMethod);
         }
     }
 
@@ -407,7 +420,13 @@ public class FacetedMethodsBuilder {
         final FacetedMethod action = FacetedMethod.createForAction(introspectedClass, actionMethod);
 
         // process facets on the action & parameters
-        getFacetProcessor().process(introspectedClass, actionMethod, methodRemover, action, FeatureType.ACTION);
+        getFacetProcessor().process(
+                introspectedClass, 
+                actionMethod, 
+                methodRemover, 
+                action, 
+                FeatureType.ACTION,
+                isMixinMain(actionMethod));
 
         final List<FacetedMethodParameter> actionParams = action.getParameters();
         for (int j = 0; j < actionParams.size(); j++) {
@@ -418,8 +437,8 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean isAllParamTypesValid(final Method actionMethod) {
-        for (final Class<?> paramType : actionMethod.getParameterTypes()) {
-            final ObjectSpecification paramSpec = getSpecificationLoader().loadSpecification(paramType);
+        for (val paramType : actionMethod.getParameterTypes()) {
+            val paramSpec = getSpecificationLoader().loadSpecification(paramType);
             if (paramSpec == null) {
                 return false;
             }
@@ -453,16 +472,16 @@ public class FacetedMethodsBuilder {
             return false;
         }
         
-        if(this.inspectedTypeSpec.isMixin()) {
+        if(isMixinMain(actionMethod)) {
             // we are introspecting a mixin type, so accept this method for further processing
-            log.debug("  identified possible mixin´s 'main' action {0}", actionMethod);
+            log.debug("  identified mixin-main action {}", actionMethod);
             return true;
         } 
         
         if(explicitActionAnnotationConfigured()) {
             
             if(_Annotations.isPresent(actionMethod, Action.class)) {
-                log.debug("  identified action {0}", actionMethod);
+                log.debug("  identified action {}", actionMethod);
                 return true;
             }
             // we have no @Action, so dismiss
@@ -476,7 +495,7 @@ public class FacetedMethodsBuilder {
         }
         // we have a valid action candidate, so fall through
         
-        log.debug("  identified action {0}", actionMethod);
+        log.debug("  identified action {}", actionMethod);
         return true;
     }
 
@@ -515,9 +534,9 @@ public class FacetedMethodsBuilder {
             final String prefix,
             final Class<?> returnType,
             final int paramCount,
-            final List<Method> methodListToAppendTo) {
+            final Consumer<Method> onRemoved) {
         
-        findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount, methodListToAppendTo::add);
+        findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount, onRemoved);
     }
 
     /**
@@ -537,6 +556,25 @@ public class FacetedMethodsBuilder {
             MethodUtil.removeMethods(methodsRemaining, methodScope, prefix, returnType, canBeVoid, paramCount, onMatch);    
         });
         
+    }
+    
+    /**
+     * In case this inspected type is a mixin, returns whether given method can be identified 
+     * as this mixin's main method. 
+     *  
+     * @param method
+     */
+    private boolean isMixinMain(Method method) {
+        if(!this.inspectedTypeSpec.isMixin()) {
+            return false;
+        }
+        val mixinMember = inspectedTypeSpec.getMixedInMember(inspectedTypeSpec);
+        if(!mixinMember.isPresent()) {
+            return false;
+        }
+        val actionMethod_ofMixinMember = ((ObjectActionMixedIn)mixinMember.get())
+                .getFacetedMethod().getMethod();
+        return method.equals(actionMethod_ofMixinMember);
     }
 
     // ////////////////////////////////////////////////////////////////////////////
