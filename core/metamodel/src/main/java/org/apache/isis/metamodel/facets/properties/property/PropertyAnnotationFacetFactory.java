@@ -25,12 +25,14 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
@@ -68,7 +70,6 @@ implements MetaModelRefiner {
     private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = 
             new MetaModelValidatorForConflictingOptionality();
 
-
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
@@ -77,6 +78,23 @@ implements MetaModelRefiner {
     public void process(final ProcessMethodContext processMethodContext) {
         
         val propertyIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Property.class);
+        
+        if(processMethodContext.isMixinMain() && propertyIfAny.isPresent()) {
+
+//            XXX[1998] this condition would allow 'intent inference' only when @Property is found at type level
+//            val isPropertyTypeLevel = !processMethodContext.synthesizeOnMethod(Property.class).isPresent();
+//            if(isPropertyTypeLevel) 
+            {
+
+                //XXX[1998] if @Property detected on method or type level infer:    
+                //@Action(semantics=SAFE)
+                //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
+                val facetedMethod = processMethodContext.getFacetHolder();
+                FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+                //facetedMethod.addFacet(new NotContributedFacetForActionLayoutAnnotation(Contributed.AS_ASSOCIATION, facetedMethod));
+            }
+
+        }
         
         processModify(processMethodContext, propertyIfAny);
         processHidden(processMethodContext, propertyIfAny);

@@ -87,11 +87,14 @@ class DomainModelTest_usingGoodDomain {
         val oa_mixin = holderSpec.getObjectAction("mixin"); // proper mix-in support
         assertNotNull(oa_mixin);
         
-        val oa_action = holderSpec.getObjectAction("action"); // proper mix-in support
+        val oa_action = holderSpec.getObjectAction("action"); // when @Action at type level
         assertNotNull(oa_action);
         
-        val oa_property = holderSpec.getAssociation("property"); // proper mix-in support
+        val oa_property = holderSpec.getAssociation("property"); // when @Property at type level
         assertNotNull(oa_property);
+        
+        val oa_property2 = holderSpec.getAssociation("property2"); // when @Property at method level
+        assertNotNull(oa_property2);
     }
     
 

@@ -43,7 +43,7 @@ public class NotContributedFacetForActionLayoutAnnotation extends NotContributed
                 .orElse(null);
     }
 
-    private NotContributedFacetForActionLayoutAnnotation(
+    public NotContributedFacetForActionLayoutAnnotation(
             final Contributed contributed,
             final FacetHolder holder) {
         super(contributed, holder);

@@ -26,6 +26,8 @@ import java.util.function.BiConsumer;
 
 import org.apache.isis.metamodel.util.snapshot.XmlSchema.ExtensionData;
 
+import lombok.val;
+
 
 public final class FacetUtil {
 
@@ -36,12 +38,12 @@ public final class FacetUtil {
         if (facet == null) {
             return;
         }
-        final FacetHolder facetHolder = facet.getFacetHolder();
+        val facetHolder = facet.getFacetHolder();
 
         Optional.ofNullable(facetHolder.getFacet(facet.facetType()))
         .filter(each -> facet.getClass() == each.getClass())
         .ifPresent(existingFacet -> {
-            final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
+            val underlyingFacet = existingFacet.getUnderlyingFacet();
             facetHolder.removeFacet(existingFacet);
             facet.setUnderlyingFacet(underlyingFacet);
         } );
