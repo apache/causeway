@@ -952,6 +952,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return;
         }
+        val mixinMethodName = mixinFacet.value();
 
         final Stream<ObjectAction> mixinActions = mixinSpec
                 .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
@@ -959,7 +960,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         mixinActions
         .filter(Predicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
-        .map(Factories.mixedInAction(this, mixinType, mixinFacet.value()))
+        .map(Factories.mixedInAction(this, mixinType, mixinMethodName))
         .peek(facetProcessor::processMemberOrder)
         .forEach(onNewMixedInAction);
 

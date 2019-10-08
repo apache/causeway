@@ -40,7 +40,7 @@ public interface ActionInvocationFacet extends Facet {
             ObjectAdapter targetAdapter,
             ObjectAdapter mixedInAdapter,  // null for regular or contributed (not mixin) actions
             ObjectAdapter[] argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            InteractionInitiatedBy interactionInitiatedBy);
 
     ObjectSpecification getReturnType();
 

@@ -27,11 +27,11 @@ import org.apache.isis.metamodel.specloader.specimpl.ContributeeMember;
  */
 public interface ContributeeMemberFacetFactory extends FacetFactory {
 
-    class ProcessContributeeMemberContext extends AbstractProcessContext<ObjectMember>
+    public static class ProcessContributeeMemberContext 
+    extends AbstractProcessContext<ObjectMember>
     implements ProcessContextWithMetadataProperties<ObjectMember> {
 
-        public ProcessContributeeMemberContext(
-                final ObjectMember facetHolder) {
+        public ProcessContributeeMemberContext(final ObjectMember facetHolder) {
             super(facetHolder);
         }
 
