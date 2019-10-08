@@ -105,6 +105,19 @@ class DomainModelTest_usingGoodDomain {
         assertEquals("property2", oa_property2.getId());
         assertEquals("foo", oa_property2.getName());
         assertEquals("bar", oa_property2.getDescription());
+        
+        val oa_collection = holderSpec.getAssociation("collection"); // when @Collection at type level
+        assertNotNull(oa_collection);
+        assertEquals("collection", oa_collection.getId());
+        assertEquals("foo", oa_collection.getName());
+        assertEquals("bar", oa_collection.getDescription());
+        
+        val oa_collection2 = holderSpec.getAssociation("collection2"); // when @Collection at method level
+        assertNotNull(oa_collection2);
+        assertEquals("collection2", oa_collection2.getId());
+        assertEquals("foo", oa_collection2.getName());
+        assertEquals("bar", oa_collection2.getDescription());
+        
     }
     
 

@@ -20,8 +20,8 @@
 package org.apache.isis.metamodel.facets.collections.collection;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
@@ -31,6 +31,8 @@ import org.apache.isis.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import lombok.val;
 
 public class DisabledAnnotationOnCollectionFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -48,17 +50,24 @@ public class DisabledAnnotationOnCollectionFacetFactoryTest extends AbstractFace
         facetFactory = null;
         super.tearDown();
     }
+    
+    private static void processEditing(
+            CollectionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        facetFactory.processEditing(processMethodContext, collectionIfAny);
+    }
+
 
     public void testDisabledAnnotationPickedUpOnCollection() {
         class Customer {
             @org.apache.isis.applib.annotation.Collection(editing = Editing.DISABLED)
-            public Collection<?> getOrders() {
+            public java.util.Collection<?> getOrders() {
                 return null;
             }
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.processEditing(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        processEditing(facetFactory, new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);

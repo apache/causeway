@@ -20,14 +20,16 @@
 package org.apache.isis.metamodel.facets.collections.collection;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+
+import lombok.val;
 
 public class NotPersistedAnnotationOnCollectionFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -38,21 +40,26 @@ public class NotPersistedAnnotationOnCollectionFacetFactoryTest extends Abstract
         super.setUp();
         facetFactory = new CollectionAnnotationFacetFactory();
     }
+    
+    private static void processNotPersisted(
+            CollectionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        facetFactory.processNotPersisted(processMethodContext, collectionIfAny);
+    }
 
     public void testNotPersistedAnnotationPickedUpOnCollection() {
 
         class Order {
         }
         class Customer {
-            @SuppressWarnings("unused")
-            @org.apache.isis.applib.annotation.Collection(mementoSerialization = MementoSerialization.EXCLUDED)
-            public Collection<Order> getOrders() {
+            @Collection(mementoSerialization = MementoSerialization.EXCLUDED)
+            public java.util.Collection<Order> getOrders() {
                 return null;
             }
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        facetFactory.processNotPersisted(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+        processNotPersisted(facetFactory, new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);

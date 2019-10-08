@@ -35,6 +35,7 @@ import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.metamodel.facets.FacetFactory;
+import org.apache.isis.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
@@ -62,6 +63,9 @@ import static org.apache.isis.metamodel.commons.matchers.IsisMatchers.classEqual
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
+@SuppressWarnings("unused")
 public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     CollectionAnnotationFacetFactory facetFactory;
@@ -91,7 +95,32 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             }
         });
     }
+    
+    private static void processModify(
+            CollectionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        facetFactory.processModify(processMethodContext, collectionIfAny);
+    }
+    
+    private static void processHidden(
+            CollectionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        facetFactory.processHidden(processMethodContext, collectionIfAny);
+    }
 
+    private static void processEditing(
+            CollectionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        facetFactory.processEditing(processMethodContext, collectionIfAny);
+    }
+    
+    private static void processTypeOf(
+            CollectionAnnotationFacetFactory facetFactory, ProcessMethodContext processMethodContext) {
+        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
+        facetFactory.processTypeOf(processMethodContext, collectionIfAny);
+    }
+
+    
     @Before
     public void setUp() throws Exception {
         facetFactory = new CollectionAnnotationFacetFactory();
@@ -170,7 +199,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            processModify(facetFactory, processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
@@ -232,7 +261,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            processModify(facetFactory, processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
@@ -287,7 +316,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            processModify(facetFactory, processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
@@ -339,7 +368,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            processModify(facetFactory, processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(CollectionDomainEventFacet.class);
@@ -388,7 +417,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processHidden(processMethodContext);
+            processHidden(facetFactory, processMethodContext);
 
             // then
             final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
@@ -431,7 +460,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processEditing(processMethodContext);
+            processEditing(facetFactory, processMethodContext);
 
             // then
             final DisabledFacet disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
@@ -468,7 +497,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processTypeOf(processMethodContext);
+            processTypeOf(facetFactory, processMethodContext);
 
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
@@ -498,7 +527,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processTypeOf(processMethodContext);
+            processTypeOf(facetFactory, processMethodContext);
 
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
@@ -528,7 +557,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
                     null, collectionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processTypeOf(processMethodContext);
+            processTypeOf(facetFactory, processMethodContext);
 
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);

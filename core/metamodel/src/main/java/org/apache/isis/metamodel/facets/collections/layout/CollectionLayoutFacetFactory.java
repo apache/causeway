@@ -45,7 +45,7 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        val collectionLayoutIfAny = processMethodContext.synthesizeOnMethod(CollectionLayout.class);
+        val collectionLayoutIfAny = processMethodContext.synthesizeOnMethodOrMixinType(CollectionLayout.class);
 
         // cssClass
         CssClassFacet cssClassFacet = CssClassFacetForCollectionLayoutAnnotation.create(collectionLayoutIfAny, facetHolder);
