@@ -1,3 +1,0 @@
-** Bypass Implementation
-*** xref:security-bypass:ROOT:configuring-isis-to-use-bypass.adoc[Configuring to use Bypass]
-

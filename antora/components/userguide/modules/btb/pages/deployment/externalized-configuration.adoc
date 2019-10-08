@@ -75,7 +75,7 @@ Note that running the app using Apache Isis' `org.apache.isis.WebServer` bootstr
 
 == Shiro Config
 
-If using Apache Isis' xref:security-shiro:ROOT:configuring-isis-to-use-shiro.adoc[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file.
+If using Apache Isis' xref:security:security-shiro:configuring-isis-to-use-shiro.adoc[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file.
 By default this also resides in `WEB-INF`.
 
 Similar to Apache Isis, Shiro lets this configuration directory be altered, by specifying the `shiroConfigLocations` context parameter.
