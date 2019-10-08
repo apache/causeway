@@ -1,6 +1,6 @@
 ifndef::env-site,env-github[]
-:attachmentsdir: {moduledir}/assets/attachments
+:attachmentsdir: {moduledir}/attachments
 :examplesdir: {moduledir}/examples
+:imagesdir: {moduledir}/images
 :partialsdir: {moduledir}/partials
-:imagesdir: {moduledir}/assets/images
 endif::[]
