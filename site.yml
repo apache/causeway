@@ -62,6 +62,10 @@ content:
     - url: .
       start_path: core/testsupport/integtestsupport/_adoc
       branches: HEAD
+    # to be resurrected somehow.
+    #- url: .
+    #  start_path: core/testsupport/mvnplugin/_adoc
+    #  branches: HEAD
     - url: .
       branches: HEAD
       start_path: extensions/fixtures/_adoc

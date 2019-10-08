@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 Apache Isis automatically injects domain services into other domain services and also into domain objects and view models.
-In fact, it also injects domain services into xref:integ-test-support:ROOT:about.adoc[integration tests] and xref:ext-fixtures:ROOT:about.adoc[fixture scripts].
+In fact, it also injects domain services into xref:testing:integ-test-support:about.adoc[integration tests] and xref:ext-fixtures:ROOT:about.adoc[fixture scripts].
 
 [NOTE]
 ====

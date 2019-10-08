@@ -1,0 +1,3 @@
+* xref:testing:ext-fixtures:about.adoc[Fixture Scripts (extension)]
+
+

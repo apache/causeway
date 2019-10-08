@@ -1342,6 +1342,13 @@
 				<version>${isis.version}</version>
 			</dependency>
 
+			<!-- maven plugin -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis-mavenplugin</artifactId>
+				<version>${isis.version}</version>
+			</dependency>
+
 			<!-- Restful Objects viewer -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>

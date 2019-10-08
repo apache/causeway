@@ -1,6 +1,6 @@
 name: testing
-title: "Testing"
 version: master
+title: "Testing"
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
