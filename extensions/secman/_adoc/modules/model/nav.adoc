@@ -1,5 +1,0 @@
-include::security:ROOT:partial$nav.adoc[]
-include::security:security-bypass:partial$nav.adoc[]
-include::security:security-shiro:partial$nav.adoc[]
-include::ext-secman:ROOT:partial$nav.adoc[]
-include::security:ROOT:partial$nav2.adoc[]

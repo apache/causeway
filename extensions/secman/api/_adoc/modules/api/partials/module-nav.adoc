@@ -1,0 +1,1 @@
+* xref:ext-secman:api:about.adoc[API]

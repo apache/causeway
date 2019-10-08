@@ -1,0 +1,7 @@
+include::ext-secman:ROOT:partial$module-nav.adoc[]
+include::ext-secman:api:partial$module-nav.adoc[]
+include::ext-secman:model:partial$module-nav.adoc[]
+include::ext-secman:realm-shiro:partial$module-nav.adoc[]
+include::ext-secman:persistence-jdo:partial$module-nav.adoc[]
+include::ext-secman:encryption-jbcrypt:partial$module-nav.adoc[]
+

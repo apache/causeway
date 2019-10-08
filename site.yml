@@ -103,9 +103,25 @@ content:
     - url: .
       start_path: core/security/shiro/_adoc
       branches: HEAD
+
     - url: .
       branches: HEAD
       start_path: extensions/secman/_adoc
+    - url: .
+      branches: HEAD
+      start_path: extensions/secman/api/_adoc
+    - url: .
+      branches: HEAD
+      start_path: extensions/secman/encryption-jbcrypt/_adoc
+    - url: .
+      branches: HEAD
+      start_path: extensions/secman/model/_adoc
+    - url: .
+      branches: HEAD
+      start_path: extensions/secman/persistence-jdo/_adoc
+    - url: .
+      branches: HEAD
+      start_path: extensions/secman/realm-shiro/_adoc
 
     - url: .
       branches: HEAD
