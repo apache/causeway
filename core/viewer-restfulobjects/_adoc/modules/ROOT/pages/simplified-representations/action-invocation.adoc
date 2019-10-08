@@ -8,7 +8,7 @@ When an action is invoked, it can return a domain object, a list, a scalar, or r
 
 == Returning an Object
 
-If the action returned an object, then the xref:vro:ROOT:simplified-representations/domain-object.adoc[domain object representation] is returned.
+If the action returned an object, then the xref:vro:ROOT:simplified-representations.adoc#domain-object[domain object representation] is returned.
 
 For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
 this resource:
@@ -58,7 +58,7 @@ Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="objec
 == Returning a List
 
 On the other hand if the action returned a list (a "standalone" collection, then an array representation is returned.
-This is very similar to that returned by a xref:vro:ROOT:simplified-representations/object-collection.adoc[(parented) object collection], though with a slightly different `Content-Type` to distinguish.
+This is very similar to that returned by a xref:vro:ROOT:simplified-representations.adoc#object-collection[(parented) object collection], though with a slightly different `Content-Type` to distinguish.
 
 For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
 this resource:

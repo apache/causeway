@@ -12,7 +12,8 @@ These spec files can then be used with the link:http://swagger.io/swagger-ui/[Sw
 
 [NOTE]
 ====
-Not all of the REST API exposed by the xref:vro:ROOT:about.adoc[Restful Objects viewer] is included in the Swagger schema definition files; the emphasis is those REST resources that are used to develop custom apps: domain objects, domain object collections and action invocations.  When combined with Apache Isis' own xref:vro:ROOT:simplified-representations.adoc[simplified representations], these are pretty much all that is needed  for this use case.
+Not all of the REST API exposed by the xref:vro:ROOT:about.adoc[Restful Objects viewer] is included in the Swagger schema definition files; the emphasis is those REST resources that are used to develop custom apps: domain objects, domain object collections and action invocations.
+When combined with Apache Isis' own xref:vro:ROOT:simplified-representations.adoc[simplified representations], these are pretty much all that is needed  for this use case.
 ====
 
 

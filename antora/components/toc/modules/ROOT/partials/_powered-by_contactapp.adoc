@@ -25,7 +25,8 @@ image:https://github.com/incodehq/contactapp/blob/master/docs/contactapp-fronten
 As our first Apache Isis app making use of mobile technologies it opens the doors for more to follow.
 Ionic has proven easy to learn and build apps with, and has a helpful community.  Meanwhile we've used
 Apache Isis' support for xref:ug:fun:programming-model.adoc#jaxb[JAXB view models]
-and in particular the http://isis.apache.org/guides/ugvro/ugvro.html#__ugvro_simplified-representations_apache-isis-profile[simplified REST representations] introduced in v1.12.0.  The result is code that is easy to follow and enhance.
+and in particular the xref:vro:ROOT:simplified-representations.adoc[simplified REST representations] introduced in v1.12.0.
+The result is code that is easy to follow and enhance.
 
 We expect that the scope of _Contact App_ will expand and new features added, these will (almost certainly) remain open source.
 Meanwhile we're now set up nicely to build further mobile apps using this technology stack.

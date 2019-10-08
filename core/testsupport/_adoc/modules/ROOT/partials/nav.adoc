@@ -1,9 +1,0 @@
-:page-partial:
-
-* xref:testing:ROOT:about.adoc[Testing]
-
-** xref:testing:ROOT:overview.adoc[Overview]
-** xref:unit-test-support:ROOT:about.adoc[Unit Test Support]
-** xref:integ-test-support:ROOT:about.adoc[Integ Test Support]
-** xref:ext-specsupport:ROOT:about.adoc[BDD Spec Support (extension)]
-** xref:ext-fixtures:ROOT:about.adoc[Fixture Scripts (extension)]

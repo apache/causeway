@@ -93,7 +93,7 @@
 				<!-- FIXME[ISIS-1976] plugins are optional -->
 				<dependency>
 					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-plugins-security-shiro</artifactId>
+					<artifactId>isis-security-shiro</artifactId>
 				</dependency>
 
 			</dependencies>

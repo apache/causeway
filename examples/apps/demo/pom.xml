@@ -32,6 +32,9 @@
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 
+		<!-- this can be overridden using -Dflavor=... -->
+		<flavor>payara</flavor>
+
 		<docker-plugin.imageName>apacheisis/isis-2-demo</docker-plugin.imageName>
 		<docker-plugin.imageTag>${flavor}</docker-plugin.imageTag>
 		<docker-plugin.resource.include>${maven-war-plugin.warName}.war</docker-plugin.resource.include>
@@ -54,7 +57,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-plugins-security-shiro</artifactId>
+			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
 
 		<dependency>

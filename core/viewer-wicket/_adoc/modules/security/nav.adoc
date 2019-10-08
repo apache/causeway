@@ -1,1 +1,5 @@
+//
+// These pages are include:d in both the RO viewer guide and also in the security guide
+//
+
 * xref:about.adoc[Security]
