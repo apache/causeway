@@ -21,6 +21,7 @@ package org.apache.isis.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -90,6 +91,12 @@ extends SingleValueFacetAbstract<String> implements MixinFacet {
         }
     }
 
+    @Override
+    public boolean isCandidateForMain(Method method) {
+        return method.getName().equals(super.value()) &&
+                constructor.getDeclaringClass().equals(method.getDeclaringClass());
+    }
+    
     @Override
     public ObjectAdapter mixedIn(ManagedObject mixinAdapter, Policy policy) {
         val mixinPojo = mixinAdapter.getPojo();

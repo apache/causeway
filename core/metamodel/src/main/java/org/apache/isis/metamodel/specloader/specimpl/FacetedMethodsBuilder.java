@@ -46,6 +46,7 @@ import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.object.facets.FacetsFacet;
+import org.apache.isis.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.metamodel.methodutils.MethodScope;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -565,8 +566,13 @@ public class FacetedMethodsBuilder {
      * @param method
      */
     private boolean isMixinMain(Method method) {
-        if(!this.inspectedTypeSpec.isMixin()) {
+        val mixinFacet = inspectedTypeSpec.getFacet(MixinFacet.class);
+        if(mixinFacet==null) {
             return false;
+        }
+        if(inspectedTypeSpec.isLessThan(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED)) {
+            // members are not introspected yet, so make a guess
+            return mixinFacet.isCandidateForMain(method);
         }
         val mixinMember = inspectedTypeSpec.getMixedInMember(inspectedTypeSpec);
         if(!mixinMember.isPresent()) {

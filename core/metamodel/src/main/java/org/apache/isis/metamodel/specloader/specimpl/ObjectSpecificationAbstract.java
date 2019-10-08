@@ -322,7 +322,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    private boolean isLessThan(IntrospectionState upTo) {
+    boolean isLessThan(IntrospectionState upTo) {
         return this.introspectionState.compareTo(upTo) < 0;
     }
     

@@ -19,6 +19,8 @@
 
 package org.apache.isis.metamodel.facets.object.mixin;
 
+import java.lang.reflect.Method;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -62,6 +64,12 @@ public interface MixinFacet extends SingleValueFacet<String> {
      */
     Object instantiate(Object holderPojo);
 
+    /**
+     * Whether given method matches as a candidate for the mixin's main method. 
+     * @param method
+     * @return whether has expected name and same declaring class
+     */
+    boolean isCandidateForMain(Method method);
 
 
 }

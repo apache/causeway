@@ -220,7 +220,7 @@ public interface FacetFactory {
             
             super(cls, method, methodRemover, facetedMethod);
             this.featureType = featureType;
-            this.mixinMain = false;
+            this.mixinMain = isMixinMain;
         }
         
         /** JUnit support, historically not using 'isMixinMain' */

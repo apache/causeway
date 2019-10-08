@@ -47,7 +47,7 @@ import lombok.val;
         })
 @TestPropertySource({
     IsisPresets.DebugValidation,
-    IsisPresets.DebugProgrammingModel,
+    //IsisPresets.DebugProgrammingModel,
     
 })
 class DomainModelTest_usingGoodDomain {
