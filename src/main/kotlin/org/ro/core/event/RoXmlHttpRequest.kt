@@ -71,7 +71,7 @@ class RoXmlHttpRequest {
 
     private fun argumentsAsUrlParameter(link: Link): String {
         val args = link.argMap()
-        return argumentsAsString(args, "?", ",", "")
+        return argumentsAsString(args, "?", "&", "")
     }
 
     private fun argumentsAsString(

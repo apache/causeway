@@ -63,4 +63,17 @@ class LinkTest : IntegrationTest() {
         }
     }
 
+    @Test
+    fun testArgumentsCanHaveEmptyKeys() {
+        val href = "href"
+        val arg = Argument(href)
+        val args = mutableMapOf<String, Argument?>()
+        args.put("", arg)
+        val l = Link(arguments = args)
+        // then
+        val arguments = l.argMap()!!
+        val a = arguments[""]
+        assertEquals("href", a!!.key)
+    }
+
 }

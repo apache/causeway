@@ -1,4 +1,11 @@
-{
+package org.ro.urls
+
+object HTTP_ERROR_ON_UNIQUE_CONSTRAINT_VIOLATION : Response() {
+    val ReadCallback = "\$ReadCallback"
+    val CachedChain = "\$CachedChain"
+
+    override val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript/invoke"
+    override val str = """{
     "httpStatusCode": 500,
     "message": "Insert of object \"domainapp.modules.simple.dom.impl.SimpleObject@7d58c3bd\" using statement \"INSERT INTO \"simple\".\"SimpleObject\" (\"name\",\"notes\",\"version\") VALUES (?,?,?)\" failed : integrity constraint violation: unique constraint or index violation; \"SimpleObject_name_UNQ\" table: \"SimpleObject\"",
     "detail": {
@@ -18,7 +25,7 @@
             "org.apache.isis.core.metamodel.services.xactn.TransactionServiceDefault.flushTransaction(TransactionServiceDefault.java:39)",
             "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract.setCommandResultIfEntity(ActionInvocationFacetForDomainEventAbstract.java:461)",
             "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract.doInvoke(ActionInvocationFacetForDomainEventAbstract.java:334)",
-            "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract$1.execute(ActionInvocationFacetForDomainEventAbstract.java:164)",
+            "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract${'$'}1.execute(ActionInvocationFacetForDomainEventAbstract.java:164)",
             "org.apache.isis.core.runtime.system.transaction.IsisTransactionManager.executeWithinTransaction(IsisTransactionManager.java:142)",
             "org.apache.isis.core.runtime.system.transaction.IsisTransactionManager.executeWithinTransaction(IsisTransactionManager.java:132)",
             "org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault.executeWithinTransaction(PersistenceSessionServiceInternalDefault.java:186)",
@@ -50,7 +57,7 @@
             "org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter.doFilter(IsisLogOnExceptionFilter.java:52)",
             "org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1668)",
             "org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)",
-            "org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)",
+            "org.apache.shiro.web.servlet.AbstractShiroFilter${'$'}1.call(AbstractShiroFilter.java:365)",
             "org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)",
             "org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)",
             "org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)",
@@ -77,11 +84,11 @@
             "org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:242)",
             "org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:261)",
             "org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)",
-            "org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:75)",
+            "org.eclipse.jetty.io.SelectChannelEndPoint${'$'}2.run(SelectChannelEndPoint.java:75)",
             "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceAndRun(ExecuteProduceConsume.java:213)",
             "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:147)",
             "org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:654)",
-            "org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:572)",
+            "org.eclipse.jetty.util.thread.QueuedThreadPool${'$'}3.run(QueuedThreadPool.java:572)",
             "java.lang.Thread.run(Thread.java:748)"
         ],
         "causedBy": {
@@ -116,7 +123,7 @@
                 "org.apache.isis.core.metamodel.services.xactn.TransactionServiceDefault.flushTransaction(TransactionServiceDefault.java:39)",
                 "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract.setCommandResultIfEntity(ActionInvocationFacetForDomainEventAbstract.java:461)",
                 "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract.doInvoke(ActionInvocationFacetForDomainEventAbstract.java:334)",
-                "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract$1.execute(ActionInvocationFacetForDomainEventAbstract.java:164)",
+                "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract${'$'}1.execute(ActionInvocationFacetForDomainEventAbstract.java:164)",
                 "org.apache.isis.core.runtime.system.transaction.IsisTransactionManager.executeWithinTransaction(IsisTransactionManager.java:142)",
                 "org.apache.isis.core.runtime.system.transaction.IsisTransactionManager.executeWithinTransaction(IsisTransactionManager.java:132)",
                 "org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault.executeWithinTransaction(PersistenceSessionServiceInternalDefault.java:186)",
@@ -148,7 +155,7 @@
                 "org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter.doFilter(IsisLogOnExceptionFilter.java:52)",
                 "org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1668)",
                 "org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)",
-                "org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)",
+                "org.apache.shiro.web.servlet.AbstractShiroFilter${'$'}1.call(AbstractShiroFilter.java:365)",
                 "org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)",
                 "org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)",
                 "org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)",
@@ -175,11 +182,11 @@
                 "org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:242)",
                 "org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:261)",
                 "org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)",
-                "org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:75)",
+                "org.eclipse.jetty.io.SelectChannelEndPoint${'$'}2.run(SelectChannelEndPoint.java:75)",
                 "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceAndRun(ExecuteProduceConsume.java:213)",
                 "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:147)",
                 "org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:654)",
-                "org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:572)",
+                "org.eclipse.jetty.util.thread.QueuedThreadPool${'$'}3.run(QueuedThreadPool.java:572)",
                 "java.lang.Thread.run(Thread.java:748)"
             ],
             "causedBy": {
@@ -224,7 +231,7 @@
                     "org.apache.isis.core.metamodel.services.xactn.TransactionServiceDefault.flushTransaction(TransactionServiceDefault.java:39)",
                     "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract.setCommandResultIfEntity(ActionInvocationFacetForDomainEventAbstract.java:461)",
                     "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract.doInvoke(ActionInvocationFacetForDomainEventAbstract.java:334)",
-                    "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract$1.execute(ActionInvocationFacetForDomainEventAbstract.java:164)",
+                    "org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract${'$'}1.execute(ActionInvocationFacetForDomainEventAbstract.java:164)",
                     "org.apache.isis.core.runtime.system.transaction.IsisTransactionManager.executeWithinTransaction(IsisTransactionManager.java:142)",
                     "org.apache.isis.core.runtime.system.transaction.IsisTransactionManager.executeWithinTransaction(IsisTransactionManager.java:132)",
                     "org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault.executeWithinTransaction(PersistenceSessionServiceInternalDefault.java:186)",
@@ -256,7 +263,7 @@
                     "org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter.doFilter(IsisLogOnExceptionFilter.java:52)",
                     "org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1668)",
                     "org.apache.shiro.web.servlet.AbstractShiroFilter.executeChain(AbstractShiroFilter.java:449)",
-                    "org.apache.shiro.web.servlet.AbstractShiroFilter$1.call(AbstractShiroFilter.java:365)",
+                    "org.apache.shiro.web.servlet.AbstractShiroFilter${'$'}1.call(AbstractShiroFilter.java:365)",
                     "org.apache.shiro.subject.support.SubjectCallable.doCall(SubjectCallable.java:90)",
                     "org.apache.shiro.subject.support.SubjectCallable.call(SubjectCallable.java:83)",
                     "org.apache.shiro.subject.support.DelegatingSubject.execute(DelegatingSubject.java:383)",
@@ -283,15 +290,17 @@
                     "org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:242)",
                     "org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:261)",
                     "org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:95)",
-                    "org.eclipse.jetty.io.SelectChannelEndPoint$2.run(SelectChannelEndPoint.java:75)",
+                    "org.eclipse.jetty.io.SelectChannelEndPoint${'$'}2.run(SelectChannelEndPoint.java:75)",
                     "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.produceAndRun(ExecuteProduceConsume.java:213)",
                     "org.eclipse.jetty.util.thread.strategy.ExecuteProduceConsume.run(ExecuteProduceConsume.java:147)",
                     "org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:654)",
-                    "org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:572)",
+                    "org.eclipse.jetty.util.thread.QueuedThreadPool${'$'}3.run(QueuedThreadPool.java:572)",
                     "java.lang.Thread.run(Thread.java:748)"
                 ],
                 "causedBy": null
             }
         }
     }
+}
+"""
 }

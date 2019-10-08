@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 //IMPROVE initialize value="", move behavior out of TO
 @Serializable
+//TODO either have kotlinx.serialization cope with empty key or implement custom serialization (cf. to.Value)
 data class Argument(var key: String = "",
                     var value: String? = null,
                     val potFileName: String = "") : TransferObject {
@@ -13,6 +14,7 @@ data class Argument(var key: String = "",
         }
     }
 
+    //TODO move to RoXMLHttpRequest / Helper class
     fun asBody(): String {
         var v = value!!
         val isHttp = v.startsWith("http")

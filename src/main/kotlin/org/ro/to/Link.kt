@@ -1,6 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
+import org.ro.core.Utils
 
 @Serializable
 data class Link(val rel: String = "",
@@ -28,7 +29,7 @@ data class Link(val rel: String = "",
     }
 
     fun setArgument(key: String, value: String?) {
-        val k = key.toLowerCase()
+        val k = Utils.enCamel(key)
         val arg = argMap()!!.get(k)
         arg!!.key = k
         arg.value = value

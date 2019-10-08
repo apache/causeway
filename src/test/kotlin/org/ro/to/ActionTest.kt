@@ -111,30 +111,6 @@ class ActionTest {
         assertEquals(choiceList[0].content, defaultChoice)
     }
 
-//    @Test    //TODO-> empty key in arguments msg: Encountered unknown key csvFileName
-    fun testParseActionDownloadMetaModel() {
-        val jsonStr = ACTIONS_DOWNLOAD_META_MODEL.str
-        val action = ActionHandler().parse(jsonStr) as Action
-        val links = action.links
-        assertEquals(4, links.size)
-
-        val invokeLink = action.getInvokeLink()
-        val argList = invokeLink!!.arguments
-        assertEquals(2, argList.size)  //2
-
-        val paramList = action.parameters
-        assertEquals(2, paramList.size)
-
-        val p = action.findParameterByName(".csvFileName")
-        assertEquals(".csvFileName", p!!.id)
-
-//        val choiceList = p.choices
-//        assertEquals(2, choiceList.size)
-
-        val defaultChoice = p.defaultChoice!!.content as String
-        assertEquals("metamodel.csv", defaultChoice)
-    }
-
     @Test
     fun testParseActionDownloadSwaggerSchemaDefinition() {
         val jsonStr = ACTIONS_DOWNLOAD_SWAGGER_SCHEMA_DEFINITION.str
@@ -163,4 +139,48 @@ class ActionTest {
         assertEquals("Private", defaultChoice)
     }
 
+    //    @Test    //TODO-> empty key in arguments msg: Encountered unknown key csvFileName
+    fun testParseActionDownloadMetaModel() {
+        val jsonStr = ACTIONS_DOWNLOAD_META_MODEL.str
+        val action = ActionHandler().parse(jsonStr) as Action
+        val links = action.links
+        assertEquals(4, links.size)
+
+        val invokeLink = action.getInvokeLink()
+        val argList = invokeLink!!.arguments
+        assertEquals(2, argList.size)  //2
+
+        val paramList = action.parameters
+        assertEquals(2, paramList.size)
+
+        val p = action.findParameterByName(".csvFileName")
+        assertEquals(".csvFileName", p!!.id)
+
+//        val choiceList = p.choices
+//        assertEquals(2, choiceList.size)
+
+        val defaultChoice = p.defaultChoice!!.content as String
+        assertEquals("metamodel.csv", defaultChoice)
+    }
+
+    //@Test    //TODO-> empty key in arguments msg: Encountered unknown key csvFileName
+    fun testDownloadTranslations() {
+        val jsonStr = ACTIONS_DOWNLOAD_TRANSLATIONS.str
+        val action = ActionHandler().parse(jsonStr) as Action
+        val links = action.links
+        assertEquals(4, links.size)
+
+        val invokeLink = action.getInvokeLink()
+        val argList = invokeLink!!.arguments
+        assertEquals(1, argList.size)  //2
+
+        val paramList = action.parameters
+        assertEquals(1, paramList.size)
+
+        val p = action.findParameterByName(".potFileName")
+        assertEquals(".potFileName", p!!.id)
+
+        val defaultChoice = p.defaultChoice!!.content as String
+        assertEquals("translations.pot", defaultChoice)
+    }
 }
