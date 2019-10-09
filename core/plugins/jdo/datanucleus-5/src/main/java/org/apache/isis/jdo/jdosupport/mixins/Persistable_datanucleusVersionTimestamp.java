@@ -20,6 +20,7 @@ package org.apache.isis.jdo.jdosupport.mixins;
 
 import javax.jdo.JDOHelper;
 
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
@@ -53,7 +54,7 @@ public class Persistable_datanucleusVersionTimestamp {
             named = "Version",
             hidden = Where.ALL_TABLES
             )
-    @MemberOrder(name = "Metadata", sequence = "800.2")
+    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
     public java.sql.Timestamp prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version != null && version instanceof java.sql.Timestamp ? (java.sql.Timestamp) version : null;

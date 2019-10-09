@@ -20,6 +20,7 @@ package org.apache.isis.jdo.jdosupport.mixins;
 
 import javax.jdo.JDOHelper;
 
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
@@ -53,7 +54,7 @@ public class Persistable_datanucleusVersionLong {
             named = "Version",
             hidden = Where.ALL_TABLES
             )
-    @MemberOrder(name = "Metadata", sequence = "800.2")
+    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
     public Long prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version != null && version instanceof Long ? (Long) version : null;

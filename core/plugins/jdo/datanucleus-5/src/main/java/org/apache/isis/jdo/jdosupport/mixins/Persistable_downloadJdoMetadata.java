@@ -25,6 +25,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
 import javax.xml.bind.JAXBException;
 
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
@@ -60,7 +61,7 @@ public class Persistable_downloadJdoMetadata {
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
             )
-    @MemberOrder(name = "datanucleusIdLong", sequence = "710.1")
+    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "710.1")
     public Clob act(
             @ParameterLayout(named = "File name")
             final String fileName) throws JAXBException, IOException {

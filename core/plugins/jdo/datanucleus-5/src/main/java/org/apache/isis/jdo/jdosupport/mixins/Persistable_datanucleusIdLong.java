@@ -20,6 +20,7 @@ package org.apache.isis.jdo.jdosupport.mixins;
 
 import javax.jdo.JDOHelper;
 
+import org.apache.isis.applib.mixins.MixinConstants;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.identity.DatastoreId;
 
@@ -54,7 +55,7 @@ public class Persistable_datanucleusIdLong {
             named = "Id",
             hidden = Where.ALL_TABLES
             )
-    @MemberOrder(name = "Metadata", sequence = "800.1")
+    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Long prop() {
         final Object objectId = JDOHelper.getObjectId(persistable);
         if(objectId instanceof DatastoreId) {
