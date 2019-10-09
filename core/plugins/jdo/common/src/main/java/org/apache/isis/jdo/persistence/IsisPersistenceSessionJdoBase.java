@@ -34,8 +34,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -50,14 +48,13 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-abstract class PersistenceSessionBase implements PersistenceSession {
+abstract class IsisPersistenceSessionJdoBase implements PersistenceSession {
 
     // -- FIELDS
 
     protected final FixturesInstalledStateHolder fixturesInstalledStateHolder;
 
     protected final PersistenceQueryFactory persistenceQueryFactory;
-    protected final IsisConfigurationLegacy configurationLegacy;
     protected final SpecificationLoader specificationLoader;
     protected final AuthenticationSession authenticationSession;
 
@@ -104,7 +101,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    protected PersistenceSessionBase(
+    protected IsisPersistenceSessionJdoBase(
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledStateHolder fixturesInstalledStateHolder) {
@@ -120,7 +117,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
 
         // injected
         this.configuration = IsisContext.getConfiguration();
-        this.configurationLegacy = _Config.getConfiguration();
         this.specificationLoader = IsisContext.getSpecificationLoader();
         this.authenticationSession = authenticationSession;
 
@@ -155,13 +151,8 @@ abstract class PersistenceSessionBase implements PersistenceSession {
      * Only populated once {@link #open()}'d
      */
     @Override
-    public PersistenceManager getPersistenceManager() {
+    public PersistenceManager getJdoPersistenceManager() {
         return persistenceManager;
-    }
-
-
-    public IsisConfigurationLegacy getConfiguration() {
-        return configurationLegacy;
     }
 
     @Override

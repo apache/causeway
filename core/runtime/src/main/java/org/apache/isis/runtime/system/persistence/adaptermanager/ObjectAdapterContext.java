@@ -186,7 +186,7 @@ final public class ObjectAdapterContext {
     // -- ADAPTER MANAGER LEGACY
 
     public ObjectAdapter fetchPersistent(final Object pojo) {
-        if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
+        if (persistenceSession.getJdoPersistenceManager().getObjectId(pojo) == null) {
             return null;
         }
         final RootOid oid = createPersistentOrViewModelOid(pojo);

@@ -110,7 +110,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     }
 
     private IsisTransactionManagerJdo transactionManagerJdo() {
-        val persistenceSessionBase = (PersistenceSessionBase)IsisContext.getPersistenceSession().get();
+        val persistenceSessionBase = (IsisPersistenceSessionJdoBase)IsisContext.getPersistenceSession().get();
         return persistenceSessionBase.transactionManager;
     }
 

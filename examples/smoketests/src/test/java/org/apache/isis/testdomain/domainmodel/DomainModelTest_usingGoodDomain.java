@@ -21,18 +21,24 @@ package org.apache.isis.testdomain.domainmodel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import javax.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ProperActionSupport;
+import org.apache.isis.testdomain.model.good.ProperActionSupport_collection;
 
 import lombok.val;
 
@@ -51,10 +57,13 @@ import lombok.val;
     //IsisPresets.DebugProgrammingModel,
     
 })
+//@Transactional
 class DomainModelTest_usingGoodDomain {
     
 //    @Inject private MetaModelService metaModelService;
 //    @Inject private JaxbService jaxbService;
+    
+    @Inject private FactoryService factoryService;
 
     @Test
     void reservedPrefix_shouldBeAllowedForMembers() {
@@ -117,6 +126,11 @@ class DomainModelTest_usingGoodDomain {
         assertEquals("collection2", oa_collection2.getId());
         assertEquals("foo", oa_collection2.getName());
         assertEquals("bar", oa_collection2.getDescription());
+        
+//        val holder = factoryService.instantiate(ProperActionSupport.class);
+//        val collectionMixin = factoryService.mixin(ProperActionSupport_collection.class, holder);
+//        assertEquals("", "" + collectionMixin.coll());
+        
         
     }
     

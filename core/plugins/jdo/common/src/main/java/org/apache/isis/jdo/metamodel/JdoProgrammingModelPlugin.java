@@ -18,39 +18,274 @@
  */
 package org.apache.isis.jdo.metamodel;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.apache.isis.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
+import javax.inject.Inject;
+import javax.jdo.annotations.IdentityType;
+
+import org.springframework.stereotype.Component;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.column.MandatoryFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.column.MaxLengthDerivedFromJdoColumnAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
+import org.apache.isis.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
 import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
 import org.apache.isis.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
+import org.apache.isis.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.progmodel.ProgrammingModel.FacetProcessingOrder;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel.Marker;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
-@Service
+@Component
 public class JdoProgrammingModelPlugin implements MetaModelRefiner {
+    
+    @Inject private IsisConfiguration config;
+    private ProgrammingModel pm;
 
     @Override
     public void refineProgrammingModel(ProgrammingModel pm) {
-
-        // come what may, we have to ignore the PersistenceCapable supertype.
-        pm.addFactory(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveJdoEnhancementTypesFacetFactory.class, Marker.JDO);
-        // so we may as well also just ignore any 'jdo' prefixed methods here also.
-        pm.addFactory(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveJdoPrefixedMethodsFacetFactory.class, Marker.JDO);
-        // DN 4.x
-        pm.addFactory(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveDatanucleusPersistableTypesFacetFactory.class, Marker.JDO);
-        pm.addFactory(FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, RemoveDnPrefixedMethodsFacetFactory.class, Marker.JDO);
-
-        val config = IsisContext.getConfiguration();
         
-        // these validators add themselves to the programming model
-        new JdoMetaModelValidator(config, pm);
+        this.pm = pm;
+
+        val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
+        
+        // come what may, we have to ignore the PersistenceCapable supertype.
+        pm.addFactory(step1, RemoveJdoEnhancementTypesFacetFactory.class, Marker.JDO);
+        // so we may as well also just ignore any 'jdo' prefixed methods here also.
+        pm.addFactory(step1, RemoveJdoPrefixedMethodsFacetFactory.class, Marker.JDO);
+        // Datanucleus
+        pm.addFactory(step1, RemoveDatanucleusPersistableTypesFacetFactory.class, Marker.JDO);
+        pm.addFactory(step1, RemoveDnPrefixedMethodsFacetFactory.class, Marker.JDO);
+
+        
+        val step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+
+        pm.addFactory(step2, JdoPersistenceCapableAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, JdoDatastoreIdentityAnnotationFacetFactory.class, Marker.JDO);
+
+        pm.addFactory(step2, JdoPrimaryKeyAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, JdoNotPersistentAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, JdoDiscriminatorAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, JdoVersionAnnotationFacetFactory.class, Marker.JDO);
+
+        pm.addFactory(step2, JdoQueryAnnotationFacetFactory.class, Marker.JDO);
+
+        pm.addFactory(step2, BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+        // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
+        // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
+        // and also PropertyAnnotationFactory
+        pm.addFactory(step2, MandatoryFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+
+
+        // -- validators
+        
+        val validator = config.getReflector().getValidator();
+        
+        addValidatorToEnsureIdentityType();
+        addValidatorToCheckForUnsupportedAnnotations();
+        
+        if(validator.isEnsureUniqueObjectTypes()) {
+            addValidatorToEnsureUniqueObjectIds();
+        }
+        
+        if(validator.isCheckModuleExtent()) {
+            addValidatorToCheckModuleExtent();
+        }
+
     }
+
+    private void addValidatorToEnsureIdentityType() {
+
+        pm.addValidator((objSpec, validationFailures) -> {
+
+            final JdoPersistenceCapableFacet jpcf = objSpec.getFacet(JdoPersistenceCapableFacet.class);
+            if(jpcf == null) {
+                return true;
+            }
+            final IdentityType identityType = jpcf.getIdentityType();
+            if(identityType == IdentityType.APPLICATION) {
+                // ok
+
+            } else if(identityType == IdentityType.NONDURABLE) {
+                // ok; for use with DN view objects (http://www.datanucleus.org/products/accessplatform_3_2/datastores/rdbms_views.html)
+
+            } else if(identityType == IdentityType.DATASTORE || identityType == IdentityType.UNSPECIFIED) {
+
+                // TODO: ensure that DATASTORE has recognised @DatastoreIdentity attribute
+
+            } else {
+                // in fact, at the time of writing there are no others, so this is theoretical in case there is
+                // a future change to the JDO spec
+                validationFailures.add(
+                        objSpec.getIdentifier(),
+                        "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
+                        objSpec.getFullIdentifier(),
+                        identityType);
+            }
+
+            return true;
+        }, Marker.JDO);
+
+    }
+
+    private void addValidatorToCheckForUnsupportedAnnotations() {
+
+        pm.addValidator((objSpec, validationFailures) -> {
+            if (objSpec.containsDoOpFacet(ParentedCollectionFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
+                validationFailures.add(
+                        objSpec.getIdentifier(),
+                        "%s: DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
+                        objSpec.getFullIdentifier());
+            }
+            return true;
+        }, Marker.JDO);
+
+    }
+
+    private void addValidatorToEnsureUniqueObjectIds() {
+
+        final Map<ObjectSpecId, List<ObjectSpecification>> specsById = _Maps.newHashMap();
+
+        MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds = new MetaModelValidatorVisiting.SummarizingVisitor(){
+
+            @Override
+            public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
+                ObjectSpecId specId = objSpec.getSpecId();
+                List<ObjectSpecification> objectSpecifications = specsById.get(specId);
+                if(objectSpecifications == null) {
+                    objectSpecifications = _Lists.newArrayList();
+                    specsById.put(specId, objectSpecifications);
+                }
+                objectSpecifications.add(objSpec);
+                return true;
+            }
+
+            @Override
+            public void summarize(final ValidationFailures validationFailures) {
+                for (final ObjectSpecId specId : specsById.keySet()) {
+                    val specList = specsById.get(specId);
+                    int numSpecs = specList.size();
+                    if(numSpecs > 1) {
+                        val csv = asCsv(specList);
+                        validationFailures.add(
+                                Identifier.classIdentifier(specId.asString()),
+                                "Object type '%s' mapped to multiple classes: %s", 
+                                specId.asString(), 
+                                csv);
+                    }
+                }
+            }
+
+            private String asCsv(final List<ObjectSpecification> specList) {
+                return stream(specList)
+                        .map(ObjectSpecification.Functions.FULL_IDENTIFIER)
+                        .collect(Collectors.joining(","));
+            }
+
+        };
+
+        pm.addValidator(ensureUniqueObjectIds);
+    }
+
+    private void addValidatorToCheckModuleExtent() {
+
+        final Map<String, List<String>> domainObjectClassNamesByPackage = _Maps.newTreeMap();
+
+        MetaModelValidatorVisiting.SummarizingVisitor visitor = new MetaModelValidatorVisiting.SummarizingVisitor(){
+
+            @Override
+            public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
+                Class<?> correspondingClass = objSpec.getCorrespondingClass();
+                if(correspondingClass == null) {
+                    return true;
+                }
+                Package aPackage = correspondingClass.getPackage();
+                if(aPackage == null) {
+                    return true;
+                }
+                final String packageName = aPackage.getName();
+
+                if (objSpec.isValue() || objSpec.isAbstract() || objSpec.isMixin() ||
+                        objSpec.isParentedOrFreeCollection() ||
+                        objSpec.getFullIdentifier().startsWith("java") ||
+                        objSpec.getFullIdentifier().startsWith("org.joda") ||
+                        objSpec.getFullIdentifier().startsWith("org.apache.isis")) {
+                    // ignore
+                } else {
+                    List<String> classNames = domainObjectClassNamesByPackage.get(packageName);
+                    if (classNames == null) {
+                        classNames = _Lists.newArrayList();
+                        domainObjectClassNamesByPackage.put(packageName, classNames);
+                    }
+                    classNames.add(objSpec.getFullIdentifier());
+                }
+                return true;
+            }
+
+            @Override
+            public void summarize(final ValidationFailures validationFailures) {
+                //FIXME[2112] module (legacy) specific, remove?
+                //                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
+                //
+                //                final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
+                //                for (final String pkg : domainObjectPackageNames) {
+                //                    List<String> domainObjectClassNames = domainObjectClassNamesByPackage.get(pkg);
+                //                    boolean withinSomeModule = isWithinSomeModule(modulePackageNames, pkg);
+                //                    if(!withinSomeModule) {
+                //                        String csv = stream(domainObjectClassNames)
+                //                                .collect(Collectors.joining(","));
+                //                        validationFailures.add(
+                //                                "Domain objects discovered in package '%s' are not in the set of modules obtained from "
+                //                                        + "the AppManifest's top-level module '%s'.  Classes are: %s",
+                //                                        pkg, topLevelModule.getClass().getName(), csv);
+                //                    }
+                //                }
+            }
+            //FIXME[2112] module (legacy) specific, remove?
+            //            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
+            //                final List<Class<?>> modules = appManifest.getModules();
+            //                return modules.stream()
+            //                        .map(aClass->aClass.getPackage().getName())
+            //                        .collect(Collectors.toCollection(HashSet::new));
+            //            }
+            //
+            //            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
+            //                for (final String modulePackageName : modulePackageNames) {
+            //                    if(pkg.startsWith(modulePackageName)) {
+            //                        return true;
+            //                    }
+            //                }
+            //                return false;
+            //            }
+        };
+
+        pm.addValidator(visitor);
+    }
+
 
 }

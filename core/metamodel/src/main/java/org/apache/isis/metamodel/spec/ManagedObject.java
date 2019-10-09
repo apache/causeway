@@ -218,11 +218,6 @@ public interface ManagedObject {
             .collect(Collectors.toList());
     }
 
-//    @Deprecated
-//    public default ObjectAdapter promote() {
-//        return (ObjectAdapter) this; 
-//    }
-
     @Deprecated
     public static ObjectAdapter promote(ManagedObject managedObject) {
         if(managedObject==null) {

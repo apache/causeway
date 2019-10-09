@@ -37,7 +37,6 @@ import javax.jdo.identity.SingleFieldIdentity;
 import javax.jdo.listener.InstanceLifecycleListener;
 import javax.jdo.listener.StoreLifecycleListener;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.datanucleus.identity.DatastoreIdImpl;
@@ -50,6 +49,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -113,7 +113,7 @@ import lombok.extern.log4j.Log4j2;
  * identities} for each and every POJO that is being used by the framework.
  */
 @Vetoed @Log4j2
-public class PersistenceSession5 extends PersistenceSessionBase
+public class PersistenceSession5 extends IsisPersistenceSessionJdoBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private ObjectAdapterContext objectAdapterContext;
@@ -725,7 +725,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public String identifierFor(final Object pojo) {
-        final Object jdoOid = pm().getObjectId(pojo);
+        final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
         requireNonNull(jdoOid, 
                 ()->String.format("Pojo of type '%s' is not recognized by JDO.", 
                         pojo.getClass().getName()));
@@ -871,7 +871,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public boolean isRecognized(Object pojo) {
         if (pojo!=null && pojo instanceof Persistable) {
-            final Object jdoOid = pm().getObjectId(pojo);
+            final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
             if(jdoOid!=null) {
                 return true;
             }

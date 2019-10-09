@@ -219,7 +219,9 @@ public interface ObjectAdapter extends ManagedObject {
             if(ManagedObject.promote(adapter).isDestroyed()) {
                 return false;
             }
-            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { return true; }
+            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { 
+                return true; 
+            }
             return isVisibleForUser(adapter);
         }
 

@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
@@ -54,7 +53,6 @@ SessionScopedComponent {
     // -- STABLE API (DRAFT)
     // -------------------------------------------------------------------------------------------------
 
-    IsisConfigurationLegacy getConfiguration();
     ServiceInjector getServiceInjector();
     TransactionService getTransactionService();
 
@@ -115,14 +113,7 @@ SessionScopedComponent {
     // -- JDO SPECIFIC
     // -------------------------------------------------------------------------------------------------
 
-    PersistenceManager getPersistenceManager();
-    /**
-     * Convenient equivalent to {@code getPersistenceManager()}.
-     * @return
-     */
-    default PersistenceManager pm() {
-        return getPersistenceManager();
-    }
+    PersistenceManager getJdoPersistenceManager();
 
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
@@ -131,7 +122,7 @@ SessionScopedComponent {
      * @return
      */
     default <T> javax.jdo.Query newJdoNamedQuery(Class<T> cls, String queryName){
-        return pm().newNamedQuery(cls, queryName);
+        return getJdoPersistenceManager().newNamedQuery(cls, queryName);
     }
 
     /**
@@ -140,7 +131,7 @@ SessionScopedComponent {
      * @return
      */
     default <T> javax.jdo.Query newJdoQuery(Class<T> cls){
-        return pm().newQuery(cls);
+        return getJdoPersistenceManager().newQuery(cls);
     }
 
     /**
@@ -150,7 +141,7 @@ SessionScopedComponent {
      * @return
      */
     default <T> javax.jdo.Query newJdoQuery(Class<T> cls, String filter){
-        return pm().newQuery(cls, filter);
+        return getJdoPersistenceManager().newQuery(cls, filter);
     }
 
     // -------------------------------------------------------------------------------------------------
