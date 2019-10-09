@@ -34,12 +34,10 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.system.persistence.SuspendableListener;
 
 public class IsisLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
-DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
-SuspendableListener {
+DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener {
 
     /**
      * The internal contract between PersistenceSession and this class.
@@ -163,23 +161,6 @@ SuspendableListener {
     public void postDetach(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
         persistenceSession.ensureRootObject(pojo);
-    }
-
-
-    // /////////////////////////////////////////////////////////
-    // SuspendListener
-    // /////////////////////////////////////////////////////////
-
-    private boolean suspended;
-
-    @Override
-    public boolean isSuspended() {
-        return suspended;
-    }
-
-    @Override
-    public void setSuspended(boolean suspended) {
-        this.suspended = suspended;
     }
 
     // /////////////////////////////////////////////////////////
