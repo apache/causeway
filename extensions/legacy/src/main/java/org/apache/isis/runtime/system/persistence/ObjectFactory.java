@@ -24,18 +24,13 @@ import java.lang.reflect.Modifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.metamodel.spec.ObjectInstantiationException;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class ObjectFactory {
 
-    private final PersistenceSession persistenceSession;
-    private final ServiceInjector serviceInjector;
-
-    public ObjectFactory(
-            final PersistenceSession persistenceSession,
-            final ServiceInjector serviceInjector) {
-
-        this.persistenceSession = persistenceSession;
-        this.serviceInjector = serviceInjector;
-    }
+    @NonNull private final ServiceInjector serviceInjector;
 
     public <T> T instantiate(final Class<T> cls) throws ObjectInstantiationException {
 
