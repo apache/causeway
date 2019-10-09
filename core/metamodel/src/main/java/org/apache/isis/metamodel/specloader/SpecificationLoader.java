@@ -19,6 +19,7 @@
 package org.apache.isis.metamodel.specloader;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -71,6 +72,14 @@ public interface SpecificationLoader {
      * @return snapshot of all the (currently) loaded specifications, a defensive-copy 
      */
     Collection<ObjectSpecification> snapshotSpecifications();
+    
+    /**
+     * Similar to {@link #snapshotSpecifications()}, but also handles concurrent additions that occur 
+     * during traversal. 
+     *  
+     * @param action
+     */
+    void forEach(Consumer<ObjectSpecification> onSpec);
 
     /**
      * Lookup a specification that has bean loaded before.
@@ -114,6 +123,8 @@ public interface SpecificationLoader {
     default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
         return loadSpecification(objectSpecId, null);
     }
+
+
 
 
 

@@ -21,10 +21,13 @@ package org.apache.isis.metamodel.specloader.validator;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.SpecificationLoaderDefault;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -50,17 +53,38 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
     @Override
     public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
         validateAll();
+        //validateAllLegacy();
         summarize();
         super.collectFailuresInto(validationFailures);
     }
 
+    private static _Probe probe = _Probe.unlimited().label("spec");
+    
     private void validateAll() {
 
-        val specsValidated = _Lists.<ObjectSpecification>newArrayList();
+        val specLoader = (SpecificationLoaderDefault)MetaModelContext.current().getSpecificationLoader();
+        val ladd = new LongAdder();
+        
+        specLoader.forEach(spec->{
+            ladd.increment();
+            visitor.visit(spec, this);            
+        });
+        
+        //probe.println("specsToValidate " + ladd.longValue());
 
+    }
+    
+    //TODO[2158] cleanup legacy  
+    private void validateAllLegacy() {
+
+        val shouldRunConcurrent = getConfiguration().getReflector().getIntrospector().isParallelize();
+        val specsValidated = _Lists.<ObjectSpecification>newArrayList();
+        
         while(validateSpecs(specsValidated)) {
             // validate in a loop, because the act of validating might cause additional specs to be uncovered
         }
+        
+        probe.println("specsToValidate " + specsValidated.size());
 
     }
 
@@ -76,20 +100,32 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
         // don't validate any specs already processed
         specsToValidate.removeAll(specsAlreadyValidated);
+        
         if(specsToValidate.isEmpty()) {
             // don't call us again
             return false;
         }
 
+        
         // validate anything new
-        for (val objSpec : specsToValidate) {
-            if(!visitor.visit(objSpec, this)) {
-                break;
-            }
-        }
-
+        
         // add the new specs just validated to the list (for next time)
         specsAlreadyValidated.addAll(specsToValidate);
+        
+        val isConcurrentFromConfig = getConfiguration().getReflector().getIntrospector().isParallelize();
+        val runSequential = !isConcurrentFromConfig;
+        if(runSequential) { 
+            
+            for (val spec : specsToValidate) {
+                if(!visitor.visit(spec, this)) {
+                    break;
+                }
+            }
+
+        } else {
+            specsToValidate.parallelStream()
+            .forEach(spec -> visitor.visit(spec, this));
+        }
 
         // go round the loop again
         return true;

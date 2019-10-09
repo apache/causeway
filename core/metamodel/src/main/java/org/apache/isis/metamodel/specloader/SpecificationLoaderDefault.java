@@ -20,6 +20,7 @@ package org.apache.isis.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -286,6 +287,18 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Override
     public Collection<ObjectSpecification> snapshotSpecifications() {
         return cache.snapshotSpecs();
+    }
+    
+    @Override
+    public void forEach(Consumer<ObjectSpecification> onSpec) {
+        val shouldRunConcurrent = isisConfiguration.getReflector().getIntrospector().isParallelize();
+        val vList = cache.getVList(); // vList is thread-safe
+        if(shouldRunConcurrent) {
+            vList.forEachParallel(onSpec);    
+        } else {
+            vList.forEach(onSpec);
+        }
+        
     }
 
     @Override

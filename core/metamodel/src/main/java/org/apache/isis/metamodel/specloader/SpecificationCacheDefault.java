@@ -25,10 +25,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.val;
 
 
@@ -36,6 +39,10 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
 
     private final Map<String, T> specByClassName = _Maps.newHashMap();
     private final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
+    
+    // optimization: specialized list to keep track of any additions to the cache fast
+    @Getter(value = AccessLevel.PACKAGE)
+    private final _VersionedList<T> vList = new _VersionedList<>(); 
     
     public T get(String className) {
         return specByClassName.get(className);
@@ -54,8 +61,11 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
     }
 
     public void clear() {
-        specByClassName.clear();
-        classNameBySpecId.clear();
+        synchronized(this) {
+            specByClassName.clear();
+            classNameBySpecId.clear();
+            vList.clear();
+        }
     }
 
     /** @returns thread-safe defensive copy */
@@ -64,7 +74,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
             return new ArrayList<T>(specByClassName.values());
         }
     }
-
+    
     public T getByObjectType(final ObjectSpecId objectSpecID) {
         val className = classNameBySpecId.get(objectSpecID);
         return className != null ? specByClassName.get(className) : null;
@@ -76,7 +86,10 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
         }
         val className = spec.getCorrespondingClass().getName();
         val specId = spec.getSpecId();
-        specByClassName.put(className, spec);
+        val existing = specByClassName.put(className, spec);
+        if(existing==null) {
+            vList.add(spec); // add to vList only if we don't have it already
+        }
         if (specId == null) {
             return;
         }
