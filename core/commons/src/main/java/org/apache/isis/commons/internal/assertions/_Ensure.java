@@ -50,7 +50,7 @@ public final class _Ensure {
      * @throws IllegalArgumentException
      *             if predicate tests to false.
      */
-    public static <T> T ensureThatArg(final T arg, final Predicate<T> predicate, final String message) {
+    public static <T> T ensureThatArg(final T arg, final Predicate<? super T> predicate, final String message) {
         requires(predicate, "predicate");
         if (!predicate.test(arg)) {
             throw new IllegalArgumentException(message);
@@ -58,7 +58,7 @@ public final class _Ensure {
         return arg;
     }
 
-    public static <T> T ensureThatArg(final T arg, final Predicate<T> predicate, final Supplier<String> messageSupplier) {
+    public static <T> T ensureThatArg(final T arg, final Predicate<? super T> predicate, final Supplier<String> messageSupplier) {
         requires(predicate, "predicate");
         if (!predicate.test(arg)) {
             requires(messageSupplier, "messageSupplier");
@@ -74,7 +74,7 @@ public final class _Ensure {
      * @throws IllegalStateException
      *             if predicate tests to false.
      */
-    public static <T> T ensureThatState(final T field, final Predicate<T> predicate, final String message) {
+    public static <T> T ensureThatState(final T field, final Predicate<? super T> predicate, final String message) {
         requires(predicate, "predicate");
         if (!predicate.test(field)) {
             throw new IllegalStateException(message);
@@ -88,7 +88,7 @@ public final class _Ensure {
      * @throws IllegalThreadStateException
      *             if predicate tests to false.
      */
-    public static <T> T ensureThatContext(final T contextProperty, final Predicate<T> predicate, final String message) {
+    public static <T> T ensureThatContext(final T contextProperty, final Predicate<? super T> predicate, final String message) {
         requires(predicate, "predicate");
         if (!predicate.test(contextProperty)) {
             throw new IllegalThreadStateException(message);

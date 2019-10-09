@@ -39,6 +39,8 @@ import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
     @Rule
@@ -49,7 +51,6 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
     private ObjectSpecification mockGrandParentType;
 
     private Visitor newValidatorVisitor;
-    private ValidationFailures failures;
     private MetaModelValidator validator;
 
     private Sequence sequence;
@@ -62,9 +63,9 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         sequence = context.sequence("inorder");
 
-        failures = new ValidationFailures();
         validator = new MetaModelValidatorAbstract() {};
         newValidatorVisitor = new JdoVersionAnnotationFacetFactory().newValidatorVisitor();
+                
     }
 
     @Test
@@ -80,7 +81,10 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
         });
 
         newValidatorVisitor.visit(mockChildType, validator);
-
+        
+        val failures = new ValidationFailures();
+        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
+        
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -104,6 +108,9 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         newValidatorVisitor.visit(mockChildType, validator);
 
+        val failures = new ValidationFailures();
+        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
+        
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -137,6 +144,9 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         newValidatorVisitor.visit(mockChildType, validator);
 
+        val failures = new ValidationFailures();
+        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
+        
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -185,6 +195,9 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         newValidatorVisitor.visit(mockChildType, validator);
 
+        val failures = new ValidationFailures();
+        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
+        
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockParentType"));
     }
@@ -235,12 +248,18 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 oneOf(mockGrandParentType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockGrandParentType"));
+                
+                oneOf(mockChildType).getFacet(DeficiencyFacet.class);
+                will(returnValue(null));
 
             }
         });
 
         newValidatorVisitor.visit(mockChildType, validator);
 
+        val failures = new ValidationFailures();
+        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
+        
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockGrandParentType"));
     }
