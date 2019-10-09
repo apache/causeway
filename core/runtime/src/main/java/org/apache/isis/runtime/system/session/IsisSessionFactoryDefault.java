@@ -89,7 +89,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init")
         
-        .addRunnable("SpecificationLoader::createThenValidateMetaModel", this::createThenValidateMetaModel)
+        .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
         .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
         .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
         .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
@@ -101,11 +101,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         runtimeEventService.fireAppPostMetamodel();
 
-    }
-
-    private void createThenValidateMetaModel() {
-        specificationLoader.createMetaModel();
-        specificationLoader.validateMetaModel();
     }
 
     @PreDestroy

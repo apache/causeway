@@ -27,9 +27,10 @@ import javax.jdo.annotations.IdentityType;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
@@ -53,8 +54,8 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -121,7 +122,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
     private void addValidatorToEnsureIdentityType() {
 
-        pm.addValidator((objSpec, validationFailures) -> {
+        pm.addValidator((objSpec, validation) -> {
 
             final JdoPersistenceCapableFacet jpcf = objSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(jpcf == null) {
@@ -141,7 +142,8 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
             } else {
                 // in fact, at the time of writing there are no others, so this is theoretical in case there is
                 // a future change to the JDO spec
-                validationFailures.add(
+                validation.onFailure(
+                        objSpec,
                         objSpec.getIdentifier(),
                         "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
                         objSpec.getFullIdentifier(),
@@ -155,9 +157,10 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
     private void addValidatorToCheckForUnsupportedAnnotations() {
 
-        pm.addValidator((objSpec, validationFailures) -> {
+        pm.addValidator((objSpec, validation) -> {
             if (objSpec.containsDoOpFacet(ParentedCollectionFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
-                validationFailures.add(
+                validation.onFailure(
+                        objSpec,
                         objSpec.getIdentifier(),
                         "%s: DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
                         objSpec.getFullIdentifier());
@@ -169,34 +172,37 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
     private void addValidatorToEnsureUniqueObjectIds() {
 
-        final Map<ObjectSpecId, List<ObjectSpecification>> specsById = _Maps.newHashMap();
+        final ListMultimap<ObjectSpecId, ObjectSpecification> collidingSpecsById = 
+                _Multimaps.newListMultimap();
 
-        MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds = new MetaModelValidatorVisiting.SummarizingVisitor(){
+        final MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds = 
+                new MetaModelValidatorVisiting.SummarizingVisitor(){
 
             @Override
-            public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
-                ObjectSpecId specId = objSpec.getSpecId();
-                List<ObjectSpecification> objectSpecifications = specsById.get(specId);
-                if(objectSpecifications == null) {
-                    objectSpecifications = _Lists.newArrayList();
-                    specsById.put(specId, objectSpecifications);
-                }
-                objectSpecifications.add(objSpec);
+            public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
+                val specId = objSpec.getSpecId();
+                collidingSpecsById.putElement(specId, objSpec);
                 return true;
             }
 
             @Override
-            public void summarize(final ValidationFailures validationFailures) {
-                for (final ObjectSpecId specId : specsById.keySet()) {
-                    val specList = specsById.get(specId);
-                    int numSpecs = specList.size();
-                    if(numSpecs > 1) {
-                        val csv = asCsv(specList);
-                        validationFailures.add(
-                                Identifier.classIdentifier(specId.asString()),
-                                "Object type '%s' mapped to multiple classes: %s", 
-                                specId.asString(), 
-                                csv);
+            public void summarize(MetaModelValidator validator) {
+                for (val specId : collidingSpecsById.keySet()) {
+                    val collidingSpecs = collidingSpecsById.get(specId);
+                    val isCollision = collidingSpecs.size()>1;
+                    if(isCollision) {
+                        val csv = asCsv(collidingSpecs);
+                        
+                        collidingSpecs.forEach(spec->{
+                            validator.onFailure(
+                                    spec,
+                                    spec.getIdentifier(),
+                                    "Object type '%s' mapped to multiple classes: %s", 
+                                    specId.asString(), 
+                                    csv);    
+                        });
+                        
+                        
                     }
                 }
             }
@@ -219,7 +225,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
         MetaModelValidatorVisiting.SummarizingVisitor visitor = new MetaModelValidatorVisiting.SummarizingVisitor(){
 
             @Override
-            public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
+            public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
                 Class<?> correspondingClass = objSpec.getCorrespondingClass();
                 if(correspondingClass == null) {
                     return true;
@@ -248,7 +254,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
             }
 
             @Override
-            public void summarize(final ValidationFailures validationFailures) {
+            public void summarize(final MetaModelValidator validator) {
                 //FIXME[2112] module (legacy) specific, remove?
                 //                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
                 //

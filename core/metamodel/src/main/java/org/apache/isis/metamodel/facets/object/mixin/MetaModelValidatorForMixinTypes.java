@@ -20,7 +20,10 @@ package org.apache.isis.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
+
+import lombok.NonNull;
 
 public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValidationFailures {
 
@@ -30,13 +33,16 @@ public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValida
         this.annotation = annotation;
     }
 
-    public boolean ensureMixinType(final Class<?> candidateMixinType) {
+    public boolean ensureMixinType(
+            @NonNull FacetHolder facetHolder,
+            final Class<?> candidateMixinType) {
 
         if (_Reflect.hasPublic1ArgConstructor(candidateMixinType)) {
             return true;
         }
         
-        addFailure(
+        onFailure(
+                facetHolder,
                 Identifier.classIdentifier(candidateMixinType),
                 "%s: annotated with %s annotation but does not have a public 1-arg constructor",
                 candidateMixinType.getName(), 

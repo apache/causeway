@@ -33,8 +33,8 @@ import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -69,14 +69,14 @@ implements MetaModelRefiner {
                     @Override
                     public boolean visit(
                             final ObjectSpecification objectSpec,
-                            final ValidationFailures validationFailures) {
-                        validate(objectSpec, validationFailures);
+                            final MetaModelValidator validator) {
+                        validate(objectSpec, validator);
                         return true;
                     }
 
                     private void validate(
                             final ObjectSpecification objectSpec,
-                            final ValidationFailures validationFailures) {
+                            final MetaModelValidator validator) {
                         objectSpec.streamObjectActions(Contributed.INCLUDED)
                         .forEach(objectAction->{
                             if(objectAction instanceof ObjectActionMixedIn || objectAction instanceof ObjectActionContributee) {
@@ -87,7 +87,7 @@ implements MetaModelRefiner {
                             int paramNum = 0;
                             for (ObjectActionParameter parameter : objectAction.getParameters()) {
                                 if(parameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
-                                    validate(objectSpec, objectAction, parameter, paramNum, validationFailures);
+                                    validate(objectSpec, objectAction, parameter, paramNum, validator);
                                 }
                                 paramNum++;
                             }
@@ -99,7 +99,7 @@ implements MetaModelRefiner {
                             final ObjectAction objectAction,
                             final ObjectActionParameter parameter,
                             final int paramNum,
-                            final ValidationFailures validationFailures) {
+                            final MetaModelValidator validator) {
 
 
                         final CollectionSemanticsFacet collectionSemantics =
@@ -109,7 +109,8 @@ implements MetaModelRefiner {
                             // from java.util.Collection but are not of
                             // exact type List, Set, SortedSet or Collection.
                             if(!collectionSemantics.value().isSupportedInterfaceForActionParameters()) {
-                                validationFailures.add(
+                                validator.onFailure(
+                                        objectSpec,
                                         objectSpec.getIdentifier(),
                                         "Collection action parameter found that is not exactly one "
                                                 + "of the following supported types: "
@@ -135,7 +136,8 @@ implements MetaModelRefiner {
                             return;
                         }
 
-                        validationFailures.add(
+                        validator.onFailure(
+                                objectSpec,
                                 objectSpec.getIdentifier(),
                                 "Collection action parameter found without supporting "
                                         + "choices or autoComplete facet.  "

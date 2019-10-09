@@ -31,9 +31,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 /**
  * There is no check that the value is a {@link Comparator}; instead this is done through
@@ -63,7 +63,7 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
                 final Stream<OneToManyAssociation> objectCollections = objectSpec.streamCollections(Contributed.EXCLUDED);
 
                 objectCollections.forEach(objectCollection->{
@@ -71,7 +71,8 @@ implements MetaModelRefiner {
                     if(facet != null) {
                         final Class<? extends Comparator<?>> cls = facet.value();
                         if(!Comparator.class.isAssignableFrom(cls)) {
-                            validationFailures.add(
+                            validator.onFailure(
+                                    objectSpec,
                                     objectSpec.getIdentifier(),
                                     "%s#%s: is annotated with @SortedBy, but the class specified '%s' is not a Comparator",
                                     objectSpec.getIdentifier().getClassName(), 

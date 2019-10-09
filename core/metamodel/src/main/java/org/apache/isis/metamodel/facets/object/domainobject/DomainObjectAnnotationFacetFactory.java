@@ -73,9 +73,9 @@ import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.metamodel.util.EventUtil;
 
 import lombok.val;
@@ -199,7 +199,13 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 .map(domainObject -> new AnnotHelper(domainObject))
                 .filter(a -> a.autoCompleteRepository != Object.class)
                 .filter(a -> {
-                    a.repositoryMethod = findRepositoryMethod(cls, "@DomainObject", a.autoCompleteRepository, a.autoCompleteAction);
+                    a.repositoryMethod = findRepositoryMethod(
+                            facetHolder, 
+                            cls, 
+                            "@DomainObject", 
+                            a.autoCompleteRepository, 
+                            a.autoCompleteAction);
+                    
                     return a.repositoryMethod != null;
                 })
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
@@ -208,10 +214,12 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     }
 
     private Method findRepositoryMethod(
+            final FacetHolder facetHolder,
             final Class<?> cls,
             final String annotationName,
             final Class<?> repositoryClass,
             final String methodName) {
+        
         final Method[] methods = repositoryClass.getMethods();
         for (Method method : methods) {
             if(method.getName().equals(methodName)) {
@@ -221,7 +229,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 }
             }
         }
-        autoCompleteMethodInvalid.addFailure(
+        autoCompleteMethodInvalid.onFailure(
+                facetHolder,
                 Identifier.classIdentifier(cls),
                 "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
@@ -298,7 +307,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
             val mixinDomainObjectIfAny =
                     domainObjectIfAny
                     .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
-                    .filter(domainObject -> mixinTypeValidator.ensureMixinType(cls));
+                    .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
 
             val mixinFacet = 
                     MixinFacetForDomainObjectAnnotation.create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector());
@@ -486,13 +495,13 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
         programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
             @Override
-            public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
+            public boolean visit(final ObjectSpecification thisSpec, final MetaModelValidator validator) {
 
-                validate(thisSpec, validationFailures);
+                validate(thisSpec, validator);
                 return true;
             }
 
-            private void validate(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
+            private void validate(final ObjectSpecification thisSpec, final MetaModelValidator validator) {
                 if(!thisSpec.isEntityOrViewModel()) {
                     return;
                 }
@@ -516,7 +525,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                     if (existingSpec == null) {
                         continue;
                     }
-                    validationFailures.add(
+                    validator.onFailure(
+                            existingSpec,
                             existingSpec.getIdentifier(),
                             "%s: cannot have two entities with same object type (@Discriminator, @DomainObject(objectType=...), @ObjectType or @PersistenceCapable(schema=...)); %s " +
                                     "has same value (%s).",
@@ -531,7 +541,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                     final Class<?> repositoryClass = facet.getRepositoryClass();
                     final boolean isResolvableBean = getServiceRegistry().isResolvableBean(repositoryClass);
                     if(!isResolvableBean) {
-                        validationFailures.add(
+                        validator.onFailure(
+                                thisSpec,
                                 thisSpec.getIdentifier(),
                                 "@DomainObject annotation on %s specifies unknown repository '%s'",
                                 thisSpec.getFullIdentifier(), repositoryClass.getName());

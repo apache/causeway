@@ -40,9 +40,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -122,12 +122,12 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                validate(objectSpec, validationFailures);
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
+                validate(objectSpec, validator);
                 return true;
             }
 
-            private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
 
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
                 if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
@@ -141,10 +141,10 @@ implements MetaModelRefiner {
                 associations
                 // skip checks if annotated with JDO @NotPersistent
                 .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
-                .forEach(association->validateMandatoryFacet(association, validationFailures));
+                .forEach(association->validateMandatoryFacet(association, validator));
             }
 
-            private void validateMandatoryFacet(ObjectAssociation association, ValidationFailures validationFailures) {
+            private void validateMandatoryFacet(ObjectAssociation association, MetaModelValidator validator) {
                 MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
 
                 MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
@@ -155,7 +155,8 @@ implements MetaModelRefiner {
                 if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
 
                     if(association.isNotPersisted()) {
-                        validationFailures.add(
+                        validator.onFailure(
+                                association,
                                 association.getIdentifier(),
                                 "%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)",
                                 association.getIdentifier().toClassAndNameIdentityString());
@@ -168,12 +169,14 @@ implements MetaModelRefiner {
 
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validationFailures.add(
+                        validator.onFailure(
+                                association,
                                 association.getIdentifier(),
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", 
                                 association.getIdentifier().toClassAndNameIdentityString());
                     } else {
-                        validationFailures.add(
+                        validator.onFailure(
+                                association,
                                 association.getIdentifier(),
                                 "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", 
                                 association.getIdentifier().toClassAndNameIdentityString());
@@ -192,12 +195,14 @@ implements MetaModelRefiner {
                     }
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validationFailures.add(
+                        validator.onFailure(
+                                association,
                                 association.getIdentifier(),
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", 
                                 association.getIdentifier().toClassAndNameIdentityString());
                     } else {
-                        validationFailures.add(
+                        validator.onFailure(
+                                association,
                                 association.getIdentifier(),
                                 "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", 
                                 association.getIdentifier().toClassAndNameIdentityString());

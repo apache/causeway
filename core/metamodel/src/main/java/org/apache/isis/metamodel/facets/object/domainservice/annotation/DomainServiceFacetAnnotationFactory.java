@@ -34,9 +34,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -84,7 +84,7 @@ implements MetaModelRefiner {
                     natureOfService,
                     "'isis.reflector.validator.mixinsOnly'");
             
-            mixinOnlyValidator.addFailure(Identifier.classIdentifier(cls), msg);
+            mixinOnlyValidator.onFailure(facetHolder, Identifier.classIdentifier(cls), msg);
             break;
         default:
             // no op
@@ -100,14 +100,14 @@ implements MetaModelRefiner {
             programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
 
                 @Override
-                public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
-                    validate(thisSpec, validationFailures);
+                public boolean visit(final ObjectSpecification thisSpec, final MetaModelValidator validator) {
+                    validate(thisSpec, validator);
                     return true;
                 }
 
                 private void validate(
                         final ObjectSpecification thisSpec,
-                        final ValidationFailures validationFailures) {
+                        final MetaModelValidator validator) {
 
                     if(!thisSpec.containsFacet(DomainServiceFacet.class)) {
                         return;
@@ -125,7 +125,8 @@ implements MetaModelRefiner {
                         return;
                     }
 
-                    validationFailures.add(
+                    validator.onFailure(
+                            thisSpec,
                             thisSpec.getIdentifier(),
                             "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                             thisSpec.getFullIdentifier(),

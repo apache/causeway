@@ -29,9 +29,9 @@ import org.apache.isis.metamodel.facets.Annotations;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -66,12 +66,12 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                validate(objectSpec, validationFailures);
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
+                validate(objectSpec, validator);
                 return true;
             }
 
-            private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
                 if(!declaresVersionAnnotation(objectSpec)) {
                     return;
                 }
@@ -79,7 +79,8 @@ implements MetaModelRefiner {
                 ObjectSpecification superclassSpec = objectSpec.superclass();
                 while(superclassSpec != null) {
                     if(declaresVersionAnnotation(superclassSpec)) {
-                        validationFailures.add(
+                        validator.onFailure(
+                                objectSpec,
                                 objectSpec.getIdentifier(),
                                 "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
                                 objectSpec.getFullIdentifier(),

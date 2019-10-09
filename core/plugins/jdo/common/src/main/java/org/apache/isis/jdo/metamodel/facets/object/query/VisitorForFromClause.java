@@ -23,7 +23,7 @@ import java.util.Objects;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.Hierarchical;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.val;
 
@@ -44,7 +44,7 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
             final String query,
-            final ValidationFailures validationFailures) {
+            final MetaModelValidator validator) {
 
         val className = objectSpec.getCorrespondingClass().getName();
         if (Objects.equals(classNameFromClause, className)) {
@@ -55,7 +55,8 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
         if(subclasses.contains(objectSpec)) {
             return;
         }
-        validationFailures.add(
+        validator.onFailure(
+                objectSpec,
                 Identifier.classIdentifier(className),
                 "%s: error in JDOQL query, class name after '%s' clause should be same as class name on which annotated, or one of its supertypes (JDOQL : %s)",
                 className, clause, query);

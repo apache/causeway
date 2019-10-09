@@ -45,11 +45,11 @@ extends FacetFactoryAbstract implements MetaModelRefiner {
             return;
         }
 
+        val facetHolder = processClassContext.getFacetHolder();
         val candidateMixinType = processClassContext.getCls();
-        if (!mixinTypeValidator.ensureMixinType(candidateMixinType)) {
+        if (!mixinTypeValidator.ensureMixinType(facetHolder, candidateMixinType)) {
             return;
         }
-        val facetHolder = processClassContext.getFacetHolder();
         
         val mixinFacet = MixinFacetForMixinAnnotation
                 .create(mixinIfAny.get(), candidateMixinType, facetHolder, getServiceInjector());

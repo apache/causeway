@@ -18,14 +18,15 @@
  */
 package org.apache.isis.metamodel.progmodel;
 
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
-
 /**
  * @since 2.0
  */
 public interface ProgrammingModelService {
 
+    /**
+     * 
+     * @apiNote don't call this during '@PostConstruct' phase
+     */
     ProgrammingModel getProgrammingModel();
-    ValidationFailures getValidationResult();
     
 }

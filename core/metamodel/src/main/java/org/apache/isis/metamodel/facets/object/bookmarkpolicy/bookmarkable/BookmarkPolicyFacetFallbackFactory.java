@@ -56,7 +56,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        programmingModel.addValidator((objectSpec, validationFailures) -> {
+        programmingModel.addValidator((objectSpec, validator) -> {
 
             final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
 
@@ -72,7 +72,7 @@ implements MetaModelRefiner {
             .forEach(objectAction->{
                 final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                 if(semanticsFacet == null || semanticsFacet.isNoop() || !semanticsFacet.value().isSafeInNature()) {
-                    validationFailures.add(
+                    validator.onFailure(objectAction,
                             objectAction.getIdentifier(),
                             "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
                                     "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",

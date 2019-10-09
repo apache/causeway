@@ -26,8 +26,6 @@ import lombok.val;
 
 public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract {
 
-    private final ValidationFailures failures = new ValidationFailures();
-
     /**
      * @param facet
      */
@@ -40,10 +38,12 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
      * @param processMethodContext - can be null if none available.
      */
     public <T extends Facet> T flagIfPresent(T facet, FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext) {
-        if(facet != null) {
+        if(facet != null && 
+                !getConfiguration().getReflector().getValidator().isAllowDeprecated()) {
+            
             val holder = (IdentifiedHolder) facet.getFacetHolder();
             val identifier = holder.getIdentifier();
-            failures.add(identifier, failureMessageFor(facet, processMethodContext));
+            super.onFailure(holder, identifier, failureMessageFor(facet, processMethodContext));
         }
         return facet;
     }
@@ -62,13 +62,6 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
 
     protected abstract String failureMessageFor(Facet facet, FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext);
 
-    @Override
-    public void validateInto(ValidationFailures validationFailures) {
-
-        if(getConfiguration().getReflector().getValidator().isAllowDeprecated()) {
-            return;
-        }
-        validationFailures.addAll(failures);
-    }
+  
 
 }

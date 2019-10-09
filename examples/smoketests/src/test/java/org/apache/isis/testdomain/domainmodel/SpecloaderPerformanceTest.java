@@ -66,8 +66,8 @@ class SpecloaderPerformanceTest {
         IsisBeanTypeRegistry.repeatedTesting = true;
     }
     
-    static long ITERATIONS = 400; /* should typically run in ~10s */
-    static long EXPECTED_MILLIS_PER_ITERATION = 500;
+    static long ITERATIONS = 100; /* should typically run in ~10s */
+    static long EXPECTED_MILLIS_PER_ITERATION = 100;
     
     @Test 
     void repeatedConcurrentSpecloading_shouldNotDeadlock() {

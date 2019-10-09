@@ -23,8 +23,8 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Visitor {
 
@@ -34,6 +34,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
     VisitorForClauseAbstract(
             final JdoQueryAnnotationFacetFactory facetFactory,
             final String clause) {
+        
         this.facetFactory = facetFactory;
         this.clause = clause;
     }
@@ -41,14 +42,16 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
     @Override
     public boolean visit(
             final ObjectSpecification objectSpec,
-            final ValidationFailures validationFailures) {
-        validate(objectSpec, validationFailures);
+            final MetaModelValidator validator) {
+        
+        validate(objectSpec, validator);
         return true;
     }
 
     private void validate(
             final ObjectSpecification objectSpec,
-            final ValidationFailures validationFailures) {
+            final MetaModelValidator validator) {
+        
         final JdoQueryFacet facet = objectSpec.getFacet(JdoQueryFacet.class);
         if(facet == null) {
             return;
@@ -58,7 +61,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             if(namedQuery.getLanguage().equals("JDOQL")) {
                 final String query = namedQuery.getQuery();
                 final String fromClassName = deriveClause(query);
-                interpretJdoql(fromClassName, objectSpec, query, validationFailures);
+                interpretJdoql(fromClassName, objectSpec, query, validator);
             }
         }
     }
@@ -67,7 +70,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
             final String query,
-            final ValidationFailures validationFailures) {
+            final MetaModelValidator validator) {
 
         if (classNameFromClause == null) {
             return;
@@ -75,14 +78,15 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
 
         final String className = objectSpec.getCorrespondingClass().getName();
         if (getSpecificationLoader().loadSpecification(classNameFromClause)==null) {
-            validationFailures.add(
+            validator.onFailure(
+                    objectSpec,
                     Identifier.classIdentifier(className),
                     "%s: error in JDOQL query, class name for '%s' clause not recognized (JDOQL : %s)",
                     className, clause, query);
             return;
         }
 
-        postInterpretJdoql(classNameFromClause, objectSpec, query, validationFailures);
+        postInterpretJdoql(classNameFromClause, objectSpec, query, validator);
     }
 
     abstract String deriveClause(final String query);
@@ -91,7 +95,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
             final String query,
-            final ValidationFailures validationFailures);
+            final MetaModelValidator validator);
 
 
     SpecificationLoader getSpecificationLoader() {

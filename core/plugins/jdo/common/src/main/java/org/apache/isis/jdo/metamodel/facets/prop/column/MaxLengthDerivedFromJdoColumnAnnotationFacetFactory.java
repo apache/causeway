@@ -32,15 +32,14 @@ import org.apache.isis.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetedMethod;
 import org.apache.isis.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
 import org.apache.isis.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -98,12 +97,12 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                validate(objectSpec, validationFailures);
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
+                validate(objectSpec, validator);
                 return true;
             }
 
-            private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
 
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
                 if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
@@ -126,17 +125,19 @@ implements MetaModelRefiner {
                         return;
                     }
 
-                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForMaxLengthAnnotationOnProperty) {
-                        if(facet.value() != underlying.value()) {
-                            validationFailures.add(
-                                    association.getIdentifier(),
-                                    "%s: inconsistent lengths specified in Isis' @MaxLength(...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
-                                    association.getIdentifier().toClassAndNameIdentityString());
-                        }
-                    }
+//                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForMaxLengthAnnotationOnProperty) {
+//                        if(facet.value() != underlying.value()) {
+//                            validator.onFailure(
+//                                    association,
+//                                    association.getIdentifier(),
+//                                    "%s: inconsistent lengths specified in Isis' @MaxLength(...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
+//                                    association.getIdentifier().toClassAndNameIdentityString());
+//                        }
+//                    }
                     if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
                         if(facet.value() != underlying.value()) {
-                            validationFailures.add(
+                            validator.onFailure(
+                                    association,
                                     association.getIdentifier(),
                                     "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
                                     association.getIdentifier().toClassAndNameIdentityString());

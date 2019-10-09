@@ -22,7 +22,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
 class VisitorForVariablesClause extends VisitorForClauseAbstract {
 
@@ -40,7 +40,7 @@ class VisitorForVariablesClause extends VisitorForClauseAbstract {
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
             final String query,
-            final ValidationFailures validationFailures) {
+            final MetaModelValidator validator) {
 
 
         final String className = objectSpec.getCorrespondingClass().getName();
@@ -51,7 +51,8 @@ class VisitorForVariablesClause extends VisitorForClauseAbstract {
                 objectSpecification.getFacet(JdoPersistenceCapableFacet.class);
 
         if(persistenceCapableFacet == null) {
-            validationFailures.add(
+            validator.onFailure(
+                    objectSpec,
                     Identifier.classIdentifier(className),
                     "%s: error in JDOQL query, class name for '%s' clause is not annotated as @PersistenceCapable (JDOQL : %s)",
                     className, clause, query);

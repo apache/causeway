@@ -149,7 +149,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidator((objectSpec, validationFailures) -> {
+        programmingModel.addValidator((objectSpec, validate) -> {
 
             final Class<?> cls = objectSpec.getCorrespondingClass();
 
@@ -167,7 +167,8 @@ implements MetaModelRefiner {
             final List<Method> methods = methodsWithTitleAnnotation(cls);
             final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
             if (methods.size() > superClassMethods.size()) {
-                validationFailures.add(
+                validate.onFailure(
+                        objectSpec,
                         objectSpec.getIdentifier(),
                         "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
                         objectSpec.getIdentifier().getClassName(),

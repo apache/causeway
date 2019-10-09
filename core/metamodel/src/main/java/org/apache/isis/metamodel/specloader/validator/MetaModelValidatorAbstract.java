@@ -19,7 +19,11 @@
 
 package org.apache.isis.metamodel.specloader.validator;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+
+import lombok.NonNull;
 
 public abstract class MetaModelValidatorAbstract 
 implements MetaModelValidator, MetaModelContext.Delegating {
@@ -27,6 +31,28 @@ implements MetaModelValidator, MetaModelContext.Delegating {
     @Override
     public MetaModelContext getMetaModelContext() {
         return MetaModelContext.current();
+    }
+    
+    protected final ValidationFailures failures = new ValidationFailures();
+    
+    /**
+     * Collect any {@link ValidationFailure} to given validationFailures. 
+     *  
+     * @param validationFailures
+     */
+    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
+        validationFailures.addAll(failures);
+    }
+
+    @Override
+    public void onFailure(
+            @NonNull FacetHolder facetHolder, 
+            @NonNull Identifier deficiencyOrigin,
+            @NonNull String deficiencyMessageFormat, 
+            Object... args) {
+        
+        MetaModelValidator.super.onFailure(facetHolder, deficiencyOrigin, deficiencyMessageFormat, args);
+        failures.add(deficiencyOrigin, deficiencyMessageFormat, args);
     }
 
 }

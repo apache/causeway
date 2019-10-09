@@ -38,8 +38,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -110,20 +110,23 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
                 @Override
                 public boolean visit(
                         ObjectSpecification objectSpec,
-                        ValidationFailures validationFailures) {
-                    validate(objectSpec, validationFailures);
+                        MetaModelValidator validator) {
+                    
+                    validate(objectSpec, validator);
                     return true;
                 }
     
                 private void validate(
                         ObjectSpecification objectSpec,
-                        ValidationFailures validationFailures) {
+                        MetaModelValidator validator) {
+                    
                     if(skip(objectSpec)) {
                         return;
                     }
                     val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
                     if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
-                        validationFailures.add(
+                        validator.onFailure(
+                                objectSpec,
                                 objectSpec.getIdentifier(),
                                 "%s: the object type must be specified explicitly ('%s' config property). "
                                         + "Defaulting the object type from the package/class/package name can lead "

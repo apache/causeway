@@ -106,7 +106,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidator((objectSpec, validationFailures) -> {
+        programmingModel.addValidator((objectSpec, validate) -> {
 
 
             final Class<?> cls = objectSpec.getCorrespondingClass();
@@ -119,7 +119,8 @@ implements MetaModelRefiner {
                 return true; // no conflict, continue validation processing
             } else if (evaluators.size()>1) {
 
-                validationFailures.add(
+                validate.onFailure(
+                        objectSpec,
                         objectSpec.getIdentifier(),
                         "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
@@ -139,7 +140,8 @@ implements MetaModelRefiner {
 
                 if(!fieldEvaluator.getGetter(cls).isPresent()) {
 
-                    validationFailures.add(
+                    validate.onFailure(
+                            objectSpec,
                             objectSpec.getIdentifier(),
                             "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",

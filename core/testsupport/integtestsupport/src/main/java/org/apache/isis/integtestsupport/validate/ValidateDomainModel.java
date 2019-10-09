@@ -54,10 +54,8 @@ public class ValidateDomainModel implements Runnable {
 
         val specificationLoader = IsisContext.getSpecificationLoader();
         
-        val programmingModelService = IsisContext.getServiceRegistry()
-                .lookupServiceElseFail(ProgrammingModelService.class);
-        this.validationFailures = programmingModelService.getValidationResult();
-        
+        this.validationFailures = specificationLoader.getValidationResult();
+      
 
         val objectSpecifications = specificationLoader.snapshotSpecifications();
         

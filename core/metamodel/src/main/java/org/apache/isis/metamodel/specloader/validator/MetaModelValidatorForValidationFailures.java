@@ -27,19 +27,12 @@ import lombok.val;
 
 public class MetaModelValidatorForValidationFailures extends MetaModelValidatorAbstract {
 
-    private final ValidationFailures failures = new ValidationFailures();
-
     public MetaModelValidatorForValidationFailures() {
     }
 
-    @Override
-    public void validateInto(ValidationFailures validationFailures) {
-        validationFailures.addAll(failures);
-    }
-
-    public void addFailure(Identifier identifier, String pattern, Object... arguments) {
-        failures.add(identifier, pattern, arguments);
-    }
+//    public void addFailure(Identifier identifier, String pattern, Object... arguments) {
+//        failures.add(identifier, pattern, arguments);
+//    }
 
 //    public Facet addFailure(Facet facet, String message) {
 //        if(facet != null) {

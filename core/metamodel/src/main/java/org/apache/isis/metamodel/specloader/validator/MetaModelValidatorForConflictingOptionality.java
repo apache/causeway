@@ -27,28 +27,21 @@ import lombok.val;
 
 public class MetaModelValidatorForConflictingOptionality extends MetaModelValidatorAbstract {
 
-    private final ValidationFailures failures = new ValidationFailures();
-
     public MetaModelValidatorForConflictingOptionality() {
     }
-
-    @Override
-    public void validateInto(final ValidationFailures validationFailures) {
-        validationFailures.addAll(failures);
+    
+    public Facet flagIfConflict(final MandatoryFacet facet, final String message) {
+        if(conflictingOptionality(facet)) {
+            addFailure(facet, message);
+        }
+        return facet;
     }
 
     private Facet addFailure(final Facet facet, final String message) {
         if(facet != null) {
             val holder = (IdentifiedHolder) facet.getFacetHolder();
             val identifier = holder.getIdentifier();
-            failures.add(identifier, message + ": " + identifier.toFullIdentityString());
-        }
-        return facet;
-    }
-
-    public Facet flagIfConflict(final MandatoryFacet facet, final String message) {
-        if(conflictingOptionality(facet)) {
-            addFailure(facet, message);
+            super.onFailure(holder, identifier, "%s : %s", message, identifier.toFullIdentityString());
         }
         return facet;
     }
@@ -65,6 +58,8 @@ public class MetaModelValidatorForConflictingOptionality extends MetaModelValida
                 underlyingFacet != null && facet.isInvertedSemantics() != underlyingFacet.isInvertedSemantics();
         return conflicting;
     }
+
+
 
 
 }

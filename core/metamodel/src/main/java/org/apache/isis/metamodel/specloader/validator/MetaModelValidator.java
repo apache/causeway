@@ -19,20 +19,26 @@
 
 package org.apache.isis.metamodel.specloader.validator;
 
-import java.util.function.Consumer;
-
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
+import org.apache.isis.metamodel.facets.all.deficiencies.DeficiencyFacet;
+
+import lombok.NonNull;
+import lombok.val;
 
 public interface MetaModelValidator {
 
-    /**
-     * Validate and then append any {@link ValidationFailure} to given validationFailures. 
-     *  
-     * @param validationFailures
-     */
-    //@Deprecated
-    void validateInto(ValidationFailures validationFailures);
-    
-    //void validateInto(FacetHolder holder, Consumer<ValidationFailure> onFailure);
+    default void onFailure(
+            @NonNull FacetHolder facetHolder,
+            @NonNull Identifier deficiencyOrigin,
+            @NonNull String deficiencyMessageFormat,
+            Object ...args) {
+        
+        val deficiencyMessage = String.format(deficiencyMessageFormat, args);
+        
+        DeficiencyFacet.appendTo(facetHolder, deficiencyOrigin, deficiencyMessage);
+    }
+
+
 
 }

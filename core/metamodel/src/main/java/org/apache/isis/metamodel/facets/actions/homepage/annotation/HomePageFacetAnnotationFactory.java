@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.HomePage;
@@ -39,9 +38,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
@@ -72,45 +71,53 @@ implements MetaModelRefiner {
     private Visitor newValidatorVisitor() {
         return new MetaModelValidatorVisiting.SummarizingVisitor() {
 
-            private final List<Identifier> annotated = _Lists.newArrayList();
+            private final List<ObjectAction> actionsHavingHomePageFacet = _Lists.newArrayList();
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
+                
+                val objectActions = 
+                        objectSpec.streamObjectActions(Contributed.EXCLUDED);
 
                 objectActions
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
+                    
+                    actionsHavingHomePageFacet.add(objectAction);
 
-                    val identifier = objectAction.getIdentifier();
-
-                    // TODO: it would good to flag if the facet is found on any non-services, however
-                    // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession exists.
+                    // TODO: it would be good to flag if the facet is found on any non-services, however
+                    // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession 
+                    // exists.
                     // this ought to be improved upon at some point...
-                    annotated.add(identifier);
+
+                    // TODO might collide with type level annotations as well 
+                    
                 });
 
                 return true; // keep searching
             }
 
             @Override
-            public void summarize(ValidationFailures validationFailures) {
-                if(annotated.size()>1) {
+            public void summarize(MetaModelValidator validator) {
+                if(actionsHavingHomePageFacet.size()>1) {
                     
-                    final Set<String> annotatedIdSet = annotated.stream()
+                    final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.stream()
+                            .map(ObjectAction::getIdentifier)
                             .map(Identifier::toClassAndNameIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
                     
-                    for (val actionIdentifier : annotated) {
+                    for (val objectAction : actionsHavingHomePageFacet) {
+                        val actionIdentifier = objectAction.getIdentifier(); 
                         val actionId = actionIdentifier.toClassAndNameIdentityString();
-                        val nonServiceNamesStr = annotatedIdSet.stream()
+                        val colission = homepageActionIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 
-                        validationFailures.add(
+                        validator.onFailure(
+                                objectAction,
                                 actionIdentifier,
                                 "%s: other actions also specified as home page: %s ",
-                                actionId, nonServiceNamesStr);
+                                actionId, colission);
                     }
                 }
             }

@@ -20,13 +20,12 @@
 package org.apache.isis.metamodel.facetapi;
 
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.assertions._Ensure;
 import org.apache.isis.metamodel.MetaModelContext;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
 
 
 public abstract class FacetAbstract implements Facet, MetaModelContext.Delegating {
@@ -99,10 +98,10 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
                     throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
                 }
             } else {
-                _Ensure.ensureThatArg(
-                        underlyingFacet.facetType(), 
-                        type->Objects.equals(type, facetType), 
-                        ()->String.format("type-missmatch: underlying facet's type '%s' must match this facet's type '%s'"));
+//                _Ensure.ensureThatArg(
+//                        underlyingFacet.facetType(), 
+//                        type->Objects.equals(type, facetType), 
+//                        ()->String.format("type-missmatch: underlying facet's type '%s' must match this facet's type '%s'"));
             }
         }
         this.underlyingFacet = underlyingFacet;
@@ -114,9 +113,8 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
             return multiTypedFacet.containsFacetTypeOf(this.facetType);
         }
 
-        final MultiTypedFacet thisAsMultiTyped = (MultiTypedFacet) this;
-        final Stream<Class<? extends Facet>> facetTypes = thisAsMultiTyped.facetTypes();
-        return facetTypes
+        val thisAsMultiTyped = (MultiTypedFacet) this;
+        return thisAsMultiTyped.facetTypes()
                 .anyMatch(facetType->multiTypedFacet.containsFacetTypeOf(facetType));
     }
 

@@ -46,8 +46,8 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 /**
  * just adds a validator
@@ -157,15 +157,15 @@ implements MetaModelRefiner {
                     @Override
                     public boolean visit(
                             final ObjectSpecification objectSpec,
-                            final ValidationFailures validationFailures) {
+                            final MetaModelValidator validator) {
 
-                        validate(objectSpec, validationFailures);
+                        validate(objectSpec, validator);
                         return true;
                     }
 
                     private void validate(
                             final ObjectSpecification objectSpec,
-                            final ValidationFailures validationFailures) {
+                            final MetaModelValidator validator) {
 
                         final boolean viewModel = objectSpec.isViewModel();
                         if(!viewModel) {
@@ -178,7 +178,7 @@ implements MetaModelRefiner {
                         }
 
                         for (final TypeValidator typeValidator : typeValidators) {
-                            typeValidator.validate(objectSpec, validationFailures);
+                            typeValidator.validate(objectSpec, validator);
                         }
 
                         final Stream<OneToOneAssociation> properties = objectSpec
@@ -189,7 +189,7 @@ implements MetaModelRefiner {
                         .filter(property->property.containsDoOpFacet(PropertySetterFacet.class))
                         .forEach(property->{
                             for (final PropertyValidator adapterValidator : propertyValidators) {
-                                adapterValidator.validate(objectSpec, property, validationFailures);
+                                adapterValidator.validate(objectSpec, property, validator);
                             }
                         });
 
@@ -231,7 +231,7 @@ implements MetaModelRefiner {
     private static abstract class TypeValidator {
         abstract void validate(
                 final ObjectSpecification objectSpec,
-                final ValidationFailures validationFailures);
+                final MetaModelValidator validator);
 
     }
 
@@ -239,7 +239,7 @@ implements MetaModelRefiner {
         abstract void validate(
                 final ObjectSpecification objectSpec,
                 final OneToOneAssociation property,
-                final ValidationFailures validationFailures);
+                final MetaModelValidator validator);
 
     }
 
@@ -249,7 +249,7 @@ implements MetaModelRefiner {
         void validate(
                 final ObjectSpecification objectSpec,
                 final OneToOneAssociation property,
-                final ValidationFailures validationFailures) {
+                final MetaModelValidator validator) {
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             if (!propertyTypeSpec.isEntity()) {
@@ -262,7 +262,8 @@ implements MetaModelRefiner {
                 return;
             }
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            validationFailures.add(
+            validator.onFailure(
+                    property,
                     property.getIdentifier(),
                     "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
@@ -283,7 +284,7 @@ implements MetaModelRefiner {
         void validate(
                 final ObjectSpecification objectSpec,
                 final OneToOneAssociation property,
-                final ValidationFailures validationFailures) {
+                final MetaModelValidator validator) {
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
@@ -304,7 +305,8 @@ implements MetaModelRefiner {
             }
 
             // else
-            validationFailures.add(
+            validator.onFailure(
+                    property,
                     property.getIdentifier(),
                     "JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
                     objectSpec.getFullIdentifier(),
@@ -317,10 +319,11 @@ implements MetaModelRefiner {
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final ValidationFailures validationFailures) {
+                final MetaModelValidator validator) {
 
             if(objectSpec.isAbstract()) {
-                validationFailures.add(
+                validator.onFailure(
+                        objectSpec,
                         objectSpec.getIdentifier(),
                         "JAXB view model '%s' is abstract", 
                         objectSpec.getFullIdentifier());
@@ -332,21 +335,24 @@ implements MetaModelRefiner {
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final ValidationFailures validationFailures) {
+                final MetaModelValidator validator) {
 
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             if(correspondingClass.isAnonymousClass()) {
-                validationFailures.add(
+                validator.onFailure(
+                        objectSpec,
                         objectSpec.getIdentifier(),
                         "JAXB view model '%s' is an anonymous class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isLocalClass()) {
-                validationFailures.add(
+                validator.onFailure(
+                        objectSpec,
                         objectSpec.getIdentifier(),
                         "JAXB view model '%s' is a local class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isMemberClass() && !Modifier.isStatic(correspondingClass.getModifiers())) {
-                validationFailures.add(
+                validator.onFailure(
+                        objectSpec,
                         objectSpec.getIdentifier(),
                         "JAXB view model '%s' is an non-static inner class", 
                         objectSpec.getFullIdentifier());
@@ -358,22 +364,25 @@ implements MetaModelRefiner {
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final ValidationFailures validationFailures) {
+                final MetaModelValidator validator) {
 
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             final Constructor<?>[] constructors = correspondingClass.getDeclaredConstructors();
             for (Constructor<?> constructor : constructors) {
                 if(constructor.getParameterCount() == 0) {
                     if (!Modifier.isPublic(constructor.getModifiers())) {
-                        validationFailures
-                        .add(objectSpec.getIdentifier(),
+                        validator
+                        .onFailure(
+                                objectSpec,
+                                objectSpec.getIdentifier(),
                                 "JAXB view model '%s' has a no-arg constructor, however it is not public",
                                 objectSpec.getFullIdentifier());
                     }
                     return;
                 }
             }
-            validationFailures.add(
+            validator.onFailure(
+                    objectSpec,
                     objectSpec.getIdentifier(),
                     "JAXB view model '%s' does not have a public no-arg constructor", 
                     objectSpec.getFullIdentifier());

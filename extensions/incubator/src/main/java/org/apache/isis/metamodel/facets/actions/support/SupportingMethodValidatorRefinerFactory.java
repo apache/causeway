@@ -88,7 +88,8 @@ implements MetaModelRefiner {
 
                 val messageFormat = "%s#%s: has annotion %s, is assumed to support "
                         + "a property, collection or action. Unmet constraint(s): %s";
-                validationFailures.add(
+                validationFailures.onFailure(
+                        spec,
                         spec.getIdentifier(),
                         messageFormat,
                         spec.getIdentifier().getClassName(),

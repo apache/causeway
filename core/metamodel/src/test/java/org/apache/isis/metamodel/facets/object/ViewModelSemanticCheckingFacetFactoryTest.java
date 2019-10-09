@@ -30,9 +30,11 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.metamodel.MetaModelContext;
+import org.apache.isis.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilterDefault;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -59,12 +61,12 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         facetFactory.refineProgrammingModel(programmingModel);
         programmingModel.init(new ProgrammingModelInitFilterDefault());
         
-        facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, null));
+        facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, new FacetHolderImpl()));
         
         val validationFailures = new ValidationFailures();
         
         programmingModel.streamValidators()
-        .forEach(validator->validator.validateInto(validationFailures));
+        .forEach(validator->((MetaModelValidatorAbstract)validator).collectFailuresInto(validationFailures));
 
         return validationFailures;
     }

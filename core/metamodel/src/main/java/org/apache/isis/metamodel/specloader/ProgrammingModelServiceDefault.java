@@ -29,7 +29,6 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelInitFilter;
 import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -42,11 +41,6 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         return programmingModel.get();
     }
     
-    @Override
-    public ValidationFailures getValidationResult() {
-        return validationResult.get();
-    }
-
     // -- HELPER
 
     @Inject private ServiceRegistry serviceRegistry;
@@ -55,9 +49,6 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
     private _Lazy<ProgrammingModel> programmingModel = 
             _Lazy.threadSafe(this::createProgrammingModel);
 
-    private _Lazy<ValidationFailures> validationResult = 
-            _Lazy.threadSafe(this::validate);
-    
     private ProgrammingModel createProgrammingModel() {
         
         log.info("About to create the ProgrammingModel.");
@@ -95,13 +86,5 @@ public class ProgrammingModelServiceDefault implements ProgrammingModelService {
         
         return programmingModel;
     }
-    
-    private ValidationFailures validate() {
-        val failures = new ValidationFailures();
-        programmingModel.get().streamValidators()
-        .forEach(validator->validator.validateInto(failures));
-        return failures;
-    }
-
 
 }

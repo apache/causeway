@@ -27,6 +27,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
 public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
@@ -36,41 +37,39 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
         /**
          * @return <tt>true</tt> continue visiting specs.
          */
-        boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures);
+        boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator);
     }
     
     public interface SummarizingVisitor extends Visitor {
-        void summarize(ValidationFailures validationFailures);
+        void summarize(MetaModelValidator validator);
     }
     
     @NonNull private final Visitor visitor;
 
     @Override
-    public final void validateInto(ValidationFailures validationFailures) {
-
-        validateAll(validationFailures);
-
-        summarize(validationFailures);
+    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
+        validateAll();
+        summarize();
+        super.collectFailuresInto(validationFailures);
     }
 
-    private void validateAll(final ValidationFailures validationFailures) {
+    private void validateAll() {
 
-        final List<ObjectSpecification> specsValidated = _Lists.newArrayList();
+        val specsValidated = _Lists.<ObjectSpecification>newArrayList();
 
-        while(validateSpecs(specsValidated, validationFailures)) {
+        while(validateSpecs(specsValidated)) {
             // validate in a loop, because the act of validating might cause additional specs to be uncovered
         }
 
     }
 
-    private boolean validateSpecs(
-            final List<ObjectSpecification> specsAlreadyValidated,
-            final ValidationFailures validationFailures) {
+    private boolean validateSpecs(List<ObjectSpecification> specsAlreadyValidated) {
 
         // all currently known specs
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        final Collection<ObjectSpecification> specsToValidate = getSpecificationLoader().snapshotSpecifications();
+        final Collection<ObjectSpecification> specsToValidate = 
+                getSpecificationLoader().snapshotSpecifications();
 
         // don't validate any specs already processed
         specsToValidate.removeAll(specsAlreadyValidated);
@@ -80,8 +79,8 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
         }
 
         // validate anything new
-        for (final ObjectSpecification objSpec : specsToValidate) {
-            if(!visitor.visit(objSpec, validationFailures)) {
+        for (val objSpec : specsToValidate) {
+            if(!visitor.visit(objSpec, this)) {
                 break;
             }
         }
@@ -93,10 +92,10 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
         return true;
     }
 
-    private void summarize(final ValidationFailures validationFailures) {
+    private void summarize() {
         if(visitor instanceof SummarizingVisitor) {
             SummarizingVisitor summarizingVisitor = (SummarizingVisitor) visitor;
-            summarizingVisitor.summarize(validationFailures);
+            summarizingVisitor.summarize(this);
         }
     }
 

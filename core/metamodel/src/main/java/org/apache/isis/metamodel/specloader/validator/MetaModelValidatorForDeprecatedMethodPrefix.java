@@ -32,7 +32,9 @@ public class MetaModelValidatorForDeprecatedMethodPrefix extends MetaModelValida
     }
 
     @Override
-    protected String failureMessageFor(final Facet facet, final FacetFactory.AbstractProcessWithMethodContext processMethodContext) {
+    protected String failureMessageFor(
+            final Facet facet, 
+            final FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext) {
 
         final boolean inherited = isInherited(processMethodContext);
 

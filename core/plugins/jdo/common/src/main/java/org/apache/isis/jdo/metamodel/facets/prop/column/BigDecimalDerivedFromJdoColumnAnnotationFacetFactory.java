@@ -38,9 +38,9 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -112,12 +112,12 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                validate(objectSpec, validationFailures);
+            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
+                validate(objectSpec, validator);
                 return true;
             }
 
-            private void validate(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
+            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
 
                 // only consider persistent entities
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
@@ -132,12 +132,12 @@ implements MetaModelRefiner {
                 // skip checks if annotated with JDO @NotPersistent
                 .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
                 .forEach(association->{
-                    validateBigDecimalValueFacet(association, validationFailures);
+                    validateBigDecimalValueFacet(association, validator);
                 });
 
             }
 
-            private void validateBigDecimalValueFacet(ObjectAssociation association, ValidationFailures validationFailures) {
+            private void validateBigDecimalValueFacet(ObjectAssociation association, MetaModelValidator validator) {
                 BigDecimalValueFacet facet = association.getFacet(BigDecimalValueFacet.class);
                 if(facet == null) {
                     return;
@@ -153,14 +153,16 @@ implements MetaModelRefiner {
                     if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
 
                         if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
-                            validationFailures.add(
+                            validator.onFailure(
+                                    association,
                                     association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
                                     association.getIdentifier().toClassAndNameIdentityString());
                         }
 
                         if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
-                            validationFailures.add(
+                            validator.onFailure(
+                                    association,
                                     association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(scale=...) different from @javax.validation.constraint.Digits(fraction=...)",
                                     association.getIdentifier().toClassAndNameIdentityString());

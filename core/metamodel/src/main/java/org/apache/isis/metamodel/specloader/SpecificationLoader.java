@@ -28,6 +28,8 @@ import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.val;
 
@@ -48,7 +50,14 @@ public interface SpecificationLoader {
      */
     void disposeMetaModel();
     
-    void validateMetaModel();
+    /**
+     * Returns the collected results of the various {@link MetaModelValidator}s configured with 
+     * the {@link ProgrammingModel}.
+     * 
+     * @apiNote Some of the {@link MetaModelValidator}s run during {@link #createMetaModel()}, 
+     * others are only triggered when calling this method. 
+     */
+    ValidationFailures getValidationResult();
 
     // -- LOOKUP
 
@@ -106,8 +115,6 @@ public interface SpecificationLoader {
     default ObjectSpecification loadSpecification(@Nullable String className) {
         return loadSpecification(className, null);
     }
-
-    
 
 
 

@@ -29,6 +29,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.commons.internal.base._Blackhole;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
@@ -48,6 +50,7 @@ import org.apache.isis.metamodel.specloader.specimpl.FacetedMethodsBuilderContex
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
+import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
@@ -122,7 +125,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Override
     public void createMetaModel() {
         
-        log.info("About to creating the Metamodel");
+        log.info("About to create the Metamodel ...");
         
         // initialize subcomponents, only after @PostConstruct has globally completed
         facetProcessor.init();
@@ -193,6 +196,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             log.info("Introspecting all cached specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
             introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         }
+        
+        log.info("Running remaining validators");
+        _Blackhole.consume(getValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
         log.info("createMetaModel() - took " + stopWatch);
@@ -200,16 +206,25 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
     
     @Override
-    public void validateMetaModel() {
+    public ValidationFailures getValidationResult() {
+        return validationResult.get();
+    }
+
+    private _Lazy<ValidationFailures> validationResult = 
+            _Lazy.threadSafe(this::collectFailuresFromMetaModel);
+
+    private ValidationFailures collectFailuresFromMetaModel() {
         val failures = new ValidationFailures();
         programmingModel.streamValidators()
-        .forEach(validator->validator.validateInto(failures));
-       // return failures;
+        .map(MetaModelValidatorAbstract.class::cast)
+        .forEach(validator->validator.collectFailuresInto(failures));
+        return failures;
     }
 
     @Override
     public void disposeMetaModel() {
         cache.clear();
+        validationResult.clear();
         log.info("Metamodel disposed.");
     }
     
