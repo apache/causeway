@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.spec.Hierarchical;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
@@ -50,7 +51,7 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
         if (Objects.equals(classNameFromClause, className)) {
             return;
         }
-        val fromSpec = getSpecificationLoader().loadSpecification(classNameFromClause);
+        val fromSpec = getSpecificationLoader().loadSpecification(ObjectSpecId.of(classNameFromClause));
         val subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
         if(subclasses.contains(objectSpec)) {
             return;

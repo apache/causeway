@@ -56,27 +56,6 @@ public final class ObjectSpecId implements Serializable {
         return specId;
     }
 
-    //replaced by lombok ...    
-    //    @Override
-    //    public int hashCode() {
-    //        return specId.hashCode();
-    //    }
-    //
-    //    @Override
-    //    public boolean equals(Object obj) {
-    //        if (this == obj) {
-    //            return true;
-    //        }
-    //        if (obj == null) {
-    //            return false;
-    //        }
-    //        if (getClass() != obj.getClass()) {
-    //            return false;
-    //        }
-    //        final ObjectSpecId other = (ObjectSpecId) obj;
-    //        return Objects.equals(specId, other.specId);
-    //    }
-
     @Override
     public String toString() {
         return asString();

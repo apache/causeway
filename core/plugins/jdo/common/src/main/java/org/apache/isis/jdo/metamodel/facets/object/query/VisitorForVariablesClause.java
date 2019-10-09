@@ -20,9 +20,12 @@ package org.apache.isis.jdo.metamodel.facets.object.query;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+
+import lombok.val;
 
 class VisitorForVariablesClause extends VisitorForClauseAbstract {
 
@@ -43,10 +46,12 @@ class VisitorForVariablesClause extends VisitorForClauseAbstract {
             final MetaModelValidator validator) {
 
 
-        final String className = objectSpec.getCorrespondingClass().getName();
-
-        ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(classNameFromClause,
-                IntrospectionState.TYPE_INTROSPECTED);
+        val className = objectSpec.getCorrespondingClass().getName();
+        val objectSpecification = getSpecificationLoader()
+                .loadSpecification(
+                        ObjectSpecId.of(classNameFromClause), 
+                        IntrospectionState.TYPE_INTROSPECTED);
+        
         JdoPersistenceCapableFacet persistenceCapableFacet =
                 objectSpecification.getFacet(JdoPersistenceCapableFacet.class);
 

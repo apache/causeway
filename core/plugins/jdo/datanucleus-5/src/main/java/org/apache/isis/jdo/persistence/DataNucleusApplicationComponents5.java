@@ -43,11 +43,13 @@ import org.apache.isis.jdo.datanucleus.DataNucleusLifeCycleHelper;
 import org.apache.isis.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.jdo.metamodel.facets.object.query.JdoQueryFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.val;
 
 @Vetoed
 public class DataNucleusApplicationComponents5 implements ApplicationScopedComponent {
@@ -244,15 +246,16 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
     }
 
     static void catalogNamedQueries(
-            Set<String> persistableClassNames, final SpecificationLoader specificationLoader) {
-        final Map<String, JdoNamedQuery> namedQueryByName = _Maps.newHashMap();
-        for (final String persistableClassName: persistableClassNames) {
-            final ObjectSpecification spec = specificationLoader.loadSpecification(persistableClassName);
-            final JdoQueryFacet facet = spec.getFacet(JdoQueryFacet.class);
-            if (facet == null) {
+            Set<String> persistableClassNames, SpecificationLoader specificationLoader) {
+        
+        val namedQueryByName = _Maps.<String, JdoNamedQuery>newHashMap();
+        for (val persistableClassName: persistableClassNames) {
+            val spec = specificationLoader.loadSpecification(ObjectSpecId.of(persistableClassName));
+            val jdoQueryFacet = spec.getFacet(JdoQueryFacet.class);
+            if (jdoQueryFacet == null) {
                 continue;
             }
-            for (final JdoNamedQuery namedQuery : facet.getNamedQueries()) {
+            for (val namedQuery : jdoQueryFacet.getNamedQueries()) {
                 namedQueryByName.put(namedQuery.getName(), namedQuery);
             }
         }

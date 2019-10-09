@@ -20,19 +20,15 @@
 package org.apache.isis.metamodel.specloader.validator;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 
 import lombok.NonNull;
 
 public abstract class MetaModelValidatorAbstract 
-implements MetaModelValidator, MetaModelContext.Delegating {
+implements MetaModelValidator {
 
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return MetaModelContext.current();
-    }
-    
     protected final ValidationFailures failures = new ValidationFailures();
     
     /**
@@ -54,5 +50,9 @@ implements MetaModelValidator, MetaModelContext.Delegating {
         MetaModelValidator.super.onFailure(facetHolder, deficiencyOrigin, deficiencyMessageFormat, args);
         failures.add(deficiencyOrigin, deficiencyMessageFormat, args);
     }
-
+    
+    protected IsisConfiguration getConfiguration() {
+        return MetaModelContext.current().getConfiguration();
+    }
+    
 }

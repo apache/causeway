@@ -33,6 +33,8 @@ public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectAdapterMemento>
 implements ChoiceExt {
 
+    private static final long serialVersionUID = 1L;
+
     public static Select2MultiChoiceExt create(
             final String id,
             final IModel<ArrayList<ObjectAdapterMemento>> modelObject,

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -65,11 +66,13 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
     private boolean validateSpecs(List<ObjectSpecification> specsAlreadyValidated) {
 
+        val specLoader = MetaModelContext.current().getSpecificationLoader();
+        
         // all currently known specs
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
         final Collection<ObjectSpecification> specsToValidate = 
-                getSpecificationLoader().snapshotSpecifications();
+                specLoader.snapshotSpecifications();
 
         // don't validate any specs already processed
         specsToValidate.removeAll(specsAlreadyValidated);

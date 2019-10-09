@@ -295,7 +295,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             return spec;
         }
         // fallback
-        return loadSpecification(objectSpecId.asString(), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        return loadSpecification(objectSpecId, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
 
 

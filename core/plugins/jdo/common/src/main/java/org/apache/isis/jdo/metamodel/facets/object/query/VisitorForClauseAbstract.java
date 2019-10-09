@@ -21,10 +21,14 @@ package org.apache.isis.jdo.metamodel.facets.object.query;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorVisiting;
+
+import lombok.val;
 
 abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Visitor {
 
@@ -72,12 +76,12 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             final String query,
             final MetaModelValidator validator) {
 
-        if (classNameFromClause == null) {
+        if (_Strings.isNullOrEmpty(classNameFromClause)) {
             return;
         }
 
-        final String className = objectSpec.getCorrespondingClass().getName();
-        if (getSpecificationLoader().loadSpecification(classNameFromClause)==null) {
+        val className = objectSpec.getCorrespondingClass().getName();
+        if (getSpecificationLoader().loadSpecification(ObjectSpecId.of(classNameFromClause))==null) {
             validator.onFailure(
                     objectSpec,
                     Identifier.classIdentifier(className),

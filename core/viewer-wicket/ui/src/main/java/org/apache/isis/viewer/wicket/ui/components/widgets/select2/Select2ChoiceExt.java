@@ -27,6 +27,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
 
 public class Select2ChoiceExt extends Select2Choice<ObjectAdapterMemento> implements ChoiceExt {
+    
+    private static final long serialVersionUID = 1L;
 
     public static Select2ChoiceExt create(
             final String id,
