@@ -13,7 +13,7 @@ You can deploy both of these concurrently, or deploy just the Wicket viewer, or 
 The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
 
 If you are using Apache Isis' integration with Apache Shiro (for security) then this also needs configuring in `web.xml`.
-See the xref:security:security-shiro:configuring-isis-to-use-shiro.adoc[security guide] for full details on this topic.
+See the xref:security:shiro:configuring-isis-to-use-shiro.adoc[security guide] for full details on this topic.
 
 The servlets and filters are mapped to three main pipelines:
 
