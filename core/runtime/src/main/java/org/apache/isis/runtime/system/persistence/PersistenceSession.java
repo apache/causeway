@@ -107,42 +107,12 @@ SessionScopedComponent {
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
 
 
-
-
     // -------------------------------------------------------------------------------------------------
     // -- JDO SPECIFIC
     // -------------------------------------------------------------------------------------------------
 
     PersistenceManager getJdoPersistenceManager();
 
-    /**
-     * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
-     * @param cls
-     * @param queryName
-     * @return
-     */
-    default <T> javax.jdo.Query newJdoNamedQuery(Class<T> cls, String queryName){
-        return getJdoPersistenceManager().newNamedQuery(cls, queryName);
-    }
-
-    /**
-     * Not type safe. For type-safe queries use <br/><br/> {@code pm().newQuery(cls, queryName)}
-     * @param cls
-     * @return
-     */
-    default <T> javax.jdo.Query newJdoQuery(Class<T> cls){
-        return getJdoPersistenceManager().newQuery(cls);
-    }
-
-    /**
-     * Not type safe. For type-safe queries use <br/><br/> {@code pm().newQuery(cls, filter)}
-     * @param cls
-     * @param filter
-     * @return
-     */
-    default <T> javax.jdo.Query newJdoQuery(Class<T> cls, String filter){
-        return getJdoPersistenceManager().newQuery(cls, filter);
-    }
 
     // -------------------------------------------------------------------------------------------------
     // -- API NOT STABLE YET - SUBJECT TO REFACTORING

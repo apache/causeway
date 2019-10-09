@@ -40,7 +40,6 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.runtime.system.context.IsisContext;
 import org.apache.isis.runtime.system.persistence.PersistenceQueryFactory;
-import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal;
 import org.apache.isis.security.authentication.AuthenticationSession;
 
@@ -48,7 +47,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-abstract class IsisPersistenceSessionJdoBase implements PersistenceSession {
+abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJdo {
 
     // -- FIELDS
 
