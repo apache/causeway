@@ -42,7 +42,8 @@ implements MetaModelRefiner {
         super(FeatureType.OBJECTS_ONLY);
     }
 
-    private final MetaModelValidatorForValidationFailures validator = new MetaModelValidatorForValidationFailures();
+    private final MetaModelValidatorForValidationFailures validator = 
+            new MetaModelValidatorForValidationFailures();
 
     @Override
     public void process(final ProcessClassContext processClassContext) {

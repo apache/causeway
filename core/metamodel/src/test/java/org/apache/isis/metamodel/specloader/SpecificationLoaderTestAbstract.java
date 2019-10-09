@@ -146,18 +146,15 @@ abstract class SpecificationLoaderTestAbstract {
 
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
 
-        _Timing.runVerbose("specificationLoader.init()", specificationLoader::init);
-
-        //specificationLoader.init();
+        _Timing.runVerbose("specificationLoader.createMetaModel()", specificationLoader::createMetaModel);
 
         specification = loadSpecification(specificationLoader);
-
 
     }
 
     @AfterEach
     public void tearDown() throws Exception {
-        specificationLoader.shutdown();
+        specificationLoader.disposeMetaModel();
     }
 
     protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);

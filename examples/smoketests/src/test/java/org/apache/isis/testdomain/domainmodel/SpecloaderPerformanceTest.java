@@ -52,7 +52,7 @@ import lombok.val;
         })
 @TestPropertySource({
     IsisPresets.DebugValidation,
-    IsisPresets.DebugProgrammingModel,
+    //IsisPresets.DebugProgrammingModel,
     
 })
 @Incubating("not a real test, just for performance tuning")
@@ -81,8 +81,8 @@ class SpecloaderPerformanceTest {
         
             for(int i=0; i<ITERATIONS; ++i) {
                 _Annotations.clearCache();
-                specificationLoader.shutdown();
-                specificationLoader.init();
+                specificationLoader.disposeMetaModel();
+                specificationLoader.createMetaModel();
            
                 if(System.currentTimeMillis() > goodUntilMillis) {
                     fail("timed out");

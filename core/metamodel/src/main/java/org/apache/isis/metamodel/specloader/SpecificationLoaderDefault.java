@@ -20,19 +20,17 @@ package org.apache.isis.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -50,6 +48,7 @@ import org.apache.isis.metamodel.specloader.specimpl.FacetedMethodsBuilderContex
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
+import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -85,12 +84,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
     
-    @PostConstruct
-    public void preInit() {
-        this.programmingModel = programmingModelService.getProgrammingModel();
-        this.facetProcessor = new FacetProcessor(programmingModel);
-        this.postProcessor = new PostProcessor(programmingModel);
-    }
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance (
@@ -110,25 +103,30 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return instance;
     }
 
-
-
     // -- LIVE CYCLE
 
+    @PostConstruct
+    public void init() {
+        if (log.isDebugEnabled()) {
+            log.debug("initialising {}", this);
+        }
+        this.programmingModel = programmingModelService.getProgrammingModel();
+        this.facetProcessor = new FacetProcessor(programmingModel);
+        this.postProcessor = new PostProcessor(programmingModel);
+    }
+    
     /**
      * Initializes and wires up, and primes the cache based on any service
      * classes (provided by the {@link IsisBeanTypeRegistry}).
      */
     @Override
-    public void init() {
+    public void createMetaModel() {
         
-        if (log.isDebugEnabled()) {
-            log.debug("initialising {}", this);
-        }
+        log.info("About to creating the Metamodel");
         
-        // initialize subcomponents
+        // initialize subcomponents, only after @PostConstruct has globally completed
         facetProcessor.init();
         postProcessor.init();
-        
 
         // need to completely load services and mixins (synchronously)
         log.info("Loading all specs (up to state of {})", IntrospectionState.NOT_INTROSPECTED);
@@ -197,15 +195,32 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
 
         stopWatch.stop();
-        log.info("init() - took " + stopWatch);
+        log.info("createMetaModel() - took " + stopWatch);
 
+    }
+    
+    @Override
+    public void validateMetaModel() {
+        val failures = new ValidationFailures();
+        programmingModel.streamValidators()
+        .forEach(validator->validator.validateInto(failures));
+       // return failures;
     }
 
     @Override
-    public void shutdown() {
+    public void disposeMetaModel() {
         cache.clear();
-
-        log.info("shutting down {}", this);
+        log.info("Metamodel disposed.");
+    }
+    
+    @PreDestroy
+    public void shutdown() {
+        log.debug("shutting down {}", this);
+        disposeMetaModel();
+        facetProcessor.shutdown();
+        postProcessor.shutdown();
+        postProcessor = null;
+        facetProcessor = null;
     }
 
     /**
@@ -378,58 +393,5 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     @Inject private ProgrammingModelService programmingModelService;
     @Inject private IsisConfiguration isisConfiguration;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
-
-    // -- DEPRECATED
-
-    //	/**
-    //	 * Loads the specifications of the specified types except the one specified
-    //	 * (to prevent an infinite loop).
-    //	 */
-    //	public boolean loadSpecifications(
-    //			final List<Class<?>> typesToLoad,
-    //			final Class<?> typeToIgnore,
-    //			final IntrospectionState upTo) {
-    //
-    //		boolean anyLoadedAsNull = false;
-    //		for (final Class<?> typeToLoad : typesToLoad) {
-    //			if (typeToLoad != typeToIgnore) {
-    //				final ObjectSpecification objectSpecification =
-    //						internalLoadSpecification(typeToLoad, null, upTo);
-    //				final boolean loadedAsNull = (objectSpecification == null);
-    //				anyLoadedAsNull = loadedAsNull || anyLoadedAsNull;
-    //			}
-    //		}
-    //		return anyLoadedAsNull;
-    //	}
-
-    //	public ObjectSpecification peekSpecification(final Class<?> type) {
-    //
-    //		final Class<?> substitutedType = classSubstitutor.getClass(type);
-    //		if (substitutedType == null) {
-    //			return null;
-    //		}
-    //
-    //		final String typeName = substitutedType.getName();
-    //		ObjectSpecification spec = cache.get(typeName);
-    //		if (spec != null) {
-    //			return spec;
-    //		}
-    //
-    //		return null;
-    //	}
-
-    //	/**
-    //	 * Whether this class has been loaded.
-    //	 */
-    //	private boolean loaded(final Class<?> cls) {
-    //		return loaded(cls.getName());
-    //	}
-
-    //	/**
-    //	 * @see #loaded(Class).
-    //	 */
-    //	private boolean loaded(final String fullyQualifiedClassName) {
-    //		return cache.get(fullyQualifiedClassName) != null;
-    //	}
 
 }

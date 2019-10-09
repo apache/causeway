@@ -19,6 +19,7 @@
 package org.apache.isis.jdo.datanucleus.service;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -28,15 +29,13 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.IsisJdoRuntimePlugin;
 import org.apache.isis.runtime.system.context.session.AppLifecycleEvent;
 import org.apache.isis.runtime.system.context.session.SessionLifecycleEvent;
 import org.apache.isis.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.system.session.IsisSession;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -44,6 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Service @Log4j2
 public class JdoPersistenceLifecycleService {
 
+    @Inject private SpecificationLoader specificationLoader;
     private PersistenceSessionFactory persistenceSessionFactory;
 
     @PostConstruct
@@ -115,7 +115,7 @@ public class JdoPersistenceLifecycleService {
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession(authenticationSession);
 
-        //TODO [2033] only to support IsisSessionFactoryDefault
+        // to support static call of PersistenceSession.current(PersistenceSession.class)
         _Context.threadLocalPut(PersistenceSession.class, persistenceSession);
 
         persistenceSession.open();
@@ -143,10 +143,6 @@ public class JdoPersistenceLifecycleService {
     }
 
     private void init() {
-        //TODO [2033] specloader should rather be a Spring/CDI managed object
-        val isisSessionFactory = _Context.getElseFail(IsisSessionFactory.class); 
-        val specificationLoader = isisSessionFactory.getSpecificationLoader();
-        requires(specificationLoader, "specificationLoader");
         persistenceSessionFactory.catalogNamedQueries(specificationLoader);
     }
 

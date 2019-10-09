@@ -41,17 +41,17 @@ public class MetaModelValidatorForValidationFailures extends MetaModelValidatorA
         failures.add(identifier, pattern, arguments);
     }
 
-    public Facet addFailure(Facet facet, String message) {
-        if(facet != null) {
-            val holder = (IdentifiedHolder) facet.getFacetHolder();
-            val identifier = holder.getIdentifier();
-            failures.add(identifier, message + " " + identifier.toFullIdentityString());
-        }
-        return facet;
-    }
+//    public Facet addFailure(Facet facet, String message) {
+//        if(facet != null) {
+//            val holder = (IdentifiedHolder) facet.getFacetHolder();
+//            val identifier = holder.getIdentifier();
+//            failures.add(identifier, message + " " + identifier.toFullIdentityString());
+//        }
+//        return facet;
+//    }
 
-    public void addFacet(final Facet facet, final String message) {
-        FacetUtil.addFacet(addFailure(facet, message));
-    }
+//    public void addFacet(Facet facet, String message) {
+//        FacetUtil.addFacet(addFailure(facet, message));
+//    }
 
 }

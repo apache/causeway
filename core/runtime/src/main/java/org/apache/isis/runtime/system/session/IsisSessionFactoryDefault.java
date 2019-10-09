@@ -85,18 +85,16 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);
 
-        // ... and make IsisSessionFactory available via the IsisContext static for those
-        // places where we cannot yet inject.
-        _Context.putSingleton(IsisSessionFactory.class, this); //TODO[2112] should no longer be required, since Spring manages this instance
-
         runtimeEventService.fireAppPreMetamodel();
 
-        val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init");
+        val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init")
         
-        taskList.addRunnable("SpecificationLoader.init()", this::initMetamodel);
-        taskList.addRunnable("ChangesDtoUtils.init()", ChangesDtoUtils::init);
-        taskList.addRunnable("InteractionDtoUtils.init()", InteractionDtoUtils::init);
-        taskList.addRunnable("CommandDtoUtils.init()", CommandDtoUtils::init);
+        .addRunnable("SpecificationLoader::createThenValidateMetaModel", this::createThenValidateMetaModel)
+        .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
+        .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
+        .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
+        .addRunnable("AuthenticationManager::init", authenticationManager::init)
+        .addRunnable("AuthorizationManager::init", IsisContext.getAuthorizationManager()::init);
 
         taskList.submit(_ConcurrentContext.forkJoin());
         taskList.await();
@@ -105,32 +103,10 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     }
 
-    private void initMetamodel() {
-        val authorizationManager = IsisContext.getAuthorizationManager();
-        
-        specificationLoader.init();
-
-        // we need to do this before checking if the metamodel is valid.
-        //
-        // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
-        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
-        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
-        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
-        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
-        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
-        // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
-        //
-        // also, required so that can still call isisSessionFactory#doInSession
-        //
-        // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
-        // (including the metamodel invalid page)
-        // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
-        // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
-
-        authenticationManager.init();
-        authorizationManager.init();
+    private void createThenValidateMetaModel() {
+        specificationLoader.createMetaModel();
+        specificationLoader.validateMetaModel();
     }
-
 
     @PreDestroy
     public void shutdown() {
@@ -142,7 +118,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         runtimeEventService.fireAppPreDestroy();
         authenticationManager.shutdown();
-        //specificationLoader.shutdown(); //[2112] lifecycle is managed by IoC
+        IsisContext.getAuthorizationManager().shutdown();
+        //specificationLoader.shutdown(); // lifecycle is managed by IoC
     }
 
     // -- 

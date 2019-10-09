@@ -19,6 +19,10 @@
 
 package org.apache.isis.metamodel.specloader.validator;
 
+import java.util.function.Consumer;
+
+import org.apache.isis.metamodel.facetapi.FacetHolder;
+
 public interface MetaModelValidator {
 
     /**
@@ -26,6 +30,9 @@ public interface MetaModelValidator {
      *  
      * @param validationFailures
      */
+    //@Deprecated
     void validateInto(ValidationFailures validationFailures);
+    
+    //void validateInto(FacetHolder holder, Consumer<ValidationFailure> onFailure);
 
 }

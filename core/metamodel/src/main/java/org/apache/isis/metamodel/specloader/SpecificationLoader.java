@@ -24,34 +24,43 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.commons.ClassUtil;
+import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
 
+import lombok.val;
+
 /**
- * Builds the meta-model.
- * TODO [2033] add missing java-doc
- *
+ * Builds the meta-model, utilizing an instance of {@link ProgrammingModel}
  */
 public interface SpecificationLoader {
-
-    // -- LIVE CYCLE
-
-    void init();
-
-    void shutdown();
+    
+    /**
+     * Creates the meta-model, that is the set of {@link ObjectSpecification}s.
+     * @see {@link #disposeMetaModel()}
+     */
+    void createMetaModel();
+    
+    /**
+     * Clears all instance references to {@link ObjectSpecification}s.
+     * @see {@link #createMetaModel()}
+     */
+    void disposeMetaModel();
+    
+    void validateMetaModel();
 
     // -- LOOKUP
 
     /**
      * @ThreadSafe
      * <p>
-     *     Must be implemented thread-safe to avoid concurrent modification exceptions for if the caller
+     *     Must be implemented thread-safe to avoid concurrent modification exceptions when the caller
      *     iterates over all the specifications and performs an activity that might give rise to new
-     *     ObjectSpec's being discovered, eg performing metamodel validation.
+     *     ObjectSpec's being discovered, eg. performing meta-model validation.
      * </p>
      * 
-     * @return (defensive-copy) snapshot of all the (currently) loaded specifications
+     * @return snapshot of all the (currently) loaded specifications, a defensive-copy 
      */
     Collection<ObjectSpecification> snapshotSpecifications();
 
@@ -60,14 +69,6 @@ public interface SpecificationLoader {
      * @param objectSpecId
      */
     ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId);
-
-    //	default ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId) {
-    //	    return lookupBySpecIdO(objectSpecId).orElseThrow(
-    //	            ()->_Exceptions.unrecoverable(
-    //	                    "Failed to lookup ObjectSpecification by its id '" + objectSpecId + "'"));
-    //	}
-
-    //ValidationFailures validate();
 
     void reloadSpecification(Class<?> domainType);
 
@@ -83,30 +84,11 @@ public interface SpecificationLoader {
      */
     ObjectSpecification loadSpecification(@Nullable Class<?> domainType, IntrospectionState upTo);
 
-    //	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId, IntrospectionState upTo) {
-    //		if(objectSpecId==null) {
-    //			return null;
-    //		}
-    //		
-    //		val className = objectSpecId.asString();
-    //		
-    //		if(_Strings.isNullOrEmpty(className)) {
-    //			return null;
-    //		}
-    //		
-    //		final Class<?> type = ClassUtil.forNameElseFail(className);
-    //		return loadSpecification(type, upTo);
-    //	}
-
     // -- SHORTCUTS
 
     default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
         return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
     }
-
-    //	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
-    //		return loadSpecification(objectSpecId.asString(), IntrospectionState.TYPE_INTROSPECTED);
-    //    }
 
     default ObjectSpecification loadSpecification(
             @Nullable String className, 
@@ -115,7 +97,7 @@ public interface SpecificationLoader {
         if(_Strings.isNullOrEmpty(className)) {
             return null;
         }
-        final Class<?> type = ClassUtil.forNameElseFail(className);
+        val type = ClassUtil.forNameElseFail(className);
         return introspectionState!=null 
                 ? loadSpecification(type, introspectionState)
                         : loadSpecification(type);
@@ -124,6 +106,8 @@ public interface SpecificationLoader {
     default ObjectSpecification loadSpecification(@Nullable String className) {
         return loadSpecification(className, null);
     }
+
+    
 
 
 

@@ -58,7 +58,7 @@ abstract class MixinIntendedAs {
                 .build());
         
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
-        MetaModelContext.current().getSpecificationLoader().init();
+        MetaModelContext.current().getSpecificationLoader().createMetaModel();
         
     }
 

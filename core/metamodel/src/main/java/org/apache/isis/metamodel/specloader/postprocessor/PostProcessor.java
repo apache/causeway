@@ -30,10 +30,9 @@ import lombok.val;
 public class PostProcessor {
 
     private final ProgrammingModel programmingModel;
-    // populated at #init
-    List<ObjectSpecificationPostProcessor> postProcessors;
+    private List<ObjectSpecificationPostProcessor> postProcessors; // populated at #init
 
-    public PostProcessor(final ProgrammingModel programmingModel) {
+    public PostProcessor(ProgrammingModel programmingModel) {
         this.programmingModel = programmingModel;
     }
 
@@ -41,12 +40,15 @@ public class PostProcessor {
         postProcessors = programmingModel.streamPostProcessors().collect(Collectors.toList());
     }
     
-    public void postProcess(final ObjectSpecification objectSpecification) {
+    public void shutdown() {
+        postProcessors.clear();
+    }
+    
+    public void postProcess(ObjectSpecification objectSpecification) {
 
         for (val postProcessor : postProcessors) {
             postProcessor.postProcess(objectSpecification);
         }
-
 
     }
 

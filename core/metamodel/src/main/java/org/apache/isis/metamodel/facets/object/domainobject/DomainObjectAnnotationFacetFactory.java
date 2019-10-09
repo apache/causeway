@@ -84,8 +84,10 @@ import lombok.val;
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
 
-    private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid = new MetaModelValidatorForValidationFailures();
-    private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
+    private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid = 
+            new MetaModelValidatorForValidationFailures();
+    private final MetaModelValidatorForMixinTypes mixinTypeValidator = 
+            new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
 
 
