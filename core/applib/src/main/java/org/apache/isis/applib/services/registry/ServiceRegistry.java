@@ -72,7 +72,7 @@ public interface ServiceRegistry {
     }
 
     /**
-     * Streams all bean adapters implementing the requested type.
+     * Streams all registered bean adapters implementing the requested type.
      */
     default Stream<ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
         return streamRegisteredBeans()
@@ -92,7 +92,12 @@ public interface ServiceRegistry {
     public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id);
 
 
-    public default ManagedBeanAdapter lookupManagedBeanByNameElseFail(String id) {
+    /**
+     * Returns a registered bean of given {@code name}, or throws when no such bean.
+     *   
+     * @param id - corresponds to the ObjectSpecificationId of the bean's type
+     */
+    public default ManagedBeanAdapter lookupRegisteredBeanByNameElseFail(String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'")); 
