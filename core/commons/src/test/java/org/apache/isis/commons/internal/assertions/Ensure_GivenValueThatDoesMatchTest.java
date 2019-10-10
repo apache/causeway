@@ -32,14 +32,14 @@ public class Ensure_GivenValueThatDoesMatchTest {
     @Test
     public void whenCallEnsureThatArgThenShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = _Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, ()->"some message");
+        final String returnedObject = _Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, $->String.format("some message %s", $));
         assertThat(returnedObject, sameInstance(object));
     }
 
     @Test
     public void whenCallEnsureThatArgWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject = _Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, "some message");
+        final String returnedObject = _Ensure.ensureThatArg(object, is(not(nullValue(String.class)))::matches, $->"some message");
         assertThat(returnedObject, sameInstance(object));
     }
 

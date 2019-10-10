@@ -19,10 +19,9 @@
 
 package org.apache.isis.metamodel.consent;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.metamodel.facetapi.Facet;
 
-import static org.apache.isis.commons.internal.assertions._Ensure.ensureThatArg;
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
 public class Veto extends ConsentAbstract {
 
@@ -36,10 +35,10 @@ public class Veto extends ConsentAbstract {
      * viewers.
      *
      * @param reasonVeteod
-     *            - must not be <tt>null</tt>
+     *            - must not be empty or <tt>null</tt>
      */
     public Veto(final String reasonVetoed) {
-        super(null, ensureThatArg(reasonVetoed, _Strings::isNotEmpty, "requires a non empty string"));
+        super(null, requiresNotEmpty(reasonVetoed, "reasonVetoed")); 
     }
 
     public Veto(final InteractionResult interactionResult) {

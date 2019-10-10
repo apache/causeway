@@ -31,7 +31,7 @@ public class Ensure_GivenValueThatDoesNotMatchTest {
     @Test
     public void whenCallEnsureThatArgOverloadedShouldThrowIllegalArgumentExceptionUsingSuppliedMessage() {
         try {
-            _Ensure.ensureThatArg("foo", is(nullValue())::matches, "my message");
+            _Ensure.ensureThatArg("foo", is(nullValue())::matches, $->"my message");
             fail();
         } catch (final IllegalArgumentException ex) {
             assertThat(ex.getMessage(), is("my message"));

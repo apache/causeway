@@ -211,7 +211,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             pojo = objectAdapterContext.instantiateAndInjectServices(spec);
         }
 
-        _Ensure.ensure("unlikely", !(pojo instanceof Oid));
+        _Ensure.ensure("Pojo most likely should not be an Oid", !(pojo instanceof Oid));
 
         return pojo;
     }

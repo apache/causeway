@@ -19,8 +19,8 @@
 
 package org.apache.isis.commons.internal.assertions;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -49,23 +49,30 @@ public final class _Ensure {
      *
      * @throws IllegalArgumentException
      *             if predicate tests to false.
+     * @deprecated might break build on OpenJDK-11 (or cross compilation builds in general)
      */
-    public static <T> T ensureThatArg(final T arg, final Predicate<? super T> predicate, final String message) {
+    @Deprecated
+    public static <T> T ensureThatArg(
+            final T arg, 
+            final Predicate<? super T> predicate, 
+            final Function<T, String> messageFunction) {
+        
         requires(predicate, "predicate");
         if (!predicate.test(arg)) {
-            throw new IllegalArgumentException(message);
+            requires(messageFunction, "messageFunction");
+            throw new IllegalArgumentException(messageFunction.apply(arg));
         }
         return arg;
     }
 
-    public static <T> T ensureThatArg(final T arg, final Predicate<? super T> predicate, final Supplier<String> messageSupplier) {
-        requires(predicate, "predicate");
-        if (!predicate.test(arg)) {
-            requires(messageSupplier, "messageSupplier");
-            throw new IllegalArgumentException(messageSupplier.get());
-        }
-        return arg;
-    }
+//    public static <T> T ensureThatArg(final T arg, final Predicate<T> predicate, final Supplier<String> messageSupplier) {
+//        requires(predicate, "predicate");
+//        if (!predicate.test(arg)) {
+//            requires(messageSupplier, "messageSupplier");
+//            throw new IllegalArgumentException(messageSupplier.get());
+//        }
+//        return arg;
+//    }
 
     /**
      * To ensure that the current state of this object (instance fields) is

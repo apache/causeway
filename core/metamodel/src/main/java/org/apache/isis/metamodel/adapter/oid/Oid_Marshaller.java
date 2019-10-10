@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.assertions._Ensure;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
