@@ -49,8 +49,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
-import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
+import org.apache.isis.commons.internal.ioc.ScannedTypeClassifier;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -124,7 +124,7 @@ public class _Spring {
      * @param classifier
      * @return
      */
-    public static Stream<BeanAdapter> streamAllBeans(BeanSortClassifier classifier) {
+    public static Stream<ManagedBeanAdapter> streamAllBeans(ScannedTypeClassifier classifier) {
 
         val context = context();
         val beanFactory = ((ConfigurableApplicationContext)context).getBeanFactory();

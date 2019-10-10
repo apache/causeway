@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.IsisConfigurationLegacy;
@@ -52,25 +52,25 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     @Inject private IsisConfigurationLegacy isisConfigurationLegacy; 
 
     @Override
-    public Optional<BeanAdapter> lookupRegisteredBeanById(String id) {
+    public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
         return Optional.ofNullable(registeredBeansById.get().get(id));
     }
 
     @Override
-    public Stream<BeanAdapter> streamRegisteredBeans() {
+    public Stream<ManagedBeanAdapter> streamRegisteredBeans() {
         return registeredBeansById.get().values().stream();
     }
 
     
     // -- HELPER
 
-    private final _Lazy<Map<String, BeanAdapter>> registeredBeansById = 
+    private final _Lazy<Map<String, ManagedBeanAdapter>> registeredBeansById = 
             _Lazy.threadSafe(this::enumerateBeans);
 
-    private Map<String, BeanAdapter> enumerateBeans() {
+    private Map<String, ManagedBeanAdapter> enumerateBeans() {
 
         val beanSortClassifier = IsisBeanTypeRegistry.current();
-        val map = _Maps.<String, BeanAdapter>newHashMap();
+        val map = _Maps.<String, ManagedBeanAdapter>newHashMap();
 
         _Spring.streamAllBeans(beanSortClassifier)
         .filter(_NullSafe::isPresent)

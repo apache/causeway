@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -83,7 +83,7 @@ public class ObjectAdapterServiceDefault implements ObjectAdapterService {
     }
 
     @Override
-    public ObjectAdapter adapterForBean(BeanAdapter bean) {
+    public ObjectAdapter adapterForBean(ManagedBeanAdapter bean) {
         return ps().adapterForBean(bean);
     }
 

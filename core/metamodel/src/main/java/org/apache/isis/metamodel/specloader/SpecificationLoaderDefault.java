@@ -133,7 +133,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         postProcessor.init();
 
         // need to completely load services and mixins (synchronously)
-        log.info("Loading all specs (up to state of {})", IntrospectionState.NOT_INTROSPECTED);
+        log.info("Categorizing types (directly) from scan result", IntrospectionState.NOT_INTROSPECTED);
 
         val typeRegistry = IsisBeanTypeRegistry.current();
 
@@ -182,19 +182,19 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         logBefore(specificationsFromRegistry, cachedSpecifications);
 
-        log.info("Introspecting all specs up to {}", IntrospectionState.TYPE_INTROSPECTED);
+        log.info("Categorizing types referenced from scan result");
         introspect(specificationsFromRegistry, IntrospectionState.TYPE_INTROSPECTED);
 
-        log.info("Introspecting domainService specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        log.info("Introspecting domain services");
         introspect(domainServiceSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        log.info("Introspecting mixin specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        log.info("Introspecting mixins");
         introspect(mixinSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         logAfter(cachedSpecifications);
 
         if(isFullIntrospect()) {
-            log.info("Introspecting all cached specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+            log.info("Introspecting all types eagerly (FullIntrospect=true)");
             introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         }
         
@@ -202,7 +202,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         _Blackhole.consume(getValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
-        log.info("createMetaModel() - took " + stopWatch);
+        log.info("Metamodel created. (took " + stopWatch + ")");
 
     }
     

@@ -20,7 +20,10 @@ package org.apache.isis.commons.internal.ioc;
 
 import org.apache.isis.commons.collections.Bin;
 
-public interface BeanAdapter {
+/**
+ * @since 2.0
+ */
+public interface ManagedBeanAdapter { 
 
     String getId();
     Bin<?> getInstance();

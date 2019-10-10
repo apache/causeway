@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
@@ -87,7 +87,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     }
 
     @Override
-    public ObjectAdapter adapterForBean(BeanAdapter bean) {
+    public ObjectAdapter adapterForBean(ManagedBeanAdapter bean) {
         return ObjectAdapterForBean.of(bean, specificationLoader);
     }
 

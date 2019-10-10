@@ -42,7 +42,7 @@ import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
 
@@ -198,7 +198,7 @@ public final class _CDI {
          * @param classifier
          * @param beanNameProvider - usually ServiceUtil::idOfBean
          */
-        public static Stream<BeanAdapter> streamAllBeans(
+        public static Stream<ManagedBeanAdapter> streamAllBeans(
                 Function<Class<?>, BeanSort> classifier, 
                 Function<Bean<?>, String> beanNameProvider) {
 

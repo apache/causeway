@@ -44,7 +44,7 @@ import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.commons.internal.ioc.BeanSortClassifier;
+import org.apache.isis.commons.internal.ioc.ScannedTypeClassifier;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
@@ -62,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE) @Log4j2
-public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoCloseable {
+public final class IsisBeanTypeRegistry implements ScannedTypeClassifier, AutoCloseable {
 
     public static IsisBeanTypeRegistry current() {
         return _Context.computeIfAbsent(IsisBeanTypeRegistry.class, IsisBeanTypeRegistry::new);

@@ -27,9 +27,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.metamodel.spec.DomainModelException;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -57,12 +55,10 @@ public class ValidateDomainModel implements Runnable {
         this.validationFailures = specificationLoader.getValidationResult();
       
 
-        val objectSpecifications = specificationLoader.snapshotSpecifications();
-        
         if(log.isDebugEnabled()) {
-            for (ObjectSpecification objectSpecification : objectSpecifications) {
-                log.debug("loaded: " + objectSpecification.getFullIdentifier());
-            }
+            specificationLoader.forEach(spec->{
+                log.debug("loaded: " + spec.getFullIdentifier());
+            });
         }
 
         if (validationFailures.occurred()) {
@@ -114,12 +110,10 @@ public class ValidateDomainModel implements Runnable {
     }
     
     private void logErrors(Collection<String> logMessages) {
-        log.error("");
         log.error("### Domain Model Deficiencies");
         for (String logMessage : logMessages) {
             log.error(logMessage);
         }
-        log.error("");
     }
 
 }

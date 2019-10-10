@@ -18,7 +18,7 @@
  */
 package org.apache.isis.runtime.persistence.adapter;
 
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.version.Version;
@@ -31,7 +31,7 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "of") 
 public class ObjectAdapterForBean implements ObjectAdapter {
 
-    private final BeanAdapter bean;
+    private final ManagedBeanAdapter bean;
     private final SpecificationLoader specificationLoader;
 
     private ObjectSpecification spec;

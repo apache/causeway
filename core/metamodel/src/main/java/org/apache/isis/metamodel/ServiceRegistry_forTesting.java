@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -41,7 +41,7 @@ import lombok.val;
 
 class ServiceRegistry_forTesting implements ServiceRegistry {
 
-    private final Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
+    private final Set<ManagedBeanAdapter> registeredBeans = _Sets.newHashSet();
 
     @Override
     public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
@@ -74,19 +74,19 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     }
 
     @Override
-    public Stream<BeanAdapter> streamRegisteredBeans() {
+    public Stream<ManagedBeanAdapter> streamRegisteredBeans() {
         return registeredBeans().stream();
     }
 
     @Override
-    public Optional<BeanAdapter> lookupRegisteredBeanById(String id) {
+    public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
         throw _Exceptions.notImplemented();
     }
 
 
     // -- HELPER
 
-    private Set<BeanAdapter> registeredBeans() {
+    private Set<ManagedBeanAdapter> registeredBeans() {
         synchronized(registeredBeans) {
             if(registeredBeans.isEmpty()) {
 
@@ -112,7 +112,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     }
 
     @Value @Builder
-    private static class PojoBeanAdapter implements BeanAdapter {
+    private static class PojoBeanAdapter implements ManagedBeanAdapter {
 
         String id;
         Bin<?> instance;
@@ -126,7 +126,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     }
 
-    private BeanAdapter toBeanAdapter(Object singleton, IsisBeanTypeRegistry beanSortClassifier) {
+    private ManagedBeanAdapter toBeanAdapter(Object singleton, IsisBeanTypeRegistry beanSortClassifier) {
 
         return PojoBeanAdapter.builder()
                 .id(singleton.getClass().getName())

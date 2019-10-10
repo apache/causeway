@@ -31,7 +31,7 @@ import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -75,7 +75,7 @@ public interface ServiceRegistry {
     /**
      * Streams all bean adapters implementing the requested type.
      */
-    default Stream<BeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
+    default Stream<ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
         return streamRegisteredBeans()
                 .filter(beanAdapter->beanAdapter.isCandidateFor(requiredType));
     }
@@ -83,7 +83,7 @@ public interface ServiceRegistry {
     /**
      * Streams all bean adapters of given BeanSort.
      */
-    default Stream<BeanAdapter> streamRegisteredBeansOfSort(BeanSort sort) {
+    default Stream<ManagedBeanAdapter> streamRegisteredBeansOfSort(BeanSort sort) {
         return streamRegisteredBeans()
                 .filter(beanAdapter->beanAdapter.getManagedObjectSort()==sort);
     }
@@ -91,17 +91,17 @@ public interface ServiceRegistry {
     /**
      * Returns all bean adapters that have been registered.
      */
-    public Stream<BeanAdapter> streamRegisteredBeans();
+    public Stream<ManagedBeanAdapter> streamRegisteredBeans();
 
     /**
      * Returns a registered bean of given {@code name}.
      *   
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    public Optional<BeanAdapter> lookupRegisteredBeanById(String id);
+    public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id);
 
 
-    public default BeanAdapter lookupRegisteredBeanByNameElseFail(String id) {
+    public default ManagedBeanAdapter lookupRegisteredBeanByNameElseFail(String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'")); 

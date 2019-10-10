@@ -18,35 +18,35 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
-import org.apache.isis.metamodel.MetaModelContext;
-import org.apache.isis.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.runtime.system.context.IsisContext;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;
-import org.apache.isis.testdomain.conf.Configuration_headless;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.Product;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ProperActionSupport;
-import org.apache.isis.testdomain.model.good.ProperActionSupport_collection;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import lombok.val;
 
 @Smoketest
 @SpringBootTest(
         classes = { 
-                Configuration_headless.class,
-                Configuration_usingValidDomain.class
+                Configuration_usingJdo.class,
+                Configuration_usingValidDomain.class,
+                
         }, 
         properties = {
                 "isis.reflector.introspector.mode=FULL",
@@ -64,9 +64,9 @@ class DomainModelTest_usingGoodDomain {
 //    @Inject private JaxbService jaxbService;
     
     @Inject private FactoryService factoryService;
+    @Inject private SpecificationLoader specLoader;
 
-    @Test
-    void reservedPrefix_shouldBeAllowedForMembers() {
+    void debug() {
            
         
 //        val config = new MetaModelService.Config()
@@ -86,51 +86,75 @@ class DomainModelTest_usingGoodDomain {
 //            System.out.println(xmlString);
 //        }
 //        System.out.println("!!! ---");
+    }
+    
+    @Test
+    void goodDomain_shouldPassValidation() {
+        assertFalse(specLoader.snapshotSpecifications().isEmpty());
         
         val validateDomainModel = new ValidateDomainModel();
         validateDomainModel.run(); // should not throw
+    }
+    
+    @Test
+    void typeLevelAnnotations_shouldBeHonored_onMixins() {
         
-        // check whether mix-ins are picked up as they should
-        val specLoader = MetaModelContext.current().getSpecificationLoader();
-        val holderSpec = specLoader.loadSpecification(ProperActionSupport.class, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        val holderSpec = specLoader.loadSpecification(ProperActionSupport.class);
         
-        val oa_mixin = holderSpec.getObjectAction("mixin"); // proper mix-in support
-        assertNotNull(oa_mixin);
+        val mx_mixin = holderSpec.getObjectAction("mixin"); // proper mix-in support
+        assertNotNull(mx_mixin);
         
-        val oa_action = holderSpec.getObjectAction("action"); // when @Action at type level
-        assertNotNull(oa_action);
-        assertEquals("action", oa_action.getId());
-        assertEquals("foo", oa_action.getName());
-        assertEquals("bar", oa_action.getDescription());
+        val mx_action = holderSpec.getObjectAction("action"); // when @Action at type level
+        assertNotNull(mx_action);
+        assertEquals("action", mx_action.getId());
+        assertEquals("foo", mx_action.getName());
+        assertEquals("bar", mx_action.getDescription());
         
-        val oa_property = holderSpec.getAssociation("property"); // when @Property at type level
-        assertNotNull(oa_property);
-        assertEquals("property", oa_property.getId());
-        assertEquals("foo", oa_property.getName());
-        assertEquals("bar", oa_property.getDescription());
+        val mx_property = holderSpec.getAssociation("property"); // when @Property at type level
+        assertNotNull(mx_property);
+        assertEquals("property", mx_property.getId());
+        assertEquals("foo", mx_property.getName());
+        assertEquals("bar", mx_property.getDescription());
         
-        val oa_property2 = holderSpec.getAssociation("property2"); // when @Property at method level
-        assertNotNull(oa_property2);
-        assertEquals("property2", oa_property2.getId());
-        assertEquals("foo", oa_property2.getName());
-        assertEquals("bar", oa_property2.getDescription());
+        val mx_property2 = holderSpec.getAssociation("property2"); // when @Property at method level
+        assertNotNull(mx_property2);
+        assertEquals("property2", mx_property2.getId());
+        assertEquals("foo", mx_property2.getName());
+        assertEquals("bar", mx_property2.getDescription());
         
-        val oa_collection = holderSpec.getAssociation("collection"); // when @Collection at type level
-        assertNotNull(oa_collection);
-        assertEquals("collection", oa_collection.getId());
-        assertEquals("foo", oa_collection.getName());
-        assertEquals("bar", oa_collection.getDescription());
+        val mx_collection = holderSpec.getAssociation("collection"); // when @Collection at type level
+        assertNotNull(mx_collection);
+        assertEquals("collection", mx_collection.getId());
+        assertEquals("foo", mx_collection.getName());
+        assertEquals("bar", mx_collection.getDescription());
         
-        val oa_collection2 = holderSpec.getAssociation("collection2"); // when @Collection at method level
-        assertNotNull(oa_collection2);
-        assertEquals("collection2", oa_collection2.getId());
-        assertEquals("foo", oa_collection2.getName());
-        assertEquals("bar", oa_collection2.getDescription());
+        val mx_collection2 = holderSpec.getAssociation("collection2"); // when @Collection at method level
+        assertNotNull(mx_collection2);
+        assertEquals("collection2", mx_collection2.getId());
+        assertEquals("foo", mx_collection2.getName());
+        assertEquals("bar", mx_collection2.getDescription());
         
-//        val holder = factoryService.instantiate(ProperActionSupport.class);
-//        val collectionMixin = factoryService.mixin(ProperActionSupport_collection.class, holder);
-//        assertEquals("", "" + collectionMixin.coll());
+    }
+    
+    @Test
+    void memberLevelAnnotations_shouldResolveUnambiguous_onMixins() {
         
+        val holderSpec = specLoader.loadSpecification(ProperActionSupport.class);
+        
+        val mx_openRestApi = holderSpec.getObjectAction("openRestApi"); // built-in mixin support
+        assertNotNull(mx_openRestApi);
+        
+        assertNull(holderSpec.getAssociation("openRestApi")); // should not be picked up as a property
+        
+    }
+    
+    @Test
+    void pluginProvidedMixins_shouldBePickedUp() {
+        
+        val holderSpec = specLoader.loadSpecification(Product.class);
+        
+        val mx_datanucleusIdLong = holderSpec.getAssociation("datanucleusIdLong"); // plugged in mixin
+        assertNotNull(mx_datanucleusIdLong);
         
     }
     

@@ -20,7 +20,7 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import java.util.function.Function;
 
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
@@ -35,7 +35,7 @@ final class Factories {
     // -- CONTRIBUTED
     
     static Function<ObjectActionDefault, ObjectAssociation> contributeeAssociation(
-            final BeanAdapter serviceBean,
+            final ManagedBeanAdapter serviceBean,
             final ObjectSpecification contributeeType) {
 
         return objectAction -> {

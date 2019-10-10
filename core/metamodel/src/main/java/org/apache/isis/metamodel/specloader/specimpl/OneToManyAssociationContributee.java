@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -46,7 +46,7 @@ import org.apache.isis.metamodel.specloader.SpecificationLoader;
 public class OneToManyAssociationContributee 
 extends OneToManyAssociationDefault implements ContributeeMember {
 
-    private final BeanAdapter serviceBean;
+    private final ManagedBeanAdapter serviceBean;
     private final ObjectAction serviceAction;
 
 
@@ -69,7 +69,7 @@ extends OneToManyAssociationDefault implements ContributeeMember {
     }
 
     public OneToManyAssociationContributee(
-            final BeanAdapter serviceBean,
+            final ManagedBeanAdapter serviceBean,
             final ObjectActionDefault serviceAction,
             final ObjectSpecification contributeeType) {
 

@@ -39,7 +39,7 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -768,7 +768,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
 
 
-    private Stream<BeanAdapter> streamServiceBeans() {
+    private Stream<ManagedBeanAdapter> streamServiceBeans() {
         return context.getServiceRegistry().streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN);
     }
 
@@ -785,7 +785,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private void forEachContributeeAssociation(
-            BeanAdapter serviceBean, 
+            ManagedBeanAdapter serviceBean, 
             Consumer<ObjectAssociation> onNewContributeeAssociation) {
 
         val serviceClass = serviceBean.getBeanClass();

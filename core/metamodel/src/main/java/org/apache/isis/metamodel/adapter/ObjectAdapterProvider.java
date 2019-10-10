@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ManagedObject;
@@ -53,7 +53,7 @@ public interface ObjectAdapterProvider {
      */
     @Nullable ObjectAdapter adapterFor(@Nullable Object domainObject);
 
-    @Nullable ObjectAdapter adapterForBean(@Nullable BeanAdapter bean);
+    @Nullable ObjectAdapter adapterForBean(@Nullable ManagedBeanAdapter bean);
 
     /**
      * @return collection adapter.
@@ -118,7 +118,7 @@ public interface ObjectAdapterProvider {
         }
 
         @Override
-        default ObjectAdapter adapterForBean(BeanAdapter bean) {
+        default ObjectAdapter adapterForBean(ManagedBeanAdapter bean) {
             return getObjectAdapterProvider().adapterForBean(bean);
         }
 

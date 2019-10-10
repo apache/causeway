@@ -28,7 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.runtime.system.context.IsisContext;
@@ -69,7 +69,7 @@ class SpringServiceProvisioningTest {
 
         val serviceRegistry = IsisContext.getServiceRegistry();
         val managedServices = serviceRegistry.streamRegisteredBeans()
-                .map(BeanAdapter::getBeanClass)
+                .map(ManagedBeanAdapter::getBeanClass)
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 

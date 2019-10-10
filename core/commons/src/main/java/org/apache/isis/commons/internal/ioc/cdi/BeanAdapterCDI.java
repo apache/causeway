@@ -21,7 +21,7 @@ package org.apache.isis.commons.internal.ioc.cdi;
 import javax.enterprise.inject.spi.Bean;
 
 import org.apache.isis.commons.collections.Bin;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
 
@@ -29,7 +29,7 @@ import lombok.Value;
 import lombok.val;
 
 @Value(staticConstructor="of")
-final class BeanAdapterCDI implements BeanAdapter {
+final class BeanAdapterCDI implements ManagedBeanAdapter {
 
     private final String id;
     private final LifecycleContext lifecycleContext;

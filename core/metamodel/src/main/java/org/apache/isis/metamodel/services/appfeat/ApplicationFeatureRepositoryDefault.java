@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.ioc.BeanAdapter;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
@@ -346,7 +346,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
         // is this class a supertype or the actual type of one of the services?
         boolean serviceCls = false;
-        for (final BeanAdapter bean : registeredServices.get()) {
+        for (final ManagedBeanAdapter bean : registeredServices.get()) {
             final Class<?> serviceClass = bean.getBeanClass();
             if (specClass.isAssignableFrom(serviceClass)) {
                 serviceCls = true;
@@ -543,7 +543,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     @Inject SpecificationLoader specificationLoader;
     @Inject ApplicationFeatureFactory applicationFeatureFactory;
 
-    private _Lazy<List<BeanAdapter>> registeredServices = _Lazy.threadSafe(()->{
+    private _Lazy<List<ManagedBeanAdapter>> registeredServices = _Lazy.threadSafe(()->{
         val registeredServices = 
                 serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
                 .collect(Collectors.toList());
