@@ -51,9 +51,8 @@ import lombok.val;
                 "isis.reflector.validator.explicitObjectType=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
-    IsisPresets.DebugValidation,
+    IsisPresets.SilenceMetaModel,
     //IsisPresets.DebugProgrammingModel,
-    
 })
 @Incubating("not a real test, just for performance tuning")
 class SpecloaderPerformanceTest {

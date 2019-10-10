@@ -52,9 +52,8 @@ import lombok.val;
                 "isis.reflector.validator.explicitObjectType=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
-    IsisPresets.DebugValidation,
-    //IsisPresets.DebugProgrammingModel,
-    
+    IsisPresets.DebugMetaModel,
+    IsisPresets.DebugProgrammingModel,  
 })
 //@Transactional
 class DomainModelTest_usingGoodDomain {

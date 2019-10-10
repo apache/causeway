@@ -57,9 +57,8 @@ import lombok.val;
                 "isis.reflector.introspector.mode=FULL"
         })
 @TestPropertySource({
-    IsisPresets.DebugValidation,
+    IsisPresets.DebugMetaModel,
     IsisPresets.DebugProgrammingModel,
-    
 })
 @Incubating("does not work, when executed in sequence with other smoketests")
 class DomainModelTest_usingBadDomain {

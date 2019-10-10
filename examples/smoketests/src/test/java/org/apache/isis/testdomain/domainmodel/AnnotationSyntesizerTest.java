@@ -54,7 +54,7 @@ import lombok.val;
                 "isis.reflector.introspector.mode=FULL"
         })
 @TestPropertySource({
-    IsisPresets.DebugValidation,
+    IsisPresets.DebugMetaModel,
     IsisPresets.DebugProgrammingModel,
 
 })
