@@ -124,7 +124,7 @@ public abstract class FacetAbstract implements Facet, MetaModelContext.Delegatin
         val thisAsMultiTyped = (MultiTypedFacet) this;
         
         return thisAsMultiTyped.facetTypes()
-                .anyMatch(thisAsMultiTyped::containsFacetTypeOf);
+                .anyMatch(multiTypedFacet::containsFacetTypeOf);
     }
 
     /**
