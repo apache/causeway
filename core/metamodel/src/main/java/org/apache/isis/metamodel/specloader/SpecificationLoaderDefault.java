@@ -19,9 +19,7 @@
 package org.apache.isis.metamodel.specloader;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -131,27 +129,26 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         facetProcessor.init();
         postProcessor.init();
 
-        // need to completely load services and mixins (synchronously)
-        log.info("Categorizing types (directly) from scan result", IntrospectionState.NOT_INTROSPECTED);
-
         val typeRegistry = IsisBeanTypeRegistry.current();
 
-        val specificationsFromRegistry = _Lists.<ObjectSpecification>newArrayList();
+        val scannedSpecs = _Lists.<ObjectSpecification>newArrayList();
         val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
-        val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
+        val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         CommonDtoUtils.VALUE_TYPES.forEach(type->{
             val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
-            if(spec!=null) specificationsFromRegistry.add(spec);
+            if(spec!=null) scannedSpecs.add(spec);
         });
 
+        log.info(" - categorizing types from class-path scan");
+        
         typeRegistry.streamAndClearInbox().forEach(entry->{
 
             val type = entry.getKey();
             val sort = entry.getValue(); 
 
             val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
-            if(spec!=null) specificationsFromRegistry.add(spec);
+            if(spec!=null) scannedSpecs.add(spec);
 
             switch (sort) {
             case MANAGED_BEAN:
@@ -160,14 +157,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 return;
             case MIXIN:
                 typeRegistry.getMixinTypes().add(type);
-                mixinSpecs.add(spec);
+                domainObjectSpecs.add(spec);
                 return;
             case ENTITY:
                 typeRegistry.getEntityTypes().add(type);
-                mixinSpecs.add(spec); //XXX why?
+                domainObjectSpecs.add(spec);
                 return;
             case VIEW_MODEL:
                 typeRegistry.getViewModelTypes().add(type);
+                domainObjectSpecs.add(spec);
                 return;
 
             default:
@@ -177,27 +175,30 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         });
 
         val stopWatch = _Timing.now();
-        val cachedSpecifications = cache.snapshotSpecs();
+        
 
-        logBefore(specificationsFromRegistry, cachedSpecifications);
+        SpecificationLoaderDefault_debug.logBefore(log, cache, scannedSpecs);
 
-        log.info("Categorizing types referenced from scan result");
-        introspect(specificationsFromRegistry, IntrospectionState.TYPE_INTROSPECTED);
+        log.info(" - introspecting {} type hierarchies", scannedSpecs.size());
+        introspect(scannedSpecs, IntrospectionState.TYPE_INTROSPECTED);
 
-        log.info("Introspecting domain services");
+        log.info(" - introspecting {} domain services", domainServiceSpecs.size());
         introspect(domainServiceSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        log.info("Introspecting mixins");
-        introspect(mixinSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        log.info(" - introspecting {} mixins", typeRegistry.getMixinTypes().size());
+        log.info(" - introspecting {} entities", typeRegistry.getEntityTypes().size());
+        log.info(" - introspecting {} view models", typeRegistry.getViewModelTypes().size());
+        introspect(domainObjectSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        logAfter(cachedSpecifications);
+        SpecificationLoaderDefault_debug.logAfter(log, cache, scannedSpecs);
 
         if(isFullIntrospect()) {
-            log.info("Introspecting all types eagerly (FullIntrospect=true)");
-            introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+            val snapshot = cache.snapshotSpecs();
+            log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
+            introspect(snapshot, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         }
         
-        log.info("Running remaining validators");
+        log.info(" - running remaining validators");
         _Blackhole.consume(getValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
@@ -343,41 +344,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         return objectSpec;
     }
 
-    private void logBefore(
-            final List<? extends ObjectSpecification> specificationsFromRegistry,
-            final Collection<? extends ObjectSpecification> cachedSpecifications) {
-        if(!log.isDebugEnabled()) {
-            return;
-        }
-        log.debug(String.format(
-                "specificationsFromRegistry.size = %d ; cachedSpecifications.size = %d",
-                specificationsFromRegistry.size(), cachedSpecifications.size()));
-
-        List<ObjectSpecification> registryNotCached = specificationsFromRegistry.stream()
-                .filter(spec -> !cachedSpecifications.contains(spec))
-                .collect(Collectors.toList());
-        List<ObjectSpecification> cachedNotRegistry = cachedSpecifications.stream()
-                .filter(spec -> !specificationsFromRegistry.contains(spec))
-                .collect(Collectors.toList());
-
-        log.debug(String.format(
-                "registryNotCached.size = %d ; cachedNotRegistry.size = %d",
-                registryNotCached.size(), cachedNotRegistry.size()));
-    }
-
-    private void logAfter(final Collection<? extends ObjectSpecification> cachedSpecifications) {
-        if(!log.isDebugEnabled()) {
-            return;
-        }
-
-        val cachedSpecificationsAfter = cache.snapshotSpecs();
-        List<ObjectSpecification> cachedAfterNotBefore = cachedSpecificationsAfter.stream()
-                .filter(spec -> !cachedSpecifications.contains(spec))
-                .collect(Collectors.toList());
-        log.debug(String.format("cachedSpecificationsAfter.size = %d ; cachedAfterNotBefore.size = %d",
-                cachedSpecificationsAfter.size(), cachedAfterNotBefore.size()));
-    }
-
     private void introspect(
             final Collection<ObjectSpecification> specs, 
             final IntrospectionState upTo) {
@@ -399,7 +365,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         .forEach(spec -> spec.introspectUpTo(upTo));
         
     }
-
 
     private void invalidateCache(final Class<?> cls) {
 

@@ -220,7 +220,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
 
     private void addValidatorToCheckModuleExtent() {
 
-        final Map<String, List<String>> domainObjectClassNamesByPackage = _Maps.newTreeMap();
+        final Map<String, List<String>> domainObjectClassNamesByPackage = _Maps.newConcurrentHashMap();
 
         MetaModelValidatorVisiting.SummarizingVisitor visitor = new MetaModelValidatorVisiting.SummarizingVisitor(){
 

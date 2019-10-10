@@ -290,6 +290,8 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             return BeanSort.MANAGED_BEAN;
         }
 
+//XXX RequestScoped is just a qualifier, don't decide on that
+//        
 //        if(findNearestAnnotation(type, RequestScoped.class).isPresent()) {
 //            return BeanSort.MANAGED_BEAN;
 //        }
@@ -304,28 +306,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
 
         return BeanSort.UNKNOWN;
     }
-
-
-    
-
-
-
-
-    // if we ever want to ever implement an alternative solution to the autoclose hack above ...
-    //    public IsisBeanTypeRegistry copy() {
-    //        
-    //        val copy = new IsisBeanTypeRegistry();
-    //        
-    //        val it1 = this.allTypeSets.iterator();
-    //        val it2 = copy.allTypeSets.iterator();
-    //        
-    //        it1.forEachRemaining(src->{
-    //            val dst = it2.next();
-    //            dst.addAll((Collection) src);    
-    //        });
-    //        
-    //        return copy;
-    //    }
 
 
 }
