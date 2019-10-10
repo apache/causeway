@@ -21,7 +21,6 @@ package org.apache.isis.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.ToString;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.InteractionInitiatedBy;
@@ -165,7 +164,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             return null;
         }
 
-        val parentOid = (RootOid)ManagedObject.promote(ownerAdapter).getOid();
+        val parentOid = ManagedObject._collectionOidIfAny(ownerAdapter); 
         val newAdapter = getObjectAdapterProvider().adapterForCollection(collection, parentOid, this);
         return newAdapter.injectServices(getServiceInjector());
     }
@@ -191,8 +190,10 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         }
         if (readWrite()) {
             
-            //if(ownerAdapter.getSpecification().isEntity() && !referencedAdapter.getSpecification().isEntity()) {
-            if (ManagedObject.promote(ownerAdapter).isRepresentingPersistent() && ManagedObject.promote(referencedAdapter).isTransient()) {
+            if (!ManagedObject._whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
+                    ownerAdapter, 
+                    referencedAdapter)) {
+                
                 throw new IsisException("can't set a reference to a transient object from a persistent one: "
                         + ownerAdapter.titleString(null)
                         + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");

@@ -25,8 +25,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.commons.StringExtensions;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -81,13 +79,8 @@ public class CommandUtil {
     }
 
     public static Bookmark bookmarkFor(final ManagedObject adapter) {
-        
-        final Oid oid = ManagedObject.promote(adapter).getOid();
-        if(!(oid instanceof RootOid)) {
-            return null;
-        }
-        final RootOid rootOid = (RootOid) oid;
-        return rootOid.asBookmark();
+        val rootOid = ManagedObject._rootOidIfAny(adapter);
+        return rootOid!=null ? rootOid.asBookmark() : null;
     }
 
     static void appendParamArg(

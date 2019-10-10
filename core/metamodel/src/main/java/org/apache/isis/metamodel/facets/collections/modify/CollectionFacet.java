@@ -31,6 +31,8 @@ import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 /**
  * Attached to {@link ObjectSpecification}s that represent a collection.
  *
@@ -91,8 +93,8 @@ public interface CollectionFacet extends Facet {
         }
 
         public static <T extends ManagedObject> Stream<T> streamAdapters(final T collectionAdapter) {
-            final CollectionFacet facet = getCollectionFacetFromSpec(collectionAdapter);
-            return Utils.<T>downCast(facet.stream(collectionAdapter));
+            val collectionFacet = getCollectionFacetFromSpec(collectionAdapter);
+            return Utils.<T>downCast(collectionFacet.stream(collectionAdapter));
         }
 
         public static <T extends ManagedObject> List<T> toAdapterList(final T collectionAdapter) {

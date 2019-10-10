@@ -216,7 +216,7 @@ public interface ObjectAdapter extends ManagedObject {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;
             }
-            if(ManagedObject.promote(adapter).isDestroyed()) {
+            if(ManagedObject._isDestroyed(adapter)) {
                 return false;
             }
             if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { 

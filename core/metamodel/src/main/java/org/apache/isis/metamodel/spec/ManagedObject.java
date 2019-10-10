@@ -27,11 +27,14 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 
 /**
  * Represents an instance of some element of the meta-model managed by the framework, 
@@ -218,6 +221,8 @@ public interface ManagedObject {
             .collect(Collectors.toList());
     }
 
+    // -- DEPRECATIONS (in an attempt to decouple the metamodel from ObjectAdapter)
+    
     @Deprecated
     public static ObjectAdapter promote(ManagedObject managedObject) {
         if(managedObject==null) {
@@ -226,6 +231,47 @@ public interface ManagedObject {
         return (ObjectAdapter) managedObject;
     }
 
+    // -- DEPRECATIONS - SPECIALIZED
+    
+    @Deprecated
+    static boolean _isDestroyed(ManagedObject adapter) {
+        //TODO only applicable when persistable
+        return ManagedObject.promote(adapter).isDestroyed();
+    }
+
+    @Deprecated
+    static RootOid _rootOidIfAny(ManagedObject adapter) {
+        // TODO Auto-generated method stub
+        val oid = ManagedObject.promote(adapter).getOid();
+        if(!(oid instanceof RootOid)) {
+            return null;
+        }
+        return (RootOid) oid;
+    }
+    
+    @Deprecated
+    static RootOid _collectionOidIfAny(ManagedObject adapter) {
+        // TODO Auto-generated method stub
+        val oid = ManagedObject.promote(adapter).getOid();
+        if(!(oid instanceof RootOid)) {
+            return null;
+        }
+        return (RootOid) oid;
+    }
+
+    @Deprecated
+    static boolean _whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
+            ManagedObject first,
+            ManagedObject second) {
+        
+        //if(ownerAdapter.getSpecification().isEntity() && !referencedAdapter.getSpecification().isEntity()) {
+        
+        if(ManagedObject.promote(first).isRepresentingPersistent() &&
+                ManagedObject.promote(second).isTransient()) {
+            return false; 
+        }
+        return true;
+    }
 
 
 

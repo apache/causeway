@@ -89,7 +89,7 @@ public class Memento implements Serializable {
     private Data createCollectionData(final ObjectAdapter adapter) {
 
         final Data[] collData = CollectionFacet.Utils.streamAdapters(adapter)
-                .map(ref->createReferenceData(ref))
+                .map(this::createReferenceData)
                 .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
 
         final String elementTypeSpecName = adapter.getSpecification().getFullIdentifier();

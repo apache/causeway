@@ -217,11 +217,13 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         if (setterFacet == null) {
             return;
         }
-
-        if (    ManagedObject.promote(ownerAdapter).isRepresentingPersistent() &&
-                newReferencedAdapter != null &&
-                ManagedObject.promote(newReferencedAdapter).isTransient() &&
-                !newReferencedAdapter.getSpecification().isParented()) {
+        
+        if (    
+                newReferencedAdapter != null && 
+                !newReferencedAdapter.getSpecification().isParented() &&
+                !ManagedObject._whenFirstIsRepresentingPersistent_ensureSecondIsAsWell(
+                        ownerAdapter, 
+                        newReferencedAdapter)) {
 
             // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
             throw new IsisException("can't set a reference to a transient object from a persistent one: " + newReferencedAdapter.titleString(null) + " (transient)");
