@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.cdi._CDI;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisConfigurationLegacy;
@@ -156,7 +155,7 @@ class MetaModelContext_usingCDI implements MetaModelContext {
 
         val objectAdapterProvider = getObjectAdapterProvider();
 
-        return getServiceRegistry().streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
+        return getServiceRegistry().streamRegisteredBeans()
                 .map(objectAdapterProvider::adapterForBean) 
                 .peek(serviceAdapter->{
                     val oid = serviceAdapter.getOid();

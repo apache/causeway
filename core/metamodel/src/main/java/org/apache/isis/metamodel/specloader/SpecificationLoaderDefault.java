@@ -87,7 +87,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     private final SpecificationCacheDefault<ObjectSpecification> cache = 
             new SpecificationCacheDefault<>();
-    
 
     /** JUnit Test Support */
     public static SpecificationLoaderDefault getInstance (

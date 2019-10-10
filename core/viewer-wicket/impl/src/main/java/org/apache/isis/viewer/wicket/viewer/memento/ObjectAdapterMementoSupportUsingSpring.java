@@ -159,7 +159,7 @@ public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMeme
         switch (sort) {
         case MANAGED_BEAN:
 
-            val bean = serviceRegistry.lookupRegisteredBeanByNameElseFail(specId.asString());
+            val bean = serviceRegistry.lookupManagedBeanByNameElseFail(specId.asString());
             return ObjectAdapterForBean.of(bean, specificationLoader);
 
         case ENTITY:

@@ -21,9 +21,8 @@ package org.apache.isis.commons.internal.ioc.cdi;
 import javax.enterprise.inject.spi.Bean;
 
 import org.apache.isis.commons.collections.Bin;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import lombok.Value;
 import lombok.val;
@@ -34,7 +33,6 @@ final class BeanAdapterCDI implements ManagedBeanAdapter {
     private final String id;
     private final LifecycleContext lifecycleContext;
     private final Bean<?> bean;
-    private final BeanSort managedObjectSort;
 
     @Override
     public Bin<?> getInstance() {

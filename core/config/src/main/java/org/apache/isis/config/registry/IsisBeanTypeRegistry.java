@@ -27,12 +27,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Vetoed;
-import javax.inject.Singleton;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
@@ -44,9 +41,9 @@ import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.commons.internal.ioc.ScannedTypeClassifier;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.config.beans.IsisComponentScanInterceptor;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
@@ -62,7 +59,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE) @Log4j2
-public final class IsisBeanTypeRegistry implements ScannedTypeClassifier, AutoCloseable {
+public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor, AutoCloseable {
 
     public static IsisBeanTypeRegistry current() {
         return _Context.computeIfAbsent(IsisBeanTypeRegistry.class, IsisBeanTypeRegistry::new);
@@ -157,11 +154,44 @@ public final class IsisBeanTypeRegistry implements ScannedTypeClassifier, AutoCl
 
     // -- FILTER
 
+    @Override
+    public boolean isInjectable(TypeMetaData typeMeta) {
+        
+        val type = typeMeta.getUnderlyingClass();
+        
+        intercept(type);
+        
+        if(findNearestAnnotation(type, DomainObject.class).isPresent()) {
+            return false; // reject
+        }
+        
+        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
+            return false; // reject
+        }
+        
+        if(findNearestAnnotation(type, Mixin.class).isPresent()) {
+            return false; // reject
+        }
+        
+        if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
+            return false; // reject
+        }
+        
+        return true;
+    }
+    
+    @Override
+    public boolean isManagedBean(Class<?> type) {
+        val beanSort = quickClassify(type);
+        return beanSort.isManagedBean();
+    }
+    
+    // -- HELPER
+    
     // don't categorize this early, instead push candidate classes onto a queue for 
     // later processing when the SpecLoader initializes.
-    public boolean isIoCManagedType(TypeMetaData typeMetaData) {
+    private void intercept(Class<?> type) {
 
-        val type = typeMetaData.getUnderlyingClass();
         val beanSort = quickClassify(type);
 
         if(beanSort.isEntity()) {
@@ -171,7 +201,7 @@ public final class IsisBeanTypeRegistry implements ScannedTypeClassifier, AutoCl
             entityTypes.add(type); 
         }
 
-        val isToBeProvisioned = beanSort.isManagedBean();
+        val isToBeRegistered = beanSort.isManagedBean();
         val isToBeInspected = !beanSort.isUnknown();
 
         if(isToBeInspected) {
@@ -179,27 +209,24 @@ public final class IsisBeanTypeRegistry implements ScannedTypeClassifier, AutoCl
         }
 
         if(log.isDebugEnabled()) {
-            if(isToBeInspected || isToBeProvisioned) {
+            if(isToBeInspected || isToBeRegistered) {
                 log.debug("{} {} [{}]",
-                        isToBeProvisioned ? "provision" : beanSort.isEntity() ? "entity" : "skip",
+                        isToBeRegistered ? "provision" : beanSort.isEntity() ? "entity" : "skip",
                                 type,
                                 beanSort.name());
             }
         }
 
-        return isToBeProvisioned;
-
     }
 
     // the SpecLoader does a better job at this
-    @Override
-    public BeanSort quickClassify(Class<?> type) {
+    private BeanSort quickClassify(Class<?> type) {
 
         requires(type, "type");
 
         
         if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
-            return BeanSort.UNKNOWN; // exclude from provisioning
+            return BeanSort.UNKNOWN; // reject
         }
 
         if(Collection.class.isAssignableFrom(type)) {
@@ -235,11 +262,7 @@ public final class IsisBeanTypeRegistry implements ScannedTypeClassifier, AutoCl
                 if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
                     return BeanSort.VIEW_MODEL;
                 }
-                // fall through
-
-            default:
-                // continue
-                break; 
+                break; // fall through
             } 
         }
 
@@ -281,6 +304,12 @@ public final class IsisBeanTypeRegistry implements ScannedTypeClassifier, AutoCl
 
         return BeanSort.UNKNOWN;
     }
+
+
+    
+
+
+
 
     // if we ever want to ever implement an alternative solution to the autoclose hack above ...
     //    public IsisBeanTypeRegistry copy() {

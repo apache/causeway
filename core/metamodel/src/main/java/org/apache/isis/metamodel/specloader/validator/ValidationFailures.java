@@ -32,7 +32,7 @@ import lombok.val;
 public final class ValidationFailures implements Iterable<ValidationFailure> {
 
     
-    private final Set<ValidationFailure> failures = _Sets.newTreeSet();
+    private final Set<ValidationFailure> failures = _Sets.newConcurrentHashSet();
 
     public void add(Identifier origin, String pattern, Object... arguments) {
         val message = String.format(pattern, arguments);

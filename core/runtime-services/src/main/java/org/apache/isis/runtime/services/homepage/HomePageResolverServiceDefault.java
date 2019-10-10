@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -84,7 +83,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         // -- 2) lookup managed beans that have actions annotated with @HomePage
 
         homePageAction = 
-                serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
+                serviceRegistry.streamRegisteredBeans()
                 .map(bean->bean.getBeanClass())
                 .map(managedBeanType->specLoader.loadSpecification(managedBeanType))
                 .filter(_NullSafe::isPresent)

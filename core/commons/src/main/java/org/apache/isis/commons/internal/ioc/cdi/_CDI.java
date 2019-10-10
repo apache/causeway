@@ -42,9 +42,8 @@ import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -199,7 +198,6 @@ public final class _CDI {
          * @param beanNameProvider - usually ServiceUtil::idOfBean
          */
         public static Stream<ManagedBeanAdapter> streamAllBeans(
-                Function<Class<?>, BeanSort> classifier, 
                 Function<Bean<?>, String> beanNameProvider) {
 
             return streamAllCDIBeans()
@@ -207,14 +205,8 @@ public final class _CDI {
 
                         val scope = bean.getScope().getSimpleName(); // also works for produced beans
                         val lifecycleContext = LifecycleContext.valueOf(scope);
-
-                        // getBeanClass() does not work for produced beans as intended here! 
-                        // (we do get the producer's class instead)
-                        val type = bean.getBeanClass(); 
-                        val sort = classifier.apply(type);
-
                         val id = beanNameProvider.apply(bean);
-                        val beanAdapter = BeanAdapterCDI.of(id, lifecycleContext, bean, sort);
+                        val beanAdapter = BeanAdapterCDI.of(id, lifecycleContext, bean);
                         return beanAdapter;
                     });
 

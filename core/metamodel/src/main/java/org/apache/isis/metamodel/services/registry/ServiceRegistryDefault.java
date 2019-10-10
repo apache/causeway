@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -47,34 +46,34 @@ import lombok.val;
 @DomainService(nature = NatureOfService.DOMAIN)
 public final class ServiceRegistryDefault implements ServiceRegistry {
     
-    //XXX to enforce provisioning order, a depends-on relationship; 
+    //XXX to enforce provisioning order, this is a depends-on relationship! 
     // keep as long as IsisConfigurationLegacy is used 
     @Inject private IsisConfigurationLegacy isisConfigurationLegacy; 
-
+    
     @Override
     public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
-        return Optional.ofNullable(registeredBeansById.get().get(id));
+        return Optional.ofNullable(managedBeansById.get().get(id));
     }
 
     @Override
     public Stream<ManagedBeanAdapter> streamRegisteredBeans() {
-        return registeredBeansById.get().values().stream();
+        return managedBeansById.get().values().stream();
     }
 
     
     // -- HELPER
 
-    private final _Lazy<Map<String, ManagedBeanAdapter>> registeredBeansById = 
-            _Lazy.threadSafe(this::enumerateBeans);
+    private final _Lazy<Map<String, ManagedBeanAdapter>> managedBeansById = 
+            _Lazy.threadSafe(this::enumerateManagedBeans);
 
-    private Map<String, ManagedBeanAdapter> enumerateBeans() {
-
-        val beanSortClassifier = IsisBeanTypeRegistry.current();
+    private Map<String, ManagedBeanAdapter> enumerateManagedBeans() {
+        
+        val filter = IsisBeanTypeRegistry.current();
         val map = _Maps.<String, ManagedBeanAdapter>newHashMap();
 
-        _Spring.streamAllBeans(beanSortClassifier)
+        _Spring.streamAllBeans()
         .filter(_NullSafe::isPresent)
-        .filter(x->!x.getManagedObjectSort().isUnknown()) // do not register unknown sort
+        .filter(bean->filter.isManagedBean(bean.getBeanClass())) // do not register unknown sort
         .forEach(bean->{
             val id = extractObjectType(bean.getBeanClass()).orElse(bean.getId());
             map.put(id, bean);
@@ -83,22 +82,13 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         return map;
     }
 
-    //TODO[2112] this would be the responsibility of the specloader, but 
+    //TODO[2158] this would be the responsibility of the specloader, but 
     // for now we use as very simple approach
     private Optional<String> extractObjectType(Class<?> type) {
 
         val aDomainService = _Reflect.getAnnotation(type, DomainService.class);
         if(aDomainService!=null) {
             val objectType = aDomainService.objectType();
-            if(_Strings.isNotEmpty(objectType)) {
-                return Optional.of(objectType); 
-            }
-            return Optional.empty(); // stop processing
-        }
-
-        val aDomainObject = _Reflect.getAnnotation(type, DomainObject.class);
-        if(aDomainObject!=null) {
-            val objectType = aDomainObject.objectType();
             if(_Strings.isNotEmpty(objectType)) {
                 return Optional.of(objectType); 
             }

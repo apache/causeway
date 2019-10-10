@@ -26,13 +26,9 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ViewModel;
-import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.config.registry.TypeMetaData;
-
-import static org.apache.isis.commons.internal.reflection._Annotations.findNearestAnnotation;
 
 import lombok.Getter;
 import lombok.val;
@@ -53,12 +49,14 @@ import lombok.extern.log4j.Log4j2;
 public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostProcessor {
 
     @Getter(lazy=true) 
-    private final IsisBeanTypeRegistry typeRegistry = IsisBeanTypeRegistry.current();
+    private final IsisComponentScanInterceptor interceptor = IsisBeanTypeRegistry.current();
     
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         
         val registry = (BeanDefinitionRegistry) beanFactory;
+        val interceptor = getInterceptor();
+        
         for (String beanDefinitionName : registry.getBeanDefinitionNames()) {
             
             log.debug(()->"processing: " + beanDefinitionName);
@@ -73,10 +71,9 @@ public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostPro
             
             val typeMetaData = TypeMetaData.of(beanDefinition.getBeanClassName());
             
-            //TODO should re-implement/rename this method 
-            getTypeRegistry().isIoCManagedType(typeMetaData);
-             
-            if(hasMetamodelAnnotation_otherThanDomainService(typeMetaData)) {
+            val injectable = interceptor.isInjectable(typeMetaData);
+            
+            if(!injectable) {
                 registry.removeBeanDefinition(beanDefinitionName);
                 log.debug(()->"removing: " + beanDefinitionName);
             }
@@ -84,28 +81,6 @@ public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostPro
         }
         
     }
-    
-    //TODO this should be a functionality of the IsisBeanTypeRegistry
-    private boolean hasMetamodelAnnotation_otherThanDomainService(TypeMetaData typeMetaData) {
-        
-        val type = typeMetaData.getUnderlyingClass();
-        
-        
-        if(findNearestAnnotation(type, DomainObject.class).isPresent()) {
-            return true;
-        }
-        
-        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
-            return true;
-        }
-        
-        if(findNearestAnnotation(type, Mixin.class).isPresent()) {
-            return true;
-        }
-        
-        
-        return false;
-        
-    }
+
 
 }

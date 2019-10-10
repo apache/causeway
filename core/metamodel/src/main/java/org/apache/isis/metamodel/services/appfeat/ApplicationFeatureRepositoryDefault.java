@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -41,7 +40,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.BeanSort;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.facets.all.hide.HiddenFacet;
@@ -545,7 +544,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     private _Lazy<List<ManagedBeanAdapter>> registeredServices = _Lazy.threadSafe(()->{
         val registeredServices = 
-                serviceRegistry.streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN)
+                serviceRegistry.streamRegisteredBeans()
                 .collect(Collectors.toList());
         return registeredServices;
     });

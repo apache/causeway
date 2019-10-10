@@ -31,7 +31,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
@@ -117,7 +116,6 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         String id;
         Bin<?> instance;
         public Class<?> beanClass;
-        BeanSort managedObjectSort;
 
         @Override
         public boolean isCandidateFor(Class<?> requiredType) {
@@ -132,7 +130,6 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
                 .id(singleton.getClass().getName())
                 .instance(Bin.ofSingleton(singleton))
                 .beanClass(singleton.getClass())
-                .managedObjectSort(beanSortClassifier.quickClassify(singleton.getClass()))
                 .build();
 
 

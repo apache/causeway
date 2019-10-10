@@ -21,9 +21,8 @@ package org.apache.isis.commons.internal.ioc.spring;
 import org.springframework.beans.factory.ObjectProvider;
 
 import org.apache.isis.commons.collections.Bin;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import lombok.Value;
 import lombok.val;
@@ -35,7 +34,7 @@ final class BeanAdapterSpring implements ManagedBeanAdapter {
     private final LifecycleContext lifecycleContext;
     private final Class<?> beanClass;
     private final ObjectProvider<?> beanProvider;
-    private final BeanSort managedObjectSort;
+    //private final BeanSort managedObjectSort;
 
     @Override
     public Bin<?> getInstance() {

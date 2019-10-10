@@ -28,7 +28,6 @@ public interface ManagedBeanAdapter {
     String getId();
     Bin<?> getInstance();
     Class<?> getBeanClass();
-    BeanSort getManagedObjectSort();
 
     boolean isCandidateFor(Class<?> requiredType);
 

@@ -156,21 +156,20 @@ class MetaModelContext_usingSpring implements MetaModelContext {
 
         val objectAdapterProvider = getObjectAdapterProvider();
 
-        return getServiceRegistry().streamRegisteredBeans()
-                .filter(registeredBean->!registeredBean.getManagedObjectSort().isUnknown())        
+        return getServiceRegistry()
+                .streamRegisteredBeans()
                 .map(objectAdapterProvider::adapterForBean) 
-                .peek(objectAdapter->{
-                    
-                    val oid = objectAdapter.getOid();
-                    if(oid.isTransient()) {
-                        val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
-                        throw _Exceptions.unrecoverable(msg);
-                    }
-                })
+                .peek(this::guardAgainsTransient)
                 .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
 
-    // -------------------------------------------------------------------------------
+    private void guardAgainsTransient(ObjectAdapter objectAdapter) {
+        val oid = objectAdapter.getOid();
+        if(oid.isTransient()) {
+            val msg = "ObjectAdapter for 'Bean' is expected not to be 'transient' " + oid;
+            throw _Exceptions.unrecoverable(msg);
+        }
+    }
 
 
 }

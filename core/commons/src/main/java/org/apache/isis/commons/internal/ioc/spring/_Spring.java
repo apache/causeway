@@ -49,9 +49,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
-import org.apache.isis.commons.internal.ioc.ScannedTypeClassifier;
 import org.apache.isis.commons.internal.ioc.LifecycleContext;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -124,7 +123,7 @@ public class _Spring {
      * @param classifier
      * @return
      */
-    public static Stream<ManagedBeanAdapter> streamAllBeans(ScannedTypeClassifier classifier) {
+    public static Stream<ManagedBeanAdapter> streamAllBeans() {
 
         val context = context();
         val beanFactory = ((ConfigurableApplicationContext)context).getBeanFactory();
@@ -133,7 +132,6 @@ public class _Spring {
                 .map(name->{
 
                     val type = context.getType(name);
-                    val managedObjectSort = classifier.quickClassify(type);
                     val id = name; // just reuse the bean's name
 
                     val scope = beanFactory.getBeanDefinition(name).getScope();
@@ -142,7 +140,7 @@ public class _Spring {
                     val resolvableType = ResolvableType.forClass(type);
                     val bean = context.getBeanProvider(resolvableType);
 
-                    val beanAdapter = BeanAdapterSpring.of(id, lifecycleContext, type, bean, managedObjectSort);
+                    val beanAdapter = BeanAdapterSpring.of(id, lifecycleContext, type, bean);
 
                     return beanAdapter;
                 });

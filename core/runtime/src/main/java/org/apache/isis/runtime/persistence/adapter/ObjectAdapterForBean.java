@@ -18,6 +18,7 @@
  */
 package org.apache.isis.runtime.persistence.adapter;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -46,7 +47,8 @@ public class ObjectAdapterForBean implements ObjectAdapter {
 
     @Override
     public Object getPojo() {
-        return bean.getInstance().iterator().next();
+        return bean.getInstance().getFirst().orElseThrow(()->
+            _Exceptions.unrecoverable("This adapter should not even exist: spec=" + spec));
     }
 
     @Override

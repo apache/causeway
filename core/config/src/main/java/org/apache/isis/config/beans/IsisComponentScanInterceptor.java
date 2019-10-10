@@ -16,7 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.ioc;
+package org.apache.isis.config.beans;
+
+import org.springframework.stereotype.Component;
+
+import org.apache.isis.config.registry.TypeMetaData;
 
 /**
  * @apiNote implementing classes must not rely on IsisConfiguration or other provisioned 
@@ -24,50 +28,22 @@ package org.apache.isis.commons.internal.ioc;
  * 
  * @since 2.0 
  */
-public interface ScannedTypeClassifier {
-
-    BeanSort quickClassify(Class<?> type);
+public interface IsisComponentScanInterceptor {
 
     /**
-     * Whether given type is available for injection.
-     * 
+     * Whether given {@link Component} annotated or meta-annotated type should be made
+     * available for injection.
      * @param type
-     * @return
+     * @apiNote implementing classes might have side effects, eg. intercept 
+     * discovered types into a type registry
      */
-    default boolean isInjectable(Class<?> type) {
-        return quickClassify(type) == BeanSort.MANAGED_BEAN;
-    }
+    boolean isInjectable(TypeMetaData type);
 
-    /**
-     * Whether given type is to be introspected by the framework.
-     * 
-     * @param type
-     * @return
-     */
-    default boolean isIntrospectable(Class<?> type) {
-        return quickClassify(type) != BeanSort.UNKNOWN;
-    }
-    
-    // -- SYNONYMS
-    
     /**
      * Whether given type is available for injection. Is a <em>Managed Bean</em>. 
-     * <p> synonym for {@link #isInjectable(Class)}
      * @param type
      * @return 
      */
-    default boolean isManagedBean(Class<?> type) {
-        return isInjectable(type);
-    }
-
-    /**
-     * Whether given type is to be introspected by the framework. Is a <em>Managed Object</em>. 
-     * <p> synonym for {@link #isIntrospectable(Class)}
-     * @param type
-     * @return
-     */
-    default boolean isManagedObject(Class<?> type) {
-        return isIntrospectable(type);
-    }
+    boolean isManagedBean(Class<?> type);
     
 }

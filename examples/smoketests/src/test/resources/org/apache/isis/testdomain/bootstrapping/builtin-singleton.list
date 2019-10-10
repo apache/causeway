@@ -19,7 +19,7 @@ org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression
 org.apache.isis.commons.internal.environment.IsisSystemEnvironment
 org.apache.isis.config.IsisConfiguration$PatternsConverter
 org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring
-org.apache.isis.config.beans.WebAppConfigBean
+#org.apache.isis.config.beans.WebAppConfigBean
 org.apache.isis.extensions.fixtures.FixturesEventService
 org.apache.isis.extensions.fixtures.FixturesLifecyleService
 org.apache.isis.extensions.fixtures.fixturescripts.ExecutionParametersService

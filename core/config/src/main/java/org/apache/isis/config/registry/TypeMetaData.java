@@ -21,11 +21,12 @@ package org.apache.isis.config.registry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import lombok.Getter;
 import lombok.Value;
 import lombok.val;
 
 @Value(staticConstructor="of")
-public class TypeMetaData {
+public final class TypeMetaData {
 
     /**
      * Fully qualified name of the underlying class.
@@ -61,10 +62,13 @@ public class TypeMetaData {
     //        return annotationTypes.contains(viewModelAnnotation);
     //    }
 
+    @Getter(lazy=true)
+    final Class<?> underlyingClass = resolveClass();
+    
     /**
      * @return the underlying class of this TypeMetaData
      */
-    public Class<?> getUnderlyingClass() {
+    private Class<?> resolveClass() {
         try {
             return _Context.loadClass(className);
         } catch (ClassNotFoundException e) {

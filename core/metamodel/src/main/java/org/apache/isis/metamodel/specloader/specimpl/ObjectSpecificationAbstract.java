@@ -768,8 +768,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
 
 
-    private Stream<ManagedBeanAdapter> streamServiceBeans() {
-        return context.getServiceRegistry().streamRegisteredBeansOfSort(BeanSort.MANAGED_BEAN);
+    private Stream<ManagedBeanAdapter> streamManagedBeans() {
+        return context.getServiceRegistry().streamRegisteredBeans();
     }
 
     // -- CONTRIBUTEE ASSOCIATIONS (PROPERTIES AND COLLECTIONS)
@@ -779,7 +779,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
         val contributeeAssociations = _Lists.<ObjectAssociation>newArrayList();
-        streamServiceBeans()
+        streamManagedBeans()
         .forEach(serviceBean->forEachContributeeAssociation(serviceBean, contributeeAssociations::add));
         return contributeeAssociations;
     }
@@ -872,7 +872,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
         val contributeeActions = _Lists.<ObjectAction>newArrayList();
-        streamServiceBeans()
+        streamManagedBeans()
         .forEach(serviceBean->forEachContributeeAction(serviceBean, contributeeActions::add));
         return contributeeActions;
     }
