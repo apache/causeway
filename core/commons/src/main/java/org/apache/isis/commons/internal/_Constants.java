@@ -75,12 +75,16 @@ public final class _Constants {
         @Override public void close() throws IOException { }
     };
     
-    public static final Primary ANNOTATION_PRIMARY = new Primary() {
-        @Override
-        public Class<? extends Annotation> annotationType(){
-            return Primary.class;
-        }
-    };
+    @Primary private static final class PrimaryAnnotated {}
+    public static final Primary ANNOTATION_PRIMARY = PrimaryAnnotated.class.getAnnotation(Primary.class);
+    
+//    public static final Primary ANNOTATION_PRIMARY = new Primary() {
+//        @Override
+//        public Class<? extends Annotation> annotationType(){
+//            return Primary.class;
+//        }
+//    };
+    
     
 
 }
