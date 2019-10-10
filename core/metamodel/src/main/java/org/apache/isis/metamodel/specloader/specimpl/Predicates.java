@@ -46,6 +46,24 @@ final class Predicates {
         return false;
     }
     
+    static boolean isAssociationContributionVetoed(final ObjectAction contributeeAction) {
+        val notContributed = contributeeAction.getFacet(NotContributedFacet.class);
+        if(notContributed != null && notContributed.toAssociations()) {
+            return true;
+        }
+        return false;
+    }
+    
+    static boolean isGetterCandidate(final ObjectAction action) {
+        if(action.getParameterCount() != 0) {
+            return false;
+        }
+        if(!action.hasReturn()) {
+            return false;
+        }
+        return true;
+    }
+    
     static boolean isAlwaysHidden(final FacetHolder holder) {
         val hiddenFacet = holder.getFacet(HiddenFacet.class);
         return hiddenFacet != null && hiddenFacet.where() == Where.ANYWHERE;
@@ -58,7 +76,7 @@ final class Predicates {
         return Utils.contributeeParameterIndexOf(typeSpec, contributeeAction)!=-1;
     }
     
-    // -- HIGHER LEVEL
+    // -- HIGHER LEVEL - CONTRIBUTEES
     
     static Predicate<ObjectAction> isContributeeAssociation(
             final ObjectSpecification typeSpec) {
@@ -110,6 +128,8 @@ final class Predicates {
         };
     }
     
+    // -- HIGHER LEVEL - MIXINS
+    
     static boolean isMixedInAction(ObjectAction mixinTypeAction) {
         if(!isRequiredType(mixinTypeAction)) {
             return false;
@@ -127,10 +147,13 @@ final class Predicates {
         if(!isRequiredType(mixinAction)) {
             return false;
         }
-        if(isActionContributionVetoed(mixinAction)) {
+        if(isAlwaysHidden(mixinAction)) {
             return false;
         }
-        if(mixinAction.getParameterCount() != 0) {
+        if(isAssociationContributionVetoed(mixinAction)) {
+            return false;
+        }
+        if(!isGetterCandidate(mixinAction)) {
             return false;
         }
         if(!mixinAction.getSemantics().isSafeInNature()) {

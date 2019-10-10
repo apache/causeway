@@ -70,17 +70,11 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
      */
     private final Map<Class<?>, BeanSort> inbox = new HashMap<>();
 
-    //TODO replace this getters: don't expose the sets for modification!?
     @Getter private final Set<Class<?>> beanTypes = new HashSet<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
-    //    @Getter private final Set<Class<? extends FixtureScript>> fixtureScriptTypes = new HashSet<>();
     @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
-    //    @Getter private final Set<Class<?>> xmlElementTypes = new HashSet<>();
-
-    //@Getter private final Set<Class<?>> iocManaged = new HashSet<>();
-    //@Getter private final Set<Class<?>> domainObjectTypes = new HashSet<>();
-    //
+    
     private final List<Set<? extends Class<? extends Object>>> allTypeSets = _Lists.of(
             beanTypes,
             entityTypes,
@@ -100,25 +94,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         inbox.clear();
         allTypeSets.forEach(Set::clear);
     }
-
-    // -- STREAM ALL
-
-    //	public Stream<Class<?>> streamAllTypes() {
-    //
-    //		return _Lists.of(
-    //				iocManaged,
-    //				entityTypes,
-    //				mixinTypes,
-    //				fixtureScriptTypes,
-    //				domainServiceTypes,
-    //				domainObjectTypes,
-    //				viewModelTypes,
-    //				xmlElementTypes)
-    //				.stream()
-    //				.distinct()
-    //				.flatMap(Collection::stream)
-    //				;
-    //	}
 
     // -- INBOX
 

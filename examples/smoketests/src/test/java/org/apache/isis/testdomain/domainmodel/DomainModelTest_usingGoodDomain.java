@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.config.IsisPresets;
 import org.apache.isis.integtestsupport.validate.ValidateDomainModel;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
@@ -37,7 +36,7 @@ import org.apache.isis.testdomain.model.good.ProperActionSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lombok.val;
 
@@ -62,8 +61,7 @@ class DomainModelTest_usingGoodDomain {
     
 //    @Inject private MetaModelService metaModelService;
 //    @Inject private JaxbService jaxbService;
-    
-    @Inject private FactoryService factoryService;
+//    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specLoader;
 
     void debug() {
@@ -144,7 +142,7 @@ class DomainModelTest_usingGoodDomain {
         val mx_openRestApi = holderSpec.getObjectAction("openRestApi"); // built-in mixin support
         assertNotNull(mx_openRestApi);
         
-        assertNull(holderSpec.getAssociation("openRestApi")); // should not be picked up as a property
+        assertThrows(Exception.class, ()->holderSpec.getAssociation("openRestApi")); // should not be picked up as a property
         
     }
     
