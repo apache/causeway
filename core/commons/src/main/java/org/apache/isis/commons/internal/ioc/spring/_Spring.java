@@ -35,7 +35,6 @@ import javax.inject.Qualifier;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -49,7 +48,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.ioc.LifecycleContext;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -126,7 +124,7 @@ public class _Spring {
     public static Stream<ManagedBeanAdapter> streamAllBeans() {
 
         val context = context();
-        val beanFactory = ((ConfigurableApplicationContext)context).getBeanFactory();
+        //val beanFactory = ((ConfigurableApplicationContext)context).getBeanFactory();
 
         return Stream.of(context.getBeanDefinitionNames())
                 .map(name->{
@@ -134,13 +132,12 @@ public class _Spring {
                     val type = context.getType(name);
                     val id = name; // just reuse the bean's name
 
-                    val scope = beanFactory.getBeanDefinition(name).getScope();
-                    val lifecycleContext = LifecycleContext.parse(scope);
+                    //val scope = beanFactory.getBeanDefinition(name).getScope();
 
                     val resolvableType = ResolvableType.forClass(type);
                     val bean = context.getBeanProvider(resolvableType);
 
-                    val beanAdapter = BeanAdapterSpring.of(id, lifecycleContext, type, bean);
+                    val beanAdapter = BeanAdapterSpring.of(id, type, bean);
 
                     return beanAdapter;
                 });

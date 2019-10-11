@@ -303,7 +303,8 @@ implements ImperativeFacet {
             returnedAdapter = getObjectAdapterProvider().adapterFor(returnedPojo);
 
             // sync DTO with result
-            getInteractionDtoServiceInternal().updateResult(priorExecution.getDto(), owningAction, returnedPojo);
+            getInteractionDtoServiceInternal()
+            .updateResult(priorExecution.getDto(), owningAction, returnedPojo);
 
 
             // update Command (if required)

@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.InjectionPoint;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.metamodel.services.ServiceInjectorDefault;
+import org.apache.isis.metamodel.services.ServiceInjectorLegacy;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import static java.util.Objects.requireNonNull;
@@ -53,7 +53,7 @@ class ServiceInjector_forTesting implements ServiceInjector {
 
             //Note: when testing we don't report un-resolvable injection points.
 
-            delegate = ServiceInjectorDefault.getInstanceAndInit(
+            delegate = ServiceInjectorLegacy.getInstanceAndInit(
                     configuration, serviceRegistry, injectorMethodEvaluator);
 
         }

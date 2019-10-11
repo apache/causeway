@@ -367,7 +367,9 @@ public final class InteractionDtoUtils {
     public static void addReturn(
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
-            final Object result, final BookmarkService bookmarkService) {
+            final Object result, 
+            final BookmarkService bookmarkService) {
+        
         final ValueWithTypeDto returned = CommonDtoUtils
                 .newValueWithTypeDto(returnType, result, bookmarkService);
         invocationDto.setReturned(returned);

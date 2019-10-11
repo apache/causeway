@@ -42,7 +42,6 @@ import org.apache.isis.commons.collections.Bin;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
-import org.apache.isis.commons.internal.ioc.LifecycleContext;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
@@ -203,10 +202,9 @@ public final class _CDI {
             return streamAllCDIBeans()
                     .map(bean->{
 
-                        val scope = bean.getScope().getSimpleName(); // also works for produced beans
-                        val lifecycleContext = LifecycleContext.valueOf(scope);
+                        //val scope = bean.getScope().getSimpleName(); // also works for produced beans
                         val id = beanNameProvider.apply(bean);
-                        val beanAdapter = BeanAdapterCDI.of(id, lifecycleContext, bean);
+                        val beanAdapter = BeanAdapterCDI.of(id, bean);
                         return beanAdapter;
                     });
 
