@@ -135,15 +135,16 @@ public interface ServiceRegistry {
                 .orElseThrow(()->
                 new NoSuchElementException("Could not locate service of type '" + serviceClass + "'"));
     }
-
-    /**
-     * @param requiredType
-     * @return whether the requiredType can be resolved to a container managed bean
-     */
-    public default boolean isResolvableBean(Class<?> requiredType) {
-        return streamRegisteredBeans()
-                .anyMatch(bean->bean.getBeanClass().isAssignableFrom(requiredType));
-    }
+    
+//XXX too slow
+//    /**
+//     * @param requiredType
+//     * @return whether the requiredType can be resolved to a container managed bean
+//     */
+//    public default boolean isResolvableBean(Class<?> requiredType) {
+//        return streamRegisteredBeans()
+//                .anyMatch(bean->bean.getBeanClass().isAssignableFrom(requiredType));
+//    }
 
     // -- PRIORITY ANNOTATION HANDLING
 

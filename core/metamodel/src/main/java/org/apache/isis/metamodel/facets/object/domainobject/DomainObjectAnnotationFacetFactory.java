@@ -537,10 +537,11 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
                 final AutoCompleteFacet autoCompleteFacet = thisSpec.getFacet(AutoCompleteFacet.class);
                 if(autoCompleteFacet != null && !autoCompleteFacet.isNoop() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
-                    final AutoCompleteFacetAbstract facet = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
-                    final Class<?> repositoryClass = facet.getRepositoryClass();
-                    final boolean isResolvableBean = getServiceRegistry().isResolvableBean(repositoryClass);
-                    if(!isResolvableBean) {
+                    val autoCompleteFacetAbstract = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
+                    val repositoryClass = autoCompleteFacetAbstract.getRepositoryClass();
+                    val isRepositoryResolvable = getServiceRegistry()
+                            .lookupService(repositoryClass).isPresent();
+                    if(!isRepositoryResolvable) {
                         validator.onFailure(
                                 thisSpec,
                                 thisSpec.getIdentifier(),

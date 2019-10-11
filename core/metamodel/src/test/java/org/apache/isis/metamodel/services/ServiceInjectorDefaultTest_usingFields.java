@@ -45,7 +45,7 @@ import lombok.Getter;
         IsisConfigModule.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
-        ServiceInjectorDefaultTest.Producers.class,
+        ServiceInjectorLegacyTest.Producers.class,
         ServiceInjectorDefaultTest_usingFields.Producers.class,
 },
 properties = {

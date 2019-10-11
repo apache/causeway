@@ -78,10 +78,12 @@ public class ServiceInjectorLegacy implements ServiceInjector {
     private void injectServices(final Object targetPojo, Consumer<InjectionPoint> onNotResolvable) {
 
         val type = targetPojo.getClass();
-        if(serviceRegistry.isResolvableBean(type)) {
-            log.warn("Skipping call injectServices() on an already managed bean {}.", type);
-            return; // already managed
-        }
+        
+//XXX check is too slow        
+//        if(serviceRegistry.isResolvableBean(type)) {
+//            log.warn("Skipping call injectServices() on an already managed bean {}.", type);
+//            return; // already managed
+//        }
 
         injectToFields(targetPojo, type, onNotResolvable);
 

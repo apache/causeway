@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         IsisConfigModule.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
-        ServiceInjectorDefaultTest.Producers.class,
+        ServiceInjectorLegacyTest.Producers.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithSomeId.class,
         ServiceInjectorDefaultTest_validateServices_happy.DomainServiceWithDifferentId.class
 },

@@ -50,14 +50,14 @@ import lombok.val;
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
         IsisConfigModule.class,
-        ServiceInjectorDefault.class,
+        ServiceInjectorLegacy.class,
         ServiceRegistryDefault.class,
-        ServiceInjectorDefaultTest.Producers.class,
+        ServiceInjectorLegacyTest.Producers.class,
 },
 properties = {
         "isis.services.injector.setPrefix=true"
 })
-class ServiceInjectorDefaultTest {
+class ServiceInjectorLegacyTest {
 
     // -- SPRING SETUP
 

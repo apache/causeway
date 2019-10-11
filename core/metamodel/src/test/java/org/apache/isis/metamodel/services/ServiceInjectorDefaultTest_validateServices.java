@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @SpringBootTest(classes = {
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
-        ServiceInjectorDefaultTest.Producers.class,
+        ServiceInjectorLegacyTest.Producers.class,
         ServiceInjectorDefaultTest_validateServices.DomainServiceWithSomeId.class,
         ServiceInjectorDefaultTest_validateServices.DomainServiceWithDuplicateId.class
 })
