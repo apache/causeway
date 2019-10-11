@@ -3,14 +3,8 @@ package org.ro.ui.table.el
 import com.github.snabbdom._get
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
-import org.ro.ui.IconManager
-import org.ro.ui.RoView
-import pl.treksoft.kvision.dropdown.ContextMenu
-import pl.treksoft.kvision.dropdown.Header.Companion.header
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.html.Link.Companion.link
-import pl.treksoft.kvision.i18n.I18n
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel.Companion.hPanel
@@ -96,28 +90,6 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 }
             }
         }
-    }
-
-    private fun buildContextMenu(): ContextMenu {
-        val contextMenu = ContextMenu {
-            header(I18n.tr("Actions affecting Tab"))
-            val title = "Close"
-            val iconName = IconManager.find(title)
-            link(I18n.tr(title), icon = iconName) {
-                setEventListener {
-                    click = { e ->
-                        e.stopPropagation()
-                        removeTab()
-                        this@ContextMenu.hide()
-                    }
-                }
-            }
-        }
-        return contextMenu
-    }
-
-    private fun removeTab() {
-        RoView.removeTab(this)
     }
 
     private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {

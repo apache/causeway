@@ -3,7 +3,7 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.handler.ResultValueHandler
-import org.ro.org.ro.core.aggregator.ObjectAggregator
+import org.ro.core.aggregator.ObjectAggregator
 import org.ro.urls.ACTIONS_DOWNLOAD_VALUE
 import org.ro.urls.ACTIONS_OPEN_SWAGGER_UI
 import kotlin.test.Test

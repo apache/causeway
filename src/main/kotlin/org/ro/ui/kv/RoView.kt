@@ -1,12 +1,17 @@
 package org.ro.ui
 
+import org.ro.core.UiManager
+import org.ro.ui.kv.RoTabPanel
 import pl.treksoft.kvision.core.*
-import pl.treksoft.kvision.panel.TabPanel
 import pl.treksoft.kvision.panel.VPanel
 
-
+/**
+ * Area between menu bar at the top and the status bar at the bottom.
+ * Contains:
+ * @Item TabPanel with Tabs
+ */
 object RoView {
-    val tabPanel = TabPanel()
+    val tabPanel = RoTabPanel()
     private var tabCount = 0
 
     init {
@@ -30,8 +35,8 @@ object RoView {
     }
 
     fun removeTab(tab: VPanel) {
-        tabPanel.remove(tab)
         tabCount--
+        UiManager.closeView(tab)
     }
 
     fun updatePowered(by: String) {

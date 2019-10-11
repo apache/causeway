@@ -1,6 +1,6 @@
 package org.ro.urls
 
-object HTTP_ERROR_ON_UNIQUE_CONSTRAINT_VIOLATION : Response() {
+object HTTP_ERROR_500_UNIQUE_CONSTRAINT_VIOLATION : Response() {
     val ReadCallback = "\$ReadCallback"
     val CachedChain = "\$CachedChain"
 

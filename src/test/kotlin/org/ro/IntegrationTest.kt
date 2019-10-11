@@ -5,7 +5,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.UnstableDefault
 import org.ro.core.Session
-import org.ro.core.aggregator.Aggregator
+import org.ro.core.aggregator.IAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.handler.ResponseHandler
@@ -39,7 +39,7 @@ open class IntegrationTest {
         return answer
     }
 
-    fun mockResponse(response: Response, aggregator: Aggregator?): LogEntry {
+    fun mockResponse(response: Response, aggregator: IAggregator?): LogEntry {
         val str = response.str
         val url = response.url
         val method = Method.GET.operation

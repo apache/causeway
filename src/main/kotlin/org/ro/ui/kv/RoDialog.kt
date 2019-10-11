@@ -43,8 +43,7 @@ class RoDialog(
                         add(Password(label = fi.label, value = fi.content as String))
                     }
                     "TextArea" -> {
-                        var rowCnt = 3
-                        if (fi.size > rowCnt) rowCnt = fi.size
+                        val rowCnt = maxOf(3, fi.size)
                         add(TextArea(label = fi.label, value = fi.content as String, rows = rowCnt))
                     }
                     "Select" -> {
@@ -76,8 +75,9 @@ class RoDialog(
     }
 
     private fun close() {
-        toggle()
+        hide()
         super.remove(this)
+        clearParent()
         dispose()
     }
 

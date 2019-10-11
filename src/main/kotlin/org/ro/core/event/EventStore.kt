@@ -1,7 +1,7 @@
 package org.ro.core.event
 
 import org.ro.core.UiManager
-import org.ro.core.aggregator.Aggregator
+import org.ro.core.aggregator.IAggregator
 import org.ro.handler.ResponseHandler
 import pl.treksoft.kvision.utils.observableListOf
 
@@ -24,7 +24,7 @@ object EventStore {
         }
     }
 
-    fun start(url: String, method: String, body: String = "", aggregator: Aggregator? = null): LogEntry {
+    fun start(url: String, method: String, body: String = "", aggregator: IAggregator? = null): LogEntry {
         val entry = LogEntry(url, method, body)
         entry.aggregator = aggregator
         log(entry)
@@ -38,8 +38,8 @@ object EventStore {
         updateStatus(entry)
     }
 
-    fun addView(title: String) {
-        val entry = LogEntry(title = title)
+    fun addView(title: String, aggregator: IAggregator) {
+        val entry = LogEntry(title = title, aggregator = aggregator)
         log(entry)
         updateStatus(entry)
     }
@@ -50,12 +50,24 @@ object EventStore {
         return entry
     }
 
-    fun close(url: String) {
-        val entry = findView(url)
-        if (null != entry) {
-            entry.setClose()
-            updateStatus(entry)
+    fun closeView(url: String) {
+        console.log("[ES.closeView]")
+        val logEntry = findView(url)
+        console.log(logEntry)
+        if (null != logEntry) {
+            logEntry.setClose()
+            //resetAggregator(logEntry)
+            logEntry.aggregator?.reset()
+            updateStatus(logEntry)
         }
+    }
+
+    private fun resetAggregator(logEntry: LogEntry) {
+        console.log("[ES.resetAggregator]")
+        console.log(logEntry)
+        val agg = logEntry.aggregator!!
+        val list = log.filter { it.aggregator == agg }
+        list.forEach { it.aggregator = null }
     }
 
     fun end(url: String, response: String): LogEntry? {
@@ -171,7 +183,6 @@ object EventStore {
         }
         return output
     }
-
 
     //TODO function has a side effect - refactor
     fun isCached(url: String): Boolean {

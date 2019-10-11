@@ -1,6 +1,7 @@
 package org.ro.core.event
 
 import kotlinx.serialization.UnstableDefault
+import org.ro.core.aggregator.ObjectAggregator
 import org.ro.to.Method
 import org.ro.urls.RESTFUL
 import org.ro.urls.RESTFUL_SERVICES
@@ -53,12 +54,13 @@ class EventStoreTest {
         val h2 = "http://localhost:8080/restful/objects/simple.SimpleObject/object-layout"
         val i1 = "Test (1)"
         val i2 = "Test (2)"
+        val agg = ObjectAggregator("testFindView")
 
         // construct list with urls
         EventStore.add(h1)
-        EventStore.addView(i1)
+        EventStore.addView(i1, agg)
         EventStore.add(h2)
-        EventStore.addView(i2)
+        EventStore.addView(i2, agg)
 
         val le1 = EventStore.find(h1)!!
         assertEquals(h1, le1.url)   //1
@@ -71,7 +73,7 @@ class EventStoreTest {
         val le4 = EventStore.findView(i1)
         assertNotNull(le4)                 //4
 
-        EventStore.close(i1)
+        EventStore.closeView(i1)
         console.log("[EventLogTest.testFindView] $i1")
 
         assertTrue(le4.isClosedView())

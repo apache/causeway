@@ -1,11 +1,8 @@
 package org.ro.ui.table
 
-import org.ro.core.event.LogEntry
+import org.ro.core.UiManager
 import org.ro.core.model.DisplayList
 import org.ro.core.model.Exposer
-import pl.treksoft.kvision.dropdown.DropDown
-import pl.treksoft.kvision.html.Link
-import pl.treksoft.kvision.i18n.I18n
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel
@@ -20,11 +17,12 @@ import pl.treksoft.kvision.utils.px
  * access attributes from dynamic (JS) objects with varying
  * - numbers of attributes
  * - attribute types (can only be determined at runtime) and
- * - accessor names are not fixed
+ * - accessor names
  */
 class RoTable(displayList: DisplayList) : VPanel() {
 
     init {
+        title = UiManager.extractTitle(displayList)
         val model = displayList.data
         val columns = ColumnFactory().buildColumns(displayList, true)
 
@@ -51,22 +49,13 @@ class RoTable(displayList: DisplayList) : VPanel() {
                 }
             }
         }
-
     }
-
-    fun build(logEntry: LogEntry): DropDown {
-        val menu = buildMenuEntry("Action(s) ...", iconName = "fa-ellipsis-h")
-        val link = Link(I18n.tr("Details"), icon = "fa-server").onClick {
-            console.log("[ActionMenu.build] $logEntry")
-        }
-        menu.add(link)
-        return menu
+/*
+    override fun remove(child: Component): FlexPanel {
+        console.log("[RoTable.remove]")
+        console.log(this)
+        return super.remove(child)
     }
-
-    private fun buildMenuEntry(title: String, iconName: String? = null): DropDown {
-        val label = I18n.tr(title)
-        val icon = iconName ?: "fa-bolt"
-        return DropDown(label, icon = icon, forNavbar = true)
-    }
+     */
 
 }

@@ -1,14 +1,17 @@
 package org.ro.core
 
+import org.ro.core.aggregator.BaseAggregator
+import org.ro.core.aggregator.IAggregator
+import org.ro.core.aggregator.UndefinedAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
+import org.ro.core.model.BaseDisplayable
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
-import org.ro.org.ro.core.model.BaseDisplayable
-import org.ro.org.ro.ui.kv.RoDisplay
 import org.ro.ui.RoMenuBar
 import org.ro.ui.RoStatusBar
 import org.ro.ui.RoView
+import org.ro.ui.kv.RoDisplay
 import org.ro.ui.table.RoTable
 import pl.treksoft.kvision.panel.VPanel
 
@@ -20,14 +23,14 @@ import pl.treksoft.kvision.panel.VPanel
  */
 object UiManager {
 
-    fun add(title: String, panel: VPanel) {
+    fun add(title: String, panel: VPanel, aggregator: IAggregator = UndefinedAggregator()) {
         RoView.addTab(title, panel)
-        EventStore.addView(title)
+        EventStore.addView(title, aggregator)
     }
 
-    fun remove(tab: VPanel) {
-        RoView.removeTab(tab)
-        // EventStore.close(tab.get)
+    fun closeView(tab: VPanel) {
+//        RoView.removeTab(tab)
+        EventStore.closeView(tab.title!!)
     }
 
     /**
@@ -60,21 +63,21 @@ object UiManager {
        // }
     }
 
-    fun createListView(displayList: DisplayList) {
+    fun openListView(displayList: DisplayList, aggregator: BaseAggregator) {
         val title: String = extractTitle(displayList)
         val panel = RoTable(displayList)
-        add(title, panel)
+        add(title, panel, aggregator)
         displayList.isRendered = true
     }
 
-    fun createObjectView(displayObject: DisplayObject) {
+    fun openObjectView(displayObject: DisplayObject, aggregator: BaseAggregator) {
         val title: String = extractTitle(displayObject)
         val panel = RoDisplay(displayObject)
-        add(title, panel)
+        add(title, panel, aggregator)
         displayObject.isRendered = true
     }
 
-    private fun extractTitle(displayable: BaseDisplayable): String {
+    fun extractTitle(displayable: BaseDisplayable): String {
         val strList = displayable.title.split("/")
         val len = strList.size
         return strList.get(len - 2)

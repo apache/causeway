@@ -1,4 +1,4 @@
-package org.ro.org.ro.ui.kv
+package org.ro.ui.kv
 
 import org.ro.core.model.DisplayObject
 import pl.treksoft.kvision.panel.FlexAlignItems

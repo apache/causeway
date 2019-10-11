@@ -36,15 +36,17 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
         }
 
         if (dsp.canBeDisplayed()) {
-            UiManager.createListView(dsp)
+            UiManager.openListView(dsp, this)
         }
     }
 
     private fun handleList(resultList: ResultList) {
-        val result = resultList.result!!
-        val links = result.value
-        for (l: Link in links) {
-            invoke(l)
+        val result = resultList.result
+        if (result != null) {
+            val links = result.value
+            for (l: Link in links) {
+                invoke(l)
+            }
         }
     }
 
@@ -73,6 +75,10 @@ class ListAggregator(val actionTitle: String) : BaseAggregator() {
             val l = p.descriptionLink()!!
             invoke(l)
         }
+    }
+
+    override fun reset() {
+        dsp.reset()
     }
 
 }

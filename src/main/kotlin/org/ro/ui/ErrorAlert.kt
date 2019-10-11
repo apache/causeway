@@ -11,8 +11,11 @@ class ErrorAlert(val logEntry: LogEntry) : Command {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("URL", "Text", logEntry.url))
         formItems.add(FormItem("Message", "Text", error.message))
-        formItems.add(FormItem("StackTrace", "TextArea", toString(error.detail.element), 20))
-        formItems.add(FormItem("Caused by", "Text", error.detail.causedBy))
+        val detail = error.detail
+        if (detail != null) {
+            formItems.add(FormItem("StackTrace", "TextArea", toString(detail.element), 20))
+            formItems.add(FormItem("Caused by", "Text", detail.causedBy))
+        }
         val label = "HttpError " + error.httpStatusCode.toString()
         RoDialog(label = label, items = formItems, command = this).show()
     }

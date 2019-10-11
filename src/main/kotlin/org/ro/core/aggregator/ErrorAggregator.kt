@@ -8,4 +8,5 @@ class ErrorAggregator : BaseAggregator() {
     override fun update(logEntry: LogEntry) {
        ErrorAlert(logEntry).open()
     }
+
 }

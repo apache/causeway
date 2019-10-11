@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class HttpError(
         val httpStatusCode: Int,
         val message: String,
-        val detail: HttpErrorDetail
+        val detail: HttpErrorDetail? = null
 ) : TransferObject

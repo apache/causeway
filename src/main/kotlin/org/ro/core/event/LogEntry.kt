@@ -3,7 +3,8 @@ package org.ro.core.event
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.ro.core.Session
-import org.ro.core.aggregator.Aggregator
+import org.ro.core.aggregator.IAggregator
+import org.ro.core.aggregator.BaseAggregator
 import org.ro.to.TransferObject
 import pl.treksoft.kvision.core.Col
 import kotlin.js.Date
@@ -49,12 +50,13 @@ data class LogEntry(
     var duration: Int = 0
 
     var cacheHits = 0
-    var aggregator: Aggregator? = null
+    var aggregator: IAggregator? = null
     var obj: TransferObject? = null
 
     // alternative constructor for UI events (eg. from user interaction)
-    constructor(title: String) : this("", "", "") {
+    constructor(title: String, aggregator: IAggregator) : this("", "", "") {
         this.title = title
+        this.aggregator = aggregator
         state = EventState.VIEW
     }
 

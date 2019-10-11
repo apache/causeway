@@ -59,7 +59,7 @@ class ActionPrompt(val action: Action) : Command {
         return selectionList
     }
 
-    fun extractUserInput(): Link {
+    internal fun extractUserInput(): Link {
         //TODO function has a sideeffect, ie. amends link with arguments
         val link = action.getInvokeLink()!!
         var value: String? = null

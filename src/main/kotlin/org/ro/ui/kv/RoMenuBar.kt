@@ -68,7 +68,6 @@ object RoMenuBar {
                 dd.add(menuLink)
                 val l = me.action.getInvokeLink()!!
                 menuLink.onClick {
-                    //TODO pass in action.id?
                     ActionAggregator().invoke(l)
                 }
             }

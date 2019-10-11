@@ -5,7 +5,11 @@ import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Link
 import org.ro.to.TObject
 
-abstract class BaseAggregator : Aggregator {
+abstract class BaseAggregator : IAggregator {
+
+    override fun reset() {
+        // default is doing nothing
+    }
 
     protected fun log(logEntry: LogEntry) {
         console.log("[BaseAggregator.log] unexpected:\n $logEntry}")

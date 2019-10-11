@@ -1,4 +1,4 @@
-package org.ro.org.ro.ui
+package org.ro.ui
 
 import org.ro.core.event.LogEntry
 import org.ro.to.ResultValue

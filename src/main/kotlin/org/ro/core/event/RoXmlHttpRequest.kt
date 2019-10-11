@@ -1,7 +1,7 @@
 package org.ro.core.event
 
 import org.ro.core.Session
-import org.ro.core.aggregator.Aggregator
+import org.ro.core.aggregator.IAggregator
 import org.ro.handler.ResponseHandler
 import org.ro.to.Argument
 import org.ro.to.Link
@@ -13,7 +13,7 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
-    fun invoke(link: Link, aggregator: Aggregator?) {
+    fun invoke(link: Link, aggregator: IAggregator?) {
         //@kotlinx.coroutines.InternalCoroutinesApi cancel()
         var url = link.href
         if (EventStore.isCached(url)) {

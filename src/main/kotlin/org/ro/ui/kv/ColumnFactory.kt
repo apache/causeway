@@ -132,6 +132,7 @@ class ColumnFactory {
         val exposer = getData(cell)
         val tObject = exposer.delegate
         val contextMenu = ContextMenuFactory().buildFor(tObject)
+        //FIXME use absolute coordinates, clientX/y are sometimes off screen
         val mei = MouseEventInit(
                 clientX = mouseEvent.clientX - 250,
                 clientY = mouseEvent.clientY - 500)
