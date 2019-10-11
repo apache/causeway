@@ -121,6 +121,7 @@ body {
 
     #wrapper.toggled #sidebar-wrapper {
         width: 0;
+        border: 0;
     }
 
     #page-content-wrapper {

@@ -26,6 +26,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
  * Usually the overrides rules are about sizes and weights, but should not change any colors
  */
 public class SidebarCssResourceReference extends CssResourceReference {
+    private static final long serialVersionUID = 1L;
 
     public SidebarCssResourceReference() {
         super(SidebarCssResourceReference.class, "simple-sidebar.css");
