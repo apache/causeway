@@ -22,14 +22,18 @@ package org.apache.isis.metamodel.spec;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -160,6 +164,12 @@ public interface ManagedObject {
 
     // -- FACTORIES
 
+    /**
+     * Optimized for cases, when the pojo's specification is already available.
+     * @param specification
+     * @param pojo
+     * @return
+     */
     public static ManagedObject of(
             final ObjectSpecification specification, 
             final Object pojo) {
@@ -176,12 +186,24 @@ public interface ManagedObject {
         };
     }
 
+    /**
+     * For cases, when the pojo's specification is not available and needs to be looked up. 
+     * @param specLoader
+     * @param pojo
+     * @return
+     */
     public static ManagedObject of(
-            final Supplier<ObjectSpecification> specificationSupplier, 
+            final Function<Class<?>, ObjectSpecification> specLoader, 
             final Object pojo) {
 
+        requires(specLoader, "specLoader");
+        requires(pojo, "pojo");
+        
+        val type = pojo.getClass();
+        
         return new ManagedObject() {
-            private final _Lazy<ObjectSpecification> specification = _Lazy.of(specificationSupplier);
+            private final _Lazy<ObjectSpecification> specification = 
+                    _Lazy.threadSafe(()->specLoader.apply(type));
 
             @Override
             public ObjectSpecification getSpecification() {
@@ -192,6 +214,21 @@ public interface ManagedObject {
                 return pojo;
             }
         };
+    }
+    
+    // -- SHORTCUTS
+    
+    /**
+     * Uses the currently available {@link SpecificationLoader} to
+     * @param pojo
+     * @return
+     * @apiNote its not well thought through yet what to do with null argument
+     */
+    public static ManagedObject forPojo(Object pojo) {
+        if(pojo==null) {
+            return null;
+        }
+        return of(MetaModelContext.current()::getSpecification, pojo);
     }
     
     // -- UNWRAPPING
@@ -271,6 +308,11 @@ public interface ManagedObject {
             return false; 
         }
         return true;
+    }
+
+    @Deprecated
+    static Oid _oid(ManagedObject adapter) {
+        return promote(adapter).getOid();
     }
 
 

@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -100,6 +99,8 @@ public interface SpecificationLoader {
      * @return {@code null} if {@code domainType==null}
      */
     ObjectSpecification loadSpecification(@Nullable Class<?> domainType, IntrospectionState upTo);
+    
+    Class<?> lookupType(ObjectSpecId objectSpecId);
 
     // -- SHORTCUTS
 
@@ -114,7 +115,7 @@ public interface SpecificationLoader {
         if(objectSpecId==null) {
             return null;
         }
-        val type = ClassUtil.forNameElseFail(objectSpecId.asString());
+        val type = lookupType(objectSpecId);
         return introspectionState!=null 
                 ? loadSpecification(type, introspectionState)
                         : loadSpecification(type);

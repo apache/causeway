@@ -92,6 +92,8 @@ public final class _Exceptions {
         return new IllegalStateException("internal error: code was reached, that is not implemented yet");
     }
 
+    // -- UNRECOVERABLE
+    
     public static RuntimeException unrecoverable(Throwable cause) {
         return new RuntimeException("unrecoverable error: with cause ...", cause);
     }
@@ -103,6 +105,13 @@ public final class _Exceptions {
     public static RuntimeException unrecoverable(String msg, Throwable cause) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
+    
+    public static RuntimeException unrecoverableFormatted(String format, Object ...args) {
+        return new RuntimeException(String.format("unrecoverable error: '%s'", 
+                String.format(format, args)));
+    }
+    
+    // -- UNSUPPORTED
 
     public static UnsupportedOperationException unsupportedOperation() {
         return new UnsupportedOperationException("unrecoverable error: method call not allowed/supported");

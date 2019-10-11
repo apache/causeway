@@ -27,6 +27,7 @@ import org.apache.isis.commons.internal.ioc.BeanSort;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
+import org.apache.isis.runtime.system.context.IsisContext;
 
 import lombok.Getter;
 import lombok.Value;

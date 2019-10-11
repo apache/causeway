@@ -36,24 +36,40 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.metamodel.spec.ManagedObject;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public final class CollectionUtils {
 
     private CollectionUtils() {
     }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final ObjectAdapterProvider adapterProvider) {
-        final ObjectAdapter collection = adapterProvider.adapterFor(option);
+    public static Object[] getCollectionAsObjectArray(
+            final Object optionPojo, 
+            final ObjectSpecification spec, 
+            final ObjectAdapterProvider adapterProvider) {
+        
+        final ObjectAdapter collection = adapterProvider.adapterFor(optionPojo);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
+        
+        {//TODO[2158] migrate
+            val mo = ManagedObject.of(MetaModelContext.current().getSpecification(optionPojo.getClass()), optionPojo);
+            val collectionFacet =  CollectionFacet.Utils.getCollectionFacetFromSpec(mo);
+            _Assert.assertEquals("expected same", 
+                    facet, collectionFacet);
+        }
 
         final Stream<ObjectAdapter> objectAdapters = 
                 CollectionFacet.Utils.streamAdapters(collection);

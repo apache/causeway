@@ -42,6 +42,7 @@ import org.apache.isis.extensions.sse.IsisBootSse;
 import org.apache.isis.jdo.IsisBootDataNucleus;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.security.shiro.IsisBootSecurityShiro;
+import org.apache.isis.viewer.restfulobjects.IsisBootWebRestfulObjects;
 import org.apache.isis.viewer.wicket.viewer.IsisBootWebWicket;
 
 import domainapp.dom.DemoModule;
@@ -62,6 +63,7 @@ import domainapp.utils.LibraryPreloadingService;
     IsisBootDataNucleus.class,
     IsisBootWebWicket.class,
     IsisBootSse.class, // server sent events
+    IsisBootWebRestfulObjects.class,
 
     // Security Manager Extension (secman)
     IsisBootSecmanModel.class,

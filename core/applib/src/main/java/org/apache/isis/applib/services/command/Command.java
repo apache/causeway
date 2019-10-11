@@ -430,7 +430,7 @@ public interface Command extends HasUniqueId {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    @Programmatic @Deprecated // bad API design
+    @Programmatic
     Internal internal();
 
 }

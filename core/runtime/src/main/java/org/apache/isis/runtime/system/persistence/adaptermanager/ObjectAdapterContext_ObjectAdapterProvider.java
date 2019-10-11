@@ -114,7 +114,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 
     @Override
     public ManagedObject disposableAdapterForViewModel(final Object viewModelPojo) {
-        return ManagedObject.of(()->specificationLoader.loadSpecification(viewModelPojo.getClass()), viewModelPojo);
+        return ManagedObject.of(specificationLoader::loadSpecification, viewModelPojo);
     }
 
     @Override

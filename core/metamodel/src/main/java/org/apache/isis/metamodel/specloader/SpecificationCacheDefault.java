@@ -26,6 +26,7 @@ import java.util.function.Function;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
+import org.apache.isis.metamodel.commons.ClassUtil;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecId;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
@@ -73,6 +74,14 @@ class SpecificationCacheDefault<T extends ObjectSpecification> {
         synchronized(this) {
             return new ArrayList<T>(specByClassName.values());
         }
+    }
+    
+    public Class<?> resolveType(final ObjectSpecId objectSpecID) {
+        val classNameFromCache = classNameBySpecId.get(objectSpecID);
+        val className = classNameFromCache != null
+                ? classNameFromCache 
+                        : objectSpecID.asString();
+        return ClassUtil.forNameElseNull(className);
     }
     
     public T getByObjectType(final ObjectSpecId objectSpecID) {

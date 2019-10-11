@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -35,6 +36,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
@@ -153,6 +155,11 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
         
         return true;
+    }
+    
+    @Override
+    public String getBeanNameOverride(TypeMetaData typeMeta) {
+        return extractObjectType(typeMeta.getUnderlyingClass()).orElse(null);
     }
     
     @Override
@@ -280,6 +287,21 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
 
         return BeanSort.UNKNOWN;
+    }
+
+    private Optional<String> extractObjectType(Class<?> type) {
+
+        val aDomainService = _Reflect.getAnnotation(type, DomainService.class);
+        if(aDomainService!=null) {
+            val objectType = aDomainService.objectType();
+            if(_Strings.isNotEmpty(objectType)) {
+                return Optional.of(objectType); 
+            }
+            return Optional.empty(); // stop processing
+        }
+
+        return Optional.empty();
+
     }
 
 

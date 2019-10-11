@@ -73,6 +73,8 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
+import lombok.val;
+
 public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
     private static final long serialVersionUID = 1L;
@@ -120,6 +122,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     final ActionPrompt actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection.withSelected(
                             selectedPojos,
                             new ActionParameterDefaultsFacetFromAssociatedCollection.SerializableRunnable<ActionPrompt>() {
+                                private static final long serialVersionUID = 1L;
+
                                 @Override
                                 public ActionPrompt call() {
                                     return performOnClick(target);
@@ -128,6 +132,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                             );
                     if(actionPrompt != null) {
                         actionPrompt.setOnClose(new ActionPrompt.CloseHandler() {
+                            private static final long serialVersionUID = 1L;
+
                             @Override
                             public void close(final AjaxRequestTarget target) {
                                 toggledMementosProviderIfAny.clearToggles(target);
@@ -164,12 +170,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
             final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
-            final ObjectSpecification specification = actionModel.getTargetAdapter().getSpecification();
+            val spec = actionModel.getTargetAdapter().getSpecification();
 
-            final MetaModelService metaModelService = getServiceRegistry()
-                    .lookupServiceElseFail(MetaModelService.class);
-            final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
-            final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, sort);
+            final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, spec.getBeanSort());
 
 
             //
@@ -185,7 +188,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 actionParametersPanel.setShowHeader(false);
 
+                @SuppressWarnings("deprecation") // conveniently reuses the toString method of AbstractReadOnlyModel
                 final Label label = new Label(prompt.getTitleId(), new AbstractReadOnlyModel<String>() {
+                    private static final long serialVersionUID = 1L;
                     @Override
                     public String getObject() {
                         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
@@ -204,14 +209,14 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
                     if(action instanceof ObjectActionMixedIn) {
                         final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;
-                        final ObjectSpecification mixinType = actionMixedIn.getMixinType();
+                        final ObjectSpecification mixinSpec = actionMixedIn.getMixinType();
 
-                        if(mixinType.isViewModel()) {
+                        if(mixinSpec.isViewModel()) {
 
                             final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getTargetAdapter());
                             final EntityModel entityModelForMixin = new EntityModel(ManagedObject.promote(targetAdapterForMixin));
 
-                            final GridFacet facet = mixinType.getFacet(GridFacet.class);
+                            final GridFacet facet = mixinSpec.getFacet(GridFacet.class);
                             final Grid gridForMixin = facet.getGrid(targetAdapterForMixin);
 
                             final String extraContentId = promptWithExtraContent.getExtraContentId();

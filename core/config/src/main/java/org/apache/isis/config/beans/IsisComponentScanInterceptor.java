@@ -38,6 +38,8 @@ public interface IsisComponentScanInterceptor {
      * discovered types into a type registry
      */
     boolean isInjectable(TypeMetaData type);
+    
+    String getBeanNameOverride(TypeMetaData type);
 
     /**
      * Whether given type is available for injection. Is a <em>Managed Bean</em>. 

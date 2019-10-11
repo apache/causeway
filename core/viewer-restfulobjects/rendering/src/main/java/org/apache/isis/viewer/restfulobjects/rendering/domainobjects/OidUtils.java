@@ -21,19 +21,18 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.RootOid;
+import org.apache.isis.metamodel.spec.ManagedObject;
 
 final class OidUtils {
 
     private OidUtils() {
     }
 
-    public static String getDomainType(final ObjectAdapter objectAdapter) {
-        Oid oid = objectAdapter.getOid();
-        if (oid == null || !(oid instanceof RootOid)) {
+    public static String getDomainType(final ManagedObject objectAdapter) {
+        if (objectAdapter == null) {
             return null;
         }
-        RootOid rootOid = (RootOid) oid;
-        return rootOid.getObjectSpecId().asString();
+        return objectAdapter.getSpecification().getSpecId().asString();
     }
 
     public static String getInstanceId(final ObjectAdapter objectAdapter) {

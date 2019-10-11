@@ -34,7 +34,7 @@ import lombok.val;
 
 /**
  * 
- * @deprecated TODO[2112] adapter to LAST KNOWN GOOD, but does not work
+ * adapter to LAST KNOWN GOOD
  *
  */
 public class ObjectAdapterMementoSupport_usingLKG 

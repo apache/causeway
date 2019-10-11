@@ -48,16 +48,16 @@ public interface ObjectAdapterMemento extends Serializable {
 
     /**
      * TODO[2112] outdated
-     * Returns a bookmark only if {@link Type#PERSISTENT} and 
-     * {@link #getSort() sort} is {@link Sort#SCALAR scalar}.
+     * Returns a bookmark only if {@link RecreateStrategy#LOOKUP} and 
+     * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
     Bookmark asBookmarkIfSupported();
 
     /**
      * TODO[2112] outdated 
-     * Returns a bookmark only if {@link Type#PERSISTENT} and 
-     * {@link #getSort() sort} is {@link Sort#SCALAR scalar}.
+     * Returns a bookmark only if {@link RecreateStrategy#LOOKUP} and 
+     * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
     Bookmark asHintingBookmarkIfSupported();

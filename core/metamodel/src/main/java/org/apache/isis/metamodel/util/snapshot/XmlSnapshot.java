@@ -861,7 +861,7 @@ public class XmlSnapshot implements Snapshot {
             }
             return fakeOid;
         } else {
-            return ManagedObject.promote(adapter).getOid().enString();
+            return ManagedObject._oid(adapter).enString();
         }
     }
 

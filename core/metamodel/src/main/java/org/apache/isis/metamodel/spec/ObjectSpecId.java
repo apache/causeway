@@ -25,11 +25,9 @@ import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import lombok.Value;
 
 /**
  * Represents an {@link ObjectSpecification}, as determined by
@@ -38,9 +36,8 @@ import lombok.experimental.FieldDefaults;
  * <p>
  * Has value semantics.
  */
-@FieldDefaults(makeFinal=true, level=AccessLevel.PRIVATE) 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter @EqualsAndHashCode
+@Value
 public final class ObjectSpecId implements Serializable {
 
     private static final long serialVersionUID = 1L;

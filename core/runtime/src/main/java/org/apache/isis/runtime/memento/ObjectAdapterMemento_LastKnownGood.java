@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.adapter.oid.ObjectNotFoundException;
@@ -105,7 +106,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         return new ObjectAdapterMemento_LastKnownGood(specId, encodableValue);
     }
 
-    public enum Sort {
+    public enum Cardinality {
         /**
          * represents a single object
          */
@@ -116,12 +117,12 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
                     final ObjectAdapterMemento_LastKnownGood oam,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
-                return oam.type.getAdapter(oam, persistenceSession, specificationLoader);
+                return oam.recreateStrategy.getAdapter(oam, persistenceSession, specificationLoader);
             }
 
             @Override
             public int hashCode(final ObjectAdapterMemento_LastKnownGood oam) {
-                return oam.type.hashCode(oam);
+                return oam.recreateStrategy.hashCode(oam);
             }
 
             @Override
@@ -130,15 +131,15 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
                     return false;
                 }
                 final ObjectAdapterMemento_LastKnownGood otherOam = (ObjectAdapterMemento_LastKnownGood) other;
-                if(otherOam.sort != SCALAR) {
+                if(otherOam.cardinality != SCALAR) {
                     return false;
                 }
-                return oam.type.equals(oam, (ObjectAdapterMemento_LastKnownGood) other);
+                return oam.recreateStrategy.equals(oam, (ObjectAdapterMemento_LastKnownGood) other);
             }
 
             @Override
             public String asString(final ObjectAdapterMemento_LastKnownGood oam) {
-                return oam.type.toString(oam);
+                return oam.recreateStrategy.toString(oam);
             }
         },
         /**
@@ -168,7 +169,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
                     return false;
                 }
                 final ObjectAdapterMemento_LastKnownGood otherOam = (ObjectAdapterMemento_LastKnownGood) other;
-                if(otherOam.sort != VECTOR) {
+                if(otherOam.cardinality != VECTOR) {
                     return false;
                 }
                 return oam.list.equals(otherOam.list);
@@ -180,7 +181,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             }
         };
 
-        void ensure(final Sort sort) {
+        void ensure(final Cardinality sort) {
             if(this == sort) {
                 return;
             }
@@ -199,7 +200,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         public abstract String asString(final ObjectAdapterMemento_LastKnownGood oam);
     }
 
-    enum Type {
+    enum RecreateStrategy {
         /**
          * The {@link ObjectAdapter} that this is the memento for directly has
          * an {@link EncodableFacet} (it is almost certainly a value), and so is
@@ -219,7 +220,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
             @Override
             public boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other) {
-                return other.type == ENCODEABLE && oam.encodableValue.equals(other.encodableValue);
+                return other.recreateStrategy == ENCODEABLE && oam.encodableValue.equals(other.encodableValue);
             }
 
             @Override
@@ -242,7 +243,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
          * The {@link ObjectAdapter} that this is for is already known by its
          * (persistent) {@link Oid}.
          */
-        PERSISTENT {
+        LOOKUP {
             @Override
             ObjectAdapter recreateAdapter(
                     final ObjectAdapterMemento_LastKnownGood oam,
@@ -277,7 +278,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
             @Override
             public boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other) {
-                return other.type == PERSISTENT && oam.persistentOidStr.equals(other.persistentOidStr);
+                return other.recreateStrategy == LOOKUP && oam.persistentOidStr.equals(other.persistentOidStr);
             }
 
             @Override
@@ -309,7 +310,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
             @Override
             public boolean equals(ObjectAdapterMemento_LastKnownGood oam, ObjectAdapterMemento_LastKnownGood other) {
-                return other.type == TRANSIENT && oam.transientMemento.equals(other.transientMemento);
+                return other.recreateStrategy == TRANSIENT && oam.transientMemento.equals(other.transientMemento);
             }
 
             @Override
@@ -353,41 +354,41 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
 
 
-    private final Sort sort;
+    private final Cardinality cardinality;
     private final ObjectSpecId objectSpecId;
 
     /**
-     * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     * Populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
-    private Type type;
+    private RecreateStrategy recreateStrategy;
 
     /**
-     * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     * Populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
     @SuppressWarnings("unused")
     private String titleHint;
 
     /**
-     * The current value, if {@link Type#ENCODEABLE}; will be <tt>null</tt> otherwise.
+     * The current value, if {@link RecreateStrategy#ENCODEABLE}; will be <tt>null</tt> otherwise.
      *
      * <p>
-     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
     private String encodableValue;
 
     /**
-     * The current value, if {@link Type#PERSISTENT}, will be <tt>null</tt> otherwise.
+     * The current value, if {@link RecreateStrategy#LOOKUP}, will be <tt>null</tt> otherwise.
      *
      * <p>
-     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
     private String persistentOidStr;
 
     /**
-     * The current value, if {@link Type#PERSISTENT}, will be <tt>null</tt> otherwise.
+     * The current value, if {@link RecreateStrategy#LOOKUP}, will be <tt>null</tt> otherwise.
      *
      * <p>
-     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
     private Bookmark bookmark;
 
@@ -397,20 +398,20 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
     private String hintId;
 
     /**
-     * The current value, if {@link Type#TRANSIENT}, will be <tt>null</tt> otherwise.
+     * The current value, if {@link RecreateStrategy#TRANSIENT}, will be <tt>null</tt> otherwise.
      *
      * <p>
-     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
     private Memento transientMemento;
 
     /**
-     * populated only if {@link #getSort() sort} is {@link Sort#VECTOR vector}
+     * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
      */
     private ArrayList<ObjectAdapterMemento_LastKnownGood> list;
 
     public ObjectAdapterMemento_LastKnownGood(final ArrayList<ObjectAdapterMemento_LastKnownGood> list, final ObjectSpecId objectSpecId) {
-        this.sort = Sort.VECTOR;
+        this.cardinality = Cardinality.VECTOR;
         this.list = list;
         this.objectSpecId = objectSpecId;
     }
@@ -422,39 +423,39 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         val specificationLoader = IsisContext.getSpecificationLoader();
         val spec = specificationLoader.lookupBySpecIdElseLoad(specId);
         if(spec!=null && spec.isEncodeable()) {
-            this.sort = Sort.SCALAR;
+            this.cardinality = Cardinality.SCALAR;
             this.objectSpecId = specId;
             this.encodableValue = rootOid.getIdentifier();
-            this.type = Type.ENCODEABLE;
+            this.recreateStrategy = RecreateStrategy.ENCODEABLE;
             return;
         } 
         // -- //
 
         _Assert.assertFalse("expected not to be transient", rootOid.isTransient());
 
-        this.sort = Sort.SCALAR;
+        this.cardinality = Cardinality.SCALAR;
 
         this.persistentOidStr = rootOid.enString();
         this.bookmark = rootOid.asBookmark();
         this.objectSpecId = rootOid.getObjectSpecId();
-        this.type = Type.PERSISTENT;
+        this.recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
     private ObjectAdapterMemento_LastKnownGood(final ObjectAdapter adapter) {
         if (adapter == null) {
             throw new IllegalArgumentException("adapter cannot be null");
         }
-        this.sort = Sort.SCALAR;
+        this.cardinality = Cardinality.SCALAR;
         final ObjectSpecification specification = adapter.getSpecification();
         objectSpecId = specification.getSpecId();
         init(adapter);
     }
 
     private ObjectAdapterMemento_LastKnownGood(final ObjectSpecId specId, final String encodableValue) {
-        this.sort = Sort.SCALAR;
+        this.cardinality = Cardinality.SCALAR;
         this.objectSpecId = specId;
         this.encodableValue = encodableValue;
-        this.type = Type.ENCODEABLE;
+        this.recreateStrategy = RecreateStrategy.ENCODEABLE;
     }
 
 
@@ -466,14 +467,14 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         final boolean isEncodable = encodableFacet != null;
         if (isEncodable) {
             encodableValue = encodableFacet.toEncodedString(adapter);
-            type = Type.ENCODEABLE;
+            recreateStrategy = RecreateStrategy.ENCODEABLE;
             return;
         }
 
         final RootOid oid = (RootOid) adapter.getOid();
         if (oid.isTransient()) {
             transientMemento = new Memento(adapter);
-            type = Type.TRANSIENT;
+            recreateStrategy = RecreateStrategy.TRANSIENT;
             return;
         }
 
@@ -483,11 +484,11 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getPojo();
             this.hintId = provider.hintId();
         }
-        type = Type.PERSISTENT;
+        recreateStrategy = RecreateStrategy.LOOKUP;
     }
 
-    public Sort getSort() {
-        return sort;
+    public Cardinality getCardinality() {
+        return cardinality;
     }
 
     public ArrayList<ObjectAdapterMemento_LastKnownGood> getList() {
@@ -500,7 +501,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
             final PersistenceSession persistenceSession,
             final SpecificationLoader specificationLoader) {
         ensureScalar();
-        type.resetVersion(this, persistenceSession, specificationLoader);
+        recreateStrategy.resetVersion(this, persistenceSession, specificationLoader);
     }
 
 
@@ -529,7 +530,19 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
     public ObjectAdapter getObjectAdapter(
             final PersistenceSession persistenceSession,
             final SpecificationLoader specificationLoader) {
-        return sort.asAdapter(this, persistenceSession, specificationLoader);
+        
+        val spec = specificationLoader.loadSpecification(objectSpecId);
+        
+        // intercept when trivial
+        if(spec.getBeanSort().isManagedBean()) {
+
+            
+            System.out.println("############## LOOKUP " + objectSpecId);
+            
+            //return MetaModelContext.current().lookupServiceAdapterById(objectSpecId.asString());
+        }
+        
+        return cardinality.asAdapter(this, persistenceSession, specificationLoader);
     }
 
     /**
@@ -575,12 +588,12 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
     @Override
     public int hashCode() {
-        return sort.hashCode(this);
+        return cardinality.hashCode(this);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return sort.equals(this, obj);
+        return cardinality.equals(this, obj);
     }
 
 
@@ -590,7 +603,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
     }
 
     public String asString() {
-        return sort.asString(this);
+        return cardinality.asString(this);
     }
 
 
@@ -662,11 +675,11 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
     }
 
     private void ensureScalar() {
-        getSort().ensure(Sort.SCALAR);
+        getCardinality().ensure(Cardinality.SCALAR);
     }
 
     private void ensureVector() {
-        getSort().ensure(Sort.VECTOR);
+        getCardinality().ensure(Cardinality.VECTOR);
     }
 
 

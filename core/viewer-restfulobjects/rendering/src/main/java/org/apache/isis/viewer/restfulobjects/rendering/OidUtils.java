@@ -18,6 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
+import org.apache.isis.commons.collections.Bin;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -25,10 +29,10 @@ import org.apache.isis.metamodel.adapter.oid.RootOid;
 import org.apache.isis.metamodel.exceptions.persistence.ObjectNotFoundException;
 import org.apache.isis.metamodel.exceptions.persistence.PojoRecreationException;
 import org.apache.isis.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecId;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
+import lombok.val;
 
 final class OidUtils {
 
@@ -73,38 +77,59 @@ final class OidUtils {
 
     private static Object domainObjectForAny(final RendererContext rendererContext, final RootOid rootOid) {
 
-        final MetaModelContext context = MetaModelContext.current();
-
-        final ObjectSpecId specId = rootOid.getObjectSpecId();
-        final ObjectSpecification spec = context.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
+        val specId = rootOid.getObjectSpecId();
+        val spec = MetaModelContext.current().getSpecificationLoader().lookupBySpecIdElseLoad(specId);
         if(spec == null) {
             // eg "NONEXISTENT:123"
             return null;
         }
 
-        if(spec.containsFacet(ViewModelFacet.class)) {
+        //TODO[2158] remove eventually
+        _Assert.assertEquals("expected same", 
+                spec.getBeanSort().isViewModel(), 
+                spec.containsFacet(ViewModelFacet.class));
+        
+        if(spec.getBeanSort().isViewModel()) {
 
             try {
-                final RootOid fixedRootOid = ensureConsistentOidState(rootOid);
-                final ObjectAdapter adapter = rendererContext.adapterOfPojo(fixedRootOid);
+                val fixedRootOid = ensureConsistentOidState(rootOid);
+                val adapter = rendererContext.adapterOfPojo(fixedRootOid);
 
-                final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
+                val pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
                 return pojo;
 
-            } catch(final ObjectNotFoundException | PojoRecreationException ex) {
+            } catch(ObjectNotFoundException | PojoRecreationException ex) {
                 return null;
             }
-        } else {
+        } else if(spec.getBeanSort().isEntity()){
             try {
-                final Object domainObject = rendererContext.fetchPersistentPojoInTransaction(rootOid);
+                val pojo = rendererContext.fetchPersistentPojoInTransaction(rootOid);
                 //TODO[ISIS-1976] changed behavior: predicate was objectAdapter.isTransient();
-                return rendererContext.stateOf(domainObject).isDetached()
+                return rendererContext.stateOf(pojo).isDetached()
                         ? null 
-                                : domainObject;
-            } catch(final ObjectNotFoundException ex) {
+                                : pojo;
+            } catch(ObjectNotFoundException ex) {
                 return null;
             }
-        }
+        } else if(spec.getBeanSort().isManagedBean()){
+            
+            val servicePojo = rendererContext.getServiceRegistry()
+                    .lookupRegisteredBeanById(spec.getSpecId().asString())
+                    .map(ManagedBeanAdapter::getInstance)
+                    .flatMap(Bin::getFirst)
+                    .orElse(null);
+            
+            if(servicePojo!=null) {
+                return servicePojo;
+            }
+            // fall through and throw
+            
+        } 
+        throw _Exceptions.unrecoverableFormatted(
+                "unhandled request for a %s having rootId %s",
+                spec,
+                rootOid);
+        
     }
 
     private static RootOid ensureConsistentOidState(RootOid rootOid) {

@@ -310,7 +310,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         // fallback
         return loadSpecification(objectSpecId, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
-
+    
+    @Override
+    public Class<?> lookupType(ObjectSpecId objectSpecId) {
+        return cache.resolveType(objectSpecId);
+    }
 
     // -- HELPER
 

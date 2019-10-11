@@ -30,11 +30,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
@@ -75,29 +73,11 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         .filter(_NullSafe::isPresent)
         .filter(bean->filter.isManagedBean(bean.getBeanClass())) // do not register unknown sort
         .forEach(bean->{
-            val id = extractObjectType(bean.getBeanClass()).orElse(bean.getId());
+            val id = bean.getId();
             map.put(id, bean);
         });
 
         return map;
     }
-
-    //TODO[2158] this would be the responsibility of the specloader, but 
-    // for now we use as very simple approach
-    private Optional<String> extractObjectType(Class<?> type) {
-
-        val aDomainService = _Reflect.getAnnotation(type, DomainService.class);
-        if(aDomainService!=null) {
-            val objectType = aDomainService.objectType();
-            if(_Strings.isNotEmpty(objectType)) {
-                return Optional.of(objectType); 
-            }
-            return Optional.empty(); // stop processing
-        }
-
-        return Optional.empty();
-
-    }
-
 
 }

@@ -44,16 +44,16 @@ public interface ObjectAdapterProvider {
      * @param pojo
      * @return oid for the given domain object 
      */
-    default @Nullable Oid oidFor(@Nullable Object domainObject) {
-        return mapIfPresentElse(adapterFor(domainObject), ObjectAdapter::getOid, null);
+    default @Nullable Oid oidFor(@Nullable Object pojo) {
+        return mapIfPresentElse(adapterFor(pojo), ObjectAdapter::getOid, null);
     }
 
     /**
      * @return standalone (value) or root adapter
      */
-    @Nullable ObjectAdapter adapterFor(@Nullable Object domainObject);
+    @Nullable ObjectAdapter adapterFor(@Nullable Object pojo);
 
-    @Nullable ObjectAdapter adapterForBean(@Nullable ManagedBeanAdapter bean);
+    @Nullable ObjectAdapter adapterForBean(@Nullable ManagedBeanAdapter beanAdapter);
 
     /**
      * @return collection adapter.

@@ -44,14 +44,11 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
         )
 public class MeService {
 
-    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<MeService, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class PropertyDomainEvent<T> extends SecurityModule.PropertyDomainEvent<MeService, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<MeService, T> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class CollectionDomainEvent<T> extends SecurityModule.CollectionDomainEvent<MeService, T> {}
 
-    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<MeService> {
-        private static final long serialVersionUID = 1L;}
+    public static abstract class ActionDomainEvent extends SecurityModule.ActionDomainEvent<MeService> {}
 
     // -- iconName
     public String iconName() {
@@ -59,8 +56,7 @@ public class MeService {
     }
 
     // -- me (action)
-    public static class MeDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L;}
+    public static class MeDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = MeDomainEvent.class,

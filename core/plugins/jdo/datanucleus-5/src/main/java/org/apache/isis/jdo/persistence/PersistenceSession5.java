@@ -744,14 +744,12 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
         if (stateOf(pojo).isDetached()) {
-            final ManagedObject adapter = ManagedObject.of(
-                    ()->getSpecificationLoader().loadSpecification(pojo.getClass()),
-                    pojo);
+            val managedObject = ManagedObject.of(specificationLoader::loadSpecification, pojo);
 
             // persisting
             // previously this was performed in the DataNucleusSimplePersistAlgorithm.
-            CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistingLifecycleEventFacet.class);
+            CallbackFacet.Util.callCallback(managedObject, PersistingCallbackFacet.class);
+            objectAdapterContext.postLifecycleEventIfRequired(managedObject, PersistingLifecycleEventFacet.class);
 
         } else {
             // updating

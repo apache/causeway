@@ -94,14 +94,15 @@ implements LinksProvider, UiHintContainer {
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
 
                 //XXX lombok issue, cannot use val here 
-                boolean isBulkLoad = IsisContext.getConfiguration().getPersistor().getDatanucleus().getStandaloneCollection().isBulkLoad();
-                final Stream<ObjectAdapter> resolveResults = isBulkLoad
-                        ? loadInBulk(entityCollectionModel)
-                                : loadOneByOne(entityCollectionModel);
-                        return resolveResults.collect(Collectors.toList());
+                boolean isBulkLoad = IsisContext.getConfiguration()
+                        .getPersistor().getDatanucleus().getStandaloneCollection().isBulkLoad();
+                
+                return isBulkLoad
+                        ? loadElementsInBulk(entityCollectionModel).collect(Collectors.toList())
+                                : loadElementsOneByOne(entityCollectionModel).collect(Collectors.toList());
             }
 
-            private Stream<ObjectAdapter> loadInBulk(final EntityCollectionModel model) {
+            private Stream<ObjectAdapter> loadElementsInBulk(final EntityCollectionModel model) {
 
                 //XXX lombok issue, cannot use val here 
                 PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
@@ -118,10 +119,13 @@ implements LinksProvider, UiHintContainer {
                         .filter(_NullSafe::isPresent);
             }
 
-            private Stream<ObjectAdapter> loadOneByOne(final EntityCollectionModel model) {
+            private Stream<ObjectAdapter> loadElementsOneByOne(final EntityCollectionModel model) {
 
                 return stream(model.mementoList)
-                        .map(ObjectAdapterMemento::getObjectAdapter)
+                        //.map(ObjectAdapterMemento::getObjectAdapter)
+                        .map(mem->{
+                            return mem.getObjectAdapter();
+                        })
                         .filter(_NullSafe::isPresent);
             }
 

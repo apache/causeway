@@ -45,18 +45,27 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
 
+import lombok.val;
+
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter> {
 
     private static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
 
-    public static LinkBuilder newLinkToBuilder(final RendererContext rendererContext, final Rel rel, final ObjectAdapter objectAdapter) {
+    public static LinkBuilder newLinkToBuilder(
+            final RendererContext rendererContext, 
+            final Rel rel, 
+            final ObjectAdapter objectAdapter) {
+        
         String domainType = OidUtils.getDomainType(objectAdapter);
         String instanceId = OidUtils.getInstanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId;
         return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
     }
 
-    public static LinkBuilder newLinkToObjectLayoutBuilder(final RendererContext rendererContext, final ObjectAdapter objectAdapter) {
+    public static LinkBuilder newLinkToObjectLayoutBuilder(
+            final RendererContext rendererContext, 
+            final ObjectAdapter objectAdapter) {
+        
         final Rel rel = Rel.OBJECT_LAYOUT;
         String domainType = OidUtils.getDomainType(objectAdapter);
         String instanceId = OidUtils.getInstanceId(objectAdapter);
@@ -64,7 +73,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.OBJECT_LAYOUT, url);
     }
 
-    public static LinkBuilder newLinkToObjectIconBuilder(final RendererContext rendererContext, final ObjectAdapter objectAdapter) {
+    public static LinkBuilder newLinkToObjectIconBuilder(
+            final RendererContext rendererContext, 
+            final ObjectAdapter objectAdapter) {
+        
         final Rel rel = Rel.OBJECT_ICON;
         String domainType = OidUtils.getDomainType(objectAdapter);
         String instanceId = OidUtils.getInstanceId(objectAdapter);
@@ -449,9 +461,14 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             String format = null; // TODO
             return JsonValueEncoder.asObject(objectAdapter, format);
         }
-        final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
+        val titleFacet = objectSpec.getFacet(TitleFacet.class);
         final String title = titleFacet.title(objectAdapter);
-        return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, ManagedObject.promote(objectAdapter)).withTitle(title).build();
+        return DomainObjectReprRenderer.newLinkToBuilder(
+                resourceContext, 
+                Rel.VALUE, 
+                ManagedObject.promote(objectAdapter))
+                .withTitle(title)
+                .build();
     }
 
 
