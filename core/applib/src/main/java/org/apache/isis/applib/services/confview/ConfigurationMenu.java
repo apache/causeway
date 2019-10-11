@@ -56,7 +56,6 @@ public class ConfigurationMenu {
             )
     @MemberOrder(sequence = "500.900.1")
     public Set<ConfigurationProperty> configuration(){
-        System.out.println("############## CALL");
         return configurationService.allProperties();
     }
 

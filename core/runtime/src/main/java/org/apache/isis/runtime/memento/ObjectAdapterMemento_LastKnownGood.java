@@ -535,11 +535,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         
         // intercept when trivial
         if(spec.getBeanSort().isManagedBean()) {
-
-            
-            System.out.println("############## LOOKUP " + objectSpecId);
-            
-            //return MetaModelContext.current().lookupServiceAdapterById(objectSpecId.asString());
+            return MetaModelContext.current().lookupServiceAdapterById(objectSpecId.asString());
         }
         
         return cardinality.asAdapter(this, persistenceSession, specificationLoader);

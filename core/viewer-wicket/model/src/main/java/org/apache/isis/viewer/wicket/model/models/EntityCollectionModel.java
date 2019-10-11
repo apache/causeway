@@ -122,10 +122,7 @@ implements LinksProvider, UiHintContainer {
             private Stream<ObjectAdapter> loadElementsOneByOne(final EntityCollectionModel model) {
 
                 return stream(model.mementoList)
-                        //.map(ObjectAdapterMemento::getObjectAdapter)
-                        .map(mem->{
-                            return mem.getObjectAdapter();
-                        })
+                        .map(ObjectAdapterMemento::getObjectAdapter)
                         .filter(_NullSafe::isPresent);
             }
 

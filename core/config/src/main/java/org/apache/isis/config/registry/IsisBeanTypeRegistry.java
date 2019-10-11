@@ -225,29 +225,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             return BeanSort.ENTITY;
         }
 
-        val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
-        if(aDomainObject!=null) {
-            switch (aDomainObject.nature()) {
-            case EXTERNAL_ENTITY:
-            case INMEMORY_ENTITY:
-            case JDO_ENTITY:
-                return BeanSort.VIEW_MODEL; //because object is not associated with a persistence context unless discovered above
-            case MIXIN:
-                return BeanSort.MIXIN;
-            case VIEW_MODEL:
-                return BeanSort.VIEW_MODEL;
-
-            case NOT_SPECIFIED:
-                if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
-                    return BeanSort.VIEW_MODEL;
-                }
-                if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
-                    return BeanSort.VIEW_MODEL;
-                }
-                break; // fall through
-            } 
-        }
-
         if(findNearestAnnotation(type, Mixin.class).isPresent()) {
             return BeanSort.MIXIN;
         }
@@ -270,6 +247,21 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
 
         if(TransactionScopedComponent.class.isAssignableFrom(type)) {
             return BeanSort.MANAGED_BEAN;
+        }
+        
+        val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
+        if(aDomainObject!=null) {
+            switch (aDomainObject.nature()) {
+            case MIXIN:
+                return BeanSort.MIXIN;
+            case JDO_ENTITY:
+                return BeanSort.ENTITY;
+            case EXTERNAL_ENTITY:
+            case INMEMORY_ENTITY:
+            case VIEW_MODEL:
+            case NOT_SPECIFIED:
+                return BeanSort.VIEW_MODEL; //because object is not associated with a persistence context unless discovered above
+            } 
         }
 
 //XXX RequestScoped is just a qualifier, don't decide on that

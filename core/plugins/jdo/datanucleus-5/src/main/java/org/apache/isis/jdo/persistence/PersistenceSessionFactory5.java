@@ -91,10 +91,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         this.configuration = IsisContext.getConfiguration();
         
         val dnSettings = IsisContext.getServiceRegistry().lookupServiceElseFail(DataNucleusSettings.class);
-        
-        //val dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
         val datanucleusProps = dnSettings.getAsMap(); 
-                //dataNucleusConfig.copyToMap();
         
         System.out.println("############## " + datanucleusProps);
 
