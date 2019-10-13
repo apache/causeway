@@ -59,7 +59,7 @@ public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostPro
         
         for (String beanDefinitionName : registry.getBeanDefinitionNames()) {
             
-            log.debug(()->"processing: " + beanDefinitionName);
+            log.debug("processing bean definition {}", beanDefinitionName);
             
             val beanDefinition = registry.containsBeanDefinition(beanDefinitionName) 
                     ? registry.getBeanDefinition(beanDefinitionName) 
@@ -79,12 +79,13 @@ public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostPro
                 if(beanNameOverride!=null) {
                     registry.removeBeanDefinition(beanDefinitionName);
                     registry.registerBeanDefinition(beanNameOverride, beanDefinition);
+                    log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
                 }
-                log.debug(()->String.format("renaming %s -> %s", beanDefinitionName, beanNameOverride));
+                
                 
             } else {
                 registry.removeBeanDefinition(beanDefinitionName);
-                log.debug(()->"removing: " + beanDefinitionName);
+                log.debug("vetoing bean {}", beanDefinitionName);
             }
             
         }

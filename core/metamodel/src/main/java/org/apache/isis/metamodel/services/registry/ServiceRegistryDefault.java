@@ -31,9 +31,10 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
 import lombok.val;
@@ -45,8 +46,8 @@ import lombok.val;
 public final class ServiceRegistryDefault implements ServiceRegistry {
     
     //XXX to enforce provisioning order, this is a depends-on relationship! 
-    // keep as long as IsisConfigurationLegacy is used 
-    @Inject private IsisConfigurationLegacy isisConfigurationLegacy; 
+    @SuppressWarnings("unused")
+    @Inject private IsisSystemEnvironment isisSystemEnvironment; 
     
     @Override
     public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
@@ -64,20 +65,24 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     private final _Lazy<Map<String, ManagedBeanAdapter>> managedBeansById = 
             _Lazy.threadSafe(this::enumerateManagedBeans);
 
+    private final static _Probe probe = _Probe.maxCallsThenIgnore(5).label("service reg");
+    
     private Map<String, ManagedBeanAdapter> enumerateManagedBeans() {
         
+        probe.println("#### enumerate");
+        
         val filter = IsisBeanTypeRegistry.current();
-        val map = _Maps.<String, ManagedBeanAdapter>newHashMap();
+        val managedBeanAdapterByName = _Maps.<String, ManagedBeanAdapter>newHashMap();
 
         _Spring.streamAllBeans()
         .filter(_NullSafe::isPresent)
         .filter(bean->filter.isManagedBean(bean.getBeanClass())) // do not register unknown sort
         .forEach(bean->{
             val id = bean.getId();
-            map.put(id, bean);
+            managedBeanAdapterByName.put(id, bean);
         });
 
-        return map;
+        return managedBeanAdapterByName;
     }
 
 }

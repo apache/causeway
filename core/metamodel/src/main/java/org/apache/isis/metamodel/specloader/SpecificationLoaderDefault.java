@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -142,29 +143,26 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         log.info(" - categorizing types from class-path scan");
         
-        typeRegistry.streamAndClearInbox().forEach(entry->{
+        typeRegistry.snapshotIntrospectableTypes().entrySet()
+        .forEach(entry->{
 
             val type = entry.getKey();
             val sort = entry.getValue(); 
 
             val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
-            if(spec!=null) scannedSpecs.add(spec);
+            if(spec!=null) {
+                scannedSpecs.add(spec);
+            } else {
+                typeRegistry.veto(type);
+            }
 
             switch (sort) {
             case MANAGED_BEAN:
-                typeRegistry.getBeanTypes().add(type);
                 domainServiceSpecs.add(spec);
                 return;
             case MIXIN:
-                typeRegistry.getMixinTypes().add(type);
-                domainObjectSpecs.add(spec);
-                return;
             case ENTITY:
-                typeRegistry.getEntityTypes().add(type);
-                domainObjectSpecs.add(spec);
-                return;
             case VIEW_MODEL:
-                typeRegistry.getViewModelTypes().add(type);
                 domainObjectSpecs.add(spec);
                 return;
 
@@ -317,6 +315,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     // -- HELPER
+    
+    private final static _Probe probe = _Probe.maxCallsThenIgnore(5).label("specloader"); 
 
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
@@ -331,10 +331,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         } else {
 
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
+            val facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
                             this, facetProcessor);
 
+            probe.println("#### check is managed");
+            
             val isManagedBean = IsisBeanTypeRegistry.current().isManagedBean(cls);
 
             objectSpec = new ObjectSpecificationDefault(

@@ -21,17 +21,14 @@ package org.apache.isis.config;
 import javax.inject.Singleton;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -50,27 +47,15 @@ public class IsisConfigModule {
     /** @deprecated this is just a historical workaround */
     @Bean @Singleton
     public IsisConfigurationLegacy getConfigurationLegacy(
-            ApplicationContext springContext,
             ConfigurableEnvironment configurableEnvironment,
             IsisSystemEnvironment isisSystemEnvironment) {
         
-        // ensures a well defined precondition
-        {
-            val beanTypeRegistry = _Context.getIfAny(IsisBeanTypeRegistry.class);
-            _Context.clear(); // special code in IsisBeanTypeRegistry.close() prevents auto-closing
-            if(beanTypeRegistry!=null) {
-                _Context.putSingleton(IsisBeanTypeRegistry.class, beanTypeRegistry);
-            } 
-        }
-
-        _Context.putSingleton(ApplicationContext.class, springContext);
+        _Config.clear();
         
         val rawKeyValueMap = _Spring.copySpringEnvironmentToMap(configurableEnvironment);
         _Config.putAll(rawKeyValueMap);
 
         log.info("Spring's context was passed over to Isis");
-
-       
 
         // dump config to log
         if(log.isInfoEnabled() && !isisSystemEnvironment.isUnitTesting()) {

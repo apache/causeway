@@ -26,10 +26,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -62,9 +58,9 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ApplicationSettings;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
@@ -579,7 +575,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                     //                isisSessionFactory.destroyServicesAndShutdown();
                     //            }
                     super.onDestroy();
-                    IsisContext.clear();
                 } catch(final RuntimeException ex) {
                     // symmetry with #init()
                     log.error("Failed to destroy", ex);
@@ -589,6 +584,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             // //////////////////////////////////////
 
+            @SuppressWarnings("deprecation")
             @Override //[ahuber] final on purpose! to switch DeploymentType, do this consistent with IsisContext.
             public final RuntimeConfigurationType getConfigurationType() {
                 return IsisSystemEnvironment.get().isPrototyping()

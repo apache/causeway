@@ -21,19 +21,21 @@ package org.apache.isis.metamodel.facets.object.defaults.annotcfg;
 
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultsProviderUtil;
 
 public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
 
-    private static String providerName(final Class<?> annotatedClass) {
+    private static String providerName(final IsisConfiguration config, final Class<?> annotatedClass) {
+        
         final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         final String providerName = annotation.defaultsProviderName();
         if (!_Strings.isNullOrEmpty(providerName)) {
             return providerName;
         }
-        return DefaultsProviderUtil.defaultsProviderNameFromConfiguration(annotatedClass);
+        return DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, annotatedClass);
     }
 
     private static Class<?> providerClass(final Class<?> annotatedClass) {
@@ -41,8 +43,12 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
         return annotation.defaultsProviderClass();
     }
 
-    public DefaultedFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder) {
-        this(providerName(annotatedClass), providerClass(annotatedClass), holder);
+    public DefaultedFacetAnnotation(
+            final IsisConfiguration config, 
+            final Class<?> annotatedClass, 
+            final FacetHolder holder) {
+        
+        this(providerName(config, annotatedClass), providerClass(annotatedClass), holder);
     }
 
     private DefaultedFacetAnnotation(

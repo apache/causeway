@@ -28,11 +28,14 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.config.IsisConfigModule;
+import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.hamcrest.Matchers.any;
@@ -42,6 +45,7 @@ import lombok.Getter;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
+        IsisBeanFactoryPostProcessorForSpring.class,
         IsisConfigModule.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
@@ -50,8 +54,8 @@ import lombok.Getter;
 },
 properties = {
         "isis.services.injector.setPrefix=true"
-}
-        )
+})
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 class ServiceInjectorDefaultTest_usingFields {
 
     @Configuration

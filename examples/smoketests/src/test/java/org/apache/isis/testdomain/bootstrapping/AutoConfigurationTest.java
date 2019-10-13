@@ -18,10 +18,6 @@
  */
 package org.apache.isis.testdomain.bootstrapping;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -98,21 +94,12 @@ class AutoConfigurationTest {
     @Test
     void domainObjects_shouldBeDiscovered() {
 
-        //TODO  bad test, relying on implementation details
-        // clearly IsisBeanTypeRegistry needs refactoring!
         val registry = IsisBeanTypeRegistry.current();
-        
-        val discoveredTypes = registry.streamAndClearInbox()
-        .map(Map.Entry::getKey)
-        .collect(Collectors.toSet());
-        discoveredTypes.addAll((Set)registry.getEntityTypes());
-        discoveredTypes.addAll((Set)registry.getBeanTypes());
+        val discoveredTypes = registry.snapshotIntrospectableTypes().keySet();
         
         for(val cls : nonManaged()) {
             assertTrue(discoveredTypes.contains(cls));
         }
-        
-        //TODO @DomainObject with NATURE_NOT_SPECIFIED is getting ignored, is this correct behavior?
         
     }
 

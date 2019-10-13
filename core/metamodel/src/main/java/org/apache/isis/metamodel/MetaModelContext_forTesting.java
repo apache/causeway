@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.springframework.core.env.AbstractEnvironment;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -67,7 +69,7 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     .build();
     
     @Builder.Default
-    private IsisConfiguration configuration = new IsisConfiguration(); // just config defaults
+    private IsisConfiguration configuration = newIsisConfiguration(); // just config defaults
 
     private SpecificationLoader specificationLoader;
 
@@ -145,6 +147,17 @@ final class MetaModelContext_forTesting implements MetaModelContext {
 
         return Stream.concat(fields.stream(), getSingletons().stream())
                 .filter(_NullSafe::isPresent);
+    }
+    
+    private static IsisConfiguration newIsisConfiguration() {
+        val config = new IsisConfiguration();
+        config.setEnvironment(new AbstractEnvironment() {
+            @Override
+            public String getProperty(String key) {
+                return _Config.getConfiguration().getString(key);
+            }
+        });
+        return config;
     }
 
 }

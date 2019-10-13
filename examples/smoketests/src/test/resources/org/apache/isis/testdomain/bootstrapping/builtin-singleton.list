@@ -83,7 +83,7 @@ org.apache.isis.runtime.system.session.IsisSessionFactoryDefault
 org.apache.isis.runtime.system.transaction.AuditingServiceInternal
 org.apache.isis.runtime.system.transaction.ChangedObjectsServiceInternal
 org.apache.isis.runtime.system.transaction.PersistenceSessionServiceInternalDefault
-org.apache.isis.security.authentication.bypass.AuthenticatorBypass
+#org.apache.isis.security.authentication.bypass.AuthenticatorBypass
 org.apache.isis.security.authentication.manager.AuthorizationManagerStandard
 org.apache.isis.security.authentication.standard.AuthenticationManagerStandard
 #org.apache.isis.security.authorization.bypass.AuthorizorBypass

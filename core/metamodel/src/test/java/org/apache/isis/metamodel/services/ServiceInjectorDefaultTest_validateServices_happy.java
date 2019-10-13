@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -46,8 +48,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 },
 properties = {
         "isis.services.injector.setPrefix=true"
-}
-        )
+})
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 class ServiceInjectorDefaultTest_validateServices_happy {
 
     // -- SCENARIO

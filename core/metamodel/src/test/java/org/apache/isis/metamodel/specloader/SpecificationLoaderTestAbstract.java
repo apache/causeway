@@ -23,6 +23,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -55,10 +56,19 @@ import lombok.val;
 abstract class SpecificationLoaderTestAbstract {
 
     static class Producers {
+
+        //@Produces
+        ConfigurableEnvironment newConfigurableEnvironment() {
+            val mock = Mockito.mock(ConfigurableEnvironment.class);
+            when(mock.getProperty("")).thenReturn("nop");
+            return mock;
+        }
+
         
         //@Produces
         IsisConfiguration newConfiguration() {
             val config = new IsisConfiguration(); // uses defaults!
+            config.setEnvironment(newConfigurableEnvironment());
             return config;
         }
 

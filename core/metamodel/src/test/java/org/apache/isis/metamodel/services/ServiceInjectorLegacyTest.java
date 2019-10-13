@@ -29,14 +29,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.config.IsisConfigModule;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.metamodel.specloader.InjectorMethodEvaluatorDefault;
@@ -49,6 +51,7 @@ import lombok.val;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
+        IsisBeanFactoryPostProcessorForSpring.class,
         IsisConfigModule.class,
         ServiceInjectorLegacy.class,
         ServiceRegistryDefault.class,
@@ -57,6 +60,7 @@ import lombok.val;
 properties = {
         "isis.services.injector.setPrefix=true"
 })
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 class ServiceInjectorLegacyTest {
 
     // -- SPRING SETUP
@@ -128,7 +132,7 @@ class ServiceInjectorLegacyTest {
 
     @BeforeEach
     void setup() {
-        _Spring.reinit(applicationContext);    
+        //_Spring.reinit(applicationContext);    
     }
     
     @Test

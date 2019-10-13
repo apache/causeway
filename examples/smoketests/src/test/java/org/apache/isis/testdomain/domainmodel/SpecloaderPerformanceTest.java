@@ -29,7 +29,6 @@ import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.IsisPresets;
-import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -62,7 +61,7 @@ class SpecloaderPerformanceTest {
     
     @BeforeAll
     static void setup() {
-        IsisBeanTypeRegistry.repeatedTesting = true;
+        
     }
     
     static long ITERATIONS = 100; /* should typically run in ~10s */

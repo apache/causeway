@@ -29,6 +29,8 @@ import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultsProviderUtil;
 
+import lombok.val;
+
 public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
 
 
@@ -42,18 +44,20 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
     }
 
     private DefaultedFacetAbstract create(final Class<?> cls, final FacetHolder holder) {
-        final Defaulted annotation = Annotations.getAnnotation(cls, Defaulted.class);
 
+        val defaultedAnnot = Annotations.getAnnotation(cls, Defaulted.class);
+        val config = super.getConfiguration();
+        
         // create from annotation, if present
-        if (annotation != null) {
-            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, holder);
-            if (facet.isValid()) {
-                return facet;
+        if (defaultedAnnot != null) {
+            val defaultedFacet = new DefaultedFacetAnnotation(config, cls, holder);
+            if (defaultedFacet.isValid()) {
+                return defaultedFacet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls);
+        val providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(config, cls);
         if (!_Strings.isNullOrEmpty(providerName)) {
             final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder);
             if (facet.isValid()) {

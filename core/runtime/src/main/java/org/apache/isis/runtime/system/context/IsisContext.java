@@ -90,16 +90,6 @@ public interface IsisContext {
         return CompletableFuture.supplyAsync(computation);
     }
 
-    // -- LIFE-CYCLING
-
-    /**
-     * Destroys this context and clears any state associated with it.
-     * It marks the end of IsisContext's life-cycle. Subsequent calls have no effect.
-     */
-    public static void clear() {
-        _Context.clear();
-    }
-
     // -- CONVENIENT SHORTCUTS
 
     /**

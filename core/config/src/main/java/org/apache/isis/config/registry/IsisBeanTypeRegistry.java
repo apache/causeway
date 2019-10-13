@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -38,12 +37,12 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.components.ApplicationScopedComponent;
 import org.apache.isis.commons.internal.components.SessionScopedComponent;
 import org.apache.isis.commons.internal.components.TransactionScopedComponent;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc.BeanSort;
-import org.apache.isis.commons.internal.ioc.spring._Spring;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.config.beans.IsisComponentScanInterceptor;
 
@@ -68,65 +67,88 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     }
 
     /**
-     * inbox for introspection, as used by the spec loader
+     * Inbox for introspection, as used by the SpecificationLoader
      */
-    private final Map<Class<?>, BeanSort> inbox = new HashMap<>();
+    private final Map<Class<?>, BeanSort> introspectableTypes = new HashMap<>();
 
-    @Getter private final Set<Class<?>> beanTypes = new HashSet<>();
+    // -- DISTINCT CATEGORIES OF BEAN SORTS
+    
+    @Getter private final Set<Class<?>> managedBeanTypes = new HashSet<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
+    @Getter private final Set<Class<?>> vetoedTypes = _Sets.newConcurrentHashSet();
     
-    private final List<Set<? extends Class<? extends Object>>> allTypeSets = _Lists.of(
-            beanTypes,
+    private final List<Set<? extends Class<? extends Object>>> allCategorySets = _Lists.of(
+            managedBeanTypes,
             entityTypes,
             mixinTypes,
-            viewModelTypes
+            viewModelTypes,
+            vetoedTypes
             );
 
     @Override
     public void close() {
 
-        if(!_Spring.isContextAvailable()) {
-            // this instance needs to survive a _Context.clear() call when Spring's context 
-            // gets passed over to Isis
-            return;
-        }
+//        if(!_Spring.isContextAvailable()) {
+//            // this instance needs to survive a _Context.clear() call when Spring's context 
+//            // gets passed over to Isis
+//            return;
+//        }
 
-        inbox.clear();
-        allTypeSets.forEach(Set::clear);
+        introspectableTypes.clear();
+        allCategorySets.forEach(Set::clear);
     }
 
     // -- INBOX
 
-    public void addToInbox(BeanSort sort, Class<?> type) {
-        synchronized (inbox) {
-            inbox.put(type, sort);
+    public void addIntrospectableType(BeanSort sort, Class<?> type) {
+        synchronized (introspectableTypes) {
+            introspectableTypes.put(type, sort);
+            
+            switch (sort) {
+            case MANAGED_BEAN:
+                managedBeanTypes.add(type);
+                return;
+            case MIXIN:
+                mixinTypes.add(type);
+                return;
+            case ENTITY:
+                entityTypes.add(type); //TODO redundant
+                return;
+            case VIEW_MODEL:
+                viewModelTypes.add(type);
+                return;
+            
+            //XXX skip introspection for these
+            case COLLECTION:
+            case VALUE:
+            case UNKNOWN:
+                break;
+            }
+            
         }
     }
 
-    public static boolean repeatedTesting = false;
-    
-    /**
-     * Implemented as a one-shot, that clears the inbox afterwards.
-     * @return
-     */
-    public Stream<Map.Entry<Class<?>, BeanSort>> streamAndClearInbox() {
+    public Map<Class<?>, BeanSort> snapshotIntrospectableTypes() {
 
         final Map<Class<?>, BeanSort> defensiveCopy;
 
-        synchronized (inbox) {
-            defensiveCopy = new HashMap<>(inbox);
-            if(!repeatedTesting) inbox.clear();
+        synchronized (introspectableTypes) {
+            defensiveCopy = new HashMap<>(introspectableTypes);
         }
 
         if(log.isDebugEnabled()) {
             defensiveCopy.forEach((k, v)->{
-                log.debug("to be specloaded: {} [{}]", k.getName(), v.name());
+                log.debug("to be introspected: {} [{}]", k.getName(), v.name());
             });
         }
 
-        return defensiveCopy.entrySet().stream();
+        return defensiveCopy;
+    }
+    
+    public void veto(Class<?> type) {
+        vetoedTypes.add(type);
     }
 
     // -- FILTER
@@ -164,30 +186,23 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     
     @Override
     public boolean isManagedBean(Class<?> type) {
-        val beanSort = quickClassify(type);
-        return beanSort.isManagedBean();
+        if(vetoedTypes.contains(type)) { // vetos are coming from the spec-loader during init
+            return false;
+        }
+        return managedBeanTypes.contains(type);
     }
     
     // -- HELPER
     
-    // don't categorize this early, instead push candidate classes onto a queue for 
-    // later processing when the SpecLoader initializes.
     private void intercept(Class<?> type) {
 
         val beanSort = quickClassify(type);
-
-        if(beanSort.isEntity()) {
-            // event though passed to the inbox for introspection we populate this 
-            // for the persistence layer not having to wait on the spec -loader for 
-            // processing of the inbox
-            entityTypes.add(type); 
-        }
 
         val isToBeRegistered = beanSort.isManagedBean();
         val isToBeInspected = !beanSort.isUnknown();
 
         if(isToBeInspected) {
-            addToInbox(beanSort, type);
+            addIntrospectableType(beanSort, type);
         }
 
         if(log.isDebugEnabled()) {
@@ -295,6 +310,8 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         return Optional.empty();
 
     }
+
+
 
 
 }
