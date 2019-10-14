@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.icon.IconFacet;
@@ -41,7 +40,6 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     public static Facet create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfigurationLegacy configurationLegacy,
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 

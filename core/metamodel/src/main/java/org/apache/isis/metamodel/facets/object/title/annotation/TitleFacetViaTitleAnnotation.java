@@ -27,6 +27,7 @@ import java.util.function.Function;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -119,6 +120,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
         final StringBuilder stringBuilder = new StringBuilder();
@@ -151,7 +153,9 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-            log.warn("Title failure", ex);
+            if(!IsisSystemEnvironment.get().isUnitTesting()) {
+                log.warn("Title failure", ex);    
+            }
             return "Failed Title";
         }
     }

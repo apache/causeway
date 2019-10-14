@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
@@ -43,7 +42,6 @@ CssClassFacet {
     public static Facet create(
             final Optional<ViewModelLayout> viewModelLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfigurationLegacy configurationLegacy,
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 

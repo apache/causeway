@@ -21,20 +21,22 @@ package org.apache.isis.metamodel.facets.object.value.annotcfg;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
-    private static String semanticsProviderName(final Class<?> annotatedClass) {
+    private static String semanticsProviderName(final IsisConfiguration config, final Class<?> annotatedClass) {
+        
         final Value annotation = annotatedClass.getAnnotation(Value.class);
         final String semanticsProviderName = annotation.semanticsProviderName();
         if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
             return semanticsProviderName;
         }
         return ValueSemanticsProviderUtil
-                .semanticsProviderNameFromConfiguration(annotatedClass);
+                .semanticsProviderNameFromConfiguration(config, annotatedClass);
     }
 
     private static Class<?> semanticsProviderClass(final Class<?> annotatedClass) {
@@ -43,10 +45,11 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     }
 
     public ValueFacetAnnotation(
+            final IsisConfiguration config,
             final Class<?> annotatedClass, 
             final FacetHolder holder) {
 
-        this(semanticsProviderName(annotatedClass), 
+        this(semanticsProviderName(config, annotatedClass), 
                 semanticsProviderClass(annotatedClass), holder);
     }
 

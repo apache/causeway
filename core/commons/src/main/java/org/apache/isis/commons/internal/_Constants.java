@@ -20,6 +20,8 @@
 package org.apache.isis.commons.internal;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
 
@@ -67,23 +69,29 @@ public final class _Constants {
     public static final Annotation[] emptyAnnotations = new Annotation[0];
 
     /**
-     * writer that does nothing
+     * Writer that does nothing
      */
     public static final Writer nopWriter = new Writer() {
         @Override public void write(char[] cbuf, int off, int len) throws IOException { }
         @Override public void flush() throws IOException { }
         @Override public void close() throws IOException { }
     };
+
+    /**
+     * OutputStream that does nothing
+     */
+    public static final OutputStream nopOutputStream = new OutputStream() {
+        @Override public void write(int b) throws IOException { }
+    };
+    
+    /**
+     * PrintStream that does nothing
+     */
+    public static final PrintStream nopPrintStream = new PrintStream(nopOutputStream);
     
     @Primary private static final class PrimaryAnnotated {}
     public static final Primary ANNOTATION_PRIMARY = PrimaryAnnotated.class.getAnnotation(Primary.class);
-    
-//    public static final Primary ANNOTATION_PRIMARY = new Primary() {
-//        @Override
-//        public Class<? extends Annotation> annotationType(){
-//            return Primary.class;
-//        }
-//    };
+
     
     
 

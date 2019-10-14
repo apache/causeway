@@ -23,6 +23,8 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.metamodel.MetaModelContext;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facetapi.FacetUtil;
 import org.apache.isis.metamodel.facetapi.FeatureType;
@@ -66,32 +68,36 @@ import org.apache.isis.metamodel.facets.object.value.vsp.ValueSemanticsProviderU
  */
 public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract  {
 
-
     public ValueFacetAnnotationOrConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        
+        FacetUtil.addFacet(create(processClassContext.getCls(), processClassContext.getFacetHolder()));
     }
 
     /**
      * Returns a {@link ValueFacet} implementation.
      */
     private ValueFacet create(final Class<?> cls, final FacetHolder holder) {
+        
+        IsisConfiguration config = MetaModelContext.current().getConfiguration();
 
         // create from annotation, if present
         final Value annotation = Annotations.getAnnotation(cls, Value.class);
         if (annotation != null) {
-            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder);
+            final ValueFacetAnnotation facet = new ValueFacetAnnotation(config, cls, holder);
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls);
+        final String semanticsProviderName = ValueSemanticsProviderUtil
+                .semanticsProviderNameFromConfiguration(config, cls);
+        
         if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
             final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder);
             if (facet.isValid()) {

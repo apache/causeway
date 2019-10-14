@@ -26,7 +26,6 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.IsisConfigurationLegacy;
 import org.apache.isis.metamodel.facetapi.Facet;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.layout.LayoutFacet;
@@ -42,7 +41,6 @@ implements LayoutFacet {
     public static Facet create(
             final Optional<ViewModelLayout> viewModelLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfigurationLegacy configurationLegacy,
             IsisConfiguration configuration, final FacetHolder facetHolder) {
 
         return viewModelLayoutIfAny

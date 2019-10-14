@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.ImperativeFacet;
@@ -62,6 +63,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
         return Intent.UI_HINT;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public String title(final ManagedObject owningAdapter) {
         try {
@@ -75,7 +77,9 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
             }
             return null;
         } catch (final RuntimeException ex) {
-            log.warn("title failure", ex);
+            if(!IsisSystemEnvironment.get().isUnitTesting()) {
+                log.warn("Title failure", ex);    
+            }
             return "Failed Title";
         }
     }

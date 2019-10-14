@@ -43,31 +43,31 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
 
         FacetUtil.addFacet(
                 TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration(), facetHolder));
+                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
         FacetUtil.addFacet(
                 TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent.create(
-                        viewModelLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration(), facetHolder));
+                        viewModelLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
 
         FacetUtil.addFacet(
                 IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration(), facetHolder));
+                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
         FacetUtil.addFacet(
                 IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent.create(
-                        viewModelLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration(), facetHolder));
+                        viewModelLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
 
         FacetUtil.addFacet(
                 CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration(), facetHolder));
+                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
         FacetUtil.addFacet(
                 CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent.create(
-                        viewModelLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration(), facetHolder));
+                        viewModelLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
 
         FacetUtil.addFacet(
                 LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent.create(
-                        domainObjectLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration(), facetHolder));
+                        domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
         FacetUtil.addFacet(
                 LayoutFacetViaViewModelLayoutAnnotationUsingLayoutUiEvent.create(
-                        viewModelLayoutIfAny, metamodelEventService, getConfigurationLegacy(), getConfiguration() , facetHolder));
+                        viewModelLayoutIfAny, metamodelEventService, getConfiguration() , facetHolder));
 
         FacetUtil.addFacet(
                 CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayoutIfAny, facetHolder));

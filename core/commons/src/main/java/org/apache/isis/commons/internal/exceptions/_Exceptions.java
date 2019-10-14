@@ -37,6 +37,8 @@ import org.apache.isis.commons.internal.functions._Functions;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.val;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -244,6 +246,23 @@ public final class _Exceptions {
     public static Throwable getRootCause(@Nullable Throwable ex) {
         return _Lists.lastElementIfAny(getCausalChain(ex));
     }
+    
+    // -- SWALLOW
+    
+    public static void silence(Runnable runnable) {
+        
+        val currentThread = Thread.currentThread();
+        val silencedHandler = currentThread.getUncaughtExceptionHandler();
+        
+        currentThread.setUncaughtExceptionHandler((Thread t, Throwable e)->{/*noop*/});
+        
+        try {
+            runnable.run();
+        } finally {
+            currentThread.setUncaughtExceptionHandler(silencedHandler);
+        }
+        
+    }
 
     // -- FLUENT EXCEPTION
 
@@ -352,6 +371,8 @@ public final class _Exceptions {
             uncheckedConsumer(checkedConsumer).accept(obj);
         }
     }
+
+
 
 
 

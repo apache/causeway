@@ -41,7 +41,6 @@ public class IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent extends IconF
     public static Facet create(
             final Optional<ViewModelLayout> viewModelLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfigurationLegacy configurationLegacy,
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
