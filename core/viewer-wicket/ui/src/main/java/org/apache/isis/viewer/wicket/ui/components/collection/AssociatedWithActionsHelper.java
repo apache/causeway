@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ActionType;
@@ -33,8 +32,8 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.memento.ObjectAdapterMemento;
-import org.apache.isis.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 /**
@@ -49,15 +48,15 @@ public class AssociatedWithActionsHelper implements Serializable {
         this.collectionModel = collectionModel;
     }
 
-    public List<ObjectAction> getAssociatedActions(final IsisSessionFactory isisSessionFactory) {
+    public List<ObjectAction> getAssociatedActions(final SpecificationLoader specLoader) {
 
         if(collectionModel.isStandalone()) {
             return Collections.emptyList();
         }
         final OneToManyAssociation collection = collectionModel.getCollectionMemento()
-                .getCollection(isisSessionFactory.getSpecificationLoader());
+                .getCollection(specLoader);
 
-        final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
+        final ObjectSpecification objectSpec = getObjectSpecification();
 
         final List<ActionType> actionTypes = inferActionTypes();
         final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED);
@@ -67,12 +66,13 @@ public class AssociatedWithActionsHelper implements Serializable {
                 .collect(Collectors.toList());
     }
 
-    private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {
+    private ObjectSpecification getObjectSpecification() {
         final ObjectAdapterMemento parentOam = collectionModel.getParentObjectAdapterMemento();
         final ObjectAdapter parentAdapter = parentOam.getObjectAdapter();
         return parentAdapter.getSpecification();
     }
 
+    @SuppressWarnings("deprecation")
     private static List<ActionType> inferActionTypes() {
         final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);

@@ -52,6 +52,8 @@ public class ValidateDomainModel implements Runnable {
 
         val specificationLoader = IsisContext.getSpecificationLoader();
         
+        specificationLoader.createMetaModel();
+        
         this.validationFailures = specificationLoader.getValidationResult();
       
 

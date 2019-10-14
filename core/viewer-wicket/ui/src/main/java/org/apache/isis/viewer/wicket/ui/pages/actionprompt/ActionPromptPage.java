@@ -50,7 +50,7 @@ public class ActionPromptPage extends PageAbstract {
      * Required for bookmarking of actions.
      */
     public ActionPromptPage(final PageParameters pageParameters) {
-        this(pageParameters, IsisContext.getSessionFactory().getSpecificationLoader());
+        this(pageParameters, IsisContext.getSpecificationLoader());
     }
 
     public ActionPromptPage(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {

@@ -105,21 +105,4 @@ public interface IsisSessionFactory {
 
     // -- component accessors
 
-    /**
-     * The {@link ApplicationScopedComponent application-scoped}
-     * {@link SpecificationLoader}.
-     * @deprecated use IsisContext instead
-     */
-    public SpecificationLoader getSpecificationLoader();
-
-    /**
-     * The {@link AuthenticationManager} that will be used to authenticate and
-     * create {@link AuthenticationSession}s
-     * {@link IsisSession#getAuthenticationSession() within} the
-     * {@link IsisSession}.
-     * @deprecated use IsisContext instead
-     */
-    public AuthenticationManager getAuthenticationManager();
-
-
 }

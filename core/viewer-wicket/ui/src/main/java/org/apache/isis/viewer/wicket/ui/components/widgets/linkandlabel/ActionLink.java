@@ -198,7 +198,7 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
+        return IsisContext.getSpecificationLoader();
     }
 
     AjaxDeferredBehaviour determineDeferredBehaviour() {

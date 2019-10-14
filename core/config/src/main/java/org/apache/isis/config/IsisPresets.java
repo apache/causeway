@@ -38,7 +38,9 @@ public final class IsisPresets  {
     
     public static final String DebugPersistence = "classpath:/presets/DebugPersistence.properties";
     public static final String DebugDiscovery = "classpath:/presets/DebugDiscovery.properties";
+    
     public static final String DebugProgrammingModel = "classpath:/presets/DebugProgrammingModel.properties";
+    public static final String SilenceProgrammingModel = "classpath:/presets/SilenceProgrammingModel.properties";
     
     public static final String DebugMetaModel = "classpath:/presets/DebugMetaModel.properties";
     public static final String SilenceMetaModel = "classpath:/presets/SilenceMetaModel.properties";

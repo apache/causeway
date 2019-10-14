@@ -20,7 +20,7 @@ package org.apache.isis.testdomain.domainmodel;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -51,6 +51,7 @@ import lombok.val;
         })
 @TestPropertySource({
     IsisPresets.SilenceMetaModel,
+    IsisPresets.SilenceProgrammingModel,
     //IsisPresets.DebugProgrammingModel,
 })
 @Incubating("not a real test, just for performance tuning")
@@ -59,9 +60,9 @@ class SpecloaderPerformanceTest {
     @Inject private IsisConfiguration config;
     @Inject private SpecificationLoader specificationLoader;
     
-    @BeforeAll
-    static void setup() {
-        
+    @BeforeEach
+    void setup() {
+        config.getReflector().getIntrospector().setParallelize(true);
     }
     
     static long ITERATIONS = 100; /* should typically run in ~10s */
@@ -70,7 +71,7 @@ class SpecloaderPerformanceTest {
     @Test 
     void repeatedConcurrentSpecloading_shouldNotDeadlock() {
         
-        config.getReflector().getIntrospector().setParallelize(true);
+        
         
         val timeOutMillis = ITERATIONS * EXPECTED_MILLIS_PER_ITERATION;
         val goodUntilMillis = System.currentTimeMillis() + timeOutMillis;

@@ -103,8 +103,8 @@ public class ResourceContextTest_getArg {
                 will(returnValue(mockIsisSession));
                 allowing(mockIsisSession).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
-                allowing(mockIsisSessionFactory).getSpecificationLoader();
-                will(returnValue(mockSpecificationLoader));
+//                allowing(mockIsisSessionFactory).getSpecificationLoader();
+//                will(returnValue(mockSpecificationLoader));
                 //                allowing(mockIsisSession).getPersistenceSession();
                 //                will(returnValue(mockPersistenceSession));
             }

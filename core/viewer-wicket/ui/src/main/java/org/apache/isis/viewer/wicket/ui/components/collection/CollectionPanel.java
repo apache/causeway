@@ -135,7 +135,7 @@ BulkActionsProvider {
 
         if(toggleboxColumn == null) {
             final List<ObjectAction> associatedActions =
-                    associatedWithActionsHelper.getAssociatedActions(getIsisSessionFactory());
+                    associatedWithActionsHelper.getAssociatedActions(getSpecificationLoader());
 
             final EntityCollectionModel entityCollectionModel = getModel();
             if(associatedActions.isEmpty() || entityCollectionModel.isStandalone()) {

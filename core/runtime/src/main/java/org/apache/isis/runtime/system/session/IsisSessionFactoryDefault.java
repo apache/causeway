@@ -180,17 +180,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         }
     }
 
-    // -- component accessors
-
-    @Override
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    @Override
-    public AuthenticationManager getAuthenticationManager() {
-        return authenticationManager;
-    }
 
 
 
