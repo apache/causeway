@@ -170,6 +170,13 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
                 null);
     }
 
+
+
+    @Override
+    public String getManagedBeanName() {
+        return null; // not a managed-bean
+    }
+
     // --
 
 

@@ -90,17 +90,21 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-    private final boolean isManagedBean;
+    
+    /**
+     * available only for managed-beans
+     */
+    private final String nameIfIsManagedBean;
 
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
             final FacetProcessor facetProcessor,
-            final boolean isManagedBean,
+            final String nameIfIsManagedBean,
             final PostProcessor postProcessor) {
         super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
-        this.isManagedBean = isManagedBean;
+        this.nameIfIsManagedBean = nameIfIsManagedBean;
 
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
 
@@ -271,10 +275,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     @Override
-    public boolean isManagedBean() {
-        return isManagedBean;
+    public String getManagedBeanName() {
+        return nameIfIsManagedBean;
     }
-
+    
     // -- getObjectAction
 
     @Override

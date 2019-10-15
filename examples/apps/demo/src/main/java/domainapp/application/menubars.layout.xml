@@ -4,13 +4,13 @@
         <mb3:menu>
             <mb3:named>Featured Types</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.types.FeaturedTypesMenu" id="temporals">
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="temporals">
                     <cpt:named>Temporal Types</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="domainapp.dom.types.FeaturedTypesMenu" id="text">
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="text">
                     <cpt:named>Text</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="domainapp.dom.types.FeaturedTypesMenu" id="blobs">
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="blobs">
                     <cpt:named>Blob Type</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -19,7 +19,7 @@
         <mb3:menu>
             <mb3:named>Tooltips</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.tooltip.TooltipMenu" id="tooltipDemo">
+                <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo">
                     <cpt:named>Tooltip Demo</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -28,7 +28,7 @@
         <mb3:menu>
             <mb3:named>Trees</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.tree.TreeDemoMenu" id="fileSystemTree">
+                <mb3:serviceAction objectType="demo.TreeDemoMenu" id="fileSystemTree">
                     <cpt:named>File System Tree</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -36,13 +36,13 @@
         <mb3:menu>
             <mb3:named>Actions</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.actions.assoc.AssociatedActionMenu" id="associatedActions">
+                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions">
                     <cpt:named>Associated Actions</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="domainapp.dom.actions.async.AsyncActionMenu" id="asyncActions">
+                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
                     <cpt:named>Asynchronous Actions</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="domainapp.dom.actions.depargs.DependentArgsActionMenu" id="dependentArgsActions">
+                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
                     <cpt:named>Actions w/ dependent Arguments</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -50,10 +50,10 @@
         <mb3:menu>
             <mb3:named>Events</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.events.EventLogMenu" id="listEvents">
+                <mb3:serviceAction objectType="demo.EventLogMenu" id="listEvents">
                     <cpt:named>List Events</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="domainapp.dom.events.EventLogMenu" id="triggerEvent">
+                <mb3:serviceAction objectType="demo.EventLogMenu" id="triggerEvent">
                     <cpt:named>Trigger Event</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -61,7 +61,7 @@
         <mb3:menu>
             <mb3:named>Error Handling</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.error.ErrorMenu" id="errorHandling">
+                <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling">
                     <cpt:named>Error Handling</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -69,7 +69,7 @@
 		<mb3:menu>
             <mb3:named>JEE/CDI</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="domainapp.dom.jee.JeeMenu" id="jeeInjectDemo">
+                <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo">
                     <cpt:named>JEE Inject Demo</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>

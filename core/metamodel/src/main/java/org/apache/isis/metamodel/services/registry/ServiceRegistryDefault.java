@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.commons.internal.ioc.spring._Spring;
@@ -65,11 +64,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     private final _Lazy<Map<String, ManagedBeanAdapter>> managedBeansById = 
             _Lazy.threadSafe(this::enumerateManagedBeans);
 
-    private final static _Probe probe = _Probe.maxCallsThenIgnore(5).label("service reg");
-    
     private Map<String, ManagedBeanAdapter> enumerateManagedBeans() {
-        
-        probe.println("#### enumerate");
         
         val filter = IsisBeanTypeRegistry.current();
         val managedBeanAdapterByName = _Maps.<String, ManagedBeanAdapter>newHashMap();

@@ -344,4 +344,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         // [2158] not implemented yet
     }
 
+    @Override
+    public String getManagedBeanName() {
+        // [2158] not implemented yet
+        return null;
+    }
+
 }

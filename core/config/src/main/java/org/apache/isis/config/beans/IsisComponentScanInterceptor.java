@@ -31,21 +31,34 @@ import org.apache.isis.config.registry.TypeMetaData;
 public interface IsisComponentScanInterceptor {
 
     /**
-     * Whether given {@link Component} annotated or meta-annotated type should be made
+     * Allows for the given type-meta to by modified before bean-definition registration 
+     * is finalized by the IoC immediately after the type-scan phase. 
+     * Supported aspects to be modified: 
+     * <p>- Whether given {@link Component} annotated or meta-annotated type should be made
      * available for injection.
+     * <p>- Naming strategy to override that of the IoC.
+     * 
      * @param type
      * @apiNote implementing classes might have side effects, eg. intercept 
      * discovered types into a type registry
      */
-    boolean isInjectable(TypeMetaData type);
-    
-    String getBeanNameOverride(TypeMetaData type);
+    void intercept(TypeMetaData type);
 
+    /**
+     * If given type is available for injection, returns the <em>Managed Bean's</em> name (id) as
+     * recognized by the IoC container, {@code null} otherwise;
+     * @param type
+     * @return
+     */
+    String getManagedBeanNameForType(Class<?> type);
+    
     /**
      * Whether given type is available for injection. Is a <em>Managed Bean</em>. 
      * @param type
      * @return 
      */
-    boolean isManagedBean(Class<?> type);
+    default boolean isManagedBean(Class<?> type) {
+        return getManagedBeanNameForType(type)!=null;
+    }
     
 }

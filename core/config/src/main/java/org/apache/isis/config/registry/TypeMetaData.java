@@ -18,52 +18,42 @@
  */
 package org.apache.isis.config.registry;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 
-@Value(staticConstructor="of")
+@RequiredArgsConstructor(staticName = "of")
 public final class TypeMetaData {
 
     /**
      * Fully qualified name of the underlying class.
      */
-    String className;
-
-    //    /**
-    //     * Fully qualified class names of all annotation types that are present on the underlying class.
-    //     */
-    //    Set<String> annotationTypes;
-
-    //    public boolean hasSingletonAnnotation() {
-    //        return annotationTypes.contains(singletonAnnotation);
-    //    }
-    //    
-    //    public boolean hasRequestScopedAnnotation() {
-    //        return annotationTypes.contains(requestScopedAnnotation);
-    //    }
-    //    
-    //    public boolean hasDomainServiceAnnotation() {
-    //        return annotationTypes.contains(domainServiceAnnotation);
-    //    }
-    //    
-    //    public boolean hasDomainObjectAnnotation() {
-    //        return annotationTypes.contains(domainObjectAnnotation);
-    //    }
-    //    
-    //    public boolean hasMixinAnnotation() {
-    //        return annotationTypes.contains(mixinAnnotation);
-    //    }
-    //    
-    //    public boolean hasViewModelAnnotation() {
-    //        return annotationTypes.contains(viewModelAnnotation);
-    //    }
-
+    @Getter private final String className;
+    
+    /**
+     * As proposed by IoC, before any overrides.
+     */
+    @Getter private final String proposedBeanName;
+    
+    /**
+     * Name override, applied only if not empty. 
+     */
+    @Getter @Setter
+    private String beanNameOverride;
+    
+    /**
+     * Whether this type should be made available to resolve injection points.  
+     */
+    @Getter @Setter
+    private boolean injectable = true;
+    
     @Getter(lazy=true)
-    final Class<?> underlyingClass = resolveClass();
+    private final Class<?> underlyingClass = resolveClass();
     
     /**
      * @return the underlying class of this TypeMetaData
@@ -77,20 +67,11 @@ public final class TypeMetaData {
         }
     }
 
-    //    private final static String singletonAnnotation = 
-    //    		javax.inject.Singleton.class.getName();
-    //    private final static String requestScopedAnnotation = 
-    //    		javax.enterprise.context.RequestScoped.class.getName();
-    //    private final static String domainServiceAnnotation = 
-    //            org.apache.isis.applib.annotation.DomainService.class.getName();
-    //    private final static String domainObjectAnnotation = 
-    //            org.apache.isis.applib.annotation.DomainObject.class.getName();
-    //    private final static String mixinAnnotation = 
-    //            org.apache.isis.applib.annotation.Mixin.class.getName();
-    //    private final static String viewModelAnnotation = 
-    //            org.apache.isis.applib.annotation.ViewModel.class.getName();
-
-
+    public String getEffectiveBeanName() {
+        return _Strings.isNullOrEmpty(beanNameOverride)
+                ? proposedBeanName 
+                        : beanNameOverride;
+    }
 
 
 }

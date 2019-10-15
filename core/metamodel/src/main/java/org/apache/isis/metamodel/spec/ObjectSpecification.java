@@ -358,12 +358,20 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     boolean isHidden();
 
     /**
-     * Whether this specification represents a bean, that is a managed object
+     * Whether this specification represents a bean, that is a managed bean
      * with scoped life-cycle, available for dependency injection. 
      */
     default boolean isManagedBean() {
-        return getBeanSort().isManagedBean();
+        return getManagedBeanName()!=null;
     }
+    
+    /**
+     * If this specification represents a bean, that is a managed bean, then
+     * returns the bean's name/id as recognized by the IoC container.
+     * <p>Otherwise returns {@code null}. 
+     * @return
+     */
+    String getManagedBeanName();
 
     default boolean isViewModel() {
         return getBeanSort().isViewModel();
@@ -433,6 +441,8 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * @since 2.0
      */
     void introspectUpTo(IntrospectionState upTo);
+
+
 
 
 }

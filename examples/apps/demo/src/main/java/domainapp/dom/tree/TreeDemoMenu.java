@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import domainapp.utils.DemoStub;
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW)
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.TreeDemoMenu")
 @DomainObjectLayout(named="Tree Demo")
 public class TreeDemoMenu {
 

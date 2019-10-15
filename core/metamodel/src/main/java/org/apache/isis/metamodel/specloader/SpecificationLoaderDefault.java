@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -316,8 +315,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     // -- HELPER
     
-    private final static _Probe probe = _Probe.maxCallsThenIgnore(5).label("specloader"); 
-
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
@@ -335,15 +332,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                     new FacetedMethodsBuilderContext(
                             this, facetProcessor);
 
-            probe.println("#### check is managed");
-            
-            val isManagedBean = IsisBeanTypeRegistry.current().isManagedBean(cls);
+            val managedBeanNameIfAny = IsisBeanTypeRegistry.current().getManagedBeanNameForType(cls);
 
             objectSpec = new ObjectSpecificationDefault(
                     cls,
                     facetedMethodsBuilderContext,
                     facetProcessor, 
-                    isManagedBean, 
+                    managedBeanNameIfAny, 
                     postProcessor);
         }
 

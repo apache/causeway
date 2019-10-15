@@ -33,7 +33,6 @@ import org.apache.isis.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.metamodel.services.ServiceUtil;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.Contributed;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
@@ -73,24 +72,26 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
     }
 
     private static ObjectSpecIdFacet createObjectSpecIdFacet(
-            final FacetHolder facetHolder, final Class<?> substitutedClass) {
-        final boolean isService = isService(facetHolder);
+            final FacetHolder facetHolder, 
+            final Class<?> substitutedClass) {
+        
+        val serviceId = getServiceId(facetHolder);
+        val isService = serviceId!=null;
+        
         if (isService) {
-
-            final String id = ServiceUtil.getExplicitIdOfType(substitutedClass).orElse(null);
-            if (id != null) {
-                return new ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId(id, facetHolder);
-            }
+            return new ObjectSpecIdFacetDerivedFromIoCNamingStrategy(serviceId, facetHolder);
         }
         return new ObjectSpecIdFacetDerivedFromClassName(substitutedClass, facetHolder);
     }
 
-    private static boolean isService(final FacetHolder facetHolder) {
+    private static String getServiceId(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {
             ObjectSpecification objectSpecification = (ObjectSpecification) facetHolder;
-            return objectSpecification.isManagedBean();
+            if(objectSpecification.isManagedBean()) {
+                return objectSpecification.getManagedBeanName();
+            }
         }
-        return false;
+        return null;
     }
 
     @Override

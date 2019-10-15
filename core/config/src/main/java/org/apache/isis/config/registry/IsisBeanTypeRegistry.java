@@ -73,14 +73,13 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
     
-    @Getter private final Set<Class<?>> managedBeanTypes = new HashSet<>();
+    @Getter private final Map<Class<?>, String> managedBeanNamesByType = new HashMap<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
     @Getter private final Set<Class<?>> vetoedTypes = _Sets.newConcurrentHashSet();
     
     private final List<Set<? extends Class<? extends Object>>> allCategorySets = _Lists.of(
-            managedBeanTypes,
             entityTypes,
             mixinTypes,
             viewModelTypes,
@@ -96,25 +95,27 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
 //            return;
 //        }
 
+        managedBeanNamesByType.clear();
         introspectableTypes.clear();
         allCategorySets.forEach(Set::clear);
     }
 
     // -- INBOX
 
-    public void addIntrospectableType(BeanSort sort, Class<?> type) {
+    public void addIntrospectableType(BeanSort sort, TypeMetaData typeMeta) {
+        val type = typeMeta.getUnderlyingClass();
         synchronized (introspectableTypes) {
             introspectableTypes.put(type, sort);
             
             switch (sort) {
             case MANAGED_BEAN:
-                managedBeanTypes.add(type);
+                managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
                 return;
             case MIXIN:
                 mixinTypes.add(type);
                 return;
             case ENTITY:
-                entityTypes.add(type); //TODO redundant
+                entityTypes.add(type);
                 return;
             case VIEW_MODEL:
                 viewModelTypes.add(type);
@@ -154,55 +155,27 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     // -- FILTER
 
     @Override
-    public boolean isInjectable(TypeMetaData typeMeta) {
+    public void intercept(TypeMetaData typeMeta) {
         
         val type = typeMeta.getUnderlyingClass();
-        
-        intercept(type);
-        
-        if(findNearestAnnotation(type, DomainObject.class).isPresent()) {
-            return false; // reject
-        }
-        
-        if(findNearestAnnotation(type, ViewModel.class).isPresent()) {
-            return false; // reject
-        }
-        
-        if(findNearestAnnotation(type, Mixin.class).isPresent()) {
-            return false; // reject
-        }
-        
-        if(findNearestAnnotation(type, Vetoed.class).isPresent()) {
-            return false; // reject
-        }
-        
-        return true;
-    }
-    
-    @Override
-    public String getBeanNameOverride(TypeMetaData typeMeta) {
-        return extractObjectType(typeMeta.getUnderlyingClass()).orElse(null);
-    }
-    
-    @Override
-    public boolean isManagedBean(Class<?> type) {
-        if(vetoedTypes.contains(type)) { // vetos are coming from the spec-loader during init
-            return false;
-        }
-        return managedBeanTypes.contains(type);
-    }
-    
-    // -- HELPER
-    
-    private void intercept(Class<?> type) {
-
         val beanSort = quickClassify(type);
 
+        if(findNearestAnnotation(type, DomainObject.class).isPresent() ||
+                findNearestAnnotation(type, ViewModel.class).isPresent() ||
+                findNearestAnnotation(type, Mixin.class).isPresent() ||
+                findNearestAnnotation(type, Vetoed.class).isPresent()) {
+            
+            typeMeta.setInjectable(false); // reject
+            
+        } else {
+            typeMeta.setBeanNameOverride(extractObjectType(typeMeta.getUnderlyingClass()).orElse(null));
+        }
+        
         val isToBeRegistered = beanSort.isManagedBean();
         val isToBeInspected = !beanSort.isUnknown();
 
         if(isToBeInspected) {
-            addIntrospectableType(beanSort, type);
+            addIntrospectableType(beanSort, typeMeta);
         }
 
         if(log.isDebugEnabled()) {
@@ -214,7 +187,18 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             }
         }
 
+        
     }
+    
+    @Override
+    public String getManagedBeanNameForType(Class<?> type) {
+        if(vetoedTypes.contains(type)) { // vetos are coming from the spec-loader during init
+            return null;
+        }
+        return managedBeanNamesByType.get(type);
+    }
+    
+    // -- HELPER
 
     // the SpecLoader does a better job at this
     private BeanSort quickClassify(Class<?> type) {

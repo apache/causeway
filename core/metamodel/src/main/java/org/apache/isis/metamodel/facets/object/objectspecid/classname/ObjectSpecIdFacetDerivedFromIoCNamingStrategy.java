@@ -22,9 +22,12 @@ package org.apache.isis.metamodel.facets.object.objectspecid.classname;
 import org.apache.isis.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 
-public class ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId extends ObjectSpecIdFacetAbstract {
+/**
+ * @since 2.0
+ */
+public class ObjectSpecIdFacetDerivedFromIoCNamingStrategy extends ObjectSpecIdFacetAbstract {
 
-    ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId(final String value, final FacetHolder holder) {
+    ObjectSpecIdFacetDerivedFromIoCNamingStrategy(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 

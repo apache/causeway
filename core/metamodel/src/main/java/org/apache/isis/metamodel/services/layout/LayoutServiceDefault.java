@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.xml.bind.Marshaller;
 
 import org.springframework.stereotype.Service;
@@ -95,7 +94,7 @@ public class LayoutServiceDefault implements LayoutService {
 
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");
 
-        for (final ObjectSpecification objectSpec : domainObjectSpecs) {
+        for (val objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
             val grid = toGrid(domainClass, style);
             if(grid != null) {

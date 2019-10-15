@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
 
-@DomainService(nature=NatureOfService.VIEW)
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.TooltipMenu")
 public class TooltipMenu {
 
     @Inject private FactoryService factoryService;

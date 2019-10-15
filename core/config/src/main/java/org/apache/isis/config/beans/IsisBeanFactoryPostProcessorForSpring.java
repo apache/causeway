@@ -69,13 +69,15 @@ public class IsisBeanFactoryPostProcessorForSpring implements BeanFactoryPostPro
                 continue; // check next beanDefinition
             }
             
-            val typeMetaData = TypeMetaData.of(beanDefinition.getBeanClassName());
+            val typeMetaData = TypeMetaData.of(
+                    beanDefinition.getBeanClassName(),
+                    beanDefinitionName);
             
-            val injectable = interceptor.isInjectable(typeMetaData);
+            interceptor.intercept(typeMetaData);
             
-            if(injectable) {
+            if(typeMetaData.isInjectable()) {
                 
-                val beanNameOverride = interceptor.getBeanNameOverride(typeMetaData);
+                val beanNameOverride = typeMetaData.getBeanNameOverride(); 
                 if(beanNameOverride!=null) {
                     registry.removeBeanDefinition(beanDefinitionName);
                     registry.registerBeanDefinition(beanNameOverride, beanDefinition);
