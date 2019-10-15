@@ -78,7 +78,7 @@ public class MetaModelServicesMenu {
 
     @Action(
             domainEvent = DownloadMetaModelEvent.class,
-            semantics = SemanticsOf.SAFE,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
@@ -115,7 +115,7 @@ public class MetaModelServicesMenu {
 
     @Action(
             domainEvent = DownloadMetaModelXmlEvent.class,
-            semantics = SemanticsOf.SAFE,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(

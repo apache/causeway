@@ -57,8 +57,7 @@ public class HsqlDbManagerMenu {
     }
 
 
-    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<HsqlDbManagerMenu> { 
-        private static final long serialVersionUID = 1L; }
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<HsqlDbManagerMenu> { }
 
     @Action(
             semantics = SemanticsOf.SAFE,

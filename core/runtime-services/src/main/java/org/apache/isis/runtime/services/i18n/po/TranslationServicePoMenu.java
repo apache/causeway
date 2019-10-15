@@ -42,17 +42,15 @@ import org.apache.isis.applib.value.Clob;
         )
 public class TranslationServicePoMenu {
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<TranslationServicePoMenu> {
-        private static final long serialVersionUID = 1L; }
+    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<TranslationServicePoMenu> {}
 
     // //////////////////////////////////////
 
-    public static class DownloadPotFileDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L; }
+    public static class DownloadPotFileDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = DownloadPotFileDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
@@ -72,12 +70,11 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L; }
+    public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent { }
 
     @Action(
             domainEvent = ResetTranslationCacheDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
@@ -94,8 +91,7 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L; }
+    public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = SwitchToReadingTranslationsDomainEvent.class,
@@ -115,8 +111,7 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    public static class SwitchToWritingTranslationsDomainEvent extends ActionDomainEvent {
-        private static final long serialVersionUID = 1L; }
+    public static class SwitchToWritingTranslationsDomainEvent extends ActionDomainEvent {}
 
     @Action(
             domainEvent = SwitchToWritingTranslationsDomainEvent.class,

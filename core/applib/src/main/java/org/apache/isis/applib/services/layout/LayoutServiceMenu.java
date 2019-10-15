@@ -64,7 +64,7 @@ public class LayoutServiceMenu {
 
     @Action(
             domainEvent = DownloadLayoutsDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
@@ -88,7 +88,7 @@ public class LayoutServiceMenu {
 
     @Action(
             domainEvent = DownloadMenuBarsLayoutDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
+            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
