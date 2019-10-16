@@ -33,6 +33,24 @@
     </listener>
 
     <filter>
+        <filter-name>TracingZipkinFilter</filter-name>
+        <filter-class>org.apache.isis.core.webapp.TracingZipkinFilter</filter-class>
+        <init-param>
+            <param-name>tracingEndpoint</param-name>
+            <param-value>http://localhost:9411/api/v2/spans</param-value>
+        </init-param>
+        <init-param>
+            <param-name>tracingLocalServiceName</param-name>
+            <param-value>helloworld-app</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>TracingZipkinFilter</filter-name>
+        <url-pattern>/wicket/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>ShiroFilter</filter-name>
         <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
     </filter>

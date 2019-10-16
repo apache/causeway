@@ -25,6 +25,9 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
+import brave.propagation.CurrentTraceContext;
+import brave.propagation.ThreadLocalCurrentTraceContext;
+
 /**
  * Adapter implementation for {@link ComponentFactory}.
  */
@@ -95,7 +98,18 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     @Override
     public final Component createComponent(final IModel<?> model) {
-        return createComponent(getComponentType().toString(), model);
+        final String id = getComponentType().toString();
+        final CurrentTraceContext ctc = ThreadLocalCurrentTraceContext.Default.inheritable();
+        final CurrentTraceContext.Scope scope = ctc.newScope(ctc.get());
+
+        //final Span start = ThreadLocalSpan.CURRENT_TRACER.next().tag("createComponent.id", id).start();
+        try {
+            return createComponent(id, model);
+        } finally {
+            scope.close();
+//            final Span remove = ThreadLocalSpan.CURRENT_TRACER.remove();
+//            remove.finish();
+        }
     }
 
     @Override

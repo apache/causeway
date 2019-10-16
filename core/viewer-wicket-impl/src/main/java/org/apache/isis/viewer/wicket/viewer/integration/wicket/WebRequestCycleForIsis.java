@@ -23,6 +23,8 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
@@ -73,6 +75,11 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
+import brave.Span;
+import brave.Tracer;
+import brave.opentracing.BraveTracer;
+import brave.propagation.ThreadLocalSpan;
+
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
  * automatically opening a {@link IsisSession} at the beginning of the request
@@ -86,10 +93,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
-        
+
         if (!Session.exists()) {
             return;
         }
+        LOG.debug("onBeginRequest");
+
 
         final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
         final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();
@@ -97,13 +106,40 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return;
         }
 
+//        final Span span = ThreadLocalSpan.CURRENT_TRACER.next()
+//                .name("WebRequestCycleForIsis#onBeginRequest")
+//                .tag("started-by", "onBeginRequest")
+//                .tag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString())
+//                .start();
+
+//        final Tracer tracerIfAny = tracerFrom(requestCycle);
+//        if(tracerIfAny != null) {
+//            final Span span = tracerIfAny.nextSpan().name("WebRequestCycleForIsis#onBeginRequest");
+//            span.start();
+//            span.tag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString());
+//        }
         getIsisSessionFactory().openSession(authenticationSession);
         getTransactionManager().startTransaction();
+
+    }
+
+    private static BraveTracer tracerFrom(final RequestCycle requestCycle) {
+        final Object containerRequest = requestCycle.getRequest().getContainerRequest();
+        if (!(containerRequest instanceof HttpServletRequest)) {
+            return null;
+        }
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) containerRequest;
+        final Object tracerObj = httpServletRequest.getAttribute("isis.tracer.zipkin.brave");
+        if (!(tracerObj instanceof BraveTracer)) {
+            return null;
+        }
+        return (BraveTracer) tracerObj;
     }
 
     @Override
-    public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler)
-    {
+    public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
+
+        LOG.debug("onRequestHandlerResolved");
 
         if(handler instanceof RenderPageRequestHandler) {
             AdapterManager.ConcurrencyChecking.disable();
@@ -136,13 +172,40 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
         }
 
+        final ThreadLocalSpan tracer = ThreadLocalSpan.CURRENT_TRACER;
+        final Tracer tracerIfAny = tracerFrom(cycle);
         if (getIsisSessionFactory().inSession()) {
             try {
                 // will commit (or abort) the transaction;
                 // an abort will cause the exception to be thrown.
                 getTransactionManager().endTransaction();
+                final Span span = tracer.remove();
+                if(span != null) {
+                    span.tag("finished-by", "onRequestHandlerExecuted");
+                    span.finish();
+                }
+//                if(tracerIfAny != null) {
+//                    final Span span = tracerIfAny.currentSpan();
+//                    span.finish();
+//                }
             } catch(Exception ex) {
-                // will redirect to error page after this, 
+
+                final Span span = tracer.remove();
+                if(span != null) {
+                    span.tag("errored-by", "onRequestHandlerExecuted");
+                    span.error(ex);
+                }
+
+                final Span nextSpan = tracer.next().name("restart response after fail to commit xactn").start();
+
+//                if(tracerIfAny != null) {
+//                    final Span span = tracerIfAny.currentSpan();
+//                    span.error(ex);
+//
+//                    tracerIfAny.nextSpan().name("restart response after fail to commit xactn").start();
+//                }
+
+                // will redirect to error page after this,
                 // so make sure there is a new transaction ready to go.
                 if(getTransactionManager().getCurrentTransaction().getState().isComplete()) {
                     getTransactionManager().startTransaction();
@@ -167,6 +230,9 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      */
     @Override
     public synchronized void onEndRequest(RequestCycle cycle) {
+
+        LOG.debug("onEndRequest");
+
         if (getIsisSessionFactory().inSession()) {
             try {
                 // belt and braces
@@ -175,16 +241,48 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 getIsisSessionFactory().closeSession();
             }
         }
+        final Span span = ThreadLocalSpan.CURRENT_TRACER.remove();
+        if(span != null) {
+            span.tag("finished-by", "onEndRequest");
+            span.finish();
+        }
+//        final Tracer tracerIfAny = tracerFrom(cycle);
+//        if(tracerIfAny != null) {
+//            final Span span = tracerIfAny.currentSpan();
+//            span.finish();
+//        }
     }
 
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
 
+        LOG.debug("onException");
+
+        final Span span = ThreadLocalSpan.CURRENT_TRACER.remove();
+        if(span != null) {
+            span.tag("errored-by", "onException");
+            span.error(ex);
+        }
+//        final Tracer tracerIfAny = tracerFrom(cycle);
+//        if(tracerIfAny != null) {
+//            final Span span = tracerIfAny.currentSpan();
+//            span.error(ex);
+//        }
+
         final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
         if(mmie != null) {
             final Set<String> validationErrors = mmie.getValidationErrors();
             final MmvErrorPage mmvErrorPage = new MmvErrorPage(validationErrors);
+
+            final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("redirect to error page on MetaModelInvalidException")
+                    .tag("started-by", "onException")
+                    .start();
+//            if(tracerIfAny != null) {
+//                final Span span = tracerIfAny.currentSpan();
+//                tracerIfAny.nextSpan().name("redirect to error page on MetaModelInvalidException").start();
+//            }
+
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
@@ -200,6 +298,13 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                     addMessage(null);
 
                 }
+                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully after ListenerInvocationNotAllowedException")
+                        .tag("started-by", "onException")
+                        .start();
+//                if(tracerIfAny != null) {
+//                    tracerIfAny.nextSpan().name("respond gracefully after ListenerInvocationNotAllowedException").start();
+//                }
+
                 return respondGracefully(cycle);
             }
 
@@ -209,6 +314,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                     getServicesInjector().lookupServices(ExceptionRecognizer2.class);
             String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             if(recognizedMessageIfAny != null) {
+                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully after recognised exception")
+                        .tag("started-by", "onException")
+                        .start();
+//                if(tracerIfAny != null) {
+//                    tracerIfAny.nextSpan().name("respond gracefully after recognised exception").start();
+//                }
                 return respondGracefully(cycle);
             }
 
@@ -217,12 +328,24 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                     ObjectMember.HiddenException.isInstanceOf()).first();
             if(hiddenIfAny.isPresent()) {
                 addMessage("hidden");
+                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully if hidden")
+                        .tag("started-by", "onException")
+                        .start();
+//                if(tracerIfAny != null) {
+//                    tracerIfAny.nextSpan().name("respond gracefully if hidden").start();
+//                }
                 return respondGracefully(cycle);
             }
             final Optional<Throwable> disabledIfAny = FluentIterable.from(causalChain).filter(
                     ObjectMember.DisabledException.isInstanceOf()).first();
             if(disabledIfAny.isPresent()) {
                 addTranslatedMessage(disabledIfAny.get().getMessage());
+                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully if disabled")
+                        .tag("started-by", "onException")
+                        .start();
+//                if(tracerIfAny != null) {
+//                    tracerIfAny.nextSpan().name("respond gracefully if disabled").start();
+//                }
                 return respondGracefully(cycle);
             }
 
@@ -235,7 +358,15 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
                 ? RedirectPolicy.NEVER_REDIRECT
                 : RedirectPolicy.ALWAYS_REDIRECT;
-        return errorPageProvider != null 
+
+        final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("redirect to error page on " + ex.getClass().getSimpleName())
+                .tag("started-by", "onException")
+                .start();
+//        if(tracerIfAny != null) {
+//            tracerIfAny.nextSpan().name("redirect to error page on " + ex.getClass().getSimpleName()).start();
+//        }
+
+        return errorPageProvider != null
                 ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
                 : null;
     }
