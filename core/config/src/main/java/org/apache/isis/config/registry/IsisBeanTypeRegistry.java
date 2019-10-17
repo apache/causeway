@@ -190,12 +190,26 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         
     }
     
-    @Override
+    /**
+     * If given type is available for injection, returns the <em>Managed Bean's</em> name (id) as
+     * recognized by the IoC container, {@code null} otherwise;
+     * @param type
+     * @return
+     */
     public String getManagedBeanNameForType(Class<?> type) {
         if(vetoedTypes.contains(type)) { // vetos are coming from the spec-loader during init
             return null;
         }
         return managedBeanNamesByType.get(type);
+    }
+    
+    /**
+     * Whether given type is available for injection. Is a <em>Managed Bean</em>. 
+     * @param type
+     * @return 
+     */
+    public boolean isManagedBean(Class<?> type) {
+        return getManagedBeanNameForType(type)!=null;
     }
     
     // -- HELPER

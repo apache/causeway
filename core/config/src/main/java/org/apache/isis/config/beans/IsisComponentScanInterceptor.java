@@ -32,11 +32,11 @@ public interface IsisComponentScanInterceptor {
 
     /**
      * Allows for the given type-meta to by modified before bean-definition registration 
-     * is finalized by the IoC immediately after the type-scan phase. 
-     * Supported aspects to be modified: 
-     * <p>- Whether given {@link Component} annotated or meta-annotated type should be made
+     * is finalized by the IoC, immediately after the type-scan phase. 
+     * Aspects to be modified: 
+     * <br>- Whether given {@link Component} annotated or meta-annotated type should be made
      * available for injection.
-     * <p>- Naming strategy to override that of the IoC.
+     * <br>- Naming strategy to override that of the IoC.
      * 
      * @param type
      * @apiNote implementing classes might have side effects, eg. intercept 
@@ -44,21 +44,21 @@ public interface IsisComponentScanInterceptor {
      */
     void intercept(TypeMetaData type);
 
-    /**
-     * If given type is available for injection, returns the <em>Managed Bean's</em> name (id) as
-     * recognized by the IoC container, {@code null} otherwise;
-     * @param type
-     * @return
-     */
-    String getManagedBeanNameForType(Class<?> type);
-    
-    /**
-     * Whether given type is available for injection. Is a <em>Managed Bean</em>. 
-     * @param type
-     * @return 
-     */
-    default boolean isManagedBean(Class<?> type) {
-        return getManagedBeanNameForType(type)!=null;
-    }
+//    /**
+//     * If given type is available for injection, returns the <em>Managed Bean's</em> name (id) as
+//     * recognized by the IoC container, {@code null} otherwise;
+//     * @param type
+//     * @return
+//     */
+//    String getManagedBeanNameForType(Class<?> type);
+//    
+//    /**
+//     * Whether given type is available for injection. Is a <em>Managed Bean</em>. 
+//     * @param type
+//     * @return 
+//     */
+//    default boolean isManagedBean(Class<?> type) {
+//        return getManagedBeanNameForType(type)!=null;
+//    }
     
 }
