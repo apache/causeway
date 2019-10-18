@@ -200,43 +200,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        <profile>
-            <id>zipkin</id>
-            <activation>
-                <property>
-                    <name>!skip.zipkin</name>
-                </property>
-            </activation>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.zipkin.brave</groupId>
-                        <artifactId>brave-bom</artifactId>
-                        <version>5.8.0</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-            <dependencies>
- <!--               <dependency>
-                    <groupId>io.zipkin.brave</groupId>
-                    <artifactId>brave-http</artifactId>
-                        <version>5.8.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>io.zipkin.brave</groupId>
-                    <artifactId>brave-core</artifactId>
-                    <version>5.8.0</version>
-                </dependency>
- -->
-                <dependency>
-                    <groupId>io.zipkin.brave</groupId>
-                    <artifactId>brave-instrumentation-servlet</artifactId>
-                        <version>5.8.0</version>
-                </dependency>
-            </dependencies>
-        </profile>
 
         <profile>
             <id>skinny-war</id>

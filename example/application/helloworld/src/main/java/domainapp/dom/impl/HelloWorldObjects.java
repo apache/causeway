@@ -34,6 +34,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
+
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
         objectType = "helloworld.HelloWorldObjects"
@@ -66,7 +71,18 @@ public class HelloWorldObjects {
 
     @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)
     public List<HelloWorldObject> listAll() {
-        return repositoryService.allInstances(HelloWorldObject.class);
+        final Tracer tracer = GlobalTracer.get();
+        final Span parentSpan = tracer.activeSpan();
+        final Span childSpan = tracer.buildSpan("listAll").asChildOf(parentSpan).start();
+        final Scope scope = tracer.scopeManager().activate(childSpan);
+        try {
+            return repositoryService.allInstances(HelloWorldObject.class);
+        } finally {
+            childSpan.finish();
+            scope.close();
+            final Span parentSpan2 = tracer.activeSpan();
+            final Span parentSpan21 = parentSpan2;
+        }
     }
 
     @javax.inject.Inject

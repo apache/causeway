@@ -128,30 +128,37 @@
         </dependency>
 
         <dependency>
-            <groupId>io.zipkin.brave</groupId>
-            <artifactId>brave-instrumentation-servlet</artifactId>
-            <version>${brave.version}</version>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-client</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.zipkin.reporter2</groupId>
-            <artifactId>zipkin-sender-okhttp3</artifactId>
-            <version>${zipkin-sender-okhttp3.version}</version>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-web-servlet-filter</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.opentracing.brave</groupId>
-            <artifactId>brave-opentracing</artifactId>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-micrometer</artifactId>
         </dependency>
+
 
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-servlet_3.0_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- PROVIDED DEPENDENCIES -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
