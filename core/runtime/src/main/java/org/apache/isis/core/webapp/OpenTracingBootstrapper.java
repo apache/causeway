@@ -24,6 +24,8 @@ import java.util.concurrent.Callable;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.isis.core.tracing.ThreadLocalScopeManager2;
+
 import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.samplers.ConstSampler;
 import io.jaegertracing.micrometer.MicrometerMetricsFactory;
@@ -31,6 +33,32 @@ import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import lombok.val;
 
+/**
+ * This implementation of {@link ServletContextListener} should be registered in the <code>web.xml</code>, along with {@link io.opentracing.contrib.web.servlet.filter.TracingFilter}.
+ * Together, these will cause traces to be sent to Jaeger.
+ *
+ * In terms of its implementation, this bootstrapper sets up a {@link Tracer} as a singleton,
+ * accessible using {@link GlobalTracer#get()}. This is then picked up by the filter.
+ *
+ * It also installs a custom variant of {@link io.opentracing.util.ThreadLocalScopeManager}, namely
+ * {@link ThreadLocalScopeManager2}.  Together with {@link org.apache.isis.core.tracing.ThreadLocalScope2}, this provides some convenience APIs and makes it possible to close a scope
+ * in a different method (though must be in the same thread) as the method that opened the scope.
+ *
+ * See the <code>TracingDemoMain</code> class (in <code>isis-core-tracing</code> module) for
+ * more details.
+ *
+ * to demo, use:
+ *
+ * docker run -d -p 5775:5775/udp -p 16686:16686 jaegertracing/all-in-one:latest
+ *
+ * And access the Jaeger console at: http://localhost:16686)
+ *
+ * Then run the app with the following properties:
+ *
+ *   -DJAEGER_AGENT_HOST=localhost -DJAEGER_AGENT_PORT=5775
+ *
+ * These are picked up in the call to Configuration.ReporterConfiguration.fromEnv().
+ */
 public class OpenTracingBootstrapper implements ServletContextListener {
 
 
@@ -61,6 +89,8 @@ public class OpenTracingBootstrapper implements ServletContextListener {
 
                 return config
                         .getTracerBuilder()
+                        .withScopeManager(new ThreadLocalScopeManager2())
+
                         .withMetricsFactory(metricsReporter)
                         .build();
             }

@@ -65,6 +65,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.tracing.ThreadLocalScopeManager2;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -73,10 +74,6 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
-//import brave.Span;
-//import brave.Tracer;
-//import brave.opentracing.BraveTracer;
-//import brave.propagation.ThreadLocalSpan;
 
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
@@ -104,41 +101,15 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return;
         }
 
-//        final Span span = GlobalTracer.get().activeSpan();
-//        final Span onBeginRequest = GlobalTracer.get().buildSpan("wicket-request-cycle")
-//                .withTag("started-by", "onBeginRequest")
-//                .withTag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString())
-//                .start();
+        ThreadLocalScopeManager2.get().startAndActivateChildSpan("wicket-request-cycle")
+                .span()
+                .setOperationName("onBeginRequest")
+                .setTag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString());
 
-//        final Span span = ThreadLocalSpan.CURRENT_TRACER.next()
-//                .name("WebRequestCycleForIsis#onBeginRequest")
-//                .tag("started-by", "onBeginRequest")
-//                .tag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString())
-//                .start();
-
-//        final Tracer tracerIfAny = tracerFrom(requestCycle);
-//        if(tracerIfAny != null) {
-//            final Span span = tracerIfAny.nextSpan().name("WebRequestCycleForIsis#onBeginRequest");
-//            span.start();
-//            span.tag("requestCycle.request.url", requestCycle.getRequest().getUrl().toString());
-//        }
         getIsisSessionFactory().openSession(authenticationSession);
         getTransactionManager().startTransaction();
 
     }
-
-//    private static BraveTracer tracerFrom(final RequestCycle requestCycle) {
-//        final Object containerRequest = requestCycle.getRequest().getContainerRequest();
-//        if (!(containerRequest instanceof HttpServletRequest)) {
-//            return null;
-//        }
-//        final HttpServletRequest httpServletRequest = (HttpServletRequest) containerRequest;
-//        final Object tracerObj = httpServletRequest.getAttribute("isis.tracer.zipkin.brave");
-//        if (!(tracerObj instanceof BraveTracer)) {
-//            return null;
-//        }
-//        return (BraveTracer) tracerObj;
-//    }
 
     @Override
     public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
@@ -176,40 +147,30 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
         }
 
-//        final ThreadLocalSpan tracer = ThreadLocalSpan.CURRENT_TRACER;
-//        final Tracer tracerIfAny = tracerFrom(cycle);
         if (getIsisSessionFactory().inSession()) {
             try {
                 // will commit (or abort) the transaction;
                 // an abort will cause the exception to be thrown.
                 getTransactionManager().endTransaction();
 
-//                final Span span = tracer.remove();
-//                if(span != null) {
-//                    span.tag("finished-by", "onRequestHandlerExecuted");
-//                    span.finish();
-//                }
-
-//                if(tracerIfAny != null) {
-//                    final Span span = tracerIfAny.currentSpan();
-//                    span.finish();
-//                }
+                ThreadLocalScopeManager2.get()
+                        .activeSpan().setTag("finished-by", "onRequestHandlerExecuted");
+                ThreadLocalScopeManager2.get()
+                        .activeScope().closeAndFinish();
             } catch(Exception ex) {
 
-//                final Span span = tracer.remove();
-//                if(span != null) {
-//                    span.tag("errored-by", "onRequestHandlerExecuted");
-//                    span.error(ex);
-//                }
-//
-//                final Span nextSpan = tracer.next().name("restart response after fail to commit xactn").start();
+                ThreadLocalScopeManager2.get()
+                        .activeSpan()
+                        .setTag("errored-by", "onRequestHandlerExecuted")
+                        .setTag("exception", Throwables.getStackTraceAsString(ex));
+                ThreadLocalScopeManager2.get()
+                        .activeScope().closeAndFinish();
 
-//                if(tracerIfAny != null) {
-//                    final Span span = tracerIfAny.currentSpan();
-//                    span.error(ex);
-//
-//                    tracerIfAny.nextSpan().name("restart response after fail to commit xactn").start();
-//                }
+                ThreadLocalScopeManager2.get()
+                        .startAndActivateChildSpan("error-response")
+                        .span()
+                        .setOperationName("onRequestHandlerExecuted")
+                        .setTag("purpose", "restart response after fail to commit xactn");
 
                 // will redirect to error page after this,
                 // so make sure there is a new transaction ready to go.
@@ -248,20 +209,13 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             }
         }
 
-        //        final Span span = GlobalTracer.get().activeSpan();
-//        span.setTag("finished-by", "onEndRequest").finish();
+        ThreadLocalScopeManager2.get()
+                .activeSpan()
+                .setTag("finished-by", "onEndRequest");
+        ThreadLocalScopeManager2.get()
+                .activeScope()
+                .closeAndFinish();
 
-//        final Span span = ThreadLocalSpan.CURRENT_TRACER.remove();
-//        if(span != null) {
-//            span.tag("finished-by", "onEndRequest");
-//            span.finish();
-//        }
-
-        //        final Tracer tracerIfAny = tracerFrom(cycle);
-//        if(tracerIfAny != null) {
-//            final Span span = tracerIfAny.currentSpan();
-//            span.finish();
-//        }
     }
 
 
@@ -270,37 +224,25 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
         LOG.debug("onException");
 
-//        GlobalTracer.get().activeSpan().setTag("errored-by", "onException").setTag("error", Throwables.getStackTraceAsString(ex)).finish();
+        ThreadLocalScopeManager2.get()
+                .activeSpan()
+                .setTag("errored-by", "onException")
+                .setTag("exception", Throwables.getStackTraceAsString(ex));
+        ThreadLocalScopeManager2.get()
+                .activeScope()
+                .closeAndFinish();
 
-//        final Span span = ThreadLocalSpan.CURRENT_TRACER.remove();
-//        if(span != null) {
-//            span.tag("errored-by", "onException");
-//            span.error(ex);
-//        }
-
-//        final Tracer tracerIfAny = tracerFrom(cycle);
-//        if(tracerIfAny != null) {
-//            final Span span = tracerIfAny.currentSpan();
-//            span.error(ex);
-//        }
 
         final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
         if(mmie != null) {
             final Set<String> validationErrors = mmie.getValidationErrors();
             final MmvErrorPage mmvErrorPage = new MmvErrorPage(validationErrors);
 
-//            GlobalTracer.get().buildSpan("redirect to error page on MetaModelInvalidException")
-//                                .withTag("started-by", "onException")
-//                                .start();
-
-//            final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("redirect to error page on MetaModelInvalidException")
-//                    .tag("started-by", "onException")
-//                    .start();
-
-//            if(tracerIfAny != null) {
-//                final Span span = tracerIfAny.currentSpan();
-//                tracerIfAny.nextSpan().name("redirect to error page on MetaModelInvalidException").start();
-//            }
+            ThreadLocalScopeManager2.get()
+                    .startAndActivateChildSpan("error-response")
+                    .span()
+                    .setOperationName("onException")
+                    .setTag("purpose", "redirect to error page on MetaModelInvalidException");
 
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
@@ -318,17 +260,11 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
                 }
 
-//                GlobalTracer.get().buildSpan("respond gracefully after ListenerInvocationNotAllowedException")
-//                                        .withTag("started-by", "onException")
-//                                        .start();
-
-//                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully after ListenerInvocationNotAllowedException")
-//                        .tag("started-by", "onException")
-//                        .start();
-
-//                if(tracerIfAny != null) {
-//                    tracerIfAny.nextSpan().name("respond gracefully after ListenerInvocationNotAllowedException").start();
-//                }
+                ThreadLocalScopeManager2.get()
+                        .startAndActivateChildSpan("error-response")
+                        .span()
+                        .setOperationName("onException")
+                        .setTag("purpose", "respond gracefully after ListenerInvocationNotAllowedException");
 
                 return respondGracefully(cycle);
             }
@@ -339,17 +275,13 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                     getServicesInjector().lookupServices(ExceptionRecognizer2.class);
             String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             if(recognizedMessageIfAny != null) {
-//                GlobalTracer.get().buildSpan("respond gracefully after recognised exception")
-//                        .withTag("started-by", "onException")
-//                        .start();
 
-//                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully after recognised exception")
-//                        .tag("started-by", "onException")
-//                        .start();
+                ThreadLocalScopeManager2.get()
+                        .startAndActivateChildSpan("error-response")
+                        .span()
+                        .setOperationName("onException")
+                        .setTag("purpose", "respond gracefully after recognised exception");
 
-//                if(tracerIfAny != null) {
-//                    tracerIfAny.nextSpan().name("respond gracefully after recognised exception").start();
-//                }
                 return respondGracefully(cycle);
             }
 
@@ -359,17 +291,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             if(hiddenIfAny.isPresent()) {
                 addMessage("hidden");
 
-//                GlobalTracer.get().buildSpan("respond gracefully if hidden")
-//                        .withTag("started-by", "onException")
-//                        .start();
+                ThreadLocalScopeManager2.get()
+                        .startAndActivateChildSpan("error-response")
+                        .span()
+                        .setOperationName("onException")
+                        .setTag("purpose", "respond gracefully if hidden");
 
-//                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully if hidden")
-//                        .tag("started-by", "onException")
-//                        .start();
-
-//                if(tracerIfAny != null) {
-//                    tracerIfAny.nextSpan().name("respond gracefully if hidden").start();
-//                }
                 return respondGracefully(cycle);
             }
             final Optional<Throwable> disabledIfAny = FluentIterable.from(causalChain).filter(
@@ -377,17 +304,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             if(disabledIfAny.isPresent()) {
                 addTranslatedMessage(disabledIfAny.get().getMessage());
 
-//                GlobalTracer.get().buildSpan("respond gracefully if disabled")
-//                        .withTag("started-by", "onException")
-//                        .start();
+                ThreadLocalScopeManager2.get()
+                        .startAndActivateChildSpan("error-response")
+                        .span()
+                        .setOperationName("onException")
+                        .setTag("purpose", "respond gracefully if disabled");
 
-//                final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("respond gracefully if disabled")
-//                        .tag("started-by", "onException")
-//                        .start();
-
-//                if(tracerIfAny != null) {
-//                    tracerIfAny.nextSpan().name("respond gracefully if disabled").start();
-//                }
                 return respondGracefully(cycle);
             }
 
@@ -401,17 +323,11 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 ? RedirectPolicy.NEVER_REDIRECT
                 : RedirectPolicy.ALWAYS_REDIRECT;
 
-//        GlobalTracer.get().buildSpan("redirect to error page on " + ex.getClass().getSimpleName())
-//                .withTag("started-by", "onException")
-//                .start();
-
-//        final Span nextSpan = ThreadLocalSpan.CURRENT_TRACER.next().name("redirect to error page on " + ex.getClass().getSimpleName())
-//                .tag("started-by", "onException")
-//                .start();
-
-//        if(tracerIfAny != null) {
-//            tracerIfAny.nextSpan().name("redirect to error page on " + ex.getClass().getSimpleName()).start();
-//        }
+        ThreadLocalScopeManager2.get()
+                .startAndActivateChildSpan("error-response")
+                .span()
+                .setOperationName("onException")
+                .setTag("purpose", "redirect to error page on " + ex.getClass().getSimpleName());
 
         return errorPageProvider != null
                 ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)

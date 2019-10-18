@@ -37,7 +37,7 @@ public class ThreadLocalScopeManager2 implements ScopeManager {
         return (ThreadLocalScopeManager2) GlobalTracer.get().scopeManager();
     }
 
-    public ThreadLocalScope2 childSpan(final String name) {
+    public ThreadLocalScope2 startAndActivateChildSpan(final String name) {
 
         final Span outer = this.activeSpan();
         final Tracer tracer = GlobalTracer.get();
@@ -59,7 +59,7 @@ public class ThreadLocalScopeManager2 implements ScopeManager {
     }
 
     public void runInSpan(final String name, final Runnable runnable) {
-        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().childSpan(name);
+        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().startAndActivateChildSpan(name);
         try {
             runnable.run();
         } finally {
@@ -68,7 +68,7 @@ public class ThreadLocalScopeManager2 implements ScopeManager {
     }
 
     public <T> T callInSpan(final String name, final Callable<T> callable) throws Exception {
-        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().childSpan(name);
+        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().startAndActivateChildSpan(name);
         try {
             return callable.call();
         } finally {
@@ -77,7 +77,7 @@ public class ThreadLocalScopeManager2 implements ScopeManager {
     }
 
     public <T> T callInSpanEx(final String name, final Callable<T> callable) {
-        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().childSpan(name);
+        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().startAndActivateChildSpan(name);
         try {
             return callable.call();
         } catch (Exception e) {

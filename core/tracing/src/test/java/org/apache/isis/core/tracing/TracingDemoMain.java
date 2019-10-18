@@ -71,13 +71,13 @@ public class TracingDemoMain {
         // creates a child (but top-level if no existing parent)
         // we don't need to hold onto the scope created; we can look it up later (see end of this method)
         final ThreadLocalScope2 unused =
-                ThreadLocalScopeManager2.get().childSpan("outer-Z");
+                ThreadLocalScopeManager2.get().startAndActivateChildSpan("outer-Z");
 
         Thread.sleep(300);
 
 
         // for nested scope, option (1) is handle scope and close
-        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().childSpan("inner-1");
+        ThreadLocalScope2 tracingScope = ThreadLocalScopeManager2.get().startAndActivateChildSpan("inner-1");
         try {
             Thread.sleep(500);
 
