@@ -46,16 +46,6 @@ public class OpenTracingBootstrapper implements ServletContextListener {
                 val samplerConfig = Configuration.SamplerConfiguration.fromEnv()
                         .withType(ConstSampler.TYPE)
                         .withParam(1);
-
-                // to demo, use:
-                //
-                // * docker run -d -p 5775:5775/udp -p 16686:16686 jaegertracing/all-in-one:latest
-                // * access at http://localhost:16686)
-                //
-                // * run the app with:
-                //
-                //   -DJAEGER_AGENT_HOST=localhost -DJAEGER_AGENT_PORT=5775
-                //
                 val reporterConfig = Configuration.ReporterConfiguration.fromEnv()
                         .withLogSpans(true)
                         .withSender(Configuration.SenderConfiguration.fromEnv());
